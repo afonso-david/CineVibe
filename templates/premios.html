@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prémios | CineVibe - Descobre os Nossos Prémios Exclusivos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/premios.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <meta name="description" content="Descobre os prémios exclusivos do CineVibe. Ganha pontos e troca por produtos incríveis do nosso bar e bilhetes de cinema.">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('premios') }}" class="active">Prémios</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-badge">Programa de Recompensas</div>
+                <h1>Prémios Exclusivos</h1>
+                <p class="subtitle">Descobre os incríveis prémios que podes ganhar no CineVibe</p>
+                <p class="description">Cada filme que vês e cada avaliação que fazes vale pontos. Troca os teus pontos por produtos deliciosos do nosso bar, bilhetes gratuitos e muito mais!</p>
+                
+                <div class="hero-features">
+                    <div class="feature">
+                        <span class="feature-icon">🎬</span>
+                        <span>100 pontos por filme visto</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">⭐</span>
+                        <span>50 pontos por avaliação</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🎁</span>
+                        <span>Prémios desde 100 pontos</span>
+                    </div>
+                </div>
+
+                <div class="hero-cta">
+                    {% if logged_in %}
+                        <a href="{{ url_for('recompensas') }}" class="btn-primary">Ver Os Meus Pontos</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn-primary">Iniciar Sessão</a>
+                    {% endif %}
+                    <a href="{{ url_for('filmes') }}" class="btn-secondary">Ver Filmes</a>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='imgs/icons/wheel-removebg-preview.png') }}" alt="Prémios CineVibe">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Como Funciona Section -->
+        <section class="how-it-works-section">
+            <div class="section-header">
+                <h2>Como Funciona</h2>
+                <p>Três passos simples para ganhares prémios incríveis</p>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">🎬</div>
+                    <h3>Vê Filmes</h3>
+                    <p>Cada filme que vês no CineVibe vale 100 pontos. Quanto mais filmes vires, mais pontos ganhas!</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">⭐</div>
+                    <h3>Avalia Filmes</h3>
+                    <p>Partilha a tua opinião! Cada avaliação que fazes vale 50 pontos extra.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">🎁</div>
+                    <h3>Troca Por Prémios</h3>
+                    <p>Usa os teus pontos para conseguir produtos do bar, bilhetes gratuitos e muito mais!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prémios Disponíveis Section -->
+        <section class="premios-section">
+            <div class="section-header">
+                <h2>Prémios Disponíveis</h2>
+                <p>Escolhe entre uma variedade de prémios incríveis</p>
+            </div>
+            
+            <div class="premios-grid">
+                {% for premio in premios %}
+                <div class="premio-card">
+                    <div class="premio-image">
+                        <img src="{{ url_for('static', filename=premio.img_url) }}" alt="{{ premio.nome }}" onerror="this.src='{{ url_for('static', filename='imgs/icons/wheel-removebg-preview.png') }}'">
+                    </div>
+                    <div class="premio-content">
+                        <h3>{{ premio.nome }}</h3>
+                        <div class="premio-points">
+                            <span class="points-icon">🏆</span>
+                            <span class="points-value">{{ premio.pontos }}</span>
+                            <span class="points-label">pontos</span>
+                        </div>
+                        <div class="premio-description">
+                            {% if premio.pontos <= 200 %}
+                                Prémio básico - perfeito para começar!
+                            {% elif premio.pontos <= 400 %}
+                                Prémio intermédio - uma boa recompensa!
+                            {% elif premio.pontos <= 600 %}
+                                Prémio avançado - vale a pena o esforço!
+                            {% else %}
+                                Prémio premium - o máximo que oferecemos!
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="premio-footer">
+                        {% if logged_in %}
+                            <a href="{{ url_for('recompensas') }}" class="btn-premio">Resgatar</a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="btn-premio">Iniciar Sessão</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="section-header">
+                <h2>Estatísticas do Programa</h2>
+                <p>Números que mostram o sucesso do nosso programa de recompensas</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-label">Membros Ativos</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎁</div>
+                    <div class="stat-number">50,000+</div>
+                    <div class="stat-label">Prémios Entregues</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-number">4.9/5</div>
+                    <div class="stat-label">Satisfação</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-number">{{ premios|length }}</div>
+                    <div class="stat-label">Prémios Disponíveis</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Pronto para Começar a Ganhar Prémios?</h2>
+                <p>Junta-te ao nosso programa de recompensas e começa a acumular pontos hoje mesmo!</p>
+                <div class="cta-buttons">
+                    {% if logged_in %}
+                        <a href="{{ url_for('filmes') }}" class="btn-cta primary">Ver Filmes</a>
+                        <a href="{{ url_for('recompensas') }}" class="btn-cta secondary">Os Meus Pontos</a>
+                    {% else %}
+                        <a href="{{ url_for('registo') }}" class="btn-cta primary">Registar Agora</a>
+                        <a href="{{ url_for('login') }}" class="btn-cta secondary">Iniciar Sessão</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="cta-features">
+                <div class="cta-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Registo gratuito</span>
+                </div>
+                <div class="cta-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Pontos imediatos</span>
+                </div>
+                <div class="cta-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Prémios exclusivos</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="section-header">
+                <h2>Perguntas Frequentes</h2>
+                <p>Esclarecemos as tuas dúvidas sobre o programa de prémios</p>
+            </div>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>Como ganho pontos?</h3>
+                    <p>Ganhas 100 pontos por cada filme que vês no CineVibe e 50 pontos por cada avaliação que fazes.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Os pontos expiram?</h3>
+                    <p>Não! Os teus pontos nunca expiram. Podes acumulá-los durante o tempo que quiseres.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Posso trocar pontos por dinheiro?</h3>
+                    <p>Os pontos só podem ser trocados por prémios do nosso catálogo, não por dinheiro.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Como resgato um prémio?</h3>
+                    <p>Vai à página "Os Meus Pontos" e clica em "Resgatar" no prémio que queres. Receberás um código para usar no cinema.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <!-- Logo e Descrição -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Tecnologia de ponta, conforto excepcional e os melhores filmes numa rede de cinemas moderna e acessível.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="TikTok"><img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok"></a>
+                        <a href="#" aria-label="Instagram"><img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram"></a>
+                        <a href="#" aria-label="Twitter"><img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X"></a>
+                    </div>
+                </div>
+
+                <!-- Links Rápidos -->
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                        <li><a href="{{ url_for('beneficios') }}">Benefícios</a></li>
+                        <li><a href="{{ url_for('sessao') }}">Sessões Especiais</a></li>
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                    </ul>
+                </div>
+
+                <!-- Experiências -->
+                <div class="footer-section">
+                    <h4>Experiências</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('cine_acessivel') }}">CineAcessível</a></li>
+                        <li><a href="{{ url_for('sessao_exclusiva') }}">Sessões VIP</a></li>
+                        <li><a href="{{ url_for('sessao_romance') }}">Noites Românticas</a></li>
+                        <li><a href="{{ url_for('sessao_terror') }}">Sessões Terror</a></li>
+                        <li><a href="{{ url_for('sessao_vintage') }}">Cinema Vintage</a></li>
+                        <li><a href="{{ url_for('premios') }}">Prémios</a></li>
+                    </ul>
+                </div>
+
+                <!-- Suporte -->
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Centro de Ajuda</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a></li>
+                        <li><a href="{{ url_for('cookies_page') }}">Política de Cookies</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-section newsletter-section">
+                    <h4>Newsletter</h4>
+                    <p>Recebe as últimas novidades, promoções exclusivas e estreias em primeira mão.</p>
+                    <form class="newsletter-form" action="#" method="POST">
+                        <div class="newsletter-input-group">
+                            <input type="email" placeholder="O seu email..." required>
+                            <button type="submit">Subscrever</button>
+                        </div>
+                    </form>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            <span>+351 800 123 456</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            <span>info@cinevibe.pt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos</a>
+                            <a href="{{ url_for('cookies_page') }}">Cookies</a>
+                            <a href="{{ url_for('acessibilidade') }}">Acessibilidade</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <span class="cert-text">Certificado ISO 9001</span>
+                        <div class="cert-logos">
+                            <img src="{{ url_for('static', filename='imgs/certifications/iso.png') }}" alt="ISO 9001">
+                            <img src="{{ url_for('static', filename='imgs/certifications/accessibility.png') }}" alt="Acessibilidade">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Smooth Scroll Script -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.step-card, .premio-card, .stat-card, .faq-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

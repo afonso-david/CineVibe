@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Reserva | CineVibe</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0D1B2A;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1B263B, #0D1B2A);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #FFD60A;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #FFD60A;
+            padding-bottom: 20px;
+        }
+        .logo {
+            color: #FFD60A;
+            font-size: 32px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .subtitle {
+            color: #4EA8DE;
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .success-message {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid #10B981;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .reserva-info {
+            background: rgba(78, 168, 222, 0.15);
+            border: 2px solid rgba(78, 168, 222, 0.4);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+        .section-title {
+            color: #FFD60A;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #FFD60A;
+            padding-bottom: 10px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            color: #B8C5D1;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .info-value {
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 16px;
+            text-align: right;
+        }
+        .highlight-value {
+            color: #FFD60A;
+            font-size: 18px;
+        }
+        .lugares-section {
+            background: rgba(255, 214, 10, 0.1);
+            border: 2px solid rgba(255, 214, 10, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .lugares-title {
+            color: #FFD60A;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .lugares-display {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD60A;
+            letter-spacing: 2px;
+        }
+        .total-section {
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(78, 168, 222, 0.2));
+            border: 3px solid #FFD60A;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .total-label {
+            color: #B8C5D1;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .total-amount {
+            font-size: 32px;
+            font-weight: 900;
+            color: #FFD60A;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .bar-section {
+            background: rgba(255, 107, 107, 0.15);
+            border: 2px solid rgba(255, 107, 107, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .bar-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 16px;
+        }
+        .bar-item:last-child {
+            border-bottom: none;
+        }
+        .bar-item-name {
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+        .bar-item-price {
+            color: #FFD60A;
+            font-weight: 700;
+        }
+        .qr-section {
+            background: rgba(16, 185, 129, 0.15);
+            border: 2px solid #10B981;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .qr-title {
+            color: #10B981;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .qr-code {
+            background: #FFFFFF;
+            color: #0D1B2A;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            display: inline-block;
+            border: 3px solid #10B981;
+        }
+        .instructions {
+            background: rgba(78, 168, 222, 0.15);
+            border-left: 5px solid #4EA8DE;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .instructions h4 {
+            color: #4EA8DE;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        .instructions li {
+            color: #B8C5D1;
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 15px;
+        }
+        .instructions li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid rgba(255, 214, 10, 0.4);
+            color: #B8C5D1;
+        }
+        .footer-logo {
+            color: #FFD60A;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .footer-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .footer strong {
+            color: #FFD60A;
+        }
+        .contact-info {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(78, 168, 222, 0.1);
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .disclaimer {
+            font-size: 12px;
+            color: #78909C;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🎬 CineVibe</div>
+            <div class="subtitle">Confirmação de Reserva #{{ reserva_id }}</div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message">
+            ✅ A sua reserva foi confirmada com sucesso!
+        </div>
+
+        <!-- Movie Information -->
+        <div class="reserva-info">
+            <div class="section-title">Informações do Filme</div>
+            <div class="info-row">
+                <span class="info-label">Filme:</span>
+                <span class="info-value highlight-value">{{ filme }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"> Tipo de Sessão:</span>
+                <span class="info-value">{{ tipo_sessao }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"> Cinema:</span>
+                <span class="info-value">{{ cinema }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"> Data e Hora:</span>
+                <span class="info-value highlight-value">{{ horario }}</span>
+            </div>
+        </div>
+
+        <!-- Reservation Details -->
+        <div class="reserva-info">
+            <div class="section-title"> Detalhes da Reserva</div>
+            <div class="info-row">
+                <span class="info-label"> Nome:</span>
+                <span class="info-value">{{ nome }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"> Email:</span>
+                <span class="info-value">{{ email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"> Quantidade de Bilhetes:</span>
+                <span class="info-value">{{ quantidade }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"> Data de Confirmação:</span>
+                <span class="info-value">{{ data_confirmacao }}</span>
+            </div>
+        </div>
+
+        <!-- Seats Section -->
+        {% if lugares %}
+        <div class="lugares-section">
+            <div class="lugares-title"> Lugares Reservados</div>
+            <div class="lugares-display">
+                {% if lugares is string %}
+                    {{ lugares }}
+                {% else %}
+                    {{ lugares|join(', ') }}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Bar Items (if any) -->
+        {% if bar_items and bar_items|length > 0 %}
+        <div class="bar-section">
+            <div class="section-title"> Itens do Bar</div>
+            {% for item in bar_items %}
+            <div class="bar-item">
+                <span class="bar-item-name">{{ item.quantidade }}x {{ item.nome }}</span>
+                <span class="bar-item-price">€{{ "%.2f"|format(item.subtotal) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Total -->
+        <div class="total-section">
+            <div class="total-label"> Total da Reserva</div>
+            <div class="total-amount">{{ preco_total }}</div>
+        </div>
+
+        <!-- QR Code Section -->
+        <div class="qr-section">
+            <div class="qr-title"> Código da Reserva</div>
+            <div class="qr-code">#{{ reserva_id }}</div>
+            <div style="color: #B8C5D1; margin-top: 10px;">
+                Apresente este código na bilheteira ou use este email como comprovativo
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h4> Instruções Importantes:</h4>
+            <ul>
+                <li>Chegue ao cinema 30 minutos antes da sessão</li>
+                <li>Apresente este email ou o código #{{ reserva_id }} na bilheteira</li>
+                <li>Traga um documento de identificação válido</li>
+                <li>Os lugares ficam reservados até 15 minutos após o início da sessão</li>
+                {% if bar_items and bar_items|length > 0 %}
+                <li>Os itens do bar serão entregues no seu lugar durante a sessão</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">CineVibe</div>
+            <div class="footer-text">
+                <strong>Obrigado por escolher o CineVibe!</strong><br>
+                A sua experiência cinematográfica premium começa aqui.
+            </div>
+            
+            <div class="contact-info">
+                📞 +351 800 123 456 | 📧 info@cinevibe.pt | 🌐 www.cinevibe.pt
+            </div>
+
+            <div class="disclaimer">
+                Este email foi enviado automaticamente pelo sistema CineVibe.<br>
+                Por favor, não responda a este email. Para suporte, contacte-nos através dos canais oficiais.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

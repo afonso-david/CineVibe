@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recompensas | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recompensas.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('recompensas') }}" class="active">Recompensas</a>
+        <a href="{{ url_for('premios') }}">Prémios</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-recompensas">
+            <div class="hero-content">
+                <h1>
+                    <img src="{{ url_for('static', filename='imgs/trophy-icon.png') }}" alt="Troféu" class="title-icon">
+                    Sistema de Recompensas
+                </h1>
+                <p class="hero-subtitle">Ganha pontos e desbloqueia benefícios exclusivos no CineVibe</p>
+                
+                <div class="pontos-display">
+                    <div class="pontos-numero">{{ pontos or 0 }}</div>
+                    <div class="pontos-label">Pontos Disponíveis</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trajetória de Níveis -->
+        <section class="trajetoria-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <img src="{{ url_for('static', filename='imgs/level-icon.png') }}" alt="Níveis" class="section-icon">
+                    Trajetória de Níveis
+                </h2>
+
+                <div class="progress-wrapper">
+                    <div class="progress-info">
+                        <div class="current-points">
+                            <span class="points-label">Pontos Atuais:</span>
+                            <span class="points-value">{{ pontos or 0 }}</span>
+                        </div>
+                        <div class="next-level">
+                            <span class="next-label">Próximo nível em <strong>{{ 1000 - ((pontos or 0) % 1000) }}</strong> pontos</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-bar-fill" style="width: {{ ((pontos or 0) % 1000) / 10 }}%">
+                            <div class="progress-indicator"></div>
+                        </div>
+                    </div>
+
+                    <div class="levels-container">
+                        <!-- Nível Bronze -->
+                        <div class="level-item {{ 'achieved' if (pontos or 0) >= 0 else '' }} {{ 'active' if (pontos or 0) < 1000 else '' }}">
+                            <div class="level-circle">
+                                <img src="{{ url_for('static', filename='imgs/bronze-medal.png') }}" alt="Bronze" class="level-icon">
+                                {% if (pontos or 0) >= 1000 %}
+                                <div class="check-mark">✓</div>
+                                {% endif %}
+                            </div>
+                            <div class="level-details">
+                                <h3>Bronze</h3>
+                                <p class="level-pts">0 - 999 pontos</p>
+                                <div class="level-perks">
+                                    <span><img src="{{ url_for('static', filename='imgs/star-icon.png') }}" alt="Benefício" class="perk-icon">Acesso básico</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/ticket-icon.png') }}" alt="Benefício" class="perk-icon">Reservas normais</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nível Prata -->
+                        <div class="level-item {{ 'achieved' if (pontos or 0) >= 1000 else '' }} {{ 'active' if 1000 <= (pontos or 0) < 2500 else '' }}">
+                            <div class="level-circle">
+                                <img src="{{ url_for('static', filename='imgs/silver-medal.png') }}" alt="Prata" class="level-icon">
+                                {% if (pontos or 0) >= 2500 %}
+                                <div class="check-mark">✓</div>
+                                {% endif %}
+                            </div>
+                            <div class="level-details">
+                                <h3>Prata</h3>
+                                <p class="level-pts">1000 - 2499 pontos</p>
+                                <div class="level-perks">
+                                    <span><img src="{{ url_for('static', filename='imgs/discount-icon.png') }}" alt="Benefício" class="perk-icon">5% desconto</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/priority-icon.png') }}" alt="Benefício" class="perk-icon">Reserva prioritária</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nível Ouro -->
+                        <div class="level-item {{ 'achieved' if (pontos or 0) >= 2500 else '' }} {{ 'active' if 2500 <= (pontos or 0) < 5000 else '' }}">
+                            <div class="level-circle">
+                                <img src="{{ url_for('static', filename='imgs/gold-medal.png') }}" alt="Ouro" class="level-icon">
+                                {% if (pontos or 0) >= 5000 %}
+                                <div class="check-mark">✓</div>
+                                {% endif %}
+                            </div>
+                            <div class="level-details">
+                                <h3>Ouro</h3>
+                                <p class="level-pts">2500 - 4999 pontos</p>
+                                <div class="level-perks">
+                                    <span><img src="{{ url_for('static', filename='imgs/discount-icon.png') }}" alt="Benefício" class="perk-icon">10% desconto</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/vip-icon.png') }}" alt="Benefício" class="perk-icon">Lugares VIP</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nível Diamante -->
+                        <div class="level-item {{ 'achieved' if (pontos or 0) >= 5000 else '' }} {{ 'active' if (pontos or 0) >= 5000 else '' }}">
+                            <div class="level-circle">
+                                <img src="{{ url_for('static', filename='imgs/diamond-medal.png') }}" alt="Diamante" class="level-icon">
+                                {% if (pontos or 0) >= 5000 %}
+                                <div class="check-mark">✓</div>
+                                {% endif %}
+                            </div>
+                            <div class="level-details">
+                                <h3>Diamante</h3>
+                                <p class="level-pts">5000+ pontos</p>
+                                <div class="level-perks">
+                                    <span><img src="{{ url_for('static', filename='imgs/discount-icon.png') }}" alt="Benefício" class="perk-icon">15% desconto</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/crown-icon.png') }}" alt="Benefício" class="perk-icon">Acesso exclusivo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recompensas Disponíveis -->
+        <section class="recompensas-disponiveis">
+            <div class="container">
+                <h2 class="section-title">
+                    <img src="{{ url_for('static', filename='imgs/gift-icon.png') }}" alt="Presentes" class="section-icon">
+                    Recompensas Disponíveis
+                </h2>
+
+                <div class="recompensas-grid">
+                    {% for recompensa in recompensas %}
+                    <div class="recompensa-card">
+                        <div class="recompensa-icon">
+                            <img src="{{ url_for('static', filename=recompensa.imagem) }}" alt="{{ recompensa.titulo }}" class="reward-icon" onerror="this.src='{{ url_for('static', filename='imgs/icons/wheel-removebg-preview.png') }}'">
+                        </div>
+                        <h3>{{ recompensa.titulo }}</h3>
+                        <p>{{ recompensa.descricao }}</p>
+                        <div class="recompensa-footer">
+                            <span class="custo">{{ recompensa.custo_pontos }} <img src="{{ url_for('static', filename='imgs/coin-icon.png') }}" alt="Pontos" class="inline-icon" onerror="this.style.display='none'"></span>
+                            <button class="btn-resgatar" onclick="resgatarRecompensa('{{ recompensa.id }}', {{ recompensa.custo_pontos }})" 
+                                    {{ 'disabled' if (pontos or 0) < recompensa.custo_pontos else '' }}>
+                                Resgatar
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Como Ganhar Pontos -->
+        <section class="como-ganhar">
+            <div class="container">
+                <h2 class="section-title">
+                    <img src="{{ url_for('static', filename='imgs/earn-icon.png') }}" alt="Ganhar" class="section-icon">
+                    Como Ganhar Pontos
+                </h2>
+
+                <div class="ganhar-grid">
+                    <div class="ganhar-card">
+                        <div class="ganhar-icon">
+                            <img src="{{ url_for('static', filename='imgs/movie-ticket.png') }}" alt="Bilhete" class="earn-icon">
+                        </div>
+                        <h3>Comprar Bilhetes</h3>
+                        <div class="pontos-ganhos">+50</div>
+                        <p>Por cada bilhete comprado</p>
+                    </div>
+
+                    <div class="ganhar-card">
+                        <div class="ganhar-icon">
+                            <img src="{{ url_for('static', filename='imgs/popcorn.png') }}" alt="Bar" class="earn-icon">
+                        </div>
+                        <h3>Compras no Bar</h3>
+                        <div class="pontos-ganhos">+25</div>
+                        <p>Por cada €5 gastos no bar</p>
+                    </div>
+
+                    <div class="ganhar-card">
+                        <div class="ganhar-icon">
+                            <img src="{{ url_for('static', filename='imgs/star-rating.png') }}" alt="Avaliação" class="earn-icon">
+                        </div>
+                        <h3>Avaliar Filmes</h3>
+                        <div class="pontos-ganhos">+10</div>
+                        <p>Por cada avaliação feita</p>
+                    </div>
+
+                    <div class="ganhar-card">
+                        <div class="ganhar-icon">
+                            <img src="{{ url_for('static', filename='imgs/calendar.png') }}" alt="Aniversário" class="earn-icon">
+                        </div>
+                        <h3>Aniversário</h3>
+                        <div class="pontos-ganhos">+200</div>
+                        <p>Bónus especial no teu aniversário</p>
+                    </div>
+
+                    <div class="ganhar-card">
+                        <div class="ganhar-icon">
+                            <img src="{{ url_for('static', filename='imgs/share.png') }}" alt="Partilhar" class="earn-icon">
+                        </div>
+                        <h3>Partilhar</h3>
+                        <div class="pontos-ganhos">+15</div>
+                        <p>Por partilhar filmes nas redes sociais</p>
+                    </div>
+
+                    <div class="ganhar-card">
+                        <div class="ganhar-icon">
+                            <img src="{{ url_for('static', filename='imgs/referral.png') }}" alt="Referir" class="earn-icon">
+                        </div>
+                        <h3>Referir Amigos</h3>
+                        <div class="pontos-ganhos">+100</div>
+                        <p>Por cada amigo que se regista</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                        <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Smooth Scroll Script -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.step-card, .benefit-card, .testimonial-card, .faq-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+
+    <script>
+        function resgatarRecompensa(tipo, custo) {
+            if ({{ pontos or 0 }} < custo) {
+                alert('Pontos insuficientes para resgatar esta recompensa.');
+                return;
+            }
+
+            if (confirm(`Confirmas que queres resgatar esta recompensa por ${custo} pontos?`)) {
+                fetch('/resgatar_recompensa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tipo: tipo,
+                        custo: custo
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Recompensa resgatada com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro ao resgatar recompensa: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao resgatar recompensa.');
+                });
+            }
+        }
+    </script>
+    </div> <!-- Closing page-wrapper -->
+</body>
+</html>

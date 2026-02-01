@@ -1,0 +1,6 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="15" width="40" height="20" rx="10" fill="#000000"/>
+<path d="M20 25 C20 22, 22 20, 25 20 C28 20, 30 22, 30 25 C30 28, 28 30, 25 30 C22 30, 20 28, 20 25 Z" fill="#FFFFFF"/>
+<path d="M23 23 L25 25 L27 23" stroke="#000000" stroke-width="1" fill="none"/>
+<text x="25" y="42" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="7" font-weight="bold">Apple Pay</text>
+</svg>

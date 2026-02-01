@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Reservas - CineVibe Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_usuarios.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_reservas.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe">
+                    <span>CineVibe</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin_filmes') }}" class="nav-item">
+                    <i class="fas fa-film"></i>
+                    <span>Filmes</span>
+                </a>
+                <a href="{{ url_for('admin_cinemas') }}" class="nav-item">
+                    <i class="fas fa-building"></i>
+                    <span>Cinemas</span>
+                </a>
+                <a href="{{ url_for('admin_usuarios') }}" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="{{ url_for('admin_reservas') }}" class="nav-item active">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Reservas</span>
+                </a>
+                <a href="{{ url_for('admin_atores') }}" class="nav-item">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Atores</span>
+                </a>
+                <a href="{{ url_for('admin_salas') }}" class="nav-item">
+                    <i class="fas fa-chair"></i>
+                    <span>Salas</span>
+                </a>
+                <a href="{{ url_for('admin_bar') }}" class="nav-item">
+                    <i class="fas fa-coffee"></i>
+                    <span>Bar</span>
+                </a>
+                <a href="{{ url_for('admin_avatares') }}" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Avatares</span>
+                </a>
+                <a href="{{ url_for('admin_tipos_sessao') }}" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Tipos de Sessão</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="{{ url_for('home') }}" class="nav-item">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Voltar ao Site</span>
+                </a>
+            </nav>
+        
+            <!-- User Profile Section -->
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {% if user and user.avatar_url %}
+                            <img src="{{ user.avatar_url }}" alt="Avatar" class="avatar-img">
+                        {% else %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
+                        <div class="user-role">Administrador</div>
+                    </div>
+                    <div class="user-actions">
+                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
+                            <i class="fas fa-user-cog"></i>
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar-pro">
+                <div class="top-bar-left">
+                    <div class="page-title">
+                        <i class="fas fa-ticket-alt"></i>
+                        <div>
+                            <h1>Gestão de Reservas</h1>
+                            <p>Gerir reservas de bilhetes e sessões</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>{{ reservas|length }} Reservas</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ cinemas|length }} Cinemas</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="window.location.reload()">
+                        <i class="fas fa-sync-alt"></i>
+                        Atualizar
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="dashboard-content-pro">
+                <!-- Control Panel -->
+                <div class="control-panel">
+                    <div class="search-section">
+                        <div class="search-box-pro">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Pesquisar por usuário, filme..." id="searchInput" value="{{ search or '' }}">
+                        </div>
+                        <div class="filter-group">
+                            <select id="cinemaFilter" class="filter-select">
+                                <option value="">Todos os Cinemas</option>
+                                {% for cinema in cinemas %}
+                                <option value="{{ cinema }}" {{ 'selected' if cinema_filter == cinema else '' }}>{{ cinema }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="date-filters">
+                                <button class="date-btn active" data-date="all">Todas</button>
+                                <button class="date-btn" data-date="today">Hoje</button>
+                                <button class="date-btn" data-date="week">Esta Semana</button>
+                                <button class="date-btn" data-date="month">Este Mês</button>
+                            </div>
+                            <button class="btn-filter" onclick="limparFiltros()">
+                                <i class="fas fa-filter-circle-xmark"></i>
+                                Limpar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="view-controls">
+                        <div class="view-toggle">
+                            <button class="view-btn" data-view="grid" title="Vista em Grelha">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="view-btn active" data-view="table" title="Vista em Tabela">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                        <div class="sort-controls">
+                            <select class="sort-select" id="sortSelect">
+                                <option value="id">Ordenar por ID</option>
+                                <option value="usuario">Ordenar por Usuário</option>
+                                <option value="filme">Ordenar por Filme</option>
+                                <option value="data">Ordenar por Data</option>
+                                <option value="status">Ordenar por Status</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div class="movies-table-container" id="reservas-table">
+                    <div class="table-wrapper">
+                        <table class="movies-table-pro">
+                            <thead>
+                                <tr>
+                                    <th class="poster-header">
+                                        <i class="fas fa-hashtag"></i>
+                                        ID
+                                    </th>
+                                    <th class="title-header">
+                                        <i class="fas fa-user"></i>
+                                        Usuário
+                                    </th>
+                                    <th class="director-header">
+                                        <i class="fas fa-film"></i>
+                                        Filme
+                                    </th>
+                                    <th class="release-header">
+                                        <i class="fas fa-building"></i>
+                                        Cinema
+                                    </th>
+                                    <th class="duration-header">
+                                        <i class="fas fa-calendar"></i>
+                                        Data Sessão
+                                    </th>
+                                    <th class="genre-header">
+                                        <i class="fas fa-chair"></i>
+                                        Lugar
+                                    </th>
+                                    <th class="actions-header">
+                                        <i class="fas fa-tag"></i>
+                                        Tipo
+                                    </th>
+                                    <th class="actions-header">
+                                        <i class="fas fa-cogs"></i>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reserva in reservas %}
+                                <tr data-reserva-id="{{ reserva.id }}" data-status="{{ reserva.status }}" data-cinema="{{ reserva.cinema_nome }}" data-data="{{ reserva.data_sessao }}">
+                                    <td class="id-cell">
+                                        <span class="reservation-id">#{{ reserva.id }}</span>
+                                    </td>
+                                    <td class="user-cell">
+                                        <div class="user-info">
+                                            <h4>{{ reserva.usuario_nome or reserva.nome_cliente or 'N/A' }}</h4>
+                                            <span class="user-email">{{ reserva.usuario_email or reserva.email_cliente or 'N/A' }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="movie-cell">{{ reserva.filme_titulo }}</td>
+                                    <td class="cinema-cell">{{ reserva.cinema_nome }}</td>
+                                    <td class="date-cell">{{ reserva.data_sessao.strftime('%d/%m/%Y') if reserva.data_sessao else 'N/A' }}</td>
+                                    <td class="seat-cell">
+                                        <span class="seat-badge">{{ reserva.lugares }}</span>
+                                    </td>
+                                    <td class="type-cell">{{ reserva.tipo_sessao or 'Normal' }}</td>
+                                    <td class="actions-cell">
+                                        <div class="movie-actions-table">
+                                            <button class="action-btn-table view" onclick="verReservaDetalhes({{ reserva.id }})" title="Ver Detalhes">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            {% if reserva.status == 'pendente' %}
+                                            <button class="action-btn-table edit" onclick="confirmarReserva({{ reserva.id }})" title="Confirmar">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            {% endif %}
+                                            <button class="action-btn-table delete" onclick="eliminarReserva({{ reserva.id }})" title="Eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Ver Reserva Detalhes -->
+    <div id="modalVerReserva" class="modal-overlay" style="display: none;">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2><i class="fas fa-eye"></i> Detalhes da Reserva</h2>
+                <button class="btn-close" onclick="fecharModal('modalVerReserva')" title="Fechar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="reservaDetalhesContent">
+                    <!-- Conteúdo carregado via AJAX -->
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 15px 25px; border-top: 1px solid #e5e7eb; text-align: center;">
+                <button class="btn-cancel" onclick="fecharModal('modalVerReserva')" style="background: #6b7280;">
+                    <i class="fas fa-times"></i> Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function verReservaDetalhes(id) {
+            console.log('Abrindo detalhes da reserva:', id);
+            document.getElementById('modalVerReserva').style.display = 'flex';
+            document.getElementById('reservaDetalhesContent').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>';
+            
+            fetch(`/admin/reservas/detalhes/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const reserva = data.reserva;
+                        const statusClass = reserva.status === 'confirmada' ? 'confirmed' : 
+                                          reserva.status === 'pendente' ? 'pending' : 'cancelled';
+                        
+                        document.getElementById('reservaDetalhesContent').innerHTML = `
+                            <div class="reservation-details">
+                                <div class="detail-header">
+                                    <h3>Reserva #${reserva.id}</h3>
+                                    <span class="status-badge ${statusClass}">${reserva.status.charAt(0).toUpperCase() + reserva.status.slice(1)}</span>
+                                </div>
+                                
+                                <div class="detail-grid">
+                                    <div class="detail-section">
+                                        <h4><i class="fas fa-user"></i> Cliente</h4>
+                                        <p><strong>Nome:</strong> ${reserva.usuario_nome || reserva.nome_cliente || 'N/A'}</p>
+                                        <p><strong>Email:</strong> ${reserva.usuario_email || reserva.email_cliente || 'N/A'}</p>
+                                        ${reserva.telefone_cliente ? `<p><strong>Telefone:</strong> ${reserva.telefone_cliente}</p>` : ''}
+                                    </div>
+                                    
+                                    <div class="detail-section">
+                                        <h4><i class="fas fa-film"></i> Filme</h4>
+                                        <p><strong>Título:</strong> ${reserva.filme_titulo}</p>
+                                        ${reserva.duracao ? `<p><strong>Duração:</strong> ${reserva.duracao} min</p>` : ''}
+                                    </div>
+                                    
+                                    <div class="detail-section">
+                                        <h4><i class="fas fa-building"></i> Cinema</h4>
+                                        <p><strong>Nome:</strong> ${reserva.cinema_nome}</p>
+                                        ${reserva.cinema_localizacao ? `<p><strong>Localização:</strong> ${reserva.cinema_localizacao}</p>` : ''}
+                                    </div>
+                                    
+                                    <div class="detail-section">
+                                        <h4><i class="fas fa-calendar"></i> Sessão</h4>
+                                        <p><strong>Data:</strong> ${reserva.data_sessao ? new Date(reserva.data_sessao).toLocaleDateString('pt-PT') : 'N/A'}</p>
+                                        <p><strong>Lugar:</strong> ${reserva.lugares || 'N/A'}</p>
+                                        <p><strong>Tipo:</strong> ${reserva.tipo_sessao || 'Normal'}</p>
+                                    </div>
+                                    
+                                    <div class="detail-section">
+                                        <h4><i class="fas fa-clock"></i> Reserva</h4>
+                                        <p><strong>Reservado em:</strong> ${reserva.data_reserva ? new Date(reserva.data_reserva).toLocaleString('pt-PT') : 'N/A'}</p>
+                                        <p><strong>Total:</strong> €${reserva.total || '0.00'}</p>
+                                        <p><strong>Método:</strong> ${reserva.metodo_pagamento || 'N/A'}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-actions">
+                                    ${reserva.status === 'pendente' ? `
+                                        <button class="btn-confirm" onclick="confirmarReserva(${reserva.id}); fecharModal('modalVerReserva');">
+                                            <i class="fas fa-check"></i> Confirmar Reserva
+                                        </button>
+                                    ` : ''}
+                                    ${reserva.status !== 'cancelada' ? `
+                                        <button class="btn-cancel" onclick="eliminarReserva(${reserva.id}); fecharModal('modalVerReserva');">
+                                            <i class="fas fa-trash"></i> Eliminar Reserva
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        document.getElementById('reservaDetalhesContent').innerHTML = `
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Erro ao carregar detalhes: ${data.message}</p>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar detalhes:', error);
+                    document.getElementById('reservaDetalhesContent').innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Erro ao carregar detalhes da reserva.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        function confirmarReserva(id) {
+            if (confirm('Confirmar esta reserva?')) {
+                fetch(`/admin/reservas/confirmar/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Erro: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Erro ao confirmar reserva: ' + error);
+                });
+            }
+        }
+
+        function eliminarReserva(id) {
+            if (confirm('Eliminar esta reserva permanentemente? Esta ação não pode ser desfeita.')) {
+                fetch(`/admin/reservas/cancelar/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Reserva eliminada com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Erro ao eliminar reserva: ' + error);
+                });
+            }
+        }
+
+        function fecharModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function limparFiltros() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('cinemaFilter').value = '';
+            document.querySelectorAll('.date-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.date-btn[data-date="all"]').classList.add('active');
+            filtrarReservas();
+        }
+
+        // Filtros
+        document.getElementById('searchInput').addEventListener('input', filtrarReservas);
+        document.getElementById('cinemaFilter').addEventListener('change', filtrarReservas);
+
+        // Filtros de data
+        document.querySelectorAll('.date-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filtrarReservas();
+            });
+        });
+
+        function filtrarReservas() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const cinema = document.getElementById('cinemaFilter').value;
+            const dateFilter = document.querySelector('.date-btn.active').dataset.date;
+            
+            const rows = document.querySelectorAll('tbody tr:not(.sem-resultados)');
+            let visibleCount = 0;
+            
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            
+            rows.forEach(row => {
+                const usuario = row.querySelector('.user-info h4').textContent.toLowerCase();
+                const filme = row.querySelector('.movie-cell').textContent.toLowerCase();
+                const rowCinema = row.dataset.cinema;
+                const rowDataStr = row.dataset.data;
+                
+                const matchSearch = usuario.includes(search) || filme.includes(search);
+                const matchCinema = !cinema || rowCinema === cinema;
+                
+                let matchDate = true;
+                
+                if (dateFilter !== 'all' && rowDataStr) {
+                    const rowDate = new Date(rowDataStr + 'T00:00:00');
+                    rowDate.setHours(0, 0, 0, 0);
+                    
+                    if (dateFilter === 'today') {
+                        matchDate = rowDate.getTime() === hoje.getTime();
+                    } else if (dateFilter === 'week') {
+                        const weekAgo = new Date(hoje);
+                        weekAgo.setDate(hoje.getDate() - 7);
+                        matchDate = rowDate >= weekAgo && rowDate <= hoje;
+                    } else if (dateFilter === 'month') {
+                        const monthAgo = new Date(hoje);
+                        monthAgo.setDate(hoje.getDate() - 30);
+                        matchDate = rowDate >= monthAgo && rowDate <= hoje;
+                    }
+                }
+                
+                if (matchSearch && matchCinema && matchDate) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Mostrar mensagem se não houver resultados
+            mostrarMensagemSemResultados(visibleCount, dateFilter);
+        }
+
+        function mostrarMensagemSemResultados(count, dateFilter) {
+            const mensagemExistente = document.querySelector('.sem-resultados');
+            if (mensagemExistente) {
+                mensagemExistente.remove();
+            }
+            
+            if (count === 0) {
+                const tbody = document.querySelector('tbody');
+                const mensagem = document.createElement('tr');
+                mensagem.className = 'sem-resultados';
+                mensagem.innerHTML = `
+                    <td colspan="8" style="text-align: center; padding: 40px; color: #9ca3af; font-style: italic;">
+                        <i class="fas fa-calendar-times" style="font-size: 2em; margin-bottom: 10px; display: block;"></i>
+                        ${dateFilter === 'today' ? 'Não há reservas para hoje' : 
+                          dateFilter === 'week' ? 'Não há reservas nesta semana' :
+                          dateFilter === 'month' ? 'Não há reservas neste mês' :
+                          'Nenhuma reserva encontrada com os filtros aplicados'}
+                    </td>
+                `;
+                tbody.appendChild(mensagem);
+            }
+        }
+
+        // Ordenação
+        document.getElementById('sortSelect').addEventListener('change', function() {
+            const sortBy = this.value;
+            const tbody = document.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                let aVal, bVal;
+                
+                switch(sortBy) {
+                    case 'id':
+                        aVal = parseInt(a.dataset.reservaId);
+                        bVal = parseInt(b.dataset.reservaId);
+                        break;
+                    case 'usuario':
+                        aVal = a.querySelector('.user-info h4').textContent;
+                        bVal = b.querySelector('.user-info h4').textContent;
+                        break;
+                    case 'filme':
+                        aVal = a.querySelector('.movie-cell').textContent;
+                        bVal = b.querySelector('.movie-cell').textContent;
+                        break;
+                    case 'data':
+                        aVal = new Date(a.dataset.data);
+                        bVal = new Date(b.dataset.data);
+                        break;
+                    case 'status':
+                        aVal = a.dataset.status;
+                        bVal = b.dataset.status;
+                        break;
+                    default:
+                        return 0;
+                }
+                
+                if (typeof aVal === 'string') {
+                    return aVal.localeCompare(bVal);
+                }
+                return aVal - bVal;
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        });
+
+        // Fechar modal ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal-overlay');
+                modals.forEach(modal => {
+                    if (modal.style.display === 'flex') {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

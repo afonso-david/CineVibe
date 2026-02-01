@@ -1,0 +1,11 @@
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pessoa em cadeira de rodas -->
+  <circle cx="25" cy="15" r="6" fill="currentColor"/>
+  <rect x="20" y="22" width="10" height="15" rx="2" fill="currentColor"/>
+  <circle cx="25" cy="45" r="8" stroke="currentColor" stroke-width="3" fill="none"/>
+  <circle cx="15" cy="35" r="4" fill="currentColor"/>
+  <rect x="18" y="30" width="15" height="3" rx="1.5" fill="currentColor"/>
+  
+  <!-- Coração -->
+  <path d="M45 20 C45 16, 41 14, 38 17 C35 14, 31 16, 31 20 C31 25, 38 30, 38 30 C38 30, 45 25, 45 20 Z" fill="currentColor"/>
+</svg>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinemas - CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cinemas.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}"class="active">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Hero Section -->
+
+
+    <!-- Cinema Section -->
+    <section class="cinema-section">
+        <!-- Filtros -->
+        <div class="filter-container">
+            <div class="filter-group">
+                <label for="searchCinema">Pesquisar Cinema</label>
+                <input type="text" id="searchCinema" placeholder="Nome do cinema...">
+            </div>
+            <div class="filter-group">
+                <label for="filterRegiao">Filtrar por Região</label>
+                <select id="filterRegiao">
+                    <option value="">Todas as Regiões</option>
+                    {% for regiao in regioes %}
+                        <option value="{{ regiao }}">{{ regiao }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Cinema Grid -->
+        <div class="cinema-grid" id="cinemaGrid">
+            {% for cinema in cinemas %}
+            <div class="cinema-card" data-regiao="{{ cinema.regiao or '' }}" data-nome="{{ cinema.nome|lower }}">
+                <div class="cinema-image">
+                    <img src="{{ url_for('static', filename=cinema.imagem) }}" 
+                         alt="{{ cinema.nome }}"
+                         onerror="this.src='{{ url_for('static', filename='imgs/cinemas/default.jpg') }}'">
+                    
+                    {% if logged_in %}
+                    <button class="btn-favorito {% if cinema.is_favorito %}favorito{% endif %}" 
+                            onclick="toggleFavorito({{ cinema.id }}, this)">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    {% endif %}
+                    
+                    <div class="cinema-overlay"></div>
+                </div>
+                
+                <div class="cinema-card-body">
+                    <h3 class="cinema-name">{{ cinema.nome }}</h3>
+                    
+                    <div class="cinema-info">
+                        <div class="info-row">
+                            <i class="fas fa-map-marker-alt info-icon"></i>
+                            <span class="info-text">{{ cinema.localizacao }}</span>
+                        </div>
+                        {% if cinema.regiao %}
+                        <div class="info-row">
+                            <i class="fas fa-globe info-icon"></i>
+                            <span class="info-text">{{ cinema.regiao }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="info-row">
+                            <i class="fas fa-clock info-icon"></i>
+                            <span class="info-text">Aberto das 10h às 24h</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cinema-card-footer">
+                    <a href="{{ url_for('cinema_filmes', id_cinema=cinema.id) }}" class="btn-cinema btn-primary">
+                        Ver Filmes
+                    </a>
+                    <button class="btn-cinema btn-secondary" onclick="verDetalhes({{ cinema.id }})">
+                        Detalhes
+                    </button>
+                </div>
+            </div>
+            {% else %}
+            <div class="no-cinemas">
+                <i class="fas fa-building" style="font-size: 4rem; margin-bottom: 20px; color: #FFD60A;"></i>
+                <h3>Nenhum cinema encontrado</h3>
+                <p>Não foram encontrados cinemas na sua pesquisa.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <div class="info-card">
+                <h3>Tecnologia de Ponta</h3>
+                <p>Todos os nossos cinemas estão equipados com a mais recente tecnologia de projeção e som, garantindo uma experiência cinematográfica única.</p>
+            </div>
+            <div class="info-card">
+                <h3>Conforto Premium</h3>
+                <p>Poltronas reclináveis, ar condicionado e espaços amplos para que possa desfrutar do seu filme com o máximo conforto.</p>
+            </div>
+            <div class="info-card">
+                <h3>Experiências Especiais</h3>
+                <p>Salas 4DX, IMAX e sessões temáticas para uma experiência cinematográfica inesquecível.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                        <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filtros de pesquisa
+        document.getElementById('searchCinema').addEventListener('input', filterCinemas);
+        document.getElementById('filterRegiao').addEventListener('change', filterCinemas);
+
+        function filterCinemas() {
+            const searchTerm = document.getElementById('searchCinema').value.toLowerCase();
+            const selectedRegiao = document.getElementById('filterRegiao').value;
+            const cinemaCards = document.querySelectorAll('.cinema-card');
+
+            cinemaCards.forEach(card => {
+                const nome = card.dataset.nome;
+                const regiao = card.dataset.regiao;
+                
+                const matchesSearch = nome.includes(searchTerm);
+                const matchesRegiao = !selectedRegiao || regiao === selectedRegiao;
+                
+                if (matchesSearch && matchesRegiao) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Toggle favorito
+        function toggleFavorito(cinemaId, button) {
+            // Adicionar loading state
+            const originalIcon = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            button.disabled = true;
+            
+            fetch(`/toggle_favorito_cinema/${cinemaId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.classList.toggle('favorito');
+                    
+                    // Mostrar feedback visual
+                    const message = data.message;
+                    showNotification(message, 'success');
+                } else {
+                    showNotification(data.message || 'Erro ao alterar favorito', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showNotification('Erro de conexão', 'error');
+            })
+            .finally(() => {
+                // Restaurar botão
+                button.innerHTML = originalIcon;
+                button.disabled = false;
+            });
+        }
+
+        // Função para mostrar notificações
+        function showNotification(message, type) {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            // Adicionar estilos
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 500;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animar entrada
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Ver detalhes do cinema
+        function verDetalhes(cinemaId) {
+            // Implementar modal ou redirecionamento para detalhes
+            alert('Funcionalidade em desenvolvimento');
+        }
+
+        // Pesquisa global
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value;
+                if (searchTerm.trim()) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

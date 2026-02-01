@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineVibe - A Sua Experiência Cinematográfica</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes-section.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+    
+    <!-- Meta tags para SEO -->
+    <meta name="description" content="CineVibe - A melhor experiência cinematográfica com filmes em estreia, salas premium e serviços exclusivos.">
+    <meta name="keywords" content="cinema, filmes, estreias, bilhetes, CineVibe, sessões exclusivas">
+    <meta property="og:title" content="CineVibe - A Sua Experiência Cinematográfica">
+    <meta property="og:description" content="Descubra os melhores filmes em salas de cinema premium com tecnologia de ponta.">
+    <meta property="og:image" content="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}"class="active">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Hero Banner com Trailers -->
+            <section class="hero-banner" id="banner">
+                <!-- Video Player Local -->
+                <video id="videoPlayer" 
+                       width="100%" 
+                       height="100%" 
+                       autoplay 
+                       muted 
+                       preload="auto"
+                       style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+                    <source src="{{ url_for('static', filename='Vídeos/Trailers/superman-trailer.mp4') }}" type="video/mp4">
+                   
+                </video>
+                
+                <!-- Imagem de fallback -->
+                <img id="posterImage" 
+                     src="{{ url_for('static', filename='imgs/filmes/superman-poster.jpg') }}" 
+                     alt="Imagem do Filme"
+                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+                
+                
+                
+                <!-- Conteúdo do banner -->
+                <div class="hero-content">
+                    <div class="hero-info">
+                        <h1 id="filmeTitle">Superman (2025)</h1>
+                        <p id="filmeGenero">Ação • Aventura • Ficção Científica</p>
+                        <div class="hero-rating">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="rating-text">5/5</span>
+                            </div>
+                        </div>
+                        <div class="hero-buttons">
+                            <button class="btn-primary" id="comprarBilhete">
+                                <i class="fas fa-ticket-alt"></i>
+                                Comprar Bilhete
+                            </button>
+                            <button class="btn-secondary" id="verDetalhes">
+                                <i class="fas fa-info-circle"></i>
+                                Ver Detalhes
+                            </button>
+                            <button class="btn-trailer" id="toggleTrailer">
+                                <i class="fas fa-play"></i>
+                                Ver Trailer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Navegação Rápida - DESIGN PREMIUM -->
+            <section class="navigation-cards-section">
+                <div class="container">
+                    <div class="section-header-premium">
+                        <div class="section-title-container">
+                            <span class="section-subtitle-small">Descubra</span>
+                            <h2 class="section-title-elegant">Explore o CineVibe</h2>
+                            <div class="title-underline"></div>
+                        </div>
+                        <p class="section-description-elegant">Mergulhe numa experiência cinematográfica única com os nossos serviços premium</p>
+                    </div>
+                    
+                    <div class="navigation-cards-grid-premium">
+                        <div class="nav-card-premium filmes-card" onclick="window.location.href='{{ url_for('filmes') }}';">
+                            <div class="nav-card-background">
+                                <div class="gradient-overlay"></div>
+                            </div>
+                            <div class="nav-card-image-premium">
+                                <div class="image-container">
+                                    <img src="{{ url_for('static', filename='imgs/home-removebg-preview.png') }}" alt="Filmes" id="filmesCardImage">
+                                </div>
+                                <div class="floating-icon">
+                                    <i class="fas fa-film"></i>
+                                </div>
+                            </div>
+                            <div class="nav-card-content-premium">
+                                <div class="card-header">
+                                    <h3>Filmes</h3>
+                                    <div class="card-badge">Em Cartaz</div>
+                                </div>
+                                <p>Explore o nosso catálogo completo de filmes em exibição com qualidade cinematográfica excepcional</p>
+                                <div class="card-features">
+                                    <span class="feature-item">
+                                        <i class="fas fa-star"></i>
+                                        Últimas Estreias
+                                    </span>
+                                    <span class="feature-item">
+                                        <i class="fas fa-crown"></i>
+                                        Qualidade Premium
+                                    </span>
+                                </div>
+                                <div class="nav-card-arrow-premium">
+                                    <span>Explorar</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="nav-card-premium bar-card" onclick="window.location.href='{{ url_for('bar') }}';">
+                            <div class="nav-card-background">
+                                <div class="gradient-overlay"></div>
+                            </div>
+                            <div class="nav-card-image-premium">
+                                <div class="image-container">
+                                    <img src="{{ url_for('static', filename='imgs/Snacks/fundo 2.png') }}" alt="Bar" id="barCardImage">
+                                </div>
+                                <div class="floating-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                            </div>
+                            <div class="nav-card-content-premium">
+                                <div class="card-header">
+                                    <h3>Bar Gourmet</h3>
+                                    <div class="card-badge">Premium</div>
+                                </div>
+                                <p>Desfrute dos nossos produtos gourmet e bebidas premium selecionadas pelos nossos chefs</p>
+                                <div class="card-features">
+                                    <span class="feature-item">
+                                        <i class="fas fa-cocktail"></i>
+                                        Bebidas Especiais
+                                    </span>
+                                    <span class="feature-item">
+                                        <i class="fas fa-cookie-bite"></i>
+                                        Snacks Gourmet
+                                    </span>
+                                </div>
+                                <div class="nav-card-arrow-premium">
+                                    <span>Descobrir</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="nav-card-premium accessibility-card" onclick="window.location.href='{{ url_for('cine_acessivel') }}';">
+                            <div class="nav-card-background">
+                                <div class="gradient-overlay"></div>
+                            </div>
+                            <div class="nav-card-image-premium">
+                                <div class="image-container">
+                                    <img src="{{ url_for('static', filename='imgs/insterprete.png') }}" alt="Acessibilidade" id="acessibilidadeCardImage">
+                                </div>
+                                <div class="floating-icon">
+                                    <i class="fas fa-universal-access"></i>
+                                </div>
+                            </div>
+                            <div class="nav-card-content-premium">
+                                <div class="card-header">
+                                    <h3>CineAcessível</h3>
+                                    <div class="card-badge">Inclusivo</div>
+                                </div>
+                                <p>Cinema inclusivo para todos com tecnologias avançadas de acessibilidade e conforto</p>
+                                <div class="card-features">
+                                    <span class="feature-item">
+                                        <i class="fas fa-sign-language"></i>
+                                        Língua Gestual
+                                    </span>
+                                    <span class="feature-item">
+                                        <i class="fas fa-wheelchair"></i>
+                                        Acesso Total
+                                    </span>
+                                </div>
+                                <div class="nav-card-arrow-premium">
+                                    <span>Conhecer</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nova Seção: Descobre o Melhor do Cinema -->
+            <section class="discover-cinema">
+                <div class="discover-background">
+                    <img src="{{ url_for('static', filename='imgs/iron-man-marvels-avengers-2023-ed.jpg') }}" alt="Cinema Background">
+                </div>
+                <div class="discover-overlay"></div>
+                <div class="discover-content">
+                    <div class="discover-text">
+                        <h2>Descobre o Melhor do Cinema</h2>
+                        <p>Explora a nossa vasta coleção de filmes em alta definição. Desde os últimos sucessos de bilheteira aos clássicos atemporais, oferecemos uma experiência cinematográfica única e inesquecível.</p>
+                        
+                        <div class="cinema-stats">
+                            <div class="stat-item">
+                                <div class="cinema-stat-number">{{ stats.filmes_em_exibicao if stats else '0' }}</div>
+                                <div class="stat-label">FILMES<br>EM EXIBIÇÃO</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="cinema-stat-number">{{ stats.total_cinemas if stats else '0' }}</div>
+                                <div class="stat-label">CINEMAS<br>DISPONÍVEIS</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="cinema-stat-number">{{ stats.total_salas if stats else '0' }}</div>
+                                <div class="stat-label">SALAS<br>DE CINEMA</div>
+                            </div>
+                        </div>
+                        
+                        <a href="{{ url_for('filmes') }}" class="discover-btn">
+                            EXPLORAR CATÁLOGO
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="discover-image">
+                        
+                            <img src="{{ url_for('static', filename='imgs/filmes/superman-poster.jpg') }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Filmes Mais Vistos -->
+            <section class="featured-movies">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>🏆 Top 10 Filmes Mais Vistos</h2>
+                        <p>Os filmes que estão a conquistar o público no CineVibe</p>
+                    </div>
+                    
+                    <div class="movies-carousel">
+                        <button class="carousel-btn prev" id="prevBtn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        
+                        <div class="movies-container" id="moviesContainer">
+                            {% if filmes %}
+                                {% for filme in filmes %}
+                                <article class="filme-card" 
+                                         data-rank="{{ loop.index }}"
+                                         data-genero="{{ filme.genero_nome|lower }}"
+                                         data-titulo="{{ filme.titulo|lower }}"
+                                         role="article"
+                                         aria-label="Filme: {{ filme.titulo }}">
+                                    <div class="movie-rank">
+                                        <span class="rank-number">#{{ loop.index }}</span>
+                                    </div>
+                                    <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}{% if filme.trailer_url %}?trailer=auto{% endif %}" 
+                                       aria-label="Ver detalhes de {{ filme.titulo }}">
+                                        <div class="poster-container">
+                                            <img src="{{ filme.poster_url if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
+                                                 alt="Poster de {{ filme.titulo }}" 
+                                                 class="poster-main"
+                                                 loading="lazy"
+                                                 onerror="this.src='{{ url_for('static', filename='imgs/filmes/placeholder.jpg') }}';">
+                                            {% if filme.poster_hover %}
+                                            <img src="{{ filme.poster_hover }}" 
+                                                 alt="Poster alternativo de {{ filme.titulo }}" 
+                                                 class="poster-hover"
+                                                 loading="lazy">
+                                            {% endif %}
+                                        </div>
+                                        <div class="filme-overlay">
+                                            <div class="filme-info">
+                                                <h3 class="titulo">{{ filme.titulo }}</h3>
+                                                <p class="genero">{{ filme.genero_nome or 'Vários Géneros' }}</p>
+                                                {% if filme.duracao %}
+                                                <p class="duracao">⏱️ {{ filme.duracao }}min</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </article>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        
+                        <button class="carousel-btn next" id="nextBtn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Experiências -->
+            <section class="experiences-section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Experiências Únicas</h2>
+                        <p>Descubra as nossas experiências exclusivas</p>
+                    </div>
+                    
+                    <div class="experiences-grid">
+                        <div class="experience-card premium">
+                            <div class="experience-icon">
+                                <img src="{{ url_for('static', filename='imgs/Does-Netflix-Support-Dolby-Atmos-removebg-preview.png') }}" 
+                                     alt="Dolby Atmos" 
+                                     class="experience-image"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <i class="fas fa-crown" style="display: none;"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="experience-card romantic">
+                            <div class="experience-icon">
+                                <img src="{{ url_for('static', filename='imgs/imax-2-logo-black-and-white-removebg-preview.png') }}" 
+                                     alt="IMAX" 
+                                     class="experience-image"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <i class="fas fa-heart" style="display: none;"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="experience-card accessible">
+                            <div class="experience-icon">
+                                <img src="{{ url_for('static', filename='imgs/4dx8706.logowik.com-removebg-preview (1).png') }}" 
+                                     alt="4DX" 
+                                     class="experience-image"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <i class="fas fa-universal-access" style="display: none;"></i>
+                            </div>
+                        </div>
+                        
+               
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Estatísticas -->
+
+
+            <!-- Call to Action -->
+        </main>        
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-container">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                            <h3>CineVibe</h3>
+                        </div>
+                        <p class="footer-description">
+                            A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="TikTok">
+                                <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                            </a>
+                            <a href="#" aria-label="Instagram">
+                                <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                            </a>
+                            <a href="#" aria-label="X">
+                                <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Navegação</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('home') }}">Início</a></li>
+                            <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                            <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                            <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Suporte</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                            <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                            <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                            <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Conta</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <div class="newsletter-section">
+                            <h4>Newsletter</h4>
+                            <p>Receba as últimas novidades e promoções exclusivas.</p>
+                            <form class="newsletter-form">
+                                <div class="newsletter-input-group">
+                                    <input type="email" placeholder="Seu email" required>
+                                    <button type="submit">Subscrever</button>
+                                </div>
+                            </form>
+                            <div class="footer-contact">
+                                <div class="contact-item">
+                                    <span class="contact-icon">📧</span>
+                                    <span>info@cinevibe.pt</span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="contact-icon">📞</span>
+                                    <span>+351 123 456 789</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-container">
+                    <div class="footer-bottom-content">
+                        <div class="footer-legal">
+                            <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                            <div class="legal-links">
+                                <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                                <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                                <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                            </div>
+                        </div>
+                        <div class="footer-certifications">
+                            <div class="cert-logos">
+                                <span class="cert-text">SSL Seguro</span>
+                                <span class="cert-text">GDPR Compliant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        console.log('🎬 CineVibe Homepage iniciada');
+
+        // Dados dos filmes com vídeos locais
+        const filmes = [
+            {
+                titulo: 'Superman (2025)',
+                genero: 'Ação • Aventura • Ficção Científica',
+                video: '{{ url_for("static", filename="Vídeos/Trailers/Superman.mp4") }}',
+                imagem: '{{ url_for("static", filename="imgs/750600FB2B80789FB437AC2FB05594BD659FB371_1680.jpg") }}',
+                rating: 4.5,
+                id: 2
+            },
+            {
+                titulo: 'Rambo III',
+                genero: 'Ação • Guerra • Thriller',
+                video: '{{ url_for("static", filename="Vídeos/Trailers/Rambo.mp4") }}',
+                imagem: '{{ url_for("static", filename="imgs/filmes/rambo-iii.jpg") }}',
+                rating: 4.2,
+                id: 1
+            },
+            {
+                titulo: 'The Black Phone 2',
+                genero: 'Terror • Thriller • Suspense',
+                video: '{{ url_for("static", filename="Vídeos/Trailers/Black Phone 2.mp4") }}',
+                imagem: '{{ url_for("static", filename="imgs/filmes/black_phone_2.jpg") }}',
+                rating: 4.0,
+                id: 13
+            }
+        ];
+
+        let currentIndex = 0;
+        let mostrandoTrailer = true;
+        let videoTimeout;
+        let imageTimeout;
+
+        // Elementos do hero
+        const videoPlayer = document.getElementById('videoPlayer');
+        const imagem = document.getElementById('posterImage');
+        const title = document.getElementById('filmeTitle');
+        const genero = document.getElementById('filmeGenero');
+
+        // Sistema de Hero Banner com vídeos locais
+        function updateHeroContent() {
+            const filme = filmes[currentIndex];
+            title.textContent = filme.titulo;
+            genero.textContent = filme.genero;
+        }
+
+        function playCurrentVideo() {
+            const filme = filmes[currentIndex];
+            console.log('🎬 Iniciando trailer:', filme.titulo);
+            
+            const heroBanner = document.querySelector('.hero-banner');
+            
+            // Limpar timeouts
+            clearTimeout(videoTimeout);
+            clearTimeout(imageTimeout);
+            
+            // Mudar para estado de vídeo
+            heroBanner.classList.remove('showing-image');
+            heroBanner.classList.add('showing-video');
+            
+            // Configurar vídeo
+            videoPlayer.src = filme.video;
+            
+            // Tempo inicial específico
+            if (filme.titulo.includes('Superman')) {
+                videoPlayer.currentTime = 83;
+            } else if (filme.titulo.includes('Black Phone')) {
+                videoPlayer.currentTime = 65;
+            } else if (filme.titulo.includes('Rambo')) {
+                videoPlayer.currentTime = 61;
+            } else {
+                videoPlayer.currentTime = 0;
+            }
+            
+            // Reproduzir vídeo
+            videoPlayer.play().catch(error => {
+                console.error('Erro ao reproduzir vídeo:', error);
+                showCurrentImage();
+            });
+            
+            mostrandoTrailer = true;
+            
+            // Duração do trailer
+            if (!filme.titulo.includes('Rambo')) {
+                let duracao = filme.titulo.includes('Superman') || filme.titulo.includes('Black Phone') ? 17000 : 30000;
+                
+                videoTimeout = setTimeout(() => {
+                    if (mostrandoTrailer) {
+                        videoPlayer.pause();
+                        showCurrentImage();
+                    }
+                }, duracao);
+            }
+        }
+
+        function showCurrentImage() {
+            const filme = filmes[currentIndex];
+            console.log('🖼️ Mostrando imagem:', filme.titulo);
+            
+            const heroBanner = document.querySelector('.hero-banner');
+            
+            // Limpar timeouts
+            clearTimeout(videoTimeout);
+            clearTimeout(imageTimeout);
+            
+            // Configurar imagem
+            imagem.src = filme.imagem;
+            
+            // Mudar para estado de imagem
+            heroBanner.classList.remove('showing-video');
+            heroBanner.classList.add('showing-image');
+            
+            mostrandoTrailer = false;
+            
+            // Próximo filme em 10 segundos
+            imageTimeout = setTimeout(() => {
+                nextMovie();
+            }, 10000);
+        }
+
+        function nextMovie() {
+            console.log('Próximo filme');
+            
+            // Limpar timeouts
+            clearTimeout(videoTimeout);
+            clearTimeout(imageTimeout);
+            
+            // Próximo filme
+            currentIndex = (currentIndex + 1) % filmes.length;
+            updateHeroContent();
+            
+            // Iniciar próximo trailer
+            playCurrentVideo();
+        }
+
+        // Função para controlar manualmente o trailer
+        function toggleTrailer() {
+            if (mostrandoTrailer) {
+                // Pausar vídeo e mostrar imagem
+                videoPlayer.pause();
+                clearTimeout(videoTimeout);
+                showCurrentImage();
+            } else {
+                // Voltar ao vídeo
+                clearTimeout(imageTimeout);
+                playCurrentVideo();
+            }
+        }
+
+        // Botões do hero
+        document.getElementById('comprarBilhete').addEventListener('click', () => {
+            window.location.href = '{{ url_for("filmes") }}';
+        });
+
+        document.getElementById('verDetalhes').addEventListener('click', () => {
+            const filme = filmes[currentIndex];
+            // Se estiver mostrando trailer, ir para página com trailer completo
+            if (mostrandoTrailer) {
+                window.location.href = `/filme/${filme.id}?trailer=auto&from=home`;
+            } else {
+                // Se estiver mostrando imagem, ir normalmente
+                window.location.href = `/filme/${filme.id}`;
+            }
+        });
+
+        document.getElementById('toggleTrailer').addEventListener('click', function() {
+            toggleTrailer();
+            
+            // Atualizar texto do botão
+            if (mostrandoTrailer) {
+                this.innerHTML = '<i class="fas fa-pause"></i> Pausar Trailer';
+            } else {
+                this.innerHTML = '<i class="fas fa-play"></i> Ver Trailer';
+            }
+        });
+
+        // Event listeners para o vídeo
+        videoPlayer.addEventListener('loadstart', () => {
+            console.log('📥 Carregando vídeo...');
+        });
+
+        videoPlayer.addEventListener('canplay', () => {
+            console.log('✅ Vídeo pronto para reproduzir');
+        });
+
+        videoPlayer.addEventListener('error', (e) => {
+            console.error('❌ Erro no vídeo:', e);
+            // Se houver erro, mostrar imagem
+            showCurrentImage();
+        });
+
+        videoPlayer.addEventListener('ended', () => {
+            console.log('🏁 Vídeo terminou naturalmente');
+            showCurrentImage();
+        });
+
+        // Controlar tempo de fim específico para cada filme
+        videoPlayer.addEventListener('timeupdate', () => {
+            const currentFilme = filmes[currentIndex];
+            if (currentFilme && currentFilme.titulo.includes('Rambo')) {
+                // Parar o trailer do Rambo aos 1:22 (82 segundos)
+                if (videoPlayer.currentTime >= 82) {
+                    console.log('🎬 Trailer do Rambo terminado aos 1:22');
+                    clearTimeout(videoTimeout); // Limpar timeout anterior
+                    videoPlayer.pause();
+                    showCurrentImage();
+                }
+            }
+        });
+
+        // Prevenir que o vídeo seja pausado pelo usuário (com exceções inteligentes)
+        videoPlayer.addEventListener('pause', (e) => {
+            // Não interferir se o vídeo foi pausado intencionalmente pelo sistema
+            if (mostrandoTrailer && !videoPlayer.ended && videoPlayer.currentTime > 0) {
+                const currentFilme = filmes[currentIndex];
+                // Não forçar play se é o Rambo e já passou do tempo limite
+                if (currentFilme && currentFilme.titulo.includes('Rambo') && videoPlayer.currentTime >= 82) {
+                    return;
+                }
+                
+                // Continuar reproduzindo para outros casos
+                setTimeout(() => {
+                    if (mostrandoTrailer && !videoPlayer.ended) {
+                        videoPlayer.play().catch(console.error);
+                    }
+                }, 100);
+            }
+        });
+
+        // Carousel de filmes - VERSÃO MELHORADA
+        const moviesContainer = document.getElementById('moviesContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (moviesContainer && prevBtn && nextBtn) {
+            const cardWidth = 330; // 300px card + 30px gap
+            let currentScroll = 0;
+            
+            // Calcular scroll máximo para evitar espaço vazio
+            function getMaxScroll() {
+                return Math.max(0, moviesContainer.scrollWidth - moviesContainer.clientWidth);
+            }
+            
+            // Atualizar visibilidade dos botões
+            function updateCarouselButtons() {
+                const maxScroll = getMaxScroll();
+                prevBtn.style.opacity = currentScroll <= 0 ? '0.5' : '1';
+                nextBtn.style.opacity = currentScroll >= maxScroll ? '0.5' : '1';
+                prevBtn.style.pointerEvents = currentScroll <= 0 ? 'none' : 'auto';
+                nextBtn.style.pointerEvents = currentScroll >= maxScroll ? 'none' : 'auto';
+            }
+            
+            // Scroll suave para posição específica
+            function scrollToPosition(position) {
+                const maxScroll = getMaxScroll();
+                currentScroll = Math.max(0, Math.min(position, maxScroll));
+                moviesContainer.scrollTo({
+                    left: currentScroll,
+                    behavior: 'smooth'
+                });
+                updateCarouselButtons();
+            }
+
+            prevBtn.addEventListener('click', () => {
+                scrollToPosition(currentScroll - cardWidth * 2);
+            });
+
+            nextBtn.addEventListener('click', () => {
+                scrollToPosition(currentScroll + cardWidth * 2);
+            });
+            
+            // Atualizar posição atual quando o usuário faz scroll manual
+            moviesContainer.addEventListener('scroll', function() {
+                currentScroll = this.scrollLeft;
+                updateCarouselButtons();
+            });
+            
+            // Inicializar botões
+            updateCarouselButtons();
+            
+            // Atualizar quando a janela redimensiona
+            window.addEventListener('resize', updateCarouselButtons);
+        }
+
+        // Função para reproduzir trailer
+        function playTrailer(trailerUrl) {
+            if (trailerUrl) {
+                window.open(trailerUrl, '_blank');
+            }
+        }
+
+        // Animação das estatísticas
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = parseInt(entry.target.dataset.target);
+                        const duration = 2000;
+                        const increment = target / (duration / 16);
+                        let current = 0;
+                        
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(timer);
+                            }
+                            
+                            if (target >= 1000000) {
+                                entry.target.textContent = (current / 1000000).toFixed(1) + 'M';
+                            } else if (target >= 1000) {
+                                entry.target.textContent = (current / 1000).toFixed(0) + 'K';
+                            } else {
+                                entry.target.textContent = Math.floor(current);
+                            }
+                        }, 16);
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            statNumbers.forEach(stat => observer.observe(stat));
+        }
+
+        // Sistema de pesquisa
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                performSearch(query);
+            }, 300);
+        });
+
+        function performSearch(query) {
+            // Simular resultados de pesquisa
+            const mockResults = [
+                { type: 'filme', name: 'Superman (2025)', url: '/filme/2' },
+                { type: 'cinema', name: 'CineVibe Lisboa', url: '/cinemas' },
+                { type: 'experiencia', name: 'Sessão VIP', url: '/sessao_exclusiva' }
+            ];
+            
+            const filteredResults = mockResults.filter(item => 
+                item.name.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (filteredResults.length > 0) {
+                searchResults.innerHTML = filteredResults.map(item => `
+                    <div class="search-result-item" onclick="window.location.href='${item.url}'">
+                        <span class="result-type">${item.type}</span>
+                        <span class="result-name">${item.name}</span>
+                    </div>
+                `).join('');
+                searchResults.style.display = 'block';
+            } else {
+                searchResults.innerHTML = '<div class="no-results">Nenhum resultado encontrado</div>';
+                searchResults.style.display = 'block';
+            }
+        }
+
+        // Fechar pesquisa ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Dropdown do perfil
+        const profileDropdown = document.querySelector('.user-profile-dropdown');
+        if (profileDropdown) {
+            profileDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+            });
+            
+            document.addEventListener('click', function() {
+                profileDropdown.classList.remove('active');
+            });
+        }
+
+        // Inicialização SIMPLES
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎬 CineVibe iniciada');
+            
+            const heroBanner = document.querySelector('.hero-banner');
+            heroBanner.classList.add('showing-video');
+            
+            updateHeroContent();
+            animateStats();
+            
+            // Iniciar primeiro trailer
+            setTimeout(() => {
+                playCurrentVideo();
+            }, 1000);
+            
+            // Smooth scroll para links internos
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Intersection Observer para animação da imagem da seção Discover
+            const discoverImageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    console.log('🖼️ Discover image intersection:', entry.isIntersecting);
+                    if (entry.isIntersecting) {
+                        console.log('✅ Animando imagem discover');
+                        entry.target.classList.add('animate-in');
+                        discoverImageObserver.unobserve(entry.target); // Animar apenas uma vez
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observar a imagem da seção discover
+            const discoverImage = document.querySelector('.discover-image');
+            if (discoverImage) {
+                console.log('🎯 Observando discover image');
+                discoverImageObserver.observe(discoverImage);
+            } else {
+                console.log('❌ Discover image não encontrada');
+            }
+        });
+    </script>
+
+
+</body>
+</html>

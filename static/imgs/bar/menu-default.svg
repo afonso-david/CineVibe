@@ -1,0 +1,8 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#2C3E50"/>
+  <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="16" fill="#FFD60A" text-anchor="middle" dy=".3em">
+    Menu
+  </text>
+  <circle cx="150" cy="80" r="30" fill="none" stroke="#FFD60A" stroke-width="2"/>
+  <path d="M 135 80 L 145 90 L 165 70" stroke="#FFD60A" stroke-width="2" fill="none"/>
+</svg>

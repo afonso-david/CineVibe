@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Modal de Reserva</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 214, 10, 0.2);
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #FFD60A 0%, #FFA726 100%);
+            color: #0f0f23;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .test-button:hover {
+            background: linear-gradient(135deg, #FFA726 0%, #FFD60A 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 214, 10, 0.4);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            position: relative;
+            max-width: 500px;
+            width: 90vw;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            animation: modalSlideIn 0.4s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #FFD60A;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: #FFA726;
+            transform: scale(1.1);
+        }
+        
+        .modal-escolha-content {
+            padding: 40px 30px 30px;
+            text-align: center;
+        }
+        
+        .modal-icon-reserva {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .modal-escolha-content h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FFD60A;
+            margin-bottom: 15px;
+        }
+        
+        .modal-escolha-content p {
+            font-size: 1.1rem;
+            color: #B8C5D1;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .modal-escolha-opcoes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .btn-modal-escolha {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 25px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-modal-escolha::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-modal-escolha:hover::before {
+            left: 100%;
+        }
+        
+        .btn-login-reserva {
+            background: linear-gradient(135deg, #FFD60A 0%, #FFA726 100%);
+            color: #0f0f23;
+            border: 2px solid transparent;
+        }
+        
+        .btn-login-reserva:hover {
+            background: linear-gradient(135deg, #FFA726 0%, #FFD60A 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
+        }
+        
+        .btn-convidado-reserva {
+            background: rgba(255, 255, 255, 0.05);
+            color: #E0E6ED;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+        }
+        
+        .btn-convidado-reserva:hover {
+            background: rgba(255, 214, 10, 0.1);
+            border-color: #FFD60A;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 214, 10, 0.2);
+        }
+        
+        .btn-icon {
+            font-size: 2rem;
+            min-width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-content {
+            flex: 1;
+        }
+        
+        .btn-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .btn-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+        
+        .modal-info-reserva {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 214, 10, 0.2);
+            text-align: left;
+        }
+        
+        .info-item {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #E0E6ED;
+            line-height: 1.5;
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-item strong {
+            color: #FFD60A;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Teste - Modal de Escolha de Reserva</h1>
+        
+        <div class="test-section">
+            <h2>Funcionalidade de Reserva</h2>
+            <p>Este teste simula o comportamento quando um usuário não logado tenta fazer uma reserva.</p>
+            
+            <button class="test-button" onclick="mostrarModalEscolhaReserva()">
+                🎫 Simular Reserva (Usuário não logado)
+            </button>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255, 214, 10, 0.1); border-radius: 8px;">
+                <strong>Cenário:</strong> Usuário seleciona um horário e clica em "Reservar Agora" sem estar logado.
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Fluxo Esperado</h2>
+            <ol style="line-height: 1.8;">
+                <li><strong>Usuário clica em "Reservar Agora"</strong></li>
+                <li><strong>Modal aparece</strong> com duas opções</li>
+                <li><strong>Opção 1:</strong> "Iniciar Sessão" → Redireciona para login e depois para reserva</li>
+                <li><strong>Opção 2:</strong> "Continuar como Convidado" → Vai direto para reserva</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Modal de Escolha para Reserva -->
+    <div class="modal-overlay" id="modalEscolhaReserva">
+        <div class="modal-content">
+            <button class="modal-close" onclick="fecharModalEscolhaReserva()">&times;</button>
+            <div class="modal-escolha-content">
+                <div class="modal-icon-reserva">🎫</div>
+                <h2>Como deseja continuar?</h2>
+                <p>Para fazer a sua reserva, pode iniciar sessão ou continuar como convidado.</p>
+                
+                <div class="modal-escolha-opcoes">
+                    <button class="btn-modal-escolha btn-login-reserva" onclick="irParaLoginReserva()">
+                        <div class="btn-icon">👤</div>
+                        <div class="btn-content">
+                            <div class="btn-title">Iniciar Sessão</div>
+                            <div class="btn-subtitle">Acesso a benefícios exclusivos</div>
+                        </div>
+                    </button>
+                    
+                    <button class="btn-modal-escolha btn-convidado-reserva" onclick="continuarComoConvidadoReserva()">
+                        <div class="btn-icon">🚀</div>
+                        <div class="btn-content">
+                            <div class="btn-title">Continuar como Convidado</div>
+                            <div class="btn-subtitle">Reserva rápida sem registo</div>
+                        </div>
+                    </button>
+                </div>
+                
+                <div class="modal-info-reserva">
+                    <div class="info-item">
+                        <strong>🎬 Superman (2025)</strong>
+                    </div>
+                    <div class="info-item">
+                        📅 Quinta-feira, 9 de janeiro<br>
+                        🕐 11:00 | 🎭 Atmos<br>
+                        🎬 Sala 3
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar modal de escolha para reserva
+        function mostrarModalEscolhaReserva() {
+            document.getElementById('modalEscolhaReserva').classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Fechar modal de escolha
+        function fecharModalEscolhaReserva() {
+            document.getElementById('modalEscolhaReserva').classList.remove('visible');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Continuar como convidado
+        function continuarComoConvidadoReserva() {
+            fecharModalEscolhaReserva();
+            alert('✅ Redirecionando para reserva como convidado...');
+            // Simular redirecionamento
+            console.log('Redirecionando para: /reserva?horario=123&cinema=1&tipo=2&data=2025-01-09');
+        }
+        
+        // Ir para login e depois reserva
+        function irParaLoginReserva() {
+            // Simular salvamento dos dados no sessionStorage
+            const dadosReserva = {
+                horario: 123,
+                cinema: 1,
+                tipo: 2,
+                data: '2025-01-09'
+            };
+            
+            sessionStorage.setItem('dadosReserva', JSON.stringify(dadosReserva));
+            
+            fecharModalEscolhaReserva();
+            alert('✅ Dados da reserva salvos! Redirecionando para login...');
+            console.log('Dados salvos no sessionStorage:', dadosReserva);
+            console.log('Redirecionando para: /login');
+        }
+        
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModalEscolhaReserva();
+            }
+        });
+        
+        // Fechar modal clicando fora
+        document.getElementById('modalEscolhaReserva').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModalEscolhaReserva();
+            }
+        });
+    </script>
+</body>
+</html>

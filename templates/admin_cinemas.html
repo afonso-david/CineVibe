@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Cinemas - CineVibe Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_cinemas.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
+                    <span>CineVibe</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin_filmes') }}" class="nav-item">
+                    <i class="fas fa-film"></i>
+                    <span>Filmes</span>
+                </a>
+                <a href="{{ url_for('admin_cinemas') }}" class="nav-item active">
+                    <i class="fas fa-building"></i>
+                    <span>Cinemas</span>
+                </a>
+                <a href="{{ url_for('admin_usuarios') }}" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="{{ url_for('admin_reservas') }}" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Reservas</span>
+                </a>
+                <a href="{{ url_for('admin_atores') }}" class="nav-item">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Atores</span>
+                </a>
+                <a href="{{ url_for('admin_salas') }}" class="nav-item">
+                    <i class="fas fa-chair"></i>
+                    <span>Salas</span>
+                </a>
+                <a href="{{ url_for('admin_bar') }}" class="nav-item">
+                    <i class="fas fa-coffee"></i>
+                    <span>Bar</span>
+                </a>
+                <a href="{{ url_for('admin_avatares') }}" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Avatares</span>
+                </a>
+                <a href="{{ url_for('admin_tipos_sessao') }}" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Tipos de Sessão</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="{{ url_for('home') }}" class="nav-item">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Voltar ao Site</span>
+                </a>
+            </nav>
+        
+            <!-- User Profile Section -->
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {% if user and user.avatar_url %}
+                            <img src="{{ user.avatar_url }}" alt="Avatar" class="avatar-img">
+                        {% else %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
+                        <div class="user-role">Administrador</div>
+                    </div>
+                    <div class="user-actions">
+                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
+                            <i class="fas fa-user-cog"></i>
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar-pro">
+                <div class="top-bar-left">
+                    <div class="page-title">
+                        <i class="fas fa-building"></i>
+                        <div>
+                            <h1>Cinemas</h1>
+                            <p>Total: {{ cinemas|length }} cinemas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <button class="btn-primary" onclick="abrirModalAdicionarCinema()">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Cinema
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content-pro">
+                <!-- Control Panel -->
+                <div class="control-panel">
+                    <div class="search-section">
+                        <div class="search-box-pro">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Pesquisar cinemas..." id="searchInput" value="{{ search or '' }}">
+                        </div>
+                        <div class="filter-group">
+                            <select id="regiaoFilter" class="filter-select">
+                                <option value="">Todas as Regiões</option>
+                                {% for regiao in regioes %}
+                                <option value="{{ regiao }}" {% if regiao_filter == regiao %}selected{% endif %}>{{ regiao }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn-filter" onclick="limparFiltros()">
+                                <i class="fas fa-filter-circle-xmark"></i>
+                                Limpar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="view-controls">
+                        <div class="view-toggle">
+                            <button class="view-btn" data-view="grid" title="Vista em Grelha">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="view-btn active" data-view="table" title="Vista em Tabela">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                        <div class="sort-controls">
+                            <select class="sort-select" id="sortSelect">
+                                <option value="id">Ordenar por ID</option>
+                                <option value="nome">Ordenar por Nome</option>
+                                <option value="regiao">Ordenar por Região</option>
+                                <option value="salas">Ordenar por Nº Salas</option>
+                                <option value="filmes">Ordenar por Nº Filmes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <div class="movies-grid" id="cinemas-grid" style="display: none;">
+                    {% for cinema in cinemas %}
+                    <div class="movie-card-pro" data-cinema-id="{{ cinema.id }}" data-regiao="{{ cinema.regiao or '' }}">
+                        <div class="movie-poster">
+                            {% if cinema.nome == 'CineVibe São Miguel' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Aveiro_v2.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Funchal' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Funchal_v2.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Portimão' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Portimao.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Porto' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Porto.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Lisboa' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Lisboa.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Braga' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Braga.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Coimbra' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Coimbra_v2.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Faro' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Faro.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Évora' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Evora.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Leiria' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Leiria.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Viseu' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Viseu.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Santarém' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Santarem_v2.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Setúbal' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Setubal.png') }}" alt="{{ cinema.nome }}">
+                            {% elif cinema.nome == 'CineVibe Montijo' %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Montijo.png') }}" alt="{{ cinema.nome }}">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='imgs/cinemas/default.jpg') }}" alt="{{ cinema.nome }}">
+                            {% endif %}
+                            <div class="movie-overlay">
+                                <div class="movie-actions">
+                                    <button class="action-btn edit" onclick="editarCinema({{ cinema.id }})" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="removerCinema({{ cinema.id }}, '{{ cinema.nome }}')" title="Remover">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="movie-info">
+                            <h3>{{ cinema.nome }}</h3>
+                            <div class="cinema-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ cinema.localizacao }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-globe"></i>
+                                    <span>{{ cinema.regiao or 'N/A' }}</span>
+                                </div>
+                            </div>
+                            <div class="movie-meta">
+                                <span class="stat-badge salas">{{ cinema.num_salas or 0 }} salas</span>
+                                <span class="stat-badge filmes">{{ cinema.num_filmes or 0 }} filmes</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Table View -->
+                <div class="movies-table-container" id="cinemas-table">
+                    {% if cinemas %}
+                    <div class="table-wrapper">
+                        <table class="movies-table-pro">
+                            <thead>
+                                <tr>
+                                    <th class="id-header">
+                                        <i class="fas fa-hashtag"></i>
+                                        ID
+                                    </th>
+                                    <th class="title-header">
+                                        <i class="fas fa-building"></i>
+                                        Nome
+                                    </th>
+                                    <th class="location-header">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        Localização
+                                    </th>
+                                    <th class="region-header">
+                                        <i class="fas fa-globe"></i>
+                                        Região
+                                    </th>
+                                    <th class="salas-header">
+                                        <i class="fas fa-chair"></i>
+                                        Salas
+                                    </th>
+                                    <th class="filmes-header">
+                                        <i class="fas fa-film"></i>
+                                        Filmes
+                                    </th>
+                                    <th class="actions-header">
+                                        <i class="fas fa-cogs"></i>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cinema in cinemas %}
+                                <tr data-cinema-id="{{ cinema.id }}" data-regiao="{{ cinema.regiao or '' }}">
+                                    <td class="id-cell">{{ cinema.id }}</td>
+                                    <td class="title-cell">
+                                        <div class="cinema-title-info">
+                                            <h4>{{ cinema.nome }}</h4>
+                                            {% if cinema.email %}
+                                            <small class="cinema-email">{{ cinema.email }}</small>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="location-cell">
+                                        <span class="location-text">{{ cinema.localizacao }}</span>
+                                    </td>
+                                    <td class="region-cell">
+                                        <span class="region-tag">{{ cinema.regiao or 'N/A' }}</span>
+                                    </td>
+                                    <td class="salas-cell">
+                                        <span class="count-badge salas">{{ cinema.num_salas or 0 }}</span>
+                                    </td>
+                                    <td class="filmes-cell">
+                                        <span class="count-badge filmes">{{ cinema.num_filmes or 0 }}</span>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="movie-actions-table">
+                                            <button class="action-btn-table edit" onclick="editarCinema({{ cinema.id }})" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn-table delete" onclick="removerCinema({{ cinema.id }}, '{{ cinema.nome }}')" title="Remover">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-building"></i>
+                        <h3>Nenhum cinema encontrado</h3>
+                        <p>Comece adicionando o primeiro cinema ao sistema.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Adicionar Cinema -->
+    <div id="modalAdicionarCinema" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus"></i> Adicionar Cinema</h2>
+                <button class="btn-close" onclick="fecharModal('modalAdicionarCinema')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form action="{{ url_for('admin_adicionar_cinema') }}" method="POST">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nome">
+                                <i class="fas fa-building"></i>
+                                Nome do Cinema *
+                            </label>
+                            <input type="text" id="nome" name="nome" required placeholder="Ex: CineVibe Lisboa">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regiao">
+                                <i class="fas fa-globe"></i>
+                                Região *
+                            </label>
+                            <select id="regiao" name="regiao" required>
+                                <option value="">Selecionar região</option>
+                                <option value="Norte">Norte</option>
+                                <option value="Centro">Centro</option>
+                                <option value="Lisboa">Lisboa</option>
+                                <option value="Alentejo">Alentejo</option>
+                                <option value="Algarve">Algarve</option>
+                                <option value="Açores">Açores</option>
+                                <option value="Madeira">Madeira</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="fecharModal('modalAdicionarCinema')">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-confirm">
+                        <i class="fas fa-save"></i>
+                        Adicionar Cinema
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Cinema -->
+    <div id="modalEditarCinema" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editar Cinema</h2>
+                <button class="btn-close" onclick="fecharModal('modalEditarCinema')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="formEditarCinema" method="POST">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="edit_nome">
+                                <i class="fas fa-building"></i>
+                                Nome do Cinema *
+                            </label>
+                            <input type="text" id="edit_nome" name="nome" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_localizacao">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Localização *
+                            </label>
+                            <input type="text" id="edit_localizacao" name="localizacao" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_regiao">
+                                <i class="fas fa-globe"></i>
+                                Região
+                            </label>
+                            <select id="edit_regiao" name="regiao">
+                                <option value="">Selecionar região</option>
+                                <option value="Norte">Norte</option>
+                                <option value="Centro">Centro</option>
+                                <option value="Lisboa">Lisboa</option>
+                                <option value="Alentejo">Alentejo</option>
+                                <option value="Algarve">Algarve</option>
+                                <option value="Açores">Açores</option>
+                                <option value="Madeira">Madeira</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_email">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            <input type="email" id="edit_email" name="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_telefone">
+                                <i class="fas fa-phone"></i>
+                                Telefone
+                            </label>
+                            <input type="tel" id="edit_telefone" name="telefone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit_imagem_url">
+                                <i class="fas fa-image"></i>
+                                URL da Imagem
+                            </label>
+                            <input type="url" id="edit_imagem_url" name="imagem_url">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="edit_descricao">
+                                <i class="fas fa-align-left"></i>
+                                Descrição
+                            </label>
+                            <textarea id="edit_descricao" name="descricao" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="fecharModal('modalEditarCinema')">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-confirm">
+                        <i class="fas fa-save"></i>
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin_cinemas.js') }}"></script>
+</body>
+</html>

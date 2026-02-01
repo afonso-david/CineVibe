@@ -1,0 +1,3403 @@
+/* Admin Filme Detalhe - CSS Original Limpo */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f0f0f;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.admin-filme-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.header-left h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.header-left .subtitle {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #ffd700;
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: #ffed4e;
+}
+
+.btn-secondary {
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.btn-secondary:hover {
+    background: #444;
+    border-color: #666;
+}
+
+.btn-upload {
+    background: rgba(255, 215, 0, 0.1);
+    color: #ffd700;
+    border: 1px solid #ffd700;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+}
+
+.btn-upload:hover {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.btn-edit, .btn-remove, .btn-view {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+}
+
+.btn-edit {
+    background: #ffd700;
+    color: #000;
+    font-weight: 600;
+}
+
+.btn-edit:hover {
+    background: #ffed4e;
+}
+
+.btn-remove {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-remove:hover {
+    background: #c0392b;
+}
+
+.btn-view {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-view:hover {
+    background: #229954;
+}
+
+.filme-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.filme-header {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.poster-container {
+    position: relative;
+    flex-shrink: 0;
+    width: 300px;
+    height: 450px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.poster-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.poster-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.poster-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.poster-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.poster-container:hover .poster-overlay {
+    opacity: 1;
+}
+
+.filme-info {
+    flex: 1;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffd700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input, .form-select, .form-textarea {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-select option {
+    background: #2a2a2a;
+    color: #fff;
+    padding: 8px;
+}
+
+/* Posicionamento do modal de géneros - ligeiramente acima do centro para dropdown aparecer em baixo */
+#generoModal {
+    align-items: flex-start;
+    padding-top: 20vh;
+    padding-bottom: 5vh;
+}
+
+#generoModal .modal-content {
+    margin: 0 auto;
+    max-height: 60vh;
+    position: relative;
+}
+
+/* Garantir que há espaço suficiente abaixo do select */
+#generoModal .modal-body {
+    padding-bottom: 50px;
+}
+
+/* Posicionamento do modal de tipos de sessão - igual ao modal de géneros */
+#tipoSessaoModal {
+    align-items: flex-start;
+    padding-top: 20vh;
+    padding-bottom: 5vh;
+}
+
+#tipoSessaoModal .modal-content {
+    margin: 0 auto;
+    max-height: 60vh;
+    position: relative;
+}
+
+/* Garantir que há espaço suficiente abaixo dos selects */
+#tipoSessaoModal .modal-body {
+    padding-bottom: 50px;
+}
+
+/* Estilo do select de géneros */
+#generoSelect {
+    position: relative;
+    z-index: 1;
+}
+
+/* Estilo dos selects de tipos de sessão */
+#tipoSessaoSelect,
+#salaTipoSessaoSelect {
+    position: relative;
+    z-index: 1;
+}
+
+/* Correção da cor do texto dos botões de sessão ativos - FUNDO DOURADO E TEXTO BRANCO */
+.btn-sessao.active,
+.botoes-sessao .btn-sessao.active,
+.cinema .btn-sessao.active,
+.cinemas-lista .btn-sessao.active,
+.cinema .botoes-sessao .btn-sessao.active,
+.cinemas-lista .cinema .btn-sessao.active,
+.tipo-sessao-container .btn-sessao.active {
+    background: linear-gradient(135deg, #FFD60A, #FFB703) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Para navegadores WebKit (Chrome, Safari) */
+#generoSelect::-webkit-scrollbar,
+#tipoSessaoSelect::-webkit-scrollbar,
+#salaTipoSessaoSelect::-webkit-scrollbar {
+    width: 8px;
+}
+
+#generoSelect::-webkit-scrollbar-track,
+#tipoSessaoSelect::-webkit-scrollbar-track,
+#salaTipoSessaoSelect::-webkit-scrollbar-track {
+    background: #2a2a2a;
+}
+
+#generoSelect::-webkit-scrollbar-thumb,
+#tipoSessaoSelect::-webkit-scrollbar-thumb,
+#salaTipoSessaoSelect::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+/* Estilos específicos para inputs de horário customizados */
+.horario-input {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 2px;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #ffd700;
+    transition: all 0.3s ease;
+    width: 120px;
+    margin: 0 auto;
+}
+
+.horario-input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    background: #2a2a2a;
+}
+
+.horario-input::placeholder {
+    color: #666;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+
+.horario-input:invalid {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+}
+
+/* Estilos específicos para inputs de tempo - formato 24h FORÇADO */
+input[type="time"] {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
+
+input[type="time"]:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+}
+
+/* FORÇA FORMATO 24 HORAS - REMOVE COMPLETAMENTE AM/PM */
+input[type="time"]::-webkit-datetime-edit-ampm-field {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+input[type="time"]::-webkit-datetime-edit {
+    color: #fff;
+    background: transparent;
+}
+
+input[type="time"]::-webkit-datetime-edit-hour-field,
+input[type="time"]::-webkit-datetime-edit-minute-field {
+    color: #fff;
+    background: transparent;
+    border: none;
+}
+
+input[type="time"]::-webkit-datetime-edit-text {
+    color: #fff;
+    background: transparent;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    background: transparent;
+}
+
+/* Para Firefox */
+input[type="time"]::-moz-time-picker {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    width: 100%;
+}
+
+.section {
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid #444;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ffd700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.atores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    background: #444;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #666;
+}
+
+.ator-card {
+    background: #2a2a2a;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #555;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ator-card:hover {
+    transform: translateY(-2px);
+    border-color: #ffd700;
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    background: #333;
+}
+
+.ator-foto {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffd700;
+}
+
+.ator-foto-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 1.5rem;
+}
+
+.ator-info {
+    flex: 1;
+}
+
+.ator-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.ator-info p {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.ator-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.empty-state h4 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(2px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show,
+.modal[style*="flex"] {
+    display: flex;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid #333;
+    z-index: 10000;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    background: #2a2a2a;
+}
+
+.modal-header h3 {
+    color: #ffd700;
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #fff;
+    background: #333;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.modal-footer {
+    padding: 20px 25px;
+    border-top: 1px solid #333;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffd700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 1001;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: #27ae60;
+}
+
+.notification.error {
+    background: #e74c3c;
+}
+
+.notification.info {
+    background: #3498db;
+}
+
+/* Cinema and Session Styles */
+.cinemas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cinema {
+    background: #222;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #333;
+}
+
+.cinema-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.nome-cinema {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.btn-remove-cinema {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-remove-cinema:hover {
+    background: #c0392b;
+}
+
+.botoes-sessao {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+/* Mensagem quando não há tipos de sessão */
+.no-tipos-sessao {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px dashed #444;
+    margin: 10px 0;
+}
+
+.btn-sessao {
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-sessao:hover {
+    background: #444;
+    border-color: #666;
+}
+
+.btn-sessao.active {
+    background: linear-gradient(135deg, #FFD60A, #FFB703) !important;
+    color: #ffffff !important;
+    border-color: #ffd700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.sessao-grupo {
+    margin-top: 15px;
+    padding: 15px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.sessao-grupo.hidden {
+    display: none;
+}
+
+.sessao-info-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.sala-tipo-sessao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.sala-label {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.sala-atual {
+    font-weight: 600;
+    color: #ffd700;
+}
+
+.btn-editar-sala-tipo {
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-editar-sala-tipo:hover {
+    background: #444;
+}
+
+.horarios-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.horario-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.hora-btn {
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.hora-btn:hover {
+    background: #444;
+}
+
+.hora-btn.selected {
+    background: #ffd700;
+    color: #000;
+    border-color: #ffd700;
+}
+
+.acoes-horario-container {
+    display: flex;
+    gap: 2px;
+}
+
+.btn-edit-horario,
+.btn-delete-horario {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: all 0.3s ease;
+}
+
+.btn-edit-horario:hover {
+    background: #ffd700;
+    color: #000;
+}
+
+.btn-delete-horario:hover {
+    background: #e74c3c;
+}
+
+.btn-add-horario {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.btn-add-horario:hover {
+    background: #229954;
+}
+
+.loading-horarios {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+.no-horarios {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-style: italic;
+}
+
+.error-horarios {
+    text-align: center;
+    padding: 20px;
+    color: #e74c3c;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+@media (max-width: 768px) {
+    .admin-filme-container {
+        padding: 15px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .filme-header {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .poster-container {
+        width: 250px;
+        height: 375px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .atores-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .botoes-sessao {
+        flex-direction: column;
+    }
+    
+    .sala-tipo-sessao {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .poster-container {
+        width: 200px;
+        height: 300px;
+    }
+    
+    .ator-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .ator-actions {
+        justify-content: center;
+    }
+    
+    .cinema-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+/* Cinemas - Estilo igual ao filme_detalhe */
+.cinemas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    flex: 1;
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.cinema {
+    background: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 16px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.cinema:hover {
+    background: #333;
+    border-color: rgba(255, 214, 10, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.cinema-header {
+    position: relative;
+    margin-bottom: 20px;
+    padding-right: 50px;
+}
+
+.nome-cinema {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #FFD60A;
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Cinema region and address - HIDDEN FOR CLEANER LOOK */
+.cinema-regiao {
+    display: none;
+}
+
+.cinema-endereco {
+    display: none;
+}
+
+.btn-remove-cinema {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.btn-remove-cinema:hover {
+    background: rgba(231, 76, 60, 0.3);
+    border-color: rgba(231, 76, 60, 0.5);
+}
+
+/* Botões de sessão - igual ao filme_detalhe */
+.botoes-sessao {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.btn-sessao {
+    padding: 10px 20px;
+    background: rgba(78, 168, 222, 0.2);
+    color: #4EA8DE;
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-sessao:hover {
+    background: rgba(78, 168, 222, 0.3);
+    border-color: rgba(78, 168, 222, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-sessao.active {
+    background: linear-gradient(135deg, #FFD60A, #FFB703);
+    color: #ffffff !important;
+    border-color: #FFD60A;
+    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
+    transform: translateY(-2px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+}
+
+
+
+/* Estilo para o modal de tipos de sessão */
+.cinema-info {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d) !important;
+    border: 1px solid #444;
+    color: #fff !important;
+}
+
+.cinema-info p {
+    color: #fff !important;
+}
+
+.cinema-info strong {
+    color: #FFD60A;
+}
+
+/* Divider no modal */
+.modal-body hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #444, transparent);
+}
+
+/* Ajuda do formulário */
+.form-help {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* Botão desabilitado */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #666 !important;
+}
+
+.btn:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ===== MELHORIAS ESTÉTICAS PARA SESSÕES ===== */
+
+/* Container principal das sessões */
+.sessoes-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sessoes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sessoes-header p {
+    margin: 0;
+    font-weight: 600;
+    color: #B8C5D1;
+}
+
+/* Botões de tipos de sessão - melhorados */
+.botoes-sessao {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 15px 0;
+}
+
+.btn-sessao {
+    padding: 12px 24px;
+    background: rgba(78, 168, 222, 0.15);
+    color: #4EA8DE;
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-sessao::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.btn-sessao:hover::before {
+    left: 100%;
+}
+
+.btn-sessao:hover {
+    background: rgba(78, 168, 222, 0.25);
+    border-color: rgba(78, 168, 222, 0.5);
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+.btn-sessao.active {
+    background: linear-gradient(135deg, #FFD60A, #FFB703);
+    color: #ffffff !important;
+    border-color: #FFD60A;
+    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
+    transform: translateY(-2px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-sessao.active:hover {
+    background: linear-gradient(135deg, #FFB703, #FF9500);
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.5);
+}
+
+/* Container para tipo de sessão com botão de remoção - SEM SOMBRA AZUL */
+.tipo-sessao-container {
+    position: relative;
+    display: inline-block;
+    border-radius: 25px;
+    overflow: visible;
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.15), rgba(78, 168, 222, 0.1));
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+    margin: 4px 8px 4px 4px; /* Espaço extra à direita para o botão */
+}
+
+.tipo-sessao-container:hover {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(78, 168, 222, 0.15));
+    border-color: rgba(78, 168, 222, 0.5);
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+.tipo-sessao-container .btn-sessao {
+    border: none;
+    background: transparent;
+    border-radius: 25px;
+    margin: 0;
+    box-shadow: none;
+    transform: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.tipo-sessao-container .btn-sessao.active {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.tipo-sessao-container .btn-sessao:hover {
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-remover-tipo-sessao {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+}
+
+.btn-remover-tipo-sessao::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-remover-tipo-sessao:hover::before {
+    opacity: 1;
+}
+
+.btn-remover-tipo-sessao:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(231, 76, 60, 0.6);
+    border-color: #fff;
+}
+
+.btn-remover-tipo-sessao:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.8);
+}
+
+.btn-remover-tipo-sessao i {
+    font-size: 10px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Mostrar botão de remoção com transição suave */
+.tipo-sessao-container .btn-remover-tipo-sessao {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tipo-sessao-container:hover .btn-remover-tipo-sessao {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Efeito de pulso sutil no hover do container - SEM SOMBRA AZUL */
+.tipo-sessao-container:hover {
+    animation: subtle-pulse 2s infinite;
+}
+
+@keyframes subtle-pulse {
+    0%, 100% {
+        box-shadow: none;
+    }
+    50% {
+        box-shadow: none;
+    }
+}
+
+/* Ajustar espaçamento dos botões de sessão */
+.botoes-sessao {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 15px 0;
+}
+
+/* Grupos de sessão - melhorados */
+.sessao-grupo {
+    position: relative;
+    overflow: visible !important;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sessao-grupo.hidden {
+    display: none;
+}
+
+.sessao-grupo .horarios {
+    display: block;
+    margin-top: 0;
+}
+
+/* Container de horários - melhorado */
+.horarios-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px 0;
+}
+
+/* Item individual de horário */
+.horario-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.horario-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(78, 168, 222, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Botões de horário - melhorados */
+.hora-btn {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #4EA8DE, #3B91C0);
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(78, 168, 222, 0.3);
+    min-width: 70px;
+    text-align: center;
+}
+
+.hora-btn:hover {
+    background: linear-gradient(135deg, #3B91C0, #2A7AA8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(78, 168, 222, 0.4);
+    border-color: rgba(78, 168, 222, 0.5);
+}
+
+.hora-btn.selected {
+    background: linear-gradient(135deg, #FFD60A, #FFB703);
+    border-color: #FFD60A;
+    color: #0D1B2A;
+    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Ações de horário */
+.horario-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.btn-edit-horario,
+.btn-remove-horario {
+    padding: 6px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+}
+
+.btn-edit-horario {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.btn-edit-horario:hover {
+    background: rgba(52, 152, 219, 0.3);
+    border-color: rgba(52, 152, 219, 0.5);
+    transform: translateY(-1px);
+}
+
+.btn-remove-horario {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.btn-remove-horario:hover {
+    background: rgba(231, 76, 60, 0.3);
+    border-color: rgba(231, 76, 60, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Botão adicionar horário - melhorado */
+.add-horario-btn {
+    padding: 12px 20px !important;
+    background: rgba(46, 204, 113, 0.2) !important;
+    color: #2ecc71 !important;
+    border: 2px solid rgba(46, 204, 113, 0.3) !important;
+    border-radius: 10px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 15px !important;
+}
+
+.add-horario-btn:hover {
+    background: rgba(46, 204, 113, 0.3) !important;
+    border-color: rgba(46, 204, 113, 0.5) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3) !important;
+}
+
+/* Salas wrapper - melhorado */
+.salas-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sala-info {
+    background: rgba(255, 214, 10, 0.15);
+    color: #FFD60A;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 214, 10, 0.3);
+    box-shadow: 0 2px 6px rgba(255, 214, 10, 0.2);
+}
+
+/* Estados especiais */
+.no-tipos-sessao {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-style: italic;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .botoes-sessao {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-sessao {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .horarios-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .horario-item {
+        justify-content: space-between;
+    }
+}
+
+/* ===== FIM DAS MELHORIAS ESTÉTICAS ===== */
+
+/* Botão adicionar tipo de sessão */
+.btn-adicionar-tipo-sessao {
+    padding: 12px 20px;
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 2px solid rgba(46, 204, 113, 0.3);
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.btn-adicionar-tipo-sessao:hover {
+    background: rgba(46, 204, 113, 0.3);
+    border-color: rgba(46, 204, 113, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+.btn-adicionar-tipo-sessao i {
+    font-size: 0.8rem;
+}
+
+/* Sessão grupo e horários - igual ao filme_detalhe */
+.sessao-grupo {
+    position: relative;
+    overflow: visible !important;
+}
+
+.sessao-grupo.hidden {
+    display: none;
+}
+
+.sessao-grupo .horarios {
+    display: block;
+    margin-top: 20px;
+}
+
+/* Horários com botões de edição */
+.horarios-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.horario-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    background: rgba(78, 168, 222, 0.1);
+    border-radius: 12px;
+    padding: 8px;
+    border: 1px solid rgba(78, 168, 222, 0.2);
+}
+
+.acoes-sessoes-container {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.sessao-individual {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-sessao {
+    font-size: 0.7rem;
+    color: #888;
+    margin-right: 4px;
+    white-space: nowrap;
+}
+
+.hora-btn {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #4EA8DE, #3B91C0);
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.3);
+}
+
+.hora-btn:hover {
+    background: linear-gradient(135deg, #3B91C0, #2A7AA8);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.5);
+    border-color: rgba(78, 168, 222, 0.5);
+}
+
+.hora-btn.selected {
+    background: linear-gradient(135deg, #FFD60A, #FFB703);
+    border-color: #FFD60A;
+    color: #0D1B2A;
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.5);
+    transform: translateY(-3px);
+}
+
+.hora-btn:disabled,
+.hora-btn[disabled] {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Botões de edição de horários */
+.btn-edit-horario,
+.btn-delete-horario {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.btn-edit-horario {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.btn-edit-horario:hover {
+    background: rgba(52, 152, 219, 0.3);
+    border-color: rgba(52, 152, 219, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-delete-horario {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.btn-delete-horario:hover {
+    background: rgba(231, 76, 60, 0.3);
+    border-color: rgba(231, 76, 60, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Botões de adicionar */
+.btn-add-horario,
+.btn-add-sala {
+    padding: 10px 16px;
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 2px solid rgba(46, 204, 113, 0.3);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-add-horario:hover,
+.btn-add-sala:hover {
+    background: rgba(46, 204, 113, 0.3);
+    border-color: rgba(46, 204, 113, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Salas com botões de edição */
+.salas-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.sala-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sala-info {
+    background: rgba(255, 214, 10, 0.1);
+    color: #FFD60A;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 214, 10, 0.3);
+}
+
+.btn-edit-sala {
+    padding: 4px 6px;
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.btn-edit-sala:hover {
+    background: rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Modal overlay - DESIGN PREMIUM E ELEGANTE */
+.modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(10px) !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    animation: fadeIn 0.4s ease !important;
+}
+
+/* Estilos para a nova interface de sala por tipo de sessão */
+.sessao-info-header {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.sessao-info-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.sala-tipo-sessao {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+.sala-label {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 16px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sala-atual {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    min-width: 120px;
+    text-align: center;
+}
+
+.btn-editar-sala-tipo {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-editar-sala-tipo:hover {
+    background: linear-gradient(135deg, #ffed4e 0%, #fff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.btn-editar-sala-tipo:active {
+    transform: translateY(0);
+}
+
+.acoes-horario-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Loading e estados */
+.loading-horarios {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+.loading-horarios i {
+    font-size: 1.2rem;
+    margin-right: 8px;
+    animation: spin 1s linear infinite;
+}
+
+.no-horarios,
+.error-horarios {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-style: italic;
+}
+
+.error-horarios {
+    color: #e74c3c;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* Seção de Avaliações */
+.avaliacoes-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+.rating-medio {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #FFD60A;
+    font-weight: 600;
+}
+
+.rating-medio i {
+    font-size: 1rem;
+}
+
+.total-avaliacoes {
+    color: #888;
+}
+
+.avaliacoes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.avaliacao-card {
+    background: #2a2a2a;
+    border-radius: 8px;
+    padding: 15px;
+    border-left: 3px solid #FFD60A;
+}
+
+.avaliacao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.avaliacao-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-remove-avaliacao {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-remove-avaliacao:hover {
+    background: #ff4444;
+    color: #fff;
+}
+
+.usuario-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.usuario-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.usuario-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+}
+
+.usuario-detalhes h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.data-avaliacao {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.rating-stars i {
+    color: #444;
+    font-size: 0.9rem;
+}
+
+.rating-stars i.active {
+    color: #FFD60A;
+}
+
+.rating-numero {
+    font-size: 0.8rem;
+    color: #888;
+    margin-left: 5px;
+}
+
+.avaliacao-comentario {
+    margin-top: 10px;
+}
+
+.avaliacao-comentario p {
+    margin: 0;
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Botão para adicionar tipo de sessão */
+.btn-add-tipo-sessao {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+}
+
+/* Botão para adicionar tipo de sessão */
+.btn-add-tipo-sessao {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+}
+
+.btn-add-tipo-sessao:hover {
+    background: linear-gradient(135deg, #218838, #1ea085);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-add-tipo-sessao i {
+    font-size: 0.8rem;
+}
+
+/* Modal para tipos de sessão */
+#modalAdicionarTipo .modal-content {
+    max-width: 500px;
+}
+
+.cinema-info {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.cinema-info p {
+    margin: 0;
+    color: #fff;
+}
+
+.cinema-info p:first-child {
+    font-weight: 600;
+}
+
+.cinema-info strong {
+    color: #FFD60A;
+}
+
+.tipo-info {
+    background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
+    border-left: 4px solid #007bff;
+    border-radius: 0 8px 8px 0;
+    padding: 15px;
+    margin-top: 15px;
+    color: #333;
+}
+
+.tipo-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.tipo-info p:not(:first-child) {
+    margin-top: 5px;
+}
+
+.tipo-info strong {
+    color: #007bff;
+}
+
+/* Responsividade para avaliações */
+@media (max-width: 768px) {
+    .avaliacao-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .rating-stars {
+        align-self: flex-end;
+    }
+}
+
+/* Géneros na área de informações básicas */
+.generos-section {
+    margin-top: 10px;
+}
+
+.generos-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.genero-tag {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #000;
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    gap: 6px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.genero-tag:hover {
+    background: linear-gradient(135deg, #ffed4e, #ffd700);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.genero-nome {
+    font-weight: 600;
+}
+
+.btn-remove-genero {
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #000;
+    font-size: 0.6rem;
+}
+
+.btn-remove-genero:hover {
+    background: rgba(220, 53, 69, 0.8);
+    color: white;
+    transform: scale(1.1);
+}
+
+.no-generos {
+    margin-bottom: 10px;
+}
+
+.no-generos-text {
+    color: #888;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.btn-add-genero {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px dashed #ffd700;
+    color: #ffd700;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-add-genero:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #ffed4e;
+    color: #ffed4e;
+    transform: translateY(-1px);
+}
+
+.btn-add-genero i {
+    font-size: 0.7rem;
+}
+
+/* Responsivo para géneros na área de informações */
+@media (max-width: 768px) {
+    .generos-grid {
+        gap: 6px;
+    }
+    
+    .genero-tag {
+        font-size: 0.75rem;
+        padding: 5px 8px;
+    }
+    
+    .btn-remove-genero {
+        width: 14px;
+        height: 14px;
+        font-size: 0.55rem;
+    }
+    
+    .btn-add-genero {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+}
+
+/* ===== ESTILOS PARA MODAL DE ADICIONAR HORÁRIO ===== */
+.modal-overlay .form-input {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 2px solid #333 !important;
+}
+
+.modal-overlay .form-input:focus {
+    border-color: #ffd700 !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+}
+
+.modal-overlay select option {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    padding: 8px !important;
+}
+
+.modal-overlay select option:hover,
+.modal-overlay select option:checked {
+    background-color: #333 !important;
+}
+
+.btn-adicionar-sessao {
+    background: #28a745 !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Garantir que o select tenha o mesmo estilo das outras listas */
+#selectHorario {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 2px solid #333 !important;
+}
+
+#selectHorario:focus {
+    border-color: #ffd700 !important;
+    outline: none !important;
+}
+
+#selectHorario option {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    padding: 8px !important;
+}
+
+#selectHorario option:hover {
+    background-color: #333 !important;
+}
+
+/* Melhorar aparência geral do modal */
+.modal-overlay .modal-content {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+.modal-overlay .modal-header h3 {
+    color: #ffd700 !important;
+}
+
+.modal-overlay .btn-primary {
+    background: #ffd700 !important;
+    color: #000 !important;
+    border: none !important;
+}
+
+.modal-overlay .btn-primary:hover {
+    background: #ffed4e !important;
+}
+
+.modal-overlay .btn-secondary {
+    background: #333 !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
+}
+
+.modal-overlay .btn-secondary:hover {
+    background: #444 !important;
+}
+
+/* ===== PESQUISA DE ATORES ===== */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #ffd700;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.search-results.show {
+    display: block;
+}
+
+.search-result-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #2a2a2a;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.search-result-item:hover {
+    background: #2a2a2a;
+    transform: translateX(5px);
+    border-left: 3px solid #ffd700;
+}
+
+.search-result-item:active {
+    background: #333;
+    transform: scale(0.98);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item.loading,
+.search-result-item.error,
+.search-result-item.no-results {
+    justify-content: center;
+    color: #888;
+    font-style: italic;
+    transform: none;
+    border-left: none;
+}
+
+.search-result-item.error {
+    color: #ff4444;
+}
+
+.actor-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #333;
+    flex-shrink: 0;
+    transition: border-color 0.2s ease;
+}
+
+.search-result-item:hover .actor-photo {
+    border-color: #ffd700;
+}
+
+.actor-info {
+    flex: 1;
+}
+
+.actor-name {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.search-result-item:hover .actor-name {
+    color: #ffd700;
+}
+
+.actor-nationality {
+    color: #888;
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+.selected-actor {
+    margin-top: 10px;
+    padding: 15px;
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    border-radius: 8px;
+    border: 2px solid #ffd700;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.selected-actor-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.selected-actor-info span {
+    color: #ffd700;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.selected-actor-info span::before {
+    content: "✓";
+    background: #ffd700;
+    color: #000;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Animação para quando o ator é selecionado */
+.selected-actor.actor-selected {
+    transform: scale(1.02);
+    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
+    border-color: #ffed4e;
+}
+
+.btn-clear-selection {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    color: #ff4444;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+}
+
+.btn-clear-selection:hover {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: rgba(255, 68, 68, 0.5);
+    transform: scale(1.05);
+}
+
+.no-results {
+    padding: 12px 16px;
+    color: #888;
+    font-style: italic;
+    text-align: center;
+}
+
+/* Loading state */
+.search-loading {
+    padding: 12px 16px;
+    color: #888;
+    text-align: center;
+}
+
+.search-loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* ===== ESTILOS PARA GESTÃO DE TIPOS DE SESSÃO ===== */
+
+.tipo-sessao-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.btn-remove-tipo {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: #dc3545;
+    color: white;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+}
+
+.tipo-sessao-container:hover .btn-remove-tipo {
+    opacity: 1;
+}
+
+.btn-remove-tipo:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
+.btn-add-tipo-sessao {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.btn-add-tipo-sessao:hover {
+    background: linear-gradient(135deg, #218838, #1ea085);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-add-tipo-sessao i {
+    font-size: 0.8rem;
+}
+
+/* Modal para adicionar tipos de sessão */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    margin: 5% auto;
+    padding: 0;
+    border: 1px solid #444;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    color: #ffd700;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.cinema-info {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.cinema-info p {
+    margin: 0 0 8px 0;
+    color: #e0e0e0;
+}
+
+.cinema-info p:last-child {
+    margin-bottom: 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffd700;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: #2d2d2d;
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.tipo-info {
+    background: rgba(0, 123, 255, 0.1);
+    border: 1px solid rgba(0, 123, 255, 0.3);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.tipo-info p {
+    margin: 0 0 8px 0;
+    color: #e0e0e0;
+}
+
+.tipo-info p:last-child {
+    margin-bottom: 0;
+}
+
+.modal-footer {
+    padding: 20px 24px;
+    border-top: 1px solid #444;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-primary:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 16px;
+    }
+    
+    .btn-add-tipo-sessao {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    .tipo-sessao-container {
+        margin-right: 4px;
+        margin-bottom: 4px;
+    }
+}
+
+/* Estilos para pesquisa de atores */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #333;
+    transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+    background-color: #2a2a2a;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.actor-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+}
+
+.actor-info {
+    flex: 1;
+}
+
+.actor-name {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.actor-nationality {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.search-loading, .search-error {
+    padding: 12px;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.search-error {
+    color: #ff6b6b;
+}
+
+/* Ator selecionado */
+.selected-actor-info {
+    margin-top: 10px;
+}
+
+.selected-actor-card {
+    display: flex;
+    align-items: center;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.selected-actor-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+}
+
+.selected-actor-details {
+    flex: 1;
+}
+
+.selected-actor-details strong {
+    display: block;
+    color: #ffd700;
+    margin-bottom: 2px;
+}
+
+.selected-actor-details span {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.btn-clear {
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.btn-clear:hover {
+    background: #ff3742;
+}
+
+/* Posicionamento relativo para o container de pesquisa */
+.form-group {
+    position: relative;
+}
+
+/* ===== SESSÕES SIMPLES ===== */
+.sessoes-simples {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+}
+
+.sessoes-simples p {
+    margin: 0 0 10px 0;
+    color: #ffd700;
+    font-weight: 500;
+}
+
+.lista-sessoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.sessao-tag {
+    background: rgba(255, 215, 0, 0.1);
+    color: #ffd700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.no-sessoes {
+    color: #888;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* ===== MODAL GERIR SESSÕES ===== */
+.tipos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.tipo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.tipo-item:hover {
+    border-color: rgba(255, 215, 0, 0.3);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.tipo-item span {
+    font-weight: 500;
+    color: #fff;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+}
+
+/* ===== CINEMA INFO NO MODAL ===== */
+.cinema-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.cinema-info p {
+    margin: 0;
+    color: #ffd700;
+}
+
+.sessoes-disponiveis h4 {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+/* Estilos para o modal de gestão de sessões */
+.tipos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.tipo-card {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.tipo-card:hover {
+    border-color: #ffd700;
+    background: #333;
+}
+
+.tipo-info h4 {
+    color: #ffd700;
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.tipo-preco {
+    color: #4EA8DE;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.tipo-descricao {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 8px 0 15px 0;
+    line-height: 1.4;
+}
+
+.loading-tipos,
+.no-tipos-disponiveis,
+.error-tipos {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-style: italic;
+}
+
+.loading-tipos i {
+    margin-right: 8px;
+    color: #ffd700;
+}
+
+.error-tipos {
+    color: #e74c3c;
+}
+
+.no-tipos-disponiveis {
+    color: #888;
+}
+
+/* ===== ACTOR SEARCH STYLES ===== */
+
+/* Container principal da pesquisa de atores */
+.actor-search-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+/* Campo de pesquisa de atores */
+#actorSearch {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+#actorSearch:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+}
+
+#actorSearch::placeholder {
+    color: #666;
+}
+
+/* Container dos resultados da pesquisa */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.search-results::-webkit-scrollbar {
+    width: 6px;
+}
+
+.search-results::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 3px;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Item individual nos resultados da pesquisa */
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #333;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: #333;
+    transform: translateX(2px);
+}
+
+/* Foto do ator nos resultados */
+.result-photo {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #ffd700;
+}
+
+.result-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Informações do ator nos resultados */
+.result-info {
+    flex: 1;
+}
+
+.result-info h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.result-info p {
+    margin: 2px 0 0 0;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Estados especiais dos resultados */
+.search-loading,
+.no-results,
+.search-error {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.search-loading i {
+    margin-right: 8px;
+    color: #ffd700;
+}
+
+.search-error {
+    color: #e74c3c;
+}
+
+/* Container do ator selecionado */
+.selected-actor {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    display: none;
+}
+
+/* Card do ator selecionado */
+.selected-actor-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+/* Foto do ator selecionado */
+.selected-actor-photo {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #ffd700;
+}
+
+.actor-photo-small {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Detalhes do ator selecionado */
+.selected-actor-details {
+    flex: 1;
+}
+
+.selected-actor-details h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffd700;
+}
+
+.selected-actor-details p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+/* Botão para limpar seleção */
+.btn-clear-selection {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 24px;
+    height: 24px;
+    background: #e74c3c;
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+}
+
+.btn-clear-selection:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(231, 76, 60, 0.6);
+}
+
+.btn-clear-selection i {
+    font-size: 10px;
+}
+
+/* Responsividade para pesquisa de atores */
+@media (max-width: 768px) {
+    .search-results {
+        max-height: 250px;
+    }
+    
+    .search-result-item {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+    
+    .result-photo {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .selected-actor-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .selected-actor-photo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .btn-clear-selection {
+        position: static;
+        margin-top: 10px;
+        width: auto;
+        height: auto;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+    }
+}
+
+/* ===== END ACTOR SEARCH STYLES ===== */
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .tipos-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tipo-item {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .lista-sessoes {
+        justify-content: center;
+    }
+}

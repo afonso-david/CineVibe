@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Lugares | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/selecao_lugares_completa.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="user-icon">
+                        {% if logged_in %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-step completed">
+                <div class="step-number">1</div>
+                <div class="step-label">Quantidade</div>
+            </div>
+            <div class="progress-line completed"></div>
+            <div class="progress-step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Lugares</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-label">Bar</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step">
+                <div class="step-number">4</div>
+                <div class="step-label">Pagamento</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main>
+            <div class="container">
+                <!-- Movie Info -->
+                <div class="movie-info-card">
+                    <img src="{{ filme.poster_url if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
+                         alt="{{ filme.titulo }}" class="movie-poster">
+                    <div class="movie-details">
+                        <h1>{{ filme.titulo }}</h1>
+                        <p><i class="fas fa-map-marker-alt"></i> {{ cinema.nome }}</p>
+                        <p><i class="fas fa-clock"></i> {{ horario.hora_str }} - {{ data_sessao }}</p>
+                        <p><i class="fas fa-ticket-alt"></i> {{ quantidade }} bilhete{{ 's' if quantidade > 1 else '' }}</p>
+                        <p class="price"><i class="fas fa-euro-sign"></i> {{ "%.2f"|format(preco_total) }}</p>
+                    </div>
+                </div>
+
+                <!-- Seat Selection -->
+                <div class="seat-selection-container">
+                    <h2>Selecione os seus lugares</h2>
+                    
+                    <!-- Screen -->
+                    <div class="screen">
+                        <div class="screen-text">ECRÃ</div>
+                    </div>
+
+                    <!-- Seat Map -->
+                    <div class="seat-map" id="seatMap">
+                        {% for lugar in lugares %}
+                        <div class="seat {{ 'occupied' if lugar.ocupado else 'available' }}" 
+                             data-seat="{{ lugar.nome_lugar }}"
+                             data-row="{{ lugar.nome_lugar[0] }}"
+                             data-number="{{ lugar.nome_lugar[1:] }}">
+                            {{ lugar.nome_lugar }}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="seat-legend">
+                        <div class="legend-item">
+                            <div class="seat available"></div>
+                            <span>Disponível</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="seat selected"></div>
+                            <span>Selecionado</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="seat occupied"></div>
+                            <span>Ocupado</span>
+                        </div>
+                    </div>
+
+                    <!-- Selected Seats Info -->
+                    <div class="selected-seats-info">
+                        <h3>Lugares Selecionados</h3>
+                        <div id="selectedSeatsList">Nenhum lugar selecionado</div>
+                        <div class="seats-counter">
+                            <span id="selectedCount">0</span> / {{ quantidade }} lugares selecionados
+                        </div>
+                    </div>
+
+                    <!-- Continue Button -->
+                    <form method="POST" action="{{ url_for('bar') }}" id="seatsForm">
+                        <input type="hidden" name="filme_id" value="{{ filme.id }}">
+                        <input type="hidden" name="cinema_id" value="{{ cinema.id }}">
+                        <input type="hidden" name="tipo_sessao_id" value="{{ tipo_sessao.id }}">
+                        <input type="hidden" name="horario_id" value="{{ horario.id }}">
+                        <input type="hidden" name="data_sessao" value="{{ data_sessao }}">
+                        <input type="hidden" name="quantidade" value="{{ quantidade }}">
+                        <input type="hidden" name="lugares_selecionados" id="selectedSeatsInput" value="">
+                        
+                        <button type="submit" class="continue-btn" id="continueBtn" disabled>
+                            <i class="fas fa-arrow-right"></i>
+                            Continuar para o Bar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const seats = document.querySelectorAll('.seat.available');
+            const selectedSeatsList = document.getElementById('selectedSeatsList');
+            const selectedCount = document.getElementById('selectedCount');
+            const selectedSeatsInput = document.getElementById('selectedSeatsInput');
+            const continueBtn = document.getElementById('continueBtn');
+            const requiredSeats = {{ quantidade }};
+            let selectedSeats = [];
+
+            seats.forEach(seat => {
+                seat.addEventListener('click', function() {
+                    const seatName = this.dataset.seat;
+                    
+                    if (this.classList.contains('selected')) {
+                        // Deselecionar
+                        this.classList.remove('selected');
+                        selectedSeats = selectedSeats.filter(s => s !== seatName);
+                    } else {
+                        // Selecionar (se não exceder o limite)
+                        if (selectedSeats.length < requiredSeats) {
+                            this.classList.add('selected');
+                            selectedSeats.push(seatName);
+                        } else {
+                            alert(`Pode selecionar apenas ${requiredSeats} lugar${requiredSeats > 1 ? 'es' : ''}.`);
+                            return;
+                        }
+                    }
+                    
+                    updateSelectedSeats();
+                });
+            });
+
+            function updateSelectedSeats() {
+                // Atualizar lista visual
+                if (selectedSeats.length === 0) {
+                    selectedSeatsList.textContent = 'Nenhum lugar selecionado';
+                } else {
+                    selectedSeatsList.textContent = selectedSeats.sort().join(', ');
+                }
+                
+                // Atualizar contador
+                selectedCount.textContent = selectedSeats.length;
+                
+                // Atualizar input hidden
+                selectedSeatsInput.value = selectedSeats.join(',');
+                
+                // Ativar/desativar botão
+                continueBtn.disabled = selectedSeats.length !== requiredSeats;
+                
+                // Atualizar texto do botão
+                if (selectedSeats.length === requiredSeats) {
+                    continueBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Continuar para o Bar';
+                } else {
+                    continueBtn.innerHTML = `<i class="fas fa-arrow-right"></i> Selecione ${requiredSeats - selectedSeats.length} lugar${(requiredSeats - selectedSeats.length) > 1 ? 'es' : ''}`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

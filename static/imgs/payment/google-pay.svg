@@ -1,0 +1,7 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="15" width="40" height="20" rx="10" fill="#4285F4"/>
+<circle cx="18" cy="25" r="4" fill="#EA4335"/>
+<circle cx="25" cy="25" r="4" fill="#FBBC04"/>
+<circle cx="32" cy="25" r="4" fill="#34A853"/>
+<text x="25" y="42" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="6" font-weight="bold">Google Pay</text>
+</svg>

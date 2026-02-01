@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pesquisa.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="CineVibe">
+                </a>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Início</a></li>
+                    <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                    <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                    <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="search-box">
+                    <form method="GET" action="{{ url_for('pesquisa') }}">
+                        <input type="text" name="q" placeholder="Pesquisar..." value="{{ request.args.get('q', '') }}">
+                        <button type="submit">🔍</button>
+                    </form>
+                </div>
+                {% if session.user_id %}
+                    <a href="{{ url_for('perfil') }}" class="user-profile">👤 Perfil</a>
+                    <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="login-btn">Entrar</a>
+                    <a href="{{ url_for('registo') }}" class="register-btn">Registar</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="pesquisa-container">
+            <h1 class="pesquisa-title">Resultados da Pesquisa</h1>
+            {% if request.args.get('q') %}
+                <p class="pesquisa-count">
+                    {% set total_results = (filmes|length if filmes else 0) + (cinemas|length if cinemas else 0) + (menus|length if menus else 0) %}
+                    {{ total_results }} resultado{{ 's' if total_results != 1 else '' }} para "{{ request.args.get('q') }}"
+                </p>
+            {% endif %}
+
+            {% if filmes %}
+            <div class="pesquisa-section">
+                <h2 class="pesquisa-section-title">🎬 Filmes</h2>
+                <div class="pesquisa-filmes-grid">
+                    {% for filme in filmes %}
+                    <div class="filme-card">
+                        <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}">
+                            <div class="filme-poster">
+                                <img src="{{ filme.poster_url or url_for('static', filename='imgs/poster-placeholder.jpg') }}" 
+                                     alt="{{ filme.titulo }}">
+                                <div class="filme-overlay">
+                                    <div class="filme-rating">⭐ {{ filme.classificacao or 'N/A' }}</div>
+                                </div>
+                            </div>
+                            <div class="filme-info">
+                                <h3>{{ filme.titulo }}</h3>
+                                <p class="filme-genre">{{ filme.genero }}</p>
+                                <p class="filme-duration">{{ filme.duracao }} min</p>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if cinemas %}
+            <div class="pesquisa-section">
+                <h2 class="pesquisa-section-title">🏢 Cinemas</h2>
+                <div class="pesquisa-cinemas-grid">
+                    {% for cinema in cinemas %}
+                    <div class="pesquisa-cinema-card">
+                        <h3>{{ cinema.nome }}</h3>
+                        <p class="cinema-location">📍 {{ cinema.morada }}</p>
+                        <p class="cinema-region">{{ cinema.regiao }}</p>
+                        <a href="{{ url_for('cinema_filmes', id_cinema=cinema.id) }}" class="cinema-link">
+                            Ver Filmes
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if menus %}
+            <div class="pesquisa-section">
+                <h2 class="pesquisa-section-title">🍿 Menu Bar</h2>
+                <div class="pesquisa-menus-grid">
+                    {% for item in menus %}
+                    <div class="pesquisa-menu-card">
+                        <img src="{{ item.imagem_url or url_for('static', filename='imgs/menu-placeholder.jpg') }}" 
+                             alt="{{ item.nome }}">
+                        <div class="menu-content">
+                            <h3>{{ item.nome }}</h3>
+                            <p class="menu-description">{{ item.descricao }}</p>
+                            <p class="menu-price">€{{ "%.2f"|format(item.preco) }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if not filmes and not cinemas and not menus and request.args.get('q') %}
+            <div class="pesquisa-no-results">
+                <p>Nenhum resultado encontrado para "{{ request.args.get('q') }}"</p>
+                <a href="{{ url_for('home') }}" class="back-home">Voltar ao Início</a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>CineVibe</h3>
+                <p>A sua experiência cinematográfica premium</p>
+            </div>
+            <div class="footer-section">
+                <h4>Links Rápidos</h4>
+                <ul>
+                    <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                    <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                    <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Suporte</h4>
+                <ul>
+                    <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                    <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                    <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CineVibe. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

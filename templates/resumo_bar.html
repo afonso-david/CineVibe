@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo da Compra | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filme_detalhe.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resumo_bar.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="user-icon">
+                        {% if user_authenticated %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png')) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navegação -->
+        <nav class="nav-center">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('filmes') }}">Filmes</a>
+            <a href="{{ url_for('cinemas') }}">Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+            <a href="{{ url_for('bar') }}">Bar</a>
+            <a href="{{ url_for('beneficios') }}">Benefícios</a>
+            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}">Contactos</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="step completed">
+                        <div class="step-number">1</div>
+                        <span>Lugares</span>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-number">2</div>
+                        <span>Bar</span>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">3</div>
+                        <span>Resumo</span>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <span>Pagamento</span>
+                    </div>
+                </div>
+
+                <div class="content-wrapper">
+                    <!-- Resumo da Compra -->
+                    <div class="purchase-summary">
+                        <div class="summary-header">
+                            <i class="fas fa-receipt"></i>
+                            <h2>Resumo da sua Compra</h2>
+                        </div>
+
+                        <!-- Informações do Filme -->
+                        <div class="movie-section">
+                            <h3><i class="fas fa-film"></i> Sessão de Cinema</h3>
+                            <div class="movie-info-card">
+                                {% if filme %}
+                                    {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
+                                    <img src="{{ url_for('static', filename='imgs/filmes/' + (poster_path if poster_path and not poster_path.startswith('http') else 'placeholder.svg')) }}" 
+                                         alt="{{ filme.titulo }}" 
+                                         class="movie-poster"
+                                         onerror="this.src='{{ url_for('static', filename='imgs/filmes/placeholder.svg') }}'">
+                                    <div class="movie-details">
+                                        <h4>{{ filme.titulo }}</h4>
+                                        <p><i class="fas fa-map-marker-alt"></i> {{ cinema.nome if cinema else 'Cinema' }}</p>
+                                        <p><i class="fas fa-clock"></i> {{ horario.hora_str if horario else 'Horário' }} - {{ data_sessao }}</p>
+                                        <p><i class="fas fa-chair"></i> Lugares: {{ lugares_selecionados|join(', ') if lugares_selecionados else 'N/A' }}</p>
+                                        <p class="price"><i class="fas fa-euro-sign"></i> {{ "%.2f"|format(preco_bilhetes) }}€</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Produtos do Bar -->
+                        {% if produtos_selecionados %}
+                        <div class="bar-section">
+                            <h3><i class="fas fa-utensils"></i> Produtos do Bar</h3>
+                            <div class="products-list">
+                                {% for produto in produtos_selecionados %}
+                                <div class="product-item">
+                                    <div class="product-info">
+                                        <span class="product-name">{{ produto.nome }}</span>
+                                        <span class="product-quantity">x{{ produto.quantidade }}</span>
+                                    </div>
+                                    <span class="product-price">{{ "%.2f"|format(produto.preco_total) }}€</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="bar-total">
+                                <strong>Subtotal Bar: {{ "%.2f"|format(total_bar) }}€</strong>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Total Geral -->
+                        <div class="total-section">
+                            <div class="total-breakdown">
+                                <div class="total-item">
+                                    <span>Bilhetes de Cinema:</span>
+                                    <span>{{ "%.2f"|format(preco_bilhetes) }}€</span>
+                                </div>
+                                {% if total_bar > 0 %}
+                                <div class="total-item">
+                                    <span>Produtos do Bar:</span>
+                                    <span>{{ "%.2f"|format(total_bar) }}€</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="final-total">
+                                <strong>Total Geral: {{ "%.2f"|format(total_geral) }}€</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dados do Cliente -->
+                    <div class="customer-data">
+                        <div class="data-header">
+                            <i class="fas fa-user"></i>
+                            <h2>Dados para Confirmação</h2>
+                        </div>
+
+                        {% if user_authenticated %}
+                        <!-- Utilizador Logado -->
+                        <div class="logged-user-info">
+                            <div class="user-card">
+                                <div class="user-avatar">
+                                    <img src="{{ url_for('static', filename=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png')) }}" alt="Avatar">
+                                </div>
+                                <div class="user-details">
+                                    <h3>{{ session.get('user_nome', 'Utilizador') }}</h3>
+                                    <p><i class="fas fa-envelope"></i> {{ session.get('user_email', 'email@exemplo.com') }}</p>
+                                    {% if session.get('user_telefone') %}
+                                    <p><i class="fas fa-phone"></i> {{ session.get('user_telefone') }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="confirmation-note">
+                                <i class="fas fa-info-circle"></i>
+                                <p>A confirmação da sua compra será enviada para o seu email registado.</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Utilizador Não Logado -->
+                        <div class="guest-form">
+                            <div class="form-note">
+                                <i class="fas fa-info-circle"></i>
+                                <p>Para receber a confirmação da compra, preencha os seus dados:</p>
+                            </div>
+                            <form id="guestDataForm" method="POST">
+                                <div class="form-group">
+                                    <label for="guest_nome">
+                                        <i class="fas fa-user"></i>
+                                        Nome Completo *
+                                    </label>
+                                    <input type="text" id="guest_nome" name="guest_nome" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="guest_email">
+                                        <i class="fas fa-envelope"></i>
+                                        Email *
+                                    </label>
+                                    <input type="email" id="guest_email" name="guest_email" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="guest_telefone">
+                                        <i class="fas fa-phone"></i>
+                                        Telemóvel (opcional)
+                                    </label>
+                                    <input type="tel" id="guest_telefone" name="guest_telefone">
+                                </div>
+                                
+                                <div class="privacy-note">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <small>Os seus dados serão utilizados apenas para envio da confirmação da compra.</small>
+                                </div>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="action-buttons">
+                    <button class="btn-secondary" onclick="voltarBar()">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar ao Bar
+                    </button>
+                    
+                    <button class="btn-primary" onclick="continuarPagamento()">
+                        <i class="fas fa-credit-card"></i>
+                        Continuar para Pagamento
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function voltarBar() {
+            // Voltar para a seleção do bar mantendo os dados
+            const params = new URLSearchParams(window.location.search);
+            window.location.href = `/bar?${params.toString()}`;
+        }
+
+        function continuarPagamento() {
+            {% if not user_authenticated %}
+            // Validar formulário para utilizadores não logados
+            const form = document.getElementById('guestDataForm');
+            const nome = document.getElementById('guest_nome').value.trim();
+            const email = document.getElementById('guest_email').value.trim();
+            
+            if (!nome || !email) {
+                alert('Por favor, preencha o nome e email para continuar.');
+                return;
+            }
+            
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, insira um email válido.');
+                return;
+            }
+            {% endif %}
+            
+            // Continuar para pagamento
+            const params = new URLSearchParams(window.location.search);
+            {% if not user_authenticated %}
+            params.set('guest_nome', document.getElementById('guest_nome').value);
+            params.set('guest_email', document.getElementById('guest_email').value);
+            params.set('guest_telefone', document.getElementById('guest_telefone').value);
+            {% endif %}
+            
+            window.location.href = `/pagamento?${params.toString()}`;
+        }
+    </script>
+</body>
+</html>

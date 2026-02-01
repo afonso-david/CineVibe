@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Salas - CineVibe Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_atores.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Estilos específicos para salas */
+        .sala-icon-small {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 8px;
+            color: #FFD700;
+            font-size: 1.5rem;
+        }
+        
+        .type-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+    </style>
+    
+    <!-- Estilos para Modal e Notificações -->
+    <style>
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(2px);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal[style*="flex"] {
+            display: flex !important;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid #333;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            background: linear-gradient(135deg, #2a2a2a, #333);
+        }
+
+        .modal-header h3 {
+            color: #ffd700;
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+            background: #333;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px;
+            border-top: 1px solid #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffd700;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+
+        .form-select option {
+            background: #222;
+            color: #fff;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+            border-color: #666;
+        }
+
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .notification.info {
+            background: #3498db;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
+                    <span>CineVibe</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin_filmes') }}" class="nav-item">
+                    <i class="fas fa-film"></i>
+                    <span>Filmes</span>
+                </a>
+                <a href="{{ url_for('admin_cinemas') }}" class="nav-item">
+                    <i class="fas fa-building"></i>
+                    <span>Cinemas</span>
+                </a>
+                <a href="{{ url_for('admin_usuarios') }}" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="{{ url_for('admin_reservas') }}" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Reservas</span>
+                </a>
+                <a href="{{ url_for('admin_atores') }}" class="nav-item">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Atores</span>
+                </a>
+                <a href="{{ url_for('admin_salas') }}" class="nav-item active">
+                    <i class="fas fa-chair"></i>
+                    <span>Salas</span>
+                </a>
+                <a href="{{ url_for('admin_bar') }}" class="nav-item">
+                    <i class="fas fa-coffee"></i>
+                    <span>Bar</span>
+                </a>
+                <a href="{{ url_for('admin_avatares') }}" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Avatares</span>
+                </a>
+                <a href="{{ url_for('admin_tipos_sessao') }}" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Tipos de Sessão</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="{{ url_for('home') }}" class="nav-item">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Voltar ao Site</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar-pro">
+                <div class="top-bar-left">
+                    <div class="page-title">
+                        <i class="fas fa-chair"></i>
+                        <div>
+                            <h1>Salas</h1>
+                            <p>Total: {{ salas|length }} salas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <button class="btn-primary" onclick="alert('Funcionalidade em desenvolvimento')">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Sala
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content-pro">
+                <!-- Control Panel -->
+                <div class="control-panel">
+                    <div class="search-section">
+                        <div class="search-box-pro">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Pesquisar salas..." id="searchInput">
+                        </div>
+                        <div class="filter-group">
+                            <select id="cinemaFilter" class="filter-select">
+                                <option value="">Todos os Cinemas</option>
+                                {% for cinema in cinemas %}
+                                <option value="{{ cinema.nome }}">{{ cinema.nome }}</option>
+                                {% endfor %}
+                            </select>
+                            <select id="tipoFilter" class="filter-select">
+                                <option value="">Todos os Tipos</option>
+                                <option value="Normal">Normal</option>
+                                <option value="IMAX">IMAX</option>
+                                <option value="4DX">4DX</option>
+                                <option value="VIP">VIP</option>
+                            </select>
+                            <button class="btn-filter" onclick="limparFiltros()">
+                                <i class="fas fa-filter-circle-xmark"></i>
+                                Limpar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="view-controls">
+                        <div class="sort-controls">
+                            <select class="sort-select" id="sortSelect">
+                                <option value="id">Ordenar por ID</option>
+                                <option value="nome">Ordenar por Nome</option>
+                                <option value="cinema">Ordenar por Cinema</option>
+                                <option value="capacidade">Ordenar por Capacidade</option>
+                                <option value="tipo">Ordenar por Tipo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div class="movies-table-container">
+                    {% if salas %}
+                    <div class="table-wrapper">
+                        <table class="movies-table-pro">
+                            <thead>
+                                <tr>
+                                    <th class="id-header">
+                                        <i class="fas fa-hashtag"></i>
+                                        ID
+                                    </th>
+                                    <th class="poster-header">
+                                        <i class="fas fa-chair"></i>
+                                        Sala
+                                    </th>
+                                    <th class="title-header">
+                                        <i class="fas fa-tag"></i>
+                                        Nome
+                                    </th>
+                                    <th class="genre-header">
+                                        <i class="fas fa-building"></i>
+                                        Cinema
+                                    </th>
+                                    <th class="duration-header">
+                                        <i class="fas fa-users"></i>
+                                        Capacidade
+                                    </th>
+                                    <th class="type-header">
+                                        <i class="fas fa-cog"></i>
+                                        Tipo
+                                    </th>
+                                    <th class="actions-header">
+                                        <i class="fas fa-cogs"></i>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sala in salas %}
+                                <tr data-sala-id="{{ sala.id }}" data-cinema="{{ sala.cinema_nome }}" data-tipo="{{ sala.tipo_sala }}">
+                                    <td class="id-cell">{{ sala.id }}</td>
+                                    <td class="poster-cell">
+                                        <div class="sala-icon-small">
+                                            <i class="fas fa-chair"></i>
+                                        </div>
+                                    </td>
+                                    <td class="title-cell">
+                                        <div class="movie-title-info">
+                                            <h4>{{ sala.nome_sala }}</h4>
+                                        </div>
+                                    </td>
+                                    <td class="genre-cell">
+                                        <span class="genre-tag">{{ sala.cinema_nome }}</span>
+                                    </td>
+                                    <td class="duration-cell">
+                                        <span class="count-badge">{{ sala.capacidade }}</span>
+                                    </td>
+                                    <td class="type-cell">
+                                        <span class="type-tag">{{ sala.tipo_sala }}</span>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="movie-actions-table">
+                                            <button class="action-btn-table edit" onclick="editarSala({{ sala.id }})" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn-table delete" onclick="removerSala({{ sala.id }}, '{{ sala.nome_sala }}')" title="Remover">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-chair"></i>
+                        <h3>Nenhuma sala encontrada</h3>
+                        <p>Comece adicionando a primeira sala ao sistema.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Editar Sala -->
+    <div id="editarSalaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Sala</h3>
+                <button onclick="fecharModalEditarSala()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarSala">
+                    <div class="form-group">
+                        <label>Nome da Sala</label>
+                        <input type="text" id="editNomeSala" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cinema</label>
+                        <select id="editCinema" class="form-select" required>
+                            <option value="">Selecionar cinema</option>
+                            {% for cinema in cinemas %}
+                                <option value="{{ cinema.id }}">{{ cinema.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidade</label>
+                        <input type="number" id="editCapacidade" class="form-input" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Sala</label>
+                        <select id="editTipoSala" class="form-select">
+                            <option value="Normal">Normal</option>
+                            <option value="IMAX">IMAX</option>
+                            <option value="4DX">4DX</option>
+                            <option value="VIP">VIP</option>
+                            <option value="Premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fileiras</label>
+                        <input type="number" id="editFileiras" class="form-input" min="1" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Lugares por Fileira</label>
+                        <input type="number" id="editLugaresPorFileira" class="form-input" min="1" value="20">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="fecharModalEditarSala()" class="btn btn-secondary">Cancelar</button>
+                <button onclick="salvarEdicaoSala()" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para filtros e pesquisa
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const cinemaFilter = document.getElementById('cinemaFilter');
+            const tipoFilter = document.getElementById('tipoFilter');
+            const sortSelect = document.getElementById('sortSelect');
+
+            // Pesquisa
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
+
+            // Filtros
+            if (cinemaFilter) {
+                cinemaFilter.addEventListener('change', applyFilters);
+            }
+            
+            if (tipoFilter) {
+                tipoFilter.addEventListener('change', applyFilters);
+            }
+
+            // Ordenação
+            if (sortSelect) {
+                sortSelect.addEventListener('change', sortSalas);
+            }
+        });
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cinemaFilter = document.getElementById('cinemaFilter').value;
+            const tipoFilter = document.getElementById('tipoFilter').value;
+            
+            const rows = document.querySelectorAll('.movies-table-pro tbody tr');
+            
+            rows.forEach(row => {
+                const nome = row.querySelector('h4').textContent.toLowerCase();
+                const cinema = row.dataset.cinema;
+                const tipo = row.dataset.tipo;
+                
+                const matchesSearch = nome.includes(searchTerm);
+                const matchesCinema = !cinemaFilter || cinema === cinemaFilter;
+                const matchesTipo = !tipoFilter || tipo === tipoFilter;
+                
+                if (matchesSearch && matchesCinema && matchesTipo) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function sortSalas() {
+            const sortBy = document.getElementById('sortSelect').value;
+            const tableBody = document.querySelector('.movies-table-pro tbody');
+            const rows = Array.from(tableBody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                switch(sortBy) {
+                    case 'nome':
+                        return a.querySelector('h4').textContent.localeCompare(b.querySelector('h4').textContent);
+                    case 'cinema':
+                        return a.dataset.cinema.localeCompare(b.dataset.cinema);
+                    case 'capacidade':
+                        const capA = parseInt(a.querySelector('.count-badge').textContent);
+                        const capB = parseInt(b.querySelector('.count-badge').textContent);
+                        return capB - capA;
+                    case 'tipo':
+                        return a.dataset.tipo.localeCompare(b.dataset.tipo);
+                    default:
+                        return parseInt(a.dataset.salaId) - parseInt(b.dataset.salaId);
+                }
+            });
+            
+            rows.forEach(row => tableBody.appendChild(row));
+        }
+
+        function limparFiltros() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('cinemaFilter').value = '';
+            document.getElementById('tipoFilter').value = '';
+            applyFilters();
+        }
+
+        // Variável global para armazenar o ID da sala sendo editada
+        let salaEditandoId = null;
+
+        // Função para editar sala
+        function editarSala(salaId) {
+            console.log('Editando sala:', salaId);
+            salaEditandoId = salaId;
+            
+            // Buscar dados da sala
+            fetch(`/admin/salas/${salaId}/dados`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const sala = data.sala;
+                        
+                        // Preencher o formulário
+                        document.getElementById('editNomeSala').value = sala.nome_sala || '';
+                        document.getElementById('editCinema').value = sala.id_cinema || '';
+                        document.getElementById('editCapacidade').value = sala.capacidade || '';
+                        document.getElementById('editTipoSala').value = sala.tipo_sala || 'Normal';
+                        document.getElementById('editFileiras').value = sala.fileiras || 10;
+                        document.getElementById('editLugaresPorFileira').value = sala.lugares_por_fileira || 20;
+                        
+                        // Abrir modal
+                        document.getElementById('editarSalaModal').style.display = 'flex';
+                    } else {
+                        showNotification('Erro ao carregar dados da sala: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados da sala:', error);
+                    showNotification('Erro ao carregar dados da sala', 'error');
+                });
+        }
+
+        // Função para fechar modal de edição
+        function fecharModalEditarSala() {
+            document.getElementById('editarSalaModal').style.display = 'none';
+            salaEditandoId = null;
+        }
+
+        // Função para salvar edição da sala
+        function salvarEdicaoSala() {
+            if (!salaEditandoId) {
+                showNotification('Erro: ID da sala não encontrado', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('nome_sala', document.getElementById('editNomeSala').value);
+            formData.append('id_cinema', document.getElementById('editCinema').value);
+            formData.append('capacidade', document.getElementById('editCapacidade').value);
+            formData.append('tipo_sala', document.getElementById('editTipoSala').value);
+            formData.append('fileiras', document.getElementById('editFileiras').value);
+            formData.append('lugares_por_fileira', document.getElementById('editLugaresPorFileira').value);
+
+            console.log('Salvando sala:', salaEditandoId);
+            
+            fetch(`/admin/salas/${salaEditandoId}/editar`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Sala atualizada com sucesso!', 'success');
+                    fecharModalEditarSala();
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showNotification('Erro ao atualizar sala: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao salvar sala:', error);
+                showNotification('Erro ao salvar sala', 'error');
+            });
+        }
+
+        // Função para remover sala
+        function removerSala(salaId, nomeSala) {
+            if (confirm(`Tem certeza que deseja remover a sala "${nomeSala}"?`)) {
+                fetch(`/admin/salas/${salaId}/remover`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('Sala removida com sucesso!', 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        showNotification('Erro ao remover sala: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao remover sala:', error);
+                    showNotification('Erro ao remover sala', 'error');
+                });
+            }
+        }
+
+        // Função para mostrar notificações
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('editarSalaModal');
+            if (event.target === modal) {
+                fecharModalEditarSala();
+            }
+        }
+    </script>
+</body>
+</html>

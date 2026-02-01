@@ -1,0 +1,15 @@
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Copo de pipocas -->
+  <path d="M12 20 L8 50 L28 50 L24 20 Z" fill="currentColor" stroke="white" stroke-width="2"/>
+  <circle cx="15" cy="18" r="3" fill="currentColor"/>
+  <circle cx="21" cy="16" r="3" fill="currentColor"/>
+  <circle cx="18" cy="14" r="2.5" fill="currentColor"/>
+  <circle cx="12" cy="16" r="2" fill="currentColor"/>
+  <circle cx="24" cy="18" r="2" fill="currentColor"/>
+  
+  <!-- Bebida -->
+  <rect x="35" y="25" width="12" height="25" rx="2" fill="currentColor"/>
+  <rect x="37" y="27" width="8" height="20" rx="1" fill="white" opacity="0.3"/>
+  <circle cx="41" cy="23" r="4" fill="currentColor"/>
+  <rect x="39" y="15" width="4" height="10" rx="2" fill="currentColor"/>
+</svg>

@@ -1,0 +1,492 @@
+/* Confirmação Styles */
+
+.page-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #415A77 100%);
+}
+
+/* Header Styles */
+header {
+    background: rgba(13, 27, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.nav-left .logo {
+    height: 50px;
+    width: auto;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #FFD60A;
+    transition: all 0.3s ease;
+}
+
+.user-icon img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 214, 10, 0.5);
+}
+
+.user-pic {
+    object-fit: cover;
+}
+
+/* Navigation */
+.nav-center {
+    background: rgba(27, 38, 59, 0.9);
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(78, 168, 222, 0.2);
+}
+
+.nav-center a {
+    color: #B8C5D1;
+    text-decoration: none;
+    margin: 0 1.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-center a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+    transition: width 0.3s ease;
+}
+
+.nav-center a:hover {
+    color: #FFD60A;
+}
+
+.nav-center a:hover::after {
+    width: 100%;
+}
+
+/* Success Header */
+.success-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+}
+
+.success-icon {
+    font-size: 5rem;
+    color: #28a745;
+    margin-bottom: 1rem;
+    transition: all 0.5s ease;
+}
+
+.success-icon.animate {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 20px rgba(40, 167, 69, 0.5));
+}
+
+.success-header h1 {
+    color: #FFD60A;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.success-header p {
+    color: #B8C5D1;
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Reservation Card */
+.reservation-card {
+    background: linear-gradient(135deg, rgba(13, 27, 42, 0.9), rgba(27, 38, 59, 0.7));
+    border-radius: 20px;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+    backdrop-filter: blur(10px);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(78, 168, 222, 0.05));
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h2 {
+    color: #FFD60A;
+    font-size: 1.8rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reservation-id {
+    background: rgba(255, 214, 10, 0.2);
+    border: 1px solid #FFD60A;
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+}
+
+.reservation-id span {
+    color: #FFD60A;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.reservation-content {
+    padding: 2rem;
+}
+
+/* Movie Section */
+.movie-section {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(78, 168, 222, 0.2);
+}
+
+.movie-poster {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.movie-details h3 {
+    color: #FFD60A;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    color: #B8C5D1;
+    font-size: 1.1rem;
+}
+
+.detail-row i {
+    color: #4EA8DE;
+    width: 20px;
+    text-align: center;
+}
+
+/* Customer Section */
+.customer-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(78, 168, 222, 0.2);
+}
+
+.customer-section h4 {
+    color: #FFD60A;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.customer-section p {
+    color: #B8C5D1;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.customer-section strong {
+    color: #4EA8DE;
+}
+
+/* Bar Section */
+.bar-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(78, 168, 222, 0.2);
+}
+
+.bar-section h4 {
+    color: #FFD60A;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bar-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(78, 168, 222, 0.1);
+    color: #B8C5D1;
+    font-size: 1.1rem;
+}
+
+.bar-item:last-child {
+    border-bottom: none;
+}
+
+/* Payment Section */
+.payment-section h4 {
+    color: #FFD60A;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.payment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    color: #B8C5D1;
+    font-size: 1.1rem;
+}
+
+.payment-row.total {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #FFD60A;
+    font-family: 'Montserrat', sans-serif;
+    padding-top: 1rem;
+    border-top: 2px solid #FFD60A;
+    margin-top: 1rem;
+}
+
+.payment-method {
+    background: rgba(78, 168, 222, 0.2);
+    border: 1px solid rgba(78, 168, 222, 0.4);
+    border-radius: 15px;
+    padding: 0.3rem 1rem;
+    color: #4EA8DE;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Notes Card */
+.notes-card {
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
+    border-radius: 15px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+    margin-bottom: 2rem;
+}
+
+.notes-card h3 {
+    color: #FFD60A;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.notes-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.notes-card li {
+    color: #B8C5D1;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.notes-card li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.print-btn, .home-btn, .profile-btn {
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    border: none;
+}
+
+.print-btn {
+    background: transparent;
+    color: #4EA8DE;
+    border: 2px solid #4EA8DE;
+}
+
+.print-btn:hover {
+    background: #4EA8DE;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(78, 168, 222, 0.3);
+}
+
+.home-btn {
+    background: linear-gradient(135deg, #FFD60A, #FFA500);
+    color: #0D1B2A;
+}
+
+.home-btn:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8500);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
+}
+
+.profile-btn {
+    background: transparent;
+    color: #28a745;
+    border: 2px solid #28a745;
+}
+
+.profile-btn:hover {
+    background: #28a745;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+/* Print Styles */
+@media print {
+    .nav-center, .action-buttons {
+        display: none !important;
+    }
+    
+    .page-wrapper {
+        background: white !important;
+    }
+    
+    .reservation-card, .notes-card {
+        background: white !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+    }
+    
+    * {
+        color: black !important;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .success-header h1 {
+        font-size: 2rem;
+    }
+    
+    .success-icon {
+        font-size: 4rem;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .movie-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .movie-poster {
+        width: 100px;
+        height: 150px;
+        margin: 0 auto;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .print-btn, .home-btn, .profile-btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .reservation-card, .notes-card {
+        margin: 0 -10px;
+        border-radius: 10px;
+    }
+    
+    .card-header, .reservation-content, .notes-card {
+        padding: 1.5rem;
+    }
+    
+    .success-header {
+        padding: 1rem 0;
+    }
+}

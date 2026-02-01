@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Menu - CineVibe Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="container">
+            <div class="admin-logo">
+                <a href="{{ url_for('admin_dashboard') }}">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe Admin">
+                    <span>Admin</span>
+                </a>
+            </div>
+            <nav class="admin-nav">
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_filmes') }}">Filmes</a>
+                <a href="{{ url_for('admin_cinemas') }}">Cinemas</a>
+                <a href="{{ url_for('admin_usuarios') }}">Utilizadores</a>
+                <a href="{{ url_for('admin_reservas') }}">Reservas</a>
+                <a href="{{ url_for('home') }}">Voltar ao Site</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        
+        <div class="admin-container">
+            <h1>🍽️ Detalhes do Menu</h1>
+            
+            {% if menu %}
+            <div class="menu-detalhe-admin">
+                <div class="menu-info">
+                    <h2>{{ menu.nome }}</h2>
+                    <p><strong>Preço:</strong> €{{ "%.2f"|format(menu.preco) }}</p>
+                    <p><strong>Descrição:</strong> {{ menu.descricao }}</p>
+                </div>
+                
+                <div class="produtos-menu">
+                    <h3>Produtos incluídos</h3>
+                    {% if produtos_menu %}
+                    <div class="produtos-grid">
+                        {% for produto in produtos_menu %}
+                        <div class="produto-menu-card">
+                            <img src="{{ url_for('static', filename='imgs/produtos/' + produto.imagem) if produto.imagem else url_for('static', filename='imgs/placeholder.svg') }}" alt="{{ produto.nome }}">
+                            <h4>{{ produto.nome }}</h4>
+                            <p>Quantidade: {{ produto.quantidade }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>Nenhum produto associado a este menu.</p>
+                    {% endif %}
+                </div>
+                
+                <div class="admin-actions">
+                    <button class="btn-edit" onclick="editarMenu({{ menu.id }})">Editar Menu</button>
+                    <button class="btn-primary" onclick="adicionarProdutoMenu({{ menu.id }})">Adicionar Produto</button>
+                    <a href="{{ url_for('admin_bar') }}" class="btn-secondary">Voltar</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="error-message">
+                <p>Menu não encontrado.</p>
+                <a href="{{ url_for('admin_bar') }}" class="btn-primary">Voltar ao Bar</a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <script>
+        function editarMenu(id) {
+            alert('Editar menu ID: ' + id);
+        }
+        
+        function adicionarProdutoMenu(id) {
+            alert('Adicionar produto ao menu ID: ' + id);
+        }
+        </script>
+    </main>
+
+    <!-- Admin Footer -->
+    <footer class="admin-footer">
+        <div class="container">
+            <p>&copy; 2025 CineVibe Admin Panel. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

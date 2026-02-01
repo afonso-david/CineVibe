@@ -1,0 +1,155 @@
+/* Página de Pesquisa - CineVibe */
+
+/* Container principal */
+.pesquisa-container {
+  padding: 40px 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Títulos e texto */
+.pesquisa-title {
+  color: #FFD60A;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 10px;
+}
+
+.pesquisa-count {
+  color: #B8C5D1;
+  margin-bottom: 40px;
+}
+
+.pesquisa-section {
+  margin-bottom: 50px;
+}
+
+.pesquisa-section-title {
+  color: #FFD60A;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+/* Grid de filmes */
+.pesquisa-filmes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* Grid de cinemas */
+.pesquisa-cinemas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.pesquisa-cinema-card {
+  background: rgba(27, 38, 59, 0.5);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pesquisa-cinema-card h3 {
+  color: #FFD60A;
+  margin-bottom: 10px;
+}
+
+.pesquisa-cinema-card .cinema-location {
+  color: #B8C5D1;
+  margin-bottom: 5px;
+}
+
+.pesquisa-cinema-card .cinema-region {
+  color: #4EA8DE;
+}
+
+.pesquisa-cinema-card .cinema-link {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 8px 20px;
+  background: #FFD60A;
+  color: #0D1B2A;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Grid de menus */
+.pesquisa-menus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.pesquisa-menu-card {
+  background: rgba(27, 38, 59, 0.5);
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.pesquisa-menu-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.pesquisa-menu-card .menu-content {
+  padding: 20px;
+}
+
+.pesquisa-menu-card h3 {
+  color: #FFD60A;
+  margin-bottom: 10px;
+}
+
+.pesquisa-menu-card .menu-description {
+  color: #B8C5D1;
+  margin-bottom: 10px;
+}
+
+.pesquisa-menu-card .menu-price {
+  color: #4EA8DE;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* Sem resultados */
+.pesquisa-no-results {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.pesquisa-no-results p {
+  color: #B8C5D1;
+  font-size: 1.2rem;
+}
+
+.pesquisa-no-results .back-home {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #FFD60A;
+  color: #0D1B2A;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .pesquisa-container {
+    padding: 20px;
+  }
+  
+  .pesquisa-cinemas-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pesquisa-menus-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}

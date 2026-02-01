@@ -1,0 +1,906 @@
+/* ==========================
+   PÁGINA DE PAGAMENTO
+========================== */
+body {
+    background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: #B8C5D1;
+}
+
+.main-content {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.container h1 {
+    text-align: center;
+    color: #FFD60A;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.pagamento-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ==========================
+   RESUMO DA COMPRA
+========================== */
+.resumo-reserva {
+    background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.resumo-reserva h2 {
+    color: #FFD60A;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.secao-resumo {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(78, 168, 222, 0.15);
+}
+
+.secao-resumo:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.secao-resumo h3 {
+    color: #4EA8DE;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.secao-resumo p {
+    color: #B8C5D1;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.filme-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(78, 168, 222, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(78, 168, 222, 0.1);
+}
+
+.filme-poster-mini {
+    width: 70px;
+    height: 105px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.filme-detalhes p {
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+}
+
+.bar-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bar-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(78, 168, 222, 0.08);
+    border-radius: 10px;
+    color: #B8C5D1;
+    font-size: 0.9rem;
+    border: 1px solid rgba(78, 168, 222, 0.1);
+}
+
+.preco-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    color: #B8C5D1;
+    font-size: 0.95rem;
+}
+
+.total-linha {
+    border-top: 2px solid rgba(255, 214, 10, 0.3);
+    margin-top: 0.8rem;
+    padding-top: 1rem;
+    color: #FFD60A;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.total-secao {
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.08), rgba(244, 196, 48, 0.05));
+    padding: 1.2rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+    box-shadow: 0 4px 20px rgba(255, 214, 10, 0.1);
+}
+
+/* ==========================
+   SEÇÃO DE CHECKOUT
+========================== */
+.checkout-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Informações do usuário logado */
+.user-info-section {
+    background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.user-info-section h2 {
+    color: #FFD60A;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-info p {
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    color: #B8C5D1;
+}
+
+.info-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem;
+    background: rgba(78, 168, 222, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(78, 168, 222, 0.2);
+    margin-top: 1rem;
+    color: #4EA8DE;
+    font-size: 0.9rem;
+}
+
+.info-notice i {
+    font-size: 1.1rem;
+    color: #4EA8DE;
+}
+
+/* Formulário para convidados */
+.guest-form-section {
+    background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.guest-form-section h2 {
+    color: #FFD60A;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #4EA8DE;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(78, 168, 222, 0.1);
+    border: 2px solid rgba(78, 168, 222, 0.2);
+    border-radius: 12px;
+    color: #B8C5D1;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4EA8DE;
+    background: rgba(78, 168, 222, 0.15);
+    box-shadow: 0 0 0 3px rgba(78, 168, 222, 0.1);
+}
+
+.form-group input::placeholder {
+    color: rgba(184, 197, 209, 0.6);
+}
+
+/* Métodos de Pagamento */
+.metodos-pagamento {
+    background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.metodos-pagamento h2 {
+    color: #FFD60A;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.payment-method {
+    background: rgba(78, 168, 222, 0.08);
+    border: 2px solid rgba(78, 168, 222, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-method::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(78, 168, 222, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.payment-method:hover {
+    background: rgba(78, 168, 222, 0.12);
+    border-color: rgba(78, 168, 222, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.2);
+}
+
+.payment-method:hover::before {
+    left: 100%;
+}
+
+.payment-method.selected {
+    background: rgba(78, 168, 222, 0.15);
+    border-color: #4EA8DE;
+    box-shadow: 0 0 0 3px rgba(78, 168, 222, 0.2);
+}
+
+.method-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.method-icon {
+    width: 60px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.method-icon i {
+    font-size: 1.8rem;
+    color: #4EA8DE;
+}
+
+.method-icon.paypal i {
+    color: #0070ba;
+}
+
+.method-icon.mbway i {
+    color: #e20613;
+}
+
+.method-icon.multibanco i {
+    color: #0066cc;
+}
+
+.method-info {
+    flex: 1;
+}
+
+.method-info h3 {
+    color: #B8C5D1;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+.method-info p {
+    color: rgba(184, 197, 209, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.method-radio {
+    display: flex;
+    align-items: center;
+}
+
+.method-radio input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #4EA8DE;
+    cursor: pointer;
+}
+
+.payment-method.selected .method-info h3 {
+    color: #4EA8DE;
+}
+
+.payment-method.selected .method-info p {
+    color: #B8C5D1;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    background: linear-gradient(135deg, #FFD60A, #F4C430);
+    color: #0D1B2A;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #F4C430, #E6B800);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-primary i {
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .pagamento-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        max-width: 800px;
+    }
+    
+    .resumo-reserva {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .container h1 {
+        font-size: 1.8rem;
+    }
+    
+    .resumo-reserva,
+    .user-info-section,
+    .guest-form-section,
+    .metodos-pagamento {
+        padding: 1.5rem;
+    }
+    
+    .filme-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .filme-poster-mini {
+        width: 80px;
+        height: 120px;
+    }
+    
+    .method-header {
+        gap: 1rem;
+    }
+    
+    .method-icon {
+        width: 50px;
+        height: 40px;
+    }
+    
+    .method-icon img {
+        width: 40px;
+        height: 28px;
+    }
+    
+    .card-brands img {
+        width: 25px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 1rem 0;
+    }
+    
+    .pagamento-container {
+        padding: 0 0.5rem;
+        gap: 1.5rem;
+    }
+    
+    .resumo-reserva,
+    .user-info-section,
+    .guest-form-section,
+    .metodos-pagamento {
+        padding: 1rem;
+        border-radius: 15px;
+    }
+    
+    .container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .secao-resumo h3,
+    .user-info-section h2,
+    .guest-form-section h2,
+    .metodos-pagamento h2 {
+        font-size: 1.2rem;
+    }
+    
+    .bar-item,
+    .payment-method {
+        padding: 1rem;
+    }
+    
+    .btn-primary {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .method-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+    }
+    
+    .method-info {
+        text-align: center;
+    }
+    
+    .card-brands {
+        justify-content: center;
+    }
+}
+/* Es
+tilos para seções antigas de pagamento com imagens */
+.pagamento-opcoes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.opcao-pagamento {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    background: rgba(78, 168, 222, 0.08);
+    border-radius: 15px;
+    border: 2px solid rgba(78, 168, 222, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.opcao-pagamento::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(78, 168, 222, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.opcao-pagamento:hover {
+    background: rgba(78, 168, 222, 0.12);
+    border-color: rgba(78, 168, 222, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.2);
+}
+
+.opcao-pagamento:hover::before {
+    left: 100%;
+}
+
+.opcao-pagamento.selected {
+    background: rgba(78, 168, 222, 0.15);
+    border-color: #4EA8DE;
+    box-shadow: 0 0 0 3px rgba(78, 168, 222, 0.2);
+}
+
+.opcao-pagamento input[type="radio"] {
+    margin-right: 1rem;
+    transform: scale(1.3);
+    accent-color: #4EA8DE;
+}
+
+.opcao-pagamento label {
+    color: #B8C5D1;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex: 1;
+}
+
+.opcao-pagamento label i {
+    font-size: 1.3rem;
+    color: #4EA8DE;
+}
+
+.opcao-pagamento input[type="radio"]:checked + label {
+    color: #4EA8DE;
+}
+
+/* Responsividade para seções antigas */
+@media (max-width: 768px) {
+    .pagamento-opcoes {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================
+   SEÇÃO DE CÓDIGO DE DESCONTO
+========================== */
+.codigo-desconto-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(244, 196, 48, 0.03));
+    border-radius: 15px;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+    box-shadow: 0 4px 20px rgba(255, 214, 10, 0.1);
+}
+
+.codigo-desconto-header h3 {
+    color: #FFD60A;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.codigo-desconto-header p {
+    color: rgba(184, 197, 209, 0.8);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.codigo-input-group {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.codigo-input-group input {
+    flex: 1;
+    padding: 1rem;
+    background: rgba(78, 168, 222, 0.1);
+    border: 2px solid rgba(78, 168, 222, 0.2);
+    border-radius: 12px;
+    color: #B8C5D1;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.codigo-input-group input:focus {
+    outline: none;
+    border-color: #FFD60A;
+    background: rgba(255, 214, 10, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.1);
+}
+
+.codigo-input-group input::placeholder {
+    color: rgba(184, 197, 209, 0.5);
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+}
+
+.btn-aplicar-codigo {
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #FFD60A, #F4C430);
+    color: #0D1B2A;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.btn-aplicar-codigo:hover {
+    background: linear-gradient(135deg, #F4C430, #E6B800);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
+}
+
+.btn-aplicar-codigo:active {
+    transform: translateY(0);
+}
+
+.btn-aplicar-codigo:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.codigo-status {
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+.codigo-status.success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #22c55e;
+}
+
+.codigo-status.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.desconto-aplicado {
+    animation: slideDown 0.4s ease;
+}
+
+.desconto-info {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.05));
+    border: 2px solid rgba(34, 197, 94, 0.3);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 25px rgba(34, 197, 94, 0.2);
+}
+
+.desconto-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.desconto-header i {
+    color: #22c55e;
+    font-size: 1.3rem;
+    margin-right: 0.5rem;
+}
+
+.desconto-titulo {
+    color: #22c55e;
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex: 1;
+}
+
+.btn-remover-desconto {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.btn-remover-desconto:hover {
+    background: rgba(239, 68, 68, 0.2);
+    transform: scale(1.05);
+}
+
+.desconto-detalhes p {
+    color: #22c55e;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.desconto-valores {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.valor-original,
+.valor-desconto,
+.valor-final {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    color: #B8C5D1;
+    font-size: 0.95rem;
+}
+
+.valor-desconto {
+    color: #22c55e;
+    font-weight: 600;
+}
+
+.valor-final {
+    border-top: 2px solid rgba(34, 197, 94, 0.3);
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    color: #22c55e;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* Animações */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade para código de desconto */
+@media (max-width: 768px) {
+    .codigo-input-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .btn-aplicar-codigo {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .desconto-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .btn-remover-desconto {
+        align-self: flex-end;
+    }
+    
+    .desconto-valores {
+        gap: 0.6rem;
+    }
+    
+    .valor-original,
+    .valor-desconto,
+    .valor-final {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .codigo-desconto-section {
+        padding: 1rem;
+    }
+    
+    .codigo-desconto-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .codigo-input-group input {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-aplicar-codigo {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .desconto-info {
+        padding: 1rem;
+    }
+    
+    .desconto-titulo {
+        font-size: 1rem;
+    }
+}

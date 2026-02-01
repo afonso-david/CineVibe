@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Bar | CineVibe</title>
+</head>
+<body>
+    <h1>Teste da Página do Bar</h1>
+    
+    <div>
+        <h2>Informações da Reserva</h2>
+        <p>Filme ID: {{ filme_id }}</p>
+        <p>Cinema ID: {{ cinema_id }}</p>
+        <p>Horário ID: {{ horario_id }}</p>
+        <p>Data: {{ data_sessao }}</p>
+        <p>Lugares: {{ lugares_selecionados|join(', ') if lugares_selecionados else 'Nenhum' }}</p>
+    </div>
+    
+    <div>
+        <h2>Produtos do Bar</h2>
+        {% if produtos %}
+            {% for produto in produtos %}
+                <div>
+                    <h3>{{ produto.produto }}</h3>
+                    <p>Preço: €{{ produto.preco }}</p>
+                    <p>Tipo: {{ produto.tipo }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum produto encontrado</p>
+        {% endif %}
+    </div>
+    
+    <div>
+        <h2>Menus</h2>
+        {% if menus %}
+            {% for menu in menus %}
+                <div>
+                    <h3>{{ menu.nome }}</h3>
+                    <p>{{ menu.descricao }}</p>
+                    <p>Preço: €{{ menu.preco_total }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum menu encontrado</p>
+        {% endif %}
+    </div>
+    
+    <a href="/checkout">Continuar para Checkout</a>
+</body>
+</html>

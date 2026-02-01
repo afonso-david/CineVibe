@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos de Pagamento - CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pagamento.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe">
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="{{ url_for('home') }}">Início</a>
+                <a href="{{ url_for('filmes') }}">Filmes</a>
+                <a href="{{ url_for('cinemas') }}">Cinemas</a>
+                <a href="{{ url_for('contactos') }}">Contactos</a>
+            </nav>
+            <div class="user-actions">
+                {% if logged_in %}
+                    <a href="{{ url_for('perfil') }}" class="profile-link">
+                        <img src="{{ url_for('static', filename=avatar) }}" alt="Avatar" class="avatar">
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="login-btn">Entrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-credit-card"></i> Métodos de Pagamento</h1>
+                <p>Escolha o método de pagamento que prefere para finalizar a sua reserva</p>
+            </div>
+            
+            <div class="pagamento-container">
+                <!-- Resumo da Reserva -->
+                <div class="resumo-reserva">
+                    <h2><i class="fas fa-ticket-alt"></i> Resumo da Reserva</h2>
+                    
+                    <div class="reserva-detalhes">
+                        <div class="filme-info">
+                            <img src="{{ url_for('static', filename=dados_pagamento.filme.poster_url) }}" 
+                                 alt="{{ dados_pagamento.filme.titulo }}" class="filme-poster">
+                            <div class="filme-dados">
+                                <h3>{{ dados_pagamento.filme.titulo }}</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> {{ dados_pagamento.cinema.nome }}</p>
+                                <p><i class="fas fa-calendar"></i> {{ dados_pagamento.data_sessao }}</p>
+                                <p><i class="fas fa-clock"></i> {{ dados_pagamento.horario }}</p>
+                                <p><i class="fas fa-film"></i> {{ dados_pagamento.tipo_sessao }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="lugares-info">
+                            <h4><i class="fas fa-chair"></i> Lugares Selecionados</h4>
+                            <div class="lugares-lista">
+                                {% for lugar in dados_pagamento.lugares_selecionados %}
+                                    <span class="lugar-badge">{{ lugar }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        {% if dados_pagamento.produtos_bar %}
+                        <div class="bar-info">
+                            <h4><i class="fas fa-utensils"></i> Produtos do Bar</h4>
+                            {% for produto in dados_pagamento.produtos_bar %}
+                            <div class="produto-item">
+                                <span>{{ produto.nome }} x{{ produto.quantidade }}</span>
+                                <span>€{{ "%.2f"|format(produto.preco * produto.quantidade) }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="totais">
+                            <div class="total-item">
+                                <span>Bilhetes ({{ dados_pagamento.lugares_selecionados|length }}x)</span>
+                                <span>€{{ "%.2f"|format(dados_pagamento.total_bilhetes) }}</span>
+                            </div>
+                            {% if dados_pagamento.total_bar > 0 %}
+                            <div class="total-item">
+                                <span>Produtos do Bar</span>
+                                <span>€{{ "%.2f"|format(dados_pagamento.total_bar) }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="total-final">
+                                <span>Total</span>
+                                <span>€{{ "%.2f"|format(dados_pagamento.total_geral) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métodos de Pagamento -->
+                <div class="metodos-pagamento">
+                    <h2><i class="fas fa-lock"></i> Escolha o Método de Pagamento</h2>
+                    
+                    <div class="payment-methods">
+                        <!-- Cartão de Crédito/Débito -->
+                        <div class="payment-method" data-method="card">
+                            <div class="method-header">
+                                <div class="method-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h3>Cartão de Crédito/Débito</h3>
+                                    <p>Visa, Mastercard, American Express</p>
+                                </div>
+                                <div class="method-radio">
+                                    <input type="radio" name="payment_method" value="card" id="card">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PayPal -->
+                        <div class="payment-method" data-method="paypal">
+                            <div class="method-header">
+                                <div class="method-icon paypal">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h3>PayPal</h3>
+                                    <p>Pagamento seguro com a sua conta PayPal</p>
+                                </div>
+                                <div class="method-radio">
+                                    <input type="radio" name="payment_method" value="paypal" id="paypal">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MB Way -->
+                        <div class="payment-method" data-method="mbway">
+                            <div class="method-header">
+                                <div class="method-icon mbway">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h3>MB WAY</h3>
+                                    <p>Pagamento rápido com o seu telemóvel</p>
+                                </div>
+                                <div class="method-radio">
+                                    <input type="radio" name="payment_method" value="mbway" id="mbway">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Multibanco -->
+                        <div class="payment-method" data-method="multibanco">
+                            <div class="method-header">
+                                <div class="method-icon multibanco">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="method-info">
+                                    <h3>Multibanco</h3>
+                                    <p>Referência para pagamento em ATM</p>
+                                </div>
+                                <div class="method-radio">
+                                    <input type="radio" name="payment_method" value="multibanco" id="multibanco">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="action-buttons">
+                        <button type="button" class="btn-secondary" onclick="history.back()">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                        <button type="button" class="btn-primary" id="finalizarPagamento" onclick="finalizarPagamento()">
+                            <i class="fas fa-lock"></i>
+                            Finalizar Pagamento
+                            <span class="amount">€{{ "%.2f"|format(dados_pagamento.total_geral) }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Loading -->
+    <div id="loadingModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h3>Processando Pagamento</h3>
+                <p>Por favor, aguarde...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let selectedMethod = null;
+
+        // Seleção de método de pagamento
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                // Remover seleção anterior
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                document.querySelectorAll('input[name="payment_method"]').forEach(input => input.checked = false);
+                
+                // Selecionar método atual
+                this.classList.add('selected');
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                selectedMethod = radio.value;
+            });
+        });
+
+        function finalizarPagamento() {
+            if (!selectedMethod) {
+                alert('Por favor, selecione um método de pagamento');
+                return;
+            }
+
+            // Mostrar loading
+            document.getElementById('loadingModal').style.display = 'flex';
+
+            // Processar pagamento
+            fetch('/api/process-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    payment_method: selectedMethod
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('loadingModal').style.display = 'none';
+                
+                if (result.success) {
+                    alert('Pagamento processado com sucesso! Reserva confirmada.');
+                    window.location.href = '/';
+                } else {
+                    alert('Erro no processamento: ' + (result.error || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                document.getElementById('loadingModal').style.display = 'none';
+                console.error('Erro:', error);
+                alert('Erro de conexão. Tente novamente.');
+            });
+        }
+    </script>
+</body>
+</html>
+                        <!-- Informações do filme -->
+                        <div class="secao-resumo">
+                            <h3>🎬 Filme</h3>
+                            <div class="filme-info">
+                                {% if dados_pagamento.filme.poster_url %}
+                                <img src="{{ url_for('static', filename=dados_pagamento.filme.poster_url) }}" 
+                                     alt="{{ dados_pagamento.filme.titulo }}" class="filme-poster-mini">
+                                {% endif %}
+                                <div class="filme-detalhes">
+                                    <p><strong>{{ dados_pagamento.filme.titulo or 'N/A' }}</strong></p>
+                                    <p>{{ dados_pagamento.filme.duracao or 'N/A' }} min</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Informações da sessão -->
+                        <div class="secao-resumo">
+                            <h3>🎭 Sessão</h3>
+                            <p><strong>Cinema:</strong> {{ dados_pagamento.cinema.nome or 'N/A' }}</p>
+                            <p><strong>Data:</strong> {{ dados_pagamento.data_sessao or 'N/A' }}</p>
+                            <p><strong>Horário:</strong> {{ dados_pagamento.horario.hora_str or 'N/A' }}</p>
+                            <p><strong>Tipo:</strong> {{ dados_pagamento.tipo_sessao.nome or 'N/A' }}</p>
+                        </div>
+                        
+                        <!-- Lugares -->
+                        <div class="secao-resumo">
+                            <h3>🪑 Lugares</h3>
+                            <p><strong>Lugares selecionados:</strong> {{ dados_pagamento.lugares|join(', ') if dados_pagamento.lugares else 'Nenhum' }}</p>
+                            <p><strong>Quantidade:</strong> {{ dados_pagamento.lugares|length if dados_pagamento.lugares else 0 }}</p>
+                        </div>
+                        
+                        <!-- Itens do Bar -->
+                        {% if dados_pagamento.bar_detalhes %}
+                        <div class="secao-resumo">
+                            <h3>🍿 Bar</h3>
+                            <div class="bar-items">
+                                {% for item in dados_pagamento.bar_detalhes %}
+                                <div class="bar-item">
+                                    <span>{{ item.nome }}</span>
+                                    <span>x{{ item.quantidade }}</span>
+                                    <span>€{{ "%.2f"|format(item.preco_total) }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Total -->
+                        <div class="secao-resumo total-secao">
+                            <h3>💰 Preços</h3>
+                            <div class="preco-linha">
+                                <span>Bilhetes ({{ dados_pagamento.lugares|length if dados_pagamento.lugares else 0 }}x):</span>
+                                <span>€{{ "%.2f"|format(dados_pagamento.preco_bilhetes or 0) }}</span>
+                            </div>
+                            {% if dados_pagamento.preco_bar > 0 %}
+                            <div class="preco-linha">
+                                <span>Bar:</span>
+                                <span>€{{ "%.2f"|format(dados_pagamento.preco_bar or 0) }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="preco-linha total-linha">
+                                <span><strong>Total:</strong></span>
+                                <span><strong>€{{ "%.2f"|format(dados_pagamento.preco_total or 0) }}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% else %}
+                    <!-- Resumo para outros tipos de pagamento -->
+                    <div class="reserva-detalhes">
+                        <p><strong>Filme:</strong> {{ filme.titulo if filme else 'N/A' }}</p>
+                        <p><strong>Cinema:</strong> {{ cinema.nome if cinema else 'N/A' }}</p>
+                        <p><strong>Data/Hora:</strong> {{ sessao.data_hora if sessao else 'N/A' }}</p>
+                        <p><strong>Lugares:</strong> {{ lugares|length if lugares else 0 }}</p>
+                        <p><strong>Total:</strong> €{{ total if total else '0.00' }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Seção de Dados do Cliente / Métodos de Pagamento -->
+                <div class="checkout-section">
+                    {% if logged_in %}
+                    <!-- Usuário logado - mostrar info e métodos de pagamento -->
+                    <div class="user-info-section">
+                        <h2>👤 Dados do Cliente</h2>
+                        <div class="user-info">
+                            <p><strong>Nome:</strong> {{ dados_pagamento.nome or session.get('user_name', 'N/A') }}</p>
+                            <p><strong>Email:</strong> {{ dados_pagamento.email or session.get('user_email', 'N/A') }}</p>
+                            <div class="info-notice">
+                                <i class="fas fa-info-circle"></i>
+                                <span>A confirmação da reserva será enviada para o seu email.</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metodos-pagamento">
+                        <h2>💳 Método de Pagamento</h2>
+                        
+                        <!-- Seção de Código de Desconto -->
+                        <div class="codigo-desconto-section">
+                            <div class="codigo-desconto-header">
+                                <h3><i class="fas fa-tag"></i> Código de Desconto</h3>
+                                <p>Tem um código de desconto? Introduza-o aqui para obter o seu desconto</p>
+                            </div>
+                            
+                            <div class="codigo-desconto-form">
+                                <div class="codigo-input-group">
+                                    <input type="text" id="codigoDesconto" placeholder="Introduza o código de desconto" maxlength="20">
+                                    <button type="button" id="aplicarCodigo" class="btn-aplicar-codigo">
+                                        <i class="fas fa-check"></i>
+                                        Aplicar
+                                    </button>
+                                </div>
+                                
+                                <div id="codigoStatus" class="codigo-status" style="display: none;"></div>
+                                
+                                <div id="descontoAplicado" class="desconto-aplicado" style="display: none;">
+                                    <div class="desconto-info">
+                                        <div class="desconto-header">
+                                            <i class="fas fa-gift"></i>
+                                            <span class="desconto-titulo">Desconto Aplicado!</span>
+                                            <button type="button" id="removerDesconto" class="btn-remover-desconto">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div class="desconto-detalhes">
+                                            <p><strong id="premioNome"></strong></p>
+                                            <div class="desconto-valores">
+                                                <div class="valor-original">
+                                                    <span>Total original:</span>
+                                                    <span id="totalOriginal">€0.00</span>
+                                                </div>
+                                                <div class="valor-desconto">
+                                                    <span>Desconto:</span>
+                                                    <span id="valorDesconto">-€0.00</span>
+                                                </div>
+                                                <div class="valor-final">
+                                                    <span><strong>Novo total:</strong></span>
+                                                    <span id="novoTotal"><strong>€0.00</strong></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pagamento-opcoes">
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="paypal" name="pagamento" value="paypal" checked>
+                                <label for="paypal">
+                                    <i class="fab fa-paypal"></i>
+                                    PayPal
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="mastercard" name="pagamento" value="mastercard">
+                                <label for="mastercard">
+                                    <i class="fab fa-cc-mastercard"></i>
+                                    Mastercard
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="visa" name="pagamento" value="visa">
+                                <label for="visa">
+                                    <i class="fab fa-cc-visa"></i>
+                                    Visa
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="mbway" name="pagamento" value="mbway">
+                                <label for="mbway">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    MB WAY
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="applepay" name="pagamento" value="applepay">
+                                <label for="applepay">
+                                    <i class="fab fa-apple-pay"></i>
+                                    Apple Pay
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="googlepay" name="pagamento" value="googlepay">
+                                <label for="googlepay">
+                                    <i class="fab fa-google-pay"></i>
+                                    Google Pay
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary btn-large" onclick="processarPagamento()">
+                            <i class="fas fa-credit-card"></i>
+                            Confirmar Pagamento
+                            <span id="totalPagamento1">€{{ "%.2f"|format(dados_pagamento.preco_total or 0) }}</span>
+                        </button>
+                    </div>
+                    
+                    {% else %}
+                    <!-- Usuário não logado - formulário de dados -->
+                    <div class="guest-form-section">
+                        <h2>👤 Dados do Cliente</h2>
+                        <form id="guestForm" class="guest-form">
+                            <div class="form-group">
+                                <label for="nome">Nome Completo *</label>
+                                <input type="text" id="nome" name="nome" required 
+                                       value="{{ dados_pagamento.nome or '' }}"
+                                       placeholder="Digite o seu nome completo">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required 
+                                       value="{{ dados_pagamento.email or '' }}"
+                                       placeholder="Digite o seu email">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="telefone">Telemóvel (opcional)</label>
+                                <input type="tel" id="telefone" name="telefone" 
+                                       placeholder="Digite o seu número de telemóvel">
+                            </div>
+                            
+                            <div class="info-notice">
+                                <i class="fas fa-info-circle"></i>
+                                <span>A confirmação da reserva será enviada para o email indicado.</span>
+                            </div>
+                            
+                            <button type="button" class="btn-primary btn-large" onclick="continuarParaPagamento()">
+                                <i class="fas fa-arrow-right"></i>
+                                Continuar
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Métodos de pagamento (inicialmente ocultos) -->
+                    <div class="metodos-pagamento" id="metodosSection" style="display: none;">
+                        <h2>💳 Método de Pagamento</h2>
+                        <div class="pagamento-opcoes">
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="paypal_guest" name="pagamento" value="paypal" checked>
+                                <label for="paypal_guest">
+                                    <i class="fab fa-paypal"></i>
+                                    PayPal
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="mastercard_guest" name="pagamento" value="mastercard">
+                                <label for="mastercard_guest">
+                                    <i class="fab fa-cc-mastercard"></i>
+                                    Mastercard
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="visa_guest" name="pagamento" value="visa">
+                                <label for="visa_guest">
+                                    <i class="fab fa-cc-visa"></i>
+                                    Visa
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="mbway_guest" name="pagamento" value="mbway">
+                                <label for="mbway_guest">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    MB WAY
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="applepay_guest" name="pagamento" value="applepay">
+                                <label for="applepay_guest">
+                                    <i class="fab fa-apple-pay"></i>
+                                    Apple Pay
+                                </label>
+                            </div>
+                            <div class="opcao-pagamento">
+                                <input type="radio" id="googlepay_guest" name="pagamento" value="googlepay">
+                                <label for="googlepay_guest">
+                                    <i class="fab fa-google-pay"></i>
+                                    Google Pay
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary btn-large" onclick="processarPagamento()">
+                            <i class="fas fa-credit-card"></i>
+                            Confirmar Pagamento
+                            <span id="totalPagamento2">€{{ "%.2f"|format(dados_pagamento.preco_total or 0) }}</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CineVibe</h3>
+                    <p>A sua experiência cinematográfica completa</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Úteis</h4>
+                    <ul>
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#" onclick="alert('Em desenvolvimento')">Política de Privacidade</a></li>
+                        <li><a href="#" onclick="alert('Em desenvolvimento')">Termos e Condições</a></li>
+                        <li><a href="#" onclick="alert('Em desenvolvimento')">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CineVibe. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
+   <script>
+        function continuarParaPagamento() {
+            // Validar formulário
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!nome) {
+                alert('Por favor, digite o seu nome.');
+                document.getElementById('nome').focus();
+                return;
+            }
+            
+            if (!email) {
+                alert('Por favor, digite o seu email.');
+                document.getElementById('email').focus();
+                return;
+            }
+            
+            // Validar formato do email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, digite um email válido.');
+                document.getElementById('email').focus();
+                return;
+            }
+            
+            // Ocultar formulário e mostrar métodos de pagamento
+            document.querySelector('.guest-form-section').style.display = 'none';
+            document.getElementById('metodosSection').style.display = 'block';
+            
+            // Scroll suave para a seção de métodos de pagamento
+            document.getElementById('metodosSection').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+        
+        // Variáveis globais para controle de desconto
+        let codigoDescontoAtivo = null;
+        let totalOriginalGlobal = {{ dados_pagamento.preco_total or 0 }};
+        let novoTotalGlobal = {{ dados_pagamento.preco_total or 0 }};
+        
+        function processarPagamento() {
+            const metodoPagamento = document.querySelector('input[name="pagamento"]:checked');
+            
+            if (!metodoPagamento) {
+                alert('Por favor, selecione um método de pagamento.');
+                return;
+            }
+            
+            // Preparar dados do pagamento
+            const dadosPagamento = {
+                payment_method: metodoPagamento.value,
+                codigo: codigoDescontoAtivo
+            };
+            
+            // Mostrar loading
+            const botao = event.target;
+            const textoOriginal = botao.innerHTML;
+            botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            botao.disabled = true;
+            
+            // Fazer requisição para finalizar pagamento
+            fetch('/api/finalizar-pagamento-com-desconto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dadosPagamento)
+            })
+            .then(response => response.json())
+            .then(result => {
+                botao.innerHTML = textoOriginal;
+                botao.disabled = false;
+                
+                if (result.success) {
+                    alert('Pagamento processado com sucesso! Reserva confirmada.');
+                    window.location.href = '/';
+                } else {
+                    alert('Erro no processamento: ' + (result.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                botao.innerHTML = textoOriginal;
+                botao.disabled = false;
+                console.error('Erro:', error);
+                alert('Erro de conexão. Tente novamente.');
+            });
+        }
+        
+        function aplicarCodigoDesconto() {
+            const codigo = document.getElementById('codigoDesconto').value.trim().toUpperCase();
+            const statusDiv = document.getElementById('codigoStatus');
+            const botaoAplicar = document.getElementById('aplicarCodigo');
+            
+            if (!codigo) {
+                mostrarStatus('Por favor, introduza um código de desconto.', 'error');
+                return;
+            }
+            
+            // Mostrar loading
+            botaoAplicar.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            botaoAplicar.disabled = true;
+            
+            // Validar código
+            fetch('/api/validar-codigo-desconto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ codigo: codigo })
+            })
+            .then(response => response.json())
+            .then(result => {
+                botaoAplicar.innerHTML = '<i class="fas fa-check"></i> Aplicar';
+                botaoAplicar.disabled = false;
+                
+                if (result.success) {
+                    // Aplicar desconto
+                    aplicarDesconto(result);
+                } else {
+                    mostrarStatus(result.message, 'error');
+                }
+            })
+            .catch(error => {
+                botaoAplicar.innerHTML = '<i class="fas fa-check"></i> Aplicar';
+                botaoAplicar.disabled = false;
+                console.error('Erro:', error);
+                mostrarStatus('Erro de conexão. Tente novamente.', 'error');
+            });
+        }
+        
+        function aplicarDesconto(codigoInfo) {
+            // Calcular desconto
+            fetch('/api/aplicar-codigo-desconto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    codigo: codigoInfo.codigo,
+                    total_original: totalOriginalGlobal
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Mostrar desconto aplicado
+                    mostrarDescontoAplicado(result);
+                    codigoDescontoAtivo = result.codigo;
+                    novoTotalGlobal = result.novo_total;
+                    
+                    // Atualizar totais nos botões
+                    atualizarTotaisBotoes(result.novo_total);
+                    
+                    // Ocultar formulário de código
+                    document.querySelector('.codigo-desconto-form').style.display = 'none';
+                } else {
+                    mostrarStatus(result.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                mostrarStatus('Erro ao aplicar desconto.', 'error');
+            });
+        }
+        
+        function mostrarDescontoAplicado(descontoInfo) {
+            const descontoDiv = document.getElementById('descontoAplicado');
+            
+            document.getElementById('premioNome').textContent = descontoInfo.premio_nome;
+            document.getElementById('totalOriginal').textContent = `€${descontoInfo.total_original.toFixed(2)}`;
+            document.getElementById('valorDesconto').textContent = `-€${descontoInfo.desconto_valor.toFixed(2)}`;
+            document.getElementById('novoTotal').textContent = `€${descontoInfo.novo_total.toFixed(2)}`;
+            
+            descontoDiv.style.display = 'block';
+            
+            // Scroll suave para mostrar o desconto
+            descontoDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function removerDesconto() {
+            codigoDescontoAtivo = null;
+            novoTotalGlobal = totalOriginalGlobal;
+            
+            // Ocultar desconto aplicado
+            document.getElementById('descontoAplicado').style.display = 'none';
+            
+            // Mostrar formulário de código novamente
+            document.querySelector('.codigo-desconto-form').style.display = 'block';
+            
+            // Limpar campo de código
+            document.getElementById('codigoDesconto').value = '';
+            
+            // Ocultar status
+            document.getElementById('codigoStatus').style.display = 'none';
+            
+            // Atualizar totais nos botões
+            atualizarTotaisBotoes(totalOriginalGlobal);
+        }
+        
+        function mostrarStatus(mensagem, tipo) {
+            const statusDiv = document.getElementById('codigoStatus');
+            statusDiv.className = `codigo-status ${tipo}`;
+            statusDiv.textContent = mensagem;
+            statusDiv.style.display = 'block';
+            
+            // Auto-ocultar após 5 segundos se for sucesso
+            if (tipo === 'success') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        function atualizarTotaisBotoes(novoTotal) {
+            const total1 = document.getElementById('totalPagamento1');
+            const total2 = document.getElementById('totalPagamento2');
+            
+            if (total1) total1.textContent = `€${novoTotal.toFixed(2)}`;
+            if (total2) total2.textContent = `€${novoTotal.toFixed(2)}`;
+        }
+        
+        // Adicionar animações suaves aos radio buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const opcoesPagamento = document.querySelectorAll('.opcao-pagamento');
+            
+            opcoesPagamento.forEach(opcao => {
+                opcao.addEventListener('click', function() {
+                    // Remover seleção de todas as opções
+                    opcoesPagamento.forEach(op => op.classList.remove('selected'));
+                    
+                    // Adicionar seleção à opção clicada
+                    this.classList.add('selected');
+                    
+                    // Marcar o radio button
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                    }
+                });
+            });
+            
+            // Event listeners para código de desconto
+            const botaoAplicar = document.getElementById('aplicarCodigo');
+            const inputCodigo = document.getElementById('codigoDesconto');
+            const botaoRemover = document.getElementById('removerDesconto');
+            
+            if (botaoAplicar) {
+                botaoAplicar.addEventListener('click', aplicarCodigoDesconto);
+            }
+            
+            if (inputCodigo) {
+                inputCodigo.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        aplicarCodigoDesconto();
+                    }
+                });
+                
+                // Converter para maiúsculas automaticamente
+                inputCodigo.addEventListener('input', function(e) {
+                    e.target.value = e.target.value.toUpperCase();
+                });
+            }
+            
+            if (botaoRemover) {
+                botaoRemover.addEventListener('click', removerDesconto);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+/* ============================================
+   DIVISÕES VERMELHAS - VERTICAL E HORIZONTAL
+============================================ */
+
+/* Override completo do corredor central VERTICAL */
+.wide-center-aisle {
+  width: 8px !important;
+  height: 22px !important;
+  background: transparent !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Traços vermelhos verticais no corredor */
+.wide-center-aisle::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 2px !important;
+  height: 100% !important;
+  background: repeating-linear-gradient(
+    to bottom,
+    #ff0000 0px,
+    #ff0000 4px,
+    transparent 4px,
+    transparent 8px
+  ) !important;
+  border-radius: 1px !important;
+  z-index: 10 !important;
+}
+
+/* Linha divisória adicional horizontal */
+.wide-center-aisle::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 0 !important;
+  transform: translateY(-50%) !important;
+  width: 100% !important;
+  height: 1px !important;
+  background: rgba(255, 0, 0, 0.3) !important;
+  z-index: 5 !important;
+}
+
+/* ============================================
+   SEPARAÇÃO HORIZONTAL ESTÉTICA
+============================================ */
+
+/* Container da sala com espaçamento para separação */
+.wide-cinema-hall {
+  position: relative !important;
+  gap: 8px !important; /* Espaçamento entre filas */
+}
+
+/* Separação horizontal entre as filas do meio */
+.wide-cinema-row:nth-child(6) {
+  margin-bottom: 12px !important;
+  position: relative !important;
+}
+
+/* Linha divisória horizontal estética (entre filas, não por cima) */
+.wide-cinema-row:nth-child(6)::after {
+  content: '' !important;
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 2px !important;
+  background: repeating-linear-gradient(
+    to right,
+    #ff0000 0px,
+    #ff0000 4px,
+    transparent 4px,
+    transparent 8px
+  ) !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+
+/* Força aplicação em todos os contextos */
+.wide-cinema-hall .wide-center-aisle,
+.sala-dinamica .wide-center-aisle,
+div.wide-center-aisle {
+  width: 8px !important;
+  background: transparent !important;
+}
+
+/* Responsivo para mobile */
+@media (max-width: 768px) {
+  .wide-center-aisle {
+    width: 6px !important;
+    height: 18px !important;
+  }
+  
+  .wide-center-aisle::before {
+    width: 1.5px !important;
+  }
+}
+
+/* Animação sutil para os traços */
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.wide-center-aisle::before {
+  animation: pulse-red 3s ease-in-out infinite !important;
+}
+/* ============================================
+   CONFIGURAÇÕES PARA DIVISÃO ÚNICA
+============================================ */
+
+/* Garantir que a divisão seja visível */
+.wide-cinema-hall {
+  padding: 20px 40px !important;
+  overflow: visible !important;
+}
+
+/* Configuração básica das filas */
+.wide-cinema-row {
+  position: relative !important;
+}
+/* Divisões horizontais aplicadas: 1765877079 */
+
+/* Divisão central única aplicada: 1765877323 */
+/* ============================================
+   MELHORIAS ESTÉTICAS PARA DIVISÕES
+============================================ */
+
+/* Espaçamento adicional para criar separação visual clara */
+.wide-cinema-row:nth-child(6) {
+  border-bottom: 1px solid rgba(255, 0, 0, 0.1) !important;
+  padding-bottom: 6px !important;
+}
+
+/* Sombra sutil para destacar a separação (dentro dos limites) */
+.wide-cinema-row:nth-child(6)::before {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 0, 0, 0.3) 20%,
+    rgba(255, 0, 0, 0.5) 50%,
+    rgba(255, 0, 0, 0.3) 80%,
+    transparent 100%
+  ) !important;
+  z-index: 3 !important;
+}
+
+/* Melhorar o espaçamento geral da sala */
+.wide-cinema-hall {
+  padding: 30px 50px !important;
+}
+
+/* Garantir que os lugares não sejam afetados pelas divisões */
+.wide-cinema-seat {
+  z-index: 10 !important;
+  position: relative !important;
+}
+
+/* Efeito de profundidade para a separação */
+.wide-cinema-row:nth-child(7) {
+  margin-top: 4px !important;
+  position: relative !important;
+}
+
+.wide-cinema-row:nth-child(7)::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -10px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 0, 0, 0.2) 20%,
+    rgba(255, 0, 0, 0.4) 50%,
+    rgba(255, 0, 0, 0.2) 80%,
+    transparent 100%
+  ) !important;
+  z-index: 2 !important;
+}
+/* Melhorias estéticas aplicadas: 1765877695 */
+/* ============================================
+   MELHORIAS ESTÉTICAS PARA SAÍDAS DE EMERGÊNCIA
+============================================ */
+
+/* Posicionar saídas mais para os lados */
+.wide-emergency-exit.left-exit {
+  left: -80px !important; /* Mais para a esquerda */
+  background: linear-gradient(135deg, #00d4aa, #00b894) !important;
+  border: 2px solid #00e676 !important;
+  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3) !important;
+}
+
+.wide-emergency-exit.right-exit {
+  right: -80px !important; /* Mais para a direita */
+  background: linear-gradient(135deg, #00d4aa, #00b894) !important;
+  border: 2px solid #00e676 !important;
+  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3) !important;
+}
+
+/* CAMINHO EM "L" - COMO NO TRACEJADO VERMELHO */
+
+/* PARTE VERTICAL - Desce da porta */
+.wide-emergency-exit.left-exit::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 100% !important; /* Começa logo abaixo da porta */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 3px !important;
+  height: 60px !important; /* Desce verticalmente */
+  background: repeating-linear-gradient(
+    to bottom,
+    #ff0000 0px,
+    #ff0000 4px,
+    transparent 4px,
+    transparent 8px
+  ) !important;
+  z-index: 5 !important;
+}
+
+.wide-emergency-exit.right-exit::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 100% !important; /* Começa logo abaixo da porta */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 3px !important;
+  height: 60px !important; /* Desce verticalmente */
+  background: repeating-linear-gradient(
+    to bottom,
+    #ff0000 0px,
+    #ff0000 4px,
+    transparent 4px,
+    transparent 8px
+  ) !important;
+  z-index: 5 !important;
+}
+
+/* PARTE HORIZONTAL - Vai para a sala */
+.wide-emergency-exit.left-exit::before {
+  content: '' !important;
+  position: absolute !important;
+  top: calc(100% + 60px) !important; /* No final da parte vertical */
+  left: 50% !important;
+  width: 80px !important; /* Vai horizontalmente para a direita */
+  height: 3px !important;
+  background: repeating-linear-gradient(
+    to right,
+    #ff0000 0px,
+    #ff0000 6px,
+    transparent 6px,
+    transparent 12px
+  ) !important;
+  z-index: 5 !important;
+}
+
+.wide-emergency-exit.right-exit::before {
+  content: '' !important;
+  position: absolute !important;
+  top: calc(100% + 60px) !important; /* No final da parte vertical */
+  right: 50% !important;
+  width: 80px !important; /* Vai horizontalmente para a esquerda */
+  height: 3px !important;
+  background: repeating-linear-gradient(
+    to left,
+    #ff0000 0px,
+    #ff0000 6px,
+    transparent 6px,
+    transparent 12px
+  ) !important;
+  z-index: 5 !important;
+}
+
+/* Manter o ícone original da porta (não alterar) */
+
+/* Efeito hover para linha verde VERTICAL */
+.wide-emergency-exit:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(0, 212, 170, 0.5) !important;
+  border-color: #00ff88 !important;
+}
+
+/* Hover na parte vertical do caminho em "L" */
+.wide-emergency-exit:hover::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    #ff4444 0px,
+    #ff4444 4px,
+    transparent 4px,
+    transparent 8px
+  ) !important;
+  width: 4px !important;
+}
+
+/* Hover na parte horizontal do caminho em "L" */
+.wide-emergency-exit:hover::before {
+  background: repeating-linear-gradient(
+    to right,
+    #ff4444 0px,
+    #ff4444 6px,
+    transparent 6px,
+    transparent 12px
+  ) !important;
+  height: 4px !important;
+}
+
+/* Sombra ambiente para simular iluminação de emergência */
+.wide-emergency-exit {
+  position: relative !important;
+}
+
+.wide-emergency-exit::before {
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.4) !important;
+}
+
+/* Responsividade para caminho em "L" */
+@media (max-width: 768px) {
+  .wide-emergency-exit.left-exit {
+    left: -60px !important;
+  }
+  
+  .wide-emergency-exit.right-exit {
+    right: -60px !important;
+  }
+  
+  /* Parte vertical menor */
+  .wide-emergency-exit.left-exit::after,
+  .wide-emergency-exit.right-exit::after {
+    height: 40px !important;
+    width: 2px !important;
+  }
+  
+  /* Parte horizontal menor */
+  .wide-emergency-exit.left-exit::before,
+  .wide-emergency-exit.right-exit::before {
+    top: calc(100% + 40px) !important;
+    width: 60px !important;
+    height: 2px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .wide-emergency-exit.left-exit {
+    left: -50px !important;
+  }
+  
+  .wide-emergency-exit.right-exit {
+    right: -50px !important;
+  }
+  
+  /* Caminho em "L" ainda menor */
+  .wide-emergency-exit.left-exit::after,
+  .wide-emergency-exit.right-exit::after {
+    height: 30px !important;
+    width: 2px !important;
+  }
+  
+  .wide-emergency-exit.left-exit::before,
+  .wide-emergency-exit.right-exit::before {
+    top: calc(100% + 30px) !important;
+    width: 50px !important;
+    height: 2px !important;
+  }
+}
+/* Caminho ao corredor aplicado: 1765878394 */
+
+/* Caminho em L aplicado: 1765878741 */
+/* Caminho em "L" implementado: 1765879234 */

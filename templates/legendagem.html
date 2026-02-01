@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legendagem | CineVibe - Cinema Acessível Para Todos</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/legendagem.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+    
+    <!-- Meta tags para SEO -->
+    <meta name="description" content="Legendagem profissional no CineVibe. Cinema inclusivo com legendas de qualidade para uma experiência cinematográfica completa.">
+    <meta name="keywords" content="legendagem, cinema acessível, legendas, CineVibe, inclusão">
+    <meta property="og:title" content="Legendagem | CineVibe - Cinema Acessível Para Todos">
+    <meta property="og:description" content="Legendagem profissional no CineVibe. Cinema inclusivo com legendas de qualidade para uma experiência cinematográfica completa.">
+    <meta property="og:image" content="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}" class="active">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <!-- Banner Section -->
+            <section class="banner" role="banner">
+                <img src="{{ url_for('static', filename='imgs/CC-example.jpg') }}" alt="Imagem representativa da Legendagem - cinema inclusivo com legendas especiais">
+                <div class="banner-content">
+                    <div class="hero-badge">Cinema Inclusivo</div>
+                    <h1>Legendagem para Surdos</h1>
+                    <p class="subtitle">Legendas que dão vida a cada som e palavra do filme</p>
+                    <p class="description">Uma experiência cinematográfica inclusiva que transforma cada diálogo, som e música em texto, permitindo que todos desfrutem da magia do cinema.</p>
+                    <div class="hero-features">
+                        <div class="feature">Legendas profissionais</div>
+                        <div class="feature">Disponível em todos os cinemas</div>
+                        <div class="feature">Serviço gratuito</div>
+                    </div>
+                    <div class="hero-cta">
+                        <a href="{{ url_for('filmes') }}" class="btn-primary">Ver Filmes</a>
+                        <a href="#como-funciona" class="btn-secondary">Como Funciona</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="about-section">
+                <div class="section-header">
+                    <h2>O que é a Legendagem Especial?</h2>
+                    <p class="description">A legendagem especial é um serviço que vai além das legendas tradicionais, incluindo descrições de sons, música e efeitos sonoros. Através de legendas detalhadas e sincronizadas, garantimos que pessoas surdas ou com dificuldades auditivas tenham acesso completo ao conteúdo dos filmes, incluindo todos os elementos sonoros importantes para a história.</p>
+                </div>
+                
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-number">01</div>
+                        <div class="feature-content">
+                            <h3>Legendas Detalhadas</h3>
+                            <p>Incluem diálogos, efeitos sonoros, música e indicações de tom de voz</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-number">02</div>
+                        <div class="feature-content">
+                            <h3>Sincronização Perfeita</h3>
+                            <p>Legendas perfeitamente sincronizadas com a ação e som do filme</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-number">03</div>
+                        <div class="feature-content">
+                            <h3>Experiência Completa</h3>
+                            <p>Transformamos cada filme numa experiência acessível e envolvente para todos</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exemplos de Legendagem -->
+            <section class="examples-section">
+                <div class="section-header">
+                    <h2>Exemplos de Legendagem</h2>
+                    <p>Veja como transformamos sons em texto para criar uma experiência cinematográfica completa</p>
+                </div>
+                
+                <div class="examples-grid">
+                    <div class="example-card">
+                        <div class="example-image">
+                            <img src="{{ url_for('static', filename='imgs/acessibilidade/AAAABV6ddmAL-n5OkFkpl7f3I2G5xEzw7gzxH9kNilP7ArEx9xvBS-_qTxNA1xwBUGNM6jEbaBmOTg7Iw5xFT3w0Efs1Vqn6BSnOrWHs.jpg') }}" alt="Diálogos">
+                        </div>
+                        <div class="example-content">
+                            <h3>Diálogos</h3>
+                            <div class="example-text">BATMAN: (voz grave)<br>"Eu sou a vingança."<br>[Som de capa ao vento]</div>
+                            <div class="example-description">Identificação de personagem e tom de voz</div>
+                        </div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-image">
+                            <img src="{{ url_for('static', filename='imgs/The-Karate-Kid-Ralph-Macchio-Pat-Morita.avif') }}" alt="Efeitos Sonoros">
+                        </div>
+                        <div class="example-content">
+                            <h3>Efeitos Sonoros</h3>
+                            <div class="example-text">[Golpe certeiro]<br>[Respiração ofegante]<br>[Aplausos da multidão]</div>
+                            <div class="example-description">Descrição de sons e efeitos</div>
+                        </div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-image">
+                            <img src="{{ url_for('static', filename='imgs/titanic.jpg') }}" alt="Música e Ambiente">
+                        </div>
+                        <div class="example-content">
+                            <h3>Música e Ambiente</h3>
+                            <div class="example-text">♪ Música orquestral romântica ♪<br>[Ondas do mar]<br>[Vento suave]</div>
+                            <div class="example-description">Indicações musicais e ambientais</div>
+                        </div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-image">
+                            <img src="{{ url_for('static', filename='imgs/acessibilidade/venom-poster-RGB.jpg') }}" alt="Emoções e Tom" onerror="this.style.display='none'">
+                        </div>
+                        <div class="example-content">
+                            <h3>Emoções e Tom</h3>
+                            <div class="example-text">VENOM: (voz distorcida)<br>"Nós... somos Venom!"<br>[Rugido ameaçador]</div>
+                            <div class="example-description">Indicação de emoções e características vocais</div>
+                        </div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-image">
+                            <img src="{{ url_for('static', filename='imgs/acessibilidade/How-Oppenheimer-Created-a-CGI-Free-Atomic-Blast-1-scaled.jpg') }}" alt="Sons Ambientais" onerror="this.style.display='none'">
+                        </div>
+                        <div class="example-content">
+                            <h3>Sons Ambientais</h3>
+                            <div class="example-text">[Silêncio tenso]<br>[Explosão ensurdecedora]<br>[Eco distante]</div>
+                            <div class="example-description">Descrição de atmosfera sonora</div>
+                        </div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-image">
+                            <img src="{{ url_for('static', filename='imgs/acessibilidade/AAAABQzXItt57RPATcYyjxtFTnm6XDpGDcxuD_Z2btOxCA9gc2d5yiZMkLbDfd4XdsgBDPi-lb6TiDXjPBc585DSJ8cX85TG9AgvF9XA.jpg') }}" alt="Narrador" onerror="this.style.display='none'">
+                        </div>
+                        <div class="example-content">
+                            <h3>Narrador</h3>
+                            <div class="example-text">NARRADOR: (voz solene)<br>"Era uma vez..."<br>♪ Música de abertura ♪</div>
+                            <div class="example-description">Identificação de narradores e vozes off</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="examples-cta">
+                    <div class="examples-cta-content">
+                        <h3>Experimente a Legendagem Especial</h3>
+                        <p>Cada filme ganha vida através das nossas legendas profissionais</p>
+                        <a href="{{ url_for('filmes') }}" class="btn-examples">Ver Filmes Disponíveis</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section após exemplos -->
+            <section class="cta-legendagem-section">
+                <div class="container">
+                    <div class="cta-legendagem-box">
+                        <h2 class="cta-legendagem-title">Pronto para uma experiência cinematográfica inclusiva?</h2>
+                        <a href="{{ url_for('filmes') }}" class="cta-legendagem-btn">Ver Filmes</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-container">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                            <h3>CineVibe</h3>
+                        </div>
+                        <p class="footer-description">
+                            A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="TikTok">
+                                <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                            </a>
+                            <a href="#" aria-label="Instagram">
+                                <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                            </a>
+                            <a href="#" aria-label="X">
+                                <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Navegação</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('home') }}">Início</a></li>
+                            <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                            <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                            <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Suporte</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                            <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                            <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                            <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Conta</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <div class="newsletter-section">
+                            <h4>Newsletter</h4>
+                            <p>Receba as últimas novidades e promoções exclusivas.</p>
+                            <form class="newsletter-form">
+                                <div class="newsletter-input-group">
+                                    <input type="email" placeholder="Seu email" required>
+                                    <button type="submit">Subscrever</button>
+                                </div>
+                            </form>
+                            <div class="footer-contact">
+                                <div class="contact-item">
+                                    <span class="contact-icon">📧</span>
+                                    <span>info@cinevibe.pt</span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="contact-icon">📞</span>
+                                    <span>+351 123 456 789</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-container">
+                    <div class="footer-bottom-content">
+                        <div class="footer-legal">
+                            <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                            <div class="legal-links">
+                                <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                                <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                                <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                            </div>
+                        </div>
+                        <div class="footer-certifications">
+                            <div class="cert-logos">
+                                <span class="cert-text">SSL Seguro</span>
+                                <span class="cert-text">GDPR Compliant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.step-card, .benefit-card, .testimonial-card, .faq-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Sistema de pesquisa
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            let searchTimeout;
+
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                
+                if (query.length < 2) {
+                    return;
+                }
+                
+                searchTimeout = setTimeout(() => {
+                    // Simular resultados de pesquisa
+                    console.log('Pesquisando por:', query);
+                }, 300);
+            });
+        }
+
+        // Dropdown do perfil
+        const profileDropdown = document.querySelector('.user-profile-dropdown');
+        if (profileDropdown) {
+            profileDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+            });
+            
+            document.addEventListener('click', function() {
+                profileDropdown.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+</html>

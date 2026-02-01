@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva Confirmada | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva_confirmada.css') }}">
+</head>
+<body>
+    <main class="reserva-confirmada-content">
+        <h1>🎉 Reserva Confirmada!</h1>
+        <p>A sua reserva foi realizada com sucesso</p>
+        
+        <div class="reserva-detalhes">
+            <h2>Detalhes da Reserva</h2>
+            {% if reserva %}
+            <div class="detalhe-item">
+                <strong>Filme:</strong> {{ reserva.filme_titulo }}
+            </div>
+            <div class="detalhe-item">
+                <strong>Cinema:</strong> {{ reserva.cinema_nome }}
+            </div>
+            <div class="detalhe-item">
+                <strong>Data:</strong> {{ reserva.data_sessao }}
+            </div>
+            <div class="detalhe-item">
+                <strong>Hora:</strong> {{ reserva.hora_sessao }}
+            </div>
+            <div class="detalhe-item">
+                <strong>Lugares:</strong> {{ reserva.lugares }}
+            </div>
+            <div class="detalhe-item">
+                <strong>Total:</strong> {{ reserva.preco_total }}€
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="acoes">
+            <a href="{{ url_for('perfil') }}" class="btn-perfil">Ver Minhas Reservas</a>
+            <a href="{{ url_for('home') }}" class="btn-home">Voltar ao Início</a>
+        </div>
+    </main>
+</body>
+</html>

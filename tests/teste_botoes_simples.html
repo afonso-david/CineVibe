@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Botões Reserva</title>
+    <link rel="stylesheet" href="static/css/reserva-simples.css">
+</head>
+<body>
+    <div class="page-container">
+        <main class="main-content">
+            <div class="step-container active" id="step1">
+                <div class="step-header">
+                    <h1>🎫 1. Quantos bilhetes?</h1>
+                    <p>Selecione a quantidade de bilhetes desejada</p>
+                </div>     
+           
+                <div class="tickets-grid">
+                    <div class="ticket-option" data-quantity="1">
+                        <div class="ticket-number">1</div>
+                        <div class="ticket-label">BILHETE</div>
+                    </div>
+                    <div class="ticket-option" data-quantity="2">
+                        <div class="ticket-number">2</div>
+                        <div class="ticket-label">BILHETES</div>
+                    </div>
+                    <div class="ticket-option" data-quantity="3">
+                        <div class="ticket-number">3</div>
+                        <div class="ticket-label">BILHETES</div>
+                    </div>
+                </div>
+
+                <div class="custom-quantity">
+                    <p>OU ESCOLHA OUTRA QUANTIDADE</p>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                        <input type="number" id="customQuantity" value="1" min="1" max="20">
+                        <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                    </div>
+                    <p class="quantity-limit">MÁXIMO DE 20 BILHETES</p>
+                </div>
+
+                <div class="step-actions">
+                    <div></div>
+                    <button class="continue-btn" id="continueStep1" onclick="nextStep()" disabled>
+                        CONTINUAR PARA LUGARES →
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        console.log('Script carregado!');
+        
+        let quantity = 1;
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado!');
+            setupEventListeners();
+            selectQuantity(1);
+        });
+
+        function setupEventListeners() {
+            console.log('Configurando event listeners...');
+            
+            // Quantidade de bilhetes
+            document.querySelectorAll('.ticket-option').forEach(option => {
+                console.log('Adicionando listener para:', option);
+                option.addEventListener('click', function() {
+                    console.log('Clicou em:', this.dataset.quantity);
+                    const quantity = parseInt(this.dataset.quantity);
+                    selectQuantity(quantity);
+                });
+            });
+
+            // Input customizado
+            const customQuantityInput = document.getElementById('customQuantity');
+            if (customQuantityInput) {
+                customQuantityInput.addEventListener('input', function() {
+                    const quantity = parseInt(this.value) || 1;
+                    selectQuantity(quantity);
+                });
+            }
+        }
+
+        function selectQuantity(newQuantity) {
+            console.log('Selecionando quantidade:', newQuantity);
+            quantity = newQuantity;
+            
+            // Atualizar UI
+            document.querySelectorAll('.ticket-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            const selectedOption = document.querySelector(`[data-quantity="${newQuantity}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+                console.log('Opção selecionada:', selectedOption);
+            }
+            
+            const customQuantityInput = document.getElementById('customQuantity');
+            if (customQuantityInput) {
+                customQuantityInput.value = newQuantity;
+            }
+            
+            // Habilitar botão
+            const continueBtn = document.getElementById('continueStep1');
+            if (continueBtn) {
+                continueBtn.disabled = false;
+                console.log('Botão habilitado');
+            }
+        }
+
+        function changeQuantity(delta) {
+            console.log('Mudando quantidade:', delta);
+            const input = document.getElementById('customQuantity');
+            if (!input) {
+                console.log('Input não encontrado');
+                return;
+            }
+            
+            const currentValue = parseInt(input.value) || 1;
+            const newQuantity = Math.max(1, Math.min(20, currentValue + delta));
+            console.log('Nova quantidade:', newQuantity);
+            selectQuantity(newQuantity);
+        }
+
+        function nextStep() {
+            console.log('Próximo passo clicado!');
+            alert('Próximo passo funcionando! Quantidade: ' + quantity);
+        }
+    </script>
+</body>
+</html>

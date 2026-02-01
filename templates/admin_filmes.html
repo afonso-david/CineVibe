@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Filmes - CineVibe Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_cinemas.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
+                    <span>CineVibe</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin_filmes') }}" class="nav-item active">
+                    <i class="fas fa-film"></i>
+                    <span>Filmes</span>
+                </a>
+                <a href="{{ url_for('admin_cinemas') }}" class="nav-item">
+                    <i class="fas fa-building"></i>
+                    <span>Cinemas</span>
+                </a>
+                <a href="{{ url_for('admin_usuarios') }}" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="{{ url_for('admin_reservas') }}" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Reservas</span>
+                </a>
+                <a href="{{ url_for('admin_atores') }}" class="nav-item">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Atores</span>
+                </a>
+                <a href="{{ url_for('admin_salas') }}" class="nav-item">
+                    <i class="fas fa-chair"></i>
+                    <span>Salas</span>
+                </a>
+                <a href="{{ url_for('admin_bar') }}" class="nav-item">
+                    <i class="fas fa-coffee"></i>
+                    <span>Bar</span>
+                </a>
+                <a href="{{ url_for('admin_avatares') }}" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Avatares</span>
+                </a>
+                <a href="{{ url_for('admin_tipos_sessao') }}" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Tipos de Sessão</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="{{ url_for('home') }}" class="nav-item">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Voltar ao Site</span>
+                </a>
+            </nav>
+        
+            <!-- User Profile Section -->
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {% if session.get('user_id') %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% else %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">Admin</div>
+                        <div class="user-role">Administrador</div>
+                    </div>
+                    <div class="user-actions">
+                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
+                            <i class="fas fa-user-cog"></i>
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar-pro">
+                <div class="top-bar-left">
+                    <div class="page-title">
+                        <i class="fas fa-film"></i>
+                        <div>
+                            <h1>Filmes</h1>
+                            <p>Total: {{ filmes|length }} filmes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <button class="btn-primary" onclick="abrirModalAdicionarFilme()">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Filme
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content-pro">
+                <!-- Control Panel -->
+                <div class="control-panel">
+                    <div class="search-section">
+                        <div class="search-box-pro">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Pesquisar filmes..." id="searchInput">
+                        </div>
+                        <div class="filter-group">
+                            <select id="estadoFilter" class="filter-select">
+                                <option value="">Todos os Estados</option>
+                                <option value="em_exibicao">Em Exibição</option>
+                                <option value="brevemente">Brevemente</option>
+                            </select>
+                            <select id="generoFilter" class="filter-select">
+                                <option value="">Todos os Géneros</option>
+                                {% for genero in generos %}
+                                <option value="{{ genero.nome }}">{{ genero.nome }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn-filter" onclick="limparFiltros()">
+                                <i class="fas fa-filter-circle-xmark"></i>
+                                Limpar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="view-controls">
+                        <div class="view-toggle">
+                            <button class="view-btn" data-view="grid" title="Vista em Grelha">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-btn active" data-view="table" title="Vista em Tabela">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        </div>
+                        <div class="sort-controls">
+                            <select class="sort-select" id="sortSelect">
+                                <option value="id">Ordenar por ID</option>
+                                <option value="duracao">Ordenar por Duração</option>
+                                <option value="imdb">Ordenar por Avaliação</option>
+                                <option value="ano">Ordenar por Ano</option>
+                            </select>
+                            <button class="btn-reverse" id="reverseBtn" title="Inverter ordem">
+                                <i class="fas fa-sort-amount-down" id="reverseIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <div class="movies-grid" id="filmes-grid" style="display: none;">
+                    {% for filme in filmes %}
+                    <div class="movie-card-grid" data-filme-id="{{ filme.id }}" data-estado="{{ filme.estado }}" data-generos="{{ filme.generos or '' }}">
+                        <div class="movie-poster-grid">
+                            {% if filme.poster_url %}
+                            <img src="{{ url_for('static', filename=filme.poster_url) }}" 
+                                 alt="{{ filme.titulo }}"
+                                 onerror="this.src='{{ url_for('static', filename='imgs/filmes/default.jpg') }}'">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='imgs/filmes/default.jpg') }}" 
+                                 alt="{{ filme.titulo }}">
+                            {% endif %}
+                            <div class="movie-overlay-grid">
+                                <div class="movie-title-overlay">{{ filme.titulo }}</div>
+                                <div class="movie-actions-grid">
+                                    <button class="action-btn-grid edit" onclick="window.location.href='{{ url_for('admin_filme_detalhe', id_filme=filme.id) }}'" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form method="POST" action="{{ url_for('admin_remover_filme', id_filme=filme.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover o filme \'{{ filme.titulo }}\'? Esta ação não pode ser desfeita.')">
+                                        <button type="submit" class="action-btn-grid delete" title="Remover">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Table View -->
+                <div class="movies-table-container" id="filmes-table">
+                    {% if filmes %}
+                    <div class="table-wrapper">
+                        <table class="movies-table-pro">
+                            <thead>
+                                <tr>
+                                    <th class="id-header">
+                                        <i class="fas fa-hashtag"></i>
+                                        ID
+                                    </th>
+                                    <th class="poster-header">
+                                        <i class="fas fa-image"></i>
+                                        Poster
+                                    </th>
+                                    <th class="title-header">
+                                        <i class="fas fa-film"></i>
+                                        Título
+                                    </th>
+                                    <th class="genre-header">
+                                        <i class="fas fa-theater-masks"></i>
+                                        Género
+                                    </th>
+                                    <th class="actors-header">
+                                        <i class="fas fa-user-friends"></i>
+                                        Atores
+                                    </th>
+                                    <th class="duration-header">
+                                        <i class="fas fa-clock"></i>
+                                        Duração
+                                    </th>
+                                    <th class="rating-header">
+                                        <i class="fas fa-star"></i>
+                                        IMDB
+                                    </th>
+                                    <th class="state-header">
+                                        <i class="fas fa-info-circle"></i>
+                                        Estado
+                                    </th>
+                                    <th class="actions-header">
+                                        <i class="fas fa-cogs"></i>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for filme in filmes %}
+                                <tr data-filme-id="{{ filme.id }}" data-estado="{{ filme.estado }}" data-generos="{{ filme.generos or '' }}">
+                                    <td class="id-cell">{{ filme.id }}</td>
+                                    <td class="poster-cell">
+                                        {% if filme.poster_url %}
+                                        <img src="{{ url_for('static', filename=filme.poster_url) }}" 
+                                             alt="{{ filme.titulo }}"
+                                             class="table-poster"
+                                             onerror="this.src='{{ url_for('static', filename='imgs/filmes/default.jpg') }}'">
+                                        {% else %}
+                                        <img src="{{ url_for('static', filename='imgs/filmes/default.jpg') }}" 
+                                             alt="{{ filme.titulo }}"
+                                             class="table-poster">
+                                        {% endif %}
+                                    </td>
+                                    <td class="title-cell">
+                                        <div class="filme-title-info">
+                                            <h4>{{ filme.titulo }}</h4>
+                                            {% if filme.diretor %}
+                                            <small class="filme-director">Dir: {{ filme.diretor }}</small>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="genre-cell">
+                                        <span class="genre-tag">{{ filme.generos or 'N/A' }}</span>
+                                    </td>
+                                    <td class="actors-cell">
+                                        <span class="actors-text" title="{{ filme.atores }}">{{ filme.atores[:30] }}{% if filme.atores and filme.atores|length > 30 %}...{% endif %}</span>
+                                    </td>
+                                    <td class="duration-cell">
+                                        <span class="duration-badge">{{ filme.duracao }} min</span>
+                                    </td>
+                                    <td class="rating-cell">
+                                        {% if filme.imdb_rating %}
+                                        <span class="rating-badge">⭐ {{ filme.imdb_rating }}</span>
+                                        {% else %}
+                                        <span class="rating-badge na">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="state-cell">
+                                        <span class="state-badge {% if filme.estado == 'em_exibicao' %}em-exibicao{% else %}brevemente{% endif %}">
+                                            {% if filme.estado == 'em_exibicao' %}Em Exibição{% else %}Brevemente{% endif %}
+                                        </span>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="movie-actions-table">
+                                            <button class="action-btn-table edit" onclick="window.location.href='{{ url_for('admin_filme_detalhe', id_filme=filme.id) }}'" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <form method="POST" action="{{ url_for('admin_remover_filme', id_filme=filme.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover o filme \'{{ filme.titulo }}\'? Esta ação não pode ser desfeita.')">
+                                                <button type="submit" class="action-btn-table delete" title="Remover">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-film"></i>
+                        <h3>Nenhum filme encontrado</h3>
+                        <p>Adicione filmes para começar a gerir o catálogo.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Adicionar Filme -->
+    <div id="modalAdicionarFilme" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Adicionar Novo Filme</h3>
+                <button class="modal-close" onclick="fecharModalAdicionarFilme()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="formAdicionarFilme" action="{{ url_for('admin_adicionar_filme') }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="titulo">
+                            <i class="fas fa-film"></i>
+                            Nome do Filme *
+                        </label>
+                        <input type="text" id="titulo" name="titulo" required 
+                               placeholder="Digite o nome do filme...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="poster">
+                            <i class="fas fa-image"></i>
+                            Imagem do Poster *
+                        </label>
+                        <div class="file-upload-container">
+                            <input type="file" id="poster" name="poster" accept="image/*" required>
+                            <div class="file-upload-preview" id="posterPreview" style="display: none;">
+                                <img id="posterImg" src="" alt="Preview">
+                                <button type="button" onclick="removerPosterPreview()" class="remove-preview">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="duracao">
+                            <i class="fas fa-clock"></i>
+                            Duração (minutos) *
+                        </label>
+                        <input type="number" id="duracao" name="duracao" required min="1" max="500"
+                               placeholder="Ex: 120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sinopse">
+                            <i class="fas fa-align-left"></i>
+                            Sinopse *
+                        </label>
+                        <textarea id="sinopse" name="sinopse" required rows="4"
+                                  placeholder="Digite a sinopse do filme..."></textarea>
+                    </div>
+                    
+                    <!-- Campos ocultos com valores padrão -->
+                    <input type="hidden" name="diretor" value="A definir">
+                    <input type="hidden" name="data_lancamento" value="2024-01-01">
+                    <input type="hidden" name="estado" value="em_exibicao">
+                    <input type="hidden" name="generos[]" value="1"> <!-- Género padrão: Ação -->
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="fecharModalAdicionarFilme()">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Filme
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+    /* Grid View Styles */
+    .movies-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .movie-card-grid {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        background: #1a1a1a;
+    }
+
+    .movie-card-grid:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
+    }
+
+    .movie-poster-grid {
+        position: relative;
+        width: 100%;
+        padding-bottom: 150%; /* Aspect ratio 2:3 for movie posters */
+        overflow: hidden;
+    }
+
+    .movie-poster-grid img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.3s ease;
+    }
+
+    .movie-card-grid:hover .movie-poster-grid img {
+        transform: scale(1.05);
+    }
+
+    .movie-overlay-grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, 
+            rgba(0, 0, 0, 0) 0%, 
+            rgba(0, 0, 0, 0.3) 50%, 
+            rgba(0, 0, 0, 0.9) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1rem;
+    }
+
+    .movie-card-grid:hover .movie-overlay-grid {
+        opacity: 1;
+    }
+
+    .movie-title-overlay {
+        color: #FFD60A;
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        line-height: 1.2;
+    }
+
+    .movie-actions-grid {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .action-btn-grid {
+        background: rgba(255, 214, 10, 0.9);
+        border: none;
+        color: #0D1B2A;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+    }
+
+    .action-btn-grid:hover {
+        background: #FFD60A;
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(255, 214, 10, 0.5);
+    }
+
+    .action-btn-grid.delete {
+        background: rgba(220, 53, 69, 0.9);
+        color: white;
+    }
+
+    .action-btn-grid.delete:hover {
+        background: #dc3545;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.5);
+    }
+
+    /* Table View Styles */
+    .table-poster {
+        width: 50px;
+        height: 75px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 2px solid rgba(255, 214, 10, 0.3);
+    }
+
+    .filme-title-info h4 {
+        margin: 0;
+        color: #FFD60A;
+        font-size: 1rem;
+    }
+
+    .filme-director {
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    .genre-tag, .actors-text {
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+
+    .duration-badge, .rating-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .duration-badge {
+        background: rgba(255, 214, 10, 0.1);
+        color: #FFD60A;
+    }
+
+    .rating-badge {
+        background: rgba(255, 214, 10, 0.2);
+        color: #FFD60A;
+    }
+
+    .rating-badge.na {
+        background: rgba(136, 136, 136, 0.2);
+        color: #888;
+    }
+
+    .state-badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .state-badge.em-exibicao {
+        background: linear-gradient(135deg, #28a745, #218838);
+        color: white;
+    }
+
+    .state-badge.brevemente {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        color: #0D1B2A;
+    }
+
+    .stat-badge.em-exibicao {
+        background: linear-gradient(135deg, #28a745, #218838);
+        color: white;
+    }
+
+    .stat-badge.brevemente {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        color: #0D1B2A;
+    }
+
+    .stat-badge.imdb {
+        background: rgba(255, 214, 10, 0.2);
+        color: #FFD60A;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-container {
+        background: #1a1a1a;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        border: 2px solid rgba(255, 214, 10, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+        background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(255, 214, 10, 0.05));
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        color: #FFD60A;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 1.25rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #FFD60A;
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #333;
+        border-radius: 8px;
+        background: #0D1B2A;
+        color: #fff;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #FFD60A;
+        box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .file-upload-container {
+        position: relative;
+    }
+
+    .file-upload-preview {
+        margin-top: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .file-upload-preview img {
+        max-width: 150px;
+        max-height: 200px;
+        border-radius: 8px;
+        border: 2px solid rgba(255, 214, 10, 0.3);
+    }
+
+    .remove-preview {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-top: 1px solid rgba(255, 214, 10, 0.2);
+        background: rgba(255, 214, 10, 0.05);
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #FFD60A, #FFC107);
+        color: #0D1B2A;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #FFC107, #FFB300);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
+    }
+
+    /* Reverse Button Styles */
+    .btn-reverse {
+        background: linear-gradient(135deg, #6c757d, #5a6268);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.5rem;
+        min-width: 45px;
+        height: 45px;
+    }
+
+    .btn-reverse:hover {
+        background: linear-gradient(135deg, #5a6268, #495057);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    }
+
+    .sort-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Action Buttons Styles */
+    .movie-actions-table {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .movie-actions-grid {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .action-btn-table {
+        background: rgba(255, 214, 10, 0.2);
+        border: 1px solid rgba(255, 214, 10, 0.3);
+        color: #FFD60A;
+        width: 35px;
+        height: 35px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .action-btn-table:hover {
+        background: rgba(255, 214, 10, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 214, 10, 0.2);
+    }
+
+    .action-btn-table.edit {
+        background: rgba(255, 214, 10, 0.2);
+        color: #FFD60A;
+    }
+
+    .action-btn-table.edit:hover {
+        background: rgba(255, 214, 10, 0.3);
+        color: #FFD60A;
+    }
+
+    .action-btn-table.delete {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+    }
+
+    .action-btn-table.delete:hover {
+        background: rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Formulários inline para botões de remoção */
+    .movie-actions-table form,
+    .movie-actions-grid form {
+        display: inline;
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+
+    <script>
+    // View Toggle
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const view = this.dataset.view;
+            
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            if (view === 'grid') {
+                document.getElementById('filmes-grid').style.display = 'grid';
+                document.getElementById('filmes-table').style.display = 'none';
+            } else {
+                document.getElementById('filmes-grid').style.display = 'none';
+                document.getElementById('filmes-table').style.display = 'block';
+            }
+        });
+    });
+
+    // Search and Filter
+    document.getElementById('searchInput').addEventListener('input', filtrarFilmes);
+    document.getElementById('estadoFilter').addEventListener('change', filtrarFilmes);
+    document.getElementById('generoFilter').addEventListener('change', filtrarFilmes);
+
+    function filtrarFilmes() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const estadoFilter = document.getElementById('estadoFilter').value;
+        const generoFilter = document.getElementById('generoFilter').value.toLowerCase();
+        
+        // Filter Grid
+        document.querySelectorAll('#filmes-grid .movie-card-grid').forEach(card => {
+            const titulo = card.querySelector('.movie-title-overlay').textContent.toLowerCase();
+            const estado = card.dataset.estado;
+            const generos = card.dataset.generos.toLowerCase();
+            
+            const matchSearch = titulo.includes(searchTerm);
+            const matchEstado = !estadoFilter || estado === estadoFilter;
+            const matchGenero = !generoFilter || generos.includes(generoFilter);
+            
+            card.style.display = (matchSearch && matchEstado && matchGenero) ? 'block' : 'none';
+        });
+        
+        // Filter Table
+        document.querySelectorAll('#filmes-table tbody tr').forEach(row => {
+            const titulo = row.querySelector('.title-cell h4').textContent.toLowerCase();
+            const estado = row.dataset.estado;
+            const generos = row.dataset.generos.toLowerCase();
+            
+            const matchSearch = titulo.includes(searchTerm);
+            const matchEstado = !estadoFilter || estado === estadoFilter;
+            const matchGenero = !generoFilter || generos.includes(generoFilter);
+            
+            row.style.display = (matchSearch && matchEstado && matchGenero) ? '' : 'none';
+        });
+    }
+
+    function limparFiltros() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('estadoFilter').value = '';
+        document.getElementById('generoFilter').value = '';
+        filtrarFilmes();
+    }
+
+    // Sort
+    document.getElementById('sortSelect').addEventListener('change', function() {
+        const sortBy = this.value;
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set('sort', sortBy);
+        window.location.href = currentUrl.toString();
+    });
+
+    // Reverse order button
+    document.getElementById('reverseBtn').addEventListener('click', function() {
+        const currentUrl = new URL(window.location);
+        const currentOrder = currentUrl.searchParams.get('order') || 'desc';
+        const newOrder = currentOrder === 'desc' ? 'asc' : 'desc';
+        currentUrl.searchParams.set('order', newOrder);
+        window.location.href = currentUrl.toString();
+    });
+
+    // Manter seleção de ordenação e atualizar ícone
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSort = urlParams.get('sort') || 'id';
+        const currentOrder = urlParams.get('order') || 'desc';
+        
+        document.getElementById('sortSelect').value = currentSort;
+        
+        // Atualizar ícone do botão de inversão
+        const reverseIcon = document.getElementById('reverseIcon');
+        const reverseBtn = document.getElementById('reverseBtn');
+        
+        if (currentOrder === 'asc') {
+            reverseIcon.className = 'fas fa-sort-amount-up';
+            reverseBtn.title = 'Ordenação crescente - Clique para decrescente';
+        } else {
+            reverseIcon.className = 'fas fa-sort-amount-down';
+            reverseBtn.title = 'Ordenação decrescente - Clique para crescente';
+        }
+    });
+
+    // Modal Functions
+    function abrirModalAdicionarFilme() {
+        document.getElementById('modalAdicionarFilme').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModalAdicionarFilme() {
+        document.getElementById('modalAdicionarFilme').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Reset form
+        document.getElementById('formAdicionarFilme').reset();
+        document.getElementById('posterPreview').style.display = 'none';
+    }
+
+    // File Upload Preview
+    document.getElementById('poster').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('posterImg').src = e.target.result;
+                document.getElementById('posterPreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function removerPosterPreview() {
+        document.getElementById('poster').value = '';
+        document.getElementById('posterPreview').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('modalAdicionarFilme').addEventListener('click', function(e) {
+        if (e.target === this) {
+            fecharModalAdicionarFilme();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            fecharModalAdicionarFilme();
+        }
+    });
+
+    // JavaScript carregado com sucesso
+    console.log('JavaScript do admin_filmes carregado com sucesso');
+    </script>
+</body>
+</html>

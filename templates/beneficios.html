@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benefícios | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/beneficios.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}" class="active">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <h1 class="section-title">Planos e Benefícios CineVibe</h1>
+        <p class="section-subtitle">Escolha o plano perfeito para a sua experiência cinematográfica</p>
+        
+        <div class="pricing-table">
+            <!-- Plano Normal -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <h2>Normal</h2>
+                    <div class="price">Grátis<span></span></div>
+                </div>
+                <div class="plan-body">
+                    <ul>
+                        <li><span class="icon-check">✓</span> Acesso a todos os filmes</li>
+                        <li><span class="icon-check">✓</span> Reservas online</li>
+                        <li><span class="icon-check">✓</span> Newsletter semanal</li>
+                        <li><span class="icon-x">✗</span> Descontos especiais</li>
+                        <li><span class="icon-x">✗</span> Acesso a pré-estreias</li>
+                        <li><span class="icon-x">✗</span> Lugares VIP</li>
+                        <li><span class="icon-x">✗</span> Suporte prioritário</li>
+                    </ul>
+                    <a href="{{ url_for('registo') }}" class="btn btn-normal">Registar Grátis</a>
+                </div>
+            </div>
+
+            <!-- Plano Member (Recomendado) -->
+            <div class="plan-card recommended">
+                <div class="ribbon">Recomendado</div>
+                <div class="plan-header">
+                    <h2>CineMember</h2>
+                    <div class="price">€9.99<span>/mês</span></div>
+                </div>
+                <div class="plan-body">
+                    <ul>
+                        <li><span class="icon-check">✓</span> Tudo do plano Normal</li>
+                        <li><span class="icon-check">✓</span> 15% desconto em bilhetes</li>
+                        <li><span class="icon-check">✓</span> 10% desconto no bar</li>
+                        <li><span class="icon-check">✓</span> 1 bilhete grátis/mês</li>
+                        <li><span class="icon-check">✓</span> Acesso a pré-estreias</li>
+                        <li><span class="icon-check">✓</span> Pontos de fidelidade</li>
+                        <li><span class="icon-x">✗</span> Lugares VIP incluídos</li>
+                    </ul>
+                    <a href="#" class="btn btn-member" onclick="subscribePlan('member')">Subscrever Agora</a>
+                </div>
+            </div>
+
+            <!-- Plano Premium -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <h2>CinePremium</h2>
+                    <div class="price">€19.99<span>/mês</span></div>
+                </div>
+                <div class="plan-body">
+                    <ul>
+                        <li><span class="icon-check">✓</span> Tudo do plano Member</li>
+                        <li><span class="icon-check">✓</span> 25% desconto em bilhetes</li>
+                        <li><span class="icon-check">✓</span> 20% desconto no bar</li>
+                        <li><span class="icon-check">✓</span> 2 bilhetes grátis/mês</li>
+                        <li><span class="icon-check">✓</span> Lugares VIP incluídos</li>
+                        <li><span class="icon-check">✓</span> Suporte prioritário 24/7</li>
+                        <li><span class="icon-check">✓</span> Eventos exclusivos</li>
+                    </ul>
+                    <a href="#" class="btn btn-premium" onclick="subscribePlan('premium')">Experiência Premium</a>
+                </div>
+            </div>
+        </div>
+    </section>    <!-- Fo
+oter -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <!-- Logo e Descrição -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        Desfrute de benefícios exclusivos e experiências cinematográficas premium. Junte-se à nossa comunidade e aproveite descontos, eventos especiais e muito mais.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><img src="{{ url_for('static', filename='imgs/icons/facebook.png') }}" alt="Facebook"></a>
+                        <a href="#" aria-label="Instagram"><img src="{{ url_for('static', filename='imgs/icons/instagram.png') }}" alt="Instagram"></a>
+                        <a href="#" aria-label="Twitter"><img src="{{ url_for('static', filename='imgs/icons/twitter.png') }}" alt="Twitter"></a>
+                        <a href="#" aria-label="YouTube"><img src="{{ url_for('static', filename='imgs/icons/youtube.png') }}" alt="YouTube"></a>
+                    </div>
+                </div>
+
+                <!-- Planos -->
+                <div class="footer-section">
+                    <h4>Planos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#normal">Plano Normal</a></li>
+                        <li><a href="#member">CineMember</a></li>
+                        <li><a href="#premium">CinePremium</a></li>
+                        <li><a href="#">Comparar Planos</a></li>
+                        <li><a href="#">Alterar Plano</a></li>
+                        <li><a href="#">Cancelar Subscrição</a></li>
+                    </ul>
+                </div>
+
+                <!-- Benefícios -->
+                <div class="footer-section">
+                    <h4>Benefícios</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Descontos Estudante</a></li>
+                        <li><a href="#">Descontos Sénior</a></li>
+                        <li><a href="#">Pacotes Família</a></li>
+                        <li><a href="{{ url_for('recompensas') }}">Programa Fidelidade</a></li>
+                        <li><a href="#">Eventos Exclusivos</a></li>
+                        <li><a href="#">Pré-estreias</a></li>
+                    </ul>
+                </div>
+
+                <!-- Suporte -->
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="#">Centro de Ajuda</a></li>
+                        <li><a href="#">FAQ Benefícios</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a></li>
+                        <li><a href="#">Gestão de Conta</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-section newsletter-section">
+                    <h4>Ofertas Exclusivas</h4>
+                    <p>Receba ofertas especiais, descontos exclusivos e novidades sobre os nossos planos de benefícios.</p>
+                    <form class="newsletter-form" action="#" method="POST">
+                        <div class="newsletter-input-group">
+                            <input type="email" placeholder="O seu email..." required>
+                            <button type="submit">Subscrever</button>
+                        </div>
+                    </form>
+                    <div class="footer-contact">
+                        <div class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            <span>Linha Benefícios: +351 800 123 456</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            <span>beneficios@cinevibe.pt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2024 CineVibe. Todos os direitos reservados. Benefícios e descontos sujeitos a termos e condições.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos</a>
+                            <a href="{{ url_for('cookies_page') }}">Cookies</a>
+                            <a href="#">Termos de Subscrição</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <span class="cert-text">Pagamentos Seguros</span>
+                        <div class="cert-logos">
+                            <img src="{{ url_for('static', filename='imgs/certifications/ssl.png') }}" alt="SSL Seguro">
+                            <img src="{{ url_for('static', filename='imgs/certifications/visa.png') }}" alt="Visa">
+                            <img src="{{ url_for('static', filename='imgs/certifications/mastercard.png') }}" alt="Mastercard">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Função para subscrever planos
+        function subscribePlan(planType) {
+            {% if logged_in %}
+                // Utilizador logado - processar subscrição
+                const planNames = {
+                    'member': 'CineMember',
+                    'premium': 'CinePremium'
+                };
+                
+                const planPrices = {
+                    'member': '9.99',
+                    'premium': '19.99'
+                };
+                
+                if (confirm(`Deseja subscrever o plano ${planNames[planType]} por €${planPrices[planType]}/mês?`)) {
+                    // Aqui seria implementada a lógica de pagamento
+                    fetch('/subscribe_plan', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            plan: planType,
+                            price: planPrices[planType]
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Subscrição realizada com sucesso! Bem-vindo ao ' + planNames[planType]);
+                            location.reload();
+                        } else {
+                            alert('Erro ao processar subscrição. Tente novamente.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Erro ao processar subscrição. Tente novamente.');
+                    });
+                }
+            {% else %}
+                // Utilizador não logado - redirecionar para login
+                if (confirm('Para subscrever um plano, precisa de fazer login. Deseja fazer login agora?')) {
+                    window.location.href = '{{ url_for("login") }}?redirect=beneficios&plan=' + planType;
+                }
+            {% endif %}
+        }
+
+        // Animações de scroll
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.plan-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 200);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        }
+
+        // Efeitos visuais nos cards
+        function addCardEffects() {
+            const cards = document.querySelectorAll('.plan-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    // Adicionar efeito de brilho
+                    this.style.boxShadow = '0 25px 70px rgba(255, 214, 10, 0.3), 0 0 0 1px rgba(255, 214, 10, 0.5)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    // Remover efeito de brilho (exceto no recomendado)
+                    if (!this.classList.contains('recommended')) {
+                        this.style.boxShadow = '0 15px 45px rgba(0,0,0,0.4)';
+                    }
+                });
+            });
+        }
+
+        // Comparação de planos
+        function comparePlans() {
+            const modal = document.createElement('div');
+            modal.className = 'comparison-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Comparação de Planos</h3>
+                        <button class="modal-close" onclick="closeComparisonModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Funcionalidades</th>
+                                    <th>Normal</th>
+                                    <th>CineMember</th>
+                                    <th>CinePremium</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Acesso a filmes</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                </tr>
+                                <tr>
+                                    <td>Reservas online</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                </tr>
+                                <tr>
+                                    <td>Desconto em bilhetes</td>
+                                    <td>-</td>
+                                    <td>15%</td>
+                                    <td>25%</td>
+                                </tr>
+                                <tr>
+                                    <td>Desconto no bar</td>
+                                    <td>-</td>
+                                    <td>10%</td>
+                                    <td>20%</td>
+                                </tr>
+                                <tr>
+                                    <td>Bilhetes grátis/mês</td>
+                                    <td>-</td>
+                                    <td>1</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>Pré-estreias</td>
+                                    <td>-</td>
+                                    <td>✓</td>
+                                    <td>✓</td>
+                                </tr>
+                                <tr>
+                                    <td>Lugares VIP</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>✓</td>
+                                </tr>
+                                <tr>
+                                    <td>Suporte prioritário</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>✓</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+        }
+
+        function closeComparisonModal() {
+            const modal = document.querySelector('.comparison-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            animateOnScroll();
+            addCardEffects();
+            
+            // Adicionar botão de comparação
+            const pricingSection = document.querySelector('.pricing-section');
+            const compareButton = document.createElement('button');
+            compareButton.textContent = 'Comparar Todos os Planos';
+            compareButton.className = 'btn-compare';
+            compareButton.onclick = comparePlans;
+            compareButton.style.cssText = `
+                margin-top: 40px;
+                padding: 15px 30px;
+                background: transparent;
+                border: 2px solid #FFD60A;
+                color: #FFD60A;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            `;
+            
+            compareButton.addEventListener('mouseenter', function() {
+                this.style.background = '#FFD60A';
+                this.style.color = '#0D1B2A';
+            });
+            
+            compareButton.addEventListener('mouseleave', function() {
+                this.style.background = 'transparent';
+                this.style.color = '#FFD60A';
+            });
+            
+            pricingSection.appendChild(compareButton);
+        });
+
+        // Smooth scroll para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- Estilos adicionais para o modal de comparação -->
+    <style>
+        .comparison-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .comparison-modal .modal-content {
+            background: #1B263B;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #FFD60A;
+        }
+
+        .comparison-modal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(255, 214, 10, 0.3);
+        }
+
+        .comparison-modal .modal-header h3 {
+            color: #FFD60A;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .comparison-modal .modal-close {
+            background: none;
+            border: none;
+            color: #FFD60A;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .comparison-modal .modal-close:hover {
+            background: rgba(255, 214, 10, 0.2);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            background: rgba(255, 214, 10, 0.1);
+            color: #FFD60A;
+            font-weight: 700;
+        }
+
+        .comparison-table td {
+            color: #B8C5D1;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</body>
+</html>

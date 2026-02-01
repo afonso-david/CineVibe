@@ -1,0 +1,6 @@
+<svg width="200" height="300" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="200" height="300" fill="#1a1a2e"/>
+<circle cx="100" cy="100" r="40" fill="#FFD700"/>
+<path d="M50 200C50 200 50 180 100 180C150 180 150 200 150 200H180V300H20V200H50Z" fill="#FFD700"/>
+<text x="100" y="250" text-anchor="middle" fill="#FFD700" font-family="Arial" font-size="14">Ator</text>
+</svg>

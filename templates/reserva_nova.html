@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Bilhetes | CineVibe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #0D1B2A;
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .step-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .step-header h1 {
+            color: #FFD700;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .screen {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 15px 60px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px auto 40px auto;
+            width: fit-content;
+        }
+        
+        .cinema-hall {
+            background: #071826;
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid #2F8FB3;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .seats-container {
+            display: grid;
+            grid-template-columns: repeat(21, 1fr);
+            gap: 3px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .seat {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid transparent;
+        }
+        
+        .seat.available {
+            background: linear-gradient(135deg, #1B2553, #24306A);
+            border: 1px solid #2F8FB3;
+        }
+        
+        .seat.available:hover {
+            background: linear-gradient(135deg, #24306A, #2F8FB3);
+            transform: scale(1.05);
+        }
+        
+        .seat.selected {
+            background-color: #FFD700;
+            border: 2px solid #FFB000;
+            color: #000;
+            transform: scale(1.05);
+        }
+        
+        .seat.wheelchair {
+            background-color: #2ecc71;
+            border: 1px solid #27ae60;
+            color: white;
+        }
+        
+        .seat.wheelchair::after {
+            content: '♿';
+            font-size: 12px;
+        }
+        
+        .aisle {
+            background: transparent;
+            border: none;
+            position: relative;
+        }
+        
+        .aisle::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 100%;
+            background-color: #e74c3c;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .info {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .selected-seats {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+        
+        .continue-btn {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            border: none;
+            border-radius: 12px;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+            min-width: 300px;
+        }
+        
+        .continue-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="step-header">
+            <h1>🎬 2. Escolha os lugares</h1>
+            <p>Selecione <span id="quantity">2</span> lugares na sala</p>
+        </div>
+        
+        <div class="screen">📺 ECRÃ</div>
+        
+        <div class="cinema-hall">
+            <div class="seats-container" id="seatsGrid">
+                <!-- Lugares serão gerados aqui -->
+            </div>
+        </div>
+        
+        <div class="info">
+            <div class="selected-seats">
+                Lugares selecionados: <span id="selectedSeats">Nenhum</span>
+            </div>
+            <button class="continue-btn" id="continueBtn" disabled>
+                CONTINUAR PARA PAGAMENTO →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedSeats = [];
+        let maxSeats = 2;
+        
+        function createCinema() {
+            const grid = document.getElementById('seatsGrid');
+            grid.innerHTML = '';
+            
+            // 12 fileiras: A-L
+            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+            
+            rows.forEach(row => {
+                // 20 lugares por fileira
+                for (let num = 1; num <= 20; num++) {
+                    const seatId = row + num;
+                    const seat = document.createElement('div');
+                    seat.className = 'seat available';
+                    seat.dataset.id = seatId;
+                    seat.onclick = () => toggleSeat(seatId);
+                    
+                    // Lugares especiais (cadeira de rodas)
+                    if ((row === 'A' || row === 'B') && (num <= 2 || num >= 19)) {
+                        seat.classList.add('wheelchair');
+                    }
+                    if ((row === 'G' || row === 'H') && (num <= 2 || num >= 19)) {
+                        seat.classList.add('wheelchair');
+                    }
+                    
+                    grid.appendChild(seat);
+                    
+                    // Corredor após lugar 10
+                    if (num === 10) {
+                        const aisle = document.createElement('div');
+                        aisle.className = 'aisle';
+                        grid.appendChild(aisle);
+                    }
+                }
+            });
+            
+            // Pré-selecionar F9 e F12
+            setTimeout(() => {
+                toggleSeat('F9');
+                if (maxSeats >= 2) toggleSeat('F12');
+            }, 100);
+        }
+        
+        function toggleSeat(seatId) {
+            const seat = document.querySelector(`[data-id="${seatId}"]`);
+            if (!seat) return;
+            
+            if (selectedSeats.includes(seatId)) {
+                // Desselecionar
+                selectedSeats = selectedSeats.filter(id => id !== seatId);
+                seat.classList.remove('selected');
+            } else {
+                // Selecionar
+                if (selectedSeats.length >= maxSeats) {
+                    alert(`Só pode selecionar ${maxSeats} lugares!`);
+                    return;
+                }
+                selectedSeats.push(seatId);
+                seat.classList.add('selected');
+            }
+            
+            updateDisplay();
+        }
+        
+        function updateDisplay() {
+            const display = document.getElementById('selectedSeats');
+            const btn = document.getElementById('continueBtn');
+            
+            display.textContent = selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Nenhum';
+            btn.disabled = selectedSeats.length !== maxSeats;
+        }
+        
+        // Inicializar
+        createCinema();
+        
+        console.log('Cinema criado: 12 fileiras x 20 lugares = 240 lugares');
+    </script>
+</body>
+</html>

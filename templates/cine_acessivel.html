@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineAcessível | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/acessivel.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Skip to main content for screen readers -->
+        <a href="#main-content" class="skip-link">Saltar para o conteúdo principal</a>
+        
+        <!-- Header -->
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="search-container">
+                        <input type="text" placeholder="Procurar..." id="searchInput" aria-label="Campo de pesquisa">
+                        <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="" class="search_icon" role="presentation">
+                    </div>
+                    <div class="user-icon">
+                        {% if logged_in %}
+                            <a href="{{ url_for('perfil') }}" aria-label="Ir para o perfil">
+                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil do utilizador">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" aria-label="Fazer login">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Ícone de login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navegação -->
+        <nav class="nav-center" role="navigation" aria-label="Navegação principal">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('filmes') }}">Filmes</a>
+            <a href="{{ url_for('cinemas') }}">Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}" class="active" aria-current="page">CineAcessível</a>
+            <a href="{{ url_for('bar') }}">Bar</a>
+            <a href="{{ url_for('beneficios') }}">Benefícios</a>
+            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}">Contactos</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <!-- Banner Section -->
+            <section class="banner" role="banner">
+                <img src="{{ url_for('static', filename='imgs/cineacessivel.png') }}" alt="Imagem representativa do CineAcessível - cinema inclusivo para todos">
+                <div class="banner-content">
+                    <h1>CineAcessível</h1>
+                    <p>O cinema é para todos. Descubra as nossas soluções de acessibilidade que tornam a experiência cinematográfica inclusiva e acessível a pessoas com diferentes necessidades.</p>
+                    
+                    <!-- Grid 2x2 das razões -->
+                    <div class="reasons" role="list">
+                        <a href="{{ url_for('acessibilidade') }}" class="reason-link" role="listitem">
+                            <div class="reason">
+                                <div class="reason-number">01</div>
+                                <div class="reason-content">
+                                    <h3>Acessibilidade Física</h3>
+                                    <p>Lugares adaptados, rampas de acesso e elevadores em todos os nossos cinemas para garantir mobilidade total.</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{{ url_for('audiodescricao') }}" class="reason-link" role="listitem">
+                            <div class="reason">
+                                <div class="reason-number">02</div>
+                                <div class="reason-content">
+                                    <h3>Audiodescrição</h3>
+                                    <p>Descrição detalhada das cenas visuais através de fones de ouvido para pessoas com deficiência visual.</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{{ url_for('lgp') }}" class="reason-link" role="listitem">
+                            <div class="reason">
+                                <div class="reason-number">03</div>
+                                <div class="reason-content">
+                                    <h3>Língua Gestual Portuguesa</h3>
+                                    <p>Interpretação simultânea em LGP em sessões especiais para a comunidade surda.</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{{ url_for('legendagem') }}" class="reason-link" role="listitem">
+                            <div class="reason">
+                                <div class="reason-number">04</div>
+                                <div class="reason-content">
+                                    <h3>Legendagem Especial</h3>
+                                    <p>Legendas descritivas que incluem efeitos sonoros e música para pessoas com deficiência auditiva.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sessões Acessíveis Section -->
+            {% if sessoes_acessiveis %}
+            <section class="sessoes-acessiveis-section" aria-labelledby="sessoes-title">
+                <div class="container">
+                    <h2 id="sessoes-title">Próximas Sessões Acessíveis</h2>
+                    <p class="section-subtitle">Encontre as sessões com os recursos de acessibilidade que precisa</p>
+                    
+                    <div class="sessoes-grid" role="list">
+                        {% for sessao in sessoes_acessiveis %}
+                        <article class="sessao-card" role="listitem">
+                            <div class="sessao-header">
+                                <h3>{{ sessao.filme_titulo }}</h3>
+                                <div class="sessao-info">
+                                    <p class="cinema-nome">{{ sessao.cinema_nome }}</p>
+                                    <p class="sessao-datetime">
+                                        <time datetime="{{ sessao.data }}T{{ sessao.hora }}">
+                                            {{ sessao.data }} às {{ sessao.hora }}
+                                        </time>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="acessibilidade-tags" role="list" aria-label="Recursos de acessibilidade disponíveis">
+                                {% if sessao.audio_descricao %}
+                                <span class="tag audio-desc" role="listitem" aria-label="Audiodescrição disponível">
+                                    <span class="sr-only">Audiodescrição disponível</span>
+                                    🎧 Audiodescrição
+                                </span>
+                                {% endif %}
+                                {% if sessao.lgp %}
+                                <span class="tag lgp" role="listitem" aria-label="Língua Gestual Portuguesa disponível">
+                                    <span class="sr-only">Língua Gestual Portuguesa disponível</span>
+                                    👋 LGP
+                                </span>
+                                {% endif %}
+                                {% if sessao.legendas %}
+                                <span class="tag legendas" role="listitem" aria-label="Legendas especiais disponíveis">
+                                    <span class="sr-only">Legendas especiais disponíveis</span>
+                                    📝 Legendas
+                                </span>
+                                {% endif %}
+                                {% if sessao.acessibilidade_fisica %}
+                                <span class="tag fisica" role="listitem" aria-label="Acessibilidade física garantida">
+                                    <span class="sr-only">Acessibilidade física garantida</span>
+                                    ♿ Acessível
+                                </span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="sessao-footer">
+                                <a href="{{ url_for('reservar', sessao_id=sessao.id) }}" class="btn-reservar" aria-label="Reservar bilhete para {{ sessao.filme_titulo }}">
+                                    Reservar Bilhete
+                                </a>
+                                <button class="btn-info" onclick="showAccessibilityInfo({{ sessao.id }})" aria-label="Ver informações de acessibilidade para {{ sessao.filme_titulo }}">
+                                    Info Acessibilidade
+                                </button>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+        </main>        
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-container">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                            <h3>CineVibe</h3>
+                        </div>
+                        <p class="footer-description">
+                            A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="TikTok">
+                                <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                            </a>
+                            <a href="#" aria-label="Instagram">
+                                <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                            </a>
+                            <a href="#" aria-label="X">
+                                <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Navegação</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('home') }}">Início</a></li>
+                            <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                            <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                            <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Suporte</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                            <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                            <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                            <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Conta</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <div class="newsletter-section">
+                            <h4>Newsletter</h4>
+                            <p>Receba as últimas novidades e promoções exclusivas.</p>
+                            <form class="newsletter-form">
+                                <div class="newsletter-input-group">
+                                    <input type="email" placeholder="Seu email" required>
+                                    <button type="submit">Subscrever</button>
+                                </div>
+                            </form>
+                            <div class="footer-contact">
+                                <div class="contact-item">
+                                    <span class="contact-icon">📧</span>
+                                    <span>info@cinevibe.pt</span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="contact-icon">📞</span>
+                                    <span>+351 123 456 789</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-container">
+                    <div class="footer-bottom-content">
+                        <div class="footer-legal">
+                            <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                            <div class="legal-links">
+                                <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                                <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                                <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                            </div>
+                        </div>
+                        <div class="footer-certifications">
+                            <div class="cert-logos">
+                                <span class="cert-text">SSL Seguro</span>
+                                <span class="cert-text">GDPR Compliant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Função para mostrar informações de acessibilidade
+        function showAccessibilityInfo(sessaoId) {
+            // Implementar modal com informações detalhadas de acessibilidade
+            const modal = document.createElement('div');
+            modal.className = 'accessibility-modal';
+            modal.innerHTML = `
+                <div class="modal-content" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+                    <div class="modal-header">
+                        <h3 id="modal-title">Informações de Acessibilidade</h3>
+                        <button class="modal-close" onclick="closeModal()" aria-label="Fechar modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="modal-description">
+                        <div class="accessibility-details">
+                            <div class="detail-item">
+                                <h4>🎧 Audiodescrição</h4>
+                                <p>Disponível através de fones de ouvido especiais. Solicite na bilheteira ou reserve online.</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>👋 Língua Gestual Portuguesa</h4>
+                                <p>Intérprete posicionado ao lado do ecrã. Lugares reservados na zona central da sala.</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>📝 Legendagem Especial</h4>
+                                <p>Legendas que incluem descrição de efeitos sonoros e identificação de personagens.</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>♿ Acessibilidade Física</h4>
+                                <p>Lugares adaptados, acesso por rampa, espaço para cadeira de rodas e acompanhante.</p>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button onclick="requestAssistance()" class="btn-assistance">Solicitar Assistência</button>
+                            <button onclick="closeModal()" class="btn-close">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Focus no modal para acessibilidade
+            modal.querySelector('.modal-close').focus();
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.accessibility-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function requestAssistance() {
+            alert('Funcionalidade de solicitação de assistência a implementar. Entre em contacto através da linha de acessibilidade: +351 800 123 456');
+            closeModal();
+        }
+
+        // Melhorar navegação por teclado
+        document.addEventListener('keydown', function(e) {
+            // Fechar modal com Escape
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            
+            // Navegação por teclado nos cards de razões
+            if (e.key === 'Enter' || e.key === ' ') {
+                const focusedElement = document.activeElement;
+                if (focusedElement.classList.contains('reason-link')) {
+                    e.preventDefault();
+                    focusedElement.click();
+                }
+            }
+        });
+
+        // Anúncios para leitores de ecrã
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+            
+            setTimeout(() => {
+                document.body.removeChild(announcement);
+            }, 1000);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Anunciar carregamento da página
+            announceToScreenReader('Página CineAcessível carregada. Use Tab para navegar pelos recursos de acessibilidade.');
+            
+            // Melhorar foco nos elementos interativos
+            const interactiveElements = document.querySelectorAll('a, button, input, select, textarea');
+            interactiveElements.forEach(element => {
+                element.addEventListener('focus', function() {
+                    this.style.outline = '3px solid #4EA8DE';
+                    this.style.outlineOffset = '2px';
+                });
+                
+                element.addEventListener('blur', function() {
+                    this.style.outline = '';
+                    this.style.outlineOffset = '';
+                });
+            });
+        });
+
+        // Suporte para modo de alto contraste
+        if (window.matchMedia && window.matchMedia('(prefers-contrast: high)').matches) {
+            document.body.classList.add('high-contrast');
+        }
+
+        // Suporte para movimento reduzido
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.body.classList.add('reduced-motion');
+        }
+    </script>
+
+    <!-- Estilos adicionais para o modal -->
+    <style>
+        .accessibility-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #1B263B;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #FFD60A;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(255, 214, 10, 0.3);
+        }
+
+        .modal-header h3 {
+            color: #FFD60A;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #FFD60A;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            background: rgba(255, 214, 10, 0.2);
+            outline: 2px solid #4EA8DE;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .accessibility-details {
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #FFD60A;
+        }
+
+        .detail-item h4 {
+            color: #FFD60A;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .detail-item p {
+            color: #B8C5D1;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .btn-assistance,
+        .btn-close {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-assistance {
+            background: linear-gradient(135deg, #FFD60A, #FFB703);
+            color: #0D1B2A;
+        }
+
+        .btn-assistance:hover,
+        .btn-assistance:focus {
+            background: linear-gradient(135deg, #FFB703, #FF9500);
+            transform: translateY(-2px);
+            outline: 2px solid #4EA8DE;
+        }
+
+        .btn-close {
+            background: rgba(78, 168, 222, 0.2);
+            color: #4EA8DE;
+            border: 2px solid rgba(78, 168, 222, 0.4);
+        }
+
+        .btn-close:hover,
+        .btn-close:focus {
+            background: rgba(78, 168, 222, 0.3);
+            border-color: #4EA8DE;
+            outline: 2px solid #4EA8DE;
+        }
+
+        /* Estilos para sessões acessíveis */
+        .sessoes-acessiveis-section {
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #B8C5D1;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .sessoes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .sessao-card {
+            background: linear-gradient(135deg, #1B263B 0%, #15202E 100%);
+            border-radius: 16px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .sessao-card:hover {
+            border-color: #FFD60A;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255, 214, 10, 0.2);
+        }
+
+        .sessao-header h3 {
+            color: #FFD60A;
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+        }
+
+        .cinema-nome {
+            color: #4EA8DE;
+            margin: 0 0 8px 0;
+            font-weight: 500;
+        }
+
+        .sessao-datetime {
+            color: #B8C5D1;
+            margin: 0 0 20px 0;
+        }
+
+        .acessibilidade-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .tag.audio-desc {
+            background: rgba(255, 214, 10, 0.2);
+            color: #FFD60A;
+            border-color: rgba(255, 214, 10, 0.4);
+        }
+
+        .tag.lgp {
+            background: rgba(78, 168, 222, 0.2);
+            color: #4EA8DE;
+            border-color: rgba(78, 168, 222, 0.4);
+        }
+
+        .tag.legendas {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ED573;
+            border-color: rgba(46, 213, 115, 0.4);
+        }
+
+        .tag.fisica {
+            background: rgba(255, 107, 107, 0.2);
+            color: #FF6B6B;
+            border-color: rgba(255, 107, 107, 0.4);
+        }
+
+        .sessao-footer {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-reservar,
+        .btn-info {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-reservar {
+            background: linear-gradient(135deg, #FFD60A, #FFB703);
+            color: #0D1B2A;
+        }
+
+        .btn-reservar:hover,
+        .btn-reservar:focus {
+            background: linear-gradient(135deg, #FFB703, #FF9500);
+            transform: translateY(-2px);
+            outline: 2px solid #4EA8DE;
+        }
+
+        .btn-info {
+            background: rgba(78, 168, 222, 0.2);
+            color: #4EA8DE;
+            border: 2px solid rgba(78, 168, 222, 0.4);
+        }
+
+        .btn-info:hover,
+        .btn-info:focus {
+            background: rgba(78, 168, 222, 0.3);
+            border-color: #4EA8DE;
+            outline: 2px solid #4EA8DE;
+        }
+
+    </style>
+</body>
+</html>

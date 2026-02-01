@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Tipos de Sessão - CineVibe Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_cinemas.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
+                    <span>CineVibe</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin_filmes') }}" class="nav-item">
+                    <i class="fas fa-film"></i>
+                    <span>Filmes</span>
+                </a>
+                <a href="{{ url_for('admin_cinemas') }}" class="nav-item">
+                    <i class="fas fa-building"></i>
+                    <span>Cinemas</span>
+                </a>
+                <a href="{{ url_for('admin_usuarios') }}" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="{{ url_for('admin_reservas') }}" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Reservas</span>
+                </a>
+                <a href="{{ url_for('admin_atores') }}" class="nav-item">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Atores</span>
+                </a>
+                <a href="{{ url_for('admin_salas') }}" class="nav-item">
+                    <i class="fas fa-chair"></i>
+                    <span>Salas</span>
+                </a>
+                <a href="{{ url_for('admin_bar') }}" class="nav-item">
+                    <i class="fas fa-coffee"></i>
+                    <span>Bar</span>
+                </a>
+                <a href="{{ url_for('admin_avatares') }}" class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Avatares</span>
+                </a>
+                <a href="{{ url_for('admin_tipos_sessao') }}" class="nav-item active">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Tipos de Sessão</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="{{ url_for('home') }}" class="nav-item">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Voltar ao Site</span>
+                </a>
+            </nav>
+        
+            <!-- User Profile Section -->
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {% if session.get('user_id') %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% else %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">Admin</div>
+                        <div class="user-role">Administrador</div>
+                    </div>
+                    <div class="user-actions">
+                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
+                            <i class="fas fa-user-cog"></i>
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar-pro">
+                <div class="top-bar-left">
+                    <div class="page-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        <div>
+                            <h1>Tipos de Sessão</h1>
+                            <p>Total: {{ tipos|length }} tipos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <button class="btn-primary" onclick="abrirModalAdicionarTipo()">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Tipo
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content-pro">
+                <!-- Control Panel -->
+                <div class="control-panel">
+                    <div class="search-section">
+                        <div class="search-box-pro">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Pesquisar tipos de sessão..." id="searchInput">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div class="movies-table-container" id="tipos-table">
+                    {% if tipos %}
+                    <div class="table-wrapper">
+                        <table class="movies-table-pro">
+                            <thead>
+                                <tr>
+                                    <th class="id-header">
+                                        <i class="fas fa-hashtag"></i>
+                                        ID
+                                    </th>
+                                    <th class="title-header">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Nome
+                                    </th>
+                                    <th class="genre-header">
+                                        <i class="fas fa-align-left"></i>
+                                        Descrição
+                                    </th>
+                                    <th class="rating-header">
+                                        <i class="fas fa-euro-sign"></i>
+                                        Preço
+                                    </th>
+                                    <th class="actions-header">
+                                        <i class="fas fa-cogs"></i>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tipo in tipos %}
+                                <tr data-tipo-id="{{ tipo.id }}">
+                                    <td class="id-cell">{{ tipo.id }}</td>
+                                    <td class="title-cell">
+                                        <div class="filme-title-info">
+                                            <h4>{{ tipo.nome }}</h4>
+                                        </div>
+                                    </td>
+                                    <td class="genre-cell">
+                                        <span class="genre-tag">{{ tipo.descricao }}</span>
+                                    </td>
+                                    <td class="rating-cell">
+                                        <span class="rating-badge">{{ "%.2f"|format(tipo.preco_bilhete) }}€</span>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="movie-actions-table">
+                                            <button class="action-btn-table edit" onclick="editarTipo({{ tipo.id }}, '{{ tipo.nome }}', '{{ tipo.descricao }}', {{ tipo.preco_bilhete }})" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn-table delete" onclick="removerTipo({{ tipo.id }}, '{{ tipo.nome }}')" title="Remover">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Nenhum tipo de sessão encontrado</h3>
+                        <p>Adicione tipos de sessão para começar a gerir.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Adicionar Tipo -->
+    <div id="modalAdicionarTipo" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fas fa-plus"></i> Adicionar Novo Tipo de Sessão</h3>
+                <button class="modal-close" onclick="fecharModalAdicionarTipo()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="formAdicionarTipo" action="{{ url_for('admin_adicionar_tipo_sessao_alt') }}" method="POST">
+                <input type="hidden" id="tipoId" name="tipo_id">
+                
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nome">
+                            <i class="fas fa-calendar-alt"></i>
+                            Nome do Tipo *
+                        </label>
+                        <input type="text" id="nome" name="nome" required 
+                               placeholder="Digite o nome do tipo...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="descricao">
+                            <i class="fas fa-align-left"></i>
+                            Descrição *
+                        </label>
+                        <textarea id="descricao" name="descricao" required rows="3"
+                                  placeholder="Digite a descrição do tipo..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preco">
+                            <i class="fas fa-euro-sign"></i>
+                            Preço (€) *
+                        </label>
+                        <input type="number" id="preco" name="preco" step="0.01" min="0" required
+                               placeholder="Ex: 8.50">
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="fecharModalAdicionarTipo()">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        <span id="submitText">Adicionar Tipo</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-container {
+        background: #1a1a1a;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        border: 2px solid rgba(255, 214, 10, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+        background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(255, 214, 10, 0.05));
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        color: #FFD60A;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 1.25rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #FFD60A;
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #333;
+        border-radius: 8px;
+        background: #0D1B2A;
+        color: #fff;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #FFD60A;
+        box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-top: 1px solid rgba(255, 214, 10, 0.2);
+        background: rgba(255, 214, 10, 0.05);
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #FFD60A, #FFC107);
+        color: #0D1B2A;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #FFC107, #FFB300);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
+    }
+
+    /* Table Styles */
+    .filme-title-info h4 {
+        margin: 0;
+        color: #FFD60A;
+        font-size: 1rem;
+    }
+
+    .genre-tag {
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+
+    .rating-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: rgba(255, 214, 10, 0.2);
+        color: #FFD60A;
+    }
+    </style>
+
+    <script>
+    // Search and Filter
+    document.getElementById('searchInput').addEventListener('input', filtrarTipos);
+
+    function filtrarTipos() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+        // Filter Table
+        document.querySelectorAll('#tipos-table tbody tr').forEach(row => {
+            const nome = row.querySelector('.title-cell h4').textContent.toLowerCase();
+            const descricao = row.querySelector('.genre-cell .genre-tag').textContent.toLowerCase();
+            
+            const matchSearch = nome.includes(searchTerm) || descricao.includes(searchTerm);
+            
+            row.style.display = matchSearch ? '' : 'none';
+        });
+    }
+
+    // Remove Type
+    function removerTipo(id, nome) {
+        if (confirm(`Tem certeza que deseja remover o tipo "${nome}"? Esta ação não pode ser desfeita.`)) {
+            window.location.href = `/admin/tipos-sessao/remover/${id}`;
+        }
+    }
+
+    // Modal Functions
+    function abrirModalAdicionarTipo() {
+        document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> Adicionar Novo Tipo de Sessão';
+        document.getElementById('formAdicionarTipo').action = '{{ url_for("admin_adicionar_tipo_sessao_alt") }}';
+        document.getElementById('tipoId').value = '';
+        document.getElementById('nome').value = '';
+        document.getElementById('descricao').value = '';
+        document.getElementById('preco').value = '';
+        document.getElementById('submitText').textContent = 'Adicionar Tipo';
+        document.getElementById('modalAdicionarTipo').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function editarTipo(id, nome, descricao, preco) {
+        document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Editar Tipo de Sessão';
+        document.getElementById('formAdicionarTipo').action = '{{ url_for("admin_editar_tipo_sessao_alt", tipo_id=0) }}'.replace('0', id);
+        document.getElementById('tipoId').value = id;
+        document.getElementById('nome').value = nome;
+        document.getElementById('descricao').value = descricao;
+        document.getElementById('preco').value = preco;
+        document.getElementById('submitText').textContent = 'Guardar Alterações';
+        document.getElementById('modalAdicionarTipo').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModalAdicionarTipo() {
+        document.getElementById('modalAdicionarTipo').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Reset form
+        document.getElementById('formAdicionarTipo').reset();
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('modalAdicionarTipo').addEventListener('click', function(e) {
+        if (e.target === this) {
+            fecharModalAdicionarTipo();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            fecharModalAdicionarTipo();
+        }
+    });
+    </script>
+</body>
+</html>

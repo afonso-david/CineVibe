@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Bilhetes | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}"class="active">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+        <!-- Main Content -->
+        <main style="padding: 2rem 0; background: #0D1B2A;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+                
+                <!-- Movie Info Card -->
+                <div class="movie-info-card">
+                    <div class="movie-info-content">
+                        {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
+                        <img src="{{ url_for('static', filename='imgs/filmes/' + (poster_path if poster_path and not poster_path.startswith('http') else 'placeholder.svg')) }}" 
+                             alt="{{ filme.titulo }}" 
+                             class="movie-poster"
+                             onerror="this.src='{{ url_for('static', filename='imgs/filmes/placeholder.svg') }}'">
+                        <div class="movie-details">
+                            <h1 class="movie-title">{{ filme.titulo }}</h1>
+                            <div class="movie-info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="cinema-name">{{ cinema.nome }}</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-film"></i>
+                                <span class="session-type">{{ tipo_sessao.nome }}</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-clock"></i>
+                                <span class="session-time">{{ horario.hora_str }} - {{ data_sessao }}</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-door-open"></i>
+                                <span class="room-info">{{ sala.nome_sala }} ({{ sala.capacidade }} lugares)</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-euro-sign"></i>
+                                <span class="ticket-price">{{ "%.2f"|format(filme_sessao.preco) }} por bilhete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ticket Quantity Selection -->
+                <div class="ticket-selection">
+                    <h3>Selecione a Quantidade de Bilhetes</h3>
+                    
+                    <!-- Grid com 6 opções -->
+                    <div class="quantity-grid">
+                        <div class="quantity-option" data-quantity="1">
+                            <div class="quantity-number">1</div>
+                            <div class="quantity-label">Bilhete</div>
+                        </div>
+                        
+                        <div class="quantity-option" data-quantity="2">
+                            <div class="quantity-number">2</div>
+                            <div class="quantity-label">Bilhetes</div>
+                        </div>
+                        
+                        <div class="quantity-option" data-quantity="3">
+                            <div class="quantity-number">3</div>
+                            <div class="quantity-label">Bilhetes</div>
+                        </div>
+                        
+                        <div class="quantity-option" data-quantity="4">
+                            <div class="quantity-number">4</div>
+                            <div class="quantity-label">Bilhetes</div>
+                        </div>
+                        
+                        <div class="quantity-option" data-quantity="5">
+                            <div class="quantity-number">5</div>
+                            <div class="quantity-label">Bilhetes</div>
+                        </div>
+                        
+                        <div class="quantity-option" data-quantity="6">
+                            <div class="quantity-number">6</div>
+                            <div class="quantity-label">Bilhetes</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção para quantidade personalizada -->
+                    <div class="custom-quantity">
+                        <h4>Ou escolha uma quantidade personalizada:</h4>
+                        <div class="quantity-input-group">
+                            <button class="quantity-btn" id="decreaseBtn">-</button>
+                            <input type="number" class="quantity-input" id="customQuantity" value="1" min="1" max="20">
+                            <button class="quantity-btn" id="increaseBtn">+</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Botão Avançar -->
+                    <form method="POST" action="{{ url_for('selecao_lugares') }}">
+                        <input type="hidden" name="filme_id" value="{{ filme.id }}">
+                        <input type="hidden" name="cinema_id" value="{{ cinema.id }}">
+                        <input type="hidden" name="id_tipo_sessao" value="{{ tipo_sessao.id }}">
+                        <input type="hidden" name="id_horario_sessao" value="{{ horario.id }}">
+                        <input type="hidden" name="data_sessao" value="{{ data_sessao }}">
+                        <input type="hidden" name="quantidade" id="selectedQuantity" value="1">
+                        
+                        <button type="submit" class="advance-btn" id="advanceBtn" disabled>
+                            <i class="fas fa-arrow-right"></i>
+                            Avançar para Seleção de Lugares
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+    // JavaScript para funcionalidade
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityOptions = document.querySelectorAll('.quantity-option');
+        const customQuantity = document.getElementById('customQuantity');
+        const decreaseBtn = document.getElementById('decreaseBtn');
+        const increaseBtn = document.getElementById('increaseBtn');
+        const advanceBtn = document.getElementById('advanceBtn');
+        const selectedQuantityInput = document.getElementById('selectedQuantity');
+        let selectedQuantity = 1;
+        
+        // Seleciona automaticamente 1 bilhete no início
+        quantityOptions[0].classList.add('selected');
+        advanceBtn.disabled = false;
+        updateButtonText();
+        
+        // Seleção de quantidade pré-definida
+        quantityOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove seleção anterior
+                quantityOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Adiciona seleção atual
+                this.classList.add('selected');
+                selectedQuantity = parseInt(this.dataset.quantity);
+                
+                // Atualiza input personalizado
+                customQuantity.value = selectedQuantity;
+                selectedQuantityInput.value = selectedQuantity;
+                
+                // Habilita botão avançar
+                advanceBtn.disabled = false;
+                updateButtonText();
+                
+                // Adiciona efeito visual
+                this.style.transform = 'translateY(-3px) scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-3px)';
+                }, 200);
+            });
+        });
+        
+        // Botões de quantidade personalizada
+        decreaseBtn.addEventListener('click', function() {
+            let current = parseInt(customQuantity.value);
+            if (current > 1) {
+                customQuantity.value = current - 1;
+                updateSelection();
+                
+                // Efeito visual
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            }
+        });
+        
+        increaseBtn.addEventListener('click', function() {
+            let current = parseInt(customQuantity.value);
+            if (current < 20) {
+                customQuantity.value = current + 1;
+                updateSelection();
+                
+                // Efeito visual
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            }
+        });
+        
+        // Input personalizado
+        customQuantity.addEventListener('input', function() {
+            // Validação
+            let value = parseInt(this.value);
+            if (isNaN(value) || value < 1) {
+                this.value = 1;
+            } else if (value > 20) {
+                this.value = 20;
+            }
+            updateSelection();
+        });
+        
+        // Teclas de atalho
+        customQuantity.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                increaseBtn.click();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                decreaseBtn.click();
+            }
+        });
+        
+        function updateSelection() {
+            selectedQuantity = parseInt(customQuantity.value);
+            selectedQuantityInput.value = selectedQuantity;
+            
+            // Remove todas as seleções
+            quantityOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleciona opção correspondente se existir
+            if (selectedQuantity <= 6) {
+                const matchingOption = document.querySelector(`[data-quantity="${selectedQuantity}"]`);
+                if (matchingOption) {
+                    matchingOption.classList.add('selected');
+                }
+            }
+            
+            // Habilita/desabilita botão avançar
+            advanceBtn.disabled = selectedQuantity < 1;
+            updateButtonText();
+        }
+        
+        function updateButtonText() {
+            const icon = '<i class="fas fa-arrow-right"></i>';
+            if (selectedQuantity === 1) {
+                advanceBtn.innerHTML = `${icon} Avançar para Seleção de Lugares`;
+            } else {
+                advanceBtn.innerHTML = `${icon} Selecionar ${selectedQuantity} Lugares`;
+            }
+        }
+        
+        // Efeito de loading no botão
+        const form = advanceBtn.closest('form');
+        form.addEventListener('submit', function() {
+            advanceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
+            advanceBtn.disabled = true;
+        });
+        // Seleção de quantidade melhorada
+        quantityOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remover seleção anterior
+                quantityOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Adicionar seleção atual
+                this.classList.add('selected');
+                
+                // Efeito de pulso
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-5px) scale(1)';
+                }, 150);
+                
+                // Atualizar quantidade selecionada
+                const quantity = this.dataset.quantity;
+                console.log(`Quantidade selecionada: ${quantity}`);
+                
+                // Aqui você pode adicionar lógica para atualizar o preço total
+                updateTotalPrice(quantity);
+            });
+            
+            // Efeito hover melhorado
+            option.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.transform = 'translateY(-3px)';
+                }
+            });
+            
+            option.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        // Função para atualizar preço total
+        function updateTotalPrice(quantity) {
+            const pricePerTicket = {{ filme_sessao.preco }};
+            const totalPrice = (pricePerTicket * quantity).toFixed(2);
+            
+            // Criar ou atualizar elemento de preço total
+            let totalPriceElement = document.getElementById('total-price');
+            if (!totalPriceElement) {
+                totalPriceElement = document.createElement('div');
+                totalPriceElement.id = 'total-price';
+                totalPriceElement.style.cssText = `
+                    text-align: center;
+                    margin-top: 2rem;
+                    padding: 1.5rem;
+                    background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(78, 168, 222, 0.1));
+                    border-radius: 15px;
+                    border: 2px solid rgba(255, 214, 10, 0.3);
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    color: #FFD60A;
+                    font-family: 'Montserrat', sans-serif;
+                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                    animation: fadeInUp 0.5s ease;
+                `;
+                document.querySelector('.ticket-selection').appendChild(totalPriceElement);
+            }
+            
+            totalPriceElement.innerHTML = `
+                <i class="fas fa-calculator" style="margin-right: 10px; color: #4EA8DE;"></i>
+                Total: €${totalPrice}
+                <div style="font-size: 0.9rem; color: #B8C5D1; margin-top: 0.5rem;">
+                    ${quantity} bilhete${quantity > 1 ? 's' : ''} × €${pricePerTicket.toFixed(2)}
+                </div>
+            `;
+            
+            // Efeito de animação
+            totalPriceElement.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                totalPriceElement.style.transform = 'scale(1)';
+            }, 100);
+        }
+        
+        // Animação de entrada melhorada
+        setTimeout(() => {
+            quantityOptions.forEach((option, index) => {
+                option.style.opacity = '0';
+                option.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    option.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    option.style.opacity = '1';
+                    option.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        }, 200);
+        
+        // Adicionar animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            .quantity-option {
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .quantity-option::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                background: radial-gradient(circle, rgba(255, 214, 10, 0.3) 0%, transparent 70%);
+                transform: translate(-50%, -50%);
+                transition: all 0.3s ease;
+                border-radius: 50%;
+            }
+            
+            .quantity-option:active::after {
+                width: 200px;
+                height: 200px;
+            }
+        `;
+        document.head.appendChild(style);
+    });
+    </script>
+</body>
+</html>

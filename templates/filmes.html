@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Filmes - CineVibe | A Sua Experiência Cinematográfica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Descubra os melhores filmes em exibição e os que estão para chegar no CineVibe. Experiência cinematográfica premium com qualidade superior.">
+    <meta name="keywords" content="filmes, cinema, CineVibe, em exibição, brevemente, ação, comédia, drama, terror, romance">
+    
+    <style>
+        /* Esconder os radio buttons e manter apenas os botões */
+        .filtros input[type="radio"] {
+            display: none !important;
+        }
+        
+        /* Estilo para gênero selecionado */
+        .filtros input[type="radio"]:checked + label {
+            background-color: #FFD60A !important;
+            color: #0D1B2A !important;
+            font-weight: 600 !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4) !important;
+        }
+        
+        .filtros label {
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+        }
+        
+        .filtros input[type="radio"]:checked + label:hover {
+            background-color: #FFD60A !important;
+            transform: scale(1.08) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}" class="active">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main role="main">
+        <!-- Títulos das Seções com Animação Elegante -->
+        <section class="filmes-titulos" role="tablist" aria-label="Categorias de filmes">
+            <h1 id="titulo-em-exibicao" 
+               class="active" 
+               onclick="mostrarSecao('em-exibicao')" 
+               role="tab" 
+               aria-selected="true" 
+               aria-controls="em-exibicao"
+               tabindex="0">
+                 Em Exibição
+            </h1>
+            <h1 id="titulo-brevemente" 
+               onclick="mostrarSecao('brevemente')" 
+               role="tab" 
+               aria-selected="false" 
+               aria-controls="brevemente"
+               tabindex="0">
+                 Brevemente
+            </h1>
+        </section>
+
+        <!-- Filtros Premium por Género -->
+        <section class="filtros" role="group" aria-label="Filtros por género">
+            <!-- Opção "Todos" para mostrar todos os filmes -->
+            <input type="radio" id="todos" name="genero" value="" 
+                   {% if not genero_filtro %}checked{% endif %}>
+            <label for="todos"> Todos</label>
+            
+            {% if generos %}
+                {% for genero in generos %}
+                    {% set genero_id = genero.nome|lower|replace(' ', '_')|replace('ã', 'a')|replace('ç', 'c') %}
+                    <input type="radio" id="{{ genero_id }}" name="genero" value="{{ genero.nome|lower }}"
+                           {% if genero_filtro == genero.nome|lower %}checked{% endif %}>
+                    <label for="{{ genero_id }}"> {{ genero.nome }}</label>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback caso não haja gêneros na base de dados -->
+                <input type="radio" id="acao" name="genero" value="acao">
+                <label for="acao"> Ação</label>
+                
+                <input type="radio" id="aventura" name="genero" value="aventura">
+                <label for="aventura"> Aventura</label>
+                
+                <input type="radio" id="comedia" name="genero" value="comedia">
+                <label for="comedia"> Comédia</label>
+                
+                <input type="radio" id="drama" name="genero" value="drama">
+                <label for="drama"> Drama</label>
+                
+                <input type="radio" id="terror" name="genero" value="terror">
+                <label for="terror"> Terror</label>
+            {% endif %}
+        </section>
+
+        <!-- Grid de Filmes Premium -->
+        <div class="filmes-grid">
+            <!-- Filmes em Exibição -->
+            <div id="em-exibicao" 
+                 class="filmes-lista active" 
+                 role="tabpanel" 
+                 aria-labelledby="titulo-em-exibicao"
+                 aria-live="polite">
+                {% for filme in filmes_em_exibicao %}
+                <article class="filme-card" 
+                         data-genero="{{ filme.genero_nome|lower }}"
+                         data-titulo="{{ filme.titulo|lower }}"
+                         role="article"
+                         aria-label="Filme: {{ filme.titulo }}">
+                    <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}" 
+                       aria-label="Ver detalhes de {{ filme.titulo }}">
+                        <div class="poster-container">
+                            <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
+                                 alt="Poster de {{ filme.titulo }}" 
+                                 class="poster-main"
+                                 loading="lazy">
+                            {% if filme.poster_hover %}
+                            <img src="{{ url_for('static', filename=filme.poster_hover) }}" 
+                                 alt="Poster alternativo de {{ filme.titulo }}" 
+                                 class="poster-hover"
+                                 loading="lazy">
+                            {% endif %}
+                        </div>
+                        <div class="filme-overlay">
+                            <div class="filme-info">
+                                <h3 class="titulo">{{ filme.titulo }}</h3>
+                                <p class="genero">{{ filme.genero_nome or 'Género não especificado' }}</p>
+                                <p class="duracao">⏱️ {{ filme.duracao }}min</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                {% endfor %}
+                
+                {% if not filmes_em_exibicao %}
+                <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: #B8C5D1;">
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.6;">🎬</div>
+                    <h3 style="font-size: 1.8rem; color: #FFD60A; margin-bottom: 15px; font-family: 'Montserrat', sans-serif;">Nenhum filme em exibição</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6; max-width: 500px; margin: 0 auto;">Em breve teremos novos filmes incríveis para si! Fique atento às nossas novidades.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Filmes Brevemente -->
+            <div id="brevemente" 
+                 class="filmes-lista" 
+                 role="tabpanel" 
+                 aria-labelledby="titulo-brevemente"
+                 aria-live="polite">
+                {% for filme in filmes_brevemente %}
+                <article class="filme-card" 
+                         data-genero="{{ filme.genero_nome|lower }}"
+                         data-titulo="{{ filme.titulo|lower }}"
+                         role="article"
+                         aria-label="Filme: {{ filme.titulo }}">
+                    <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}" 
+                       aria-label="Ver detalhes de {{ filme.titulo }}">
+                        <div class="poster-container">
+                            <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
+                                 alt="Poster de {{ filme.titulo }}" 
+                                 class="poster-main"
+                                 loading="lazy">
+                            {% if filme.poster_hover %}
+                            <img src="{{ url_for('static', filename=filme.poster_hover) }}" 
+                                 alt="Poster alternativo de {{ filme.titulo }}" 
+                                 class="poster-hover"
+                                 loading="lazy">
+                            {% endif %}
+                        </div>
+                        <div class="filme-overlay">
+                            <div class="filme-info">
+                                <h3 class="titulo">{{ filme.titulo }}</h3>
+                                <p class="genero">{{ filme.genero_nome or 'Género não especificado' }}</p>
+                                <p class="duracao">⏱️ {{ filme.duracao }}min</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                {% endfor %}
+                
+                {% if not filmes_brevemente %}
+                <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: #B8C5D1;">
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.6;">🚀</div>
+                    <h3 style="font-size: 1.8rem; color: #FFD60A; margin-bottom: 15px; font-family: 'Montserrat', sans-serif;">Nenhum filme em breve</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.6; max-width: 500px; margin: 0 auto;">Fique atento às nossas redes sociais para saber das próximas estreias!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                        <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Premium -->
+    <script>
+        // Alternar entre seções com animações suaves
+        function mostrarSecao(secao) {
+            // Remover classe active de todos os títulos e seções
+            document.querySelectorAll('.filmes-titulos h1').forEach(titulo => {
+                titulo.classList.remove('active');
+                titulo.setAttribute('aria-selected', 'false');
+            });
+            document.querySelectorAll('.filmes-lista').forEach(lista => {
+                lista.classList.remove('active');
+            });
+
+            // Adicionar classe active à seção selecionada
+            const tituloAtivo = document.getElementById(`titulo-${secao}`);
+            const secaoAtiva = document.getElementById(secao);
+            
+            tituloAtivo.classList.add('active');
+            tituloAtivo.setAttribute('aria-selected', 'true');
+            secaoAtiva.classList.add('active');
+
+            // Aplicar filtro na nova seção
+            setTimeout(() => {
+                aplicarFiltroInstantaneo();
+            }, 100);
+        }
+
+        // Sistema de filtros instantâneo
+        function aplicarFiltroInstantaneo() {
+            const radioSelecionado = document.querySelector('.filtros input[type="radio"]:checked');
+            const generoSelecionado = radioSelecionado ? radioSelecionado.value.toLowerCase() : '';
+            
+            const secaoAtiva = document.querySelector('.filmes-lista.active');
+            const filmes = secaoAtiva.querySelectorAll('.filme-card');
+            
+            let filmesVisiveis = 0;
+            
+            filmes.forEach((filme, index) => {
+                const generosFilme = filme.dataset.genero.toLowerCase();
+                
+                let mostrar = false;
+                if (generoSelecionado === '' || generoSelecionado === 'todos') {
+                    // Mostrar todos os filmes
+                    mostrar = true;
+                } else {
+                    // Verificar se o filme contém o gênero selecionado
+                    mostrar = generosFilme.includes(generoSelecionado) || 
+                             generosFilme.includes(normalizeGenre(generoSelecionado)) ||
+                             normalizeGenre(generosFilme).includes(generoSelecionado);
+                }
+                
+                if (mostrar) {
+                    filme.style.display = 'block';
+                    filme.style.opacity = '0';
+                    filme.style.transform = 'translateY(20px)';
+                    
+                    // Animação escalonada
+                    setTimeout(() => {
+                        filme.style.transition = 'all 0.4s ease';
+                        filme.style.opacity = '1';
+                        filme.style.transform = 'translateY(0)';
+                    }, filmesVisiveis * 50);
+                    
+                    filmesVisiveis++;
+                } else {
+                    filme.style.display = 'none';
+                }
+            });
+            
+            console.log(`Filtro aplicado: "${generoSelecionado}" - ${filmesVisiveis} filmes encontrados`);
+        }
+
+        // Normalizar nomes de géneros para melhor matching
+        function normalizeGenre(genre) {
+            const map = {
+                'acao': 'ação',
+                'ficcao': 'ficção científica',
+                'sci-fi': 'ficção científica',
+                'scifi': 'ficção científica',
+                'documentario': 'documentário',
+                'suspense': 'thriller',
+                'comedia': 'comédia'
+            };
+            return map[genre.toLowerCase()] || genre.toLowerCase();
+        }
+
+        // Event listeners para os filtros - SISTEMA CUSTOMIZADO
+        document.querySelectorAll('.filtros label').forEach(label => {
+            label.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const radio = document.getElementById(this.getAttribute('for'));
+                const isTodos = radio.id === 'todos';
+                
+                if (isTodos) {
+                    // "Todos" sempre ativa e desativa outros
+                    document.querySelectorAll('.filtros input[type="radio"]').forEach(r => r.checked = false);
+                    radio.checked = true;
+                } else {
+                    // Para outros gêneros: toggle on/off
+                    if (radio.checked) {
+                        // Se já está selecionado, desmarcar e ativar "Todos"
+                        radio.checked = false;
+                        document.getElementById('todos').checked = true;
+                    } else {
+                        // Se não está selecionado, desmarcar todos e selecionar este
+                        document.querySelectorAll('.filtros input[type="radio"]').forEach(r => r.checked = false);
+                        radio.checked = true;
+                    }
+                }
+                
+                // Aplicar filtro instantaneamente
+                aplicarFiltroInstantaneo();
+                
+                // Atualizar URL sem recarregar
+                const radioSelecionado = document.querySelector('.filtros input[type="radio"]:checked');
+                const genero = radioSelecionado ? radioSelecionado.value : '';
+                const newUrl = genero === '' ? 
+                    '{{ url_for("filmes") }}' : 
+                    `{{ url_for("filmes") }}?genero=${encodeURIComponent(genero)}`;
+                
+                window.history.replaceState({}, '', newUrl);
+            });
+        });
+
+        // Pesquisa avançada de filmes
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const termo = e.target.value.toLowerCase().trim();
+            const secaoAtiva = document.querySelector('.filmes-lista.active');
+            const filmes = secaoAtiva.querySelectorAll('.filme-card');
+            
+            filmes.forEach(filme => {
+                const titulo = filme.dataset.titulo;
+                const genero = filme.querySelector('.genero').textContent.toLowerCase();
+                
+                if (titulo.includes(termo) || genero.includes(termo) || termo === '') {
+                    filme.style.display = 'block';
+                } else {
+                    filme.style.display = 'none';
+                }
+            });
+        });
+
+        // Newsletter com validação
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            // Simulação de sucesso
+            const button = this.querySelector('button');
+            const originalText = button.textContent;
+            
+            button.textContent = 'Subscrevendo...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                alert(`🎉 Obrigado por se inscrever na nossa newsletter!\n📧 Email: ${email}\n\nReceberá as últimas novidades sobre filmes e promoções exclusivas!`);
+                this.reset();
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 1500);
+        });
+
+        // Animação elegante de entrada dos cards
+        function animarCards() {
+            const cards = document.querySelectorAll('.filme-card[style*="block"], .filme-card:not([style*="none"])');
+            cards.forEach((card, index) => {
+                if (card.style.display !== 'none') {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(50px) scale(0.9)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0) scale(1)';
+                    }, index * 150);
+                }
+            });
+        }
+
+        // Navegação por teclado para títulos
+        document.querySelectorAll('.filmes-titulos h1').forEach(titulo => {
+            titulo.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // Inicialização quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aplicar filtro de género da URL se existir
+            {% if genero_filtro %}
+            const generoRadio = document.querySelector('input[name="genero"][value="{{ genero_filtro }}"]');
+            if (generoRadio) {
+                generoRadio.checked = true;
+                aplicarFiltroInstantaneo();
+            }
+            {% else %}
+            // Garantir que "Todos" está selecionado e todos os filmes visíveis
+            const todosRadio = document.getElementById('todos');
+            if (todosRadio) {
+                todosRadio.checked = true;
+                aplicarFiltroInstantaneo();
+            }
+            {% endif %}
+            
+            // Animar cards após carregamento
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.filme-card');
+                cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.6s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            }, 200);
+            
+            // Adicionar efeitos de hover suaves
+            document.querySelectorAll('.filme-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+
+        // Performance: Lazy loading para imagens
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    </script>
+</body>
+</html>

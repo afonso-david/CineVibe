@@ -1,0 +1,1453 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #0D1B2A;
+  color: white;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ==========================
+   HEADER / NAV
+========================== */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 25px;
+  background: linear-gradient(to right, #0D1B2A, #1B263B);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  height: 55px;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+  margin-top: 20px;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* MENU CENTRAL */
+.nav-center {
+  display: flex;
+  gap: 20px;
+  background-color: #1E2A3A;
+  padding: 12px 25px;
+  align-items: center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: auto;
+}
+
+.nav-center a {
+  color: #fff;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  padding: 5px 15px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.nav-center a:first-child {
+  margin-left: 20px;
+}
+
+.nav-center a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+  transition: all 0.4s ease;
+  transform: translateX(-50%);
+}
+
+.nav-center a:hover::after,
+.nav-center a.active::after {
+  width: 80%;
+}
+
+.nav-center a:hover,
+.nav-center a.active {
+  color: #4EA8DE;
+}
+
+/* DIREITA: PESQUISA + UTILIZADOR */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-container input {
+  background-color: #223B53;
+  border: none;
+  padding: 6px 20px 6px 40px;
+  border-radius: 30px;
+  color: white;
+  outline: none;
+  width: 400px;
+  font-size: 18px;
+  transition: 0.3s ease;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+.search-container input:focus {
+  background-color: #22314A;
+}
+
+.search_icon {
+  position: absolute;
+  left: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* ÍCONE UTILIZADOR */
+.user-icon img {
+  background-color: #1B263B;
+  border-radius: 50%;
+  padding: 6px;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-top: 20px;
+}
+
+.user-icon img:hover {
+  background-color: #18AFC6;
+  transform: scale(1.1);
+}
+
+/* Container principal */
+main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Card de informações do filme - IGUAL À PÁGINA DE RESERVA */
+.movie-info-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 214, 10, 0.15) 0%, 
+        rgba(78, 168, 222, 0.1) 50%, 
+        rgba(255, 214, 10, 0.1) 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 2px solid rgba(255, 214, 10, 0.4);
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+}
+
+.movie-info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #FFD60A, #4EA8DE, #FFD60A);
+}
+
+.movie-info-content {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.movie-poster {
+    width: 140px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    
+    border: 3px solid rgba(255, 214, 10, 0.5);
+    transition: all 0.3s ease;
+}
+
+.movie-poster:hover {
+    transform: scale(1.05);
+    border-color: #FFD60A;
+}
+
+.movie-details {
+    flex: 1;
+    min-width: 300px;
+}
+
+.movie-title {
+    color: #FFD60A;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.movie-info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.movie-info-item i {
+    width: 20px;
+    margin-right: 12px;
+    color: #4EA8DE;
+}
+
+.cinema-name {
+    color: #4EA8DE;
+    font-weight: 600;
+}
+
+.session-type {
+    color: #FFD60A;
+    font-weight: 500;
+}
+
+.session-time {
+    color: #B8C5D1;
+}
+
+.room-info {
+    color: #B8C5D1;
+}
+
+.ticket-price {
+    color: #FFD60A;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+/* Seleção de quantidade - ELEGANTE CINEVIBE */
+.ticket-selection {
+    background: linear-gradient(145deg, 
+        rgba(27, 38, 59, 0.3) 0%, 
+        rgba(13, 27, 42, 0.5) 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin: 2rem 0;
+    backdrop-filter: blur(15px);
+  
+    
+}
+
+.ticket-selection h3 {
+    color: #FFD60A;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.4);
+}
+
+/* Grid de quantidade - MELHORADO COM CORES CINEVIBE */
+.quantity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.quantity-option {
+    background: linear-gradient(145deg, 
+        rgba(27, 38, 59, 0.4) 0%, 
+        rgba(13, 27, 42, 0.6) 100%);
+    border: 2px solid rgba(255, 214, 10, 0.2);
+    border-radius: 15px;
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.quantity-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.quantity-option:hover::before {
+    left: 100%;
+}
+
+.quantity-option:hover {
+    background: linear-gradient(145deg, 
+        rgba(27, 38, 59, 0.6) 0%, 
+        rgba(13, 27, 42, 0.8) 100%);
+    border-color: rgba(255, 214, 10, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.quantity-option.selected {
+    background: linear-gradient(145deg, 
+        rgba(255, 214, 10, 0.2) 0%, 
+        rgba(78, 168, 222, 0.15) 100%);
+    border-color: rgba(255, 214, 10, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(255, 214, 10, 0.3);
+}
+
+.quantity-number {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #FFD60A;
+    margin-bottom: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 0 1px 3px rgba(255, 214, 10, 0.3);
+}
+
+.quantity-option.selected .quantity-number {
+    color: #FFD60A;
+    text-shadow: 0 2px 6px rgba(255, 214, 10, 0.5);
+}
+
+.quantity-label {
+    font-size: 0.85rem;
+    color: #B8C5D1;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.quantity-option.selected .quantity-label {
+    color: #E8EEF2;
+    font-weight: 700;
+}
+    border-color: #FFD60A;
+    transform: translateY(-2px);
+}
+
+.quantity-option.selected {
+    background: rgba(255, 214, 10, 0.3);
+    border-color: #FFD60A;
+    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
+}
+
+.quantity-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #FFD60A;
+    margin-bottom: 0.5rem;
+}
+
+.quantity-label {
+    color: #B8C5D1;
+    font-size: 0.9rem;
+}
+
+/* Quantidade personalizada - ELEGANTE CINEVIBE */
+.custom-quantity {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.custom-quantity h4 {
+    color: #4EA8DE;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.quantity-input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantity-btn {
+    background: linear-gradient(135deg, #FFD60A, #4EA8DE);
+    color: #0D1B2A;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:hover {
+    background: linear-gradient(135deg, #4EA8DE, #FFD60A);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.4);
+}
+
+.quantity-input {
+    background: rgba(27, 38, 59, 0.6);
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    color: #FFD60A;
+    padding: 0.8rem;
+    width: 80px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.quantity-input:focus {
+    outline: none;
+    border-color: #FFD60A;
+    box-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
+    background: rgba(27, 38, 59, 0.8);
+}
+
+/* Botão avançar - ELEGANTE CINEVIBE */
+.advance-btn {
+    background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
+    color: #0D1B2A;
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 2rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.advance-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.advance-btn:hover::before {
+    left: 100%;
+}
+
+.advance-btn:hover {
+    background: linear-gradient(135deg, #4EA8DE 0%, #FFD60A 100%);
+    color: white;
+    border-color: rgba(78, 168, 222, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(78, 168, 222, 0.4);
+}
+
+.advance-btn:disabled {
+    background: linear-gradient(135deg, rgba(102, 102, 102, 0.6), rgba(68, 68, 68, 0.6));
+    color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(102, 102, 102, 0.3);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .quantity-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .ticket-selection {
+        padding: 1.5rem;
+    }
+}
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    animation: shimmer 3s infinite;
+}
+
+.page-header h1 {
+    color: #FFD60A;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 3px 10px rgba(255, 214, 10, 0.4);
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* 🎬 CARD DO FILME ELEGANTE CINEVIBE */
+.filme-card {
+    background: linear-gradient(145deg, 
+        rgba(27, 38, 59, 0.4) 0%, 
+        rgba(13, 27, 42, 0.6) 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 2px solid rgba(255, 214, 10, 0.2);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.filme-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 214, 10, 0.4);
+}
+
+/* 🖼️ POSTER PREMIUM */
+.poster-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.poster-container img {
+    width: 100%;
+    height: auto;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 15px;
+}
+
+.poster-container:hover img {
+    transform: scale(1.1) rotate(2deg);
+    filter: brightness(1.2) contrast(1.1);
+}
+
+.poster-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(255, 215, 0, 0.1) 0%,
+        transparent 50%,
+        rgba(255, 215, 0, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 15px;
+}
+
+.poster-container:hover::after {
+    opacity: 1;
+}
+
+/* 📊 INFORMAÇÕES DO FILME */
+.filme-info {
+    padding: 20px;
+}
+
+.filme-info h2 {
+    color: #FFD60A;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.3);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.filme-info p {
+    color: #E8EEF2;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.filme-info strong {
+    color: #FFD60A;
+    font-weight: 600;
+}
+
+/* 🎫 DETALHES DA SESSÃO ELEGANTE CINEVIBE */
+.sessao-detalhes {
+    background: linear-gradient(145deg, 
+        rgba(27, 38, 59, 0.3) 0%, 
+        rgba(13, 27, 42, 0.5) 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(78, 168, 222, 0.2);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.sessao-detalhes:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    border-color: rgba(78, 168, 222, 0.4);
+}
+
+.sessao-detalhes h3 {
+    color: #4EA8DE;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(78, 168, 222, 0.3);
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* 📅 GRID DE INFORMAÇÕES */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.info-item {
+    background: rgba(27, 38, 59, 0.4);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 214, 10, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.info-item:hover {
+    transform: translateY(-3px);
+    background: rgba(27, 38, 59, 0.6);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 214, 10, 0.4);
+}
+
+.info-item i {
+    font-size: 2rem;
+    color: #FFD60A;
+    margin-bottom: 10px;
+}
+
+.info-item h4 {
+    color: #FFD60A;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.info-item p {
+    color: #E8EEF2;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* 🎯 BOTÕES ELEGANTE CINEVIBE */
+.btn-premium {
+    background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    border-radius: 25px;
+    color: #0D1B2A;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 15px 40px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-premium:hover::before {
+    left: 100%;
+}
+
+.btn-premium:hover {
+    background: linear-gradient(135deg, #4EA8DE 0%, #FFD60A 100%);
+    color: white;
+    border-color: rgba(78, 168, 222, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(78, 168, 222, 0.4);
+}
+
+.btn-premium:active {
+    transform: translateY(-1px);
+}
+
+/* 🔙 BOTÃO VOLTAR ELEGANTE */
+.btn-voltar {
+    background: linear-gradient(135deg, 
+        rgba(27, 38, 59, 0.8) 0%, 
+        rgba(13, 27, 42, 0.8) 100%);
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    color: #E8EEF2;
+    text-decoration: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-voltar:hover {
+    background: linear-gradient(135deg, 
+        rgba(78, 168, 222, 0.3) 0%, 
+        rgba(255, 214, 10, 0.2) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.3);
+    color: #FFD60A;
+    border-color: rgba(255, 214, 10, 0.5);
+}
+
+/* 📱 RESPONSIVIDADE PREMIUM */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .filme-info h2 {
+        font-size: 1.5rem;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .btn-premium {
+        font-size: 1rem;
+        padding: 12px 30px;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* 🎨 EFEITOS ESPECIAIS */
+.sparkle {
+    position: relative;
+}
+
+.sparkle::after {
+    content: '✨';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.5rem;
+    animation: pulse 2s infinite;
+}
+
+/* 🌟 LOADING PREMIUM */
+.loading-premium {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    border-top-color: #FFD60A;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 🎭 EFEITOS DE HOVER ESPECIAIS */
+.hover-glow:hover {
+    animation: glow 2s infinite;
+}
+
+.hover-float:hover {
+    animation: float 2s infinite;
+}
+
+.hover-pulse:hover {
+    animation: pulse 1.5s infinite;
+}
+
+/* 🎫 SELEÇÃO DE QUANTIDADE PREMIUM */
+.ticket-selection {
+    background: linear-gradient(135deg, 
+        rgba(138, 43, 226, 0.1) 0%,
+        rgba(220, 20, 60, 0.1) 50%,
+        rgba(255, 140, 0, 0.1) 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(138, 43, 226, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    animation: fadeInScale 0.8s ease-out 0.6s both;
+}
+
+/* 🔢 GRID DE QUANTIDADE */
+.quantity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.quantity-option {
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.1) 0%,
+        rgba(255, 140, 0, 0.1) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.quantity-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s;
+}
+
+.quantity-option:hover::before {
+    left: 100%;
+}
+
+.quantity-option:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    animation: glow 2s infinite;
+}
+
+.quantity-option.selected {
+    background: linear-gradient(135deg, 
+        rgba(255, 214, 10, 0.3) 0%,
+        rgba(78, 168, 222, 0.15) 100%);
+    border-color: #FFD60A;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 214, 10, 0.4);
+}
+
+.quantity-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFD60A;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.3);
+}
+
+.quantity-label {
+    font-size: 1rem;
+    color: #e0e1dd;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 🎛️ QUANTIDADE PERSONALIZADA */
+.custom-quantity {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 25px;
+    margin-top: 30px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-quantity h4 {
+    color: #4EA8DE;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.quantity-input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.quantity-btn {
+    background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    color: #0D1B2A;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
+}
+
+.quantity-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    animation: pulse 1s infinite;
+}
+
+.quantity-btn:active {
+    transform: scale(0.95);
+}
+
+.quantity-input {
+    background: rgba(27, 38, 59, 0.6);
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    width: 80px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FFD60A;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.quantity-input:focus {
+    outline: none;
+    border-color: #FFD60A;
+    box-shadow: 0 0 20px rgba(255, 214, 10, 0.4);
+}
+
+/* 🚀 BOTÕES DE NAVEGAÇÃO */
+.navigation-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+    align-items: center;
+}
+
+.navigation-buttons form {
+    flex: 1;
+}
+
+/* 📱 RESPONSIVIDADE AVANÇADA */
+@media (max-width: 768px) {
+    .quantity-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .quantity-option {
+        padding: 15px;
+    }
+    
+    .quantity-number {
+        font-size: 2rem;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .navigation-buttons form {
+        width: 100%;
+    }
+    
+    .btn-premium,
+    .btn-voltar {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .quantity-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .custom-quantity {
+        padding: 20px;
+    }
+    
+    .quantity-input-group {
+        max-width: 180px;
+    }
+    
+    .quantity-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+    
+    .quantity-input {
+        width: 70px;
+        padding: 12px;
+        font-size: 1.3rem;
+    }
+}
+
+/* 🎨 EFEITOS ESPECIAIS ADICIONAIS */
+.ticket-selection:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.quantity-option:nth-child(1) { animation-delay: 0.1s; }
+.quantity-option:nth-child(2) { animation-delay: 0.2s; }
+.quantity-option:nth-child(3) { animation-delay: 0.3s; }
+.quantity-option:nth-child(4) { animation-delay: 0.4s; }
+.quantity-option:nth-child(5) { animation-delay: 0.5s; }
+.quantity-option:nth-child(6) { animation-delay: 0.6s; }
+
+/* ✨ LOADING STATE */
+.btn-premium:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    animation: none;
+}
+
+.btn-premium:disabled:hover {
+    transform: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+/
+* Quantidade personalizada - MELHORADO */
+.custom-quantity {
+    background: linear-gradient(135deg, 
+        rgba(78, 168, 222, 0.1) 0%, 
+        rgba(255, 214, 10, 0.05) 100%);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-top: 2rem;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    text-align: center;
+}
+
+.custom-quantity h4 {
+    color: #4EA8DE;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 214, 10, 0.3);
+    overflow: hidden;
+}
+
+.quantity-btn {
+    background: linear-gradient(135deg, #FFD60A, #4EA8DE);
+    border: none;
+    color: #0D1B2A;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:hover {
+    background: linear-gradient(135deg, #4EA8DE, #FFD60A);
+    transform: scale(1.1);
+}
+
+.quantity-input {
+    background: transparent;
+    border: none;
+    color: #FFD60A;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    width: 60px;
+    height: 40px;
+    outline: none;
+}
+
+/* Botão continuar - MELHORADO */
+.continue-btn {
+    background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
+    border: none;
+    color: #0D1B2A;
+    padding: 1rem 2.5rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.continue-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.continue-btn:hover::before {
+    left: 100%;
+}
+
+.continue-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
+}
+
+.continue-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsividade melhorada */
+@media (max-width: 768px) {
+    .movie-info-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .movie-poster {
+        width: 120px;
+        height: 170px;
+    }
+    
+    .movie-title {
+        font-size: 1.8rem;
+    }
+    
+    .quantity-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .quantity-option {
+        padding: 1.5rem 0.5rem;
+    }
+    
+    .quantity-number {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .movie-info-card,
+    .ticket-selection {
+        padding: 1.5rem;
+    }
+    
+    .quantity-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .quantity-number {
+        font-size: 1.8rem;
+    }
+    
+    .movie-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animações adicionais */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.movie-info-card {
+    animation: slideInFromLeft 0.8s ease;
+}
+
+.ticket-selection {
+    animation: slideInFromRight 0.8s ease;
+}
+
+/* Efeitos de hover melhorados */
+.movie-info-item:hover i {
+    color: #FFD60A;
+    transform: scale(1.2);
+    transition: all 0.3s ease;
+}
+
+/* Loading state para imagens */
+.movie-poster {
+    background: linear-gradient(45deg, #1B263B, #0D1B2A);
+    background-size: 400% 400%;
+    animation: gradientShift 2s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.movie-poster[src] {
+    animation: none;
+    background: none;
+}
+
+/* ===== CORES CINEVIBE SIMPLES E LIMPAS ===== */
+
+.movie-title, .ticket-price {
+    color: #FFD60A !important;
+}
+
+/* Seção de seleção - AZUL */
+.ticket-selection {
+    background: rgba(78, 168, 222, 0.1) !important;
+    border: 2px solid #4EA8DE !important;
+    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.3) !important;
+}
+
+.ticket-selection h3 {
+    color: #FFD60A !important;
+}
+
+/* Botões de quantidade - AMARELO quando não selecionado, AZUL quando selecionado */
+.quantity-option {
+    background: rgba(255, 214, 10, 0.1) !important;
+    border: 2px solid #FFD60A !important;
+    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.2) !important;
+}
+
+.quantity-option:hover {
+    background: rgba(255, 214, 10, 0.2) !important;
+    border-color: #FFD60A !important;
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4) !important;
+}
+
+.quantity-option.selected {
+    background: #4EA8DE !important;
+    border-color: #4EA8DE !important;
+    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5) !important;
+}
+
+.quantity-number {
+    color: #FFD60A !important;
+}
+
+.quantity-option.selected .quantity-number {
+    color: white !important;
+}
+
+.quantity-label {
+    color: #4EA8DE !important;
+}
+
+.quantity-option.selected .quantity-label {
+    color: white !important;
+}
+
+/* Informações do filme */
+.cinema-name {
+    color: #4EA8DE !important;
+}
+
+.session-type {
+    color: #FFD60A !important;
+}
+
+.movie-info-item i {
+    color: #4EA8DE !important;
+}
+
+/* Quantidade personalizada - AZUL */
+.custom-quantity {
+    background: rgba(78, 168, 222, 0.1) !important;
+    border: 2px solid #4EA8DE !important;
+    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.3) !important;
+}
+
+.custom-quantity h4 {
+    color: #4EA8DE !important;
+}
+
+.quantity-controls {
+    border: 2px solid #FFD60A !important;
+}
+
+.quantity-btn {
+    background: #FFD60A !important;
+    color: #0D1B2A !important;
+}
+
+.quantity-btn:hover {
+    background: #4EA8DE !important;
+    color: white !important;
+}
+
+.quantity-input {
+    color: #FFD60A !important;
+}
+
+/* Botões principais - AMARELO */
+.continue-btn, .advance-btn, [class*="btn-"] {
+    background: #FFD60A !important;
+    color: #0D1B2A !important;
+    border: 2px solid #FFD60A !important;
+    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4) !important;
+}
+
+.continue-btn:hover, .advance-btn:hover, [class*="btn-"]:hover {
+    background: #4EA8DE !important;
+    color: white !important;
+    border-color: #4EA8DE !important;
+    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5) !important;
+}

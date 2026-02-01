@@ -1,0 +1,2109 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Editar Filme: {{ filme.titulo }} - CineVibe Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_filme_detalhe.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="admin-filme-container">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-left">
+            <h1><i class="fas fa-film"></i> {{ filme.titulo }}</h1>
+            <p class="subtitle">Edição de Filme</p>
+        </div>
+        <div class="header-actions">
+            <button onclick="window.history.back()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <button onclick="salvarFilme()" class="btn btn-primary">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="filme-content">
+        <!-- Poster e Informações Básicas -->
+        <div class="filme-header">
+            <div class="poster-container">
+                {% if filme.poster_url %}
+                    <img src="{{ url_for('static', filename=filme.poster_url) }}" alt="{{ filme.titulo }}" class="poster-image" id="posterImage">
+                {% else %}
+                    <div class="poster-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>Sem Poster</span>
+                    </div>
+                {% endif %}
+                <div class="poster-overlay">
+                    <input type="file" id="posterInput" accept="image/*" style="display: none;">
+                    <button onclick="document.getElementById('posterInput').click()" class="btn-upload">
+                        <i class="fas fa-upload"></i> Alterar
+                    </button>
+                </div>
+            </div>
+
+            <div class="filme-info">
+                <div class="info-grid">
+                    <div class="info-group">
+                        <label>Título</label>
+                        <input type="text" id="titulo" value="{{ filme.titulo }}" class="form-input">
+                    </div>
+                    
+                    <div class="info-group">
+                        <label>Diretor</label>
+                        <input type="text" id="diretor" value="{{ filme.diretor or '' }}" class="form-input">
+                    </div>
+                    
+                    <div class="info-group">
+                        <label>Duração (min)</label>
+                        <input type="number" id="duracao" value="{{ filme.duracao or '' }}" class="form-input">
+                    </div>
+                    
+                    <div class="info-group">
+                        <label>Data de Lançamento</label>
+                        <input type="date" id="data_lancamento" value="{{ filme.data_lancamento or '' }}" class="form-input">
+                    </div>
+                    
+                    <div class="info-group">
+                        <label>Idade Recomendada</label>
+                        <select id="idade_recomendada" class="form-select">
+                            <option value="">Selecionar idade</option>
+                            <option value="0" {% if filme.idade_recomendada == 0 %}selected{% endif %}>Livre</option>
+                            <option value="6" {% if filme.idade_recomendada == 6 %}selected{% endif %}>6 anos</option>
+                            <option value="10" {% if filme.idade_recomendada == 10 %}selected{% endif %}>10 anos</option>
+                            <option value="12" {% if filme.idade_recomendada == 12 %}selected{% endif %}>12 anos</option>
+                            <option value="14" {% if filme.idade_recomendada == 14 %}selected{% endif %}>14 anos</option>
+                            <option value="16" {% if filme.idade_recomendada == 16 %}selected{% endif %}>16 anos</option>
+                            <option value="18" {% if filme.idade_recomendada == 18 %}selected{% endif %}>18 anos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="info-group">
+                        <label>Estado</label>
+                        <select id="estado" class="form-select">
+                            <option value="em_exibicao" {% if filme.estado == 'em_exibicao' %}selected{% endif %}>Em Exibição</option>
+                            <option value="brevemente" {% if filme.estado == 'brevemente' %}selected{% endif %}>Em Breve</option>
+                            <option value="fora_cartaz" {% if filme.estado == 'fora_cartaz' %}selected{% endif %}>Fora de Cartaz</option>
+                        </select>
+                    </div>
+                    
+                    <div class="info-group full-width">
+                        <label>URL do Trailer</label>
+                        <input type="url" id="trailer_url" value="{{ filme.trailer_url or '' }}" class="form-input" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+                    
+                    <!-- Géneros do Filme -->
+                    <div class="info-group full-width">
+                        <label>Géneros</label>
+                        <div class="generos-section">
+                            {% if generos_filme %}
+                            <div class="generos-grid">
+                                {% for genero in generos_filme %}
+                                <div class="genero-tag" data-genero-id="{{ genero.id }}">
+                                    <span class="genero-nome">{{ genero.nome }}</span>
+                                    <button onclick="removeGeneroFromMovie({{ genero.id }}, '{{ genero.nome }}')" class="btn-remove-genero" title="Remover género">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="no-generos">
+                                <span class="no-generos-text">Nenhum género associado</span>
+                            </div>
+                            {% endif %}
+                            <button onclick="openAddGeneroModal()" class="btn-add-genero">
+                                <i class="fas fa-plus"></i> Adicionar Género
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sinopse -->
+        <div class="section">
+            <h3><i class="fas fa-align-left"></i> Sinopse</h3>
+            <textarea id="sinopse" class="form-textarea" rows="4" placeholder="Descrição do filme...">{{ filme.sinopse or '' }}</textarea>
+        </div>
+
+        <!-- Atores -->
+        <div class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-users"></i> Atores</h3>
+                <button onclick="openAddActorModal()" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i> Adicionar Ator
+                </button>
+            </div>
+            
+            <div class="atores-grid">
+                {% for ator in atores_filme %}
+                <div class="ator-card" data-ator-id="{{ ator.id }}">
+                    {% if ator.foto_url %}
+                        <img src="{{ url_for('static', filename=ator.foto_url) }}" alt="{{ ator.nome }}" class="ator-foto">
+                    {% else %}
+                        <div class="ator-foto-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    {% endif %}
+                    <div class="ator-info">
+                        <h4>{{ ator.nome }}</h4>
+                        <p>{{ ator.papel or 'Papel não definido' }}</p>
+                    </div>
+                    <div class="ator-actions">
+                        <button onclick="editActor({{ ator.id }}, '{{ ator.nome }}', '{{ ator.papel or '' }}')" class="btn-edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="removeActor({{ ator.id }})" class="btn-remove">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Cinemas -->
+        <div class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-building"></i> Cinemas em Exibição</h3>
+                <button onclick="openAddCinemaModal()" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i> Adicionar Cinema
+                </button>
+            </div>
+            
+            {% if filme_cinemas %}
+            <div class="cinemas-lista">
+                {% for cinema in filme_cinemas %}
+                <div class="cinema" data-regiao="{{ cinema.regiao|lower }}" data-cinema-id="{{ cinema.id }}">
+                    <div class="cinema-header">
+                        <h3 class="nome-cinema">{{ cinema.nome }}</h3>
+                        {# 
+                        <p class="cinema-regiao">{{ cinema.regiao }}</p>
+                        {% if cinema.localizacao %}
+                        <p class="cinema-endereco">{{ cinema.localizacao }}</p>
+                        {% endif %}
+                        #}
+                        <button onclick="removeCinemaFromMovie({{ cinema.id }})" class="btn-remove-cinema">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Botões de Tipos de Sessão -->
+                    <div class="botoes-sessao">
+                        {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
+                        <div class="tipo-sessao-container">
+                            <button class="btn-sessao" 
+                                    data-tipo="{{ tipo.id }}" 
+                                    data-cinema="{{ cinema.id }}"
+                                    onclick="mostrarHorarios({{ cinema.id }}, {{ tipo.id }}, '{{ tipo.nome }}')">
+                                {{ tipo.nome }}
+                            </button>
+                            <button class="btn-remover-tipo-sessao" 
+                                    onclick="removerTipoSessao({{ cinema.id }}, {{ tipo.id }}, '{{ tipo.nome }}')"
+                                    title="Remover {{ tipo.nome }}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- Botão para adicionar tipo de sessão -->
+                        <button class="btn-adicionar-tipo-sessao" 
+                                onclick="adicionarTipoSessao({{ cinema.id }})">
+                            <i class="fas fa-plus"></i> Adicionar Tipo
+                        </button>
+                    </div>
+                    
+                    <!-- Grupos de Sessão (Horários) -->
+                    {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
+                    <div class="sessao-grupo hidden" 
+                         id="sessao-{{ cinema.id }}-{{ tipo.id }}"
+                         data-cinema="{{ cinema.id }}" 
+                         data-tipo="{{ tipo.id }}">
+                        
+                        <!-- Cabeçalho com informações da sala do tipo de sessão -->
+                        <div class="sessao-info-header">
+                            <div class="sala-tipo-sessao">
+                                <span class="sala-label">Sala para {{ tipo.nome }}:</span>
+                                <span class="sala-atual" id="sala-atual-{{ cinema.id }}-{{ tipo.id }}">Carregando...</span>
+                                <button class="btn-editar-sala-tipo" onclick="editarSalaTipoSessao({{ cinema.id }}, {{ tipo.id }}, '{{ tipo.nome }}')">
+                                    <i class="fas fa-edit"></i> Alterar Sala
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="horarios">
+                            <div class="horarios-wrapper" id="horarios-{{ cinema.id }}-{{ tipo.id }}">
+                                <!-- Horários serão carregados dinamicamente -->
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h4>Nenhum cinema associado</h4>
+                <p>Este filme ainda não está sendo exibido em nenhum cinema. Clique em "Adicionar Cinema" para associar cinemas a este filme.</p>
+                <button onclick="openAddCinemaModal()" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Adicionar Primeiro Cinema
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Avaliações -->
+        <div class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-star"></i> Avaliações</h3>
+                <div class="avaliacoes-stats">
+                    <span class="rating-medio">
+                        <i class="fas fa-star"></i> 
+                        <span id="rating-medio">{{ "%.1f"|format(filme.rating_medio or 0) }}</span>
+                    </span>
+                    <span class="total-avaliacoes">
+                        ({{ filme.total_avaliacoes or 0 }} avaliações)
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Avaliações Externas -->
+            <div class="avaliacoes-externas">
+                <h4><i class="fas fa-external-link-alt"></i> Links de Avaliações Externas</h4>
+                <div class="external-ratings-grid">
+                    <div class="info-group">
+                        <label>
+                            <i class="fas fa-tomato rating-icon-small"></i>
+                            URL do Rotten Tomatoes
+                        </label>
+                        <input type="url" id="rotten_tomatoes_url" value="{{ filme.rotten_tomatoes_url or '' }}" class="form-input" placeholder="https://www.rottentomatoes.com/m/...">
+                    </div>
+                    
+                    <div class="info-group">
+                        <label>
+                            <i class="fas fa-film rating-icon-small"></i>
+                            URL do IMDb
+                        </label>
+                        <input type="url" id="imdb_url" value="{{ filme.imdb_url or '' }}" class="form-input" placeholder="https://www.imdb.com/title/...">
+                    </div>
+                </div>
+            </div>
+            
+            {% if avaliacoes_recentes %}
+            <div class="avaliacoes-lista">
+                {% for avaliacao in avaliacoes_recentes %}
+                <div class="avaliacao-card">
+                    <div class="avaliacao-header">
+                        <div class="usuario-info">
+                            {% if avaliacao.usuario_avatar %}
+                                <img src="{{ url_for('static', filename=avaliacao.usuario_avatar) }}" alt="{{ avaliacao.usuario_nome }}" class="usuario-avatar">
+                            {% else %}
+                                <div class="usuario-avatar-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            {% endif %}
+                            <div class="usuario-detalhes">
+                                <h4>{{ avaliacao.usuario_nome }}</h4>
+                                <span class="data-avaliacao">{{ avaliacao.data_avaliacao.strftime('%d/%m/%Y') }}</span>
+                            </div>
+                        </div>
+                        <div class="rating-stars">
+                            {% for i in range(1, 6) %}
+                                <i class="fas fa-star {% if i <= avaliacao.rating %}active{% endif %}"></i>
+                            {% endfor %}
+                            <span class="rating-numero">{{ avaliacao.rating }}/5</span>
+                        </div>
+                        <div class="avaliacao-actions">
+                            <button onclick="removerAvaliacao({{ avaliacao.id }})" class="btn-remove-avaliacao" title="Remover avaliação">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% if avaliacao.comentario %}
+                    <div class="avaliacao-comentario">
+                        <p>{{ avaliacao.comentario }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if filme.total_avaliacoes > 5 %}
+            <div class="ver-mais-avaliacoes">
+                <button onclick="verTodasAvaliacoes()" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Ver todas as {{ filme.total_avaliacoes }} avaliações
+                </button>
+            </div>
+            {% endif %}
+            
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <h4>Nenhuma avaliação ainda</h4>
+                <p>Este filme ainda não recebeu avaliações dos utilizadores.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Adicionar/Editar Ator -->
+<div id="actorModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="actorModalTitle">Adicionar Ator</h3>
+            <button onclick="closeActorModal()" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Pesquisar Ator</label>
+                <div class="actor-search-container">
+                    <input type="text" id="actorSearch" class="form-input" placeholder="Digite o nome do ator..." autocomplete="off">
+                    <div id="actorSearchResults" class="search-results"></div>
+                </div>
+                
+                <!-- Ator selecionado -->
+                <div id="selectedActorInfo" class="selected-actor" style="display: none;">
+                    <div class="selected-actor-card">
+                        <div class="selected-actor-photo">
+                            <img id="selectedActorPhoto" src="" alt="" class="actor-photo-small">
+                        </div>
+                        <div class="selected-actor-details">
+                            <h4 id="selectedActorName"></h4>
+                            <p id="selectedActorBio"></p>
+                        </div>
+                        <button type="button" onclick="clearActorSelection()" class="btn-clear-selection">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Select oculto para compatibilidade -->
+                <select id="actorSelect" class="form-select" style="display: none;">
+                    <option value="">Selecionar ator</option>
+                    {% for ator in todos_atores %}
+                        <option value="{{ ator.id }}">{{ ator.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Papel no Filme</label>
+                <input type="text" id="actorRole" class="form-input" placeholder="Ex: Protagonista, Vilão...">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeActorModal()" class="btn btn-secondary">Cancelar</button>
+            <button onclick="saveActor()" class="btn btn-primary">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Adicionar Cinema -->
+<div id="cinemaModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Adicionar Cinema</h3>
+            <button onclick="closeCinemaModal()" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Cinema</label>
+                <select id="cinemaSelect" class="form-select">
+                    <option value="">Selecionar cinema</option>
+                    {% for cinema in todos_cinemas %}
+                        <option value="{{ cinema.id }}">{{ cinema.nome }} - {{ cinema.regiao }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeCinemaModal()" class="btn btn-secondary">Cancelar</button>
+            <button onclick="addCinemaToMovie()" class="btn btn-primary">Adicionar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Adicionar Género -->
+<div id="generoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Adicionar Género</h3>
+            <button onclick="closeGeneroModal()" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Género</label>
+                <select id="generoSelect" class="form-select">
+                    <option value="">Selecionar género</option>
+                    {% for genero in todos_generos %}
+                        <option value="{{ genero.id }}">{{ genero.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeGeneroModal()" class="btn btn-secondary">Cancelar</button>
+            <button onclick="addGeneroToMovie()" class="btn btn-primary">Adicionar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Adicionar Tipo de Sessão -->
+<div id="tipoSessaoModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Adicionar Tipo de Sessão</h3>
+            <button onclick="closeTipoSessaoModal()" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Tipo de Sessão</label>
+                <select id="tipoSessaoSelect" class="form-select">
+                    <option value="">Carregando tipos disponíveis...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Sala</label>
+                <select id="salaTipoSessaoSelect" class="form-select">
+                    <option value="">Carregando salas...</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeTipoSessaoModal()" class="btn btn-secondary">Cancelar</button>
+            <button onclick="addTipoSessaoToMovie()" class="btn btn-primary">Adicionar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentActorId = null;
+
+// Salvar filme
+function salvarFilme() {
+    const data = {
+        titulo: document.getElementById('titulo').value,
+        diretor: document.getElementById('diretor').value,
+        duracao: document.getElementById('duracao').value,
+        data_lancamento: document.getElementById('data_lancamento').value,
+        idade_recomendada: document.getElementById('idade_recomendada').value,
+        estado: document.getElementById('estado').value,
+        trailer_url: document.getElementById('trailer_url').value,
+        sinopse: document.getElementById('sinopse').value,
+        rotten_tomatoes_url: document.getElementById('rotten_tomatoes_url').value,
+        imdb_url: document.getElementById('imdb_url').value
+    };
+    
+    fetch(`/admin/filmes/{{ filme.id }}/editar`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Filme atualizado com sucesso!', 'success');
+        } else {
+            showNotification('Erro ao atualizar filme: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro ao salvar: ' + error.message, 'error');
+    });
+}
+
+// Upload de poster
+document.getElementById('posterInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('poster', file);
+        
+        fetch(`/admin/filmes/{{ filme.id }}/upload-poster`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('posterImage').src = data.poster_url;
+                showNotification('Poster atualizado com sucesso!', 'success');
+            } else {
+                showNotification('Erro ao fazer upload: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Erro no upload: ' + error.message, 'error');
+        });
+    }
+});
+
+// Funções dos atores
+function openAddActorModal() {
+    currentActorId = null;
+    document.getElementById('actorModalTitle').textContent = 'Adicionar Ator';
+    document.getElementById('actorSelect').value = '';
+    document.getElementById('actorRole').value = '';
+    document.getElementById('actorModal').style.display = 'flex';
+}
+
+function editActor(actorId, actorName, actorRole) {
+    currentActorId = actorId;
+    document.getElementById('actorModalTitle').textContent = 'Editar Ator';
+    document.getElementById('actorSelect').value = actorId;
+    document.getElementById('actorRole').value = actorRole;
+    document.getElementById('actorModal').style.display = 'flex';
+}
+
+function closeActorModal() {
+    document.getElementById('actorModal').style.display = 'none';
+}
+
+function saveActor() {
+    const actorId = document.getElementById('actorSelect').value;
+    const role = document.getElementById('actorRole').value;
+    
+    if (!actorId) {
+        showNotification('Selecione um ator', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('ator_id', actorId);
+    formData.append('papel', role);
+    
+    const url = currentActorId ? 
+        `/admin/filmes/{{ filme.id }}/editar-papel-ator` : 
+        `/admin/filmes/{{ filme.id }}/adicionar-ator`;
+    
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(currentActorId ? 'Ator atualizado!' : 'Ator adicionado!', 'success');
+            closeActorModal();
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification('Erro: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro: ' + error.message, 'error');
+    });
+}
+
+function removeActor(actorId) {
+    if (confirm('Tem certeza que deseja remover este ator do filme?')) {
+        fetch(`/admin/filmes/{{ filme.id }}/remover-ator/${actorId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Ator removido!', 'success');
+                document.querySelector(`[data-ator-id="${actorId}"]`).remove();
+            } else {
+                showNotification('Erro: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Erro: ' + error.message, 'error');
+        });
+    }
+}
+
+// Funções dos cinemas
+function openAddCinemaModal() {
+    document.getElementById('cinemaSelect').value = '';
+    document.getElementById('cinemaModal').style.display = 'flex';
+}
+
+function closeCinemaModal() {
+    document.getElementById('cinemaModal').style.display = 'none';
+}
+
+function addCinemaToMovie() {
+    const cinemaId = document.getElementById('cinemaSelect').value;
+    
+    if (!cinemaId) {
+        showNotification('Selecione um cinema', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('cinema_id', cinemaId);
+    
+    fetch(`/admin/filmes/{{ filme.id }}/adicionar-cinema`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Cinema adicionado!', 'success');
+            closeCinemaModal();
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification('Erro: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro: ' + error.message, 'error');
+    });
+}
+
+function removeCinemaFromMovie(cinemaId) {
+    console.log('removeCinemaFromMovie chamada com cinemaId:', cinemaId);
+    
+    if (confirm('⚠️ ATENÇÃO: Isto irá remover o cinema e TODOS os horários e reservas associados.\n\nTem certeza que deseja continuar?')) {
+        console.log('Enviando requisição para remover cinema...');
+        
+        fetch(`/admin/filmes/{{ filme.id }}/remover-cinema/${cinemaId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                showNotification('Cinema removido com sucesso!', 'success');
+                
+                // Procurar e remover o elemento do cinema
+                const cinemaElement = document.querySelector(`[data-cinema-id="${cinemaId}"]`);
+                console.log('Elemento encontrado:', cinemaElement);
+                
+                if (cinemaElement) {
+                    cinemaElement.remove();
+                    console.log('Elemento removido com sucesso');
+                } else {
+                    console.error('Elemento com data-cinema-id não encontrado:', cinemaId);
+                    // Fallback: recarregar a página
+                    setTimeout(() => location.reload(), 1000);
+                }
+            } else {
+                showNotification('Erro: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+            showNotification('Erro: ' + error.message, 'error');
+        });
+    }
+}
+
+// Funções dos géneros
+function openAddGeneroModal() {
+    document.getElementById('generoSelect').value = '';
+    document.getElementById('generoModal').style.display = 'flex';
+}
+
+function closeGeneroModal() {
+    document.getElementById('generoModal').style.display = 'none';
+}
+
+function addGeneroToMovie() {
+    const generoId = document.getElementById('generoSelect').value;
+    
+    if (!generoId) {
+        showNotification('Selecione um género', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('genero_id', generoId);
+    
+    fetch(`/admin/filmes/{{ filme.id }}/adicionar-genero`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Género adicionado!', 'success');
+            closeGeneroModal();
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification('Erro: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro: ' + error.message, 'error');
+    });
+}
+
+function removeGeneroFromMovie(generoId, generoNome) {
+    if (confirm(`Tem certeza que deseja remover o género "${generoNome}" do filme?`)) {
+        fetch(`/admin/filmes/{{ filme.id }}/remover-genero/${generoId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Género removido com sucesso!', 'success');
+                
+                // Remover o elemento do género da interface
+                const generoElement = document.querySelector(`[data-genero-id="${generoId}"]`);
+                if (generoElement) {
+                    generoElement.remove();
+                    
+                    // Verificar se não há mais géneros
+                    if (document.querySelectorAll('.genero-tag').length === 0) {
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                } else {
+                    setTimeout(() => location.reload(), 1000);
+                }
+            } else {
+                showNotification('Erro: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Erro: ' + error.message, 'error');
+        });
+    }
+}
+
+// Variáveis globais para controle de sessões
+let cinemaAtual = null;
+let tipoSessaoAtual = null;
+let horarioSelecionado = null;
+let cinemaParaTipoSessao = null; // Para controlar qual cinema está sendo editado
+
+// Funções dos tipos de sessão
+function adicionarTipoSessao(cinemaId) {
+    cinemaParaTipoSessao = cinemaId;
+    document.getElementById('tipoSessaoSelect').innerHTML = '<option value="">Carregando tipos disponíveis...</option>';
+    document.getElementById('salaTipoSessaoSelect').innerHTML = '<option value="">Carregando salas...</option>';
+    document.getElementById('tipoSessaoModal').style.display = 'flex';
+    
+    // Carregar tipos de sessão disponíveis (que não estão visíveis para este cinema)
+    fetch(`/admin/filmes/{{ filme.id }}/cinema/${cinemaId}/tipos-sessao-disponiveis`)
+        .then(response => response.json())
+        .then(data => {
+            const tipoSelect = document.getElementById('tipoSessaoSelect');
+            tipoSelect.innerHTML = '<option value="">Selecionar tipo de sessão</option>';
+            
+            if (data.success && data.tipos && data.tipos.length > 0) {
+                data.tipos.forEach(tipo => {
+                    const option = document.createElement('option');
+                    option.value = tipo.id;
+                    option.textContent = tipo.nome;
+                    tipoSelect.appendChild(option);
+                });
+            } else {
+                tipoSelect.innerHTML = '<option value="">Todos os tipos já estão visíveis</option>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar tipos de sessão:', error);
+            document.getElementById('tipoSessaoSelect').innerHTML = '<option value="">Erro ao carregar tipos</option>';
+        });
+    
+    // Carregar salas disponíveis para este cinema
+    fetch(`/admin/filmes/{{ filme.id }}/cinema/${cinemaId}/salas`)
+        .then(response => response.json())
+        .then(data => {
+            const salaSelect = document.getElementById('salaTipoSessaoSelect');
+            salaSelect.innerHTML = '<option value="">Selecionar sala</option>';
+            
+            if (data.success && data.salas) {
+                // Filtrar salas duplicadas baseado no nome
+                const salasUnicas = [];
+                const nomesVistos = new Set();
+                
+                data.salas.forEach(sala => {
+                    if (!nomesVistos.has(sala.nome_sala)) {
+                        nomesVistos.add(sala.nome_sala);
+                        salasUnicas.push(sala);
+                    }
+                });
+                
+                salasUnicas.forEach(sala => {
+                    const option = document.createElement('option');
+                    option.value = sala.id;
+                    option.textContent = `${sala.nome_sala} (Cap: ${sala.capacidade})`;
+                    salaSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar salas:', error);
+            document.getElementById('salaTipoSessaoSelect').innerHTML = '<option value="">Erro ao carregar salas</option>';
+        });
+}
+
+function closeTipoSessaoModal() {
+    document.getElementById('tipoSessaoModal').style.display = 'none';
+    cinemaParaTipoSessao = null;
+}
+
+function addTipoSessaoToMovie() {
+    const tipoSessaoId = document.getElementById('tipoSessaoSelect').value;
+    const salaId = document.getElementById('salaTipoSessaoSelect').value;
+    
+    if (!tipoSessaoId) {
+        showNotification('Selecione um tipo de sessão', 'error');
+        return;
+    }
+    
+    if (!salaId) {
+        showNotification('Selecione uma sala', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('filme_id', {{ filme.id }});
+    formData.append('cinema_id', cinemaParaTipoSessao);
+    formData.append('tipo_sessao_id', tipoSessaoId);
+    formData.append('sala_id', salaId);
+    
+    fetch('/admin/adicionar-tipo-sessao-cinema', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Tipo de sessão adicionado com sucesso!', 'success');
+            closeTipoSessaoModal();
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification('Erro: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro: ' + error.message, 'error');
+    });
+}
+
+// Mostrar horários para um tipo de sessão específico (igual ao filme_detalhe)
+function mostrarHorarios(cinemaId, tipoId, tipoNome) {
+    const botaoClicado = event.target;
+    const grupoSessao = document.getElementById(`sessao-${cinemaId}-${tipoId}`);
+    
+    // Verificar se o botão já está ativo (toggle)
+    if (botaoClicado.classList.contains('active')) {
+        // Desativar
+        botaoClicado.classList.remove('active');
+        grupoSessao.classList.add('hidden');
+        
+        // Resetar estado
+        cinemaAtual = null;
+        tipoSessaoAtual = null;
+        horarioSelecionado = null;
+        return;
+    }
+    
+    // Esconder todos os grupos de sessão deste cinema
+    document.querySelectorAll(`[data-cinema="${cinemaId}"]`).forEach(grupo => {
+        if (grupo.classList.contains('sessao-grupo')) {
+            grupo.classList.add('hidden');
+        }
+    });
+    
+    // Remover active de todos os botões deste cinema
+    document.querySelectorAll(`[data-cinema="${cinemaId}"].btn-sessao`).forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Ativar botão clicado
+    botaoClicado.classList.add('active');
+    
+    // Mostrar grupo de sessão
+    if (grupoSessao) {
+        grupoSessao.classList.remove('hidden');
+        carregarHorarios(cinemaId, tipoId);
+    }
+    
+    cinemaAtual = cinemaId;
+    tipoSessaoAtual = tipoId;
+}
+
+// Carregar horários para cinema e tipo de sessão específicos
+function carregarHorarios(cinemaId, tipoId) {
+    const container = document.getElementById(`horarios-${cinemaId}-${tipoId}`);
+    const salaAtualSpan = document.getElementById(`sala-atual-${cinemaId}-${tipoId}`);
+    
+    // Mostrar loading
+    container.innerHTML = '<div class="loading-horarios"><i class="fas fa-spinner fa-spin"></i> Carregando horários...</div>';
+    if (salaAtualSpan) {
+        salaAtualSpan.textContent = 'Carregando...';
+    }
+    
+    // Buscar horários via API
+    fetch(`/admin/filmes/{{ filme.id }}/cinema/${cinemaId}/tipo/${tipoId}/horarios`)
+        .then(response => response.json())
+        .then(data => {
+            container.innerHTML = '';
+            
+            if (data.success && data.horarios.length > 0) {
+                // Agrupar por horário
+                const horariosPorHora = {};
+                let salaTipoSessao = null;
+                
+                data.horarios.forEach(h => {
+                    if (!horariosPorHora[h.hora]) {
+                        horariosPorHora[h.hora] = [];
+                    }
+                    horariosPorHora[h.hora].push(h);
+                    
+                    // Pegar a sala do tipo de sessão (deve ser a mesma para todos)
+                    if (!salaTipoSessao && h.nome_sala) {
+                        salaTipoSessao = h.nome_sala;
+                    }
+                });
+                
+                // Atualizar informação da sala do tipo de sessão
+                if (salaAtualSpan) {
+                    salaAtualSpan.textContent = salaTipoSessao || 'Nenhuma sala definida';
+                }
+                
+                // Criar botões de horário simples (sem edição individual de sala)
+                Object.keys(horariosPorHora).sort().forEach(hora => {
+                    const sessoes = horariosPorHora[hora];
+                    
+                    // Container para horário + botões de ação
+                    const horarioContainer = document.createElement('div');
+                    horarioContainer.className = 'horario-container';
+                    
+                    // Botão principal do horário
+                    const horarioBtn = document.createElement('button');
+                    horarioBtn.className = 'hora-btn';
+                    horarioBtn.textContent = hora;
+                    horarioBtn.onclick = () => selecionarHorario(sessoes[0], horarioBtn);
+                    
+                    // Container para os botões de ação
+                    const acoesContainer = document.createElement('div');
+                    acoesContainer.className = 'acoes-horario-container';
+                    
+                    // Botão de editar horário (apenas hora)
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'btn-edit-horario';
+                    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                    editBtn.title = 'Editar horário';
+                    editBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        editarHorarioSimples(sessoes[0], cinemaId, tipoId);
+                    };
+                    
+                    // Botão de remover horário
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn-delete-horario';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.title = 'Remover horário';
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        removerHorario(sessoes, cinemaId, tipoId);
+                    };
+                    
+                    acoesContainer.appendChild(editBtn);
+                    acoesContainer.appendChild(deleteBtn);
+                    
+                    // Adicionar elementos ao container
+                    horarioContainer.appendChild(horarioBtn);
+                    horarioContainer.appendChild(acoesContainer);
+                    
+                    container.appendChild(horarioContainer);
+                });
+                
+                // Botão para adicionar novo horário
+                const addHorarioBtn = document.createElement('button');
+                addHorarioBtn.className = 'btn-add-horario';
+                addHorarioBtn.innerHTML = '<i class="fas fa-plus"></i> Novo Horário';
+                addHorarioBtn.onclick = () => adicionarHorario(cinemaId, tipoId);
+                container.appendChild(addHorarioBtn);
+                
+            } else {
+                container.innerHTML = '<p class="no-horarios">Nenhum horário disponível para este tipo de sessão.</p>';
+                
+                // Atualizar informação da sala
+                if (salaAtualSpan) {
+                    salaAtualSpan.textContent = 'Nenhuma sala definida';
+                }
+                
+                // Botão para adicionar primeiro horário
+                const addFirstHorarioBtn = document.createElement('button');
+                addFirstHorarioBtn.className = 'btn-add-horario';
+                addFirstHorarioBtn.innerHTML = '<i class="fas fa-plus"></i> Adicionar Primeiro Horário';
+                addFirstHorarioBtn.onclick = () => adicionarHorario(cinemaId, tipoId);
+                container.appendChild(addFirstHorarioBtn);
+            }
+        })
+        .catch(error => {
+            container.innerHTML = '<p class="error-horarios">Erro ao carregar horários. Tente novamente.</p>';
+            console.error('Erro ao carregar horários:', error);
+        });
+}
+
+// Selecionar um horário específico
+function selecionarHorario(horario, botao) {
+    // Remover seleção anterior
+    document.querySelectorAll('.hora-btn').forEach(btn => btn.classList.remove('selected'));
+    
+    // Selecionar novo horário
+    botao.classList.add('selected');
+    horarioSelecionado = horario;
+    
+    showNotification(`Horário ${horario.hora} selecionado para ${horario.nome_sala}`, 'info');
+}
+
+// Editar sala para todo o tipo de sessão
+function editarSalaTipoSessao(cinemaId, tipoId, tipoNome) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Alterar Sala para ${tipoNome}</h3>
+                <button onclick="this.closest('.modal-overlay').remove()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Esta ação irá alterar a sala para TODOS os horários deste tipo de sessão.</p>
+                <div class="form-group">
+                    <label>Nova Sala</label>
+                    <select id="novaSalaTipo" class="form-select">
+                        <option value="">Carregando salas...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="this.closest('.modal-overlay').remove()" class="btn btn-secondary">Cancelar</button>
+                <button onclick="salvarSalaTipoSessao(${cinemaId}, ${tipoId})" class="btn btn-primary">Alterar Todas</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Carregar salas disponíveis
+    fetch(`/admin/filmes/{{ filme.id }}/cinema/${cinemaId}/salas`)
+        .then(response => response.json())
+        .then(data => {
+            const salaSelect = document.getElementById('novaSalaTipo');
+            salaSelect.innerHTML = '<option value="">Selecionar sala</option>';
+            
+            if (data.success && data.salas) {
+                // Filtrar salas duplicadas baseado no nome
+                const salasUnicas = [];
+                const nomesVistos = new Set();
+                
+                data.salas.forEach(sala => {
+                    if (!nomesVistos.has(sala.nome_sala)) {
+                        nomesVistos.add(sala.nome_sala);
+                        salasUnicas.push(sala);
+                    }
+                });
+                
+                salasUnicas.forEach(sala => {
+                    const option = document.createElement('option');
+                    option.value = sala.id;
+                    option.textContent = `${sala.nome_sala} (Cap: ${sala.capacidade})`;
+                    salaSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar salas:', error);
+            document.getElementById('novaSalaTipo').innerHTML = '<option value="">Erro ao carregar salas</option>';
+        });
+}
+
+// Salvar nova sala para todo o tipo de sessão
+function salvarSalaTipoSessao(cinemaId, tipoId) {
+    const salaId = document.getElementById('novaSalaTipo').value;
+    
+    if (!salaId) {
+        showNotification('Selecione uma sala', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('filme_id', {{ filme.id }});
+    formData.append('cinema_id', cinemaId);
+    formData.append('tipo_sessao_id', tipoId);
+    formData.append('sala_id', salaId);
+    
+    fetch('/admin/tipo-sessao/alterar-sala', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Sala alterada para todos os horários!', 'success');
+            document.querySelector('.modal-overlay').remove();
+            carregarHorarios(cinemaId, tipoId);
+        } else {
+            showNotification('Erro ao alterar sala: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro ao salvar: ' + error.message, 'error');
+    });
+}
+
+// Editar horário simples (apenas hora)
+function editarHorarioSimples(horario, cinemaId, tipoId) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Horário</h3>
+                <button onclick="this.closest('.modal-overlay').remove()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Selecionar Horário</label>
+                    <select id="editHorarioSelect" class="form-select">
+                        <option value="">Carregando horários...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="editNovoHorarioCheck" onchange="toggleEditNovoHorario()"> 
+                        Criar novo horário
+                    </label>
+                </div>
+                <div class="form-group" id="editNovoHorarioGroup" style="display: none;">
+                    <label>Novo Horário</label>
+                    <input type="text" id="editHoraSimples" value="${horario.hora}" class="form-input horario-input" placeholder="16:30" maxlength="5">
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 5px;">
+                        <i class="fas fa-info-circle"></i> Digite no formato HH:MM (ex: 16:30, 09:15).
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="this.closest('.modal-overlay').remove()" class="btn btn-secondary">Cancelar</button>
+                <button onclick="salvarEdicaoHorarioSimples(${horario.sessao_id}, ${cinemaId}, ${tipoId})" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Carregar horários disponíveis
+    fetch('/admin/horarios/disponiveis')
+        .then(response => response.json())
+        .then(data => {
+            const horarioSelect = document.getElementById('editHorarioSelect');
+            horarioSelect.innerHTML = '<option value="">Selecionar horário existente</option>';
+            
+            if (data.success && data.horarios) {
+                let horarioAtualEncontrado = false;
+                
+                data.horarios.forEach(h => {
+                    const option = document.createElement('option');
+                    option.value = h.id;
+                    option.textContent = h.display;
+                    
+                    // Selecionar o horário atual se encontrado
+                    if (h.display === horario.hora) {
+                        option.selected = true;
+                        horarioAtualEncontrado = true;
+                    }
+                    
+                    horarioSelect.appendChild(option);
+                });
+                
+                // Se o horário atual não foi encontrado na lista, mostrar aviso
+                if (!horarioAtualEncontrado) {
+                    const optionAtual = document.createElement('option');
+                    optionAtual.value = 'atual';
+                    optionAtual.textContent = `${horario.hora} (atual)`;
+                    optionAtual.selected = true;
+                    horarioSelect.insertBefore(optionAtual, horarioSelect.children[1]);
+                }
+            } else {
+                horarioSelect.innerHTML = '<option value="">Erro ao carregar horários</option>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar horários:', error);
+            document.getElementById('editHorarioSelect').innerHTML = '<option value="">Erro ao carregar horários</option>';
+        });
+    
+    // Configurar validação do horário quando criar novo
+    setTimeout(() => {
+        const horarioInput = document.getElementById('editHoraSimples');
+        if (horarioInput) {
+            configurarInputHorario(horarioInput);
+        }
+    }, 100);
+}
+
+// Função para alternar entre seleção de horário existente e criação de novo (edição)
+function toggleEditNovoHorario() {
+    const checkbox = document.getElementById('editNovoHorarioCheck');
+    const novoHorarioGroup = document.getElementById('editNovoHorarioGroup');
+    const horarioSelect = document.getElementById('editHorarioSelect');
+    
+    if (checkbox.checked) {
+        novoHorarioGroup.style.display = 'block';
+        horarioSelect.disabled = true;
+        horarioSelect.value = '';
+    } else {
+        novoHorarioGroup.style.display = 'none';
+        horarioSelect.disabled = false;
+        document.getElementById('editHoraSimples').value = '';
+    }
+}
+
+// Salvar edição de horário simples
+function salvarEdicaoHorarioSimples(sessaoId, cinemaId, tipoId) {
+    const editNovoHorarioCheck = document.getElementById('editNovoHorarioCheck');
+    const editHorarioSelect = document.getElementById('editHorarioSelect');
+    const editHoraSimples = document.getElementById('editHoraSimples');
+    
+    let horarioId = null;
+    let hora = null;
+    
+    // Verificar se está criando novo horário ou selecionando existente
+    if (editNovoHorarioCheck.checked) {
+        // Criar novo horário
+        hora = editHoraSimples.value.trim();
+        
+        if (!hora) {
+            showNotification('Preencha o horário', 'error');
+            return;
+        }
+        
+        // Validar formato HH:MM
+        const timeRegex = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/;
+        if (!timeRegex.test(hora)) {
+            showNotification('Formato de horário inválido. Use HH:MM (ex: 16:30)', 'error');
+            return;
+        }
+        
+        console.log('Editando para novo horário:', hora);
+    } else {
+        // Selecionar horário existente
+        const selectedValue = editHorarioSelect.value;
+        
+        if (!selectedValue) {
+            showNotification('Selecione um horário ou marque "Criar novo horário"', 'error');
+            return;
+        }
+        
+        if (selectedValue === 'atual') {
+            // Manter horário atual - não fazer nada
+            showNotification('Horário mantido sem alterações', 'info');
+            document.querySelector('.modal-overlay').remove();
+            return;
+        }
+        
+        horarioId = selectedValue;
+        console.log('Editando para horário existente ID:', horarioId);
+    }
+    
+    const formData = new FormData();
+    
+    // Adicionar horario_id ou hora dependendo da seleção
+    if (horarioId) {
+        formData.append('horario_id', horarioId);
+    } else {
+        formData.append('hora', hora);
+    }
+    
+    // Log dos dados enviados
+    for (let [key, value] of formData.entries()) {
+        console.log(`FormData: ${key} = ${value}`);
+    }
+    
+    fetch(`/admin/horarios/${sessaoId}/editar-simples`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Horário atualizado com sucesso!', 'success');
+            document.querySelector('.modal-overlay').remove();
+            carregarHorarios(cinemaId, tipoId);
+        } else {
+            showNotification('Erro ao atualizar horário: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro ao salvar: ' + error.message, 'error');
+    });
+}
+
+// Remover horário (todas as sessões desse horário)
+function removerHorario(sessoes, cinemaId, tipoId) {
+    if (confirm(`Tem certeza que deseja remover o horário ${sessoes[0].hora}?`)) {
+        const sessaoIds = sessoes.map(s => s.sessao_id);
+        
+        const formData = new FormData();
+        formData.append('sessao_ids', JSON.stringify(sessaoIds));
+        
+        fetch('/admin/horarios/remover-multiplos-sessoes', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Horário removido com sucesso!', 'success');
+                carregarHorarios(cinemaId, tipoId);
+            } else {
+                showNotification('Erro: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Erro: ' + error.message, 'error');
+        });
+    }
+}
+
+// Salvar edição de horário
+function salvarEdicaoHorario(sessaoId, cinemaId, tipoId) {
+    const hora = document.getElementById('editHora').value;
+    const salaId = document.getElementById('editSala').value;
+    
+    if (!hora || !salaId) {
+        showNotification('Preencha todos os campos obrigatórios', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('hora', hora);
+    formData.append('sala_id', salaId);
+    
+    fetch(`/admin/horarios/${sessaoId}/editar`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Sessão atualizada com sucesso!', 'success');
+            document.querySelector('.modal-overlay').remove();
+            carregarHorarios(cinemaId, tipoId);
+        } else {
+            showNotification('Erro ao atualizar sessão: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro ao salvar: ' + error.message, 'error');
+    });
+}
+
+// Remover sessão específica
+function removerSessao(sessaoId, cinemaId, tipoId) {
+    console.log('removerSessao chamada com:', { sessaoId, cinemaId, tipoId });
+    
+    if (confirm('Tem certeza que deseja remover esta sessão?')) {
+        fetch(`/admin/sessoes/${sessaoId}/remover`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                showNotification('Sessão removida com sucesso!', 'success');
+                carregarHorarios(cinemaId, tipoId);
+            } else {
+                showNotification('Erro: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+            showNotification('Erro: ' + error.message, 'error');
+        });
+    }
+}
+
+// Função para configurar validação de input de horário
+function configurarInputHorario(input) {
+    // Event listener para formatação durante a digitação
+    input.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/[^\d:]/g, ''); // Remove tudo exceto números e :
+        
+        // Auto-formatação: adiciona : após 2 dígitos
+        if (value.length === 2 && !value.includes(':')) {
+            value = value + ':';
+        }
+        
+        // Limita o formato HH:MM
+        if (value.length > 5) {
+            value = value.substring(0, 5);
+        }
+        
+        e.target.value = value;
+        
+        // Remove borda de erro se estava presente
+        e.target.style.borderColor = '#333';
+    });
+    
+    // Event listener para validação quando perde o foco
+    input.addEventListener('blur', function(e) {
+        let value = e.target.value.trim();
+        
+        if (value) {
+            // Tenta completar formato incompleto
+            if (value.length === 1) {
+                value = '0' + value + ':00';
+            } else if (value.length === 2) {
+                value = value + ':00';
+            } else if (value.length === 4 && value.includes(':')) {
+                const parts = value.split(':');
+                if (parts[1].length === 1) {
+                    value = parts[0] + ':' + parts[1] + '0';
+                }
+            }
+            
+            // Valida formato HH:MM
+            const timeRegex = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/;
+            if (timeRegex.test(value)) {
+                const parts = value.split(':');
+                const hours = parts[0].padStart(2, '0');
+                const minutes = parts[1].padStart(2, '0');
+                e.target.value = `${hours}:${minutes}`;
+                e.target.style.borderColor = '#ffd700';
+                console.log('Horário válido formatado:', e.target.value);
+            } else {
+                e.target.style.borderColor = '#e74c3c';
+                console.log('Horário inválido:', value);
+            }
+        }
+    });
+    
+    // Event listener para permitir apenas números e :
+    input.addEventListener('keypress', function(e) {
+        const char = String.fromCharCode(e.which);
+        if (!/[\d:]/.test(char)) {
+            e.preventDefault();
+        }
+    });
+    
+    // Event listener para Enter submeter o formulário
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const botaoAdicionar = document.querySelector('.modal-footer .btn-primary');
+            if (botaoAdicionar && !botaoAdicionar.disabled) {
+                botaoAdicionar.click();
+            }
+        }
+    });
+    
+    // Foco inicial
+    setTimeout(() => {
+        input.focus();
+        input.select();
+    }, 100);
+}
+
+// Adicionar novo horário
+function adicionarHorario(cinemaId, tipoId) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar Horário</h3>
+                <button onclick="this.closest('.modal-overlay').remove()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Selecionar Horário</label>
+                    <select id="horarioSelect" class="form-select">
+                        <option value="">Carregando horários...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="novoHorarioCheck" onchange="toggleNovoHorario()"> 
+                        Criar novo horário
+                    </label>
+                </div>
+                <div class="form-group" id="novoHorarioGroup" style="display: none;">
+                    <label>Novo Horário</label>
+                    <input type="text" id="newHora" class="form-input horario-input" placeholder="16:30" maxlength="5">
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 5px;">
+                        <i class="fas fa-info-circle"></i> Digite no formato HH:MM (ex: 16:30, 09:15).
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="this.closest('.modal-overlay').remove()" class="btn btn-secondary">Cancelar</button>
+                <button onclick="salvarNovoHorario(${cinemaId}, ${tipoId})" class="btn btn-primary">Adicionar</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Carregar horários disponíveis
+    fetch('/admin/horarios/disponiveis')
+        .then(response => response.json())
+        .then(data => {
+            const horarioSelect = document.getElementById('horarioSelect');
+            horarioSelect.innerHTML = '<option value="">Selecionar horário existente</option>';
+            
+            if (data.success && data.horarios) {
+                data.horarios.forEach(horario => {
+                    const option = document.createElement('option');
+                    option.value = horario.id;
+                    option.textContent = horario.display;
+                    horarioSelect.appendChild(option);
+                });
+            } else {
+                horarioSelect.innerHTML = '<option value="">Erro ao carregar horários</option>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar horários:', error);
+            document.getElementById('horarioSelect').innerHTML = '<option value="">Erro ao carregar horários</option>';
+        });
+    
+    // Configurar validação do horário quando criar novo
+    setTimeout(() => {
+        const horarioInput = document.getElementById('newHora');
+        if (horarioInput) {
+            configurarInputHorario(horarioInput);
+        }
+    }, 100);
+}
+
+// Função para alternar entre seleção de horário existente e criação de novo
+function toggleNovoHorario() {
+    const checkbox = document.getElementById('novoHorarioCheck');
+    const novoHorarioGroup = document.getElementById('novoHorarioGroup');
+    const horarioSelect = document.getElementById('horarioSelect');
+    
+    if (checkbox.checked) {
+        novoHorarioGroup.style.display = 'block';
+        horarioSelect.disabled = true;
+        horarioSelect.value = '';
+    } else {
+        novoHorarioGroup.style.display = 'none';
+        horarioSelect.disabled = false;
+        document.getElementById('newHora').value = '';
+    }
+}
+
+// Salvar novo horário
+function salvarNovoHorario(cinemaId, tipoId) {
+    console.log('salvarNovoHorario chamada com:', cinemaId, tipoId);
+    
+    const novoHorarioCheck = document.getElementById('novoHorarioCheck');
+    const horarioSelect = document.getElementById('horarioSelect');
+    const newHora = document.getElementById('newHora');
+    
+    let horarioId = null;
+    let hora = null;
+    
+    // Verificar se está criando novo horário ou selecionando existente
+    if (novoHorarioCheck.checked) {
+        // Criar novo horário
+        hora = newHora.value.trim();
+        
+        if (!hora) {
+            showNotification('Preencha o horário', 'error');
+            return;
+        }
+        
+        // Validar formato HH:MM
+        const timeRegex = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/;
+        if (!timeRegex.test(hora)) {
+            showNotification('Formato de horário inválido. Use HH:MM (ex: 16:30)', 'error');
+            return;
+        }
+        
+        console.log('Criando novo horário:', hora);
+    } else {
+        // Selecionar horário existente
+        horarioId = horarioSelect.value;
+        
+        if (!horarioId) {
+            showNotification('Selecione um horário ou marque "Criar novo horário"', 'error');
+            return;
+        }
+        
+        console.log('Usando horário existente ID:', horarioId);
+    }
+    
+    console.log('Validação passou, buscando sala do tipo de sessão...');
+    
+    // Primeiro, buscar a sala configurada para este tipo de sessão
+    fetch(`/admin/filmes/{{ filme.id }}/cinema/${cinemaId}/tipo/${tipoId}/sala`)
+        .then(response => response.json())
+        .then(salaData => {
+            console.log('Dados da sala:', salaData);
+            
+            if (!salaData.success || !salaData.sala_id) {
+                showNotification('Erro: Nenhuma sala configurada para este tipo de sessão', 'error');
+                return;
+            }
+            
+            console.log('Sala encontrada, enviando dados para API...');
+            
+            const formData = new FormData();
+            formData.append('filme_id', {{ filme.id }});
+            formData.append('cinema_id', cinemaId);
+            formData.append('tipo_sessao_id', tipoId);
+            formData.append('sala_id', salaData.sala_id);
+            
+            // Adicionar horario_id ou hora dependendo da seleção
+            if (horarioId) {
+                formData.append('horario_id', horarioId);
+            } else {
+                formData.append('hora', hora);
+            }
+            
+            // Log dos dados enviados
+            for (let [key, value] of formData.entries()) {
+                console.log(`FormData: ${key} = ${value}`);
+            }
+            
+            // Mostrar loading
+            const botaoAdicionar = document.querySelector('.modal-footer .btn-primary');
+            const textoOriginal = botaoAdicionar.innerHTML;
+            botaoAdicionar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adicionando...';
+            botaoAdicionar.disabled = true;
+            
+            return fetch('/admin/horarios/adicionar', {
+                method: 'POST',
+                body: formData
+            });
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            
+            // Restaurar botão
+            const botaoAdicionar = document.querySelector('.modal-footer .btn-primary');
+            if (botaoAdicionar) {
+                botaoAdicionar.innerHTML = 'Adicionar';
+                botaoAdicionar.disabled = false;
+            }
+            
+            if (data.success) {
+                showNotification('Horário adicionado com sucesso!', 'success');
+                document.querySelector('.modal-overlay').remove();
+                carregarHorarios(cinemaId, tipoId);
+            } else {
+                showNotification('Erro ao adicionar horário: ' + (data.message || 'Erro desconhecido'), 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+            
+            // Restaurar botão
+            const botaoAdicionar = document.querySelector('.modal-footer .btn-primary');
+            if (botaoAdicionar) {
+                botaoAdicionar.innerHTML = 'Adicionar';
+                botaoAdicionar.disabled = false;
+            }
+            
+            showNotification('Erro ao salvar: ' + error.message, 'error');
+        });
+}
+
+// Notificações
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}"></i>
+        ${message}
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Função para ver todas as avaliações
+function verTodasAvaliacoes() {
+    // Redirecionar para uma página de avaliações ou abrir modal
+    window.open(`/admin/filmes/{{ filme.id }}/avaliacoes`, '_blank');
+}
+
+// Função para remover avaliação
+function removerAvaliacao(avaliacaoId) {
+    if (confirm('Tem certeza que deseja remover esta avaliação?')) {
+        fetch(`/admin/avaliacoes/${avaliacaoId}/remover`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Avaliação removida com sucesso!', 'success');
+                // Recarregar a página para atualizar as avaliações
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showNotification('Erro ao remover avaliação: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Erro ao remover avaliação: ' + error.message, 'error');
+        });
+    }
+}
+
+// Remover tipo de sessão
+function removerTipoSessao(cinemaId, tipoId, tipoNome) {
+    if (confirm(`Tem certeza que deseja remover o tipo de sessão "${tipoNome}" deste cinema?`)) {
+        const formData = new FormData();
+        formData.append('filme_id', {{ filme.id }});
+        formData.append('cinema_id', cinemaId);
+        formData.append('tipo_sessao_id', tipoId);
+        
+        fetch('/admin/remover-tipo-sessao-cinema', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Tipo de sessão removido com sucesso!', 'success');
+                
+                // Encontrar o container do cinema correto
+                const cinemaContainer = document.querySelector(`[data-cinema-id="${cinemaId}"]`);
+                if (cinemaContainer) {
+                    // Encontrar o botão de sessão específico dentro deste cinema
+                    const btnSessao = cinemaContainer.querySelector(`.btn-sessao[data-tipo="${tipoId}"]`);
+                    if (btnSessao) {
+                        // Remover o container pai (tipo-sessao-container)
+                        const tipoContainer = btnSessao.closest('.tipo-sessao-container');
+                        if (tipoContainer) {
+                            tipoContainer.remove();
+                            console.log(`Removido container do tipo ${tipoNome} do cinema ${cinemaId}`);
+                        }
+                    }
+                    
+                    // Remover também o grupo de sessão se estiver visível
+                    const grupoSessao = document.getElementById(`sessao-${cinemaId}-${tipoId}`);
+                    if (grupoSessao) {
+                        grupoSessao.remove();
+                        console.log(`Removido grupo de sessão ${cinemaId}-${tipoId}`);
+                    }
+                    
+                    // Verificar se não há mais tipos de sessão para este cinema
+                    const botoesSessao = cinemaContainer.querySelector('.botoes-sessao');
+                    if (botoesSessao) {
+                        const tiposRestantes = botoesSessao.querySelectorAll('.tipo-sessao-container');
+                        if (tiposRestantes.length === 0) {
+                            // Se não há mais tipos, mostrar mensagem
+                            const btnAdicionar = botoesSessao.querySelector('.btn-adicionar-tipo-sessao');
+                            botoesSessao.innerHTML = '<p class="no-tipos-sessao">Nenhum tipo de sessão disponível para este cinema.</p>';
+                            // Manter o botão de adicionar
+                            if (btnAdicionar) {
+                                botoesSessao.appendChild(btnAdicionar);
+                            }
+                        }
+                    }
+                } else {
+                    console.error(`Container do cinema ${cinemaId} não encontrado`);
+                }
+            } else {
+                showNotification('Erro: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+            showNotification('Erro: ' + error.message, 'error');
+        });
+    }
+}
+
+// ===== FUNÇÕES DE PESQUISA DE ATORES =====
+
+let searchTimeout = null;
+let selectedActorId = null;
+
+// Função para pesquisar atores
+function searchActors() {
+    const query = document.getElementById('actorSearch').value.trim();
+    
+    if (query.length < 2) {
+        hideSearchResults();
+        return;
+    }
+    
+    // Mostrar loading
+    const resultsContainer = document.getElementById('actorSearchResults');
+    resultsContainer.innerHTML = '<div class="search-loading"><i class="fas fa-spinner fa-spin"></i> Pesquisando...</div>';
+    resultsContainer.style.display = 'block';
+    
+    fetch(`/admin/atores/pesquisar?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.atores) {
+                displayActorResults(data.atores);
+            } else {
+                resultsContainer.innerHTML = '<div class="no-results">Nenhum ator encontrado</div>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro na pesquisa:', error);
+            resultsContainer.innerHTML = '<div class="search-error">Erro na pesquisa</div>';
+        });
+}
+
+// Função para exibir resultados da pesquisa
+function displayActorResults(atores) {
+    const resultsContainer = document.getElementById('actorSearchResults');
+    
+    if (atores.length === 0) {
+        resultsContainer.innerHTML = '<div class="no-results">Nenhum ator encontrado</div>';
+        return;
+    }
+    
+    let html = '';
+    atores.forEach(ator => {
+        const fotoUrl = ator.foto_url ? `/static/${ator.foto_url}` : '/static/imgs/icons/user_icon34-removebg-preview.png';
+        html += `
+            <div class="search-result-item" onclick="selectActor(${ator.id}, '${ator.nome.replace(/'/g, "\\'")}', '${ator.nacionalidade || ''}', '${fotoUrl}')">
+                <div class="result-photo">
+                    <img src="${fotoUrl}" alt="${ator.nome}" onerror="this.src='/static/imgs/icons/user_icon34-removebg-preview.png'">
+                </div>
+                <div class="result-info">
+                    <h4>${ator.nome}</h4>
+                    ${ator.nacionalidade ? `<p>${ator.nacionalidade}</p>` : ''}
+                </div>
+            </div>
+        `;
+    });
+    
+    resultsContainer.innerHTML = html;
+    resultsContainer.style.display = 'block';
+}
+
+// Função para selecionar um ator
+function selectActor(actorId, actorName, nationality, photoUrl) {
+    console.log('selectActor chamada:', { actorId, actorName, nationality, photoUrl });
+    
+    selectedActorId = actorId;
+    
+    // Atualizar o select oculto para compatibilidade
+    document.getElementById('actorSelect').value = actorId;
+    
+    // Limpar campo de pesquisa
+    document.getElementById('actorSearch').value = actorName;
+    
+    // Mostrar informações do ator selecionado
+    const selectedInfo = document.getElementById('selectedActorInfo');
+    const selectedPhoto = document.getElementById('selectedActorPhoto');
+    const selectedName = document.getElementById('selectedActorName');
+    const selectedBio = document.getElementById('selectedActorBio');
+    
+    selectedPhoto.src = photoUrl;
+    selectedPhoto.alt = actorName;
+    selectedName.textContent = actorName;
+    selectedBio.textContent = nationality || 'Nacionalidade não informada';
+    
+    selectedInfo.style.display = 'block';
+    
+    // Esconder resultados da pesquisa
+    hideSearchResults();
+    
+    console.log('Ator selecionado:', actorName);
+}
+
+// Função para limpar seleção de ator
+function clearActorSelection() {
+    selectedActorId = null;
+    document.getElementById('actorSelect').value = '';
+    document.getElementById('actorSearch').value = '';
+    document.getElementById('selectedActorInfo').style.display = 'none';
+    hideSearchResults();
+}
+
+// Função para esconder resultados da pesquisa
+function hideSearchResults() {
+    const resultsContainer = document.getElementById('actorSearchResults');
+    resultsContainer.style.display = 'none';
+    resultsContainer.innerHTML = '';
+}
+
+// Atualizar as funções existentes de atores para trabalhar com a nova interface
+function openAddActorModal() {
+    currentActorId = null;
+    selectedActorId = null;
+    document.getElementById('actorModalTitle').textContent = 'Adicionar Ator';
+    document.getElementById('actorSelect').value = '';
+    document.getElementById('actorRole').value = '';
+    document.getElementById('actorSearch').value = '';
+    document.getElementById('selectedActorInfo').style.display = 'none';
+    hideSearchResults();
+    document.getElementById('actorModal').style.display = 'flex';
+    
+    // Focar no campo de pesquisa
+    setTimeout(() => {
+        document.getElementById('actorSearch').focus();
+    }, 100);
+}
+
+function editActor(actorId, actorName, actorRole) {
+    currentActorId = actorId;
+    selectedActorId = actorId;
+    document.getElementById('actorModalTitle').textContent = 'Editar Ator';
+    document.getElementById('actorSelect').value = actorId;
+    document.getElementById('actorRole').value = actorRole;
+    document.getElementById('actorSearch').value = actorName;
+    
+    // Buscar informações do ator para mostrar na seleção
+    fetch(`/admin/atores/${actorId}/info`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.ator) {
+                const ator = data.ator;
+                const fotoUrl = ator.foto_url ? `/static/${ator.foto_url}` : '/static/imgs/icons/user_icon34-removebg-preview.png';
+                
+                const selectedInfo = document.getElementById('selectedActorInfo');
+                const selectedPhoto = document.getElementById('selectedActorPhoto');
+                const selectedName = document.getElementById('selectedActorName');
+                const selectedBio = document.getElementById('selectedActorBio');
+                
+                selectedPhoto.src = fotoUrl;
+                selectedPhoto.alt = ator.nome;
+                selectedName.textContent = ator.nome;
+                selectedBio.textContent = ator.nacionalidade || 'Nacionalidade não informada';
+                
+                selectedInfo.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar informações do ator:', error);
+        });
+    
+    hideSearchResults();
+    document.getElementById('actorModal').style.display = 'flex';
+}
+
+function saveActor() {
+    const actorId = selectedActorId || document.getElementById('actorSelect').value;
+    const role = document.getElementById('actorRole').value;
+    
+    if (!actorId) {
+        showNotification('Selecione um ator', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('ator_id', actorId);
+    formData.append('papel', role);
+    
+    const url = currentActorId ? 
+        `/admin/filmes/{{ filme.id }}/editar-papel-ator` : 
+        `/admin/filmes/{{ filme.id }}/adicionar-ator`;
+    
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(currentActorId ? 'Ator atualizado!' : 'Ator adicionado!', 'success');
+            closeActorModal();
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification('Erro: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('Erro: ' + error.message, 'error');
+    });
+}
+
+// Configuração inicial da página
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Admin Filme Detalhe carregado com sucesso!');
+    
+    // Configurar event listeners para pesquisa de atores
+    const actorSearch = document.getElementById('actorSearch');
+    if (actorSearch) {
+        // Pesquisa com debounce
+        actorSearch.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(searchActors, 300);
+        });
+        
+        // Mostrar resultados ao focar se já há texto
+        actorSearch.addEventListener('focus', function() {
+            if (this.value.trim().length >= 2) {
+                searchActors();
+            }
+        });
+        
+        // Esconder resultados ao perder foco (com delay para permitir cliques)
+        actorSearch.addEventListener('blur', function() {
+            setTimeout(() => {
+                if (!document.querySelector('#actorSearchResults:hover')) {
+                    hideSearchResults();
+                }
+            }, 200);
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Lugares | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filme_detalhe.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/selecao_lugares.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="user-icon">
+                        {% if user_authenticated %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=user_avatar) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navegação -->
+        <nav class="nav-center">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('filmes') }}">Filmes</a>
+            <a href="{{ url_for('cinemas') }}">Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+            <a href="{{ url_for('bar') }}">Bar</a>
+            <a href="{{ url_for('beneficios') }}">Benefícios</a>
+            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}">Contactos</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main style="padding: 2rem 0; background: #0D1B2A; min-height: 100vh;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+                
+                <!-- Movie Info Card -->
+                <div class="movie-info-card">
+                    <div class="movie-info-content">
+                        {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
+                        <img src="{{ url_for('static', filename='imgs/filmes/' + (poster_path if poster_path and not poster_path.startswith('http') else 'placeholder.svg')) }}" 
+                             alt="{{ filme.titulo }}" 
+                             class="movie-poster"
+                             onerror="this.src='{{ url_for('static', filename='imgs/filmes/placeholder.svg') }}'">
+                        <div class="movie-details">
+                            <h1 class="movie-title">{{ filme.titulo }}</h1>
+                            <div class="movie-info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="cinema-name">{{ cinema.nome }}</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-film"></i>
+                                <span class="session-type">{{ tipo_sessao.nome }}</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-clock"></i>
+                                <span class="session-time">{{ horario.hora_str }} - {{ data_sessao }}</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-door-open"></i>
+                                <span class="room-info">{{ sala.nome_sala }} ({{ sala.capacidade }} lugares)</span>
+                            </div>
+                            <div class="movie-info-item">
+                                <i class="fas fa-euro-sign"></i>
+                                <span class="ticket-price">{{ "%.2f"|format(preco_bilhete) }} por bilhete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seat Selection -->
+                <div class="seat-selection">
+                    <h3>Selecione {{ quantidade }} lugar{{ 'es' if quantidade > 1 else '' }}</h3>
+                    
+                    <!-- Cinema Screen -->
+                    <div class="cinema-screen"></div>
+                    
+                    <!-- Seat Map -->
+                    <div class="seat-map">
+                        {% for fileira in lugares %}
+                            {% if fileira.tipo == 'divisao_horizontal' %}
+                                <!-- Divisão Horizontal -->
+                                <div class="seat-divider">
+                                    <div class="divider-line-horizontal"></div>
+                                </div>
+                            {% else %}
+                                <!-- Fileira Normal -->
+                                <div class="seat-row">
+                                    {% for lugar in fileira.lugares %}
+                                    <!-- DEBUG: {{ lugar.nome }} ocupado={{ lugar.ocupado }} -->
+                                    <div class="seat {{ 'occupied' if lugar.ocupado else ('accessible' if lugar.acessivel else 'available') }}" 
+                                         data-seat="{{ lugar.nome }}"
+                                         data-row="{{ fileira.letra }}"
+                                         data-position="{{ loop.index }}"
+                                         data-occupied="{{ 'true' if lugar.ocupado else 'false' }}"
+                                         {% if not lugar.ocupado %}onclick="toggleSeat(this)"{% endif %}>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Entradas da Sala -->
+                        <div class="cinema-entrances">
+                            <div class="entrance entrance-left">
+                                <img src="{{ url_for('static', filename='imgs/icons/entrada.png') }}" alt="Entrada Esquerda">
+                                <span>ENTRADA</span>
+                            </div>
+                            <div class="entrance entrance-right">
+                                <img src="{{ url_for('static', filename='imgs/icons/entrada.png') }}" alt="Entrada Direita">
+                                <span>ENTRADA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legend -->
+                    <div class="seat-legend">
+                        <div class="legend-item">
+                            <div class="legend-seat legend-available"></div>
+                            <span>Disponível</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-seat legend-selected"></div>
+                            <span>Selecionado</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-seat legend-accessible"></div>
+                            <span>Acessível</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-seat legend-occupied"></div>
+                            <span>Ocupado</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Selection Summary -->
+                    <div class="selection-summary">
+                        <div class="summary-row">
+                            <span>Lugares selecionados:</span>
+                            <span class="selected-seats" id="selectedSeatsDisplay">Nenhum</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Quantidade:</span>
+                            <span id="selectedCount">0</span> / {{ quantidade }}
+                        </div>
+                        <div class="summary-row">
+                            <span>Total:</span>
+                            <span id="totalPrice">€0.00</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="button-group">
+                        <a href="{{ url_for('reserva', horario=id_horario_sessao, cinema=cinema_id, tipo=id_tipo_sessao, data=data_sessao) }}" class="back-btn">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                        
+                        <form method="GET" action="{{ url_for('selecao_bar') }}" style="flex: 1;">
+                            <input type="hidden" name="id_horario_sessao" value="{{ id_horario_sessao }}">
+                            <input type="hidden" name="cinema_id" value="{{ cinema_id }}">
+                            <input type="hidden" name="id_tipo_sessao" value="{{ id_tipo_sessao }}">
+                            <input type="hidden" name="filme_id" value="{{ filme_id }}">
+                            <input type="hidden" name="data_sessao" value="{{ data_sessao }}">
+                            <input type="hidden" name="lugares" id="selectedSeatsInput" value="">
+                            
+                            <button type="submit" class="confirm-btn" id="confirmBtn" disabled>
+                                <i class="fas fa-shopping-cart"></i>
+                                Continuar para o Bar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+    let selectedSeats = [];
+    const maxSeats = parseInt('{{ quantidade }}');
+    const pricePerSeat = parseFloat('{{ preco_bilhete }}');
+    let autoSelectionDone = false;
+
+    function findBestSeats(quantity) {
+        const allSeats = document.querySelectorAll('.seat.available');
+        const seatsByRow = {};
+        
+        // Agrupar lugares por fileira
+        allSeats.forEach(seat => {
+            const row = seat.dataset.row;
+            const position = parseInt(seat.dataset.position);
+            
+            if (!seatsByRow[row]) {
+                seatsByRow[row] = [];
+            }
+            seatsByRow[row].push({
+                element: seat,
+                position: position,
+                name: seat.dataset.seat
+            });
+        });
+        
+        // Ordenar lugares por posição em cada fileira
+        Object.keys(seatsByRow).forEach(row => {
+            seatsByRow[row].sort((a, b) => a.position - b.position);
+        });
+        
+        // Encontrar TODOS os grupos consecutivos possíveis
+        const allConsecutiveGroups = [];
+        
+        for (const row in seatsByRow) {
+            const seats = seatsByRow[row];
+            
+            for (let i = 0; i <= seats.length - quantity; i++) {
+                let consecutive = true;
+                
+                // Verificar se os lugares são consecutivos
+                for (let j = 1; j < quantity; j++) {
+                    if (seats[i + j].position !== seats[i + j - 1].position + 1) {
+                        consecutive = false;
+                        break;
+                    }
+                }
+                
+                if (consecutive) {
+                    // Adicionar este grupo à lista de opções
+                    const group = [];
+                    for (let j = 0; j < quantity; j++) {
+                        group.push(seats[i + j]);
+                    }
+                    allConsecutiveGroups.push(group);
+                }
+            }
+        }
+        
+        // Se encontrou grupos consecutivos, escolher um aleatoriamente
+        if (allConsecutiveGroups.length > 0) {
+            const randomIndex = Math.floor(Math.random() * allConsecutiveGroups.length);
+            return allConsecutiveGroups[randomIndex];
+        }
+        
+        // Se não encontrar lugares consecutivos, pegar aleatórios disponíveis
+        const availableSeats = Array.from(allSeats).map(seat => ({
+            element: seat,
+            name: seat.dataset.seat
+        }));
+        
+        // Embaralhar e pegar a quantidade necessária
+        const shuffled = availableSeats.sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, Math.min(quantity, shuffled.length));
+    }
+
+    function autoSelectSeats() {
+        if (autoSelectionDone || maxSeats === 0) return;
+        
+        const bestSeats = findBestSeats(maxSeats);
+        
+        bestSeats.forEach(seatData => {
+            const seat = seatData.element;
+            seat.classList.add('selected');
+            selectedSeats.push(seatData.name);
+        });
+        
+        autoSelectionDone = true;
+        updateSummary();
+    }
+
+    function toggleSeat(seatElement) {
+        const seatName = seatElement.dataset.seat;
+        
+        // Não permitir clicar em lugares ocupados
+        if (seatElement.classList.contains('occupied')) {
+            return;
+        }
+        
+        if (seatElement.classList.contains('selected')) {
+            // Desselecionar
+            seatElement.classList.remove('selected');
+            selectedSeats = selectedSeats.filter(seat => seat !== seatName);
+        } else {
+            // Selecionar (se não exceder o limite)
+            if (selectedSeats.length < maxSeats) {
+                seatElement.classList.add('selected');
+                selectedSeats.push(seatName);
+            } else {
+                // Não mostrar alerta, apenas não permitir seleção
+                return;
+            }
+        }
+        
+        updateSummary();
+    }
+
+    function updateSummary() {
+        const selectedCount = selectedSeats.length;
+        const totalPrice = selectedCount * pricePerSeat;
+        
+        // Atualizar display
+        document.getElementById('selectedCount').textContent = selectedCount;
+        document.getElementById('totalPrice').textContent = `€${totalPrice.toFixed(2)}`;
+        
+        if (selectedCount > 0) {
+            document.getElementById('selectedSeatsDisplay').textContent = selectedSeats.sort().join(', ');
+            document.getElementById('selectedSeatsInput').value = JSON.stringify(selectedSeats);
+            document.getElementById('confirmBtn').disabled = selectedCount !== maxSeats;
+        } else {
+            document.getElementById('selectedSeatsDisplay').textContent = 'Nenhum';
+            document.getElementById('selectedSeatsInput').value = '';
+            document.getElementById('confirmBtn').disabled = true;
+        }
+    }
+
+    // Inicializar e fazer seleção automática
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSummary();
+        // Aguardar um pouco para garantir que tudo foi carregado
+        setTimeout(autoSelectSeats, 100);
+    });
+    </script>
+</body>
+</html>

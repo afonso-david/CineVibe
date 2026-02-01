@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sessão Vintage | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vintage.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}"class="active">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+                    
+               
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-background">
+                <img src="{{ url_for('static', filename='imgs/A1PRNm5wKtwlhPmPvmRk2MEXwwG.jpg') }}" alt="">
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="film-grain"></div>
+            
+            <div class="hero-content">
+                <div class="hero-text">
+                    <span class="hero-subtitle">Uma Viagem no Tempo</span>
+                    <h1 class="hero-title">
+                        Sessão <span class="vintage-text">Vintage</span>
+                    </h1>
+                    <p class="hero-description">
+                        Reviva a magia dourada do cinema clássico numa experiência única e nostálgica
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#classics" class="btn-primary large">Ver Clássicos</a>
+                        <a href="#experience" class="btn-secondary large">Saber Mais</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <div class="scroll-arrow">↓</div>
+                <p>Descubra a experiência</p>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">A Experiência Vintage</h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/descarregar__5_-removebg-preview.png') }}" alt="Filmes Clássicos">
+                        </div>
+                        <h3>Filmes Clássicos</h3>
+                        <p>Uma seleção cuidadosa dos maiores clássicos do cinema mundial, restaurados digitalmente para uma qualidade de imagem perfeita.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/vintage-cinema-interior-with-red-velvet-seating-and-illuminated-screen-ready-for-movie-presentation-photo.jpeg') }}" alt="Decoração Retrô">
+                        </div>
+                        <h3>Ambiente Retro</h3>
+                        <p>Sala decorada com elementos dos anos dourados do cinema, criando uma atmosfera autêntica e nostálgica.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <img src="{{ url_for('static', filename='imgs/temas/NOSTAL~1/DOWNLO~1.PNG') }}" alt="Música Vintage">
+                        </div>
+                        <h3>Banda Sonora</h3>
+                        <p>Música ambiente dos anos 40-60 antes do filme, transportando-o para a época dourada do cinema.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="experience-section">
+            <div class="experience-bg">
+                <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/photo-1485095329183-d0797cdc5676.jpg') }}" alt="Teatro Vintage">
+            </div>
+            <div class="experience-overlay"></div>
+            
+            <div class="experience-content">
+                <div class="section-label">Experiência Única</div>
+                <h2 class="experience-title">Mergulhe na Era Dourada</h2>
+                <p class="experience-lead">
+                    Cada detalhe foi pensado para transportá-lo para os anos dourados do cinema, 
+                    desde a decoração art déco até aos snacks tradicionais da época.
+                </p>
+                
+                <div class="experience-features">
+                    <div class="exp-feature">
+                        <div class="exp-icon">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/descarregar__8_-removebg-preview.png') }}" alt="Projetor Vintage">
+                        </div>
+                        <div class="exp-content">
+                            <h4>Projeção Premium</h4>
+                            <p>Tecnologia moderna com estética vintage para a melhor experiência visual.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="exp-feature">
+                        <div class="exp-icon">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/descarregar__7_-removebg-preview.png') }}" alt="Poltronas Vintage">
+                        </div>
+                        <div class="exp-content">
+                            <h4>Poltronas Clássicas</h4>
+                            <p>Assentos inspirados nos cinemas dos anos 50, com conforto moderno.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="exp-feature">
+                        <div class="exp-icon">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/vintage_popcorn.png') }}" alt="Snacks Vintage">
+                        </div>
+                        <div class="exp-content">
+                            <h4>Snacks Tradicionais</h4>
+                            <p>O bar vintage do cinema combina charme clássico e ambiente nostálgico, sendo o espaço ideal para relaxar antes ou depois da sessão.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="exp-feature">
+                        <div class="exp-icon">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/Ticket.png') }}" alt="Bilhete Vintage">
+                        </div>
+                        <div class="exp-content">
+                            <h4>Bilhetes Especiais</h4>
+                            <p>Bilhetes colecionáveis com design retrô para guardar como recordação.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Movies Section -->
+        <section class="movies-section" id="classics">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Filmes Vintage</h2>
+                    <p class="section-subtitle">Uma seleção dos maiores clássicos do cinema mundial, restaurados digitalmente para uma qualidade perfeita</p>
+                </div>
+                
+                <div class="movies-carousel">
+                    <button class="carousel-btn prev" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="movies-container" id="moviesContainer">
+                        {% if filmes_vintage %}
+                            {% for filme in filmes_vintage %}
+                            <article class="filme-card" 
+                                     data-rank="{{ loop.index }}"
+                                     data-genero="{{ filme.genero_nome|lower }}"
+                                     data-titulo="{{ filme.titulo|lower }}"
+                                     role="article"
+                                     aria-label="Filme: {{ filme.titulo }}">
+                                <div class="movie-rank vintage-rank">
+                                    <span class="rank-number">#{{ loop.index }}</span>
+                                </div>
+                                <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}{% if filme.trailer_url %}?trailer=auto{% endif %}" 
+                                   aria-label="Ver detalhes de {{ filme.titulo }}">
+                                    <div class="poster-container">
+                                        <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
+                                             alt="Poster de {{ filme.titulo }}" 
+                                             class="poster-main"
+                                             loading="lazy"
+                                             onerror="this.src='{{ url_for('static', filename='imgs/filmes/placeholder.jpg') }}'">
+                                        {% if filme.poster_hover %}
+                                        <img src="{{ url_for('static', filename=filme.poster_hover) }}" 
+                                             alt="Poster alternativo de {{ filme.titulo }}" 
+                                             class="poster-hover"
+                                             loading="lazy">
+                                        {% endif %}
+                                    </div>
+                                    <div class="filme-overlay">
+                                        <div class="filme-info">
+                                            <h3 class="titulo">{{ filme.titulo }}</h3>
+                                            <p class="genero">{{ filme.genero_nome or 'Vintage' }}</p>
+                                            {% if filme.duracao %}
+                                            <p class="duracao">⏱️ {{ filme.duracao }}min</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-movies">
+                                <i class="fas fa-film"></i>
+                                <h3>Nenhum filme vintage disponível</h3>
+                                <p>Volte em breve para descobrir os clássicos!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <button class="carousel-btn next" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bar Section -->
+        <section class="bar-section">
+            <div class="container">
+                <div class="bar-header">
+                    <div class="section-label">Sabores Vintage</div>
+                    <h2 class="section-title">Bar Retrô</h2>
+                    <p class="bar-subtitle">
+                        Snacks e bebidas inspirados na época dourada do cinema
+                    </p>
+                </div>
+                
+                <div class="snacks-showcase">
+                    <div class="snack-card">
+                        <div class="snack-image">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/vintage_popcorn.png') }}" alt="Pipocas Vintage">
+                        </div>
+                        <div class="snack-info">
+                            <h3>Pipocas Clássicas</h3>
+                            <p>Servidas em saquinhos de papel vintage, como nos cinemas dos anos 50.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="snack-card">
+                        <div class="snack-image">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/Coca_Cola_Bottle_s_retouch_-_Touch_It_FRS-removebg-preview.png') }}" alt="Refrigerantes Vintage">
+                        </div>
+                        <div class="snack-info">
+                            <h3>Refrigerantes Retrô</h3>
+                            <p>Bebidas servidas em garrafas de vidro e copos vintage autênticos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="snack-card">
+                        <div class="snack-image">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/R-removebg-preview (10).png') }}" alt="Doces Vintage">
+                        </div>
+                        <div class="snack-info">
+                            <h3>Doces Tradicionais</h3>
+                            <p>Seleção de doces clássicos que eram populares na era dourada.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bar-cta">
+                    <a href="{{ url_for('bar') }}" class="btn-outline large">Explorar Bar</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Atmosphere Section -->
+        <section class="atmosphere-section">
+            <div class="container">
+                <div class="atmosphere-content">
+                    <div class="section-label">Atmosfera Única</div>
+                    <h2 class="section-title">Bilhetes Colecionáveis</h2>
+                    <p class="atmosphere-description">
+                        Cada sessão vintage inclui um bilhete especial com design retrô único, 
+                        inspirado nos clássicos cinemas dos anos dourados. Uma recordação autêntica 
+                        da sua experiência cinematográfica nostálgica.
+                    </p>
+                    
+                    <div class="tickets-showcase">
+                        <div class="ticket-item">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/Ticket.png') }}" alt="Bilhete Vintage 1">
+                        </div>
+                        <div class="ticket-item">
+                             <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/Captura de ecrã 2026-01-27 193300.png') }}" alt="Bilhete Vintage 2">
+                        </div>
+                        <div class="ticket-item">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/Captura de ecrã 2026-01-27 193352.png') }}" alt="Bilhete Vintage 3">
+                        </div>
+                        <div class="ticket-item">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/Captura de ecrã 2026-01-27 202752.png') }}" alt="Bilhete Vintage 4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Pronto para a Viagem no Tempo?</h2>
+                    <p>Reserve já o seu lugar numa experiência cinematográfica única</p>
+                    <div class="cta-buttons">
+                        <a href="{{ url_for('reserva_sessao_tematica', tipo='vintage') }}" class="btn-primary large">Reservar Bilhete</a>
+                        <a href="{{ url_for('cinemas') }}" class="btn-outline large">Ver Cinemas</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-container">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                            <h3>CineVibe</h3>
+                        </div>
+                        <p class="footer-description">
+                            A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook">
+                                <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                            </a>
+                            <a href="#" aria-label="Instagram">
+                                <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                            </a>
+                            <a href="#" aria-label="Twitter">
+                                <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Navegação</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('home') }}">Início</a></li>
+                            <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                            <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                            <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Suporte</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                            <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                            <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                            <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Conta</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <div class="newsletter-section">
+                            <h4>Newsletter</h4>
+                            <p>Receba as últimas novidades e promoções exclusivas.</p>
+                            <form class="newsletter-form">
+                                <div class="newsletter-input-group">
+                                    <input type="email" placeholder="Seu email" required>
+                                    <button type="submit">Subscrever</button>
+                                </div>
+                            </form>
+                            <div class="footer-contact">
+                                <div class="contact-item">
+                                    <span class="contact-icon">📧</span>
+                                    <span>info@cinevibe.pt</span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="contact-icon">📞</span>
+                                    <span>+351 123 456 789</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-container">
+                    <div class="footer-bottom-content">
+                        <div class="footer-legal">
+                            <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                            <div class="legal-links">
+                                <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                                <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                                <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                            </div>
+                        </div>
+                        <div class="footer-certifications">
+                            <div class="cert-logos">
+                                <span class="cert-text">SSL Seguro</span>
+                                <span class="cert-text">GDPR Compliant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Carousel functionality for movies
+        document.addEventListener('DOMContentLoaded', function() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const moviesContainer = document.getElementById('moviesContainer');
+            
+            if (prevBtn && nextBtn && moviesContainer) {
+                const scrollAmount = 360; // Width of one card + gap (320 + 40)
+                
+                prevBtn.addEventListener('click', function() {
+                    moviesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                });
+                
+                nextBtn.addEventListener('click', function() {
+                    moviesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                });
+                
+                // Update button states based on scroll position
+                function updateButtonStates() {
+                    const maxScroll = moviesContainer.scrollWidth - moviesContainer.clientWidth;
+                    prevBtn.style.opacity = moviesContainer.scrollLeft <= 0 ? '0.5' : '1';
+                    nextBtn.style.opacity = moviesContainer.scrollLeft >= maxScroll ? '0.5' : '1';
+                }
+
+                moviesContainer.addEventListener('scroll', updateButtonStates);
+                updateButtonStates(); // Initial state
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // User dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const userIcon = document.querySelector('.user-icon');
+            const userDropdown = document.querySelector('.user-dropdown');
+            
+            if (userIcon && userDropdown) {
+                userIcon.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('show');
+                });
+                
+                document.addEventListener('click', function() {
+                    userDropdown.classList.remove('show');
+                });
+            }
+        });
+
+        // Movie card hover effects
+        document.querySelectorAll('.filme-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.05)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Touch/swipe support for mobile
+        let startX = 0;
+        let scrollLeft = 0;
+
+        if (moviesContainer) {
+            moviesContainer.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].pageX - moviesContainer.offsetLeft;
+                scrollLeft = moviesContainer.scrollLeft;
+            });
+
+            moviesContainer.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const x = e.touches[0].pageX - moviesContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                moviesContainer.scrollLeft = scrollLeft - walk;
+            });
+        }
+    </script>
+</body>
+</html>

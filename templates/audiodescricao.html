@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audiodescrição | CineVibe - Cinema Acessível Para Todos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/audiodescricao.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <meta name="description" content="Audiodescrição profissional no CineVibe. Cinema inclusivo com narração especializada para uma experiência cinematográfica completa.">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}" class="active">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-text">
+                <div class="hero-badge">Cinema Inclusivo</div>
+                <h1>Audiodescrição</h1>
+                <p class="subtitle">Damos voz às imagens para que todos possam viver cada cena do filme</p>
+                <p class="description">Uma experiência cinematográfica inclusiva que transforma o visual em narrativa, permitindo que todos desfrutem da magia do cinema.</p>
+                <div class="hero-features">
+                    <div class="feature">Narração profissional</div>
+                    <div class="feature">Disponível em todos os cinemas</div>
+                    <div class="feature">Equipamento gratuito</div>
+                </div>
+                <div class="hero-cta">
+                    <a href="{{ url_for('filmes') }}" class="btn-primary">Ver Filmes</a>
+                    <a href="#como-funciona" class="btn-secondary">Como Funciona</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='imgs/produtos/ChatGPT_Image_25_11_2025__12_25_30-removebg-preview.png') }}" alt="Headphones CineVibe" onerror="this.src='{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}'">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section">
+            <div class="section-header">
+                <h2>O que é a Audiodescrição?</h2>
+                <p class="description">A audiodescrição é uma técnica que traduz imagens em palavras, permitindo que pessoas cegas ou com baixa visão tenham acesso ao conteúdo visual dos filmes. Através de uma narração profissional, descrevemos ações, cenários, expressões faciais e todos os elementos visuais importantes para a história, sincronizados perfeitamente com os diálogos do filme.</p>
+            </div>
+            
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-number">01</div>
+                    <div class="feature-content">
+                        <h3>Narração Profissional</h3>
+                        <p>Vozes treinadas que dão vida às imagens com clareza e emoção</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">02</div>
+                    <div class="feature-content">
+                        <h3>Sincronização Perfeita</h3>
+                        <p>Descrições precisas nos momentos certos, sem interferir nos diálogos</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">03</div>
+                    <div class="feature-content">
+                        <h3>Experiência Imersiva</h3>
+                        <p>Transformamos cada filme numa jornada completa e acessível para todos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exemplos de Audiodescrição -->
+        <section class="examples-section">
+            <div class="section-header">
+                <h2>Exemplos de Audiodescrição</h2>
+                <p>Veja como transformamos imagens em palavras para criar uma experiência cinematográfica completa</p>
+            </div>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="{{ url_for('static', filename='imgs/acessibilidade/AAAABV6ddmAL-n5OkFkpl7f3I2G5xEzw7gzxH9kNilP7ArEx9xvBS-_qTxNA1xwBUGNM6jEbaBmOTg7Iw5xFT3w0Efs1Vqn6BSnOrWHs.jpg') }}" alt="Descrição de Ação">
+                    </div>
+                    <div class="example-content">
+                        <h3>Descrição de Ação</h3>
+                        <div class="example-text">"Black Mamba ergue lentamente a espada, o metal captando a luz com um brilho frio e ameaçador. O seu corpo permanece firme, tenso, enquanto o olhar se fixa no adversário com determinação absoluta. O silêncio adensa-se no ar, quebrado apenas pelo leve sussurro da lâmina ao mover-se. Naquele instante suspenso, tudo converge para o confronto inevitável."</div>
+                        <div class="example-description">Narração de movimentos e cenários</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="{{ url_for('static', filename='imgs/acessibilidade/home-alone-header.avif') }}" alt="Expressões Faciais">
+                    </div>
+                    <div class="example-content">
+                        <h3>Expressões Faciais</h3>
+                        <div class="example-text">"Kevin espalha a espuma de barbear pelo rosto, observando-se no espelho com curiosidade. De repente, os seus olhos arregalam-se e ele leva as mãos às bochechas. Um grito agudo ecoa pela casa enquanto salta para trás, assustado com a sensação gelada."</div>
+                        <div class="example-description">Descrição de emoções e expressões</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="{{ url_for('static', filename='imgs/acessibilidade/harry-Potter.jpg') }}" alt="Ambientes e Cenários">
+                    </div>
+                    <div class="example-content">
+                        <h3>Ambientes e Cenários</h3>
+                        <div class="example-text">"O castelo ergue-se imponente sobre um afloramento rochoso, como se tivesse nascido da própria pedra. As suas torres altas e pontiagudas recortam o céu azul, cada uma com telhados escuros e janelas estreitas que guardam séculos de segredos. As muralhas de pedra antiga estendem-se em linhas sólidas e austeras, marcadas pelo tempo e pela magia que ali habita. Lá em baixo, as árvores envolvem a base do castelo, reforçando a sensação de isolamento e grandeza, enquanto o conjunto domina a paisagem com uma presença solene e intemporal."</div>
+                        <div class="example-description">Descrição detalhada de locais</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="{{ url_for('static', filename='imgs/acessibilidade/venom-poster-RGB.jpg') }}" alt="Personagens" onerror="this.style.display='none'">
+                    </div>
+                    <div class="example-content">
+                        <h3>Personagens</h3>
+                        <div class="example-text">"Venom surge como uma massa negra e viva, o corpo ondulando com energia selvagem. Os olhos brancos destacam-se no rosto monstruoso, enquanto dentes afiados e a língua serpenteante revelam a sua natureza predatória."</div>
+                        <div class="example-description">Apresentação e características físicas</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="{{ url_for('static', filename='imgs/acessibilidade/How-Oppenheimer-Created-a-CGI-Free-Atomic-Blast-1-scaled.jpg') }}" alt="Efeitos Visuais" onerror="this.style.display='none'">
+                    </div>
+                    <div class="example-content">
+                        <h3>Efeitos Visuais</h3>
+                        <div class="example-text">"Um silêncio pesado instala-se no deserto. A luz explode subitamente no horizonte, branca e avassaladora, engolindo tudo à sua volta. A onda de choque expande-se com força implacável, levantando poeira e fogo enquanto o cogumelo de fumo se ergue lentamente no céu. Segundos depois, o estrondo chega, profundo e ensurdecedor, fazendo o chão tremer como se o mundo estivesse a rasgar-se."</div>
+                        <div class="example-description">Descrição de efeitos especiais</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="{{ url_for('static', filename='imgs/acessibilidade/AAAABQzXItt57RPATcYyjxtFTnm6XDpGDcxuD_Z2btOxCA9gc2d5yiZMkLbDfd4XdsgBDPi-lb6TiDXjPBc585DSJ8cX85TG9AgvF9XA.jpg') }}" alt="Atmosfera e Mood" onerror="this.style.display='none'">
+                    </div>
+                    <div class="example-content">
+                        <h3>Atmosfera e Mood</h3>
+                        <div class="example-text">"A névoa densa cria uma atmosfera misteriosa. Sombras alongadas dançam nas paredes."</div>
+                        <div class="example-description">Criação de ambiente e tensão</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="examples-cta">
+                <div class="examples-cta-content">
+                    <h3>Experimente a Audiodescrição</h3>
+                    <p>Cada filme ganha vida através da nossa narração profissional</p>
+                    <a href="{{ url_for('filmes') }}" class="btn-examples">Ver Filmes Disponíveis</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="section-header">
+                <h2>O que dizem os nossos clientes</h2>
+                <p>Experiências reais de quem já viveu o cinema de forma inclusiva</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Finalmente posso ir ao cinema com a minha família e desfrutar verdadeiramente do filme. A audiodescrição do CineVibe é excecional."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>Maria Silva</h4>
+                            <span>Cliente desde 2023</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"A qualidade da narração é impressionante. Sinto-me completamente imerso na história, como se estivesse a ver o filme."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>João Santos</h4>
+                            <span>Utilizador regular</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"O CineVibe transformou a minha experiência de cinema. Agora posso desfrutar de qualquer filme com total independência."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>Ana Costa</h4>
+                            <span>Membro VIP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Pronto para uma experiência cinematográfica inclusiva?</h2>
+                <p>Descubra como a audiodescrição pode transformar a sua ida ao cinema</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('filmes') }}" class="btn-cta primary">Ver Filmes Disponíveis</a>
+                    <a href="{{ url_for('cinemas') }}" class="btn-cta secondary">Encontrar Cinema</a>
+                </div>
+            </div>
+            <div class="cta-features">
+                <div class="cta-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Equipamento gratuito</span>
+                </div>
+                <div class="cta-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Todos os filmes disponíveis</span>
+                </div>
+                <div class="cta-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Suporte especializado</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="section-header">
+                <h2>Perguntas Frequentes</h2>
+                <p>Esclarecemos as suas dúvidas sobre audiodescrição</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>Como posso reservar uma sessão com audiodescrição?</h3>
+                    <p>Todas as sessões têm audiodescrição disponível. Basta solicitar o equipamento na bilheteira ou diretamente na sala.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Há custos adicionais pela audiodescrição?</h3>
+                    <p>Não! A audiodescrição é completamente gratuita e está incluída no preço do seu bilhete.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Todos os filmes têm audiodescrição?</h3>
+                    <p>Sim, 100% dos filmes em cartaz no CineVibe têm audiodescrição profissional disponível.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Preciso de reservar com antecedência?</h3>
+                    <p>Recomendamos reservar para garantir lugar, mas o equipamento está sempre disponível.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                        <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Smooth Scroll Script -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.step-card, .benefit-card, .testimonial-card, .faq-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

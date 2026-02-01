@@ -1,0 +1,30 @@
+<svg width="200" height="300" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1B263B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0D1B2A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="border" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD60A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4EA8DE;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="200" height="300" fill="url(#bg)" rx="10"/>
+  <rect x="2" y="2" width="196" height="296" stroke="url(#border)" stroke-width="2" fill="none" rx="8"/>
+  
+  <!-- Film icon -->
+  <g transform="translate(100, 120)">
+    <circle cx="0" cy="0" r="30" fill="rgba(255, 214, 10, 0.2)" stroke="#FFD60A" stroke-width="2"/>
+    <path d="M-15 -10 L15 -10 L15 10 L-15 10 Z" fill="#FFD60A"/>
+    <circle cx="-20" cy="-15" r="4" fill="#4EA8DE"/>
+    <circle cx="-20" cy="0" r="4" fill="#4EA8DE"/>
+    <circle cx="-20" cy="15" r="4" fill="#4EA8DE"/>
+    <circle cx="20" cy="-15" r="4" fill="#4EA8DE"/>
+    <circle cx="20" cy="0" r="4" fill="#4EA8DE"/>
+    <circle cx="20" cy="15" r="4" fill="#4EA8DE"/>
+  </g>
+  
+  <text x="100" y="180" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#FFD60A" text-anchor="middle">CineVibe</text>
+  <text x="100" y="200" font-family="Arial, sans-serif" font-size="10" fill="#4EA8DE" text-anchor="middle">Poster não disponível</text>
+</svg>

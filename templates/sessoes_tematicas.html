@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sessões Temáticas - CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sessoes_tematicas.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}"">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}"class="active">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+      
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <div class="floating-particles">
+                <div class="particle" style="--delay: 0s; --duration: 8s; --size: 4px;"></div>
+                <div class="particle" style="--delay: 1s; --duration: 10s; --size: 6px;"></div>
+                <div class="particle" style="--delay: 2s; --duration: 12s; --size: 3px;"></div>
+                <div class="particle" style="--delay: 3s; --duration: 9s; --size: 5px;"></div>
+                <div class="particle" style="--delay: 4s; --duration: 11s; --size: 4px;"></div>
+            </div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>Experiências Temáticas</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line">Sessões</span>
+                <span class="title-line highlight">Temáticas</span>
+            </h1>
+            <p class="hero-subtitle">
+                Mergulhe em universos únicos onde cada tema conta uma história diferente. 
+                Escolha a sua aventura cinematográfica.
+            </p>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div class="scroll-text">Explore os temas</div>
+            <div class="scroll-arrow">
+                ↓
+            </div>
+        </div>
+    </section>
+
+    <!-- Themes Section -->
+    <section class="themes-section" id="themes">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Escolha o Seu Universo</h2>
+                <p class="section-subtitle">Três experiências únicas, três mundos diferentes</p>
+            </div>
+            
+            <div class="themes-grid">
+                <!-- Vintage Theme -->
+                <div class="theme-card vintage" data-theme="vintage">
+                    <div class="theme-image">
+                        <img src="{{ url_for('static', filename='imgs/A1PRNm5wKtwlhPmPvmRk2MEXwwG.jpg') }}" alt="Sessão Vintage">
+                        <div class="theme-overlay"></div>
+                        <div class="image-button">
+                            <a href="{{ url_for('sessao_vintage') }}" class="image-btn vintage-image-btn">
+                                <span>EXPLORAR VINTAGE</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-background">
+                        <div class="theme-pattern vintage-pattern"></div>
+                        <div class="theme-glow vintage-glow"></div>
+                    </div>
+                    
+                    <div class="theme-content">
+                        <div class="theme-header">
+                            <div class="theme-badge vintage-badge">Nostálgico</div>
+                        </div>
+                        
+                        <div class="theme-info">
+                            <h3 class="theme-title">Sessão Vintage</h3>
+                            <p class="theme-description">
+                                Viaje no tempo para a era dourada do cinema. Filmes clássicos, 
+                                decoração retrô e uma atmosfera nostálgica que o transporta 
+                                para os anos dourados de Hollywood.
+                            </p>
+                        </div>
+                        
+                        <div class="theme-highlights">
+                            <div class="highlight-item">
+                                <span class="highlight-text">Filmes clássicos selecionados</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Decoração vintage autêntica</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Trilha sonora da época</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Bebidas e snacks retrô</span>
+                            </div>
+                        </div>
+                        
+                        <div class="theme-actions">
+                            <div class="theme-price">
+                                <span class="price-label">A partir de</span>
+                                <span class="price-value">€35</span>
+                            </div>
+                            <a href="{{ url_for('sessao_vintage') }}" class="theme-btn vintage-btn">
+                                <span>Explorar Vintage</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Romance Theme -->
+                <div class="theme-card romance" data-theme="romance">
+                    <div class="theme-image">
+                        <img src="{{ url_for('static', filename='imgs/AAAABQviwRi9D1MAfx6Yl4ApfCUEDDW03_fiZt35ct4l-Zqs1JQ6_OBdlPo5Izt5GIJUAum8A--kta20z1pGYjZrTtEhMuCudgnZYQ-A.jpg') }}" alt="Sessão Romance">
+                        <div class="theme-overlay"></div>
+                        <div class="image-button">
+                            <a href="{{ url_for('sessao_romance') }}" class="image-btn romance-image-btn">
+                                <span>EXPLORAR ROMANCE</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-background">
+                        <div class="theme-pattern romance-pattern"></div>
+                        <div class="theme-glow romance-glow"></div>
+                    </div>
+                    
+                    <div class="theme-content">
+                        <div class="theme-header">
+                            <div class="theme-badge romance-badge featured">Mais Popular</div>
+                        </div>
+                        
+                        <div class="theme-info">
+                            <h3 class="theme-title">Sessão Romance</h3>
+                            <p class="theme-description">
+                                A experiência perfeita para casais apaixonados. 
+                                Ambiente íntimo, decoração romântica e todos os 
+                                detalhes pensados para criar momentos inesquecíveis a dois.
+                            </p>
+                        </div>
+                        
+                        <div class="theme-highlights">
+                            <div class="highlight-item">
+                                <span class="highlight-text">Decoração romântica</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Champanhe de boas-vindas</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Jantar para dois incluído</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Fotografia profissional</span>
+                            </div>
+                        </div>
+                        
+                        <div class="theme-actions">
+                            <div class="theme-price">
+                                <span class="price-label">A partir de</span>
+                                <span class="price-value">€85</span>
+                            </div>
+                            <a href="{{ url_for('sessao_romance') }}" class="theme-btn romance-btn">
+                                <span>Explorar Romance</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Terror Theme -->
+                <div class="theme-card terror" data-theme="terror">
+                    <div class="theme-image">
+                        <img src="{{ url_for('static', filename='imgs/1731317621822-i.avif') }}" alt="Sessão Terror">
+                        <div class="theme-overlay"></div>
+                        <div class="image-button">
+                            <a href="{{ url_for('sessao_terror') }}" class="image-btn terror-image-btn">
+                                <span>EXPLORAR TERROR</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-background">
+                        <div class="theme-pattern terror-pattern"></div>
+                        <div class="theme-glow terror-glow"></div>
+                    </div>
+                    
+                    <div class="theme-content">
+                        <div class="theme-header">
+                            <div class="theme-badge terror-badge">Arrepiante</div>
+                        </div>
+                        
+                        <div class="theme-info">
+                            <h3 class="theme-title">Sessão Terror</h3>
+                            <p class="theme-description">
+                                Para os corajosos que procuram emoções fortes. 
+                                Ambiente sombrio, efeitos especiais e uma experiência 
+                                que vai fazer o seu coração acelerar do início ao fim.
+                            </p>
+                        </div>
+                        
+                        <div class="theme-highlights">
+                            <div class="highlight-item">
+                                <span class="highlight-text">Filmes de terror selecionados</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Efeitos especiais imersivos</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Ambiente sombrio e misterioso</span>
+                            </div>
+                            <div class="highlight-item">
+                                <span class="highlight-text">Surpresas durante a sessão</span>
+                            </div>
+                        </div>
+                        
+                        <div class="theme-actions">
+                            <div class="theme-price">
+                                <span class="price-label">A partir de</span>
+                                <span class="price-value">€45</span>
+                            </div>
+                            <a href="{{ url_for('sessao_terror') }}" class="theme-btn terror-btn">
+                                <span>Explorar Terror</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section">
+        <div class="container">
+            <div class="info-content">
+                <h2>Como Funcionam as Sessões Temáticas</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-number">01</div>
+                        <h3>Reserve Online</h3>
+                        <p>Escolha o tema, data e horário que mais lhe convém através da nossa plataforma online.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-number">02</div>
+                        <h3>Ambiente Transformado</h3>
+                        <p>Chegue e encontre a sala completamente transformada de acordo com o tema escolhido.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-number">03</div>
+                        <h3>Experiência Completa</h3>
+                        <p>Desfrute de uma experiência cinematográfica única com todos os detalhes pensados para si.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-number">04</div>
+                        <h3>Memórias Eternas</h3>
+                        <p>Leve consigo recordações inesquecíveis de uma noite verdadeiramente especial.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-background">
+            <div class="cta-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Pronto Para a Aventura?</h2>
+                <p class="cta-subtitle">
+                    Não perca a oportunidade de viver uma experiência cinematográfica única. 
+                    Escolha o seu tema favorito e reserve já hoje.
+                </p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('sessao_vintage') }}" class="cta-btn vintage">
+                        <span>Vintage</span>
+                    </a>
+                    <a href="{{ url_for('sessao_romance') }}" class="cta-btn romance">
+                        <span>Romance</span>
+                    </a>
+                    <a href="{{ url_for('sessao_terror') }}" class="cta-btn terror">
+                        <span>Terror</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                        <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Smooth scrolling
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.getElementById('themes').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero-background');
+            if (parallax) {
+                const speed = scrolled * 0.3;
+                parallax.style.transform = `translateY(${speed}px)`;
+            }
+        });
+
+        // Theme card hover effects
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Floating particles animation
+        document.querySelectorAll('.particle').forEach((particle, index) => {
+            const delay = index * 0.5;
+            particle.style.animationDelay = `${delay}s`;
+            
+            // Random position
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe theme cards
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.style.animation = 'fadeInUp 0.8s ease forwards paused';
+            observer.observe(card);
+        });
+
+        // Observe info cards
+        document.querySelectorAll('.info-card').forEach((card, index) => {
+            card.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s forwards paused`;
+            observer.observe(card);
+        });
+
+        // Theme selection tracking
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const theme = e.target.closest('.theme-card').dataset.theme;
+                console.log(`Selected theme: ${theme}`);
+                
+                // Add click animation
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    btn.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/perfil.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+    
+    <style>
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .user-name-edit {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #FFD60A;
+            border-radius: 8px;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            text-transform: uppercase;
+            width: auto;
+            min-width: 200px;
+        }
+        
+        .user-name-edit:focus {
+            outline: none;
+            border-color: #FFA500;
+            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.3);
+        }
+        
+        .edit-icon {
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .edit-icon:hover {
+            opacity: 1;
+            background: rgba(255, 214, 10, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .edit-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-save, .btn-cancel {
+            padding: 8px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save {
+            background: rgba(76, 175, 80, 0.8);
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: rgba(76, 175, 80, 1);
+            transform: scale(1.1);
+        }
+        
+        .btn-cancel {
+            background: rgba(244, 67, 54, 0.8);
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: rgba(244, 67, 54, 1);
+            transform: scale(1.1);
+        }
+        
+        .avatar-container {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .avatar-container:hover {
+            transform: scale(1.05);
+        }
+        
+        .avatar-edit-badge {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            background: #FFD60A;
+            color: #1a1a1a;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .avatar-edit-badge:hover {
+            background: #FFA500;
+            transform: scale(1.1);
+        }
+        
+        .btn-trocar-avatar {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-trocar-avatar:hover {
+            background: linear-gradient(135deg, #FFA500, #FF8C00);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 214, 10, 0.4);
+        }
+        
+        .btn-alterar-senha {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-alterar-senha:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        /* Modal de Alterar Senha */
+        .modal-alterar-senha {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content-senha {
+            background: linear-gradient(135deg, #1B263B, #2C3E50);
+            border-radius: 20px;
+            padding: 0;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 214, 10, 0.3);
+        }
+        
+        .modal-header-senha {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            color: #1a1a1a;
+            padding: 20px 30px;
+            border-radius: 18px 18px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header-senha h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .btn-close-senha {
+            background: none;
+            border: none;
+            color: #1a1a1a;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-close-senha:hover {
+            background: rgba(26, 26, 26, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .modal-body-senha {
+            padding: 30px;
+        }
+        
+        .form-group-senha {
+            margin-bottom: 20px;
+        }
+        
+        .form-group-senha label {
+            display: block;
+            color: #FFD60A;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .password-input-wrapper {
+            position: relative;
+        }
+        
+        .form-group-senha input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-group-senha input:focus {
+            outline: none;
+            border-color: #FFD60A;
+            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .toggle-password:hover {
+            color: #FFD60A;
+        }
+        
+        .password-hint {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .modal-footer-senha {
+            padding: 20px 30px 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+        
+        .btn-cancelar-senha {
+            background: rgba(244, 67, 54, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancelar-senha:hover {
+            background: rgba(244, 67, 54, 1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-confirmar-senha {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-confirmar-senha:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+        }
+        
+        .btn-confirmar-senha:disabled {
+            background: rgba(76, 175, 80, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}" class="active">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="perfil-main">
+        <div class="perfil-container">
+            <!-- Card Principal do Perfil -->
+            <div class="perfil-card">
+                <!-- Seção Esquerda - Informações do Usuário -->
+                <div class="perfil-left">
+                    <div class="user-header">
+                        <h1 class="user-name" id="userName">{{ user.nome.upper() }}</h1>
+                        <input type="text" class="user-name-edit" id="userNameEdit" value="{{ user.nome }}" style="display: none;">
+                        <div class="edit-icon" onclick="toggleEditarNome()" style="cursor: pointer;" title="Editar nome">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </div>
+                        <div class="edit-actions" id="editActions" style="display: none;">
+                            <button class="btn-save" onclick="salvarNome()" title="Salvar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="20,6 9,17 4,12"></polyline>
+                                </svg>
+                            </button>
+                            <button class="btn-cancel" onclick="cancelarEdicao()" title="Cancelar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="user-avatar-section">
+                        <div class="avatar-and-actions">
+                            <div class="avatar-container" onclick="abrirModalAvatar()" style="cursor: pointer;" title="Trocar avatar">
+                                <img src="{{ url_for('static', filename=avatar) }}" alt="Avatar" class="user-avatar">
+                            </div>
+                            
+                            <div class="actions-with-email">
+                                <div class="email-container">
+                                    <div class="user-email">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        <span>{{ user.email }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="profile-actions">
+                                    <button class="btn-trocar-avatar" onclick="abrirModalAvatar()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                        Trocar Avatar
+                                    </button>
+                                    <button class="btn-alterar-senha" onclick="abrirModalAlterarSenha()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                            <circle cx="12" cy="16" r="1"></circle>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                        </svg>
+                                        Alterar Senha
+                                    </button>
+                                    <button class="btn-sair-conta">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                            <polyline points="16,17 21,12 16,7"></polyline>
+                                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                                        </svg>
+                                        Sair Conta
+                                    </button>
+                                    <button class="btn-cinefilo">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                                        </svg>
+                                        Cinéfilo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Direita - Pontos e Recompensas -->
+                <div class="perfil-right">
+                    <div class="pontos-card">
+                        <div class="pontos-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="pontos-valor">{{ pontos or 850 }}</div>
+                        <div class="pontos-label">PONTOS CINEVIBE</div>
+                        <div class="pontos-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ ((pontos or 850) % 1000) / 10 }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="proximo-nivel">
+                            Próximo nível: <span class="pontos-restantes">{{ 1000 - ((pontos or 850) % 1000) }}</span> pontos
+                        </div>
+                        <button class="btn-recompensas">
+                            <i class="fas fa-star"></i>
+                            Clica para ver recompensas
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Estatísticas -->
+            <div class="stats-section">
+                <h2 class="section-title">As Minhas Estatísticas</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎬</div>
+                        <div class="stat-number">{{ stats.filmes_vistos or 12 }}</div>
+                        <div class="stat-label">Filmes Vistos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎫</div>
+                        <div class="stat-number">{{ stats.reservas_feitas or 8 }}</div>
+                        <div class="stat-label">Reservas Feitas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-number">{{ stats.avaliacoes_feitas or 5 }}</div>
+                        <div class="stat-label">Avaliações</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-number">{{ stats.pontos_gastos or 250 }}</div>
+                        <div class="stat-label">Pontos Gastos</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filmes Vistos -->
+            <div class="filmes-section">
+                <h2 class="section-title">Filmes Vistos</h2>
+                <div class="filmes-grid">
+                    {% if filmes_vistos %}
+                        {% for filme in filmes_vistos %}
+                        <div class="filme-card" data-filme-id="{{ filme.id }}" {% if filme.user_rating %}data-avaliado="true"{% endif %}>
+                            <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/default-poster.jpg') }}" 
+                                 alt="{{ filme.titulo }}"
+                                 loading="lazy">
+                            {% if filme.user_rating %}
+                            <div class="avaliacao-badge">
+                                <i class="fas fa-star"></i>
+                                <span>{{ filme.user_rating }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="filme-overlay">
+                                <h4>{{ filme.titulo }}</h4>
+                                <p>{{ filme.data_sessao.strftime('%d/%m/%Y') if filme.data_sessao else 'Data não disponível' }}</p>
+                                {% if filme.tipo_sessao %}
+                                <div class="tipo-sessao">
+                                    <i class="fas fa-star"></i>
+                                    <span>{{ filme.tipo_sessao }}</span>
+                                </div>
+                                {% endif %}
+                                <button class="btn-avaliar" 
+                                        data-filme-id="{{ filme.id }}" 
+                                        data-filme-titulo="{{ filme.titulo }}" 
+                                        data-user-rating="{{ filme.user_rating or 0 }}" 
+                                        data-user-comentario="{{ (filme.user_comentario or '')|e }}">
+                                    <i class="fas fa-star"></i>
+                                    {% if filme.user_rating %}
+                                        Editar Avaliação ({{ filme.user_rating }}★)
+                                    {% else %}
+                                        Avaliar Filme
+                                    {% endif %}
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-film"></i>
+                            <h3>Ainda não viste nenhum filme</h3>
+                            <p>Quando assistires aos teus primeiros filmes, eles aparecerão aqui!</p>
+                            <a href="{{ url_for('filmes') }}" class="btn-primary">
+                                <i class="fas fa-search"></i>
+                                Explorar Filmes
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Cinemas Favoritos -->
+            <div class="cinemas-section">
+                <h2 class="section-title">Os Meus Cinemas Favoritos</h2>
+                <div class="cinemas-grid">
+                    {% if cinemas_favoritos %}
+                        {% for cinema in cinemas_favoritos %}
+                        <div class="cinema-card">
+                            <div class="cinema-image">
+                                <img src="{{ url_for('static', filename=cinema.imagem) }}" 
+                                     alt="{{ cinema.nome }}"
+                                     onerror="this.src='{{ url_for('static', filename='imgs/cinemas/default.jpg') }}'">
+                                <div class="cinema-overlay"></div>
+                                <button class="btn-remover-favorito" data-cinema-id="{{ cinema.id }}" title="Remover dos favoritos">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="cinema-content">
+                                <div class="cinema-header">
+                                    <h3>{{ cinema.nome }}</h3>
+                                    <p class="cinema-localizacao">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {{ cinema.localizacao }}
+                                    </p>
+                                </div>
+                                <div class="cinema-actions">
+                                    <a href="{{ url_for('cinema_filmes', id_cinema=cinema.id) }}" class="btn-ver-filmes">
+                                        <i class="fas fa-film"></i>
+                                        Ver Filmes
+                                    </a>
+                                    <a href="{{ url_for('cinemas') }}#cinema-{{ cinema.id }}" class="btn-ver-detalhes">
+                                        <i class="fas fa-info-circle"></i>
+                                        Detalhes
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-building"></i>
+                            <h3>Ainda não tens cinemas favoritos</h3>
+                            <p>Adiciona os teus cinemas preferidos para acesso rápido!</p>
+                            <a href="{{ url_for('cinemas') }}" class="btn-primary">
+                                <i class="fas fa-search"></i>
+                                Explorar Cinemas
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Avaliação -->
+    <div id="avaliacaoModal" class="modal-avaliacao" style="display: none;">
+        <div class="modal-content-avaliacao">
+            <div class="modal-header">
+                <h3>Avaliar Filme</h3>
+                <button class="btn-close-modal" onclick="fecharModalAvaliacao()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="filme-info-modal">
+                    <h4 id="filmeNomeModal">Nome do Filme</h4>
+                </div>
+                <div class="rating-section">
+                    <label>A tua avaliação:</label>
+                    <div class="star-rating" id="starRating">
+                        <span class="star" data-rating="1">☆</span>
+                        <span class="star" data-rating="2">☆</span>
+                        <span class="star" data-rating="3">☆</span>
+                        <span class="star" data-rating="4">☆</span>
+                        <span class="star" data-rating="5">☆</span>
+                    </div>
+                    <div class="rating-text">
+                        <span id="ratingValue">0</span> de 5 estrelas
+                    </div>
+                </div>
+                <div class="comment-section">
+                    <label for="comentarioAvaliacao">Comentário (opcional):</label>
+                    <textarea id="comentarioAvaliacao" placeholder="Partilha a tua opinião sobre este filme..." maxlength="500"></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span>/500 caracteres
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancelar" onclick="fecharModalAvaliacao()">Cancelar</button>
+                <button class="btn-submeter" onclick="submeterAvaliacao()">Submeter Avaliação</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Avatar -->
+    <div id="avatarModal" class="modal-avatar" style="display: none;">
+        <div class="modal-content-avatar">
+            <div class="modal-header-avatar">
+                <h2>Escolher Avatar</h2>
+                <button class="btn-close-avatar" onclick="fecharModalAvatar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body-avatar">
+                <div class="avatar-categories">
+                    <!-- Conteúdo carregado via JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer-avatar">
+                <div class="selected-avatar-preview">
+                    <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Avatar Selecionado">
+                    <span>Nenhum avatar selecionado</span>
+                </div>
+                <div class="modal-footer-buttons">
+                    <button class="btn-cancelar-avatar">Cancelar</button>
+                    <button class="btn-confirmar-avatar">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Alterar Senha -->
+    <div id="alterarSenhaModal" class="modal-alterar-senha" style="display: none;">
+        <div class="modal-content-senha">
+            <div class="modal-header-senha">
+                <h2>Alterar Senha</h2>
+                <button class="btn-close-senha" onclick="fecharModalAlterarSenha()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body-senha">
+                <form id="formAlterarSenha">
+                    <div class="form-group-senha">
+                        <label for="novaSenha">Nova Senha</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="novaSenha" name="novaSenha" placeholder="Digite a nova senha" required>
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('novaSenha')">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <small class="password-hint">Mínimo 6 caracteres</small>
+                    </div>
+                    
+                    <div class="form-group-senha">
+                        <label for="confirmarSenha">Confirmar Nova Senha</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirme a nova senha" required>
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirmarSenha')">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-senha">
+                <button class="btn-cancelar-senha" onclick="fecharModalAlterarSenha()">Cancelar</button>
+                <button class="btn-confirmar-senha" onclick="alterarSenha()">Alterar Senha</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                        <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript inline para evitar problemas de loading -->
+    <script>
+        let editandoNome = false;
+        let nomeOriginal = "{{ user.nome }}";
+        
+        // Função para alternar entre modo visualização e edição
+        function toggleEditarNome() {
+            const userName = document.getElementById('userName');
+            const userNameEdit = document.getElementById('userNameEdit');
+            const editActions = document.getElementById('editActions');
+            const editIcon = document.querySelector('.edit-icon');
+            
+            if (!editandoNome) {
+                // Entrar em modo de edição
+                userName.style.display = 'none';
+                userNameEdit.style.display = 'block';
+                editActions.style.display = 'flex';
+                editIcon.style.display = 'none';
+                userNameEdit.focus();
+                userNameEdit.select();
+                editandoNome = true;
+            }
+        }
+        
+        // Função para salvar o nome
+        function salvarNome() {
+            const userNameEdit = document.getElementById('userNameEdit');
+            const novoNome = userNameEdit.value.trim();
+            
+            if (!novoNome) {
+                alert('Nome não pode estar vazio!');
+                return;
+            }
+            
+            if (novoNome === nomeOriginal) {
+                cancelarEdicao();
+                return;
+            }
+            
+            // Fazer requisição para atualizar o nome
+            fetch('/api/atualizar-nome', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nome: novoNome
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Atualizar o nome na página
+                    document.getElementById('userName').textContent = novoNome.toUpperCase();
+                    nomeOriginal = novoNome;
+                    sairModoEdicao();
+                    
+                    // Mostrar feedback visual
+                    const userName = document.getElementById('userName');
+                    userName.style.color = '#4CAF50';
+                    setTimeout(() => {
+                        userName.style.color = '';
+                    }, 2000);
+                } else {
+                    alert('Erro ao atualizar nome: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro de conexão ao atualizar nome.');
+            });
+        }
+        
+        // Função para cancelar a edição
+        function cancelarEdicao() {
+            document.getElementById('userNameEdit').value = nomeOriginal;
+            sairModoEdicao();
+        }
+        
+        // Função para sair do modo de edição
+        function sairModoEdicao() {
+            const userName = document.getElementById('userName');
+            const userNameEdit = document.getElementById('userNameEdit');
+            const editActions = document.getElementById('editActions');
+            const editIcon = document.querySelector('.edit-icon');
+            
+            userName.style.display = 'block';
+            userNameEdit.style.display = 'none';
+            editActions.style.display = 'none';
+            editIcon.style.display = 'block';
+            editandoNome = false;
+        }
+        
+        // Aguardar o DOM estar carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando eventos...');
+            
+            // Adicionar eventos de teclado para o campo de edição
+            const userNameEdit = document.getElementById('userNameEdit');
+            if (userNameEdit) {
+                userNameEdit.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        salvarNome();
+                    } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        cancelarEdicao();
+                    }
+                });
+            }
+            
+            // Funcionalidade dos botões
+            // Avatar container já tem onclick="abrirModalAvatar()" no HTML
+            console.log('Avatar container configurado para abrir modal ao clicar');
+
+            const btnTrocarAvatar = document.querySelector('.btn-trocar-avatar');
+            if (btnTrocarAvatar) {
+                console.log('Botão trocar avatar encontrado!');
+                btnTrocarAvatar.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Botão trocar avatar clicado!');
+                    abrirModalAvatar();
+                });
+            } else {
+                console.error('Botão trocar avatar NÃO encontrado!');
+            }
+
+            const btnSairConta = document.querySelector('.btn-sair-conta');
+            if (btnSairConta) {
+                console.log('Botão sair conta encontrado!');
+                btnSairConta.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Botão sair conta clicado!');
+                    // Logout direto sem confirmação
+                    window.location.href = "{{ url_for('logout') }}";
+                });
+            } else {
+                console.error('Botão sair conta NÃO encontrado!');
+            }
+
+            const btnCinefilo = document.querySelector('.btn-cinefilo');
+            if (btnCinefilo) {
+                btnCinefilo.addEventListener('click', function() {
+                    console.log('Botão cinéfilo clicado');
+                    // Ação do botão cinéfilo
+                });
+            }
+
+            const btnRecompensas = document.querySelector('.btn-recompensas');
+            if (btnRecompensas) {
+                btnRecompensas.addEventListener('click', function() {
+                    console.log('Botão recompensas clicado');
+                    window.location.href = "{{ url_for('recompensas') }}";
+                });
+            }
+
+            // Funcionalidade de remover cinemas favoritos
+            const botoesRemover = document.querySelectorAll('.btn-remover-favorito');
+            
+            botoesRemover.forEach(botao => {
+                botao.addEventListener('click', function() {
+                    const cinemaId = this.getAttribute('data-cinema-id');
+                    const cinemaCard = this.closest('.cinema-card');
+                    const cinemaName = cinemaCard.querySelector('h3').textContent;
+                    
+                    if (confirm(`Tens a certeza que queres remover "${cinemaName}" dos teus favoritos?`)) {
+                        // Fazer chamada à API para remover permanentemente
+                        fetch('/api/remover-cinema-favorito', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                cinema_id: cinemaId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Animar remoção do card
+                                cinemaCard.style.transform = 'scale(0.8)';
+                                cinemaCard.style.opacity = '0';
+                                
+                                setTimeout(() => {
+                                    cinemaCard.remove();
+                                    
+                                    // Verificar se não há mais cinemas favoritos
+                                    const cinemasGrid = document.querySelector('.cinemas-grid');
+                                    if (cinemasGrid && cinemasGrid.children.length === 0) {
+                                        cinemasGrid.innerHTML = `
+                                            <div class="empty-state">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin-bottom: 16px;">
+                                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                                </svg>
+                                                <h3>Ainda não tens cinemas favoritos</h3>
+                                                <p>Adiciona os teus cinemas preferidos para acesso rápido!</p>
+                                                <a href="{{ url_for('cinemas') }}" class="btn-primary">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;">
+                                                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                                    </svg>
+                                                    Explorar Cinemas
+                                                </a>
+                                            </div>
+                                        `;
+                                    }
+                                }, 300);
+                            } else {
+                                alert('Erro ao remover cinema: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro:', error);
+                            alert('Erro de conexão ao remover cinema.');
+                        });
+                    }
+                });
+            });
+
+            // Funcionalidade de avaliação de filmes
+            const botoesAvaliar = document.querySelectorAll('.btn-avaliar');
+            
+            botoesAvaliar.forEach(botao => {
+                botao.addEventListener('click', function() {
+                    const filmeId = this.getAttribute('data-filme-id');
+                    const filmeTitulo = this.getAttribute('data-filme-titulo');
+                    const userRating = this.getAttribute('data-user-rating');
+                    const userComentario = this.getAttribute('data-user-comentario');
+                    
+                    console.log('Dados do botão:', {filmeId, filmeTitulo, userRating, userComentario});
+                    
+                    // Abrir modal com dados atuais (se existirem)
+                    abrirModalAvaliacao(filmeId, filmeTitulo, userRating, userComentario);
+                });
+            });
+
+            // Funcionalidade das estrelas - apenas estrelas inteiras
+            const stars = document.querySelectorAll('.star');
+
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const starValue = parseInt(this.getAttribute('data-rating'));
+                    
+                    // Se clicar na mesma estrela que já está ativa, remover avaliação
+                    if (window.avaliacaoSystem.currentRating === starValue) {
+                        window.avaliacaoSystem.currentRating = 0;
+                    } else {
+                        // Selecionar até essa estrela (valor inteiro)
+                        window.avaliacaoSystem.currentRating = starValue;
+                    }
+                    
+                    window.avaliacaoSystem.updateStarDisplay(window.avaliacaoSystem.currentRating);
+                    document.getElementById('ratingValue').textContent = window.avaliacaoSystem.currentRating;
+                    
+                    // Habilitar botão de submeter se há rating
+                    const btnSubmeter = document.querySelector('.btn-submeter');
+                    btnSubmeter.disabled = window.avaliacaoSystem.currentRating === 0;
+                });
+
+                star.addEventListener('mouseover', function() {
+                    const hoverRating = parseInt(this.getAttribute('data-rating'));
+                    window.avaliacaoSystem.updateStarDisplay(hoverRating);
+                });
+            });
+
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                window.avaliacaoSystem.updateStarDisplay(window.avaliacaoSystem.currentRating);
+            });
+
+            // Contador de caracteres
+            const textarea = document.getElementById('comentarioAvaliacao');
+            const charCount = document.getElementById('charCount');
+            
+            textarea.addEventListener('input', function() {
+                charCount.textContent = this.value.length;
+            });
+        });
+
+        // Sistema de avaliações - objeto global
+        window.avaliacaoSystem = {
+            currentFilmeId: null,
+            currentRating: 0,
+            
+            abrirModal: function(filmeId, filmeTitulo, currentRating = 0, currentComentario = '') {
+                console.log('Abrindo modal com dados:', {filmeId, filmeTitulo, currentRating, currentComentario});
+                
+                this.currentFilmeId = filmeId;
+                document.getElementById('filmeNomeModal').textContent = filmeTitulo;
+                document.getElementById('avaliacaoModal').style.display = 'flex';
+                
+                // Definir rating atual (se existir)
+                this.currentRating = parseInt(currentRating) || 0;  // Usar parseInt em vez de parseFloat
+                console.log('Rating definido:', this.currentRating);
+                
+                // Atualizar display das estrelas
+                this.updateStarDisplay(this.currentRating);
+                
+                // Atualizar texto do rating
+                document.getElementById('ratingValue').textContent = this.currentRating;
+                
+                // Preencher comentário atual
+                const comentarioTextarea = document.getElementById('comentarioAvaliacao');
+                if (comentarioTextarea) {
+                    comentarioTextarea.value = currentComentario || '';
+                    console.log('Comentário preenchido:', currentComentario);
+                }
+                
+                // Atualizar contador de caracteres
+                const charCount = document.getElementById('charCount');
+                if (charCount) {
+                    charCount.textContent = (currentComentario || '').length;
+                }
+                
+                // Habilitar/desabilitar botão submeter
+                const btnSubmeter = document.querySelector('.btn-submeter');
+                btnSubmeter.disabled = this.currentRating === 0;
+            },
+            
+            fecharModal: function() {
+                document.getElementById('avaliacaoModal').style.display = 'none';
+                this.currentFilmeId = null;
+                this.currentRating = 0;
+            },
+            
+            updateStarDisplay: function(rating) {
+                const stars = document.querySelectorAll('.star');
+                stars.forEach((star, index) => {
+                    const starValue = parseInt(star.getAttribute('data-rating'));
+                    star.classList.remove('active', 'half');
+                    
+                    // Apenas estrelas inteiras - sem meias estrelas
+                    if (starValue <= rating) {
+                        star.classList.add('active');
+                    }
+                });
+            },
+            
+            submeterAvaliacao: function() {
+                console.log('Submeter avaliação chamada');
+                console.log('Current rating:', this.currentRating);
+                
+                if (this.currentRating === 0) {
+                    console.log('Rating é 0, saindo');
+                    return;
+                }
+
+                const comentario = document.getElementById('comentarioAvaliacao').value.trim();
+                console.log('Comentário:', comentario);
+                
+                const avaliacaoData = {
+                    filme_id: this.currentFilmeId,
+                    rating: this.currentRating,
+                    comentario: comentario
+                };
+                
+                console.log('Dados a enviar:', avaliacaoData);
+
+                // Desabilitar botão durante o envio
+                const btnSubmeter = document.querySelector('.btn-submeter');
+                btnSubmeter.disabled = true;
+                btnSubmeter.textContent = 'Enviando...';
+
+                // Fazer chamada AJAX para o servidor
+                fetch('/avaliar_filme', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(avaliacaoData)
+                })
+                .then(response => {
+                    console.log('Status da resposta:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Dados da resposta:', data);
+                    if (data.success) {
+                        console.log('Sucesso! Redirecionando para filme_detalhe...');
+                        
+                        // Fechar modal
+                        this.fecharModal();
+                        
+                        // Mostrar mensagem de sucesso
+                        if (data.filme_titulo) {
+                            // Criar notificação temporária
+                            const notification = document.createElement('div');
+                            notification.style.cssText = `
+                                position: fixed;
+                                top: 20px;
+                                right: 20px;
+                                background: #4CAF50;
+                                color: white;
+                                padding: 15px 20px;
+                                border-radius: 5px;
+                                z-index: 10000;
+                                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                                font-family: Arial, sans-serif;
+                            `;
+                            notification.innerHTML = `
+                                <strong>✅ Avaliação salva!</strong><br>
+                                Redirecionando para ${data.filme_titulo}...
+                            `;
+                            document.body.appendChild(notification);
+                            
+                            // Remover notificação após 2 segundos
+                            setTimeout(() => {
+                                if (notification.parentNode) {
+                                    notification.parentNode.removeChild(notification);
+                                }
+                            }, 2000);
+                        }
+                        
+                        // Redirecionar após 1.5 segundos
+                        setTimeout(() => {
+                            if (data.redirect_url) {
+                                window.location.href = data.redirect_url;
+                            } else {
+                                window.location.reload();
+                            }
+                        }, 1500);
+                        
+                    } else {
+                        console.error('Erro do servidor:', data.message);
+                        alert('Erro: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro na requisição:', error);
+                    alert('Erro de conexão: ' + error.message);
+                })
+                .finally(() => {
+                    // Reabilitar botão
+                    btnSubmeter.disabled = false;
+                    btnSubmeter.textContent = 'Submeter Avaliação';
+                });
+            }
+        };
+
+        // Funções globais para compatibilidade
+        function abrirModalAvaliacao(filmeId, filmeTitulo, currentRating = 0, currentComentario = '') {
+            window.avaliacaoSystem.abrirModal(filmeId, filmeTitulo, currentRating, currentComentario);
+        }
+
+        function fecharModalAvaliacao() {
+            window.avaliacaoSystem.fecharModal();
+        }
+
+        function updateStarDisplay(rating) {
+            window.avaliacaoSystem.updateStarDisplay(rating);
+        }
+
+        function submeterAvaliacao() {
+            window.avaliacaoSystem.submeterAvaliacao();
+        }
+
+        // Fechar modal ao clicar fora
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('avaliacaoModal');
+            if (e.target === modal) {
+                fecharModalAvaliacao();
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModalAvaliacao();
+                fecharModalAvatar();
+            }
+        });
+
+        // Sistema de Avatar Modal
+        function abrirModalAvatar() {
+            console.log('Abrindo modal de avatar...');
+            const modal = document.getElementById('avatarModal');
+            if (modal) {
+                console.log('Modal encontrado, exibindo...');
+                
+                // Limpar imediatamente o container para evitar flash de cores
+                const container = document.querySelector('.avatar-categories');
+                if (container) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #B8C5D1;">Carregando avatares...</div>';
+                }
+                
+                modal.style.display = 'flex';
+                carregarCategorias();
+            } else {
+                console.error('Modal avatarModal NÃO encontrado!');
+            }
+        }
+
+        function fecharModalAvatar() {
+            document.getElementById('avatarModal').style.display = 'none';
+        }
+
+        function carregarCategorias() {
+            console.log('Carregando categorias...');
+            fetch('/api/avatar-categorias')
+                .then(response => {
+                    console.log('Resposta da API:', response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Dados recebidos:', data);
+                    const container = document.querySelector('.avatar-categories');
+                    
+                    if (!container) {
+                        console.error('Container .avatar-categories não encontrado!');
+                        return;
+                    }
+                    
+                    container.innerHTML = '';
+                    
+                    if (data.success && data.categorias && data.categorias.length > 0) {
+                        data.categorias.forEach(categoria => {
+                            const categoriaDiv = document.createElement('div');
+                            categoriaDiv.className = 'avatar-category';
+                            // Aplicar estilos inline para evitar flash de cores
+                            categoriaDiv.style.background = 'transparent';
+                            categoriaDiv.style.backgroundColor = 'transparent';
+                            categoriaDiv.style.backgroundImage = 'none';
+                            categoriaDiv.style.marginBottom = '30px';
+                            
+                            categoriaDiv.innerHTML = `
+                                <div class="category-header" style="background: transparent !important; background-color: transparent !important; background-image: none !important; margin-bottom: 15px;">
+                                    <h3 style="background: transparent !important; background-color: transparent !important; background-image: none !important; color: #FFD60A !important; margin: 0 0 5px 0; font-size: 1.4em; font-weight: 600;">${categoria.nome}</h3>
+                                    <div class="category-subtitle" style="background: transparent !important; background-color: transparent !important; background-image: none !important; color: #B8C5D1 !important; font-size: 0.9em; opacity: 0.8;">${categoria.subtitulo || ''}</div>
+                                </div>
+                                <div class="avatars-grid" style="background: transparent !important; background-color: transparent !important; background-image: none !important; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 20px; margin-top: 15px;">
+                                    ${categoria.avatares.map(avatar => `
+                                        <div class="avatar-option" onclick="selecionarAvatar('${avatar.caminho}')" style="background: linear-gradient(135deg, #2C3E50, #1B263B) !important; position: relative; width: 120px; height: 120px; border-radius: 15px; border: 3px solid transparent; cursor: pointer; overflow: hidden; transition: transform 0.2s ease !important;">
+                                            <img src="${avatar.caminho}" alt="${avatar.nome}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;" />
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                            
+                            container.appendChild(categoriaDiv);
+                        });
+                        console.log(`${data.categorias.length} categorias carregadas com sucesso!`);
+                    } else {
+                        container.innerHTML = '<p style="background: transparent !important; color: #B8C5D1 !important; text-align: center; padding: 20px;">Nenhuma categoria de avatar encontrada.</p>';
+                        console.warn('Nenhuma categoria encontrada ou erro na resposta:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar categorias:', error);
+                    const container = document.querySelector('.avatar-categories');
+                    if (container) {
+                        container.innerHTML = '<p style="background: transparent !important; color: #B8C5D1 !important; text-align: center; padding: 20px;">Erro ao carregar avatares. Tente novamente.</p>';
+                    }
+                });
+        }
+
+        function selecionarAvatar(caminhoAvatar) {
+            fetch('/api/atualizar-avatar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    avatar: caminhoAvatar
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Atualizar avatar na página
+                    document.querySelector('.user-avatar').src = caminhoAvatar;
+                    document.querySelector('.user-pic').src = caminhoAvatar;
+                    
+                    // Fechar modal
+                    fecharModalAvatar();
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+        }
+
+        // Fechar modal ao clicar fora
+        document.addEventListener('click', function(e) {
+            const modalAvaliacao = document.getElementById('avaliacaoModal');
+            const modalAvatar = document.getElementById('avatarModal');
+            
+            if (e.target === modalAvaliacao) {
+                fecharModalAvaliacao();
+            }
+            if (e.target === modalAvatar) {
+                fecharModalAvatar();
+            }
+            
+            // Fechar modal de alterar senha ao clicar fora
+            const modalAlterarSenha = document.getElementById('alterarSenhaModal');
+            if (e.target === modalAlterarSenha) {
+                fecharModalAlterarSenha();
+            }
+        });
+
+        // Sistema de Modal Alterar Senha
+        function abrirModalAlterarSenha() {
+            console.log('Abrindo modal de alterar senha...');
+            const modal = document.getElementById('alterarSenhaModal');
+            modal.style.display = 'flex';
+            
+            // Limpar campos
+            document.getElementById('novaSenha').value = '';
+            document.getElementById('confirmarSenha').value = '';
+        }
+
+        function fecharModalAlterarSenha() {
+            console.log('Fechando modal de alterar senha...');
+            document.getElementById('alterarSenhaModal').style.display = 'none';
+            
+            // Limpar campos
+            document.getElementById('novaSenha').value = '';
+            document.getElementById('confirmarSenha').value = '';
+        }
+
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            const icon = button.querySelector('svg path');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('d', 'M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('d', 'M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z');
+            }
+        }
+
+        function alterarSenha() {
+            const novaSenha = document.getElementById('novaSenha').value;
+            const confirmarSenha = document.getElementById('confirmarSenha').value;
+            
+            // Validações
+            if (!novaSenha || !confirmarSenha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            if (novaSenha.length < 6) {
+                alert('A nova senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            
+            if (novaSenha !== confirmarSenha) {
+                alert('A confirmação da senha não confere.');
+                return;
+            }
+            
+            // Desabilitar botão durante o envio
+            const btnConfirmar = document.querySelector('.btn-confirmar-senha');
+            btnConfirmar.disabled = true;
+            btnConfirmar.textContent = 'Alterando...';
+            
+            // Enviar dados para o servidor
+            fetch('/api/alterar-senha', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    novaSenha: novaSenha
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Senha alterada com sucesso!');
+                    fecharModalAlterarSenha();
+                } else {
+                    alert(data.message || 'Erro ao alterar senha.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao alterar senha. Tente novamente.');
+            })
+            .finally(() => {
+                // Reabilitar botão
+                btnConfirmar.disabled = false;
+                btnConfirmar.textContent = 'Alterar Senha';
+            });
+        }
+
+        // Adicionar evento ESC para fechar modal de alterar senha
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModalAvaliacao();
+                fecharModalAvatar();
+                fecharModalAlterarSenha();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserva de Bilhetes | CineVibe</title>
+
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/corredor-vermelho.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/produtos-bar-premium.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/resumo-finalizacao-premium.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal-lugares-premium.css') }}">
+
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="top-nav">
+      <div class="nav-left">
+        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+      </div>
+
+      <div class="nav-right">
+        <div class="search-container">
+          <input type="text" placeholder="Procurar Filmes...">
+          <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+        </div>
+
+        <div class="user-icon">
+    {% if logged_in %}
+        <a href="{{ url_for('perfil') }}">
+            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+        </a>
+    {% else %}
+        <a href="{{ url_for('login') }}">
+            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+        </a>
+    {% endif %}
+</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navegação -->
+  <nav class="nav-center">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('filmes') }}">Filmes</a>
+    <a href="{{ url_for('cinemas') }}">Cinemas</a>
+    <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+    <a href="{{ url_for('bar') }}">Bar</a>
+    <a href="{{ url_for('beneficios') }}">Benefícios</a>
+    <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+    <a href="{{ url_for('contactos') }}">Contactos</a>
+  </nav>
+
+  <div class="page-wrapper">
+    <!-- Main Content -->
+    <main class="reserva-main-container">
+      <div class="reserva-layout">
+        
+        <!-- Sidebar (oculta inicialmente) -->
+        <div class="reserva-left">
+          <div class="info-panel">
+            <div class="filme-info">
+              <h3>{{ filme.titulo }}</h3>
+              <div class="sessao-info">
+                <h4>Sessão</h4>
+                <div class="sessao-meta">
+                  <div class="meta-row">
+                    <span class="meta-label">Data:</span>
+                    <span class="meta-value">{{ data_sessao }}</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Hora:</span>
+                    <span class="meta-value">{{ horario.hora_str if horario else 'N/A' }}</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Cinema:</span>
+                    <span class="meta-value">{{ cinema.nome }}</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Sala:</span>
+                    <span class="meta-value">{{ sala.nome_sala if sala else 'N/A' }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="resumo-reserva">
+                <h4>Resumo</h4>
+                <div class="resumo-content">
+                  <div class="resumo-item">
+                    <span class="resumo-label">Bilhetes:</span>
+                    <span class="resumo-value" id="resumo-bilhetes">0</span>
+                  </div>
+                  <div class="resumo-item">
+                    <span class="resumo-label">Lugares:</span>
+                    <span class="resumo-value" id="resumo-lugares-sidebar">-</span>
+                  </div>
+                  <div class="resumo-item">
+                    <span class="resumo-label">Bar:</span>
+                    <span class="resumo-value" id="resumo-bar-sidebar">0.00€</span>
+                  </div>
+                  <div class="resumo-item total">
+                    <span class="resumo-label">Total:</span>
+                    <span class="resumo-value" id="resumo-total-sidebar">0.00€</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="reserva-right">
+          <div class="reserva-form-container">
+
+            <!-- PASSO 1: QUANTIDADE DE BILHETES -->
+            <div id="passo-bilhetes" class="form-step active">
+              <div class="step-header">
+                <h2>1. Quantos bilhetes?</h2>
+                <p>Selecione a quantidade de bilhetes desejada</p>
+              </div>
+              
+              <div class="bilhetes-grid">
+                <button class="btn-bilhete" data-qtd="1">
+                  <span class="bilhete-numero">1</span>
+                  <span class="bilhete-label">Bilhete</span>
+                </button>
+                <button class="btn-bilhete" data-qtd="2">
+                  <span class="bilhete-numero">2</span>
+                  <span class="bilhete-label">Bilhetes</span>
+                </button>
+                <button class="btn-bilhete" data-qtd="3">
+                  <span class="bilhete-numero">3</span>
+                  <span class="bilhete-label">Bilhetes</span>
+                </button>
+                <button class="btn-bilhete" data-qtd="4">
+                  <span class="bilhete-numero">4</span>
+                  <span class="bilhete-label">Bilhetes</span>
+                </button>
+                <button class="btn-bilhete" data-qtd="5">
+                  <span class="bilhete-numero">5</span>
+                  <span class="bilhete-label">Bilhetes</span>
+                </button>
+                <button class="btn-bilhete" data-qtd="6">
+                  <span class="bilhete-numero">6</span>
+                  <span class="bilhete-label">Bilhetes</span>
+                </button>
+              </div>
+
+              <!-- Quantidade Custom -->
+              <div class="quantidade-custom-wrapper">
+                <p class="quantidade-label">Ou escolha outra quantidade</p>
+                <div class="quantidade-controls">
+                  <button type="button" id="btn-menos-bilhetes" class="btn-qty-mini">-</button>
+                  <input type="number" id="quantidade-bilhetes" class="input-qty-mini" min="1" max="50" value="1" />
+                  <button type="button" id="btn-mais-bilhetes" class="btn-qty-mini">+</button>
+                </div>
+                <p class="quantidade-hint">Selecione de 1 a 50 bilhetes</p>
+              </div>
+
+              <!-- Botão Continuar -->
+              <div class="step-actions-wrapper">
+                <button id="continuar-lugares" class="btn-continuar-lugares" disabled>
+                  Continuar para Lugares
+                  <span class="btn-arrow"><i class="fas fa-arrow-right"></i></span>
+                </button>
+              </div>
+            </div>
+
+            <!-- PASSO 2: SELEÇÃO DE LUGARES -->
+            <div id="passo-lugares" class="form-step">
+              <div class="step-header">
+                <h2>2. Escolha os lugares</h2>
+                <p>Selecione <span id="lugares-necessarios">0</span> lugares na sala</p>
+              </div>
+
+              <div class="sala-container">
+                <div class="tela-cinema">
+                  <span class="tela-label">Ecrã</span>
+                </div>
+                
+                <div class="sala-dinamica" id="sala-lugares">
+                  <!-- Lugares serão gerados dinamicamente -->
+                </div>
+              </div>
+
+
+
+              <div class="lugares-info">
+                <div class="lugares-instrucoes">
+                  <p><i class="fas fa-hand-pointer"></i> Clique nos lugares desejados na planta acima</p>
+                </div>
+                
+                <div class="lugares-selecionados">
+                  <strong>Lugares selecionados:</strong>
+                  <span id="lugares-display">Nenhum</span>
+                </div>
+                
+                <button id="btn-info-lugares" class="btn-info-lugares" type="button">
+                  <i class="fas fa-info-circle"></i> Informações dos Lugares
+                </button>
+              </div>
+
+              <!-- Modal de Informações Ultra Premium -->
+              <div id="modal-info" class="modal-lugares-overlay modal-hidden">
+                <div class="modal-lugares-container">
+                  <div class="modal-lugares-header">
+                    <div class="modal-icon">
+                      <i class="fas fa-info-circle"></i>
+                    </div>
+                    <h3>Informações dos Lugares</h3>
+                    <button class="modal-close-btn" id="modal-close">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="modal-lugares-content">
+                    <!-- Tipos de Lugares -->
+                    <div class="tipos-lugares-section">
+                      <h4><i class="fas fa-couch"></i> Tipos de Lugares</h4>
+                      <div class="tipos-grid">
+                        <div class="tipo-item">
+                          <div class="tipo-visual disponivel-visual"></div>
+                          <div class="tipo-info">
+                            <span class="tipo-nome">Disponível</span>
+                            <span class="tipo-desc">Lugares livres para seleção</span>
+                          </div>
+                        </div>
+                        
+                        <div class="tipo-item">
+                          <div class="tipo-visual selecionado-visual"></div>
+                          <div class="tipo-info">
+                            <span class="tipo-nome">Selecionado</span>
+                            <span class="tipo-desc">Lugares escolhidos por si</span>
+                          </div>
+                        </div>
+                        
+                        <div class="tipo-item">
+                          <div class="tipo-visual ocupado-visual">✕</div>
+                          <div class="tipo-info">
+                            <span class="tipo-nome">Ocupado</span>
+                            <span class="tipo-desc">Já reservado por outros</span>
+                          </div>
+                        </div>
+                        
+                        <div class="tipo-item">
+                          <div class="tipo-visual acessivel-visual">
+                            <img src="{{ url_for('static', filename='imgs/cadeira_rodas_icon-removebg-preview.png') }}" 
+                                 alt="Acessível" class="acessivel-icon">
+                          </div>
+                          <div class="tipo-info">
+                            <span class="tipo-nome">Acessível</span>
+                            <span class="tipo-desc">Para pessoas com mobilidade reduzida</span>
+                          </div>
+                        </div>
+                        
+                        <div class="tipo-item">
+                          <div class="tipo-visual casal-visual">
+                            <img src="{{ url_for('static', filename='imgs/icons/ChatGPT_Image_Dec_15__2025__05_05_22_PM-removebg-preview.png') }}" 
+                                 alt="Casal" class="casal-icon">
+                          </div>
+                          <div class="tipo-info">
+                            <span class="tipo-nome">Lugares de Casal</span>
+                            <span class="tipo-desc">Lugares especiais para casais</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Informações Importantes -->
+                    <div class="info-importantes-section">
+                      <h4><i class="fas fa-star"></i> Informações Importantes</h4>
+                      <div class="info-cards">
+                        <div class="info-card">
+                          <div class="info-card-icon">
+                            <img src="{{ url_for('static', filename='imgs/cadeira_rodas_icon-removebg-preview.png') }}" 
+                                 alt="Acessibilidade" class="info-icon">
+                          </div>
+                          <div class="info-card-text">
+                            <span class="info-title">Acessibilidade</span>
+                            <span class="info-desc">Lugares estratégicos para fácil acesso</span>
+                          </div>
+                        </div>
+                        
+                        <div class="info-card">
+                          <div class="info-card-icon">
+                            <i class="fas fa-eye"></i>
+                          </div>
+                          <div class="info-card-text">
+                            <span class="info-title">Visibilidade</span>
+                            <span class="info-desc">Excelente vista do ecrã em todos os lugares</span>
+                          </div>
+                        </div>
+                        
+                        <div class="info-card">
+                          <div class="info-card-icon">
+                            <i class="fas fa-volume-up"></i>
+                          </div>
+                          <div class="info-card-text">
+                            <span class="info-title">Som Surround</span>
+                            <span class="info-desc">Sistema de áudio premium em toda a sala</span>
+                          </div>
+                        </div>
+                        
+                        <div class="info-card">
+                          <div class="info-card-icon">
+                            <i class="fas fa-snowflake"></i>
+                          </div>
+                          <div class="info-card-text">
+                            <span class="info-title">Climatização</span>
+                            <span class="info-desc">Temperatura controlada para máximo conforto</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="modal-lugares-footer">
+                    <button class="btn-entendido" id="btn-modal-close">
+                      <i class="fas fa-check"></i>
+                      Entendido
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button id="voltar-bilhetes" class="btn-secondary"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button id="continuar-bar" class="btn-primary" disabled>
+                  Continuar <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- PASSO 3: BAR (OPCIONAL) -->
+            <div id="passo-bar" class="form-step">
+              <div class="step-header">
+                <h2>3. Bar (Opcional)</h2>
+                <p>Adicione produtos do bar à sua reserva</p>
+              </div>
+
+              <div class="bar-content">
+                <div class="bar-categorias">
+                  <button class="categoria-btn active" data-categoria="menus">
+                    <i class="fas fa-utensils"></i>Menus
+                  </button>
+                  <button class="categoria-btn" data-categoria="bebidas">
+                    <i class="fas fa-glass-cheers"></i>Bebidas
+                  </button>
+                  <button class="categoria-btn" data-categoria="snacks">
+                    <i class="fas fa-cookie-bite"></i>Snacks
+                  </button>
+                </div>
+
+
+
+                <div class="produtos-container">
+                  <!-- Menus -->
+                  <div class="categoria-produtos active" id="categoria-menus">
+                    {% for menu in menus_bar %}
+                    <div class="produto-card" data-produto-id="menu-{{ menu.id }}">
+                      <div class="produto-imagem">
+                        <img src="{{ menu.imagem_url if menu.imagem_url else url_for('static', filename='imgs/bar/menu-default.svg') }}" 
+                             alt="{{ menu.nome }}" 
+                             class="produto-img"
+                             loading="eager"
+                             decoding="async">
+                        <div class="produto-overlay">
+                          <i class="fas fa-utensils"></i>
+                        </div>
+                      </div>
+                      <div class="produto-info">
+                        <h4>{{ menu.nome }}</h4>
+                        <p>{{ menu.descricao }}</p>
+                        <span class="produto-preco">{{ "%.2f"|format(menu.preco_total) }}€</span>
+                      </div>
+                      <div class="produto-controls">
+                        <button class="btn-menos" data-id="menu-{{ menu.id }}" data-tipo="menu" disabled>-</button>
+                        <span class="quantidade" data-id="menu-{{ menu.id }}">0</span>
+                        <button class="btn-mais" data-id="menu-{{ menu.id }}" data-tipo="menu">+</button>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+
+                  <!-- Produtos -->
+                  <div class="categoria-produtos" id="categoria-bebidas">
+                    {% for produto in produtos_bar if produto.tipo.lower() in ['bebida', 'drink'] %}
+                    <div class="produto-card" data-produto-id="produto-{{ produto.id }}">
+                      <div class="produto-imagem">
+                        <img src="{{ produto.imagem if produto.imagem else url_for('static', filename='imgs/bar/bebida-default.svg') }}" 
+                             alt="{{ produto.nome }}" 
+                             class="produto-img"
+                             loading="eager"
+                             decoding="async">
+                        <div class="produto-overlay">
+                          <i class="fas fa-glass-cheers"></i>
+                        </div>
+                      </div>
+                      <div class="produto-info">
+                        <h4>{{ produto.nome }}</h4>
+                        <p>{{ produto.descricao if produto.descricao else 'Deliciosa bebida para acompanhar o filme' }}</p>
+                        <span class="produto-preco">{{ "%.2f"|format(produto.preco) }}€</span>
+                      </div>
+                      <div class="produto-controls">
+                        <button class="btn-menos" data-id="produto-{{ produto.id }}" data-tipo="produto" disabled>-</button>
+                        <span class="quantidade" data-id="produto-{{ produto.id }}">0</span>
+                        <button class="btn-mais" data-id="produto-{{ produto.id }}" data-tipo="produto">+</button>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+
+                  <div class="categoria-produtos" id="categoria-snacks">
+                    {% for produto in produtos_bar if produto.tipo.lower() in ['snack', 'lanche'] %}
+                    <div class="produto-card" data-produto-id="produto-{{ produto.id }}">
+                      <div class="produto-imagem">
+                        <img src="{{ produto.imagem if produto.imagem else url_for('static', filename='imgs/bar/snack-default.svg') }}" 
+                             alt="{{ produto.nome }}" 
+                             class="produto-img"
+                             loading="eager"
+                             decoding="async">
+                        <div class="produto-overlay">
+                          <i class="fas fa-cookie-bite"></i>
+                        </div>
+                      </div>
+                      <div class="produto-info">
+                        <h4>{{ produto.nome }}</h4>
+                        <p>{{ produto.descricao if produto.descricao else 'Delicioso snack para acompanhar o filme' }}</p>
+                        <span class="produto-preco">{{ "%.2f"|format(produto.preco) }}€</span>
+                      </div>
+                      <div class="produto-controls">
+                        <button class="btn-menos" data-id="produto-{{ produto.id }}" data-tipo="produto" disabled>-</button>
+                        <span class="quantidade" data-id="produto-{{ produto.id }}">0</span>
+                        <button class="btn-mais" data-id="produto-{{ produto.id }}" data-tipo="produto">+</button>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button id="voltar-lugares-bar" class="btn-secondary"><i class="fas fa-arrow-left"></i> Voltar aos Lugares</button>
+                <button id="pular-bar" class="btn-skip">Pular Bar</button>
+                <button id="continuar-confirmacao-bar" class="btn-primary">
+                  Continuar <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- PASSO 4: CONFIRMAÇÃO -->
+            <div id="passo-confirmacao" class="form-step">
+              <div class="step-header">
+                <h2>4. Resumo e Finalização</h2>
+                <p>Confirme os detalhes e complete a sua reserva</p>
+              </div>
+
+              <!-- Layout de Duas Colunas -->
+              <div class="resumo-layout">
+                
+                <!-- Coluna Esquerda: Resumo -->
+                <div class="resumo-coluna">
+                  <div class="resumo-card-unico">
+                    <div class="title-with-icon">
+                      <i class="fas fa-receipt"></i>
+                    </div>
+                    <h3>Resumo da Reserva</h3>
+                  </div>
+
+                  <!-- Informações da Sessão -->
+                  <div class="resumo-section">
+                    <h4><i class="fas fa-video"></i> Sessão de Cinema</h4>
+                    <div class="resumo-details">
+                      <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-film"></i> Filme:</span>
+                        <span class="detail-value" id="resumo-filme-titulo">{{ filme.titulo }}</span>
+                      </div>
+                      <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-clock"></i> Data & Hora:</span>
+                        <span class="detail-value" id="resumo-sessao-data">
+                          {% if data_sessao %}{{ data_sessao }}{% else %}Data não definida{% endif %} às 
+                          {% if horario and horario.hora_str %}{{ horario.hora_str }}{% else %}Hora não definida{% endif %}
+                        </span>
+                      </div>
+                      <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-map-marker-alt"></i> Cinema:</span>
+                        <span class="detail-value" id="resumo-cinema">{{ cinema.nome }}</span>
+                      </div>
+                      <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-couch"></i> Sala:</span>
+                        <span class="detail-value" id="resumo-sala">{{ sala.nome_sala if sala and sala.nome_sala else 'Não definida' }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Informações dos Bilhetes -->
+                  <div class="resumo-section">
+                    <h4><i class="fas fa-tickets-alt"></i> Bilhetes</h4>
+                    <div class="resumo-details">
+                      <div class="detail-row">
+                        <span class="detail-label">Quantidade:</span>
+                        <span class="detail-value"><span id="resumo-bilhetes-qtd">0</span> bilhete(s)</span>
+                      </div>
+                      <div class="detail-row">
+                        <span class="detail-label">Preço unitário:</span>
+                        <span class="detail-value" id="resumo-preco-unitario">8.50€</span>
+                      </div>
+                      <div class="detail-row">
+                        <span class="detail-label">Lugares:</span>
+                        <span class="detail-value" id="resumo-lugares-lista">Nenhum selecionado</span>
+                      </div>
+                      <div class="detail-row subtotal">
+                        <span class="detail-label">Subtotal Bilhetes:</span>
+                        <span class="detail-value" id="resumo-bilhetes-total">0.00€</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Informações do Bar -->
+                  <div class="resumo-section resumo-section-hidden" id="resumo-bar-section">
+                    <h4><i class="fas fa-utensils"></i> Produtos do Bar</h4>
+                    <div class="resumo-details">
+                      <div id="resumo-bar-produtos">
+                        <!-- Produtos serão adicionados dinamicamente -->
+                      </div>
+                      <div class="detail-row subtotal">
+                        <span class="detail-label">Subtotal Bar:</span>
+                        <span class="detail-value" id="resumo-bar-total">0.00€</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Total Final -->
+                  <div class="resumo-item-moderno total-especial">
+                    <span class="resumo-label-moderno">Total a Pagar</span>
+                    <span class="resumo-valor-moderno" id="resumo-total-final">0.00€</span>
+                  </div>
+                </div>
+
+                <!-- Coluna Direita: Dados Pessoais -->
+                <div class="dados-coluna">
+                  <div class="dados-card">
+                    <div class="title-with-icon">
+                      <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Dados Pessoais</h3>
+                  </div>
+
+                  {% if user_authenticated %}
+                    <!-- Usuário Logado -->
+                    <div class="user-info-container">
+                      <div class="user-info-content">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                          <p class="logged-name">Autenticado como <strong>{{ user_name }}</strong></p>
+                          <p class="logged-email">Confirmação será enviada para: <strong>{{ user_email }}</strong></p>
+                        </div>
+                      </div>
+                    </div>
+                  {% else %}
+                    <!-- Formulário para Não Logados -->
+                    <div class="dados-form">
+                      <div class="dados-grupo required">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+                      </div>
+                      
+                      <div class="dados-grupo required">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="Digite seu email">
+                      </div>
+                      
+                      <div class="dados-grupo required">
+                        <label for="telefone">Telefone <span class="opcional">(opcional)</span></label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone (opcional)">
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  <!-- Informações de Segurança -->
+                  <p class="finalizacao-info">
+                    <i class="fas fa-shield-alt"></i>
+                    Pagamento 100% seguro e protegido
+                  </p>
+                  
+                  <!-- Botão Finalizar -->
+                  <button id="finalizar-reserva" class="btn-finalizar" disabled>
+                    <div class="btn-icon">
+                      <i class="fas fa-credit-card"></i>
+                    </div>
+                    <span class="btn-text">EFETUAR PAGAMENTO</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button id="voltar-bar" class="btn-secondary"><i class="fas fa-arrow-left"></i> Voltar ao Bar</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+   <footer class="footer">
+  <div class="footer-main">
+    <div class="footer-container">
+      
+      <!-- Seção da empresa -->
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
+          <h3>CineVibe</h3>
+        </div>
+        <p class="footer-description">
+          A sua experiência cinematográfica completa. Descubra os melhores filmes, 
+          reserve os seus lugares e desfrute de momentos únicos no cinema.
+        </p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><img src="{{ url_for('static', filename='imgs/icons/R-removebg-preview (2).png') }}" alt="Instagram"></a>
+          <a href="#" aria-label="X"><img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X"></a>
+          <a href="#" aria-label="Tik Tok"><img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok"></a>
+        </div>
+      </div>
+
+      <!-- Links rápidos -->
+      <div class="footer-section">
+        <h4>Links Rápidos</h4>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('filmes') }}">Filmes em Cartaz</a></li>
+          <li><a href="{{ url_for('cinemas') }}">Os Nossos Cinemas</a></li>
+          <li><a href="{{ url_for('cine_acessivel') }}">CineAcessível</a></li>
+          <li><a href="{{ url_for('bar') }}">Bar & Snacks</a></li>
+          <li><a href="{{ url_for('beneficios') }}">Benefícios</a></li>
+        </ul>
+      </div>
+
+      <!-- Serviços -->
+      <div class="footer-section">
+        <h4>Serviços</h4>
+        <ul class="footer-links">
+          <li><a href="#">Reservas Online</a></li>
+          <li><a href="#">Sessões Privadas</a></li>
+          <li><a href="#">Eventos Corporativos</a></li>
+          <li><a href="#">Gift Cards</a></li>
+          <li><a href="#">Programa de Fidelidade</a></li>
+        </ul>
+      </div>
+
+      <!-- Suporte -->
+      <div class="footer-section">
+        <h4>Suporte</h4>
+        <ul class="footer-links">
+          <li><a href="#">Contactos</a></li>
+          <li><a href="#">FAQ's</a></li>
+          <li><a href="#">Centro de Ajuda</a></li>
+          <li><a href="#">Feedback</a></li>
+          <li><a href="#">Recrutamento</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="footer-section newsletter-section">
+        <h4>Newsletter</h4>
+        <p>Receba as últimas novidades e promoções exclusivas</p>
+        <form class="newsletter-form">
+          <div class="newsletter-input-group">
+            <input type="email" placeholder="O seu email" required>
+            <button type="submit">Subscrever</button>
+          </div>
+        </form>
+        <div class="footer-contact">
+          <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <span>+351 123 456 789</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">✉️</span>
+            <span>info@cinevibe.pt</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer bottom -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-container">
+      <div class="footer-bottom-content">
+        <div class="footer-legal">
+          <p>&copy; 2024 CineVibe. Todos os direitos reservados.</p>
+          <div class="legal-links">
+            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+            <a href="{{ url_for('cookies_page') }}">Cookies</a>
+          </div>
+        </div>
+        <div class="footer-certifications">
+          <span>Pagamentos seguros:</span>
+          <div class="cert-logos">
+            <span class="cert-text">SSL</span>
+            <span class="cert-text">VISA</span>
+            <span class="cert-text">MASTERCARD</span>
+            <span class="cert-text">MB WAY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Variáveis globais
+    let quantidadeBilhetes = 0;
+    let lugaresSelecionados = [];
+    let produtosBar = {};
+    let precoUnitario = {% if horario and horario.preco %}{{ horario.preco }}{% else %}8.50{% endif %};
+    let ultimaAreaSelecionada = null; // Para evitar repetir a mesma área
+    
+    // FUNÇÃO PARA CALCULAR LAYOUT DINÂMICO DA SALA
+    function calcularLayoutSala(capacidade) {
+      let layout = {};
+      
+      if (capacidade <= 100) {
+        // SALA PEQUENA (até 100 lugares)
+        layout = {
+          filas: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+          lugaresporFila: 14, // 3 + 4 + corredor + 4 + 3 = 14
+          distribuicao: { lateral: 3, centro: 4 }
+        };
+      } else if (capacidade <= 150) {
+        // SALA MÉDIA (101-150 lugares)
+        layout = {
+          filas: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+          lugaresporFila: 18, // 4 + 5 + corredor + 5 + 4 = 18
+          distribuicao: { lateral: 4, centro: 5 }
+        };
+      } else if (capacidade <= 250) {
+        // SALA GRANDE (151-250 lugares)
+        layout = {
+          filas: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
+          lugaresporFila: 22, // 5 + 6 + corredor + 6 + 5 = 22
+          distribuicao: { lateral: 5, centro: 6 }
+        };
+      } else {
+        // SALA PREMIUM (251+ lugares)
+        layout = {
+          filas: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
+          lugaresporFila: 28, // 6 + 8 + corredor + 8 + 6 = 28
+          distribuicao: { lateral: 6, centro: 8 }
+        };
+      }
+      
+      return layout;
+    }
+    
+    // FUNÇÃO PARA GERAR LUGARES ESPECIAIS (HARDCODED)
+    function gerarLugaresEspeciais(filas, layout) {
+      const numFilas = filas.length;
+      const lugaresporFila = layout.lugaresporFila;
+      const lateral = layout.distribuicao.lateral;
+      const centro = layout.distribuicao.centro;
+      
+      // Calcular posições centrais
+      const centroEsq = lateral + Math.floor(centro / 2);
+      const centroDir = lateral + centro + Math.floor(centro / 2);
+      
+      // Filas do meio (melhores para VIP)
+      const filaMeio1 = Math.floor(numFilas * 0.4); // ~40% das filas
+      const filaMeio2 = Math.floor(numFilas * 0.5); // ~50% das filas
+      const filaMeio3 = Math.floor(numFilas * 0.6); // ~60% das filas
+      
+      return {
+        // Lugares acessíveis (sempre em pares nas laterais)
+        acessiveis: [
+          `${filas[filaMeio2]}1`, `${filas[filaMeio2]}2`, // Par esquerdo meio
+          `${filas[filaMeio2]}${lugaresporFila-1}`, `${filas[filaMeio2]}${lugaresporFila}`, // Par direito meio
+          `${filas[numFilas-2]}1`, `${filas[numFilas-2]}2`, // Par esquerdo traseiro
+          `${filas[numFilas-2]}${lugaresporFila-1}`, `${filas[numFilas-2]}${lugaresporFila}` // Par direito traseiro
+        ],
+        
+        // Lugares VIP (centro das melhores filas)
+        vip: [
+          `${filas[filaMeio1]}${centroEsq}`, `${filas[filaMeio1]}${centroEsq+1}`, `${filas[filaMeio1]}${centroDir}`, `${filas[filaMeio1]}${centroDir+1}`,
+          `${filas[filaMeio2]}${centroEsq}`, `${filas[filaMeio2]}${centroEsq+1}`, `${filas[filaMeio2]}${centroDir}`, `${filas[filaMeio2]}${centroDir+1}`,
+          `${filas[filaMeio3]}${centroEsq}`, `${filas[filaMeio3]}${centroEsq+1}`, `${filas[filaMeio3]}${centroDir}`, `${filas[filaMeio3]}${centroDir+1}`
+        ],
+        
+        // Lugares Premium (boas posições centrais)
+        premium: [
+          `${filas[filaMeio1-1]}${centroEsq-1}`, `${filas[filaMeio1-1]}${centroEsq}`, `${filas[filaMeio1-1]}${centroDir}`, `${filas[filaMeio1-1]}${centroDir+1}`,
+          `${filas[filaMeio1]}${centroEsq-1}`, `${filas[filaMeio1]}${centroEsq+2}`, `${filas[filaMeio1]}${centroDir-1}`, `${filas[filaMeio1]}${centroDir+2}`,
+          `${filas[filaMeio2]}${centroEsq-1}`, `${filas[filaMeio2]}${centroEsq+2}`, `${filas[filaMeio2]}${centroDir-1}`, `${filas[filaMeio2]}${centroDir+2}`,
+          `${filas[filaMeio3]}${centroEsq-1}`, `${filas[filaMeio3]}${centroEsq}`, `${filas[filaMeio3]}${centroDir}`, `${filas[filaMeio3]}${centroDir+1}`
+        ],
+        
+        // Lugares Casal (SOLUÇÃO DEFINITIVA - sempre duplas consecutivas)
+        casal: (() => {
+          const lugaresCasal = [];
+          const filasCasal = filaMeio2; // Usar fila do meio
+          
+          // DEFINIÇÃO FIXA E SIMPLES - sempre duplas consecutivas
+          // Posições centralizadas mais à direita conforme solicitado
+          if (lugaresporFila >= 28) {
+            // Sala grande (28 lugares) - 6 duplas bem espaçadas
+            lugaresCasal.push(
+              `${filas[filasCasal]}10`, `${filas[filasCasal]}11`,  // Dupla 1
+              `${filas[filasCasal]}13`, `${filas[filasCasal]}14`,  // Dupla 2
+              `${filas[filasCasal]}16`, `${filas[filasCasal]}17`,  // Dupla 3
+              `${filas[filasCasal]}19`, `${filas[filasCasal]}20`,  // Dupla 4
+              `${filas[filasCasal]}22`, `${filas[filasCasal]}23`,  // Dupla 5
+              `${filas[filasCasal]}25`, `${filas[filasCasal]}26`   // Dupla 6
+            );
+          } else if (lugaresporFila >= 22) {
+            // Sala média-grande (22 lugares) - 5 duplas
+            lugaresCasal.push(
+              `${filas[filasCasal]}7`, `${filas[filasCasal]}8`,    // Dupla 1
+              `${filas[filasCasal]}10`, `${filas[filasCasal]}11`,  // Dupla 2
+              `${filas[filasCasal]}13`, `${filas[filasCasal]}14`,  // Dupla 3
+              `${filas[filasCasal]}16`, `${filas[filasCasal]}17`,  // Dupla 4
+              `${filas[filasCasal]}19`, `${filas[filasCasal]}20`   // Dupla 5
+            );
+          } else if (lugaresporFila >= 18) {
+            // Sala média (18 lugares) - 4 duplas
+            lugaresCasal.push(
+              `${filas[filasCasal]}6`, `${filas[filasCasal]}7`,    // Dupla 1
+              `${filas[filasCasal]}9`, `${filas[filasCasal]}10`,   // Dupla 2
+              `${filas[filasCasal]}12`, `${filas[filasCasal]}13`,  // Dupla 3
+              `${filas[filasCasal]}15`, `${filas[filasCasal]}16`   // Dupla 4
+            );
+          } else {
+            // Sala pequena (14 lugares) - 3 duplas
+            lugaresCasal.push(
+              `${filas[filasCasal]}5`, `${filas[filasCasal]}6`,    // Dupla 1
+              `${filas[filasCasal]}8`, `${filas[filasCasal]}9`,    // Dupla 2
+              `${filas[filasCasal]}11`, `${filas[filasCasal]}12`   // Dupla 3  
+            );
+          }
+          
+          return lugaresCasal;
+        })()
+      };
+    }
+    
+    // Dados da sessão
+    const sessaoData = {
+      filme_id: {% if filme and filme.id %}{{ filme.id }}{% else %}null{% endif %},
+      cinema_id: {% if cinema and cinema.id %}{{ cinema.id }}{% else %}null{% endif %},
+      tipo_id: {% if tipo_sessao and tipo_sessao.id %}{{ tipo_sessao.id }}{% else %}null{% endif %},
+      sala_id: {% if sala and sala.id %}{{ sala.id }}{% else %}null{% endif %},
+      horario_id: {% if horario and horario.id %}{{ horario.id }}{% else %}null{% endif %},
+      data_sessao: '{% if data_sessao %}{{ data_sessao }}{% else %}{% endif %}',
+      preco_unitario: precoUnitario
+    };
+    
+    console.log('Dados da sessão inicializados:', sessaoData);
+
+    // Sidebar
+    const resumoBilhetes = document.getElementById('resumo-bilhetes');
+    const resumoLugaresSidebar = document.getElementById('resumo-lugares-sidebar');
+    const resumoBarSidebar = document.getElementById('resumo-bar-sidebar');
+    const resumoTotalSidebar = document.getElementById('resumo-total-sidebar');
+
+    // Elementos do DOM
+    const passos = document.querySelectorAll('.form-step');
+    const btnsBilhete = document.querySelectorAll('.btn-bilhete');
+    const quantidadeInput = document.getElementById('quantidade-bilhetes');
+    const btnMenos = document.getElementById('btn-menos-bilhetes');
+    const btnMais = document.getElementById('btn-mais-bilhetes');
+    const btnContinuarLugares = document.getElementById('continuar-lugares');
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+      inicializarEventos();
+      atualizarResumo();
+    });
+
+    function inicializarEventos() {
+      // Eventos dos bilhetes
+      btnsBilhete.forEach(btn => {
+        btn.addEventListener('click', () => selecionarQuantidade(parseInt(btn.dataset.qtd)));
+      });
+
+      btnMenos.addEventListener('click', () => {
+        if (quantidadeInput.value > 1) {
+          quantidadeInput.value = parseInt(quantidadeInput.value) - 1;
+          selecionarQuantidade(parseInt(quantidadeInput.value));
+        }
+      });
+
+      btnMais.addEventListener('click', () => {
+        if (quantidadeInput.value < 50) {
+          quantidadeInput.value = parseInt(quantidadeInput.value) + 1;
+          selecionarQuantidade(parseInt(quantidadeInput.value));
+        }
+      });
+
+      quantidadeInput.addEventListener('change', () => {
+        selecionarQuantidade(parseInt(quantidadeInput.value));
+      });
+
+      // Navegação entre passos
+      btnContinuarLugares.addEventListener('click', () => {
+        if (quantidadeBilhetes > 0) {
+          mostrarPasso('passo-lugares');
+          gerarLugares();
+          // Atualizar texto de lugares necessários
+          document.getElementById('lugares-necessarios').textContent = quantidadeBilhetes;
+          // Scroll automático para o topo
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      document.getElementById('voltar-bilhetes').addEventListener('click', () => {
+        mostrarPasso('passo-bilhetes');
+      });
+
+      document.getElementById('continuar-bar').addEventListener('click', () => {
+        if (lugaresSelecionados.length === quantidadeBilhetes) {
+          mostrarPasso('passo-bar');
+          // Scroll automático para o topo
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      document.getElementById('voltar-lugares-bar').addEventListener('click', () => {
+        mostrarPasso('passo-lugares');
+      });
+
+      document.getElementById('pular-bar').addEventListener('click', () => {
+        mostrarPasso('passo-confirmacao');
+        atualizarResumoFinal();
+        // Scroll automático para o topo
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.getElementById('continuar-confirmacao-bar').addEventListener('click', () => {
+        mostrarPasso('passo-confirmacao');
+        atualizarResumoFinal();
+        // Scroll automático para o topo
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.getElementById('voltar-bar').addEventListener('click', () => {
+        mostrarPasso('passo-bar');
+      });
+
+      // Modal de informações premium
+      // Modal de informações ultra premium
+      const btnInfoLugares = document.getElementById('btn-info-lugares');
+      const modalInfo = document.getElementById('modal-info');
+      
+      if (btnInfoLugares && modalInfo) {
+        btnInfoLugares.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+
+          
+          const modalContent = modalInfo.querySelector('.modal-lugares-content');
+          
+          // Resetar scroll do modal
+          if (modalContent) {
+            modalContent.scrollTop = 0;
+          }
+          
+          // Prevenir scroll da página
+          document.body.style.overflow = 'hidden';
+          
+          // Mostrar modal
+          modalInfo.style.display = 'flex';
+          setTimeout(() => {
+            modalInfo.classList.add('active');
+
+          }, 50);
+        });
+      } else {
+        console.error('Botão ou modal não encontrado:', {
+          botao: btnInfoLugares,
+          modal: modalInfo
+        });
+      }
+      
+
+      
+      function closeModalLugares() {
+
+        const modal = document.getElementById('modal-info');
+        
+        // Restaurar scroll da página
+        document.body.style.overflow = '';
+        
+        // Fechar modal
+        modal.classList.remove('active');
+        setTimeout(() => {
+          modal.style.display = 'none';
+
+        }, 400);
+      }
+      
+      // Event listeners para fechar modal
+      const modalClose = document.getElementById('modal-close');
+      if (modalClose) {
+        modalClose.addEventListener('click', (e) => {
+          e.preventDefault();
+          closeModalLugares();
+        });
+      }
+      
+      // Botão entendido
+      const btnEntendido = document.getElementById('btn-modal-close');
+      if (btnEntendido) {
+        btnEntendido.addEventListener('click', (e) => {
+          e.preventDefault();
+          closeModalLugares();
+        });
+      }
+      
+      // Fechar modal clicando fora
+      if (modalInfo) {
+        modalInfo.addEventListener('click', (e) => {
+          if (e.target.classList.contains('modal-lugares-overlay')) {
+            closeModalLugares();
+          }
+        });
+      }
+      
+      // Fechar modal com ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('modal-info');
+          if (modal.classList.contains('active')) {
+            closeModalLugares();
+          }
+        }
+      });
+
+      // Categorias do bar com animação suave
+      document.querySelectorAll('.categoria-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remover classes ativas
+          document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.categoria-produtos').forEach(c => c.classList.remove('active'));
+          
+          // Adicionar classe ativa com delay para animação
+          btn.classList.add('active');
+          
+          setTimeout(() => {
+            document.getElementById(`categoria-${btn.dataset.categoria}`).classList.add('active');
+          }, 150);
+        });
+      });
+
+      // Animação de entrada dos produtos
+      function animateProductCards() {
+        const cards = document.querySelectorAll('.produto-card');
+        cards.forEach((card, index) => {
+          card.classList.add('slide-in');
+          card.style.animationDelay = `${index * 0.1}s`;
+        });
+      }
+
+      // Executar animação quando a página carrega
+      setTimeout(animateProductCards, 500);
+
+      // Controles do bar
+      document.querySelectorAll('.btn-mais').forEach(btn => {
+        btn.addEventListener('click', () => adicionarProduto(btn.dataset.id, btn.dataset.tipo));
+      });
+
+      document.querySelectorAll('.btn-menos').forEach(btn => {
+        btn.addEventListener('click', () => removerProduto(btn.dataset.id, btn.dataset.tipo));
+      });
+
+      // Finalizar reserva
+      document.getElementById('finalizar-reserva').addEventListener('click', finalizarReserva);
+    }
+
+    function selecionarQuantidade(qtd) {
+      quantidadeBilhetes = qtd;
+      
+      // Resetar seleção de lugares se já estiver no passo de lugares
+      if (document.getElementById('passo-lugares').classList.contains('active')) {
+        resetarSelecaoLugares();
+        // Regenerar lugares com nova pré-seleção
+        setTimeout(() => {
+          gerarLugares();
+        }, 100);
+      }
+      
+      // Atualizar visual dos botões
+      btnsBilhete.forEach(btn => {
+        btn.classList.remove('selected');
+        if (parseInt(btn.dataset.qtd) === qtd) {
+          btn.classList.add('selected');
+        }
+      });
+
+      // Atualizar input
+      quantidadeInput.value = qtd;
+      
+      // Habilitar botão continuar
+      btnContinuarLugares.disabled = qtd === 0;
+      
+      // Atualizar botões +/-
+      btnMenos.disabled = qtd <= 1;
+      btnMais.disabled = qtd >= 50;
+
+      // Limpar lugares selecionados
+      lugaresSelecionados = [];
+      
+      // Atualizar resumo
+      atualizarResumo();
+      
+      // Atualizar texto de lugares necessários
+      document.getElementById('lugares-necessarios').textContent = qtd;
+    }
+
+    function mostrarPasso(passoId) {
+      passos.forEach(passo => passo.classList.remove('active'));
+      document.getElementById(passoId).classList.add('active');
+      
+      // Mostrar sidebar nos passos finais
+      const reservaLayout = document.querySelector('.reserva-layout');
+      if (passoId === 'passo-confirmacao') {
+        reservaLayout.classList.add('show-sidebar');
+      } else {
+        reservaLayout.classList.remove('show-sidebar');
+      }
+    }
+
+    function gerarLugares() {
+      const salaContainer = document.getElementById('sala-lugares');
+      salaContainer.innerHTML = '';
+      
+      // SISTEMA DINÂMICO BASEADO NA CAPACIDADE DA SALA E TIPOS DE LUGARES
+      const capacidadeSala = {% if sala and sala.capacidade %}{{ sala.capacidade }}{% else %}336{% endif %};
+      const lugaresAcessiveis = {% if sala and sala.lugares_acessiveis %}{{ sala.lugares_acessiveis }}{% else %}8{% endif %};
+      const lugaresCasal = {% if sala and sala.lugares_casal %}{{ sala.lugares_casal }}{% else %}8{% endif %};
+      const lugaresPremium = {% if sala and sala.lugares_premium %}{{ sala.lugares_premium }}{% else %}8{% endif %};
+      const tipoSala = '{% if sala and sala.tipo_sala %}{{ sala.tipo_sala }}{% else %}Normal{% endif %}';
+      
+      const layoutSala = calcularLayoutSala(capacidadeSala);
+      
+      // Adicionar informações dos lugares especiais ao layout
+      layoutSala.lugaresEspeciais = {
+        acessiveis: lugaresAcessiveis,
+        casal: lugaresCasal,
+        premium: lugaresPremium,
+        tipoSala: tipoSala
+      };
+      
+      const filas = layoutSala.filas;
+      const lugaresporFila = layoutSala.lugaresporFila;
+      
+      // Tornar layout acessível globalmente para outras funções
+      window.currentLayoutSala = layoutSala;
+      window.currentLayoutSala.lugaresporFila = lugaresporFila;
+      
+      console.log(`Gerando sala com ${capacidadeSala} lugares: ${filas.length} filas × ${lugaresporFila} lugares`);
+      
+      // Lugares realmente ocupados por outras reservas (poucos)
+      const ocupados = [
+        {% if lugares %}
+          {% for lugar in lugares %}
+            {% if lugar.ocupado == 1 %}
+              '{{ lugar.nome_lugar }}'{% if not loop.last %},{% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      ];
+      
+
+      
+      // GERAR LUGARES ESPECIAIS (HARDCODED)
+      const lugaresEspeciais = gerarLugaresEspeciais(filas, layoutSala);
+      const lugaresAcessiveis = lugaresEspeciais.acessiveis;
+      const lugaresVIP = lugaresEspeciais.vip;
+      const lugaresPremium = lugaresEspeciais.premium;
+      const lugaresCasal = lugaresEspeciais.casal;
+      const lugaresPremium = lugaresEspeciais.premium;
+      const lugaresCasal = lugaresEspeciais.casal;
+      
+
+      
+      // Container principal da sala
+      const wideHall = document.createElement('div');
+      wideHall.className = 'wide-cinema-hall';
+      
+      // Gerar todas as filas mais largas
+      filas.forEach((fila, index) => {
+        const filaElement = document.createElement('div');
+        filaElement.className = 'wide-cinema-row';
+        filaElement.dataset.row = fila;
+        
+        // Sem label da fila
+        
+        // Saída de emergência esquerda (apenas na última fila)
+        if (index === filas.length - 1) { // Última fila
+          const saidaEsq = document.createElement('div');
+          saidaEsq.className = 'wide-emergency-exit left-exit';
+          saidaEsq.innerHTML = '<img src="static/imgs/icons/png-clipart-the-door-computer-icons-house-door-angle-furniture-thumbnail-removebg-preview.png" alt="Porta" style="width: 100%; height: 100%; object-fit: contain;">'; // Ícone da porta
+          filaElement.appendChild(saidaEsq);
+        }
+        
+        // Lugares laterais esquerdos (dinâmico)
+        for (let num = 1; num <= layoutSala.distribuicao.lateral; num++) {
+          const seat = document.createElement('div');
+          seat.className = 'wide-cinema-seat lateral-seat';
+          seat.dataset.row = fila;
+          seat.dataset.number = num;
+          seat.dataset.id = `${fila}${num}`;
+          
+          if (ocupados.includes(`${fila}${num}`)) {
+            seat.classList.add('occupied');
+          } else if (lugaresAcessiveis.includes(`${fila}${num}`)) {
+            seat.classList.add('wheelchair');
+          } else if (lugaresVIP.includes(`${fila}${num}`)) {
+            seat.classList.add('vip-seat');
+          } else if (lugaresPremium.includes(`${fila}${num}`)) {
+            seat.classList.add('premium-seat');
+          } else if (lugaresCasal.includes(`${fila}${num}`)) {
+            seat.classList.add('couple-seat');
+          }
+          
+          seat.onclick = () => wideSelectSeat(seat);
+          
+          filaElement.appendChild(seat);
+        }
+        
+        // Lugares centrais esquerdos (dinâmico)
+        const inicioEsquerda = layoutSala.distribuicao.lateral + 1;
+        const fimEsquerda = layoutSala.distribuicao.lateral + layoutSala.distribuicao.centro;
+        for (let num = inicioEsquerda; num <= fimEsquerda; num++) {
+          const seat = document.createElement('div');
+          seat.className = 'wide-cinema-seat';
+          seat.dataset.row = fila;
+          seat.dataset.number = num;
+          seat.dataset.id = `${fila}${num}`;
+          
+          if (ocupados.includes(`${fila}${num}`)) {
+            seat.classList.add('occupied');
+          } else if (lugaresAcessiveis.includes(`${fila}${num}`)) {
+            seat.classList.add('wheelchair');
+          } else if (lugaresVIP.includes(`${fila}${num}`)) {
+            seat.classList.add('vip-seat');
+          } else if (lugaresPremium.includes(`${fila}${num}`)) {
+            seat.classList.add('premium-seat');
+          } else if (lugaresCasal.includes(`${fila}${num}`)) {
+            seat.classList.add('couple-seat');
+          }
+          
+          seat.onclick = () => wideSelectSeat(seat);
+          
+          filaElement.appendChild(seat);
+        }
+        
+        // Corredor central
+        const corredor = document.createElement('div');
+        corredor.className = 'wide-center-aisle';
+        filaElement.appendChild(corredor);
+        
+        // Lugares centrais direitos (dinâmico)
+        const inicioDireita = layoutSala.distribuicao.lateral + layoutSala.distribuicao.centro + 1;
+        const fimDireita = layoutSala.distribuicao.lateral + (layoutSala.distribuicao.centro * 2);
+        for (let num = inicioDireita; num <= fimDireita; num++) {
+          const seat = document.createElement('div');
+          seat.className = 'wide-cinema-seat';
+          seat.dataset.row = fila;
+          seat.dataset.number = num;
+          seat.dataset.id = `${fila}${num}`;
+          
+          if (ocupados.includes(`${fila}${num}`)) {
+            seat.classList.add('occupied');
+          } else if (lugaresAcessiveis.includes(`${fila}${num}`)) {
+            seat.classList.add('wheelchair');
+          } else if (lugaresVIP.includes(`${fila}${num}`)) {
+            seat.classList.add('vip-seat');
+          } else if (lugaresPremium.includes(`${fila}${num}`)) {
+            seat.classList.add('premium-seat');
+          } else if (lugaresCasal.includes(`${fila}${num}`)) {
+            seat.classList.add('couple-seat');
+          }
+          
+          seat.onclick = () => wideSelectSeat(seat);
+          
+          filaElement.appendChild(seat);
+        }
+        
+        // Lugares laterais direitos (dinâmico)
+        const inicioLateralDir = layoutSala.distribuicao.lateral + (layoutSala.distribuicao.centro * 2) + 1;
+        const fimLateralDir = lugaresporFila;
+        for (let num = inicioLateralDir; num <= fimLateralDir; num++) {
+          const seat = document.createElement('div');
+          seat.className = 'wide-cinema-seat lateral-seat';
+          seat.dataset.row = fila;
+          seat.dataset.number = num;
+          seat.dataset.id = `${fila}${num}`;
+          
+          if (ocupados.includes(`${fila}${num}`)) {
+            seat.classList.add('occupied');
+          } else if (lugaresAcessiveis.includes(`${fila}${num}`)) {
+            seat.classList.add('wheelchair');
+          } else if (lugaresVIP.includes(`${fila}${num}`)) {
+            seat.classList.add('vip-seat');
+          } else if (lugaresPremium.includes(`${fila}${num}`)) {
+            seat.classList.add('premium-seat');
+          } else if (lugaresCasal.includes(`${fila}${num}`)) {
+            seat.classList.add('couple-seat');
+          }
+          
+          seat.onclick = () => wideSelectSeat(seat);
+          
+          filaElement.appendChild(seat);
+        }
+        
+        // Saída de emergência direita (apenas na última fila)
+        if (index === filas.length - 1) { // Última fila
+          const saidaDir = document.createElement('div');
+          saidaDir.className = 'wide-emergency-exit right-exit';
+          saidaDir.innerHTML = '<img src="static/imgs/icons/png-clipart-the-door-computer-icons-house-door-angle-furniture-thumbnail-removebg-preview.png" alt="Porta" style="width: 100%; height: 100%; object-fit: contain;">'; // Ícone da porta
+          filaElement.appendChild(saidaDir);
+        }
+        
+        // Sem label da fila
+        
+        wideHall.appendChild(filaElement);
+      });
+      
+      salaContainer.appendChild(wideHall);
+      
+      // Pré-selecionar lugares automaticamente após um pequeno delay
+      console.log('Iniciando pré-seleção com', quantidadeBilhetes, 'bilhetes');
+      setTimeout(() => {
+        console.log('Executando pré-seleção...');
+        preSeleccionarLugaresConsecutivos(filas, ocupados);
+      }, 200);
+    }
+    
+    function preSeleccionarLugaresConsecutivos(filas, ocupados) {
+      console.log('preSeleccionarLugaresConsecutivos chamada com:', quantidadeBilhetes, 'bilhetes');
+      if (quantidadeBilhetes === 0) {
+        console.log('Quantidade de bilhetes é 0, saindo...');
+        return;
+      }
+      
+      // Limpar seleções anteriores
+      lugaresSelecionados = [];
+      document.querySelectorAll('.wide-cinema-seat.selected').forEach(seat => {
+        seat.classList.remove('selected');
+      });
+      console.log('Seleções anteriores limpas');
+      
+      // Encontrar sequências de lugares livres consecutivos
+      const sequenciasLivres = [];
+      
+      filas.forEach(fila => {
+        // Verificar diferentes áreas da sala para mais variedade (dinâmico)
+        const layoutAtual = window.currentLayoutSala || { distribuicao: { lateral: 6, centro: 8 }, lugaresporFila: 28 };
+        const lateral = layoutAtual.distribuicao.lateral;
+        const centro = layoutAtual.distribuicao.centro;
+        const lugaresTotaisFila = layoutAtual.lugaresporFila || 28;
+        
+        console.log(`Fila ${fila}: lateral=${lateral}, centro=${centro}, total=${lugaresTotaisFila}`);
+        const areas = [
+          { inicio: 1, fim: lateral, tipo: 'lateral-esquerda' },
+          { inicio: lateral + 1, fim: lateral + centro, tipo: 'centro-esquerda' },
+          { inicio: lateral + centro + 1, fim: lateral + (centro * 2), tipo: 'centro-direita' },
+          { inicio: lateral + (centro * 2) + 1, fim: lugaresTotaisFila, tipo: 'lateral-direita' }
+        ];
+        
+        areas.forEach(area => {
+          for (let inicio = area.inicio; inicio <= area.fim - quantidadeBilhetes + 1; inicio++) {
+            let sequenciaValida = true;
+            const sequencia = [];
+            
+            // Verificar se todos os lugares da sequência estão livres
+            for (let i = 0; i < quantidadeBilhetes; i++) {
+              const lugarId = `${fila}${inicio + i}`;
+              if (ocupados.includes(lugarId)) {
+                sequenciaValida = false;
+                break;
+              }
+              sequencia.push(lugarId);
+            }
+            
+            if (sequenciaValida) {
+              sequenciasLivres.push({
+                fila: fila,
+                lugares: sequencia,
+                inicio: inicio,
+                filaIndex: filas.indexOf(fila),
+                area: area.tipo
+              });
+            }
+          }
+        });
+      });
+      
+      console.log('Sequências livres encontradas:', sequenciasLivres.length);
+      
+      if (sequenciasLivres.length > 0) {
+        // Priorizar filas do meio dinamicamente
+        const numFilas = filas.length;
+        const indiceMeio = Math.floor(numFilas / 2);
+        const filasPreferidas = [
+          filas[indiceMeio - 1] || filas[0],
+          filas[indiceMeio] || filas[0], 
+          filas[indiceMeio + 1] || filas[0],
+          filas[indiceMeio + 2] || filas[0]
+        ].filter(f => f); // Remove undefined
+        
+        console.log('Filas preferidas calculadas:', filasPreferidas);
+        let sequenciasPreferidas = [];
+        
+        // Sistema de pesos para seleção aleatória inteligente
+        const sequenciasComPeso = [];
+        
+        sequenciasLivres.forEach(seq => {
+          let peso = 1; // Peso base
+          
+          // Aumentar peso para filas preferidas
+          if (filasPreferidas.includes(seq.fila)) {
+            peso += 3;
+          }
+          
+          // Aumentar peso para áreas centrais
+          if (seq.area === 'centro-esquerda' || seq.area === 'centro-direita') {
+            peso += 2;
+          }
+          
+          // Reduzir peso se for a mesma área da última seleção (para variedade)
+          if (ultimaAreaSelecionada && seq.area === ultimaAreaSelecionada) {
+            peso = Math.max(1, peso - 2);
+          }
+          
+          // Adicionar múltiplas cópias baseadas no peso
+          for (let i = 0; i < peso; i++) {
+            sequenciasComPeso.push(seq);
+          }
+        });
+        
+        // Escolher aleatoriamente considerando os pesos
+        let sequenciaEscolhida = null;
+        if (sequenciasComPeso.length > 0) {
+          const indiceAleatorio = Math.floor(Math.random() * sequenciasComPeso.length);
+          sequenciaEscolhida = sequenciasComPeso[indiceAleatorio];
+          
+          // Guardar a área selecionada para próxima vez
+          ultimaAreaSelecionada = sequenciaEscolhida.area;
+          
+          console.log('Escolhida sequência aleatória ponderada:', sequenciaEscolhida);
+          console.log('Área selecionada:', sequenciaEscolhida.area);
+        }
+        
+        // Pré-selecionar os lugares
+        console.log('Sequência escolhida:', sequenciaEscolhida);
+        console.log('Total de sequências encontradas:', sequenciasLivres.length);
+        
+        sequenciaEscolhida.lugares.forEach(lugarId => {
+          const lugarElement = document.querySelector(`[data-id="${lugarId}"]`);
+          console.log('Tentando selecionar lugar:', lugarId, 'Elemento encontrado:', !!lugarElement);
+          if (lugarElement && !lugarElement.classList.contains('occupied')) {
+            lugarElement.classList.add('selected');
+            lugaresSelecionados.push(lugarId);
+            console.log('Lugar selecionado com sucesso:', lugarId);
+          } else {
+            console.log('Falha ao selecionar lugar:', lugarId, 'Ocupado:', lugarElement?.classList.contains('occupied'));
+          }
+        });
+        
+        // Atualizar display e habilitar botão
+        atualizarDisplayLugares();
+        document.getElementById('continuar-bar').disabled = false;
+        
+        console.log('Lugares pré-selecionados final:', lugaresSelecionados);
+      }
+    }
+    
+    function wideSelectSeat(seat) {
+      if (seat.classList.contains('occupied')) return;
+      
+      const seatId = seat.dataset.id;
+      
+      // LUGARES DE CASAL: Tratar como duplas inseparáveis
+      if (seat.classList.contains('couple-seat')) {
+        handleCoupleSeatSelection(seat, seatId);
+      } else {
+        // Lógica normal para outros lugares
+        handleNormalSeatSelection(seat, seatId);
+      }
+      
+      atualizarDisplayLugares();
+      document.getElementById('continuar-bar').disabled = lugaresSelecionados.length !== quantidadeBilhetes;
+    }
+    
+    function handleCoupleSeatSelection(seat, seatId) {
+      const couplePair = findCouplePair(seatId);
+      
+      if (!couplePair) {
+        console.warn('Par de casal não encontrado para:', seatId);
+        return;
+      }
+      
+      const [seat1Id, seat2Id] = couplePair;
+      const seat1 = document.querySelector(`[data-id="${seat1Id}"]`);
+      const seat2 = document.querySelector(`[data-id="${seat2Id}"]`);
+      
+      if (!seat1 || !seat2) {
+        console.warn('Lugares do par não encontrados:', seat1Id, seat2Id);
+        return;
+      }
+      
+      // Verificar se algum dos lugares está ocupado
+      if (seat1.classList.contains('occupied') || seat2.classList.contains('occupied')) {
+        return;
+      }
+      
+      // Se qualquer um dos lugares está selecionado, desselecionar ambos
+      if (seat1.classList.contains('selected') || seat2.classList.contains('selected')) {
+        // Desselecionar ambos
+        seat1.classList.remove('selected', 'manual-selected');
+        seat2.classList.remove('selected', 'manual-selected');
+        lugaresSelecionados = lugaresSelecionados.filter(id => id !== seat1Id && id !== seat2Id);
+        console.log('Par de casal desselecionado:', seat1Id, seat2Id);
+      } else {
+        // Verificar se há espaço para selecionar o par (2 lugares)
+        const espacoDisponivel = quantidadeBilhetes - lugaresSelecionados.length;
+        
+        if (espacoDisponivel >= 2) {
+          // Limpar pré-seleções se necessário
+          const hasAutoSelected = document.querySelector('.wide-cinema-seat.selected:not(.manual-selected)');
+          if (hasAutoSelected) {
+            document.querySelectorAll('.wide-cinema-seat.selected:not(.manual-selected)').forEach(s => {
+              s.classList.remove('selected');
+              lugaresSelecionados = lugaresSelecionados.filter(id => id !== s.dataset.id);
+            });
+          }
+          
+          // Selecionar ambos os lugares do par
+          seat1.classList.add('selected', 'manual-selected');
+          seat2.classList.add('selected', 'manual-selected');
+          lugaresSelecionados.push(seat1Id, seat2Id);
+          console.log('Par de casal selecionado:', seat1Id, seat2Id);
+        }
+      }
+    }
+    
+    function handleNormalSeatSelection(seat, seatId) {
+      // Se o lugar já está selecionado, desselecionar
+      if (seat.classList.contains('selected')) {
+        seat.classList.remove('selected', 'manual-selected');
+        lugaresSelecionados = lugaresSelecionados.filter(id => id !== seatId);
+      } else {
+        // Verificar se há lugares pré-selecionados (automáticos)
+        const hasAutoSelected = document.querySelector('.wide-cinema-seat.selected:not(.manual-selected)');
+        
+        if (hasAutoSelected) {
+          // Se há pré-seleções, só permite selecionar se ainda há espaço
+          if (lugaresSelecionados.length < quantidadeBilhetes) {
+            seat.classList.add('selected', 'manual-selected');
+            lugaresSelecionados.push(seatId);
+          }
+        } else {
+          // Se não há pré-seleções, permite seleção normal
+          if (lugaresSelecionados.length < quantidadeBilhetes) {
+            seat.classList.add('selected', 'manual-selected');
+            lugaresSelecionados.push(seatId);
+          }
+        }
+      }
+    }
+    
+    function findCouplePair(seatId) {
+      // Definir os pares de lugares de casal - 6 DUPLAS em uma fila com espaçamento
+      const couplePairs = [
+        ['E3', 'E4'],   // Dupla 1
+        ['E6', 'E7'],   // Dupla 2
+        ['E9', 'E10'],  // Dupla 3
+        ['E12', 'E13'], // Dupla 4
+        ['E15', 'E16'], // Dupla 5
+        ['E18', 'E19']  // Dupla 6
+      ];
+      
+      // Encontrar o par que contém o lugar clicado
+      return couplePairs.find(pair => pair.includes(seatId));
+    }
+    
+
+
+
+
+    function atualizarDisplayLugares() {
+      const display = document.getElementById('lugares-display');
+      if (lugaresSelecionados.length === 0) {
+        display.textContent = 'Nenhum';
+      } else {
+        display.textContent = lugaresSelecionados.join(', ');
+      }
+    }
+    
+    function resetarSelecaoLugares() {
+      // Limpar todas as seleções visuais
+      document.querySelectorAll('.wide-cinema-seat.selected').forEach(seat => {
+        seat.classList.remove('selected', 'manual-selected');
+      });
+      
+      // Limpar array de lugares selecionados
+      lugaresSelecionados = [];
+      
+      // Atualizar display
+      atualizarDisplayLugares();
+      
+      // Desabilitar botão continuar
+      const btnContinuar = document.getElementById('continuar-bar');
+      if (btnContinuar) {
+        btnContinuar.disabled = true;
+      }
+    }
+    
+
+
+    function adicionarProduto(id, tipo) {
+      if (!produtosBar[id]) {
+        produtosBar[id] = { quantidade: 0, tipo: tipo };
+      }
+      produtosBar[id].quantidade++;
+      
+      atualizarControleProduto(id);
+      atualizarVisualCard(id);
+      atualizarResumo();
+      
+      // Efeito visual de adição
+      const card = document.querySelector(`[data-produto-id="${id}"]`);
+      if (card) {
+        card.classList.add('bounce-effect');
+        setTimeout(() => card.classList.remove('bounce-effect'), 400);
+      }
+    }
+
+    function removerProduto(id, tipo) {
+      if (produtosBar[id] && produtosBar[id].quantidade > 0) {
+        produtosBar[id].quantidade--;
+        if (produtosBar[id].quantidade === 0) {
+          delete produtosBar[id];
+        }
+      }
+      
+      atualizarControleProduto(id);
+      atualizarVisualCard(id);
+      atualizarResumo();
+    }
+
+    function atualizarControleProduto(id) {
+      const quantidade = produtosBar[id] ? produtosBar[id].quantidade : 0;
+      const spanQuantidade = document.querySelector(`[data-id="${id}"].quantidade`);
+      const btnMenos = document.querySelector(`[data-id="${id}"].btn-menos`);
+      
+      if (spanQuantidade) spanQuantidade.textContent = quantidade;
+      if (btnMenos) btnMenos.disabled = quantidade === 0;
+    }
+    
+    function atualizarVisualCard(id) {
+      console.log('Atualizando visual do card:', id);
+      const card = document.querySelector(`[data-produto-id="${id}"]`);
+      const quantidade = produtosBar[id] ? produtosBar[id].quantidade : 0;
+      
+      console.log('Card encontrado:', card, 'Quantidade:', quantidade);
+      
+      if (card) {
+        // Garantir que o card está visível
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+        
+        // Remover badge existente
+        const existingBadge = card.querySelector('.quantidade-badge');
+        if (existingBadge) {
+          existingBadge.remove();
+        }
+        
+        if (quantidade > 0) {
+          card.classList.add('selected');
+          
+          // Criar novo badge
+          const badge = document.createElement('div');
+          badge.className = 'quantidade-badge';
+          badge.textContent = quantidade;
+          card.appendChild(badge);
+        } else {
+          card.classList.remove('selected');
+        }
+      }
+    }
+
+    function atualizarResumo() {
+      // Atualizar bilhetes
+      const resumoBilhetesQtd = document.getElementById('resumo-bilhetes-qtd');
+      const resumoLugaresLista = document.getElementById('resumo-lugares-lista');
+      const resumoBilhetesTotal = document.getElementById('resumo-bilhetes-total');
+      const resumoPrecoUnitario = document.getElementById('resumo-preco-unitario');
+      
+      if (resumoBilhetesQtd) resumoBilhetesQtd.textContent = quantidadeBilhetes;
+      if (resumoPrecoUnitario) resumoPrecoUnitario.textContent = precoUnitario.toFixed(2) + '€';
+      
+      const totalBilhetes = quantidadeBilhetes * precoUnitario;
+      if (resumoBilhetesTotal) resumoBilhetesTotal.textContent = totalBilhetes.toFixed(2) + '€';
+      
+      if (resumoLugaresLista) {
+        resumoLugaresLista.textContent = lugaresSelecionados.length > 0 ? lugaresSelecionados.join(', ') : 'Nenhum selecionado';
+      }
+      
+      // Calcular total do bar
+      let totalBar = 0;
+      Object.keys(produtosBar).forEach(id => {
+        const produto = produtosBar[id];
+        // Aqui você precisaria do preço do produto - isso viria do backend
+        // Por agora, vamos usar um preço exemplo
+        const preco = 5.00; // Preço exemplo
+        totalBar += produto.quantidade * preco;
+      });
+      
+      // Atualizar sidebar
+      if (resumoBilhetes) resumoBilhetes.textContent = quantidadeBilhetes;
+      if (resumoLugaresSidebar) resumoLugaresSidebar.textContent = lugaresSelecionados.length > 0 ? lugaresSelecionados.join(', ') : '-';
+      if (resumoBarSidebar) resumoBarSidebar.textContent = totalBar.toFixed(2) + '€';
+      
+      const totalGeral = totalBilhetes + totalBar;
+      if (resumoTotalSidebar) resumoTotalSidebar.textContent = totalGeral.toFixed(2) + '€';
+      
+      // Atualizar total final
+      const resumoTotalFinal = document.getElementById('resumo-total-final');
+      if (resumoTotalFinal) resumoTotalFinal.textContent = totalGeral.toFixed(2) + '€';
+      
+      // Habilitar botão finalizar se tudo estiver preenchido
+      const btnFinalizar = document.getElementById('finalizar-reserva');
+      if (btnFinalizar) {
+        const temBilhetes = quantidadeBilhetes > 0;
+        const temLugares = lugaresSelecionados.length === quantidadeBilhetes;
+        {% if not user_authenticated %}
+        const temDados = document.getElementById('nome') && document.getElementById('nome').value.trim() !== '' &&
+                        document.getElementById('email') && document.getElementById('email').value.trim() !== '';
+        {% else %}
+        const temDados = true;
+        {% endif %}
+        
+        btnFinalizar.disabled = !(temBilhetes && temLugares && temDados);
+      }
+    }
+
+    function atualizarResumoFinal() {
+      // Mostrar seção do bar se houver produtos
+      const resumoBarSection = document.getElementById('resumo-bar-section');
+      const resumoBarProdutos = document.getElementById('resumo-bar-produtos');
+      
+      if (Object.keys(produtosBar).length > 0) {
+        resumoBarSection.style.display = 'block';
+        resumoBarProdutos.innerHTML = '';
+        
+        Object.keys(produtosBar).forEach(id => {
+          const produto = produtosBar[id];
+          const div = document.createElement('div');
+          div.className = 'detail-row';
+          div.innerHTML = `
+            <span class="detail-label">${id}:</span>
+            <span class="detail-value">${produto.quantidade}x</span>
+          `;
+          resumoBarProdutos.appendChild(div);
+        });
+      } else {
+        resumoBarSection.style.display = 'none';
+      }
+      
+      atualizarResumo();
+    }
+
+    function finalizarReserva() {
+      // Validar se todos os dados necessários estão preenchidos
+      if (quantidadeBilhetes === 0) {
+        alert('Por favor, selecione pelo menos um lugar.');
+        return;
+      }
+      
+      {% if not user_authenticated %}
+      // Validar dados pessoais para usuários não logados
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const telefone = document.getElementById('telefone').value.trim();
+      
+      if (!nome || !email) {
+        alert('Por favor, preencha o nome e email.');
+        return;
+      }
+      
+      // Validar formato do email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Por favor, insira um email válido.');
+        return;
+      }
+      {% endif %}
+      
+      // Preparar dados da reserva no formato esperado pela página de pagamento
+      const totalBar = calcularTotalBar();
+      const totalBilhetes = quantidadeBilhetes * precoUnitario;
+      const totalGeral = totalBilhetes + totalBar;
+      
+      const dadosReserva = {
+        // Dados da sessão (formato esperado pelo backend)
+        filme_id: sessaoData.filme_id,
+        cinema_id: sessaoData.cinema_id,
+        tipo_id: sessaoData.tipo_id,
+        horario_id: sessaoData.horario_id,
+        data_sessao: sessaoData.data_sessao,
+        
+        // Dados dos bilhetes
+        lugares: lugaresSelecionados,
+        quantidade_bilhetes: quantidadeBilhetes,
+        preco_unitario: precoUnitario,
+        total_bilhetes: totalBilhetes,
+        
+        // Dados do bar
+        produtos_bar: produtosBar,
+        total_bar: totalBar,
+        
+        // Total geral
+        total_geral: totalGeral,
+        
+        // Dados pessoais
+        {% if user_authenticated %}
+        nome: '{{ user_name }}',
+        email: '{{ user_email }}',
+        telefone: '', // Será preenchido se necessário
+        {% else %}
+        nome: document.getElementById('nome').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        {% endif %}
+        
+        // Metadados
+        tipo_reserva: 'cinema',
+        categoria: 'bilhete'
+      };
+      
+      // Debug: mostrar dados que serão enviados
+      console.log('=== DADOS DA RESERVA PREPARADOS ===');
+      console.log('Dados completos:', dadosReserva);
+      console.log('Sessão:', sessaoData);
+      console.log('Lugares selecionados:', lugaresSelecionados);
+      console.log('Produtos do bar:', produtosBar);
+      
+      // Validar dados críticos
+      if (!dadosReserva.filme_id || !dadosReserva.cinema_id || !dadosReserva.horario_id) {
+        console.error('Dados críticos faltando:', {
+          filme_id: dadosReserva.filme_id,
+          cinema_id: dadosReserva.cinema_id,
+          horario_id: dadosReserva.horario_id
+        });
+        alert('Erro: Dados da sessão incompletos. Tente recarregar a página.');
+        return;
+      }
+      
+      // Salvar dados no sessionStorage para a página de pagamento
+      try {
+        sessionStorage.setItem('dadosReserva', JSON.stringify(dadosReserva));
+        console.log('✅ Dados salvos no sessionStorage');
+      } catch (error) {
+        console.error('❌ Erro ao salvar no sessionStorage:', error);
+        alert('Erro ao preparar dados para pagamento. Tente novamente.');
+        return;
+      }
+      
+      // Mostrar loading no botão
+      const btnFinalizar = document.getElementById('finalizar-reserva');
+      const originalText = btnFinalizar.innerHTML;
+      btnFinalizar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+      btnFinalizar.disabled = true;
+      
+      // Verificar se os dados foram salvos corretamente
+      const dadosVerificacao = sessionStorage.getItem('dadosReserva');
+      if (!dadosVerificacao) {
+        console.error('❌ Falha ao salvar dados no sessionStorage');
+        alert('Erro ao preparar dados. Tente novamente.');
+        btnFinalizar.innerHTML = originalText;
+        btnFinalizar.disabled = false;
+        return;
+      }
+      
+      // Redirecionar para página de pagamento após um pequeno delay
+      setTimeout(() => {
+        console.log('🔄 Redirecionando para pagamento...');
+        console.log('📦 Dados no sessionStorage:', JSON.parse(dadosVerificacao));
+        window.location.href = '/reserva/pagamento';
+      }, 800);
+    }
+    
+    function calcularTotalBar() {
+      let total = 0;
+      console.log('Calculando total do bar. Produtos:', produtosBar);
+      
+      for (const produtoId in produtosBar) {
+        const produto = produtosBar[produtoId];
+        
+        // Buscar preço do produto no DOM
+        const precoElement = document.querySelector(`[data-produto-id="${produtoId}"] .produto-preco`);
+        if (precoElement) {
+          const precoTexto = precoElement.textContent.replace('€', '').replace(',', '.').trim();
+          const preco = parseFloat(precoTexto);
+          const subtotal = preco * produto.quantidade;
+          total += subtotal;
+          
+          console.log(`Produto ${produtoId}: ${preco}€ x ${produto.quantidade} = ${subtotal}€`);
+        } else {
+          console.warn(`Elemento de preço não encontrado para produto ${produtoId}`);
+        }
+      }
+      
+      console.log('Total do bar calculado:', total);
+      return total;
+    }
+
+
+
+    // Eventos de validação em tempo real
+    {% if not user_authenticated %}
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = ['nome', 'email', 'telefone'];
+      inputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+          input.addEventListener('input', atualizarResumo);
+          input.addEventListener('blur', atualizarResumo);
+        }
+      });
+    });
+    {% endif %}
+  </script>
+</body>
+</html>

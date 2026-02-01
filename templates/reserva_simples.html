@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Bilhetes | CineVibe</title>
+    <style>
+        body {
+            background: #0D1B2A;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .movie-info {
+            background: rgba(255,214,10,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .quantity-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .quantity-option {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .quantity-option:hover {
+            background: rgba(255,214,10,0.2);
+            border-color: #FFD60A;
+        }
+        .quantity-option.selected {
+            background: rgba(255,214,10,0.3);
+            border-color: #FFD60A;
+        }
+        .advance-btn {
+            background: #FFD60A;
+            color: #0D1B2A;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .advance-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 CineVibe - Reserva de Bilhetes</h1>
+        
+        <div class="movie-info">
+            <h2>{{ filme.titulo if filme else 'Filme' }}</h2>
+            <p><strong>Cinema:</strong> {{ cinema.nome if cinema else 'Cinema' }}</p>
+            <p><strong>Sessão:</strong> {{ tipo_sessao.nome if tipo_sessao else 'Sessão' }}</p>
+            <p><strong>Horário:</strong> {{ horario.hora_str if horario else 'Horário' }} - {{ data_sessao if data_sessao else 'Data' }}</p>
+            <p><strong>Preço:</strong> €{{ "%.2f"|format(filme_sessao.preco) if filme_sessao else '8.50' }} por bilhete</p>
+        </div>
+
+        <h3>Selecione a Quantidade de Bilhetes</h3>
+        
+        <div class="quantity-grid">
+            <div class="quantity-option selected" data-quantity="1">
+                <div style="font-size: 24px; font-weight: bold;">1</div>
+                <div>Bilhete</div>
+            </div>
+            
+            <div class="quantity-option" data-quantity="2">
+                <div style="font-size: 24px; font-weight: bold;">2</div>
+                <div>Bilhetes</div>
+            </div>
+            
+            <div class="quantity-option" data-quantity="3">
+                <div style="font-size: 24px; font-weight: bold;">3</div>
+                <div>Bilhetes</div>
+            </div>
+            
+            <div class="quantity-option" data-quantity="4">
+                <div style="font-size: 24px; font-weight: bold;">4</div>
+                <div>Bilhetes</div>
+            </div>
+            
+            <div class="quantity-option" data-quantity="5">
+                <div style="font-size: 24px; font-weight: bold;">5</div>
+                <div>Bilhetes</div>
+            </div>
+            
+            <div class="quantity-option" data-quantity="6">
+                <div style="font-size: 24px; font-weight: bold;">6</div>
+                <div>Bilhetes</div>
+            </div>
+        </div>
+        
+        <form method="POST" action="{{ url_for('confirmar_reserva') }}">
+            <input type="hidden" name="filme_id" value="{{ filme.id if filme else '' }}">
+            <input type="hidden" name="cinema_id" value="{{ cinema.id if cinema else '' }}">
+            <input type="hidden" name="tipo_sessao_id" value="{{ tipo_sessao.id if tipo_sessao else '' }}">
+            <input type="hidden" name="horario_id" value="{{ horario.id if horario else '' }}">
+            <input type="hidden" name="data_sessao" value="{{ data_sessao if data_sessao else '' }}">
+            <input type="hidden" name="quantidade" id="selectedQuantity" value="1">
+            
+            <button type="submit" class="advance-btn" id="advanceBtn">
+                Avançar para Seleção de Lugares
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityOptions = document.querySelectorAll('.quantity-option');
+            const selectedQuantityInput = document.getElementById('selectedQuantity');
+            let selectedQuantity = 1;
+            
+            quantityOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove seleção anterior
+                    quantityOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Adiciona seleção atual
+                    this.classList.add('selected');
+                    
+                    // Atualiza quantidade
+                    selectedQuantity = parseInt(this.dataset.quantity);
+                    selectedQuantityInput.value = selectedQuantity;
+                    
+                    console.log('Quantidade selecionada:', selectedQuantity);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

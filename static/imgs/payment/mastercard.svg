@@ -1,0 +1,6 @@
+<svg width="50" height="30" viewBox="0 0 50 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="50" height="30" rx="4" fill="#EB001B"/>
+<circle cx="18" cy="15" r="8" fill="#FF5F00"/>
+<circle cx="32" cy="15" r="8" fill="#F79E1B"/>
+<text x="25" y="25" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="6" font-weight="bold">mastercard</text>
+</svg>

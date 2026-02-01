@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Pré-seleção Aleatória | CineVibe</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0D1B2A;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 214, 10, 0.2);
+        }
+        
+        h1 {
+            color: #FFD60A;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .demo-section {
+            background: rgba(13, 27, 42, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 214, 10, 0.2);
+        }
+        
+        .demo-section h2 {
+            color: #4EA8DE;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-seat-map {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 1rem;
+            background: rgba(13, 27, 42, 0.3);
+            border-radius: 15px;
+        }
+        
+        .demo-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            align-items: center;
+        }
+        
+        .demo-seat {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        
+        .demo-seat.available {
+            background: #161D3E;
+            border: 2px solid #125A82;
+        }
+        
+        .demo-seat.selected {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            border: 2px solid #FFD60A;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        .demo-seat.occupied {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+            border: 2px solid #991b1b;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            color: #0D1B2A;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .test-button:hover {
+            background: linear-gradient(135deg, #FFA500, #FF8500);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
+        }
+        
+        .results {
+            background: rgba(78, 168, 222, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #4EA8DE;
+        }
+        
+        .highlight {
+            color: #FFD60A;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎲 Demo - Pré-seleção Aleatória de Lugares</h1>
+        
+        <div class="demo-section">
+            <h2>🎯 Como Funciona</h2>
+            <p>O sistema agora encontra <span class="highlight">TODOS</span> os grupos consecutivos possíveis e escolhe um <span class="highlight">aleatoriamente</span>:</p>
+            <ul>
+                <li>✅ Lugares sempre juntos (consecutivos)</li>
+                <li>🎲 Posição diferente a cada acesso</li>
+                <li>🚫 Evita lugares ocupados automaticamente</li>
+                <li>⚡ Seleção instantânea ao carregar a página</li>
+            </ul>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🎬 Exemplo de Sala</h2>
+            <p>Sala com alguns lugares ocupados (vermelho). Clique no botão para ver diferentes pré-seleções para <span id="currentQuantity">3</span> lugares:</p>
+            
+            <div class="demo-seat-map" id="seatMap">
+                <!-- Será preenchido pelo JavaScript -->
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="test-button" onclick="changeQuantity(1)">1 Lugar</button>
+                <button class="test-button" onclick="changeQuantity(2)">2 Lugares</button>
+                <button class="test-button" onclick="changeQuantity(3)">3 Lugares</button>
+                <button class="test-button" onclick="changeQuantity(4)">4 Lugares</button>
+                <button class="test-button" onclick="generateRandomSelection()">🎲 Nova Seleção</button>
+            </div>
+            
+            <div class="results" id="results">
+                Clique em "Nova Seleção" para ver diferentes combinações!
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>📊 Estatísticas</h2>
+            <div id="stats">
+                <!-- Será preenchido pelo JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração da sala demo
+        const rows = 8;
+        const seatsPerRow = 12;
+        const occupiedSeats = ['A3', 'A4', 'B7', 'C1', 'C2', 'C3', 'D8', 'D9', 'F5', 'F6', 'G10', 'H2'];
+        let currentQuantity = 3;
+        
+        function generateSeatMap() {
+            const seatMap = document.getElementById('seatMap');
+            seatMap.innerHTML = '';
+            
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            
+            for (let i = 0; i < rows; i++) {
+                const row = document.createElement('div');
+                row.className = 'demo-row';
+                
+                for (let j = 1; j <= seatsPerRow; j++) {
+                    const seat = document.createElement('div');
+                    const seatName = letters[i] + j;
+                    
+                    seat.className = 'demo-seat';
+                    seat.dataset.seat = seatName;
+                    seat.dataset.row = letters[i];
+                    seat.dataset.position = j;
+                    
+                    if (occupiedSeats.includes(seatName)) {
+                        seat.classList.add('occupied');
+                    } else {
+                        seat.classList.add('available');
+                    }
+                    
+                    row.appendChild(seat);
+                }
+                
+                seatMap.appendChild(row);
+            }
+        }
+        
+        function findAllConsecutiveGroups(quantity) {
+            const seatsByRow = {};
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            
+            // Agrupar lugares disponíveis por fileira
+            for (let i = 0; i < rows; i++) {
+                const rowLetter = letters[i];
+                seatsByRow[rowLetter] = [];
+                
+                for (let j = 1; j <= seatsPerRow; j++) {
+                    const seatName = rowLetter + j;
+                    if (!occupiedSeats.includes(seatName)) {
+                        seatsByRow[rowLetter].push({
+                            name: seatName,
+                            position: j
+                        });
+                    }
+                }
+            }
+            
+            // Encontrar todos os grupos consecutivos
+            const allGroups = [];
+            
+            for (const row in seatsByRow) {
+                const seats = seatsByRow[row];
+                
+                for (let i = 0; i <= seats.length - quantity; i++) {
+                    let consecutive = true;
+                    
+                    for (let j = 1; j < quantity; j++) {
+                        if (seats[i + j].position !== seats[i + j - 1].position + 1) {
+                            consecutive = false;
+                            break;
+                        }
+                    }
+                    
+                    if (consecutive) {
+                        const group = [];
+                        for (let j = 0; j < quantity; j++) {
+                            group.push(seats[i + j].name);
+                        }
+                        allGroups.push(group);
+                    }
+                }
+            }
+            
+            return allGroups;
+        }
+        
+        function generateRandomSelection() {
+            // Limpar seleções anteriores
+            document.querySelectorAll('.demo-seat.selected').forEach(seat => {
+                seat.classList.remove('selected');
+            });
+            
+            const allGroups = findAllConsecutiveGroups(currentQuantity);
+            
+            if (allGroups.length > 0) {
+                // Escolher grupo aleatório
+                const randomGroup = allGroups[Math.floor(Math.random() * allGroups.length)];
+                
+                // Selecionar os lugares
+                randomGroup.forEach(seatName => {
+                    const seatElement = document.querySelector(`[data-seat="${seatName}"]`);
+                    if (seatElement) {
+                        seatElement.classList.add('selected');
+                    }
+                });
+                
+                // Mostrar resultado
+                document.getElementById('results').innerHTML = `
+                    <strong>🎯 Seleção Aleatória:</strong> ${randomGroup.join(', ')}<br>
+                    <strong>📊 Opções disponíveis:</strong> ${allGroups.length} grupos consecutivos diferentes
+                `;
+            } else {
+                document.getElementById('results').innerHTML = `
+                    <strong>⚠️ Não há grupos consecutivos disponíveis para ${currentQuantity} lugar${currentQuantity > 1 ? 'es' : ''}!</strong>
+                `;
+            }
+            
+            updateStats();
+        }
+        
+        function changeQuantity(quantity) {
+            currentQuantity = quantity;
+            document.getElementById('currentQuantity').textContent = quantity;
+            generateRandomSelection();
+        }
+        
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            let statsHtml = '<h3>📈 Estatísticas por Quantidade:</h3>';
+            
+            for (let q = 1; q <= 6; q++) {
+                const groups = findAllConsecutiveGroups(q);
+                statsHtml += `<p><strong>${q} lugar${q > 1 ? 'es' : ''}:</strong> ${groups.length} opções diferentes</p>`;
+            }
+            
+            stats.innerHTML = statsHtml;
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            generateSeatMap();
+            generateRandomSelection();
+        });
+    </script>
+</body>
+</html>

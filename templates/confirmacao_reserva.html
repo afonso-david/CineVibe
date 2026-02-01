@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva Confirmada | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filme_detalhe.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/confirmacao.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="user-icon">
+                        {% if user_authenticated %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=user_avatar) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navegação -->
+        <nav class="nav-center">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('filmes') }}">Filmes</a>
+            <a href="{{ url_for('cinemas') }}">Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+            <a href="{{ url_for('bar') }}">Bar</a>
+            <a href="{{ url_for('beneficios') }}">Benefícios</a>
+            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}">Contactos</a>
+        </nav>
+
+        <!-- Main Content -->
+        <main style="padding: 2rem 0; background: #0D1B2A; min-height: 100vh;">
+            <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+                
+                <!-- Success Message -->
+                <div class="success-header">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h1>Reserva Confirmada!</h1>
+                    <p>A sua reserva foi processada com sucesso. Receberá um email de confirmação em breve.</p>
+                </div>
+
+                <!-- Reservation Details -->
+                <div class="reservation-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-ticket-alt"></i> Detalhes da Reserva</h2>
+                        <div class="reservation-id">
+                            <span>Reserva #{{ reserva.id }}</span>
+                        </div>
+                    </div>
+
+                    <div class="reservation-content">
+                        <!-- Movie Info -->
+                        <div class="movie-section">
+                            <img src="{{ reserva.poster_url if reserva.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
+                                 alt="{{ reserva.titulo }}" class="movie-poster">
+                            <div class="movie-details">
+                                <h3>{{ reserva.titulo }}</h3>
+                                <div class="detail-row">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ reserva.cinema_nome }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ reserva.data_sessao }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ reserva.hora.strftime("%H:%M") if reserva.hora else "N/A" }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-film"></i>
+                                    <span>{{ reserva.tipo_sessao_nome }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-chair"></i>
+                                    <span>Lugares: {{ reserva.lugares }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Customer Info -->
+                        <div class="customer-section">
+                            <h4><i class="fas fa-user"></i> Dados do Cliente</h4>
+                            <p><strong>Nome:</strong> {{ reserva.nome_cliente }}</p>
+                            <p><strong>Email:</strong> {{ reserva.email_cliente }}</p>
+                        </div>
+
+                        <!-- Bar Items -->
+                        {% if bar_items %}
+                        <div class="bar-section">
+                            <h4><i class="fas fa-utensils"></i> Itens do Bar</h4>
+                            {% for item in bar_items %}
+                            <div class="bar-item">
+                                <span>{{ item.quantidade }}x {{ item.produto }}</span>
+                                <span>€{{ "%.2f"|format(item.subtotal) }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Payment Info -->
+                        <div class="payment-section">
+                            <h4><i class="fas fa-credit-card"></i> Pagamento</h4>
+                            <div class="payment-row">
+                                <span>Método:</span>
+                                <span class="payment-method">{{ reserva.metodo_pagamento.title() }}</span>
+                            </div>
+                            <div class="payment-row total">
+                                <span>Total Pago:</span>
+                                <span>€{{ "%.2f"|format(reserva.total) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Notes -->
+                <div class="notes-card">
+                    <h3><i class="fas fa-info-circle"></i> Informações Importantes</h3>
+                    <ul>
+                        <li>Apresente este email ou o número da reserva na bilheteira</li>
+                        <li>Chegue pelo menos 15 minutos antes do início da sessão</li>
+                        <li>Os bilhetes podem ser levantados até 30 minutos antes da sessão</li>
+                        {% if bar_items %}
+                        <li>Os itens do bar serão preparados e entregues no cinema</li>
+                        {% endif %}
+                        <li>Em caso de dúvidas, contacte-nos através do nosso site</li>
+                    </ul>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="print-btn" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        Imprimir Reserva
+                    </button>
+                    
+                    <a href="{{ url_for('home') }}" class="home-btn">
+                        <i class="fas fa-home"></i>
+                        Voltar ao Início
+                    </a>
+                    
+                    {% if session.get('user_id') %}
+                    <a href="{{ url_for('perfil') }}" class="profile-btn">
+                        <i class="fas fa-user"></i>
+                        Ver Minhas Reservas
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Auto-scroll to top
+        window.scrollTo(0, 0);
+        
+        // Show success animation
+        setTimeout(() => {
+            document.querySelector('.success-icon').classList.add('animate');
+        }, 500);
+    </script>
+</body>
+</html>

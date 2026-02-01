@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva-completa.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="nav-left">
+                <a href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe" class="logo">
+                </a>
+            </div>
+            <div class="nav-center">
+                <div class="breadcrumb">
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}">{{ filme.titulo }}</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Reserva</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                {% if logged_in %}
+                    <div class="user-info">
+                        <img src="{{ url_for('static', filename=avatar) }}" alt="Avatar" class="user-avatar">
+                        <span>{{ nome_usuario }}</span>
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="login-btn">Entrar</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="reserva-main">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-line">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="progress-step active" data-step="1">
+                            <div class="step-circle">1</div>
+                            <span>Quantidade</span>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <div class="step-circle">2</div>
+                            <span>Lugares</span>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <div class="step-circle">3</div>
+                            <span>Extras</span>
+                        </div>
+                        <div class="progress-step" data-step="4">
+                            <div class="step-circle">4</div>
+                            <span>Resumo</span>
+                        </div>
+                        <div class="progress-step" data-step="5">
+                            <div class="step-circle">5</div>
+                            <span>Pagamento</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="content-container">
+                <!-- Left Column - Steps -->
+                <div class="steps-column">
+                    
+                    <!-- Step 1: Quantidade de Bilhetes -->
+                    <div class="step-content active" id="step1">
+                        <div class="step-header">
+                            <h2>🎫 Quantos bilhetes?</h2>
+                            <p>Selecione a quantidade de bilhetes para a sessão</p>
+                        </div>
+                        
+                        <div class="quantidade-selector">
+                            <div class="quantidade-opcoes">
+                                <button class="quantidade-btn" data-quantidade="1">1</button>
+                                <button class="quantidade-btn" data-quantidade="2">2</button>
+                                <button class="quantidade-btn" data-quantidade="3">3</button>
+                                <button class="quantidade-btn" data-quantidade="4">4</button>
+                                <button class="quantidade-btn" data-quantidade="5">5</button>
+                                <button class="quantidade-btn" data-quantidade="6">6</button>
+                            </div>
+                            
+                            <div class="quantidade-custom">
+                                <label for="quantidadeCustom">Ou digite a quantidade:</label>
+                                <div class="input-group">
+                                    <button class="btn-decrease" onclick="alterarQuantidade(-1)">-</button>
+                                    <input type="number" id="quantidadeCustom" min="1" max="20" value="1">
+                                    <button class="btn-increase" onclick="alterarQuantidade(1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-next" onclick="proximoStep()" disabled id="btnStep1">
+                                Continuar <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Seleção de Lugares -->
+                    <div class="step-content" id="step2">
+                        <div class="step-header">
+                            <h2>🎬 Escolha seus lugares</h2>
+                            <p>Selecione <span id="quantidadeSelecionada">1</span> lugar(es) na sala</p>
+                        </div>
+                        
+                        <div class="sala-container">
+                            <div class="tela">
+                                <div class="tela-text">TELA</div>
+                            </div>
+                            
+                            <div class="mapa-sala" id="mapaSala">
+                                <!-- Lugares serão gerados dinamicamente -->
+                            </div>
+                            
+                            <div class="legenda">
+                                <div class="legenda-item">
+                                    <div class="lugar-exemplo disponivel"></div>
+                                    <span>Disponível</span>
+                                </div>
+                                <div class="legenda-item">
+                                    <div class="lugar-exemplo ocupado"></div>
+                                    <span>Ocupado</span>
+                                </div>
+                                <div class="legenda-item">
+                                    <div class="lugar-exemplo selecionado"></div>
+                                    <span>Selecionado</span>
+                                </div>
+                                <div class="legenda-item">
+                                    <div class="lugar-exemplo vip"></div>
+                                    <span>VIP (+€3)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-back" onclick="anteriorStep()">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </button>
+                            <button class="btn-next" onclick="proximoStep()" disabled id="btnStep2">
+                                Continuar <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Produtos do Bar -->
+                    <div class="step-content" id="step3">
+                        <div class="step-header">
+                            <h2>🍿 Produtos do Bar</h2>
+                            <p>Adicione snacks e bebidas à sua experiência (opcional)</p>
+                        </div>
+                        
+                        <div class="produtos-container">
+                            <div class="categoria-produtos">
+                                <h3>🍿 Snacks</h3>
+                                <div class="produtos-grid">
+                                    <div class="produto-item" data-produto="pipocas-pequena" data-preco="4.50">
+                                        <img src="{{ url_for('static', filename='imgs/bar/pipocas-pequena.jpg') }}" alt="Pipocas Pequena">
+                                        <div class="produto-info">
+                                            <h4>Pipocas Pequena</h4>
+                                            <p class="produto-preco">€4,50</p>
+                                            <div class="quantidade-controle">
+                                                <button class="btn-menos" onclick="alterarProduto('pipocas-pequena', -1)">-</button>
+                                                <span class="quantidade-produto" id="qty-pipocas-pequena">0</span>
+                                                <button class="btn-mais" onclick="alterarProduto('pipocas-pequena', 1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="produto-item" data-produto="pipocas-grande" data-preco="6.50">
+                                        <img src="{{ url_for('static', filename='imgs/bar/pipocas-grande.jpg') }}" alt="Pipocas Grande">
+                                        <div class="produto-info">
+                                            <h4>Pipocas Grande</h4>
+                                            <p class="produto-preco">€6,50</p>
+                                            <div class="quantidade-controle">
+                                                <button class="btn-menos" onclick="alterarProduto('pipocas-grande', -1)">-</button>
+                                                <span class="quantidade-produto" id="qty-pipocas-grande">0</span>
+                                                <button class="btn-mais" onclick="alterarProduto('pipocas-grande', 1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="produto-item" data-produto="nachos" data-preco="5.50">
+                                        <img src="{{ url_for('static', filename='imgs/bar/nachos.jpg') }}" alt="Nachos">
+                                        <div class="produto-info">
+                                            <h4>Nachos</h4>
+                                            <p class="produto-preco">€5,50</p>
+                                            <div class="quantidade-controle">
+                                                <button class="btn-menos" onclick="alterarProduto('nachos', -1)">-</button>
+                                                <span class="quantidade-produto" id="qty-nachos">0</span>
+                                                <button class="btn-mais" onclick="alterarProduto('nachos', 1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="categoria-produtos">
+                                <h3>🥤 Bebidas</h3>
+                                <div class="produtos-grid">
+                                    <div class="produto-item" data-produto="coca-cola" data-preco="3.50">
+                                        <img src="{{ url_for('static', filename='imgs/bar/coca-cola.jpg') }}" alt="Coca-Cola">
+                                        <div class="produto-info">
+                                            <h4>Coca-Cola</h4>
+                                            <p class="produto-preco">€3,50</p>
+                                            <div class="quantidade-controle">
+                                                <button class="btn-menos" onclick="alterarProduto('coca-cola', -1)">-</button>
+                                                <span class="quantidade-produto" id="qty-coca-cola">0</span>
+                                                <button class="btn-mais" onclick="alterarProduto('coca-cola', 1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="produto-item" data-produto="agua" data-preco="2.50">
+                                        <img src="{{ url_for('static', filename='imgs/bar/agua.jpg') }}" alt="Água">
+                                        <div class="produto-info">
+                                            <h4>Água</h4>
+                                            <p class="produto-preco">€2,50</p>
+                                            <div class="quantidade-controle">
+                                                <button class="btn-menos" onclick="alterarProduto('agua', -1)">-</button>
+                                                <span class="quantidade-produto" id="qty-agua">0</span>
+                                                <button class="btn-mais" onclick="alterarProduto('agua', 1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="produto-item" data-produto="sumo-laranja" data-preco="3.00">
+                                        <img src="{{ url_for('static', filename='imgs/bar/sumo-laranja.jpg') }}" alt="Sumo de Laranja">
+                                        <div class="produto-info">
+                                            <h4>Sumo de Laranja</h4>
+                                            <p class="produto-preco">€3,00</p>
+                                            <div class="quantidade-controle">
+                                                <button class="btn-menos" onclick="alterarProduto('sumo-laranja', -1)">-</button>
+                                                <span class="quantidade-produto" id="qty-sumo-laranja">0</span>
+                                                <button class="btn-mais" onclick="alterarProduto('sumo-laranja', 1)">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-back" onclick="anteriorStep()">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </button>
+                            <button class="btn-next" onclick="proximoStep()">
+                                Continuar <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Resumo da Compra -->
+                    <div class="step-content" id="step4">
+                        <div class="step-header">
+                            <h2>📋 Resumo da Compra</h2>
+                            <p>Confirme os detalhes da sua reserva</p>
+                        </div>
+                        
+                        <div class="resumo-container">
+                            <div class="resumo-filme">
+                                <img src="{{ url_for('static', filename=filme.poster_url) }}" alt="{{ filme.titulo }}" class="filme-poster">
+                                <div class="filme-info">
+                                    <h3>{{ filme.titulo }}</h3>
+                                    <p><i class="fas fa-building"></i> {{ cinema.nome }}</p>
+                                    <p><i class="fas fa-calendar"></i> {{ data_sessao }}</p>
+                                    <p><i class="fas fa-clock"></i> {{ horario.hora_str }}</p>
+                                    <p><i class="fas fa-film"></i> {{ tipo_sessao.nome }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="resumo-lugares">
+                                <h4>🎫 Bilhetes</h4>
+                                <div id="resumoLugares">
+                                    <!-- Lugares selecionados serão mostrados aqui -->
+                                </div>
+                            </div>
+                            
+                            <div class="resumo-produtos" id="resumoProdutos">
+                                <h4>🍿 Produtos do Bar</h4>
+                                <div id="listaProdutos">
+                                    <!-- Produtos selecionados serão mostrados aqui -->
+                                </div>
+                            </div>
+                            
+                            <div class="resumo-total">
+                                <div class="total-linha">
+                                    <span>Subtotal Bilhetes:</span>
+                                    <span id="subtotalBilhetes">€0,00</span>
+                                </div>
+                                <div class="total-linha">
+                                    <span>Subtotal Produtos:</span>
+                                    <span id="subtotalProdutos">€0,00</span>
+                                </div>
+                                <div class="total-linha total-final">
+                                    <span>Total:</span>
+                                    <span id="totalFinal">€0,00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-back" onclick="anteriorStep()">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </button>
+                            <button class="btn-next" onclick="proximoStep()">
+                                Continuar para Pagamento <i class="fas fa-credit-card"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Pagamento -->
+                    <div class="step-content" id="step5">
+                        <div class="step-header">
+                            <h2>💳 Pagamento</h2>
+                            <p>Escolha o método de pagamento e finalize sua reserva</p>
+                        </div>
+                        
+                        <div class="pagamento-container">
+                            <div class="metodos-pagamento">
+                                <h4>Método de Pagamento</h4>
+                                <div class="metodo-opcoes">
+                                    <label class="metodo-opcao">
+                                        <input type="radio" name="metodoPagamento" value="cartao" checked>
+                                        <div class="metodo-card">
+                                            <i class="fas fa-credit-card"></i>
+                                            <span>Cartão de Crédito/Débito</span>
+                                        </div>
+                                    </label>
+                                    
+                                    <label class="metodo-opcao">
+                                        <input type="radio" name="metodoPagamento" value="mbway">
+                                        <div class="metodo-card">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span>MB WAY</span>
+                                        </div>
+                                    </label>
+                                    
+                                    <label class="metodo-opcao">
+                                        <input type="radio" name="metodoPagamento" value="paypal">
+                                        <div class="metodo-card">
+                                            <i class="fab fa-paypal"></i>
+                                            <span>PayPal</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="dados-pagamento">
+                                <!-- Cartão de Crédito -->
+                                <div class="pagamento-form active" id="formCartao">
+                                    <h4>Dados do Cartão</h4>
+                                    <div class="form-group">
+                                        <label for="numeroCartao">Número do Cartão</label>
+                                        <input type="text" id="numeroCartao" placeholder="1234 5678 9012 3456" maxlength="19">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="validadeCartao">Validade</label>
+                                            <input type="text" id="validadeCartao" placeholder="MM/AA" maxlength="5">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cvvCartao">CVV</label>
+                                            <input type="text" id="cvvCartao" placeholder="123" maxlength="3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nomeCartao">Nome no Cartão</label>
+                                        <input type="text" id="nomeCartao" placeholder="Nome como aparece no cartão">
+                                    </div>
+                                </div>
+                                
+                                <!-- MB WAY -->
+                                <div class="pagamento-form" id="formMbway">
+                                    <h4>MB WAY</h4>
+                                    <div class="form-group">
+                                        <label for="telemovelMbway">Número de Telemóvel</label>
+                                        <input type="tel" id="telemovelMbway" placeholder="+351 912 345 678">
+                                    </div>
+                                    <p class="mbway-info">
+                                        <i class="fas fa-info-circle"></i>
+                                        Receberá uma notificação no seu telemóvel para confirmar o pagamento.
+                                    </p>
+                                </div>
+                                
+                                <!-- PayPal -->
+                                <div class="pagamento-form" id="formPaypal">
+                                    <h4>PayPal</h4>
+                                    <p class="paypal-info">
+                                        <i class="fab fa-paypal"></i>
+                                        Será redirecionado para o PayPal para completar o pagamento de forma segura.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-back" onclick="anteriorStep()">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </button>
+                            <button class="btn-finalizar" onclick="finalizarReserva()">
+                                <i class="fas fa-check"></i> Confirmar Pagamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Resumo Fixo -->
+                <div class="resumo-fixo">
+                    <div class="resumo-card">
+                        <h3>Resumo da Reserva</h3>
+                        
+                        <div class="resumo-filme-mini">
+                            <img src="{{ url_for('static', filename=filme.poster_url) }}" alt="{{ filme.titulo }}">
+                            <div>
+                                <h4>{{ filme.titulo }}</h4>
+                                <p>{{ cinema.nome }}</p>
+                                <p>{{ data_sessao }} - {{ horario.hora_str }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="resumo-detalhes">
+                            <div class="detalhe-linha">
+                                <span>Bilhetes:</span>
+                                <span id="resumoBilhetes">0</span>
+                            </div>
+                            <div class="detalhe-linha">
+                                <span>Lugares:</span>
+                                <span id="resumoLugaresTexto">-</span>
+                            </div>
+                            <div class="detalhe-linha">
+                                <span>Produtos:</span>
+                                <span id="resumoProdutosTexto">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="resumo-total-fixo">
+                            <div class="total-linha">
+                                <span>Total:</span>
+                                <span id="totalFixo">€0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal-overlay" id="loadingModal">
+        <div class="modal-content loading-modal">
+            <div class="loading-spinner"></div>
+            <h3>Processando Pagamento...</h3>
+            <p>Por favor, aguarde enquanto processamos sua reserva.</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Reserva Confirmada!</h3>
+            <p>Sua reserva foi realizada com sucesso. Você receberá um email com os detalhes.</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="irParaHome()">Voltar ao Início</button>
+                <button class="btn-secondary" onclick="verReservas()">Ver Minhas Reservas</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados da sessão (passados do backend)
+        const dadosSessao = {
+            filme_id: {{ filme.id }},
+            cinema_id: {{ cinema.id }},
+            horario_id: {{ horario.id }},
+            tipo_sessao_id: {{ tipo_sessao.id }},
+            data_sessao: '{{ data_sessao }}',
+            preco_base: {{ tipo_sessao.preco or 8.50 }}
+        };
+
+        // Estado da reserva
+        let estadoReserva = {
+            step: 1,
+            quantidade: 1,
+            lugaresSelecionados: [],
+            produtos: {},
+            metodoPagamento: 'cartao',
+            totalBilhetes: 0,
+            totalProdutos: 0,
+            totalGeral: 0
+        };
+
+        // Dados da sala (vindos da base de dados)
+        const dadosSala = {{ sala_layout|tojson }};
+        const lugaresOcupados = {{ lugares_ocupados|tojson }};
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarReserva();
+            gerarMapaSala();
+            configurarEventListeners();
+        });
+
+        // Função principal de inicialização
+        function inicializarReserva() {
+            atualizarProgressBar();
+            atualizarResumoFixo();
+        }
+
+        // Configurar event listeners
+        function configurarEventListeners() {
+            // Quantidade de bilhetes
+            document.querySelectorAll('.quantidade-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const quantidade = parseInt(this.dataset.quantidade);
+                    selecionarQuantidade(quantidade);
+                });
+            });
+
+            // Input customizado de quantidade
+            document.getElementById('quantidadeCustom').addEventListener('input', function() {
+                const quantidade = parseInt(this.value) || 1;
+                selecionarQuantidade(quantidade);
+            });
+
+            // Métodos de pagamento
+            document.querySelectorAll('input[name="metodoPagamento"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    alterarMetodoPagamento(this.value);
+                });
+            });
+
+            // Formatação de campos
+            formatarCampoCartao();
+        }
+
+        // Selecionar quantidade de bilhetes
+        function selecionarQuantidade(quantidade) {
+            estadoReserva.quantidade = quantidade;
+            
+            // Atualizar UI
+            document.querySelectorAll('.quantidade-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-quantidade="${quantidade}"]`)?.classList.add('selected');
+            document.getElementById('quantidadeCustom').value = quantidade;
+            document.getElementById('quantidadeSelecionada').textContent = quantidade;
+            
+            // Habilitar botão
+            document.getElementById('btnStep1').disabled = false;
+            
+            // Atualizar resumo
+            atualizarResumoFixo();
+        }
+
+        // Alterar quantidade com botões +/-
+        function alterarQuantidade(delta) {
+            const input = document.getElementById('quantidadeCustom');
+            const novaQuantidade = Math.max(1, Math.min(20, parseInt(input.value) + delta));
+            selecionarQuantidade(novaQuantidade);
+        }
+
+        // Gerar mapa da sala
+        function gerarMapaSala() {
+            const mapaSala = document.getElementById('mapaSala');
+            mapaSala.innerHTML = '';
+
+            for (let fila = 1; fila <= dadosSala.filas; fila++) {
+                const filaDiv = document.createElement('div');
+                filaDiv.className = 'fila';
+                
+                // Letra da fila
+                const letraFila = document.createElement('div');
+                letraFila.className = 'letra-fila';
+                letraFila.textContent = String.fromCharCode(64 + fila); // A, B, C...
+                filaDiv.appendChild(letraFila);
+
+                for (let lugar = 1; lugar <= dadosSala.lugares_por_fila; lugar++) {
+                    const lugarDiv = document.createElement('div');
+                    const lugarId = `${String.fromCharCode(64 + fila)}${lugar}`;
+                    
+                    lugarDiv.className = 'lugar';
+                    lugarDiv.dataset.lugar = lugarId;
+                    lugarDiv.dataset.fila = fila;
+                    lugarDiv.dataset.numero = lugar;
+                    lugarDiv.textContent = lugar;
+
+                    // Verificar se é VIP (últimas 2 filas)
+                    if (fila >= dadosSala.filas - 1) {
+                        lugarDiv.classList.add('vip');
+                    }
+
+                    // Verificar se está ocupado
+                    if (lugaresOcupados.includes(lugarId)) {
+                        lugarDiv.classList.add('ocupado');
+                    } else {
+                        lugarDiv.addEventListener('click', () => selecionarLugar(lugarId, lugarDiv));
+                    }
+
+                    filaDiv.appendChild(lugarDiv);
+                }
+
+                mapaSala.appendChild(filaDiv);
+            }
+        }
+
+        // Selecionar lugar na sala
+        function selecionarLugar(lugarId, elemento) {
+            if (elemento.classList.contains('ocupado')) return;
+
+            if (elemento.classList.contains('selecionado')) {
+                // Desselecionar
+                elemento.classList.remove('selecionado');
+                estadoReserva.lugaresSelecionados = estadoReserva.lugaresSelecionados.filter(l => l.id !== lugarId);
+            } else {
+                // Verificar se já atingiu o limite
+                if (estadoReserva.lugaresSelecionados.length >= estadoReserva.quantidade) {
+                    alert(`Você pode selecionar apenas ${estadoReserva.quantidade} lugar(es).`);
+                    return;
+                }
+
+                // Selecionar
+                elemento.classList.add('selecionado');
+                const isVip = elemento.classList.contains('vip');
+                estadoReserva.lugaresSelecionados.push({
+                    id: lugarId,
+                    fila: elemento.dataset.fila,
+                    numero: elemento.dataset.numero,
+                    vip: isVip,
+                    preco: dadosSessao.preco_base + (isVip ? 3 : 0)
+                });
+            }
+
+            // Verificar se pode avançar
+            document.getElementById('btnStep2').disabled = 
+                estadoReserva.lugaresSelecionados.length !== estadoReserva.quantidade;
+
+            atualizarResumoFixo();
+        }
+
+        // Alterar produto do bar
+        function alterarProduto(produtoId, delta) {
+            if (!estadoReserva.produtos[produtoId]) {
+                estadoReserva.produtos[produtoId] = { quantidade: 0, preco: 0 };
+            }
+
+            const produto = document.querySelector(`[data-produto="${produtoId}"]`);
+            const preco = parseFloat(produto.dataset.preco);
+            
+            estadoReserva.produtos[produtoId].quantidade = Math.max(0, 
+                estadoReserva.produtos[produtoId].quantidade + delta);
+            estadoReserva.produtos[produtoId].preco = preco;
+
+            // Atualizar UI
+            document.getElementById(`qty-${produtoId}`).textContent = 
+                estadoReserva.produtos[produtoId].quantidade;
+
+            atualizarResumoFixo();
+        }
+
+        // Próximo step
+        function proximoStep() {
+            if (estadoReserva.step < 5) {
+                // Esconder step atual
+                document.getElementById(`step${estadoReserva.step}`).classList.remove('active');
+                
+                // Avançar step
+                estadoReserva.step++;
+                
+                // Mostrar próximo step
+                document.getElementById(`step${estadoReserva.step}`).classList.add('active');
+                
+                // Atualizar progress bar
+                atualizarProgressBar();
+                
+                // Atualizar resumo se for step 4
+                if (estadoReserva.step === 4) {
+                    atualizarResumoCompleto();
+                }
+            }
+        }
+
+        // Step anterior
+        function anteriorStep() {
+            if (estadoReserva.step > 1) {
+                // Esconder step atual
+                document.getElementById(`step${estadoReserva.step}`).classList.remove('active');
+                
+                // Voltar step
+                estadoReserva.step--;
+                
+                // Mostrar step anterior
+                document.getElementById(`step${estadoReserva.step}`).classList.add('active');
+                
+                // Atualizar progress bar
+                atualizarProgressBar();
+            }
+        }
+
+        // Atualizar progress bar
+        function atualizarProgressBar() {
+            // Atualizar steps
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                if (index + 1 <= estadoReserva.step) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            // Atualizar linha de progresso
+            const progressFill = document.getElementById('progressFill');
+            const percentage = ((estadoReserva.step - 1) / 4) * 100;
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        // Atualizar resumo fixo
+        function atualizarResumoFixo() {
+            // Calcular totais
+            estadoReserva.totalBilhetes = estadoReserva.lugaresSelecionados.reduce((total, lugar) => 
+                total + lugar.preco, 0);
+            
+            estadoReserva.totalProdutos = Object.values(estadoReserva.produtos).reduce((total, produto) => 
+                total + (produto.quantidade * produto.preco), 0);
+            
+            estadoReserva.totalGeral = estadoReserva.totalBilhetes + estadoReserva.totalProdutos;
+
+            // Atualizar UI
+            document.getElementById('resumoBilhetes').textContent = estadoReserva.quantidade;
+            document.getElementById('resumoLugaresTexto').textContent = 
+                estadoReserva.lugaresSelecionados.map(l => l.id).join(', ') || '-';
+            
+            const produtosTexto = Object.entries(estadoReserva.produtos)
+                .filter(([_, produto]) => produto.quantidade > 0)
+                .map(([id, produto]) => `${produto.quantidade}x ${id}`)
+                .join(', ') || '-';
+            document.getElementById('resumoProdutosTexto').textContent = produtosTexto;
+            
+            document.getElementById('totalFixo').textContent = `€${estadoReserva.totalGeral.toFixed(2)}`;
+        }
+
+        // Atualizar resumo completo (step 4)
+        function atualizarResumoCompleto() {
+            // Lugares
+            const resumoLugares = document.getElementById('resumoLugares');
+            resumoLugares.innerHTML = estadoReserva.lugaresSelecionados.map(lugar => `
+                <div class="lugar-resumo">
+                    <span>Lugar ${lugar.id} ${lugar.vip ? '(VIP)' : ''}</span>
+                    <span>€${lugar.preco.toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            // Produtos
+            const listaProdutos = document.getElementById('listaProdutos');
+            const produtosComQuantidade = Object.entries(estadoReserva.produtos)
+                .filter(([_, produto]) => produto.quantidade > 0);
+            
+            if (produtosComQuantidade.length > 0) {
+                listaProdutos.innerHTML = produtosComQuantidade.map(([id, produto]) => `
+                    <div class="produto-resumo">
+                        <span>${produto.quantidade}x ${id.replace('-', ' ')}</span>
+                        <span>€${(produto.quantidade * produto.preco).toFixed(2)}</span>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('resumoProdutos').style.display = 'none';
+            }
+
+            // Totais
+            document.getElementById('subtotalBilhetes').textContent = `€${estadoReserva.totalBilhetes.toFixed(2)}`;
+            document.getElementById('subtotalProdutos').textContent = `€${estadoReserva.totalProdutos.toFixed(2)}`;
+            document.getElementById('totalFinal').textContent = `€${estadoReserva.totalGeral.toFixed(2)}`;
+        }
+
+        // Alterar método de pagamento
+        function alterarMetodoPagamento(metodo) {
+            estadoReserva.metodoPagamento = metodo;
+            
+            // Esconder todos os forms
+            document.querySelectorAll('.pagamento-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Mostrar form selecionado
+            document.getElementById(`form${metodo.charAt(0).toUpperCase() + metodo.slice(1)}`).classList.add('active');
+        }
+
+        // Formatação do campo de cartão
+        function formatarCampoCartao() {
+            const numeroCartao = document.getElementById('numeroCartao');
+            const validadeCartao = document.getElementById('validadeCartao');
+
+            numeroCartao.addEventListener('input', function() {
+                let value = this.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                this.value = formattedValue;
+            });
+
+            validadeCartao.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                this.value = value;
+            });
+        }
+
+        // Finalizar reserva
+        function finalizarReserva() {
+            // Validar dados de pagamento
+            if (!validarDadosPagamento()) {
+                return;
+            }
+
+            // Mostrar loading
+            document.getElementById('loadingModal').classList.add('visible');
+
+            // Preparar dados para envio
+            const dadosReserva = {
+                ...dadosSessao,
+                lugares: estadoReserva.lugaresSelecionados,
+                produtos: estadoReserva.produtos,
+                metodoPagamento: estadoReserva.metodoPagamento,
+                total: estadoReserva.totalGeral
+            };
+
+            // Enviar para o backend
+            fetch('/confirmar_reserva', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dadosReserva)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loadingModal').classList.remove('visible');
+                
+                if (data.success) {
+                    document.getElementById('successModal').classList.add('visible');
+                } else {
+                    alert('Erro ao processar reserva: ' + data.message);
+                }
+            })
+            .catch(error => {
+                document.getElementById('loadingModal').classList.remove('visible');
+                alert('Erro ao processar reserva. Tente novamente.');
+                console.error('Erro:', error);
+            });
+        }
+
+        // Validar dados de pagamento
+        function validarDadosPagamento() {
+            const metodo = estadoReserva.metodoPagamento;
+            
+            if (metodo === 'cartao') {
+                const numero = document.getElementById('numeroCartao').value.replace(/\s/g, '');
+                const validade = document.getElementById('validadeCartao').value;
+                const cvv = document.getElementById('cvvCartao').value;
+                const nome = document.getElementById('nomeCartao').value;
+                
+                if (!numero || numero.length < 16) {
+                    alert('Número do cartão inválido');
+                    return false;
+                }
+                if (!validade || validade.length < 5) {
+                    alert('Data de validade inválida');
+                    return false;
+                }
+                if (!cvv || cvv.length < 3) {
+                    alert('CVV inválido');
+                    return false;
+                }
+                if (!nome.trim()) {
+                    alert('Nome no cartão é obrigatório');
+                    return false;
+                }
+            } else if (metodo === 'mbway') {
+                const telemovel = document.getElementById('telemovelMbway').value;
+                if (!telemovel.trim()) {
+                    alert('Número de telemóvel é obrigatório');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // Funções dos modais
+        function irParaHome() {
+            window.location.href = '{{ url_for("home") }}';
+        }
+
+        function verReservas() {
+            window.location.href = '{{ url_for("perfil") }}';
+        }
+    </script>
+</body>
+</html>

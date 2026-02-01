@@ -1,0 +1,361 @@
+/* ========================================
+   DASHBOARD ESPECÍFICO
+   ======================================== */
+
+/* Ícones como imagens */
+.icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon-img-large {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Header com menu mobile */
+.admin-header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  position: relative;
+}
+
+/* Alertas de Sucesso */
+.alert-success {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border-left: 4px solid #4caf50;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.alert-success-icon {
+  font-size: 2rem;
+}
+
+.alert-success-title {
+  color: #4caf50;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.alert-success-text {
+  color: #fff;
+}
+
+/* Alertas de Vendas */
+.alert-sales {
+  background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(255, 214, 10, 0.1));
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border-left: 4px solid #FFD60A;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.alert-sales-icon {
+  font-size: 2rem;
+}
+
+.alert-sales-title {
+  color: #FFD60A;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.alert-sales-text {
+  color: #fff;
+}
+
+/* Filtros de Período */
+.period-filter-container {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 214, 10, 0.2);
+}
+
+.period-filter-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.period-filter-title {
+  color: #FFD60A;
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.period-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.period-update-info {
+  text-align: right;
+}
+
+.period-update-label {
+  color: #aaa;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.period-update-time {
+  color: #FFD60A;
+  font-weight: 600;
+}
+
+/* Gráficos */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.chart-title {
+  color: #FFD60A;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.chart-canvas {
+  max-height: 300px;
+}
+
+/* Top Filmes e Produtos */
+.top-items-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.table-rank {
+  color: #FFD60A;
+  font-weight: 600;
+}
+
+/* Horários Populares */
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.horario-card {
+  background: rgba(255, 214, 10, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid rgba(255, 214, 10, 0.3);
+}
+
+.horario-time {
+  font-size: 2rem;
+  color: #FFD60A;
+  margin-bottom: 10px;
+}
+
+.horario-count {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* Atividade Recente */
+.activity-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.reservas-table-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.reserva-id {
+  color: #FFD60A;
+  font-weight: 600;
+}
+
+/* Estatísticas de Usuários */
+.user-stats-container {
+  margin-bottom: 20px;
+}
+
+.user-stat-card {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.user-stat-card.new-users {
+  background: rgba(255, 214, 10, 0.1);
+  border-left: 4px solid #FFD60A;
+}
+
+.user-stat-card.active-users {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 4px solid #4caf50;
+}
+
+.user-stat-card.return-rate {
+  background: rgba(33, 150, 243, 0.1);
+  border-left: 4px solid #2196f3;
+}
+
+.user-stat-label {
+  color: #aaa;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.user-stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.user-stat-number.yellow {
+  color: #FFD60A;
+}
+
+.user-stat-number.green {
+  color: #4caf50;
+}
+
+.user-stat-number.blue {
+  color: #2196f3;
+}
+
+/* Botões de Exportação */
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.export-btn {
+  padding: 15px;
+  border: 2px solid;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.export-btn.vendas {
+  background: rgba(76, 175, 80, 0.2);
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+.export-btn.reservas {
+  background: rgba(33, 150, 243, 0.2);
+  border-color: #2196f3;
+  color: #2196f3;
+}
+
+.export-btn.usuarios {
+  background: rgba(156, 39, 176, 0.2);
+  border-color: #9c27b0;
+  color: #9c27b0;
+}
+
+.export-btn.produtos {
+  background: rgba(255, 152, 0, 0.2);
+  border-color: #ff9800;
+  color: #ff9800;
+}
+
+.export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .charts-grid,
+  .top-items-grid,
+  .activity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .period-filter-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .period-update-info {
+    text-align: left;
+    width: 100%;
+  }
+}
+
+
+/* ========================================
+   MELHORIAS NOS ÍCONES
+   ======================================== */
+
+/* Ícone de filtro especial - maior e com animação sutil */
+.period-filter-title .icon-img {
+  width: 36px !important;
+  height: 36px !important;
+  margin-right: 12px;
+  vertical-align: middle;
+  filter: brightness(0) saturate(100%) invert(82%) sepia(85%) saturate(1000%) hue-rotate(359deg) brightness(103%) contrast(104%);
+  animation: pulse-icon 3s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.9;
+  }
+}
+
+/* Melhorar todos os ícones H3 */
+h3 .icon-img {
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 12px;
+}
+
+
+/* Emojis nos cards de gestão - amarelos */
+.menu-card .icon {
+  font-size: 64px;
+  margin-bottom: 15px;
+  filter: grayscale(0%) brightness(1.2) sepia(100%) saturate(300%) hue-rotate(5deg);
+  transition: transform 0.3s ease;
+}
+
+.menu-card:hover .icon {
+  transform: scale(1.15);
+}

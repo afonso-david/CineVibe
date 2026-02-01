@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Navegação - CineVibe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+        }
+        
+        .form-step {
+            display: none;
+            padding: 20px;
+            border: 2px solid #00bcd4;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .btn-bilhete {
+            background: #1e3a8a;
+            color: white;
+            border: 2px solid #00bcd4;
+            padding: 15px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn-bilhete.selected {
+            background: #00bcd4;
+            color: #0f172a;
+        }
+        
+        .btn-continuar-lugares {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        .btn-continuar-lugares:disabled {
+            background: #374151;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        .sala-lugares {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .cinema-seat {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: #1e3a8a;
+            border: 1px solid #00bcd4;
+            margin: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 25px;
+            font-size: 10px;
+        }
+        
+        .cinema-seat.selected {
+            background: #fbbf24;
+            color: #0f172a;
+        }
+        
+        .cinema-row {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Teste de Navegação - Sistema de Reservas</h1>
+    
+    <!-- PASSO 1: BILHETES -->
+    <div id="passo-bilhetes" class="form-step active">
+        <h2>1. Quantos bilhetes?</h2>
+        <p>Selecione a quantidade de bilhetes desejada</p>
+        
+        <button class="btn-bilhete" data-qtd="1">1 Bilhete</button>
+        <button class="btn-bilhete" data-qtd="2">2 Bilhetes</button>
+        <button class="btn-bilhete" data-qtd="3">3 Bilhetes</button>
+        <button class="btn-bilhete" data-qtd="4">4 Bilhetes</button>
+        
+        <br><br>
+        <button id="continuar-lugares" class="btn-continuar-lugares" disabled>
+            Continuar para Lugares
+        </button>
+        
+        <p><strong>Quantidade selecionada:</strong> <span id="qtd-display">0</span></p>
+    </div>
+    
+    <!-- PASSO 2: LUGARES -->
+    <div id="passo-lugares" class="form-step">
+        <h2>2. Escolha os lugares</h2>
+        <p>Selecione <span id="lugares-necessarios">0</span> lugares na sala</p>
+        
+        <div class="tela-cinema">
+            <h3>🎬 ECRÃ</h3>
+        </div>
+        
+        <div id="sala-lugares" class="sala-lugares">
+            <!-- Lugares serão gerados aqui -->
+        </div>
+        
+        <p><strong>Lugares selecionados:</strong> <span id="lugares-display">Nenhum</span></p>
+        
+        <button onclick="voltarBilhetes()">← Voltar aos Bilhetes</button>
+        <button id="continuar-bar" disabled>Continuar para Bar →</button>
+    </div>
+    
+    <!-- PASSO 3: BAR -->
+    <div id="passo-bar" class="form-step">
+        <h2>3. Bar (Opcional)</h2>
+        <p>Adicione produtos do bar à sua reserva</p>
+        
+        <p>🍿 Pipocas - 3.50€</p>
+        <p>🥤 Bebidas - 2.50€</p>
+        <p>🍫 Chocolates - 2.00€</p>
+        
+        <button onclick="voltarLugares()">← Voltar aos Lugares</button>
+        <button onclick="pularBar()">Pular Bar</button>
+        <button onclick="continuarConfirmacao()">Continuar →</button>
+    </div>
+    
+    <script>
+// ===== VARIÁVEIS GLOBAIS =====
+let quantidadeBilhetes = 0;
+let lugaresSelecionados = [];
+let produtosBar = {};
+
+console.log('🚀 Iniciando sistema CineVibe...');
+
+// ===== NAVEGAÇÃO ENTRE PASSOS =====
+function mostrarPasso(passoId) {
+    console.log('📍 Mostrando passo:', passoId);
+    
+    document.querySelectorAll('.form-step').forEach(passo => {
+        passo.classList.remove('active');
+        passo.style.display = 'none';
+    });
+    
+    const passo = document.getElementById(passoId);
+    if (passo) {
+        passo.classList.add('active');
+        passo.style.display = 'block';
+    }
+}
+
+// ===== SISTEMA DE BILHETES =====
+document.addEventListener('click', function(e) {
+    // Botões de quantidade de bilhetes
+    if (e.target.classList.contains('quantidade-btn')) {
+        const quantidade = parseInt(e.target.dataset.quantidade);
+        console.log('🎫 Selecionando', quantidade, 'bilhetes');
+        
+        quantidadeBilhetes = quantidade;
+        
+        // Atualizar visual
+        document.querySelectorAll('.quantidade-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        e.target.classList.add('selected');
+        
+        // Atualizar resumo
+        atualizarResumo();
+    }
+    
+    // Botão continuar para lugares
+    if (e.target.id === 'continuar-lugares' || e.target.closest('#continuar-lugares')) {
+        if (quantidadeBilhetes > 0) {
+            mostrarPasso('passo-lugares');
+        }
+    }
+    
+    // Botão continuar para bar
+    if (e.target.id === 'continuar-bar' || e.target.closest('#continuar-bar')) {
+        mostrarPasso('passo-bar');
+    }
+    
+    // Botão continuar para confirmação
+    if (e.target.id === 'continuar-confirmacao' || e.target.closest('#continuar-confirmacao')) {
+        mostrarPasso('passo-confirmacao');
+        atualizarResumoFinal();
+    }
+    
+    // Botões voltar
+    if (e.target.id === 'voltar-bilhetes' || e.target.closest('#voltar-bilhetes')) {
+        mostrarPasso('passo-bilhetes');
+    }
+    
+    if (e.target.id === 'voltar-lugares' || e.target.closest('#voltar-lugares')) {
+        mostrarPasso('passo-lugares');
+    }
+    
+    if (e.target.id === 'voltar-bar' || e.target.closest('#voltar-bar')) {
+        mostrarPasso('passo-bar');
+    }
+});
+
+// ===== SISTEMA DO BAR =====
+document.addEventListener('click', function(e) {
+    // Botão MAIS
+    if (e.target.classList.contains('btn-mais')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const produtoId = e.target.dataset.id;
+        console.log('➕ Adicionando produto:', produtoId);
+        
+        if (!produtosBar[produtoId]) {
+            produtosBar[produtoId] = { quantidade: 0 };
+        }
+        
+        produtosBar[produtoId].quantidade++;
+        atualizarVisualProduto(produtoId);
+        atualizarResumoBar();
+        
+        return false;
+    }
+    
+    // Botão MENOS
+    if (e.target.classList.contains('btn-menos')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const produtoId = e.target.dataset.id;
+        console.log('➖ Removendo produto:', produtoId);
+        
+        if (produtosBar[produtoId] && produtosBar[produtoId].quantidade > 0) {
+            produtosBar[produtoId].quantidade--;
+            
+            if (produtosBar[produtoId].quantidade === 0) {
+                delete produtosBar[produtoId];
+            }
+            
+            atualizarVisualProduto(produtoId);
+            atualizarResumoBar();
+        }
+        
+        return false;
+    }
+    
+    // Botões de categoria
+    if (e.target.classList.contains('categoria-btn')) {
+        const categoria = e.target.dataset.categoria;
+        console.log('📂 Mudando categoria:', categoria);
+        
+        document.querySelectorAll('.categoria-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        document.querySelectorAll('.categoria-produtos').forEach(cat => {
+            cat.classList.remove('active');
+            cat.style.display = 'none';
+        });
+        
+        const categoriaAtiva = document.getElementById(`categoria-${categoria}`);
+        if (categoriaAtiva) {
+            categoriaAtiva.classList.add('active');
+            categoriaAtiva.style.display = 'grid';
+        }
+    }
+});
+
+function atualizarVisualProduto(produtoId) {
+    const quantidade = produtosBar[produtoId] ? produtosBar[produtoId].quantidade : 0;
+    
+    const quantidadeSpan = document.querySelector(`[data-id="${produtoId}"].quantidade`);
+    if (quantidadeSpan) {
+        quantidadeSpan.textContent = quantidade;
+    }
+    
+    const btnMenos = document.querySelector(`[data-id="${produtoId}"].btn-menos`);
+    if (btnMenos) {
+        btnMenos.disabled = quantidade === 0;
+    }
+    
+    const card = document.querySelector(`[data-produto-id="${produtoId}"]`);
+    if (card) {
+        if (quantidade > 0) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
+    }
+}
+
+// ===== ATUALIZAR RESUMOS =====
+function atualizarResumo() {
+    console.log('📋 Atualizando resumo...');
+    
+    const precoUnitario = 8.50;
+    const totalBilhetes = quantidadeBilhetes * precoUnitario;
+    
+    const elementos = [
+        { id: 'resumo-quantidade', valor: quantidadeBilhetes + ' bilhete(s)' },
+        { id: 'resumo-total-bilhetes', valor: totalBilhetes.toFixed(2) + '€' }
+    ];
+    
+    elementos.forEach(elem => {
+        const el = document.getElementById(elem.id);
+        if (el) {
+            el.textContent = elem.valor;
+        }
+    });
+    
+    atualizarTotalFinal();
+}
+
+function atualizarResumoBar() {
+    console.log('🍿 Atualizando resumo do bar...');
+    
+    let totalBar = 0;
+    
+    for (const produtoId in produtosBar) {
+        const produto = produtosBar[produtoId];
+        const precoElement = document.querySelector(`[data-produto-id="${produtoId}"] .produto-preco`);
+        
+        if (precoElement) {
+            const precoTexto = precoElement.textContent;
+            const preco = parseFloat(precoTexto.replace('€', '').replace(',', '.'));
+            totalBar += preco * produto.quantidade;
+        }
+    }
+    
+    const elementosBar = [
+        { id: 'resumo-bar-total', valor: totalBar.toFixed(2) + '€' }
+    ];
+    
+    elementosBar.forEach(elem => {
+        const el = document.getElementById(elem.id);
+        if (el) {
+            el.textContent = elem.valor;
+        }
+    });
+    
+    atualizarTotalFinal();
+}
+
+function atualizarTotalFinal() {
+    const precoUnitario = 8.50;
+    const totalBilhetes = quantidadeBilhetes * precoUnitario;
+    
+    let totalBar = 0;
+    for (const produtoId in produtosBar) {
+        const produto = produtosBar[produtoId];
+        const precoElement = document.querySelector(`[data-produto-id="${produtoId}"] .produto-preco`);
+        
+        if (precoElement) {
+            const precoTexto = precoElement.textContent;
+            const preco = parseFloat(precoTexto.replace('€', '').replace(',', '.'));
+            totalBar += preco * produto.quantidade;
+        }
+    }
+    
+    const totalGeral = totalBilhetes + totalBar;
+    
+    const elementosTotal = [
+        { id: 'resumo-total-final', valor: totalGeral.toFixed(2) + '€' }
+    ];
+    
+    elementosTotal.forEach(elem => {
+        const el = document.getElementById(elem.id);
+        if (el) {
+            el.textContent = elem.valor;
+        }
+    });
+    
+    console.log('💰 TOTAL:', totalGeral.toFixed(2) + '€');
+}
+
+function atualizarResumoFinal() {
+    atualizarResumo();
+    atualizarResumoBar();
+}
+
+// ===== BOTÃO DE PAGAMENTO =====
+setTimeout(() => {
+    const btnFinalizar = document.getElementById('finalizar-reserva');
+    if (btnFinalizar) {
+        btnFinalizar.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const precoUnitario = 8.50;
+            const totalBilhetes = quantidadeBilhetes * precoUnitario;
+            let totalBar = 0;
+            
+            for (const produtoId in produtosBar) {
+                const produto = produtosBar[produtoId];
+                const precoElement = document.querySelector(`[data-produto-id="${produtoId}"] .produto-preco`);
+                
+                if (precoElement) {
+                    const precoTexto = precoElement.textContent;
+                    const preco = parseFloat(precoTexto.replace('€', '').replace(',', '.'));
+                    totalBar += preco * produto.quantidade;
+                }
+            }
+            
+            const totalGeral = totalBilhetes + totalBar;
+            
+            alert(`✅ Reserva efetuada!\n\nBilhetes: ${quantidadeBilhetes}\nTotal: ${totalGeral.toFixed(2)}€`);
+        });
+    }
+}, 500);
+
+console.log('✅ Sistema carregado!');
+</script>
+</body>
+</html>

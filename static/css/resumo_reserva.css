@@ -1,0 +1,780 @@
+/* Resumo da Reserva - CSS */
+
+/* Progress Bar */
+.progress-container {
+    background: #1B2838;
+    padding: 1rem 0;
+    border-bottom: 1px solid #2A3F54;
+}
+
+.progress-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 100%;
+    width: 2rem;
+    height: 2px;
+    background: #2A3F54;
+    z-index: 1;
+}
+
+.step.completed:not(:last-child)::after,
+.step.active:not(:last-child)::after {
+    background: #FFD60A;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2A3F54;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8B949E;
+    font-size: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.step.completed .step-circle {
+    background: #FFD60A;
+    color: #0D1B2A;
+}
+
+.step.active .step-circle {
+    background: #FFD60A;
+    color: #0D1B2A;
+    box-shadow: 0 0 20px rgba(255, 214, 10, 0.4);
+}
+
+.step span {
+    font-size: 0.875rem;
+    color: #8B949E;
+    font-weight: 500;
+}
+
+.step.completed span,
+.step.active span {
+    color: #FFD60A;
+}
+
+/* Layout Principal */
+.resumo-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Card do Resumo */
+.resumo-card {
+    background: linear-gradient(135deg, #1B2838 0%, #2A3F54 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid #3A4F64;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.resumo-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #3A4F64;
+}
+
+.resumo-header h1 {
+    color: #FFD60A;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.resumo-header p {
+    color: #8B949E;
+    font-size: 1rem;
+}
+
+/* Seções */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #3A4F64;
+}
+
+.section-title i {
+    color: #FFD60A;
+    font-size: 1.25rem;
+}
+
+.section-title h2 {
+    color: #FFFFFF;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Informações do Filme */
+.movie-section {
+    margin-bottom: 2rem;
+}
+
+.movie-info-card {
+    display: flex;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+}
+
+.movie-poster {
+    flex-shrink: 0;
+}
+
+.movie-poster img {
+    width: 100px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.movie-details h3 {
+    color: #FFD60A;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.movie-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+}
+
+.info-item i {
+    color: #FFD60A;
+    width: 16px;
+}
+
+/* Bilhetes */
+.tickets-section {
+    margin-bottom: 2rem;
+}
+
+.ticket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.25rem;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+}
+
+.ticket-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ticket-type {
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.ticket-places {
+    color: #8B949E;
+    font-size: 0.9rem;
+}
+
+.ticket-price {
+    color: #FFD60A;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Produtos do Bar */
+.bar-section {
+    margin-bottom: 2rem;
+}
+
+.bar-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.bar-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 214, 10, 0.1);
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.item-name {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.item-description {
+    color: #8B949E;
+    font-size: 0.85rem;
+}
+
+.item-price {
+    color: #FFD60A;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.no-bar-items {
+    text-align: center;
+    padding: 2rem;
+    color: #8B949E;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px dashed #3A4F64;
+}
+
+.no-bar-items i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Total */
+.total-section {
+    background: rgba(255, 214, 10, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 214, 10, 0.3);
+}
+
+.total-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.subtotal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 1rem;
+}
+
+.total-divider {
+    height: 1px;
+    background: rgba(255, 214, 10, 0.3);
+    margin: 0.5rem 0;
+}
+
+.total-final {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #FFD60A;
+    padding-top: 0.5rem;
+}
+
+/* Card do Cliente */
+.customer-card {
+    background: linear-gradient(135deg, #1B2838 0%, #2A3F54 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid #3A4F64;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    height: fit-content;
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.customer-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #3A4F64;
+}
+
+.customer-header h2 {
+    color: #FFD60A;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Utilizador Logado */
+.user-logged-in {
+    text-align: center;
+}
+
+.user-avatar {
+    margin-bottom: 1rem;
+}
+
+.user-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #FFD60A;
+    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
+}
+
+.user-info h3 {
+    color: #FFFFFF;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.user-email {
+    color: #8B949E;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.user-phone {
+    color: #8B949E;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ECC71;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.email-note {
+    background: rgba(255, 214, 10, 0.1);
+    color: #FFD60A;
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+}
+
+.email-note i {
+    margin-right: 0.5rem;
+}
+
+/* Formulário de Convidado */
+.guest-form {
+    margin-bottom: 2rem;
+}
+
+.guest-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #8B949E;
+}
+
+.guest-header i {
+    font-size: 3rem;
+    color: #FFD60A;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.guest-data-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group label i {
+    color: #FFD60A;
+    width: 16px;
+}
+
+.form-group input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #3A4F64;
+    border-radius: 10px;
+    padding: 0.875rem 1rem;
+    color: #FFFFFF;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #FFD60A;
+    box-shadow: 0 0 10px rgba(255, 214, 10, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.form-group input::placeholder {
+    color: #8B949E;
+}
+
+.form-note {
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498DB;
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(52, 152, 219, 0.2);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.form-note i {
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+}
+
+/* Botões de Ação */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.btn-secondary,
+.btn-primary {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 0; /* Permite que o flex item encolha */
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal; /* Permite quebra de linha */
+    text-align: center;
+    line-height: 1.3;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border: 1px solid #3A4F64;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #FFD60A;
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FFD60A 0%, #F39C12 100%);
+    color: #0D1B2A;
+    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.4);
+    flex-wrap: wrap;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.6);
+}
+
+.btn-primary .amount {
+    background: rgba(13, 27, 42, 0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 700;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Informações de Segurança */
+.security-info {
+    background: rgba(46, 204, 113, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.security-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: #2ECC71;
+}
+
+.security-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.security-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.security-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #2ECC71;
+    font-size: 0.9rem;
+}
+
+.security-item i {
+    width: 16px;
+    text-align: center;
+}
+
+/* Responsivo */
+@media (max-width: 1024px) {
+    .resumo-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .customer-card {
+        order: -1;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .progress-bar {
+        gap: 1rem;
+    }
+    
+    .step span {
+        display: none;
+    }
+    
+    .movie-info-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .movie-info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn-secondary,
+    .btn-primary {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+        padding: 1.2rem 1rem;
+        line-height: 1.4;
+        min-height: 60px;
+        align-items: center;
+    }
+    
+    .resumo-card,
+    .customer-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .resumo-card,
+    .customer-card {
+        padding: 1rem;
+    }
+    
+    .resumo-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .movie-poster img {
+        width: 80px;
+        height: 112px;
+    }
+    
+    .btn-secondary,
+    .btn-primary {
+        font-size: 0.9rem;
+        padding: 1rem 0.75rem;
+        line-height: 1.3;
+        min-height: 55px;
+    }
+    
+    .btn-primary .amount {
+        font-size: 0.85rem;
+        padding: 0.2rem 0.4rem;
+        margin-left: 0.3rem;
+    }
+}
+/* Produtos do Bar */
+.bar-section {
+    margin-bottom: 2rem;
+}
+
+.bar-items {
+    background: rgba(27, 40, 56, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+}
+
+.bar-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 214, 10, 0.1);
+}
+
+.bar-item:last-child {
+    border-bottom: none;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.item-name {
+    color: #4EA8DE;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.item-price-unit {
+    color: #B8C5D1;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.item-price {
+    color: #FFD60A;
+    font-weight: 700;
+    font-size: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.no-bar-items {
+    text-align: center;
+    padding: 2rem;
+    color: #B8C5D1;
+    background: rgba(27, 40, 56, 0.2);
+    border-radius: 12px;
+    border: 2px dashed rgba(78, 168, 222, 0.3);
+}
+
+.no-bar-items i {
+    font-size: 2rem;
+    color: #4EA8DE;
+    margin-bottom: 1rem;
+    display: block;
+    opacity: 0.7;
+}
+
+.no-bar-items p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* Responsive para produtos do bar */
+@media (max-width: 768px) {
+    .bar-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .item-price {
+        align-self: flex-end;
+    }
+}

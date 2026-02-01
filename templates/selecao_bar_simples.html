@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção do Bar | CineVibe</title>
+</head>
+<body>
+    <h1>Seleção do Bar - Teste</h1>
+    
+    <p>Filme ID: {{ filme_id }}</p>
+    <p>Cinema ID: {{ cinema_id }}</p>
+    <p>Horário ID: {{ horario_id }}</p>
+    
+    <form id="resumoForm" method="GET" action="{{ url_for('resumo_reserva') }}">
+        <input type="hidden" name="filme_id" value="{{ filme_id }}">
+        <input type="hidden" name="cinema_id" value="{{ cinema_id }}">
+        <input type="hidden" name="tipo_sessao_id" value="{{ tipo_sessao_id }}">
+        <input type="hidden" name="horario_id" value="{{ horario_id }}">
+        <input type="hidden" name="data_sessao" value="{{ data_sessao }}">
+        <input type="hidden" name="lugares" value="{{ lugares_selecionados|join(',') if lugares_selecionados else '' }}">
+        <input type="hidden" name="quantidade" value="{{ lugares_selecionados|length if lugares_selecionados else 1 }}">
+        <input type="hidden" name="produtos_bar" value="[]">
+        
+        <button type="submit">Ver Resumo da Reserva</button>
+    </form>
+</body>
+</html>

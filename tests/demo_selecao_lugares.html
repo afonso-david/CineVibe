@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Seleção de Lugares | CineVibe</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0D1B2A;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 214, 10, 0.2);
+        }
+        
+        h1 {
+            color: #FFD60A;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .info-section {
+            background: rgba(13, 27, 42, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 214, 10, 0.2);
+        }
+        
+        .info-section h2 {
+            color: #4EA8DE;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 214, 10, 0.1);
+        }
+        
+        .feature-list li:before {
+            content: "✅ ";
+            color: #FFD60A;
+            font-weight: bold;
+        }
+        
+        .demo-seat-map {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: rgba(13, 27, 42, 0.3);
+            border-radius: 15px;
+        }
+        
+        .demo-screen {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            height: 6px;
+            border-radius: 20px;
+            margin: 1rem auto 2rem;
+            max-width: 80%;
+            position: relative;
+        }
+        
+        .demo-screen::before {
+            content: "ECRÃ";
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #B8C5D1;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .demo-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            align-items: center;
+        }
+        
+        .demo-row-label {
+            color: #B8C5D1;
+            font-weight: 600;
+            width: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .demo-seat {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        
+        .demo-seat.available {
+            background: #161D3E;
+            border: 2px solid #125A82;
+            color: transparent;
+        }
+        
+        .demo-seat.selected {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            border: 2px solid #FFD60A;
+            color: transparent;
+        }
+        
+        .demo-seat.occupied {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+            border: 2px solid #991b1b;
+            color: transparent;
+        }
+        
+        .demo-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .demo-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #B8C5D1;
+            font-size: 0.8rem;
+        }
+        
+        .demo-legend-seat {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .url-section {
+            background: rgba(78, 168, 222, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #4EA8DE;
+        }
+        
+        .url-section code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #FFD60A;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎬 Demo - Sistema de Seleção de Lugares</h1>
+        
+        <div class="info-section">
+            <h2>📋 Funcionalidades Implementadas</h2>
+            <ul class="feature-list">
+                <li>Planta da sala gerada dinamicamente baseada na capacidade da base de dados</li>
+                <li>Layout inteligente: Pequena (10x15), Média (15x20), Grande/IMAX (20x18)</li>
+                <li>Visualização de lugares ocupados em tempo real</li>
+                <li>Pré-seleção automática de lugares em grupo consecutivo</li>
+                <li>Seleção interativa sem mensagens de alerta</li>
+                <li>Interface limpa sem letras de fileiras</li>
+                <li>Design premium com cores escuras e elegantes</li>
+                <li>Integração completa com a base de dados existente</li>
+                <li>Validação de lugares já reservados por sessão e data</li>
+                <li>Interface responsiva para desktop e mobile</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>🏗️ Estrutura do Sistema</h2>
+            <p><strong>1. Página de Reserva:</strong> Seleção da quantidade de bilhetes (1-6 ou personalizada)</p>
+            <p><strong>2. Página de Seleção de Lugares:</strong> Planta da sala com pré-seleção automática de lugares em grupo</p>
+            <p><strong>3. Interação:</strong> Usuário pode alterar a seleção clicando nos lugares desejados</p>
+            <p><strong>4. Confirmação:</strong> Processamento da reserva na base de dados</p>
+        </div>
+        
+        <div class="info-section">
+            <h2>🎯 Exemplo de Layout de Sala</h2>
+            <p>Sala IMAX - 350 lugares (Layout: 20 fileiras x 18 lugares)</p>
+            
+            <div class="demo-seat-map">
+                <div class="demo-screen"></div>
+                
+                <!-- Exemplo sem letras de fileiras -->
+                <div class="demo-row">
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat selected"></div>
+                    <div class="demo-seat selected"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat occupied"></div>
+                    <div class="demo-seat occupied"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                </div>
+                
+                <div class="demo-row">
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                </div>
+                
+                <div class="demo-row">
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat occupied"></div>
+                    <div class="demo-seat occupied"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                    <div class="demo-seat available"></div>
+                </div>
+                
+                <div style="text-align: center; color: #B8C5D1; font-size: 0.8rem; margin: 1rem 0;">
+                    ... (mais 17 fileiras) ...
+                </div>
+                
+                <div class="demo-legend">
+                    <div class="demo-legend-item">
+                        <div class="demo-legend-seat available"></div>
+                        <span>Disponível</span>
+                    </div>
+                    <div class="demo-legend-item">
+                        <div class="demo-legend-seat selected"></div>
+                        <span>Pré-selecionado</span>
+                    </div>
+                    <div class="demo-legend-item">
+                        <div class="demo-legend-seat occupied"></div>
+                        <span>Ocupado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>🔗 URLs de Teste</h2>
+            <div class="url-section">
+                <p><strong>Página de Reserva:</strong></p>
+                <code>http://localhost:5000/reserva?horario=155&cinema=1&tipo=1&data=2026-01-10</code>
+            </div>
+            <div class="url-section">
+                <p><strong>Seleção de Lugares:</strong></p>
+                <code>http://localhost:5000/selecao_lugares?horario_id=155&cinema_id=1&tipo_sessao_id=1&filme_id=2&data_sessao=2026-01-10&quantidade=2</code>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>💾 Base de Dados</h2>
+            <p><strong>Salas:</strong> 240 salas com capacidades definidas (100-400 lugares)</p>
+            <p><strong>Tipos de Layout:</strong></p>
+            <ul style="margin-left: 2rem;">
+                <li>Sala 4DX: 100 lugares → Layout 10x15 (Pequena)</li>
+                <li>Sala IMAX: 350 lugares → Layout 20x18 (Grande)</li>
+                <li>Sala Normal: 400 lugares → Layout 20x18 (Grande)</li>
+            </ul>
+            <p><strong>Reservas:</strong> Sistema de controle por sessão_id + data_sessao</p>
+        </div>
+    </div>
+</body>
+</html>

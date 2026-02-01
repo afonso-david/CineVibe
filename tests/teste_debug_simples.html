@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Simples | CineVibe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f0f23;
+            color: white;
+            padding: 20px;
+        }
+        
+        .ticket-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #FFD60A;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .ticket-option:hover {
+            background: rgba(255, 214, 10, 0.2);
+        }
+        
+        .ticket-option.selected {
+            background: rgba(255, 214, 10, 0.3);
+            border-color: #FFD60A;
+            box-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
+        }
+        
+        .continue-btn {
+            background: #FFD60A;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        .continue-btn:disabled {
+            background: #666;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        #debug {
+            background: #333;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Debug Simples - Teste de Cliques</h1>
+    
+    <div id="debug">
+        <strong>Debug Log:</strong><br>
+        <div id="log">Carregando...</div>
+    </div>
+    
+    <h2>Clique nos bilhetes:</h2>
+    
+    <div class="ticket-option" data-quantity="1" onclick="selectQuantity(1)">
+        <div style="font-size: 2rem; color: #FFD60A;">1</div>
+        <div>BILHETE</div>
+    </div>
+    
+    <div class="ticket-option" data-quantity="2" onclick="selectQuantity(2)">
+        <div style="font-size: 2rem; color: #FFD60A;">2</div>
+        <div>BILHETES</div>
+    </div>
+    
+    <div class="ticket-option" data-quantity="3" onclick="selectQuantity(3)">
+        <div style="font-size: 2rem; color: #FFD60A;">3</div>
+        <div>BILHETES</div>
+    </div>
+    
+    <br><br>
+    
+    <button class="continue-btn" id="continueBtn" onclick="nextStep()" disabled>
+        CONTINUAR PARA LUGARES →
+    </button>
+    
+    <script>
+        let selectedQuantity = 0;
+        
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += '<br>' + new Date().toLocaleTimeString() + ': ' + message;
+            console.log(message);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            log('✅ DOM carregado!');
+            log('✅ JavaScript funcionando!');
+        });
+        
+        function selectQuantity(quantity) {
+            log(`🎯 CLICOU em ${quantity} bilhetes`);
+            selectedQuantity = quantity;
+            
+            // Remover seleção anterior
+            document.querySelectorAll('.ticket-option').forEach(option => {
+                option.classList.remove('selected');
+                log(`🔄 Removendo seleção de ${option.dataset.quantity}`);
+            });
+            
+            // Adicionar nova seleção
+            const selectedOption = document.querySelector(`[data-quantity="${quantity}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+                log(`✅ Selecionado: ${quantity} bilhetes`);
+            } else {
+                log(`❌ Elemento não encontrado para quantidade: ${quantity}`);
+            }
+            
+            // Habilitar botão
+            const continueBtn = document.getElementById('continueBtn');
+            if (continueBtn) {
+                continueBtn.disabled = false;
+                log('✅ Botão CONTINUAR habilitado');
+            } else {
+                log('❌ Botão CONTINUAR não encontrado');
+            }
+        }
+        
+        function nextStep() {
+            log(`🚀 PRÓXIMO PASSO! Quantidade selecionada: ${selectedQuantity}`);
+            alert(`Funcionou! Selecionou ${selectedQuantity} bilhetes.`);
+        }
+        
+        // Teste adicional com event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🔧 Configurando event listeners...');
+            
+            document.querySelectorAll('.ticket-option').forEach((option, index) => {
+                log(`🎫 Configurando listener para opção ${index + 1}`);
+                
+                option.addEventListener('click', function() {
+                    const quantity = parseInt(this.dataset.quantity);
+                    log(`🎯 Event listener ativado para: ${quantity}`);
+                    selectQuantity(quantity);
+                });
+            });
+            
+            log('✅ Event listeners configurados!');
+        });
+    </script>
+</body>
+</html>

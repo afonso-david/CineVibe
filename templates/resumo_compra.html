@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo da Compra - CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resumo_compra.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}"class="active">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="step completed">
+                <div class="step-circle">
+                    <i class="fas fa-chair"></i>
+                </div>
+                <span>Lugares</span>
+            </div>
+            <div class="step completed">
+                <div class="step-circle">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <span>Bar</span>
+            </div>
+            <div class="step active">
+                <div class="step-circle">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <span>Resumo</span>
+            </div>
+            <div class="step">
+                <div class="step-circle">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <span>Pagamento</span>
+            </div>
+            <div class="step">
+                <div class="step-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+                <span>Confirmação</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="resumo-layout">
+                <!-- Order Summary Card -->
+                <div class="order-summary-card">
+                    <div class="summary-header">
+                        <h1><i class="fas fa-receipt"></i> Resumo da Sua Compra</h1>
+                        <p>Verifique todos os detalhes antes de prosseguir para o pagamento</p>
+                    </div>
+                    
+                    <!-- Movie Info Section -->
+                    <div class="movie-info-section">
+                        <div class="section-title">
+                            <i class="fas fa-film"></i>
+                            <h2>Informações do Filme</h2>
+                        </div>
+                        <div class="movie-card">
+                            <div class="movie-poster">
+                                <img src="{{ url_for('static', filename=filme.poster_url if filme and filme.poster_url else 'imgs/filmes/placeholder.jpg') }}" alt="{{ filme.titulo if filme else 'Filme' }}">
+                            </div>
+                            <div class="movie-details">
+                                <h3>{{ filme.titulo if filme else 'Título do Filme' }}</h3>
+                                <div class="movie-info">
+                                    <p><i class="fas fa-map-marker-alt"></i> {{ cinema.nome if cinema else 'Cinema Exemplo' }}</p>
+                                    <p><i class="fas fa-calendar"></i> {{ data_sessao if data_sessao else '15/01/2025' }}</p>
+                                    <p><i class="fas fa-clock"></i> {{ horario.hora_str if horario else '20:30' }}</p>
+                                    <p><i class="fas fa-tv"></i> {{ tipo_sessao.nome if tipo_sessao else 'Sessão Standard' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tickets Section -->
+                    <div class="tickets-section">
+                        <div class="section-title">
+                            <i class="fas fa-ticket-alt"></i>
+                            <h2>Bilhetes</h2>
+                        </div>
+                        <div class="tickets-list">
+                            <div class="ticket-item">
+                                <div class="ticket-info">
+                                    <span class="ticket-type">{{ quantidade if quantidade else '2' }}x Bilhetes {{ tipo_sessao.nome if tipo_sessao else 'Standard' }}</span>
+                                    <span class="ticket-places">Lugares: {{ lugares_selecionados if lugares_selecionados else 'A1, A2' }}</span>
+                                </div>
+                                <div class="ticket-price">
+                                    €{{ "%.2f"|format((quantidade * preco_bilhete) if quantidade and preco_bilhete else 15.80) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Items Section -->
+                    {% if produtos_bar_selecionados %}
+                    <div class="bar-section">
+                        <div class="section-title">
+                            <i class="fas fa-utensils"></i>
+                            <h2>Produtos do Bar</h2>
+                        </div>
+                        <div class="bar-items">
+                            {% for produto in produtos_bar_selecionados %}
+                            <div class="bar-item">
+                                <div class="item-info">
+                                    <span class="item-name">{{ produto.quantidade }}x {{ produto.nome }}</span>
+                                    <span class="item-description">{{ produto.descricao if produto.descricao else '' }}</span>
+                                </div>
+                                <div class="item-price">
+                                    €{{ "%.2f"|format(produto.preco_total) }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="bar-section">
+                        <div class="section-title">
+                            <i class="fas fa-utensils"></i>
+                            <h2>Produtos do Bar</h2>
+                        </div>
+                        <div class="no-bar-items">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Nenhum produto do bar selecionado</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Total Section -->
+                    <div class="total-section">
+                        <div class="total-breakdown">
+                            <div class="subtotal-item">
+                                <span>Bilhetes</span>
+                                <span>€{{ "%.2f"|format((quantidade * preco_bilhete) if quantidade and preco_bilhete else 15.80) }}</span>
+                            </div>
+                            {% if produtos_bar_selecionados %}
+                            <div class="subtotal-item">
+                                <span>Produtos do Bar</span>
+                                <span>€{{ "%.2f"|format(total_bar if total_bar else 9.50) }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="total-line"></div>
+                            <div class="total-final">
+                                <span>Total</span>
+                                <span>€{{ "%.2f"|format(total_geral if total_geral else 25.30) }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dados do Cliente (apenas para não logados) -->
+                    {% if not logged_in %}
+                    <div class="customer-data-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-user"></i> Seus Dados</h3>
+                            <p>Preencha seus dados para receber a confirmação da reserva</p>
+                        </div>
+                        <form id="customerDataForm" class="customer-form">
+                            <div class="form-group">
+                                <label for="customer_name">
+                                    <i class="fas fa-user"></i> Nome Completo *
+                                </label>
+                                <input type="text" 
+                                       id="customer_name" 
+                                       name="customer_name" 
+                                       placeholder="Digite seu nome completo" 
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_email">
+                                    <i class="fas fa-envelope"></i> Email *
+                                </label>
+                                <input type="email" 
+                                       id="customer_email" 
+                                       name="customer_email" 
+                                       placeholder="seu.email@exemplo.com" 
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_phone">
+                                    <i class="fas fa-phone"></i> Telefone *
+                                </label>
+                                <input type="tel" 
+                                       id="customer_phone" 
+                                       name="customer_phone" 
+                                       placeholder="912 345 678" 
+                                       pattern="[0-9]{9}" 
+                                       required>
+                                <small>Formato: 9 dígitos (ex: 912345678)</small>
+                            </div>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button type="button" class="btn-secondary" onclick="voltarParaBar()">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar ao Bar
+                        </button>
+                        <button type="button" class="btn-primary" onclick="prosseguirParaPagamento()">
+                            <i class="fas fa-credit-card"></i>
+                            Prosseguir para Pagamento
+                            <span class="amount">€{{ "%.2f"|format(total_geral if total_geral else 25.30) }}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Customer Info Sidebar -->
+                <div class="customer-sidebar">
+                    <div class="customer-card">
+                        <div class="customer-header">
+                            <h3><i class="fas fa-user"></i> Dados do Cliente</h3>
+                        </div>
+                        
+                        {% if logged_in %}
+                        <div class="customer-logged-in">
+                            <div class="customer-avatar">
+                                <img src="{{ url_for('static', filename=avatar) }}" alt="Avatar">
+                            </div>
+                            <div class="customer-details">
+                                <h4>{{ user_name if user_name else 'Utilizador' }}</h4>
+                                <p>{{ user_email if user_email else 'email@exemplo.com' }}</p>
+                            </div>
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Verificado</span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="guest-info">
+                            <div class="guest-icon">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <p>Está a comprar como convidado</p>
+                            <p class="guest-note">Os dados serão solicitados no pagamento</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Security Info -->
+                    <div class="security-card">
+                        <div class="security-header">
+                            <h3><i class="fas fa-shield-alt"></i> Segurança</h3>
+                        </div>
+                        <div class="security-features">
+                            <div class="security-item">
+                                <i class="fas fa-lock"></i>
+                                <span>Pagamento Seguro SSL</span>
+                            </div>
+                            <div class="security-item">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Múltiplos Métodos</span>
+                            </div>
+                            <div class="security-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>Confirmação por Email</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CineVibe</h3>
+                    <p>A sua experiência cinematográfica completa</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Úteis</h4>
+                    <ul>
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos e Condições</a></li>
+                        <li><a href="#">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CineVibe. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function voltarParaBar() {
+            window.history.back();
+        }
+
+        function prosseguirParaPagamento() {
+            {% if not logged_in %}
+            // Validar dados do cliente para utilizadores não logados
+            const form = document.getElementById('customerDataForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Obter dados do formulário
+            const customerName = document.getElementById('customer_name').value.trim();
+            const customerEmail = document.getElementById('customer_email').value.trim();
+            const customerPhone = document.getElementById('customer_phone').value.trim();
+            
+            // Validar campos
+            if (!customerName || !customerEmail || !customerPhone) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(customerEmail)) {
+                alert('Por favor, insira um email válido.');
+                return;
+            }
+            
+            // Validar telefone (9 dígitos)
+            const phoneRegex = /^[0-9]{9}$/;
+            if (!phoneRegex.test(customerPhone)) {
+                alert('Por favor, insira um número de telefone válido (9 dígitos).');
+                return;
+            }
+            
+            // Salvar dados na sessionStorage para usar no checkout
+            sessionStorage.setItem('customer_name', customerName);
+            sessionStorage.setItem('customer_email', customerEmail);
+            sessionStorage.setItem('customer_phone', customerPhone);
+            {% endif %}
+            
+            // Redirecionar para a página de pagamento
+            window.location.href = '{{ url_for("checkout") }}';
+        }
+    </script>
+</body>
+</html>

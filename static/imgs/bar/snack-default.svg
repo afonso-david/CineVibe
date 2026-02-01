@@ -1,0 +1,13 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="snackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2350;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f1432;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" fill="url(#snackGrad)"/>
+  <circle cx="150" cy="80" r="30" fill="#ff6b6b" opacity="0.8"/>
+  <text x="150" y="90" font-family="Arial, sans-serif" font-size="40" fill="white" text-anchor="middle">🍿</text>
+  <text x="150" y="130" font-family="Arial, sans-serif" font-size="16" fill="#ffd60a" text-anchor="middle" font-weight="bold">SNACK</text>
+  <text x="150" y="150" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" text-anchor="middle" opacity="0.8">Delicioso</text>
+</svg>

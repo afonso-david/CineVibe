@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ filme.titulo }} - CineVibe | Detalhes do Filme</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filme_detalhe.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estrelas-inline-fix.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Descubra todos os detalhes sobre {{ filme.titulo }}. Sinopse, elenco, horários de sessão e muito mais no CineVibe.">
+    <meta name="keywords" content="{{ filme.titulo }}, filme, cinema, CineVibe, {{ filme_generos|map(attribute='genero')|join(', ') if filme_generos else '' }}">
+    
+    <style>
+        /* CSS INLINE PARA MÁXIMA PRIORIDADE - ESTRELAS FIXAS */
+        .stars-inline .star-inline {
+            font-size: 1rem !important;
+            transform: none !important;
+            transition: color 0.2s ease !important;
+            animation: none !important;
+            filter: none !important;
+            position: relative !important;
+            display: inline-block !important;
+            color: #444 !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            line-height: 1 !important;
+            margin: 0 2px !important;
+        }
+        
+        .stars-inline .star-inline.full-star {
+            color: #FFD60A !important;
+            text-shadow: 0 0 10px rgba(255, 214, 10, 0.5) !important;
+        }
+        
+        /* CSS para meias estrelas removido - agora só usamos estrelas inteiras */
+        /*
+        .stars-inline .star-inline.half-star {
+            color: #444 !important;
+        }
+        
+        .stars-inline .star-inline.half-star::before {
+            content: '★' !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 50% !important;
+            overflow: hidden !important;
+            color: #FFD60A !important;
+            text-shadow: 0 0 10px rgba(255, 214, 10, 0.5) !important;
+            z-index: 2 !important;
+        }
+        */
+        
+        .stars-inline .star-inline:hover {
+            color: #FFD60A !important;
+            text-shadow: 0 0 15px rgba(255, 214, 10, 0.8) !important;
+            transform: none !important;
+            font-size: 1rem !important;
+        }
+        
+        .stars-inline .star-inline:active,
+        .stars-inline .star-inline:focus,
+        .stars-inline .star-inline.active {
+            transform: none !important;
+            font-size: 1rem !important;
+            animation: none !important;
+        }
+        
+        /* CSS para o ícone de perfil no círculo amarelo */
+        .profile-icon-circle {
+            width: 80px !important;
+            height: 80px !important;
+            background: linear-gradient(135deg, #FFD60A, #FFC107) !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 auto 20px auto !important;
+            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4) !important;
+            border: 3px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        .profile-icon-circle i {
+            font-size: 32px !important;
+            color: #0D1B2A !important;
+            font-weight: bold !important;
+        }
+        
+        /* Melhorar os botões do modal */
+        .btn-modal {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .btn-modal i {
+            font-size: 16px !important;
+        }
+        
+        .btn-modal:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="search-container">
+                        <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                        <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                    <div class="user-icon">
+                        {% if logged_in %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navegação -->
+        <nav class="nav-center">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('filmes') }}" class="active">Filmes</a>
+            <a href="{{ url_for('cinemas') }}">Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+            <a href="{{ url_for('bar') }}">Bar</a>
+            <a href="{{ url_for('beneficios') }}">Benefícios</a>
+            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}">Contactos</a>
+        </nav> 
+       <!-- Banner Cinematográfico -->
+        <section class="banner" style="background-image: url('{{ url_for('static', filename=filme.imagem_grande) if filme.imagem_grande else url_for('static', filename='imgs/filmes/banner-default.jpg') }}');">
+            <div class="banner-content">
+                <div class="poster-wrapper">
+                    {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
+                    <img src="{{ url_for('static', filename='imgs/filmes/' + (poster_path if poster_path and not poster_path.startswith('http') else 'placeholder.jpg')) }}" 
+                         alt="Poster de {{ filme.titulo }}" 
+                         onerror="this.src='{{ url_for('static', filename='imgs/filmes/placeholder.jpg') }}'"
+                         loading="lazy">
+                </div>
+                <div class="filme-info">
+                    <h1>{{ filme.titulo }}</h1>
+                    <button class="btn-bilhete" onclick="scrollToSessoes()">
+                        Comprar Bilhete
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Botão de Play do Trailer -->
+            {% if filme.trailer_url %}
+            <div class="trailer-play-overlay">
+                <button class="trailer-play-btn" onclick="abrirTrailer('{{ filme.trailer_url }}', '{{ filme.titulo }}')">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+            {% endif %}
+        </section> 
+       <!-- Conteúdo Principal -->
+        <main class="conteudo-principal">
+            <!-- Sinopse Completa -->
+            {% if filme.sinopse %}
+            <section class="sinopse-completa">
+                <h2>Sinopse</h2>
+                <p>{{ filme.sinopse }}</p>
+            </section>
+            {% endif %}
+
+            <!-- Container Elenco + Detalhes -->
+            <div class="elenco-detalhes-wrapper">
+                <!-- Elenco Principal -->
+                {% if elenco %}
+                <section class="elenco">
+                    <h2>Elenco Principal</h2>
+                    <div class="atores">
+                        {% for ator in elenco %}
+                        <div class="ator">
+                            <img src="{{ url_for('static', filename=ator.foto_url) if ator.foto_url else url_for('static', filename='imgs/atores/placeholder.jpg') }}" 
+                                 alt="{{ ator.nome }}" 
+                                 loading="lazy">
+                            <div class="ator-info">
+                                <h3>{{ ator.nome }}</h3>
+                                <p>{{ ator.papel or 'Ator' }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}  
+              <!-- Informações do Filme -->
+                <section class="informacoes-direita">
+                    <h2>Informações</h2>
+                    
+                    <div class="info-grid">
+                        {% if filme.diretor %}
+                        <div class="info-item">
+                            <span class="info-label">Diretor</span>
+                            <span class="info-value">{{ filme.diretor }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if filme.duracao %}
+                        <div class="info-item">
+                            <span class="info-label">Duração</span>
+                            <span class="info-value">{{ filme.duracao }} min</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if filme_generos %}
+                        <div class="info-item">
+                            <span class="info-label">Género</span>
+                            <span class="info-value">{{ filme_generos|map(attribute='genero')|join(', ') }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if filme.data_lancamento %}
+                        <div class="info-item">
+                            <span class="info-label">Lançamento</span>
+                            <span class="info-value">{{ filme.data_lancamento.strftime('%Y') if filme.data_lancamento else 'N/A' }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if filme.idade_recomendada %}
+                        <div class="info-item">
+                            <span class="info-label">Classificação</span>
+                            <span class="info-value">{{ filme.idade_recomendada }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if filme.pais_origem %}
+                        <div class="info-item">
+                            <span class="info-label">País</span>
+                            <span class="info-value">{{ filme.pais_origem }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if filme.idioma_original %}
+                        <div class="info-item">
+                            <span class="info-label">Idioma</span>
+                            <span class="info-value">{{ filme.idioma_original }}</span>
+                        </div>
+                        {% endif %}
+                    </div>         
+           <!-- Avaliações Externas -->
+                    {% if filme.rotten_tomatoes_score or filme.imdb_rating %}
+                    <div class="info-divider"></div>
+                    <h3 class="avaliacoes-titulo">Avaliações</h3>
+                    
+                    <div class="avaliacoes-container">
+                        {% if filme.rotten_tomatoes_score %}
+                        <div class="avaliacao-item">
+                            <div class="info-label">
+                                <img src="{{ url_for('static', filename='imgs/icons/rotten-tomatoes.png') }}" alt="Rotten Tomatoes" class="rating-icon">
+                                
+                                {% set rt_score = filme.rotten_tomatoes_score|int %}
+                                {% if rt_score >= 75 %}
+                                    <span class="badge-quality fresh-badge">Fresh</span>
+                                {% elif rt_score >= 60 %}
+                                    <span class="badge-quality mid-badge">Fresh</span>
+                                {% else %}
+                                    <span class="badge-quality rotten-badge">Rotten</span>
+                                {% endif %}
+                            </div>
+                            <div class="info-value">
+                                {% if filme.rotten_tomatoes_url %}
+                                <a href="{{ filme.rotten_tomatoes_url }}" target="_blank" rel="noopener" class="rating-link">
+                                    <span class="rating-score {% if rt_score >= 75 %}fresh{% elif rt_score >= 60 %}mid{% else %}rotten{% endif %}">
+                                        {{ filme.rotten_tomatoes_score }}%
+                                    </span>
+                                    <span class="external-link-icon"></span>
+                                </a>
+                                {% else %}
+                                <span class="rating-score {% if rt_score >= 75 %}fresh{% elif rt_score >= 60 %}mid{% else %}rotten{% endif %}">
+                                    {{ filme.rotten_tomatoes_score }}%
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if filme.imdb_rating %}
+                        <div class="avaliacao-item">
+                            <div class="info-label">
+                                <img src="{{ url_for('static', filename='imgs/icons/imdb.png') }}" alt="IMDb" class="rating-icon">
+                                IMDb
+                                {% set imdb_score = filme.imdb_rating|float %}
+                                {% if imdb_score >= 8.0 %}
+                                    <span class="badge-quality imdb-excellent">Excelente</span>
+                                {% elif imdb_score >= 7.0 %}
+                                    <span class="badge-quality imdb-good">Bom</span>
+                                {% elif imdb_score >= 6.0 %}
+                                    <span class="badge-quality imdb-ok">OK</span>
+                                {% else %}
+                                    <span class="badge-quality imdb-low">Baixo</span>
+                                {% endif %}
+                            </div>
+                            <div class="info-value">
+                                {% if filme.imdb_url %}
+                                <a href="{{ filme.imdb_url }}" target="_blank" rel="noopener" class="rating-link">
+                                    <span class="rating-score imdb-score">{{ "%.1f"|format(filme.imdb_rating) }}/10</span>
+                                    <span class="external-link-icon"></span>
+                                </a>
+                                {% else %}
+                                <span class="rating-score imdb-score">{{ "%.1f"|format(filme.imdb_rating) }}/10</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}         
+           <!-- Críticas e Avaliações dos Usuários -->
+                    <div class="avaliacoes-usuarios-container">
+                        <div class="info-divider"></div>
+                        <div class="avaliacoes-header">
+                            <h3 class="avaliacoes-titulo">
+                                <span class="titulo-icon">⭐</span>
+                                Avaliações dos Utilizadores
+                                <span class="titulo-badge">{{ avaliacoes|length if avaliacoes else 0 }}</span>
+                            </h3>
+                        </div>
+                        
+                        {% if logged_in %}
+                        <!-- Seção de Avaliação do Utilizador -->
+                        {% if user_avaliacao %}
+                        <div class="minha-avaliacao-card" id="minhaAvaliacaoCard">
+                            <!-- Modo Visualização -->
+                            <div class="modo-visualizacao" id="modoVisualizacao">
+                                <div class="card-header-minha">
+                                    <div class="usuario-info-minha">
+                                        <img src="{{ url_for('static', filename=avatar) }}" 
+                                             alt="Seu avatar" 
+                                             class="meu-avatar">
+                                        <div class="minha-info">
+                                            <span class="meu-nome">A Sua Avaliação</span>
+                                            <div class="minha-rating">
+                                                {% for i in range(1, 6) %}
+                                                    {% if i <= user_avaliacao.rating %}
+                                                        <span class="star-filled">★</span>
+                                                    {% else %}
+                                                        <span class="star-empty">☆</span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <span class="rating-number">{{ user_avaliacao.rating }}/5</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn-editar-minha" onclick="editarAvaliacao()">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </button>
+                                </div>
+                                
+                                {% if user_avaliacao.comentario %}
+                                <div class="meu-comentario">
+                                    <p id="comentarioAtual">{{ user_avaliacao.comentario }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="minha-data">
+                                    Avaliado em {{ user_avaliacao.data_avaliacao.strftime('%d/%m/%Y') if user_avaliacao.data_avaliacao else 'Recente' }}
+                                </div>
+                            </div>
+
+                            <!-- Modo Edição -->
+                            <div class="modo-edicao" id="modoEdicao" style="display: none;">
+                                <div class="form-header-inline">
+                                    <img src="{{ url_for('static', filename=avatar) }}" 
+                                         alt="Seu avatar" 
+                                         class="form-avatar-inline">
+                                    <h4>Editar Avaliação</h4>
+                                </div>
+                                
+                                <form id="formEdicaoInline" class="form-inline">
+                                    <input type="hidden" id="filmeIdInline" value="{{ filme.id }}">
+                                    
+                                    <div class="rating-section-inline">
+                                        <label>A sua classificação:</label>
+                                        <div class="stars-inline" id="starsInline">
+                                            <span class="star-inline" data-rating="1" onclick="selecionarEstrelaInline(1)">★</span>
+                                            <span class="star-inline" data-rating="2" onclick="selecionarEstrelaInline(2)">★</span>
+                                            <span class="star-inline" data-rating="3" onclick="selecionarEstrelaInline(3)">★</span>
+                                            <span class="star-inline" data-rating="4" onclick="selecionarEstrelaInline(4)">★</span>
+                                            <span class="star-inline" data-rating="5" onclick="selecionarEstrelaInline(5)">★</span>
+                                        </div>
+                                        <span class="rating-feedback-inline" id="ratingTextInline">{{ user_avaliacao.rating }} de 5 estrelas</span>
+                                        <input type="hidden" id="ratingValueInline" name="rating" value="{{ user_avaliacao.rating }}">
+                                    </div>
+                                    
+                                    <div class="comentario-section-inline">
+                                        <label for="comentarioInline">Comentário (opcional):</label>
+                                        <textarea 
+                                            id="comentarioInline" 
+                                            name="comentario" 
+                                            placeholder="Partilhe os seus pensamentos sobre o filme..."
+                                            maxlength="500"
+                                            rows="3">{{ user_avaliacao.comentario if user_avaliacao.comentario else '' }}</textarea>
+                                        <div class="char-counter-inline">
+                                            <span id="charCountInline">{{ user_avaliacao.comentario|length if user_avaliacao.comentario else 0 }}</span>/500 caracteres
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-actions-inline">
+                                        <button type="button" class="btn-cancelar-inline" onclick="cancelarEdicao()">
+                                            Cancelar
+                                        </button>
+                                        <button type="button" class="btn-submeter-inline" onclick="atualizarAvaliacao()">
+                                            <i class="fas fa-save"></i>
+                                            Atualizar
+                                        </button>
+                                        <button type="button" class="btn-remover-inline" onclick="removerAvaliacao()">
+                                            <i class="fas fa-trash"></i>
+                                            Remover
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Prompt para Avaliar -->
+                        <div class="prompt-avaliar">
+                            <div class="prompt-content">
+                                <img src="{{ url_for('static', filename=avatar) }}" 
+                                     alt="Seu avatar" 
+                                     class="prompt-avatar">
+                                <div class="prompt-text">
+                                    <h4>Já viu este filme?</h4>
+                                    <p>Partilhe a sua opinião com outros utilizadores</p>
+                                </div>
+                                <button class="btn-avaliar-agora" onclick="abrirFormularioAvaliacao()">
+                                    <i class="fas fa-star"></i>
+                                    Avaliar Filme
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        
+                        <!-- Lista de Todas as Avaliações -->
+                        {% if avaliacoes %}
+                        {% for avaliacao in avaliacoes %}
+                        <div class="minha-avaliacao-card">
+                            <div class="modo-visualizacao">
+                                <div class="card-header-minha">
+                                    <div class="usuario-info-minha">
+                                        <img src="{{ url_for('static', filename=avaliacao.usuario_avatar) }}" 
+                                             alt="Avatar de {{ avaliacao.usuario_nome }}" 
+                                             class="meu-avatar">
+                                        <div class="minha-info">
+                                            <span class="meu-nome">{{ avaliacao.usuario_nome }}</span>
+                                            <div class="minha-rating">
+                                                {% for i in range(1, 6) %}
+                                                    {% if i <= avaliacao.rating %}
+                                                        <span class="star-filled">★</span>
+                                                    {% else %}
+                                                        <span class="star-empty">☆</span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <span class="rating-number">{{ avaliacao.rating }}/5</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% if avaliacao.comentario %}
+                                <div class="meu-comentario">
+                                    <p>{{ avaliacao.comentario }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="minha-data">
+                                    Avaliado em {{ avaliacao.data_avaliacao.strftime('%d/%m/%Y') if avaliacao.data_avaliacao else 'Recente' }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+        </main>      
+  <!-- Sessões e Horários -->
+        <section class="sessoes" id="sessoes">
+            <h2>Sessões e Horários</h2>
+            
+            <!-- Navegação de Dias -->
+            <div class="nav-dias">
+                <h3 class="nav-dias-titulo">Selecione o Dia</h3>
+                <div class="dias-container" id="diasContainer">
+                    <!-- Dias serão gerados dinamicamente pelo JavaScript -->
+                </div>
+            </div>
+
+            <div class="sessoes-wrapper">
+                <!-- Filtros por Região -->
+                <div class="filtros-regiao">
+                    <button class="filtro-regiao-btn active" data-regiao="todas" onclick="filtrarPorRegiao('todas')">
+                        Todas as Regiões
+                    </button>
+                    {% for regiao in regioes %}
+                    <button class="filtro-regiao-btn" data-regiao="{{ regiao|lower }}" onclick="filtrarPorRegiao('{{ regiao|lower }}')">
+                        {{ regiao }}
+                    </button>
+                    {% endfor %}
+                </div>
+
+                <!-- Lista de Cinemas -->
+                <div class="cinemas-lista" id="cinemasLista">
+                    {% for cinema in filme_cinemas %}
+                    <div class="cinema" data-regiao="{{ cinema.regiao|lower }}">
+                        <h3 class="nome-cinema">{{ cinema.nome }}</h3>
+                        <p style="color: #B8C5D1; margin-bottom: 20px;">{{ cinema.regiao }}</p>
+                        
+                        <!-- Botões de Tipos de Sessão -->
+                        <div class="botoes-sessao">
+                            {% if tipos_sessao_por_cinema.get(cinema.id) %}
+                                {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
+                                <button class="btn-sessao" 
+                                        data-tipo="{{ tipo.id }}" 
+                                        data-cinema="{{ cinema.id }}"
+                                        onclick="mostrarHorarios({{ cinema.id }}, {{ tipo.id }}, '{{ tipo.nome }}')">
+                                    {{ tipo.nome }}
+                                </button>
+                                {% endfor %}
+                            {% else %}
+                                <p class="no-tipos-sessao">Nenhum tipo de sessão disponível para este cinema.</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Grupos de Sessões (inicialmente ocultos) -->
+                        {% if tipos_sessao_por_cinema.get(cinema.id) %}
+                            {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
+                            <div class="sessao-grupo hidden" 
+                                 id="sessao-{{ cinema.id }}-{{ tipo.id }}"
+                                 data-cinema="{{ cinema.id }}" 
+                                 data-tipo="{{ tipo.id }}">
+                                <div class="horarios">
+                                    <div class="horarios-wrapper" id="horarios-{{ cinema.id }}-{{ tipo.id }}">
+                                        <!-- Horários serão carregados dinamicamente -->
+                                    </div>
+                                    <div class="salas-wrapper" id="salas-{{ cinema.id }}-{{ tipo.id }}">
+                                        <!-- Informações das salas serão mostradas aqui -->
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    {% if not filme_cinemas %}
+                    <div style="text-align: center; padding: 60px 20px; color: #B8C5D1;">
+                        <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.6;"></div>
+                        <h3 style="font-size: 1.8rem; color: #FFD60A; margin-bottom: 15px;">Nenhum cinema disponível</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.6;">Este filme não está em exibição em nenhum cinema no momento.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>    
+    <!-- Painel Flutuante de Compra -->
+        <div id="comprar-bilhete-flutuante">
+            <div class="conteudo-bilhete">
+                <div id="info-bilhete">
+                    <strong>{{ filme.titulo }}</strong>
+                    <div class="detalhe-sessao" id="detalhe-sessao">
+                        Selecione um horário para continuar
+                    </div>
+                </div>
+                <button id="btn-comprar" onclick="prosseguirCompra()" disabled>
+                    Reservar Agora
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal Matrix Login -->
+        <div id="matrixModal" class="matrix-modal" style="display: none;">
+            <div class="matrix-overlay"></div>
+            
+            <!-- Imagem de fundo com tamanho do container original -->
+            <div class="matrix-background-image"></div>
+            
+            <!-- Botão de fechar flutuante -->
+            <button class="matrix-close" onclick="closeMatrixModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <!-- Conteúdo flutuante sem container -->
+            <div class="matrix-character">
+            </div>
+            
+            <div class="matrix-text">
+                <h2 class="matrix-title">Esta é a sua última oportunidade</h2>
+                <p class="matrix-subtitle">Depois disto, não há volta atrás</p>
+            </div>
+            
+            <div class="matrix-pills">
+                <div class="pill-container">
+                    <button class="pill red-pill" onclick="window.location.href='{{ url_for('login') }}'">
+                        <div class="pill-content">
+                            <span class="pill-text">INICIAR SESSÃO</span>
+                            <div class="pill-icon">💊</div>
+                        </div>
+                    </button>
+                    <div class="pill-description red-desc">
+                        Tome a pílula vermelha e descubra as sessões exclusivas
+                    </div>
+                </div>
+                
+                <div class="pill-container">
+                    <button class="pill blue-pill" onclick="continuarComoConvidado()">
+                        <div class="pill-content">
+                            <span class="pill-text">CONVIDADO</span>
+                            <div class="pill-icon">💊</div>
+                        </div>
+                    </button>
+                    <div class="pill-description blue-desc">
+                        Tome a pílula azul e continue como estava
+                    </div>
+                </div>
+            </div>
+            
+            <div class="matrix-quote">
+                "Lembre-se... tudo o que estou a oferecer é a verdade, nada mais."
+            </div>
+            
+            <!-- Matrix Rain Effect -->
+            <canvas id="matrixRain" class="matrix-rain"></canvas>
+        </div>
+        
+        <!-- Modal do Trailer -->
+        <div class="modal-overlay" id="modalTrailer">
+            <div class="modal-content modal-trailer">
+                <button class="modal-close" onclick="fecharTrailer()">&times;</button>
+                <div class="trailer-modal-content">
+                    <h2 id="trailerTitulo">Trailer</h2>
+                    <div class="trailer-video-container" id="trailerContainer">
+                        <!-- Vídeo será inserido aqui dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>   
+     <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-container">
+                    <!-- Logo e Descrição -->
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                            <h3>CineVibe</h3>
+                        </div>
+                        <p class="footer-description">
+                            A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook">
+                                <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                            </a>
+                            <a href="#" aria-label="Instagram">
+                                <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                            </a>
+                            <a href="#" aria-label="Twitter">
+                                <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Navegação</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('home') }}">Início</a></li>
+                            <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                            <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                            <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Suporte</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                            <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                            <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                            <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Conta</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <div class="newsletter-section">
+                            <h4>Newsletter</h4>
+                            <p>Receba as últimas novidades e promoções exclusivas.</p>
+                            <form class="newsletter-form">
+                                <div class="newsletter-input-group">
+                                    <input type="email" placeholder="Seu email" required>
+                                    <button type="submit">Subscrever</button>
+                                </div>
+                            </form>
+                            <div class="footer-contact">
+                                <div class="contact-item">
+                                    <span class="contact-icon">📧</span>
+                                    <span>info@cinevibe.pt</span>
+                                </div>
+                                <div class="contact-item">
+                                    <span class="contact-icon">📞</span>
+                                    <span>+351 123 456 789</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-container">
+                    <div class="footer-bottom-content">
+                        <div class="footer-legal">
+                            <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                            <div class="legal-links">
+                                <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                                <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                                <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                            </div>
+                        </div>
+                        <div class="footer-certifications">
+                            <div class="cert-logos">
+                                <span class="cert-text">SSL Seguro</span>
+                                <span class="cert-text">GDPR Compliant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div> 
+   <!-- JavaScript Premium -->
+    <script>
+        // Dados do filme e horários (passados do backend)
+        const filmeId = {{ filme.id }};
+        const horariosFilme = {{ horarios_filme|tojson }};
+        const tiposSessao = {{ tipos_sessao|tojson }};
+        
+        // Estado da aplicação
+        let diaAtual = new Date();
+        let diaSelecionado = null;
+        let horarioSelecionado = null;
+        let cinemaAtual = null;
+        let tipoSessaoAtual = null;
+        let dataSelecionada = null;
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gerar dias da semana
+            gerarDias();
+            selecionarDiaAtual();
+            
+            // Newsletter
+            document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                alert(`🎉 Obrigado por se inscrever!\n📧 Email: ${email}`);
+                this.reset();
+            });
+            
+            // Verificar se deve abrir trailer automaticamente
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldAutoPlay = urlParams.get('trailer') === 'auto';
+            const fromHome = urlParams.get('from') === 'home';
+            
+            if (shouldAutoPlay && '{{ filme.trailer_url }}') {
+                // Se veio da home page, mostrar mensagem e abrir trailer completo
+                if (fromHome) {
+                    console.log('🎬 Abrindo TRAILER COMPLETO vindo da home page - SEM LIMITAÇÕES DE TEMPO');
+                    
+                    // Mostrar notificação discreta
+                    const notification = document.createElement('div');
+                    notification.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: rgba(0, 0, 0, 0.8);
+                        color: #FFD60A;
+                        padding: 15px 20px;
+                        border-radius: 10px;
+                        z-index: 1000;
+                        font-weight: bold;
+                        border: 2px solid #FFD60A;
+                    `;
+                    notification.textContent = '🎬 Trailer Completo';
+                    document.body.appendChild(notification);
+                    
+                    // Remover notificação após 3 segundos
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 3000);
+                }
+                
+                // Aguardar um pouco para a página carregar completamente
+                setTimeout(() => {
+                    abrirTrailer('{{ filme.trailer_url }}', '{{ filme.titulo }}');
+                    
+                    // Limpar parâmetros da URL para não reabrir se recarregar
+                    const newUrl = window.location.pathname;
+                    window.history.replaceState({}, document.title, newUrl);
+                }, 500);
+            }
+        });
+
+        // Gerar navegação de dias (próximos 7 dias)
+        function gerarDias() {
+            const container = document.getElementById('diasContainer');
+            const hoje = new Date();
+            
+            for (let i = 0; i < 7; i++) {
+                const data = new Date(hoje);
+                data.setDate(hoje.getDate() + i);
+                
+                const diaBtn = document.createElement('button');
+                diaBtn.className = 'dia-btn';
+                diaBtn.dataset.data = data.toISOString().split('T')[0];
+                diaBtn.onclick = () => selecionarDia(data, diaBtn);
+                
+                // Mostrar "Hoje" para o dia atual, senão mostrar o dia da semana
+                const diaSemana = i === 0 ? 'Hoje' : data.toLocaleDateString('pt-PT', { weekday: 'long' });
+                const diaNumero = data.getDate();
+                const mes = data.toLocaleDateString('pt-PT', { month: 'short' });
+                
+                diaBtn.innerHTML = `
+                    <div class="dia-semana">${diaSemana}</div>
+                    <div class="dia-numero">${diaNumero} ${mes}</div>
+                `;
+                
+                container.appendChild(diaBtn);
+            }
+        }
+
+        // Selecionar dia atual por padrão
+        function selecionarDiaAtual() {
+            const hoje = new Date();
+            const primeiroDia = document.querySelector('.dia-btn');
+            if (primeiroDia) {
+                selecionarDia(hoje, primeiroDia);
+            }
+        }   
+     // Selecionar um dia específico
+        function selecionarDia(data, botao) {
+            // Remover seleção anterior
+            document.querySelectorAll('.dia-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Selecionar novo dia
+            botao.classList.add('active');
+            diaSelecionado = data;
+            dataSelecionada = data.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+            
+            // Resetar seleções
+            resetarSelecoes();
+            
+            // Atualizar horários disponíveis
+            atualizarHorariosDisponiveis();
+        }
+
+        // Mostrar horários para um tipo de sessão específico
+        function mostrarHorarios(cinemaId, tipoId, tipoNome) {
+            const botaoClicado = event.target;
+            const grupoSessao = document.getElementById(`sessao-${cinemaId}-${tipoId}`);
+            
+            // Verificar se o botão já está ativo (toggle)
+            if (botaoClicado.classList.contains('active')) {
+                // Desativar botão e esconder horários
+                botaoClicado.classList.remove('active');
+                if (grupoSessao) {
+                    grupoSessao.classList.add('hidden');
+                }
+                
+                // Resetar estado
+                cinemaAtual = null;
+                tipoSessaoAtual = null;
+                horarioSelecionado = null;
+                esconderPainelCompra();
+                
+                return;
+            }
+            
+            // Esconder todos os grupos de sessão deste cinema
+            document.querySelectorAll(`[data-cinema="${cinemaId}"]`).forEach(grupo => {
+                if (grupo.classList.contains('sessao-grupo')) {
+                    grupo.classList.add('hidden');
+                }
+            });
+            
+            // Remover active de todos os botões deste cinema
+            document.querySelectorAll(`[data-cinema="${cinemaId}"].btn-sessao`).forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Ativar botão selecionado
+            botaoClicado.classList.add('active');
+            
+            // Mostrar grupo de sessão correspondente
+            if (grupoSessao) {
+                grupoSessao.classList.remove('hidden');
+                carregarHorarios(cinemaId, tipoId);
+            }
+            
+            cinemaAtual = cinemaId;
+            tipoSessaoAtual = tipoId;
+        }
+
+        // Carregar horários para cinema e tipo de sessão específicos
+        function carregarHorarios(cinemaId, tipoId) {
+            const container = document.getElementById(`horarios-${cinemaId}-${tipoId}`);
+            const salasContainer = document.getElementById(`salas-${cinemaId}-${tipoId}`);
+            
+            // Filtrar horários para este cinema e tipo de sessão
+            let horariosDisponiveis = horariosFilme.filter(h => 
+                h.id_cinema == cinemaId && h.id_tipo_sessao == tipoId
+            );
+            
+            // Se o dia selecionado é hoje, filtrar horários que ainda não passaram
+            const hoje = new Date();
+            const diaSelecionadoStr = diaSelecionado.toISOString().split('T')[0];
+            const hojeStr = hoje.toISOString().split('T')[0];
+            
+            if (diaSelecionadoStr === hojeStr) {
+                const agora = new Date();
+                const horaAtual = agora.getHours();
+                const minutoAtual = agora.getMinutes();
+                
+                horariosDisponiveis = horariosDisponiveis.filter(h => {
+                    // Extrair hora e minuto do horário (formato "HH:MM")
+                    const [hora, minuto] = h.hora_str.split(':').map(Number);
+                    
+                    // Comparar com a hora atual
+                    if (hora > horaAtual) {
+                        return true; // Horário futuro
+                    } else if (hora === horaAtual) {
+                        return minuto > minutoAtual; // Mesma hora, mas minuto futuro
+                    } else {
+                        return false; // Horário já passou
+                    }
+                });
+            }
+            
+            container.innerHTML = '';
+            salasContainer.innerHTML = '';
+            
+            if (horariosDisponiveis.length === 0) {
+                const mensagem = diaSelecionadoStr === hojeStr ? 
+                    'Não há mais sessões disponíveis para hoje.' : 
+                    'Nenhum horário disponível para este tipo de sessão.';
+                container.innerHTML = `<p style="color: #B8C5D1; text-align: center; padding: 20px;">${mensagem}</p>`;
+                return;
+            }
+            
+            // Agrupar por horário
+            const horariosPorHora = {};
+            horariosDisponiveis.forEach(h => {
+                if (!horariosPorHora[h.hora_str]) {
+                    horariosPorHora[h.hora_str] = [];
+                }
+                horariosPorHora[h.hora_str].push(h);
+            });
+            
+            // Criar botões de horário
+            Object.keys(horariosPorHora).sort().forEach(hora => {
+                const horarios = horariosPorHora[hora];
+                const horarioBtn = document.createElement('button');
+                horarioBtn.className = 'hora-btn';
+                horarioBtn.textContent = hora;
+                horarioBtn.onclick = () => selecionarHorario(horarios[0], horarioBtn);
+                
+                container.appendChild(horarioBtn);
+            });
+            
+            // Mostrar informações das salas
+            const salasUnicas = [...new Set(horariosDisponiveis.map(h => h.nome_sala).filter(Boolean))];
+            if (salasUnicas.length > 0) {
+                salasUnicas.forEach(sala => {
+                    const salaInfo = document.createElement('div');
+                    salaInfo.className = 'sala-info';
+                    salaInfo.textContent = `${sala}`;
+                    salasContainer.appendChild(salaInfo);
+                });
+            }
+        }   
+     // Selecionar um horário específico
+        function selecionarHorario(horario, botao) {
+            // Remover seleção anterior
+            document.querySelectorAll('.hora-btn').forEach(btn => btn.classList.remove('selected'));
+            
+            // Selecionar novo horário
+            botao.classList.add('selected');
+            horarioSelecionado = horario;
+            
+            // Atualizar painel flutuante
+            atualizarPainelCompra();
+            
+            // Mostrar painel flutuante
+            mostrarPainelCompra();
+        }
+
+        // Atualizar painel de compra flutuante
+        function atualizarPainelCompra() {
+            if (!horarioSelecionado || !diaSelecionado) return;
+            
+            const infoBilhete = document.getElementById('info-bilhete');
+            const detalhesSessao = document.getElementById('detalhe-sessao');
+            const btnComprar = document.getElementById('btn-comprar');
+            
+            const dataFormatada = diaSelecionado.toLocaleDateString('pt-PT', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long'
+            });
+            
+            const tipoSessaoNome = tiposSessao.find(t => t.id == tipoSessaoAtual)?.nome || 'Sessão';
+            const salaNome = horarioSelecionado.nome_sala || 'Sala não especificada';
+            
+            const detalhesTexto = `
+                ${dataFormatada}<br>
+                ${horarioSelecionado.hora_str} | ${tipoSessaoNome}<br>
+                ${salaNome}
+            `;
+            
+            detalhesSessao.innerHTML = detalhesTexto;
+            btnComprar.disabled = false;
+        }
+
+        // Mostrar painel de compra
+        function mostrarPainelCompra() {
+            const painel = document.getElementById('comprar-bilhete-flutuante');
+            painel.classList.add('visible');
+        }
+
+        // Esconder painel de compra
+        function esconderPainelCompra() {
+            const painel = document.getElementById('comprar-bilhete-flutuante');
+            painel.classList.remove('visible');
+        }
+
+        // Prosseguir com a compra
+        function prosseguirCompra() {
+            if (!horarioSelecionado || !diaSelecionado) {
+                alert('Por favor, selecione um horário primeiro.');
+                return;
+            }
+            
+            // Verificar se o usuário está logado
+            const isLoggedIn = {{ 'true' if logged_in else 'false' }};
+            
+            if (!isLoggedIn) {
+                // Mostrar modal de login
+                showMatrixModal();
+                return;
+            }
+            
+            // Se logado, ir direto para reserva
+            redirecionarParaReserva();
+        }
+        
+        // Redirecionar para página de reserva
+        function redirecionarParaReserva() {
+            const params = new URLSearchParams({
+                horario: horarioSelecionado.id,
+                cinema: cinemaAtual,
+                tipo: tipoSessaoAtual,
+                data: diaSelecionado.toISOString().split('T')[0]
+            });
+            
+            window.location.href = `{{ url_for('reserva') }}?${params.toString()}`;
+        }
+
+        // Scroll suave para sessões
+        function scrollToSessoes() {
+            console.log('scrollToSessoes chamada');
+            const sessoesElement = document.getElementById('sessoes');
+            if (sessoesElement) {
+                sessoesElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                console.log('Scroll executado');
+            } else {
+                console.error('Elemento sessoes não encontrado');
+            }
+        }
+
+        // Função para mostrar o modal Matrix
+        function showMatrixModal() {
+            const modal = document.getElementById('matrixModal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            // Iniciar o efeito Matrix Rain
+            startMatrixRain();
+            
+            // Adicionar animação de entrada
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 100);
+        }
+
+        // Função para fechar o modal Matrix
+        function closeMatrixModal() {
+            const modal = document.getElementById('matrixModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                stopMatrixRain();
+            }, 300);
+        }
+
+        // Efeito Matrix Rain - MELHORADO
+        let matrixInterval;
+        
+        function startMatrixRain() {
+            const canvas = document.getElementById('matrixRain');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const matrixArray = matrix.split("");
+            
+            const fontSize = 14; // Aumentado de 10 para 14
+            const columns = canvas.width / fontSize;
+            
+            const drops = [];
+            for(let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+            
+            function draw() {
+                // Fundo mais transparente para letras mais visíveis
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; // Reduzido de 0.04 para 0.02
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Cor verde mais intensa
+                ctx.fillStyle = '#00FF41'; // Verde mais brilhante
+                ctx.font = 'bold ' + fontSize + 'px "Courier New", monospace'; // Fonte bold e Courier New
+                ctx.shadowColor = '#00FF41';
+                ctx.shadowBlur = 8; // Adicionar glow às letras
+                
+                for(let i = 0; i < drops.length; i++) {
+                    const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                    
+                    // Variação de intensidade para criar efeito de profundidade
+                    const alpha = Math.random() * 0.5 + 0.5; // Entre 0.5 e 1.0
+                    ctx.globalAlpha = alpha;
+                    
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    // Reset alpha
+                    ctx.globalAlpha = 1.0;
+                    
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.970) { // Mais letras (0.970 em vez de 0.975)
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+                
+                // Reset shadow
+                ctx.shadowBlur = 0;
+            }
+            
+            matrixInterval = setInterval(draw, 30); // Mais rápido (30ms em vez de 35ms)
+        }
+        
+        function stopMatrixRain() {
+            if (matrixInterval) {
+                clearInterval(matrixInterval);
+            }
+        }
+
+        function continuarComoConvidado() {
+            console.log('🎮 Continuar como convidado clicado');
+            
+            // Fechar o modal primeiro
+            closeMatrixModal();
+            
+            // Verificar se temos os dados necessários da sessão
+            if (cinemaAtual && tipoSessaoAtual && horarioSelecionado && diaSelecionado) {
+                console.log('🔗 Redirecionando para reserva com parâmetros...');
+                const params = new URLSearchParams({
+                    horario: horarioSelecionado.id,
+                    cinema: cinemaAtual,
+                    tipo: tipoSessaoAtual,
+                    data: diaSelecionado.toISOString().split('T')[0]
+                });
+                
+                window.location.href = `{{ url_for('reserva') }}?${params.toString()}`;
+            } else {
+                console.log('⚠️ Dados da sessão não disponíveis, redirecionando para reserva sem parâmetros');
+                window.location.href = '{{ url_for("reserva") }}';
+            }
+        }
+        
+        function fazerLogin() {
+            // Guardar dados da sessão no sessionStorage para usar após login
+            if (cinemaAtual && tipoSessaoAtual && horarioSelecionado && dataSelecionada) {
+                const dadosReserva = {
+                    horario: horarioSelecionado.id,
+                    cinema: cinemaAtual,
+                    tipo: tipoSessaoAtual,
+                    data: dataSelecionada
+                };
+                
+                sessionStorage.setItem('dadosReserva', JSON.stringify(dadosReserva));
+                console.log('Dados da reserva guardados para após login:', dadosReserva);
+            }
+            
+            // Redirecionar para login
+            window.location.href = '{{ url_for("login") }}';
+        }    
+    // Filtrar cinemas por região
+        function filtrarPorRegiao(regiao) {
+            // Atualizar botões
+            document.querySelectorAll('.filtro-regiao-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filtrar cinemas
+            document.querySelectorAll('.cinema').forEach(cinema => {
+                if (regiao === 'todas' || cinema.dataset.regiao === regiao) {
+                    cinema.style.display = 'block';
+                } else {
+                    cinema.style.display = 'none';
+                }
+            });
+        }
+
+        // Resetar todas as seleções
+        function resetarSelecoes() {
+            horarioSelecionado = null;
+            cinemaAtual = null;
+            tipoSessaoAtual = null;
+            
+            // Esconder painel de compra
+            esconderPainelCompra();
+            
+            // Resetar botões
+            document.querySelectorAll('.btn-sessao').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.hora-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.sessao-grupo').forEach(grupo => grupo.classList.add('hidden'));
+        }
+
+        // Atualizar horários disponíveis baseado no dia selecionado
+        function atualizarHorariosDisponiveis() {
+            // Esta função pode ser expandida para filtrar horários por data
+            // Por agora, todos os horários são mostrados
+        }
+
+        // Pesquisa de filmes
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const termo = e.target.value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (termo.length < 2) {
+                resultsContainer.classList.remove('show');
+                return;
+            }
+            
+            // Simulação de resultados de pesquisa
+            // Em produção, isto seria uma chamada AJAX
+            const resultados = [
+                { tipo: 'filme', nome: 'Resultado de exemplo', meta: 'Ação, 2025' }
+            ].filter(item => item.nome.toLowerCase().includes(termo));
+            
+            if (resultados.length > 0) {
+                resultsContainer.innerHTML = `
+                    <div class="search-results-section">
+                        <div class="search-results-title">Filmes</div>
+                        ${resultados.map(item => `
+                            <div class="search-result-item">
+                                <span class="search-result-icon"></span>
+                                <div class="search-result-text">
+                                    <div class="search-result-name">${item.nome}</div>
+                                    <div class="search-result-meta">${item.meta}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                resultsContainer.classList.add('show');
+            } else {
+                resultsContainer.innerHTML = '<div class="search-no-results">Nenhum resultado encontrado</div>';
+                resultsContainer.classList.add('show');
+            }
+        });
+
+        // Fechar resultados de pesquisa ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-container')) {
+                document.getElementById('searchResults').classList.remove('show');
+            }
+        });
+
+        // ===========================
+        // FUNCIONALIDADE DE TRAILER
+        // ===========================
+        
+        // Abrir modal do trailer
+        window.abrirTrailer = function(trailerUrl, titulo) {
+            console.log('abrirTrailer chamada com:', trailerUrl, titulo);
+            const modal = document.getElementById('modalTrailer');
+            const container = document.getElementById('trailerContainer');
+            const tituloElement = document.getElementById('trailerTitulo');
+            
+            if (!modal || !container) {
+                console.error('Elementos do modal não encontrados:', {modal, container});
+                return;
+            }
+            
+            if (tituloElement) {
+                tituloElement.textContent = `Trailer - ${titulo}`;
+            }
+            
+            // Limpar container
+            container.innerHTML = '';
+            
+            // Verificar se é YouTube
+            if (trailerUrl.includes('youtube.com') || trailerUrl.includes('youtu.be')) {
+                console.log('Trailer do YouTube detectado');
+                let videoId;
+                if (trailerUrl.includes('v=')) {
+                    videoId = trailerUrl.split('v=')[1].split('&')[0];
+                } else {
+                    videoId = trailerUrl.split('/').pop();
+                }
+                
+                console.log('Video ID:', videoId);
+                
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+                iframe.frameBorder = '0';
+                iframe.allowFullscreen = true;
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                container.appendChild(iframe);
+            } else {
+                console.log('Vídeo local detectado - TRAILER COMPLETO');
+                // Vídeo local - SEM LIMITAÇÕES DE TEMPO
+                const video = document.createElement('video');
+                video.src = trailerUrl;
+                video.controls = true;
+                video.autoplay = true;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                
+                // IMPORTANTE: Não adicionar event listeners que pausem o vídeo
+                // Deixar o trailer tocar até o final naturalmente
+                video.addEventListener('loadeddata', () => {
+                    console.log('🎬 Trailer carregado - Duração completa:', video.duration, 'segundos');
+                });
+                
+                video.addEventListener('ended', () => {
+                    console.log('🎬 Trailer terminou naturalmente');
+                });
+                
+                // Prevenir pausas automáticas
+                video.addEventListener('pause', (e) => {
+                    // Só permitir pausa se foi clicada pelo usuário nos controles
+                    if (!e.isTrusted) {
+                        console.log('🎬 Pausar trailer cancelado - deixando tocar completo');
+                        video.play();
+                    }
+                });
+                
+                container.appendChild(video);
+            }
+            
+            modal.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+            console.log('Modal do trailer aberto - VERSÃO COMPLETA');
+        };
+        
+        // Fechar modal do trailer
+        window.fecharTrailer = function() {
+            const modal = document.getElementById('modalTrailer');
+            const container = document.getElementById('trailerContainer');
+            
+            // Parar vídeo
+            container.innerHTML = '';
+            
+            modal.classList.remove('visible');
+            document.body.style.overflow = 'auto';
+        };
+        
+        // Fechar modal ao clicar fora
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('matrixModal');
+            if (e.target === modal) {
+                closeMatrixModal();
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMatrixModal();
+                fecharTrailer();
+            }
+        });
+
+        // Funções de avaliação
+        function editarAvaliacao() {
+            console.log('Editar avaliação clicada');
+            document.getElementById('modoVisualizacao').style.display = 'none';
+            document.getElementById('modoEdicao').style.display = 'block';
+            
+            // Inicializar estrelas com o rating atual
+            setTimeout(() => {
+                const rating = {{ user_avaliacao.rating if user_avaliacao else 0 }};
+                currentRatingInlineGlobal = rating;
+                updateStarsVisual(rating);
+                
+                // Atualizar campos
+                document.getElementById('ratingValueInline').value = rating;
+                if (rating === 0) {
+                    document.getElementById('ratingTextInline').textContent = 'Nenhuma classificação';
+                } else {
+                    document.getElementById('ratingTextInline').textContent = rating + ' de 5 estrelas';
+                }
+                
+                // Configurar contador de caracteres
+                const textarea = document.getElementById('comentarioInline');
+                if (textarea) {
+                    textarea.addEventListener('input', updateCharCountInline);
+                    updateCharCountInline();
+                }
+            }, 100);
+        }
+
+        function cancelarEdicao() {
+            console.log('Cancelar edição clicada');
+            document.getElementById('modoEdicao').style.display = 'none';
+            document.getElementById('modoVisualizacao').style.display = 'block';
+        }
+
+        function atualizarAvaliacao() {
+            const rating = document.getElementById('ratingValueInline').value;
+            const comentario = document.getElementById('comentarioInline').value.trim();
+            
+            if (!rating || rating === '0') {
+                alert('Por favor, selecione uma classificação!');
+                return;
+            }
+
+            fetch('/avaliar_filme', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    filme_id: {{ filme.id }},
+                    rating: parseInt(rating),  // Usar parseInt em vez de parseFloat
+                    comentario: comentario
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erro ao atualizar');
+            });
+        }
+
+        function removerAvaliacao() {
+            if (confirm('Tem a certeza que deseja remover a sua avaliação?')) {
+                fetch('/remover_avaliacao', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filme_id: {{ filme.id }}
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Erro: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Erro ao remover avaliação');
+                });
+            }
+        }
+
+        // Variável global para controlar o rating atual
+        let currentRatingInlineGlobal = {{ user_avaliacao.rating if user_avaliacao else 0 }};
+
+        // Função para selecionar estrela com suporte a meias estrelas
+        function selecionarEstrelaInline(starValue) {
+            console.log('Estrela clicada:', starValue, 'Rating atual:', currentRatingInlineGlobal);
+            
+            // Lógica para estrelas inteiras apenas (1-5):
+            // - Se clicar numa estrela: seleciona até essa estrela (valor inteiro)
+            // - Se clicar na mesma estrela já selecionada: remove a avaliação
+            
+            if (currentRatingInlineGlobal === starValue) {
+                // Se clicar na mesma estrela já selecionada, remover avaliação
+                currentRatingInlineGlobal = 0;
+            } else {
+                // Selecionar até essa estrela (valor inteiro)
+                currentRatingInlineGlobal = starValue;
+            }
+            
+            // Garantir que não fica negativo
+            if (currentRatingInlineGlobal < 0) {
+                currentRatingInlineGlobal = 0;
+            }
+            
+            console.log('Novo rating:', currentRatingInlineGlobal);
+            
+            // Atualizar visualmente as estrelas
+            updateStarsVisual(currentRatingInlineGlobal);
+            
+            // Atualizar campos
+            document.getElementById('ratingValueInline').value = currentRatingInlineGlobal;
+            
+            // Atualizar texto de feedback
+            if (currentRatingInlineGlobal === 0) {
+                document.getElementById('ratingTextInline').textContent = 'Nenhuma classificação';
+            } else {
+                document.getElementById('ratingTextInline').textContent = currentRatingInlineGlobal + ' de 5 estrelas';
+            }
+        }
+
+        // Função para atualizar o visual das estrelas (APENAS ESTRELAS INTEIRAS)
+        function updateStarsVisual(rating) {
+            console.log('Atualizando estrelas para rating:', rating);
+            const stars = document.querySelectorAll('.star-inline');
+            
+            stars.forEach((star, index) => {
+                const starValue = parseInt(star.getAttribute('data-rating'));
+                
+                // Remover todas as classes
+                star.classList.remove('full-star', 'half-star');
+                
+                if (rating >= starValue) {
+                    // Estrela completa
+                    star.classList.add('full-star');
+                    console.log(`Estrela ${starValue}: completa`);
+                } else {
+                    // Estrela vazia
+                    console.log(`Estrela ${starValue}: vazia`);
+                }
+            });
+        }
+
+        function updateCharCountInline() {
+            const textarea = document.getElementById('comentarioInline');
+            const charCount = document.getElementById('charCountInline');
+            if (textarea && charCount) {
+                charCount.textContent = textarea.value.length;
+            }
+        }
+
+        function abrirFormularioAvaliacao() {
+            console.log('Abrir formulário de avaliação');
+            // Implementar formulário de avaliação para novos utilizadores
+        }
+    </script>
+</body>
+</html>

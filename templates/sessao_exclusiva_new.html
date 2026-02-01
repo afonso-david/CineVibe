@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sessão Exclusiva | CineVibe</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sessao_exclusiva.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+    
+    <!-- Meta tags para SEO -->
+    <meta name="description" content="Sessões exclusivas e personalizadas no CineVibe - Experiências cinematográficas únicas">
+    <meta name="keywords" content="cinema, sessões exclusivas, experiências VIP, CineVibe">
+    <meta property="og:title" content="Sessão Exclusiva | CineVibe">
+    <meta property="og:description" content="Experiências cinematográficas exclusivas e personalizadas">
+    <meta property="og:image" content="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+            </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}" class="active">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-background" style="background-image: url('{{ url_for('static', filename='imgs/filmes/taxi-driver-filmi.jpg') }}');"></div>
+                <div class="hero-content">
+                    <h1 class="hero-title">Sessões Exclusivas</h1>
+                    <p class="hero-subtitle">Experiências Cinematográficas de Luxo</p>
+                    <p class="hero-description">
+                        Desfrute de salas privadas com tecnologia de ponta, serviços personalizados e momentos únicos. 
+                        Cada sessão é criada especialmente para si e os seus convidados.
+                    </p>
+                    <button class="hero-cta" onclick="scrollToSalas()">
+                        <i class="fas fa-crown"></i>
+                        Explorar Salas Exclusivas
+                    </button>
+                </div>
+            </section>
+
+            <!-- Salas Section -->
+            <section class="salas-section" id="salas">
+                <div class="container">
+                    <h2 class="section-title">Salas Exclusivas</h2>
+                    <p class="section-subtitle">Escolha a experiência perfeita para a sua ocasião especial</p>
+                    
+                    <div class="salas-grid">
+                        {% for sala in salas_exclusivas %}
+                        <div class="sala-card {% if sala.nome == 'Premium' %}featured{% endif %}">
+                            <div class="sala-image">
+                                {% if sala.nome == 'Intimista' %}
+                                    <img src="{{ url_for('static', filename='imgs/cinemas/descarregar (19).jpg') }}" alt="Sala {{ sala.nome }}">
+                                {% elif sala.nome == 'Vip' %}
+                                    <img src="{{ url_for('static', filename='imgs/cinemas/a movie theater with double beds for lying down and watching your favorite movies! Called the ‘VIP Bedroom’, Cinema Pathé in Switzerland.jpg') }}" alt="Sala {{ sala.nome }}">
+                                {% elif sala.nome == 'Premium' %}
+                                    <img src="{{ url_for('static', filename='imgs/cinemas/20 Brilliant Home Theater Game Room Ideas.jpg') }}" alt="Sala {{ sala.nome }}">
+                                {% endif %}
+
+                                {% if sala.nome == 'Premium' %}
+                                <div class="sala-badge popular">
+                                    <i class="fas fa-crown"></i>
+                                    Mais Popular
+                                </div>
+                                {% else %}
+                                <div class="sala-badge">
+                                    {% if sala.nome == 'Intimista' %}
+                                        <i class="fas fa-heart"></i>
+                                        Intimista
+                                    {% elif sala.nome == 'Vip' %}
+                                        <i class="fas fa-star"></i>
+                                        Sala Vip
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                <div class="sala-badge capacity">
+                                    <i class="fas fa-users"></i>
+                                    Até {{ sala.capacidade }} pessoas
+                                </div>
+                                <div class="sala-overlay"></div>
+                            </div>
+                            <div class="sala-content">
+                                <div class="sala-info">
+                                    <h3 class="sala-title">Sala {{ sala.nome }}</h3>
+                                    <p class="sala-description">
+                                        {{ sala.descricao }}
+                                    </p>
+                                    <div class="sala-features">
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            {{ sala.capacidade }} lugares
+                                        </div>
+                                        {% if sala.nome == 'Intimista' %}
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Som 5.1
+                                        </div>
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Projeção Full HD
+                                        </div>
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Atmosfera exclusiva e confortável
+                                        </div>
+                                        {% elif sala.nome == 'Vip' %}
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Som Dolby Atmos
+                                        </div>
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Projeção 4K
+                                        </div>
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Diversão garantida com arcades antes do filme
+                                        </div>
+                                        {% elif sala.nome == 'Premium' %}
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Escolha livre do filme
+                                        </div>
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Catering personalizado
+                                        </div>
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Decoração temática opcional
+                                        </div>
+                                        <div class="feature">
+                                            <div class="feature-icon">✓</div>
+                                            Equipamento audiovisual premium
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="sala-bottom">
+                                    <div class="sala-price">
+                                        <span class="price-label">{% if sala.nome == 'Premium' %}Desde{% else %}A partir de{% endif %}</span>
+                                        <div class="price-value">€{{ sala.preco|int }}</div>
+                                        <div class="price-period">por sessão</div>
+                                    </div>
+                                    <button class="btn-reservar" onclick="openReservaModal('{{ sala.nome.lower() }}', {{ sala.preco|int }}, '{{ sala.nome }}')">
+                                        {% if sala.nome == 'Intimista' %}
+                                            <i class="fas fa-calendar-check"></i>
+                                            Reservar Agora
+                                        {% elif sala.nome == 'Vip' %}
+                                            <i class="fas fa-heart"></i>
+                                            Reservar Experiência
+                                        {% elif sala.nome == 'Premium' %}
+                                            <i class="fas fa-key"></i>
+                                            Reservar Sala
+                                        {% endif %}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modal Matrix Login -->
+            <div id="matrixModal" class="matrix-modal" style="display: none;">
+                <div class="matrix-overlay"></div>
+                
+                <!-- Imagem de fundo com tamanho do container original -->
+                <div class="matrix-background-image"></div>
+                
+                <!-- Botão de fechar flutuante -->
+                <button class="matrix-close" onclick="closeMatrixModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <!-- Conteúdo flutuante sem container -->
+                <div class="matrix-character">
+                </div>
+                
+                <div class="matrix-text">
+                    <h2 class="matrix-title">Esta é a sua última oportunidade</h2>
+                    <p class="matrix-subtitle">Depois disto, não há volta atrás</p>
+                </div>
+                
+                <div class="matrix-pills">
+                    <div class="pill-container">
+                        <button class="pill red-pill" onclick="window.location.href='{{ url_for('login') }}'">
+                            <div class="pill-content">
+                                <span class="pill-text">INICIAR SESSÃO</span>
+                                <div class="pill-icon">💊</div>
+                            </div>
+                        </button>
+                        <div class="pill-description red-desc">
+                            Tome a pílula vermelha e descubra as sessões exclusivas
+                        </div>
+                    </div>
+                    
+                    <div class="pill-container">
+                        <button class="pill blue-pill" onclick="closeMatrixModal()">
+                            <div class="pill-content">
+                                <span class="pill-text">CONVIDADO</span>
+                                <div class="pill-icon">💊</div>
+                            </div>
+                        </button>
+                        <div class="pill-description blue-desc">
+                            Tome a pílula azul e continue como estava
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="matrix-quote">
+                    "Lembre-se... tudo o que estou a oferecer é a verdade, nada mais."
+                </div>
+                
+                <!-- Matrix Rain Effect -->
+                <canvas id="matrixRain" class="matrix-rain"></canvas>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CineVibe</h3>
+                    <p>A sua experiência cinematográfica exclusiva</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p>Email: info@cinevibe.pt</p>
+                    <p>Telefone: +351 123 456 789</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CineVibe. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Variável global para verificar se o utilizador está logado
+        const isLoggedIn = {{ 'true' if logged_in else 'false' }};
+        
+        // Função para abrir modal de reserva
+        function openReservaModal(salaType, preco, salaNome) {
+            if (isLoggedIn) {
+                // Se o utilizador está logado, redireciona para a página de pagamento
+                window.location.href = `/pagamento_sessao_tematica?tipo=${salaType}&preco=${preco}&sala=${salaNome}`;
+            } else {
+                // Se não está logado, mostra o modal Matrix
+                showMatrixModal();
+            }
+        }
+
+        // Função para mostrar o modal Matrix
+        function showMatrixModal() {
+            const modal = document.getElementById('matrixModal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            // Iniciar o efeito Matrix Rain
+            startMatrixRain();
+            
+            // Adicionar animação de entrada
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 100);
+        }
+
+        // Função para fechar o modal Matrix
+        function closeMatrixModal() {
+            const modal = document.getElementById('matrixModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                stopMatrixRain();
+            }, 300);
+        }
+
+        // Efeito Matrix Rain - MELHORADO
+        let matrixInterval;
+        
+        function startMatrixRain() {
+            const canvas = document.getElementById('matrixRain');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const matrixArray = matrix.split("");
+            
+            const fontSize = 14; // Aumentado de 10 para 14
+            const columns = canvas.width / fontSize;
+            
+            const drops = [];
+            for(let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+            
+            function draw() {
+                // Fundo mais transparente para letras mais visíveis
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; // Reduzido de 0.04 para 0.02
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Cor verde mais intensa
+                ctx.fillStyle = '#00FF41'; // Verde mais brilhante
+                ctx.font = 'bold ' + fontSize + 'px "Courier New", monospace'; // Fonte bold e Courier New
+                ctx.shadowColor = '#00FF41';
+                ctx.shadowBlur = 8; // Adicionar glow às letras
+                
+                for(let i = 0; i < drops.length; i++) {
+                    const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                    
+                    // Variação de intensidade para criar efeito de profundidade
+                    const alpha = Math.random() * 0.5 + 0.5; // Entre 0.5 e 1.0
+                    ctx.globalAlpha = alpha;
+                    
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    // Reset alpha
+                    ctx.globalAlpha = 1.0;
+                    
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.970) { // Mais letras (0.970 em vez de 0.975)
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+                
+                // Reset shadow
+                ctx.shadowBlur = 0;
+            }
+            
+            matrixInterval = setInterval(draw, 30); // Mais rápido (30ms em vez de 35ms)
+        }
+        
+        function stopMatrixRain() {
+            if (matrixInterval) {
+                clearInterval(matrixInterval);
+            }
+        }
+
+        // Função para scroll suave para as salas
+        function scrollToSalas() {
+            document.getElementById('salas').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // Fechar modal ao clicar fora
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('matrixModal');
+            if (event.target === modal) {
+                closeMatrixModal();
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeMatrixModal();
+            }
+        });
+    </script>
+</body>
+</html>

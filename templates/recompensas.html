@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recompensas | CineVibe</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/recompensas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recompensas.css') }}?v=2.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
 </head>
@@ -24,7 +24,7 @@
                 <div class="user-icon">
                     {% if logged_in %}
                         <a href="{{ url_for('perfil') }}">
-                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic active-profile" alt="Perfil">
                         </a>
                     {% else %}
                         <a href="{{ url_for('login') }}">
@@ -45,8 +45,6 @@
         <a href="{{ url_for('bar') }}">Bar</a>
         <a href="{{ url_for('beneficios') }}">Benefícios</a>
         <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
-        <a href="{{ url_for('recompensas') }}" class="active">Recompensas</a>
-        <a href="{{ url_for('premios') }}">Prémios</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
@@ -55,15 +53,17 @@
         <!-- Hero Section -->
         <section class="hero-recompensas">
             <div class="hero-content">
-                <h1>
-                    <img src="{{ url_for('static', filename='imgs/trophy-icon.png') }}" alt="Troféu" class="title-icon">
-                    Sistema de Recompensas
-                </h1>
-                <p class="hero-subtitle">Ganha pontos e desbloqueia benefícios exclusivos no CineVibe</p>
-                
-                <div class="pontos-display">
-                    <div class="pontos-numero">{{ pontos or 0 }}</div>
-                    <div class="pontos-label">Pontos Disponíveis</div>
+                <div class="hero-left">
+                    <img src="{{ url_for('static', filename='imgs/90th_Academy_Awards_Damien_Chazelle_Statue_PNG-removebg-preview.png') }}" alt="Troféu" class="hero-trophy">
+                </div>
+                <div class="hero-right">
+                    <h1>Sistema de Recompensas</h1>
+                    <p class="hero-subtitle">Ganha pontos e desbloqueia benefícios exclusivos no CineVibe</p>
+                    
+                    <div class="pontos-display">
+                        <div class="pontos-numero">{{ pontos or 0 }}</div>
+                        <div class="pontos-label">Pontos Disponíveis</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -72,7 +72,6 @@
         <section class="trajetoria-section">
             <div class="container">
                 <h2 class="section-title">
-                    <img src="{{ url_for('static', filename='imgs/level-icon.png') }}" alt="Níveis" class="section-icon">
                     Trajetória de Níveis
                 </h2>
 
@@ -97,7 +96,7 @@
                         <!-- Nível Bronze -->
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 0 else '' }} {{ 'active' if (pontos or 0) < 1000 else '' }}">
                             <div class="level-circle">
-                                <img src="{{ url_for('static', filename='imgs/bronze-medal.png') }}" alt="Bronze" class="level-icon">
+                                <img src="{{ url_for('static', filename='imgs/descarregar__21_-removebg-preview.png') }}" alt="Bronze" class="level-icon">
                                 {% if (pontos or 0) >= 1000 %}
                                 <div class="check-mark">✓</div>
                                 {% endif %}
@@ -106,8 +105,8 @@
                                 <h3>Bronze</h3>
                                 <p class="level-pts">0 - 999 pontos</p>
                                 <div class="level-perks">
-                                    <span><img src="{{ url_for('static', filename='imgs/star-icon.png') }}" alt="Benefício" class="perk-icon">Acesso básico</span>
-                                    <span><img src="{{ url_for('static', filename='imgs/ticket-icon.png') }}" alt="Benefício" class="perk-icon">Reservas normais</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/icons/home.png') }}" alt="Benefício" class="perk-icon">Acesso básico</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/Box_Of_Popcorn_free_icons_designed_by_Freepik-removebg-preview.png') }}" alt="Benefício" class="perk-icon">5% off bar</span>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +114,7 @@
                         <!-- Nível Prata -->
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 1000 else '' }} {{ 'active' if 1000 <= (pontos or 0) < 2500 else '' }}">
                             <div class="level-circle">
-                                <img src="{{ url_for('static', filename='imgs/silver-medal.png') }}" alt="Prata" class="level-icon">
+                                <img src="{{ url_for('static', filename='imgs/3D_Glasses_Clipart_Graphic_in_SVG_PNG_JPG_-_Stylish_3D_Goggles_Illustration_-_Cricut_Compatible_-_Downloadable_Image_-_Etsy-removebg-preview.png') }}" alt="Prata" class="level-icon">
                                 {% if (pontos or 0) >= 2500 %}
                                 <div class="check-mark">✓</div>
                                 {% endif %}
@@ -124,8 +123,8 @@
                                 <h3>Prata</h3>
                                 <p class="level-pts">1000 - 2499 pontos</p>
                                 <div class="level-perks">
-                                    <span><img src="{{ url_for('static', filename='imgs/discount-icon.png') }}" alt="Benefício" class="perk-icon">5% desconto</span>
-                                    <span><img src="{{ url_for('static', filename='imgs/priority-icon.png') }}" alt="Benefício" class="perk-icon">Reserva prioritária</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/descarregar__22_-removebg-preview.png') }}" alt="Benefício" class="perk-icon">5% desconto</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/Box_Of_Popcorn_free_icons_designed_by_Freepik-removebg-preview.png') }}" alt="Benefício" class="perk-icon">Menu grátis</span>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +132,7 @@
                         <!-- Nível Ouro -->
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 2500 else '' }} {{ 'active' if 2500 <= (pontos or 0) < 5000 else '' }}">
                             <div class="level-circle">
-                                <img src="{{ url_for('static', filename='imgs/gold-medal.png') }}" alt="Ouro" class="level-icon">
+                                <img src="{{ url_for('static', filename='imgs/90th_Academy_Awards_Damien_Chazelle_Statue_PNG-removebg-preview.png') }}" alt="Ouro" class="level-icon">
                                 {% if (pontos or 0) >= 5000 %}
                                 <div class="check-mark">✓</div>
                                 {% endif %}
@@ -142,8 +141,8 @@
                                 <h3>Ouro</h3>
                                 <p class="level-pts">2500 - 4999 pontos</p>
                                 <div class="level-perks">
-                                    <span><img src="{{ url_for('static', filename='imgs/discount-icon.png') }}" alt="Benefício" class="perk-icon">10% desconto</span>
-                                    <span><img src="{{ url_for('static', filename='imgs/vip-icon.png') }}" alt="Benefício" class="perk-icon">Lugares VIP</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/descarregar__22_-removebg-preview.png') }}" alt="Benefício" class="perk-icon">10% desconto</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/Box_Of_Popcorn_free_icons_designed_by_Freepik-removebg-preview.png') }}" alt="Benefício" class="perk-icon">15% off bar</span>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +150,7 @@
                         <!-- Nível Diamante -->
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 5000 else '' }} {{ 'active' if (pontos or 0) >= 5000 else '' }}">
                             <div class="level-circle">
-                                <img src="{{ url_for('static', filename='imgs/diamond-medal.png') }}" alt="Diamante" class="level-icon">
+                                <img src="{{ url_for('static', filename='imgs/Hollywood star remove.png') }}" alt="Diamante" class="level-icon">
                                 {% if (pontos or 0) >= 5000 %}
                                 <div class="check-mark">✓</div>
                                 {% endif %}
@@ -160,8 +159,8 @@
                                 <h3>Diamante</h3>
                                 <p class="level-pts">5000+ pontos</p>
                                 <div class="level-perks">
-                                    <span><img src="{{ url_for('static', filename='imgs/discount-icon.png') }}" alt="Benefício" class="perk-icon">15% desconto</span>
-                                    <span><img src="{{ url_for('static', filename='imgs/crown-icon.png') }}" alt="Benefício" class="perk-icon">Acesso exclusivo</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/descarregar__22_-removebg-preview.png') }}" alt="Benefício" class="perk-icon">15% desconto</span>
+                                    <span><img src="{{ url_for('static', filename='imgs/Box_Of_Popcorn_free_icons_designed_by_Freepik-removebg-preview.png') }}" alt="Benefício" class="perk-icon">Menu premium</span>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +173,6 @@
         <section class="recompensas-disponiveis">
             <div class="container">
                 <h2 class="section-title">
-                    <img src="{{ url_for('static', filename='imgs/gift-icon.png') }}" alt="Presentes" class="section-icon">
                     Recompensas Disponíveis
                 </h2>
 
@@ -184,15 +182,13 @@
                         <div class="recompensa-icon">
                             <img src="{{ url_for('static', filename=recompensa.imagem) }}" alt="{{ recompensa.titulo }}" class="reward-icon" onerror="this.src='{{ url_for('static', filename='imgs/icons/wheel-removebg-preview.png') }}'">
                         </div>
-                        <h3>{{ recompensa.titulo }}</h3>
+                        <h3>{{ recompensa.titulo|upper }}</h3>
                         <p>{{ recompensa.descricao }}</p>
-                        <div class="recompensa-footer">
-                            <span class="custo">{{ recompensa.custo_pontos }} <img src="{{ url_for('static', filename='imgs/coin-icon.png') }}" alt="Pontos" class="inline-icon" onerror="this.style.display='none'"></span>
-                            <button class="btn-resgatar" onclick="resgatarRecompensa('{{ recompensa.id }}', {{ recompensa.custo_pontos }})" 
-                                    {{ 'disabled' if (pontos or 0) < recompensa.custo_pontos else '' }}>
-                                Resgatar
-                            </button>
-                        </div>
+                        <div class="pontos-custo">{{ recompensa.custo_pontos }}</div>
+                        <button class="btn-resgatar" onclick="resgatarRecompensa('{{ recompensa.id }}', {{ recompensa.custo_pontos }})" 
+                                {{ 'disabled' if (pontos or 0) < recompensa.custo_pontos else '' }}>
+                            RESGATAR
+                        </button>
                     </div>
                     {% endfor %}
                 </div>
@@ -203,23 +199,22 @@
         <section class="como-ganhar">
             <div class="container">
                 <h2 class="section-title">
-                    <img src="{{ url_for('static', filename='imgs/earn-icon.png') }}" alt="Ganhar" class="section-icon">
                     Como Ganhar Pontos
                 </h2>
 
                 <div class="ganhar-grid">
                     <div class="ganhar-card">
                         <div class="ganhar-icon">
-                            <img src="{{ url_for('static', filename='imgs/movie-ticket.png') }}" alt="Bilhete" class="earn-icon">
+                            <img src="{{ url_for('static', filename='imgs/Movie_tickets_silhouette_free_icon-removebg-preview.png') }}" alt="Bilhete" class="earn-icon">
                         </div>
                         <h3>Comprar Bilhetes</h3>
-                        <div class="pontos-ganhos">+50</div>
+                        <div class="pontos-ganhos">+100</div>
                         <p>Por cada bilhete comprado</p>
                     </div>
 
                     <div class="ganhar-card">
                         <div class="ganhar-icon">
-                            <img src="{{ url_for('static', filename='imgs/popcorn.png') }}" alt="Bar" class="earn-icon">
+                            <img src="{{ url_for('static', filename='imgs/Box_Of_Popcorn_free_icons_designed_by_Freepik-removebg-preview.png') }}" alt="Bar" class="earn-icon">
                         </div>
                         <h3>Compras no Bar</h3>
                         <div class="pontos-ganhos">+25</div>
@@ -228,34 +223,25 @@
 
                     <div class="ganhar-card">
                         <div class="ganhar-icon">
-                            <img src="{{ url_for('static', filename='imgs/star-rating.png') }}" alt="Avaliação" class="earn-icon">
+                            <img src="{{ url_for('static', filename='imgs/icons/CINEMA_LOGO_VECTOR-removebg-preview.png') }}" alt="Avaliação" class="earn-icon">
                         </div>
                         <h3>Avaliar Filmes</h3>
-                        <div class="pontos-ganhos">+10</div>
+                        <div class="pontos-ganhos">+50</div>
                         <p>Por cada avaliação feita</p>
                     </div>
 
                     <div class="ganhar-card">
                         <div class="ganhar-icon">
-                            <img src="{{ url_for('static', filename='imgs/calendar.png') }}" alt="Aniversário" class="earn-icon">
-                        </div>
-                        <h3>Aniversário</h3>
-                        <div class="pontos-ganhos">+200</div>
-                        <p>Bónus especial no teu aniversário</p>
-                    </div>
-
-                    <div class="ganhar-card">
-                        <div class="ganhar-icon">
-                            <img src="{{ url_for('static', filename='imgs/share.png') }}" alt="Partilhar" class="earn-icon">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Partilhar" class="earn-icon">
                         </div>
                         <h3>Partilhar</h3>
                         <div class="pontos-ganhos">+15</div>
-                        <p>Por partilhar filmes nas redes sociais</p>
+                        <p>Por marcar nos nas redes sociais</p>
                     </div>
 
                     <div class="ganhar-card">
                         <div class="ganhar-icon">
-                            <img src="{{ url_for('static', filename='imgs/referral.png') }}" alt="Referir" class="earn-icon">
+                            <img src="{{ url_for('static', filename='imgs/icons/group_icon-removebg-preview.png') }}" alt="Referir" class="earn-icon">
                         </div>
                         <h3>Referir Amigos</h3>
                         <div class="pontos-ganhos">+100</div>
@@ -407,35 +393,98 @@
     <script>
         function resgatarRecompensa(tipo, custo) {
             if ({{ pontos or 0 }} < custo) {
-                alert('Pontos insuficientes para resgatar esta recompensa.');
+                showCustomAlert('Pontos Insuficientes', 'Não tens pontos suficientes para resgatar esta recompensa.', 'error');
                 return;
             }
 
-            if (confirm(`Confirmas que queres resgatar esta recompensa por ${custo} pontos?`)) {
-                fetch('/resgatar_recompensa', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        tipo: tipo,
-                        custo: custo
+            showCustomConfirm(
+                'Confirmar Resgate',
+                `Confirmas que queres resgatar esta recompensa por ${custo} pontos?`,
+                function() {
+                    fetch('/resgatar_recompensa', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            tipo: tipo,
+                            custo: custo
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Recompensa resgatada com sucesso!');
-                        location.reload();
-                    } else {
-                        alert('Erro ao resgatar recompensa: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Erro ao resgatar recompensa.');
-                });
-            }
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showCustomAlert('Sucesso!', 'Recompensa resgatada com sucesso! Foi enviado para o teu email.', 'success');
+                        } else {
+                            showCustomAlert('Erro', 'Erro ao resgatar recompensa: ' + data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        showCustomAlert('Erro', 'Erro ao resgatar recompensa.', 'error');
+                    });
+                }
+            );
+        }
+
+        function showCustomAlert(title, message, type) {
+            const modal = document.createElement('div');
+            modal.className = 'custom-modal';
+            modal.innerHTML = `
+                <div class="modal-content ${type}">
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>${message}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-btn modal-btn-primary" onclick="closeModal(this)">OK</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function showCustomConfirm(title, message, callback) {
+            const modal = document.createElement('div');
+            modal.className = 'custom-modal';
+            modal.innerHTML = `
+                <div class="modal-content confirm">
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>${message}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-btn modal-btn-secondary" onclick="closeModal(this)">Cancelar</button>
+                        <button class="modal-btn modal-btn-primary" onclick="confirmAction(this, arguments[0])" data-callback="callback">Confirmar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.querySelector('[data-callback]').callback = callback;
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function confirmAction(button, callback) {
+            const modal = button.closest('.custom-modal');
+            button.callback();
+            closeModal(button);
+        }
+
+        function closeModal(button) {
+            const modal = button.closest('.custom-modal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.remove();
+                // Reload page only after success modal is closed
+                if (modal.querySelector('.modal-content.success')) {
+                    location.reload();
+                }
+            }, 300);
         }
     </script>
     </div> <!-- Closing page-wrapper -->

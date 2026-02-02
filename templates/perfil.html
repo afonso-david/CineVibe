@@ -337,7 +337,7 @@
                 <div class="user-icon">
                     {% if logged_in %}
                         <a href="{{ url_for('perfil') }}">
-                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic active-profile" alt="Perfil">
                         </a>
                     {% else %}
                         <a href="{{ url_for('login') }}">

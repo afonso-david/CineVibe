@@ -399,6 +399,93 @@ def get_db_connection():
         database="cinevibe"
     )
 
+def usar_codigo_desconto_reserva(user_id, codigo, premio_nome, pontos_gastos):
+    """Função chamada quando um código de desconto é usado numa reserva"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Adicionar movimento negativo na tabela pontos_movimentos
+        cursor.execute("""
+            INSERT INTO pontos_movimentos 
+            (utilizador_id, pontos, motivo, data_movimento)
+            VALUES (%s, %s, %s, NOW())
+        """, (user_id, -pontos_gastos, f"Uso de código de desconto {codigo} - {premio_nome}"))
+        
+        # Marcar código como usado na tabela codigos_desconto
+        cursor.execute("""
+            UPDATE codigos_desconto 
+            SET usado = 1, data_uso = NOW() 
+            WHERE codigo = %s AND usuario_id = %s
+        """, (codigo, user_id))
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        print(f"✅ Código {codigo} usado com sucesso. {pontos_gastos} pontos descontados do usuário {user_id}")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Erro ao usar código de desconto: {e}")
+        return False
+
+def criar_tabelas_resgates():
+    """Cria as tabelas necessárias para o sistema de resgates se não existirem"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        print("🔍 DEBUG: Criando tabela codigos_desconto...")
+        # Criar tabela codigos_desconto
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS `codigos_desconto` (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `codigo` varchar(20) NOT NULL,
+              `usuario_id` int NOT NULL,
+              `premio_id` int DEFAULT NULL,
+              `premio_nome` varchar(100) DEFAULT NULL,
+              `tipo_desconto` enum('valor_fixo','percentual','produto_gratis') DEFAULT 'produto_gratis',
+              `valor_desconto` decimal(10,2) DEFAULT 0.00,
+              `data_criacao` datetime DEFAULT CURRENT_TIMESTAMP,
+              `data_expiracao` datetime DEFAULT NULL,
+              `usado` tinyint(1) DEFAULT 0,
+              `data_uso` datetime DEFAULT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `codigo` (`codigo`),
+              KEY `usuario_id` (`usuario_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+        """)
+        
+        print("🔍 DEBUG: Criando tabela pontos_gastos...")
+        # Criar tabela pontos_gastos
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS `pontos_gastos` (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `usuario_id` int NOT NULL,
+              `premio_id` int DEFAULT NULL,
+              `premio_nome` varchar(100) DEFAULT NULL,
+              `pontos_gastos` int NOT NULL,
+              `codigo_desconto` varchar(20) DEFAULT NULL,
+              `data_resgate` datetime DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              KEY `usuario_id` (`usuario_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+        """)
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        print("✅ DEBUG: Tabelas de resgates criadas com sucesso")
+        app.logger.info("✅ Tabelas de resgates criadas com sucesso")
+        return True
+        
+    except Exception as e:
+        print(f"❌ DEBUG: Erro ao criar tabelas de resgates: {e}")
+        app.logger.error(f"❌ Erro ao criar tabelas de resgates: {e}")
+        return False
+
 def calcular_pontos_usuario(user_id, cursor):
     """Calcula os pontos disponíveis do usuário (ganhos - gastos)"""
     try:
@@ -422,10 +509,13 @@ def calcular_pontos_usuario(user_id, cursor):
         
         pontos_ganhos = (filmes_vistos * 100) + (avaliacoes * 50)
         
-        # Calcular pontos gastos
-        cursor.execute("SELECT COALESCE(SUM(pontos_gastos), 0) as total FROM pontos_gastos WHERE usuario_id = %s", (user_id,))
-        result = cursor.fetchone()
-        pontos_gastos = result['total'] if result else 0
+        # Calcular pontos gastos da tabela pontos_gastos
+        try:
+            cursor.execute("SELECT COALESCE(SUM(pontos_gastos), 0) as total FROM pontos_gastos WHERE usuario_id = %s", (user_id,))
+            result = cursor.fetchone()
+            pontos_gastos = result['total'] if result else 0
+        except:
+            pontos_gastos = 0
         
         # Retornar pontos disponíveis
         pontos_disponiveis = max(0, pontos_ganhos - pontos_gastos)
@@ -1509,6 +1599,384 @@ def teste_perfil_debug():
     user_id = session['user_id']
     return f"✅ Usuário logado com ID: {user_id}. Route de teste funcionando!"
 
+@app.route('/debug-produtos-resgatados')
+def debug_produtos_resgatados():
+    """Debug para verificar produtos resgatados"""
+    if 'user_id' not in session:
+        return "Precisa estar logado"
+    
+    user_id = session['user_id']
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        resultado = f"<h2>Debug Produtos Resgatados - User ID: {user_id}</h2>"
+        
+        # Verificar se tabela existe
+        cursor.execute("SHOW TABLES LIKE 'pontos_gastos'")
+        tabela_existe = cursor.fetchone()
+        resultado += f"<p>Tabela pontos_gastos existe: {'SIM' if tabela_existe else 'NÃO'}</p>"
+        
+        if not tabela_existe:
+            # Criar tabela se não existir
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS `pontos_gastos` (
+                  `id` int NOT NULL AUTO_INCREMENT,
+                  `usuario_id` int NOT NULL,
+                  `premio_id` int DEFAULT NULL,
+                  `premio_nome` varchar(100) DEFAULT NULL,
+                  `pontos_gastos` int NOT NULL,
+                  `codigo_desconto` varchar(20) DEFAULT NULL,
+                  `data_resgate` datetime DEFAULT CURRENT_TIMESTAMP,
+                  PRIMARY KEY (`id`),
+                  KEY `usuario_id` (`usuario_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            """)
+            conn.commit()
+            resultado += "<p>✅ Tabela pontos_gastos criada!</p>"
+        
+        # Verificar dados existentes
+        cursor.execute("SELECT COUNT(*) as total FROM pontos_gastos WHERE usuario_id = %s", (user_id,))
+        total = cursor.fetchone()['total']
+        resultado += f"<p>Total de produtos para este usuário: {total}</p>"
+        
+        if total == 0:
+            # Inserir dados de teste
+            produtos_teste = [
+                (user_id, 8, 'Pretzel', 100, 'TEST001'),
+                (user_id, 1, 'Coca Cola pequena', 200, 'TEST002'),
+                (user_id, 2, 'Pipocas doces/Salgadas', 300, 'TEST003'),
+                (user_id, 5, 'Snickers', 200, 'TEST004')
+            ]
+            
+            for produto in produtos_teste:
+                cursor.execute("""
+                    INSERT INTO pontos_gastos 
+                    (usuario_id, premio_id, premio_nome, pontos_gastos, codigo_desconto, data_resgate)
+                    VALUES (%s, %s, %s, %s, %s, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY))
+                """, produto)
+            
+            conn.commit()
+            resultado += f"<p>✅ Inseridos {len(produtos_teste)} produtos de teste!</p>"
+        
+        # Buscar e mostrar produtos
+        cursor.execute("""
+            SELECT 
+                pg.id,
+                pg.premio_nome as nome,
+                pg.pontos_gastos,
+                pg.data_resgate,
+                p.img_url as imagem,
+                p.nome as premio_original
+            FROM pontos_gastos pg
+            LEFT JOIN premios p ON pg.premio_id = p.id
+            WHERE pg.usuario_id = %s
+            ORDER BY pg.data_resgate DESC
+        """, (user_id,))
+        
+        produtos = cursor.fetchall()
+        
+        resultado += f"<h3>Produtos encontrados: {len(produtos)}</h3>"
+        resultado += "<table border='1' style='color: white;'>"
+        resultado += "<tr><th>ID</th><th>Nome</th><th>Pontos</th><th>Data</th><th>Imagem</th><th>Prémio Original</th></tr>"
+        
+        for produto in produtos:
+            resultado += f"""
+            <tr>
+                <td>{produto['id']}</td>
+                <td>{produto['nome']}</td>
+                <td>{produto['pontos_gastos']}</td>
+                <td>{produto['data_resgate']}</td>
+                <td>{produto['imagem'] or 'NULL'}</td>
+                <td>{produto['premio_original'] or 'NULL'}</td>
+            </tr>
+            """
+        
+        resultado += "</table>"
+        
+        cursor.close()
+        conn.close()
+        
+        resultado += f'<p><a href="/perfil">Ir para o Perfil</a></p>'
+        
+        return resultado
+        
+    except Exception as e:
+        return f"Erro: {str(e)}"
+
+@app.route('/criar-dados-teste-pontos-movimentos')
+def criar_dados_teste_pontos_movimentos():
+    """Insere dados de teste na tabela pontos_movimentos para simular produtos resgatados"""
+    if 'user_id' not in session:
+        return "Precisa estar logado"
+    
+    user_id = session['user_id']
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Limpar dados de teste antigos do usuário
+        cursor.execute("DELETE FROM pontos_movimentos WHERE utilizador_id = %s AND motivo LIKE '%resgate%'", (user_id,))
+        
+        # Inserir dados de teste na tabela pontos_movimentos
+        produtos_teste = [
+            (user_id, -100, 'Resgate de Pretzel com código TESTE001'),
+            (user_id, -200, 'Resgate de Coca Cola pequena com código TESTE002'),
+            (user_id, -300, 'Resgate de Pipocas doces/Salgadas com código TESTE003'),
+            (user_id, -200, 'Resgate de Snickers com código TESTE004'),
+            (user_id, -400, 'Resgate de Doritos com código TESTE005')
+        ]
+        
+        for produto in produtos_teste:
+            cursor.execute("""
+                INSERT INTO pontos_movimentos 
+                (utilizador_id, pontos, motivo, data_movimento)
+                VALUES (%s, %s, %s, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY))
+            """, produto)
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return f"""
+        <h2>✅ Dados de teste criados na tabela pontos_movimentos!</h2>
+        <p>Foram inseridos {len(produtos_teste)} movimentos de pontos para o usuário {user_id}</p>
+        <p>Estes representam produtos resgatados com códigos que já foram usados em reservas.</p>
+        <p><a href="/perfil">Ir para o Perfil</a></p>
+        <p><a href="/teste-pontos-movimentos">Testar busca em pontos_movimentos</a></p>
+        """
+        
+    except Exception as e:
+        return f"❌ Erro: {str(e)}"
+
+@app.route('/teste-pontos-movimentos')
+def teste_pontos_movimentos():
+    """Rota para testar a busca na tabela pontos_movimentos"""
+    if 'user_id' not in session:
+        return "Precisa estar logado"
+    
+    user_id = session['user_id']
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Buscar todos os movimentos de pontos do usuário
+        cursor.execute("""
+            SELECT 
+                pm.motivo as nome,
+                ABS(pm.pontos) as pontos_gastos,
+                pm.data_movimento as data_resgate,
+                p.img_url as imagem
+            FROM pontos_movimentos pm
+            LEFT JOIN premios p ON (
+                (pm.motivo LIKE '%pretzel%' AND p.nome LIKE '%pretzel%') OR
+                (pm.motivo LIKE '%coca%' AND p.nome LIKE '%coca%') OR
+                (pm.motivo LIKE '%pipocas%' AND p.nome LIKE '%pipocas%') OR
+                (pm.motivo LIKE '%snickers%' AND p.nome LIKE '%snickers%') OR
+                (pm.motivo LIKE '%fanta%' AND p.nome LIKE '%fanta%') OR
+                (pm.motivo LIKE '%gomas%' AND p.nome LIKE '%gomas%') OR
+                (pm.motivo LIKE '%doritos%' AND p.nome LIKE '%doritos%') OR
+                (pm.motivo LIKE '%bilhete%' AND p.nome LIKE '%bilhete%')
+            )
+            WHERE pm.utilizador_id = %s 
+            AND pm.pontos < 0 
+            AND (pm.motivo LIKE '%resgate%' OR pm.motivo LIKE '%código%' OR pm.motivo LIKE '%premio%')
+            ORDER BY pm.data_movimento DESC
+        """, (user_id,))
+        
+        produtos = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        
+        resultado = f"""
+        <h2>Teste Pontos Movimentos - Usuário {user_id}</h2>
+        <p>Total de produtos resgatados encontrados: {len(produtos)}</p>
+        <ul>
+        """
+        
+        for produto in produtos:
+            resultado += f"""
+            <li>
+                <strong>{produto['nome']}</strong><br>
+                Pontos: {produto['pontos_gastos']}<br>
+                Data: {produto['data_resgate']}<br>
+                Imagem: {produto['imagem']}<br>
+                ---
+            </li>
+            """
+        
+        resultado += "</ul>"
+        resultado += f'<p><a href="/perfil">Voltar ao Perfil</a></p>'
+        resultado += f'<p><a href="/criar-dados-teste-pontos-movimentos">Criar dados de teste</a></p>'
+        
+        return resultado
+        
+    except Exception as e:
+        return f"Erro: {str(e)}"
+
+@app.route('/criar-dados-teste-produtos')
+def criar_dados_teste_produtos():
+    """Força a criação da tabela e insere dados de teste"""
+    if 'user_id' not in session:
+        return "Precisa estar logado"
+    
+    user_id = session['user_id']
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Criar tabela se não existir
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS `pontos_gastos` (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `usuario_id` int NOT NULL,
+              `premio_id` int DEFAULT NULL,
+              `premio_nome` varchar(100) DEFAULT NULL,
+              `pontos_gastos` int NOT NULL,
+              `codigo_desconto` varchar(20) DEFAULT NULL,
+              `data_resgate` datetime DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              KEY `usuario_id` (`usuario_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+        """)
+        
+        # Limpar dados existentes do usuário
+        cursor.execute("DELETE FROM pontos_gastos WHERE usuario_id = %s", (user_id,))
+        
+        # Inserir dados de teste
+        produtos_teste = [
+            (user_id, 8, 'Pretzel', 100, 'TEST001'),
+            (user_id, 1, 'Coca Cola pequena', 200, 'TEST002'),
+            (user_id, 2, 'Pipocas doces/Salgadas', 300, 'TEST003'),
+            (user_id, 5, 'Snickers', 200, 'TEST004'),
+            (user_id, 7, 'Doritos', 400, 'TEST005')
+        ]
+        
+        for produto in produtos_teste:
+            cursor.execute("""
+                INSERT INTO pontos_gastos 
+                (usuario_id, premio_id, premio_nome, pontos_gastos, codigo_desconto, data_resgate)
+                VALUES (%s, %s, %s, %s, %s, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY))
+            """, produto)
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return f"""
+        <h2>✅ Dados de teste criados com sucesso!</h2>
+        <p>Foram inseridos {len(produtos_teste)} produtos para o usuário {user_id}</p>
+        <p><a href="/perfil">Ir para o Perfil</a></p>
+        <p><a href="/teste-produtos-resgatados">Testar busca de produtos</a></p>
+        """
+        
+    except Exception as e:
+        return f"❌ Erro: {str(e)}"
+
+@app.route('/teste-produtos-resgatados')
+def teste_produtos_resgatados():
+    """Rota para testar e criar produtos resgatados de exemplo"""
+    if 'user_id' not in session:
+        return "Precisa estar logado"
+    
+    user_id = session['user_id']
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Primeiro, garantir que as tabelas existem
+        print("🔍 Criando tabelas se não existirem...")
+        
+        # Criar tabela pontos_gastos
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS `pontos_gastos` (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `usuario_id` int NOT NULL,
+              `premio_id` int DEFAULT NULL,
+              `premio_nome` varchar(100) DEFAULT NULL,
+              `pontos_gastos` int NOT NULL,
+              `codigo_desconto` varchar(20) DEFAULT NULL,
+              `data_resgate` datetime DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              KEY `usuario_id` (`usuario_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+        """)
+        
+        # Verificar se já existem produtos para este usuário
+        cursor.execute("SELECT COUNT(*) as total FROM pontos_gastos WHERE usuario_id = %s", (user_id,))
+        total_existente = cursor.fetchone()['total']
+        
+        if total_existente == 0:
+            print(f"🔍 Inserindo produtos de exemplo para usuário {user_id}...")
+            
+            # Inserir produtos de exemplo
+            produtos_exemplo = [
+                (user_id, 8, 'Pretzel', 100, 'CODIGO001'),
+                (user_id, 1, 'Coca Cola pequena', 200, 'CODIGO002'),
+                (user_id, 2, 'Pipocas doces/Salgadas', 300, 'CODIGO003'),
+                (user_id, 5, 'Snickers', 200, 'CODIGO004')
+            ]
+            
+            for produto in produtos_exemplo:
+                cursor.execute("""
+                    INSERT INTO pontos_gastos 
+                    (usuario_id, premio_id, premio_nome, pontos_gastos, codigo_desconto, data_resgate)
+                    VALUES (%s, %s, %s, %s, %s, DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30) DAY))
+                """, produto)
+            
+            conn.commit()
+            print(f"✅ {len(produtos_exemplo)} produtos inseridos com sucesso!")
+        
+        # Buscar produtos resgatados
+        cursor.execute("""
+            SELECT 
+                pg.premio_nome as nome,
+                pg.pontos_gastos,
+                pg.data_resgate,
+                p.img_url as imagem,
+                'Produto resgatado com pontos CineVibe' as descricao
+            FROM pontos_gastos pg
+            LEFT JOIN premios p ON pg.premio_id = p.id
+            WHERE pg.usuario_id = %s
+            ORDER BY pg.data_resgate DESC
+        """, (user_id,))
+        
+        produtos = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        
+        resultado = f"""
+        <h2>Teste Produtos Resgatados - Usuário {user_id}</h2>
+        <p>Total de produtos encontrados: {len(produtos)}</p>
+        <ul>
+        """
+        
+        for produto in produtos:
+            resultado += f"""
+            <li>
+                <strong>{produto['nome']}</strong><br>
+                Pontos: {produto['pontos_gastos']}<br>
+                Data: {produto['data_resgate']}<br>
+                Imagem: {produto['imagem']}<br>
+                ---
+            </li>
+            """
+        
+        resultado += "</ul>"
+        resultado += f'<p><a href="/perfil">Voltar ao Perfil</a></p>'
+        
+        return resultado
+        
+    except Exception as e:
+        return f"Erro: {str(e)}"
+
 @app.route('/perfil')
 def perfil():
     print("🔍 DEBUG: Entrando no route /perfil")
@@ -1685,9 +2153,9 @@ def perfil():
             'pontos_gastos': 0
         }
 
-        print(f"✅ DEBUG: Pronto para renderizar template perfil.html")
-        print(f"✅ DEBUG: Stats: {stats}")
-        print(f"✅ DEBUG: Pontos: {pontos}")
+        print(f"✅ DEBUG PERFIL: Pronto para renderizar template perfil.html")
+        print(f"✅ DEBUG PERFIL: Stats: {stats}")
+        print(f"✅ DEBUG PERFIL: Pontos: {pontos}")
 
         return render_template("perfil.html", 
                              user=user, 
@@ -1930,7 +2398,7 @@ def resgatar_recompensa():
         
         print(f"✅ Código {codigo} inserido na tabela codigos_desconto")
         
-        # Registrar o gasto de pontos
+        # Registrar o gasto de pontos na tabela pontos_gastos
         cursor.execute("""
             INSERT INTO pontos_gastos 
             (usuario_id, premio_id, premio_nome, pontos_gastos, codigo_desconto)
@@ -12398,10 +12866,6 @@ def finalizar_pagamento_com_desconto():
 
 # ==========================
 # Run (apenas aqui, no fim)
-# ==========================
-if __name__ == '__main__':
-    app.logger.info("Iniciando app; endpoints registados:\n%s", app.url_map)
-    app.run(debug=True)
 @app.route('/debug/bar')
 def debug_bar():
     """Debug dos dados do bar"""
@@ -12430,3 +12894,13 @@ def debug_bar():
         
     except Exception as e:
         return f"<h1>Erro Debug</h1><p>{str(e)}</p>"
+
+# ==========================
+
+if __name__ == '__main__':
+    # Criar tabelas necessárias na inicialização apenas quando executar diretamente
+    with app.app_context():
+        criar_tabelas_resgates()
+    
+    app.logger.info("Iniciando app; endpoints registados:\n%s", app.url_map)
+    app.run(debug=True)

@@ -12807,6 +12807,22 @@ def aplicar_codigo_desconto():
         cursor.close()
         conn.close()
         
+        # MARCAR CÓDIGO COMO USADO (aqui é onde o código é realmente aplicado)
+        conn_update = get_db_connection()
+        cursor_update = conn_update.cursor()
+        
+        cursor_update.execute("""
+            UPDATE codigos_desconto 
+            SET usado = 1, data_uso = NOW()
+            WHERE codigo = %s AND usuario_id = %s AND usado = 0
+        """, (codigo, session['user_id']))
+        
+        conn_update.commit()
+        cursor_update.close()
+        conn_update.close()
+        
+        print(f"✅ Código {codigo} marcado como usado")
+        
         return jsonify({
             'success': True,
             'codigo': codigo_info['codigo'],

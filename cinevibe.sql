@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 28, 2026 at 01:57 PM
+-- Generation Time: Feb 03, 2026 at 06:04 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -182,7 +182,10 @@ INSERT INTO `avaliacoes_filmes` (`id`, `usuario_id`, `filme_id`, `rating`, `come
 (23, 1, 15, 4.0, 'Clássico do cinema, sempre bom rever.', '2026-01-13 13:16:50'),
 (25, 1, 23, 5.0, 'Filme emocionante, chorei no final.', '2026-01-13 13:16:50'),
 (26, 1, 19, 4.0, 'Comédia hilária, ri muito!', '2026-01-13 13:16:50'),
-(35, 1, 5, 4.0, 'Fixe', '2026-01-14 16:05:58');
+(35, 1, 5, 4.0, 'Fixe', '2026-01-14 16:05:58'),
+(41, 1, 18, 4.0, 'Vem o Oscar', '2026-02-02 07:10:23'),
+(42, 1, 35, 4.0, 'Assustador', '2026-02-02 07:11:17'),
+(43, 1, 11, 3.0, 'Muito engraçado', '2026-02-03 17:36:39');
 
 -- --------------------------------------------------------
 
@@ -418,8 +421,7 @@ INSERT INTO `cinemas` (`id`, `nome`, `localizacao`, `email`, `regiao`, `imagem`)
 (12, 'CineVibe Santarém', 'Santarém', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Santarem_v2.png'),
 (13, 'CineVibe Portimão', 'Portimão', NULL, 'Sul', 'imgs/cinemas/CineVibe_Portimao.png'),
 (14, 'CineVibe Funchal', 'Funchal', NULL, 'Madeira', 'imgs/cinemas/CineVibe_Funchal.png'),
-(15, 'CineVibe São Miguel', 'Rua da Cultura, Ponta Delgada', 'contacto@cineacores.pt', 'Açores', 'imgs/cinemas/CineVibe_Funchal.png'),
-(18, 'CinevibeRoma', NULL, NULL, 'Centro', NULL);
+(15, 'CineVibe São Miguel', 'Rua da Cultura, Ponta Delgada', 'contacto@cineacores.pt', 'Açores', 'imgs/cinemas/CineVibe_Funchal.png');
 
 -- --------------------------------------------------------
 
@@ -446,6 +448,58 @@ INSERT INTO `cinemas_favoritos` (`id`, `usuario_id`, `cinema_id`, `data_adicao`)
 (2, 1, 3, '2025-11-19 10:06:03'),
 (4, 23, 1, '2025-11-20 09:41:03'),
 (5, 1, 15, '2026-01-21 09:10:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `codigos_desconto`
+--
+
+DROP TABLE IF EXISTS `codigos_desconto`;
+CREATE TABLE IF NOT EXISTS `codigos_desconto` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `codigo` varchar(20) NOT NULL,
+  `usuario_id` int NOT NULL,
+  `premio_id` int NOT NULL,
+  `premio_nome` varchar(100) NOT NULL,
+  `premio_valor` decimal(10,2) DEFAULT '0.00',
+  `tipo_desconto` enum('percentual','valor_fixo','produto_gratis') NOT NULL DEFAULT 'valor_fixo',
+  `valor_desconto` decimal(10,2) NOT NULL,
+  `usado` tinyint(1) DEFAULT '0',
+  `data_criacao` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `data_uso` timestamp NULL DEFAULT NULL,
+  `data_expiracao` timestamp NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `codigo` (`codigo`),
+  KEY `idx_codigo` (`codigo`),
+  KEY `idx_usuario` (`usuario_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `codigos_desconto`
+--
+
+INSERT INTO `codigos_desconto` (`id`, `codigo`, `usuario_id`, `premio_id`, `premio_nome`, `premio_valor`, `tipo_desconto`, `valor_desconto`, `usado`, `data_criacao`, `data_uso`, `data_expiracao`) VALUES
+(1, 'WCGVFCDH', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-01-29 19:26:28', NULL, '2026-02-28 19:26:29'),
+(2, 'X1ULK9KE', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-01-29 19:27:20', NULL, '2026-02-28 19:27:20'),
+(3, 'N2I77ZW8', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-01-29 19:39:01', NULL, '2026-02-28 19:39:01'),
+(4, '304HUARK', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-01-30 12:55:27', NULL, '2026-03-01 12:55:28'),
+(5, 'ZATYQ4Y2', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-02 07:13:05', NULL, '2026-03-04 07:13:05'),
+(6, '8Y4XPMHD', 1, 2, 'Pipocas doces/Salgadas', 0.00, 'valor_fixo', 4.00, 0, '2026-02-02 08:33:23', NULL, '2026-03-04 08:33:23'),
+(7, 'XFDVLQ01', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 0, '2026-02-02 08:35:41', NULL, '2026-03-04 08:35:42'),
+(8, 'IKL03RDQ', 1, 5, 'Snickers', 0.00, 'valor_fixo', 3.00, 0, '2026-02-02 08:37:09', NULL, '2026-03-04 08:37:09'),
+(9, 'QBURPNX5', 1, 2, 'Pipocas doces/Salgadas', 0.00, 'valor_fixo', 4.00, 0, '2026-02-02 08:38:37', NULL, '2026-03-04 08:38:38'),
+(10, 'I6YHBW7C', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-02 10:17:27', NULL, '2026-03-04 10:17:28'),
+(11, 'TYWM1LXZ', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 0, '2026-02-02 10:25:45', NULL, '2026-03-04 10:25:46'),
+(12, '64T3SPK1', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-02 10:35:21', NULL, '2026-03-04 10:35:22'),
+(13, 'DXHSAS06', 1, 5, 'Snickers', 0.00, 'valor_fixo', 3.00, 0, '2026-02-02 10:40:54', NULL, '2026-03-04 10:40:54'),
+(14, 'N1JF0MPI', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-02 11:13:00', NULL, '2026-03-04 11:13:01'),
+(15, 'TO02VEU6', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 0, '2026-02-03 17:05:55', NULL, '2026-03-05 17:05:56'),
+(16, 'GJV5CEAZ', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:16:26', NULL, '2026-03-05 17:16:26'),
+(17, 'NTOQTL6K', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 0, '2026-02-03 17:25:42', NULL, '2026-03-05 17:25:43'),
+(18, '9MUYY1Z8', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:31:26', NULL, '2026-03-05 17:31:27'),
+(19, '916QLAVR', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:39:58', NULL, '2026-03-05 17:39:59'),
+(20, 'GI2C9IC6', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:55:49', NULL, '2026-03-05 17:55:49');
 
 -- --------------------------------------------------------
 
@@ -500,28 +554,28 @@ CREATE TABLE IF NOT EXISTS `filmes` (
 
 INSERT INTO `filmes` (`id`, `titulo`, `sinopse`, `diretor`, `idioma_original`, `pais_origem`, `data_lancamento`, `duracao`, `poster_url`, `imagem_grande`, `trailer_url`, `estado`, `rotten_tomatoes_score`, `rotten_tomatoes_url`, `imdb_rating`, `imdb_url`, `idade_recomendada`, `poster_hover`) VALUES
 (1, 'Rambo III', 'Rambo vai ao Afeganistão para resgatar o Coronel Trautman.', 'Peter MacDonald', 'Inglês', 'Estados Unidos', '1988-05-25', 102, 'imgs/filmes/65a1bc5c8311e.jpg', 'imgs/filmes/rambo-iii.jpg', 'https://www.youtube.com/watch?v=9eJvyU7C2UQ', 'em_exibicao', 44, 'https://www.rottentomatoes.com/m/test_movie', 5.8, 'https://www.imdb.com/title/tt1234567/', 16, 'imgs/f7af5df66f18568592a37aad7268acaf.jpg'),
-(2, 'Superman (2025)', 'Num mundo onde o super‑herói mais icónico voltou a aterrar, Clark Kent/Superman enfrenta as consequências das suas intervenções em crises internacionais. Quando a confiança pública vacila, o bilionário brilhante e manipulador Lex Luthor aproveita para desafiar o Homem de Aço. Agora, com o apoio da intrépida jornalista Lois Lane e dos que ainda acreditam no ideal de verdade, justiça e humanidade, Superman terá de provar que a esperança ainda tem lugar neste novo universo', 'James Gunn', 'Inglês', 'Estados Unidos', '2025-07-11', 150, 'imgs/filmes/Superman.jpg', 'imgs/filmes/Superman-2025-Official-Teaser-Trailer.jpg', 'https://www.youtube.com/embed/uhUht6vAsMY?si=Yq3CfJ1KdX_x6LIR&start=83&end=101&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/superman_2025', 7.4, 'https://www.imdb.com/title/tt5950044/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_superman', 12, 'imgs/3a3d65c1cd6cbd1b722e1159d8057d3e.jpg'),
-(3, 'E.T. the Extra-Terrestrial', 'Um menino faz amizade com um extraterrestre perdido na Terra.', 'Steven Spielberg', 'Inglês', 'Estados Unidos', '1982-06-11', 115, 'imgs/filmes/ET.jpg', 'imgs/filmes/image.jpg', 'https://www.youtube.com/watch?v=FkT-LM8JxCs', 'em_exibicao', 99, 'https://www.rottentomatoes.com/m/et_the_extraterrestrial', 7.9, 'https://www.imdb.com/title/tt0083866/', 10, 'imgs/de9936fc768350dc3f9ec4efb1d027ed.jpg'),
+(2, 'Superman (2025)', 'Num mundo onde o super‑herói mais icónico voltou a aterrar, Clark Kent/Superman enfrenta as consequências das suas intervenções em crises internacionais. Quando a confiança pública vacila, o bilionário brilhante e manipulador Lex Luthor aproveita para desafiar o Homem de Aço. Agora, com o apoio da intrépida jornalista Lois Lane e dos que ainda acreditam no ideal de verdade, justiça e humanidade, Superman terá de provar que a esperança ainda tem lugar neste novo universo', 'James Gunn', 'Inglês', 'Estados Unidos', '2025-07-11', 150, 'imgs/filmes/Superman.jpg', 'imgs/filmes/Superman-2025-Official-Teaser-Trailer.jpg', 'https://www.youtube.com/embed/uhUht6vAsMY?si=Yq3CfJ1KdX_x6LIR&start=83&end=101&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/superman_2025', 7.4, 'https://www.imdb.com/title/tt5950044/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_superman', 12, 'imgs\\3a3d65c1cd6cbd1b722e1159d8057d3e - Cópia.jpg\"'),
+(3, 'E.T. the Extra-Terrestrial', 'Um menino faz amizade com um extraterrestre perdido na Terra.', 'Steven Spielberg', 'Inglês', 'Estados Unidos', '1982-06-11', 115, 'imgs/filmes/ET.jpg', 'imgs/filmes/image.jpg', 'https://www.youtube.com/watch?v=FkT-LM8JxCs', 'em_exibicao', 99, 'https://www.rottentomatoes.com/m/et_the_extraterrestrial', 7.9, 'https://www.imdb.com/title/tt0083866/', 10, 'imgs\\de9936fc768350dc3f9ec4efb1d027ed - Cópia.jpg\"'),
 (4, 'Back to the Future', 'Um adolescente viaja no tempo e conhece os seus pais quando jovens.', 'Robert Zemeckis', 'Inglês', 'Estados Unidos', '1985-07-03', 116, 'imgs/filmes/Back to the future.jpg', 'imgs/filmes/back-to-the-future-official-40th-anniversary-re-release-trai_1qa1.1200.webp', 'https://www.youtube.com/watch?v=qvsgGtivCgs', 'em_exibicao', 93, 'https://www.rottentomatoes.com/m/back_to_the_future', 8.5, 'https://www.imdb.com/title/tt0088763/', 10, 'imgs/1926836d80bf22cd02e5099a4584bca6.jpg'),
-(5, 'Jurassic Park', 'Um parque temático com dinossauros clonados sofre um desastre.', 'Steven Spielberg', 'Inglês', 'Estados Unidos', '1993-06-11', 127, 'imgs/filmes/Jurassic park.jpg', 'imgs/filmes/jurassic-park-rexy-1024x576-e1542845722946.jpg', 'https://www.youtube.com/embed/QWBKEmWWL38?si=jkl012&start=25&end=44&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 92, 'https://www.rottentomatoes.com/m/jurassic_park', 8.2, 'https://www.imdb.com/title/tt0107290/', 13, 'imgs/ffc21b65aa3b4d849363115a55310ed7.jpg'),
-(6, 'Scream', 'Um assassino mascarado aterroriza adolescentes de uma pequena cidade.', 'Wes Craven', 'Inglês', 'Estados Unidos', '1996-12-20', 111, 'imgs/filmes/Scream.jpg', 'imgs/filmes/OIP.webp', 'https://www.youtube.com/watch?v=U0LETmDvuXc', 'em_exibicao', 78, 'https://www.rottentomatoes.com/m/1074316-scream', 7.4, 'https://www.imdb.com/title/tt0117571/', 16, 'imgs/aed55bcc4dbaf6042673164630022dc9.jpg'),
+(5, 'Jurassic Park', 'Um parque temático com dinossauros clonados sofre um desastre.', 'Steven Spielberg', 'Inglês', 'Estados Unidos', '1993-06-11', 127, 'imgs/filmes/Jurassic park.jpg', 'imgs/filmes/jurassic-park-rexy-1024x576-e1542845722946.jpg', 'https://www.youtube.com/embed/QWBKEmWWL38?si=jkl012&start=25&end=44&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 92, 'https://www.rottentomatoes.com/m/jurassic_park', 8.2, 'https://www.imdb.com/title/tt0107290/', 13, 'imgs\\ffc21b65aa3b4d849363115a55310ed7 - Cópia.jpg\"'),
+(6, 'Scream', 'Um assassino mascarado aterroriza adolescentes de uma pequena cidade.', 'Wes Craven', 'Inglês', 'Estados Unidos', '1996-12-20', 111, 'imgs/filmes/Scream.jpg', 'imgs/filmes/OIP.webp', 'https://www.youtube.com/watch?v=U0LETmDvuXc', 'em_exibicao', 78, 'https://www.rottentomatoes.com/m/1074316-scream', 7.4, 'https://www.imdb.com/title/tt0117571/', 16, 'imgs\\aed55bcc4dbaf6042673164630022dc9 - Cópia.jpg\"'),
 (7, 'The Karate Kid', 'Um adolescente aprende karaté com um mestre para enfrentar os seus rivais.', 'John G. Avildsen', 'Inglês', 'Estados Unidos', '1984-06-22', 126, 'imgs/filmes/Karate kid.webp', 'imgs/filmes/R.jpeg', 'https://www.youtube.com/watch?v=r_8Rw16uscg', 'em_exibicao', 89, 'https://www.rottentomatoes.com/m/karate_kid', 7.3, 'https://www.imdb.com/title/tt0087538/', 10, 'imgs/bd63774c72706745b5bdc6a47c0cd252.jpg'),
 (8, 'The Shawshank Redemption', 'Dois prisioneiros criam um laço profundo durante anos de prisão.', 'Frank Darabont', 'Inglês', 'Estados Unidos', '1994-09-23', 142, 'imgs/filmes/Shawshank redmption.jpg', 'imgs/filmes/Shawshank-Featured.jpg', 'https://www.youtube.com/watch?v=PLl99DlL6b4', 'em_exibicao', 91, 'https://www.rottentomatoes.com/m/shawshank_redemption', 9.3, 'https://www.imdb.com/title/tt0111161/', 16, 'imgs/0736e316f455a0422a4da65be1c9e9a3.jpg'),
-(9, 'Homem-Aranha: No Aranhaverso', 'Miles Morales descobre que existem múltiplos Homens-Aranha no multiverso.', 'Bob Persichetti, Peter Ramsey, Rodney Rothman', 'Inglês', 'Estados Unidos', '2018-12-14', 117, 'imgs/filmes/spider-man-into-the-spider-verse.jpg', 'imgs/filmes/R (1).jpeg', 'https://www.youtube.com/watch?v=g4Hbz2jLxvQ&t=15s', 'em_exibicao', 97, 'https://www.rottentomatoes.com/m/spider_man_into_the_spider_verse', 8.4, 'https://www.imdb.com/title/tt4633694/', 10, 'imgs/582f3977ea299969fcb3544fe59675ab.jpg'),
-(10, 'Seven', 'Dois detectives perseguem um serial killer que baseia seus crimes nos sete pecados capitais.', 'David Fincher', 'Inglês', 'Estados Unidos', '1995-09-22', 127, 'imgs/filmes/Seven.jpg', 'imgs/filmes/635801.jpg', 'https://www.youtube.com/watch?v=KPOuJGkpblk', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/seven', 8.6, 'https://www.imdb.com/title/tt0114369/', 16, 'imgs/983710f239516f59ff5b216fa60a714b.jpg'),
-(11, 'The Hangover', 'Três amigos tentam descobrir o que aconteceu na despedida de solteiro em Las Vegas.', 'Todd Phillips', 'Inglês', 'Estados Unidos', '2009-06-05', 100, 'imgs/filmes/hangouver.jpg', 'imgs/filmes/know-these-20-facts-hangover.webp', 'https://www.youtube.com/watch?v=tlize92ffnY', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/hangover', 7.7, 'https://www.imdb.com/title/tt1119646/', 16, 'imgs/8b09dcdda85982aed429747b0c90eb29.jpg'),
-(12, 'Como Treinares o Teu Dragão 3', 'Hiccup e Toothless descobrem um mundo de dragões selvagens.', 'Dean DeBlois', 'Inglês', 'Estados Unidos', '2019-02-22', 104, 'imgs/filmes/How to train your dragon.jpg', 'imgs/filmes/mv5bmzi3mtc2ndy4mv5bml5banbnxkftztgwndu3nti2njm-v1-sx1777-cr001777736-al.avif', 'https://www.youtube.com/watch?v=SkcucKDrbOI', 'em_exibicao', 90, 'https://www.rottentomatoes.com/m/how_to_train_your_dragon_the_hidden_world', 7.5, 'https://www.imdb.com/title/tt2386490/', 10, 'imgs/119a16babbb09895cfcc3f58ce3a6f97.jpg'),
-(13, 'The Black Phone 2', 'Após os eventos do primeiro filme, Finn e Gwen enfrentam novos horrores quando o misterioso telefone preto volta a tocar, revelando segredos sombrios de seu passado.', 'Scott Derrickson', 'Inglês', 'Estados Unidos', '2025-10-17', 114, 'imgs/filmes/The Black Phone 2.jpg', 'imgs/filmes/black_phone_2.jpg', 'https://www.youtube.com/watch?v=DdR-gzFZoDk', 'em_exibicao', 72, 'https://www.rottentomatoes.com/m/black_phone_2', 6.4, 'https://www.imdb.com/title/tt29644189/', 16, 'imgs/67b3159994a9c0a182be805994933b78.jpg'),
-(14, 'The Conjuring: Last Rites', 'Investigadores paranormais Ed e Lorraine Warren enfrentam seu caso mais aterrador, com entidades que desafiam sua experiência, no capítulo final da saga iniciada em 2013.', 'Michael Chaves', 'Inglês', 'Estados Unidos', '2025-09-05', 135, 'imgs/filmes/24TTrTCttPJnBNVC0NFGj9P0dMb.webp', 'imgs/filmes/l-intro-1760718440.jpg', 'https://www.youtube.com/watch?v=bMgfsdYoEEo', 'em_exibicao', 59, 'https://www.rottentomatoes.com/m/the_conjuring_last_rites', 6.2, 'https://www.imdb.com/title/tt22898462/', 16, 'imgs/96d13790ba1eea310128da223a1efe26.jpg'),
-(15, 'Demon Slayer – Infinity Castle', 'Tanjiro e os Caçadores enfrentam Muzan no arco final.', 'Haruo Sotozaki', 'Japonês', 'Japão', '2025-07-18', 155, 'imgs/filmes/film-demon-slayer-la-forteresse-infinie-visuel-2.webp', 'imgs/filmes/demon-slayer-infinity-castle.webp', 'https://www.youtube.com/watch?v=x7uLutVRBfI', 'em_exibicao', 98, 'https://www.rottentomatoes.com/m/demon_slayer_kimetsu_no_yaiba_infinity_castle', 8.5, 'https://www.imdb.com/title/tt32820897/', 12, 'imgs/1e5db40d62965c506d471c8c806b0da2.jpg'),
+(9, 'Homem-Aranha: No Aranhaverso', 'Miles Morales descobre que existem múltiplos Homens-Aranha no multiverso.', 'Bob Persichetti, Peter Ramsey, Rodney Rothman', 'Inglês', 'Estados Unidos', '2018-12-14', 117, 'imgs/filmes/spider-man-into-the-spider-verse.jpg', 'imgs/filmes/R (1).jpeg', 'https://www.youtube.com/watch?v=g4Hbz2jLxvQ&t=15s', 'em_exibicao', 97, 'https://www.rottentomatoes.com/m/spider_man_into_the_spider_verse', 8.4, 'https://www.imdb.com/title/tt4633694/', 10, 'imgs\\582f3977ea299969fcb3544fe59675ab - Cópia.jpg\"'),
+(10, 'Seven', 'Dois detectives perseguem um serial killer que baseia seus crimes nos sete pecados capitais.', 'David Fincher', 'Inglês', 'Estados Unidos', '1995-09-22', 127, 'imgs/filmes/Seven.jpg', 'imgs/filmes/635801.jpg', 'https://www.youtube.com/watch?v=KPOuJGkpblk', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/seven', 8.6, 'https://www.imdb.com/title/tt0114369/', 16, 'imgs\\983710f239516f59ff5b216fa60a714b - Cópia.jpg\"'),
+(11, 'The Hangover', 'Três amigos tentam descobrir o que aconteceu na despedida de solteiro em Las Vegas.', 'Todd Phillips', 'Inglês', 'Estados Unidos', '2009-06-05', 100, 'imgs/filmes/hangouver.jpg', 'imgs/filmes/know-these-20-facts-hangover.webp', 'https://www.youtube.com/watch?v=tlize92ffnY', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/hangover', 7.7, 'https://www.imdb.com/title/tt1119646/', 16, 'imgs\\a42674bc_8b09dcdda85982aed429747b0c90eb29.jpg\"'),
+(12, 'Como Treinares o Teu Dragão 3', 'Hiccup e Toothless descobrem um mundo de dragões selvagens.', 'Dean DeBlois', 'Inglês', 'Estados Unidos', '2019-02-22', 104, 'imgs/filmes/How to train your dragon.jpg', 'imgs/filmes/mv5bmzi3mtc2ndy4mv5bml5banbnxkftztgwndu3nti2njm-v1-sx1777-cr001777736-al.avif', 'https://www.youtube.com/watch?v=SkcucKDrbOI', 'em_exibicao', 90, 'https://www.rottentomatoes.com/m/how_to_train_your_dragon_the_hidden_world', 7.5, 'https://www.imdb.com/title/tt2386490/', 10, 'imgs\\119a16babbb09895cfcc3f58ce3a6f97 - Cópia.jpg\"'),
+(13, 'The Black Phone 2', 'Após os eventos do primeiro filme, Finn e Gwen enfrentam novos horrores quando o misterioso telefone preto volta a tocar, revelando segredos sombrios de seu passado.', 'Scott Derrickson', 'Inglês', 'Estados Unidos', '2025-10-17', 114, 'imgs/filmes/The Black Phone 2.jpg', 'imgs/filmes/black_phone_2.jpg', 'https://www.youtube.com/watch?v=DdR-gzFZoDk', 'em_exibicao', 72, 'https://www.rottentomatoes.com/m/black_phone_2', 6.4, 'https://www.imdb.com/title/tt29644189/', 16, 'imgs\\67b3159994a9c0a182be805994933b78 - Cópia.jpg\"'),
+(14, 'The Conjuring: Last Rites', 'Investigadores paranormais Ed e Lorraine Warren enfrentam seu caso mais aterrador, com entidades que desafiam sua experiência, no capítulo final da saga iniciada em 2013.', 'Michael Chaves', 'Inglês', 'Estados Unidos', '2025-09-05', 135, 'imgs/filmes/24TTrTCttPJnBNVC0NFGj9P0dMb.webp', 'imgs/filmes/l-intro-1760718440.jpg', 'https://www.youtube.com/watch?v=bMgfsdYoEEo', 'em_exibicao', 59, 'https://www.rottentomatoes.com/m/the_conjuring_last_rites', 6.2, 'https://www.imdb.com/title/tt22898462/', 16, 'imgs\\96d13790ba1eea310128da223a1efe26 - Cópia.jpg\"'),
+(15, 'Demon Slayer – Infinity Castle', 'Tanjiro e os Caçadores enfrentam Muzan no arco final.', 'Haruo Sotozaki', 'Japonês', 'Japão', '2025-07-18', 155, 'imgs/filmes/film-demon-slayer-la-forteresse-infinie-visuel-2.webp', 'imgs/filmes/demon-slayer-infinity-castle.webp', 'https://www.youtube.com/watch?v=x7uLutVRBfI', 'em_exibicao', 98, 'https://www.rottentomatoes.com/m/demon_slayer_kimetsu_no_yaiba_infinity_castle', 8.5, 'https://www.imdb.com/title/tt32820897/', 12, 'imgs\\1025eb3d_1e5db40d62965c506d471c8c806b0da2.jpg\"'),
 (16, 'The Smashing Machine', 'A história do lutador de MMA Mark Kerr, enfrentando desafios dentro e fora do ringue.', 'Benny Safdie', 'Inglês', 'Estados Unidos', '2025-10-03', 123, 'imgs/filmes/the-smashing-machine-official-poster.avif', 'imgs/filmes/the-smashing-machine-a24.webp', 'https://www.youtube.com/watch?v=aRpnP3LZ99g', 'em_exibicao', 70, 'https://www.rottentomatoes.com/m/the_smashing_machine_2025', 6.6, 'https://www.imdb.com/title/tt11214558/', 16, 'imgs/The_Smashing_Machine_Thumb_d86d918480.jpg'),
-(17, 'Rocky IV', 'Após a morte do seu amigo Apollo Creed numa luta contra o boxeador russo Ivan Drago, Rocky Balboa decide enfrentá-lo numa luta épica em Moscovo, colocando a honra e o orgulho em jogo durante a Guerra Fria.', 'Sylvester Stallone', 'Inglês', 'Estados Unidos', '1985-11-27', 91, 'imgs/filmes/jmvpwgW5M2kduR9zB0q8qGFC4zM.webp', 'imgs/filmes/MKWEioPFtFOtcSUrLe6dhzDizldbkqRNykVde66L6HQ.webp', 'https://www.youtube.com/watch?v=4qjV0bB2V0Q', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/rocky_iv', 6.9, 'https://www.imdb.com/title/tt0089927/', 10, 'imgs/474696ab5c5ddcc3005f8d974fc1a073.jpg'),
+(17, 'Rocky IV', 'Após a morte do seu amigo Apollo Creed numa luta contra o boxeador russo Ivan Drago, Rocky Balboa decide enfrentá-lo numa luta épica em Moscovo, colocando a honra e o orgulho em jogo durante a Guerra Fria.', 'Sylvester Stallone', 'Inglês', 'Estados Unidos', '1985-11-27', 91, 'imgs/filmes/jmvpwgW5M2kduR9zB0q8qGFC4zM.webp', 'imgs/filmes/MKWEioPFtFOtcSUrLe6dhzDizldbkqRNykVde66L6HQ.webp', 'https://www.youtube.com/watch?v=4qjV0bB2V0Q', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/rocky_iv', 6.9, 'https://www.imdb.com/title/tt0089927/', 10, 'imgs\\474696ab5c5ddcc3005f8d974fc1a073 - Cópia.jpg\"'),
 (18, 'Sinners', 'Ambientado em 1932 no Delta do Mississippi, os irmãos gêmeos Smoke e Stack retornam à sua cidade natal para recomeçar, mas descobrem que um mal ainda maior os espera.', 'Ryan Coogler', 'Inglês', 'Estados Unidos', '2025-04-18', 138, 'imgs/filmes/sinners-official-poster.jpg', 'imgs/filmes/sinners-hed.jpg', 'https://www.youtube.com/watch?v=bKGxHflevuk', 'em_exibicao', 97, 'https://www.rottentomatoes.com/m/sinners_2025', 8.2, 'https://www.imdb.com/title/tt31193180/', 16, 'imgs/b01a2671a2aee6e6acc1efb91bdc11c2.jpg'),
 (19, 'Gladiator II', 'O filme segue Lucius Verus, sobrinho de Cómodo, que após as invasões romanas é forçado a tornar-se gladiador e enfrenta uma nova era de lutas e conspirações em Roma.', 'Ridley Scott', 'Inglês', 'Estados Unidos', '2024-11-22', 148, 'imgs/filmes/fedce497491780e5a5d856d0602eebc0_original.jpg', 'imgs/filmes/1094465-gladiator-2-paul-mescal-est-lucius.jpg', 'https://www.youtube.com/watch?v=4rgYUipGJNo', 'em_exibicao', 70, 'https://www.rottentomatoes.com/m/gladiator_ii', 6.5, 'https://www.imdb.com/title/tt9218128/', 16, 'imgs/410de0484f85d5213a869b017cc1b137.jpg'),
-(20, 'The Batman', 'Quando o crime se espalha por Gotham City e um assassino sádico deixa um rastro de enigmas, Batman mergulha nas profundezas da corrupção e descobre segredos sombrios que podem mudar tudo.', 'Matt Reeves', 'Inglês', 'Estados Unidos', '2022-03-04', 176, 'imgs/filmes/Batman.jpg', 'imgs/filmes/196-The-Batman-Dest-scaled.jpg', 'https://www.youtube.com/embed/mqqft2x_Aa4?si=abc123&start=45&end=65&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/the_batman', 7.8, 'https://www.imdb.com/title/tt1877830/', 14, 'imgs/98cfc504d0b12fc81303a01c2b7405dd.jpg'),
+(20, 'The Batman', 'Quando o crime se espalha por Gotham City e um assassino sádico deixa um rastro de enigmas, Batman mergulha nas profundezas da corrupção e descobre segredos sombrios que podem mudar tudo.', 'Matt Reeves', 'Inglês', 'Estados Unidos', '2022-03-04', 176, 'imgs/filmes/Batman.jpg', 'imgs/filmes/196-The-Batman-Dest-scaled.jpg', 'https://www.youtube.com/embed/mqqft2x_Aa4?si=abc123&start=45&end=65&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/the_batman', 7.8, 'https://www.imdb.com/title/tt1877830/', 14, 'imgs\\98cfc504d0b12fc81303a01c2b7405dd - Cópia.jpg\"'),
 (22, 'Odisseia', 'Uma epopeia visual e emocional onde um astronauta atravessa dimensões do tempo e da memória para salvar aquilo que mais ama. À medida que a missão se desenrola, segredos do seu passado e do universo põem em causa o próprio conceito de realidade.', 'Christopher Nolan', 'Inglês', 'Estados Unidos', '2026-12-04', 165, 'imgs/filmes/image001.avif', 'imgs/filmes/matt-damon-in-the-odyssey.avif', 'https://www.youtube.com/watch?v=EXEMPLO_ODISSEIA', 'brevemente', NULL, NULL, NULL, NULL, 13, NULL),
 (23, 'Five Nights at Freddy\'s 2', 'Sequência sombria onde um novo segurança nocturno descobre que os animatrónicos reencenderam as suas memórias — e a sua sede por sangue. À medida que as noites passam a entidade que habita a fábrica fica mais inteligente e vingativa.', 'Emma Tammi', 'Inglês', 'Estados Unidos', '2025-12-04', 105, 'imgs/filmes/five-nights-at-freddy-s-2-the-movie-fan-casting-poster-408632-large.jpg', 'imgs/filmes/may-has-broken-a-major-five-nights-at-freddy-s-tradition.avif', 'https://www.youtube.com/watch?v=dSDpoobO6yM&t=2s', 'em_exibicao', NULL, NULL, NULL, NULL, 16, 'imgs/4e3e7e45b809a8f37d85ba9072f70b0c.jpg'),
-(24, '28 Years Later: The Bone Temple', 'Anos após uma vaga de terror que varreu o país, um pequeno grupo de sobreviventes segue pistas até ao mítico \"Bone Temple\". À medida que a noite cai, segredos do passado ressurgem e a linha entre sã consciência e loucura desvanece.', 'Ava Richardson', 'Inglês', 'Reino Unido', '2026-01-16', 110, 'imgs/filmes/28-years-later_-the-bone-temple-poster.avif', 'imgs/filmes/M1tfi8TCyk2tubfoP57iwA.jpg', 'https://www.youtube.com/watch?v=EOwTdTZA8D8', 'em_exibicao', NULL, NULL, NULL, NULL, 16, NULL),
+(24, '28 Years Later: The Bone Temple', 'Anos após uma vaga de terror que varreu o país, um pequeno grupo de sobreviventes segue pistas até ao mítico \"Bone Temple\". À medida que a noite cai, segredos do passado ressurgem e a linha entre sã consciência e loucura desvanece.', 'Ava Richardson', 'Inglês', 'Reino Unido', '2026-01-16', 110, 'imgs/filmes/28-years-later_-the-bone-temple-poster.avif', 'imgs/filmes/M1tfi8TCyk2tubfoP57iwA.jpg', 'https://www.youtube.com/watch?v=EOwTdTZA8D8', 'em_exibicao', NULL, NULL, NULL, NULL, 16, 'imgs\\d428b9ca592a2b47ca8623d17ce8767d.jpg\"'),
 (25, 'Mortal Kombat 2', 'Após os eventos do primeiro torneio, os guerreiros da Terra enfrentam uma nova ameaça quando Shao Kahn decide invadir o seu mundo. Novos campeões entram em combate, e as alianças serão postas à prova enquanto o destino dos reinos é decidido.', 'Simon McQuoid', 'Inglês', 'Estados Unidos', '2026-05-08', 118, 'imgs/filmes/mortal-kombat-2-poster.avif', 'imgs/filmes/spieleverfilmungen-featured-mortal-kombat-2-cast-warner-bros-960x540.jpg', 'https://www.youtube.com/watch?v=YOOPPPM2mB8', 'brevemente', NULL, NULL, NULL, NULL, 16, NULL),
 (26, 'Spider-Man: Brand New Day', 'Após os eventos do Multiverso, Peter Parker tenta reconstruir a sua vida enquanto enfrenta as consequências de um mundo que o esqueceu. Quando um novo vilão surge com o poder de manipular memórias, Peter é forçado a lutar não só pelo futuro de Nova Iorque, mas também pela sua própria identidade.', 'Jon Watts', NULL, NULL, '2026-07-10', 142, 'imgs/filmes/SPIDER-MAN-BRAND-NEW-DAY.jpg', 'imgs/filmes/no-way-home-final-swing-v0-ptw4d7fv6h1b1.webp', 'https://www.youtube.com/embed/JfVOs4VSpmA?si=def456&start=30&end=46&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'brevemente', NULL, NULL, NULL, NULL, NULL, NULL),
 (27, 'Supergirl: Woman of Tomorrow', 'Kara Zor-El, prima de Superman, embarca numa jornada de vingança e autodescoberta através da galáxia. Após testemunhar uma tragédia pessoal, Supergirl é forçada a enfrentar o lado mais sombrio do universo — e de si própria — enquanto decide que tipo de heroína deseja ser.', 'Craig Gillespie', 'Inglês', 'Estados Unidos', '2026-06-26', 135, 'imgs/filmes/5Yx1evq4mvo3eOKvcYq8BtnnIp1.webp', 'imgs/filmes/6m3jGKVlYGTZ4IwAYU2tI6HdjN4-1200-1200-675-675-crop-000000.jpg', 'https://www.youtube.com/watch?v=EXEMPLO_SUPERGIRL', 'brevemente', NULL, NULL, NULL, NULL, 12, 'https://www.youtube.com/watch?v=YqdAEdkHrwo'),
@@ -531,7 +585,7 @@ INSERT INTO `filmes` (`id`, `titulo`, `sinopse`, `diretor`, `idioma_original`, `
 (31, 'Lawrence da Arábia', 'A história épica de T.E. Lawrence, um oficial britânico que uniu tribos árabes durante a Primeira Guerra Mundial. Vencedor de 7 Óscares.', 'David Lean', 'Inglês', 'Reino Unido', '1962-12-16', 216, 'imgs/filmes/0937b63d234e2b38313f7530908b376c_XL.jpg', 'imgs/filmes/vised-lawrence-of-arabia-wide-screen-camels.jpg', 'https://www.youtube.com/watch?v=vOlRhGEhG7k', 'em_exibicao', 94, 'https://www.rottentomatoes.com/m/lawrence_of_arabia', 8.3, 'https://www.imdb.com/title/tt0056172/', 0, 'imgs/69e25fe0c71ea0db2c89c39baf6ec6c6.jpg'),
 (32, '2001: Odisseia no Espaço', 'Uma viagem épica através do espaço e do tempo, explorando a evolução humana e o encontro com inteligência artificial. Obra-prima visionária de Kubrick.', 'Stanley Kubrick', 'Inglês', 'Reino Unido / EUA', '1968-04-02', 149, 'imgs/filmes/R.jpg', 'imgs/filmes/R (1).jpg', 'https://www.youtube.com/watch?v=7E9CD3Hucws', 'em_exibicao', 92, 'https://www.rottentomatoes.com/m/2001_a_space_odyssey', 8.3, 'https://www.imdb.com/title/tt0062622/', 0, 'imgs/691047e85c11d004b4ddacabc2869c69.jpg'),
 (33, 'Star Wars: Episódio IV - Uma Nova Esperança', 'Luke Skywalker junta-se à Aliança Rebelde para destruir a Estrela da Morte e salvar a Princesa Leia das garras do Império Galáctico.', 'George Lucas', 'Inglês', 'EUA', '1977-05-25', 121, 'imgs/filmes/star wars.jpg', 'imgs/filmes/a.jpg', 'https://www.youtube.com/watch?v=vZ734NWnAHA', 'em_exibicao', 93, 'https://www.rottentomatoes.com/m/star_wars', 8.6, 'https://www.imdb.com/title/tt0076759/', 0, 'imgs/70076f7dd43959aa4f9a5326bc2c9bb6.jpg'),
-(34, 'Taxi Driver', 'Um veterano de guerra solitário trabalha como taxista em Nova Iorque e planeja salvar uma jovem prostituta da vida nas ruas. Drama psicológico intenso.', 'Martin Scorsese', NULL, NULL, '1976-02-08', 114, 'imgs/filmes/filme_34_6f914397.jpg', 'imgs/filmes/taxi-driver-filmi.jpg', 'https://www.youtube.com/watch?v=T5IligQP7Fo', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/taxi_driver', NULL, 'https://www.imdb.com/title/tt0075314/', 0, 'imgs/526106c0ccce111d7600a01348980485.jpg'),
+(34, 'Taxi Driver', 'Um veterano de guerra solitário trabalha como taxista em Nova Iorque e planeja salvar uma jovem prostituta da vida nas ruas. Drama psicológico intenso.', 'Martin Scorsese', NULL, NULL, '1976-02-08', 114, 'imgs\\filme_34_6f914397.jpg\"', 'imgs/filmes/taxi-driver-filmi.jpg', 'https://www.youtube.com/watch?v=T5IligQP7Fo', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/taxi_driver', NULL, 'https://www.imdb.com/title/tt0075314/', 0, 'imgs\\526106c0ccce111d7600a01348980485.jpg\"'),
 (35, 'O Exorcista', 'Uma menina de 12 anos é possuída por uma entidade demoníaca. Dois padres tentam salvá-la através de um exorcismo. Um dos filmes de terror mais assustadores de sempre.', 'William Friedkin', 'Inglês', 'EUA', '1973-12-26', 122, 'imgs/filmes/exorcista.webp', 'imgs/filmes/o-exorcista-1973-filme-cena.jpg', 'https://www.youtube.com/watch?v=4x6a6igB1AQ', 'em_exibicao', 84, 'https://www.rottentomatoes.com/m/exorcist', 8.1, 'https://www.imdb.com/title/tt0070047/', 16, 'imgs/83d3b65f715d93f31a1eb5d358602ace.jpg'),
 (38, 'Os Caçadores da Arca Perdida', 'O arqueólogo Indiana Jones é contratado pelo governo americano para encontrar a Arca da Aliança antes dos nazis. Aventura épica cheia de ação.', 'Steven Spielberg', NULL, NULL, '1986-05-08', 115, 'imgs\\filmes\\indiana jones.webp\"', 'imgs/filmes/3026122-indy.jpg', 'https://www.youtube.com/watch?v=XkkzKHCx154', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/raiders_of_the_lost_ark', NULL, 'https://www.imdb.com/title/tt0082971/', 10, 'imgs/eb54a5dac4861b4908a9f9a2ab8f2d32.jpg'),
 (39, 'La La Land', 'Uma atriz aspirante e um pianista de jazz lutam para alcançar os seus sonhos em Los Angeles, enquanto vivem um romance marcado por escolhas difíceis.', 'Damien Chazelle', NULL, NULL, '2016-12-09', 128, 'imgs/filmes/la.jpg', 'imgs/filmes/la2.jpg', 'https://www.youtube.com/watch?v=0pdqf4P9MB8', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/la_la_land', NULL, 'https://www.imdb.com/title/tt3783958/', 0, 'imgs/0d82d8434adc4352e1e7b6c1f61dc5f7.jpg'),
@@ -11228,6 +11282,45 @@ INSERT INTO `menu_produtos` (`id`, `menu_id`, `produto_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pontos_gastos`
+--
+
+DROP TABLE IF EXISTS `pontos_gastos`;
+CREATE TABLE IF NOT EXISTS `pontos_gastos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `usuario_id` int NOT NULL,
+  `premio_id` int NOT NULL,
+  `premio_nome` varchar(100) NOT NULL,
+  `pontos_gastos` int NOT NULL,
+  `codigo_desconto` varchar(20) NOT NULL,
+  `data_gasto` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_usuario_gastos` (`usuario_id`),
+  KEY `idx_codigo_gastos` (`codigo_desconto`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pontos_gastos`
+--
+
+INSERT INTO `pontos_gastos` (`id`, `usuario_id`, `premio_id`, `premio_nome`, `pontos_gastos`, `codigo_desconto`, `data_gasto`) VALUES
+(1, 1, 1, 'Coca Cola pequena', 200, 'N2I77ZW8', '2026-01-29 19:39:01'),
+(2, 1, 1, 'Coca Cola pequena', 200, '304HUARK', '2026-01-30 12:55:27'),
+(3, 1, 1, 'Coca Cola pequena', 200, 'ZATYQ4Y2', '2026-02-02 07:13:05'),
+(4, 1, 2, 'Pipocas doces/Salgadas', 300, '8Y4XPMHD', '2026-02-02 08:33:23'),
+(5, 1, 8, 'Pretzel', 100, 'XFDVLQ01', '2026-02-02 08:35:41'),
+(6, 1, 5, 'Snickers', 200, 'IKL03RDQ', '2026-02-02 08:37:09'),
+(7, 1, 2, 'Pipocas doces/Salgadas', 300, 'QBURPNX5', '2026-02-02 08:38:37'),
+(8, 1, 1, 'Coca Cola pequena', 200, 'I6YHBW7C', '2026-02-02 10:17:28'),
+(9, 1, 8, 'Pretzel', 100, 'TYWM1LXZ', '2026-02-02 10:25:45'),
+(10, 1, 5, 'Snickers', 200, 'DXHSAS06', '2026-02-02 10:40:54'),
+(11, 1, 1, 'Coca Cola pequena', 200, 'N1JF0MPI', '2026-02-02 11:13:00'),
+(12, 1, 8, 'Pretzel', 100, 'TO02VEU6', '2026-02-03 17:05:55'),
+(13, 1, 1, 'Coca Cola pequena', 200, 'GJV5CEAZ', '2026-02-03 17:16:26');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pontos_movimentos`
 --
 
@@ -11348,7 +11441,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   KEY `tipo_sessao_id` (`id_tipo_sessao`),
   KEY `idx_data_sessao` (`data_sessao`),
   KEY `fk_reserva_horario_sessao` (`id_horario_sessao`)
-) ENGINE=InnoDB AUTO_INCREMENT=712 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=729 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas`
@@ -11634,7 +11727,24 @@ INSERT INTO `reservas` (`id`, `id_horario_sessao`, `data_sessao`, `id_filme`, `i
 (708, 244, '2026-01-25', 2, 8, 5, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-01-25 12:27:01', 'confirmada', 47.40, 'applepay', 'N3,N4,N5,N6,N7,N8'),
 (709, 36971, '2026-01-27', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-27 13:04:15', 'confirmada', 47.40, 'applepay', 'J23,J24,J25,J26,J27,J28'),
 (710, 36971, '2026-01-27', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-27 13:17:34', 'confirmada', 7.90, 'paypal', 'H12'),
-(711, 36971, '2026-01-27', 2, 8, 5, NULL, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-27 18:10:24', 'confirmada', 23.70, 'paypal', 'A26,A27,A28');
+(711, 36971, '2026-01-27', 2, 8, 5, NULL, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-27 18:10:24', 'confirmada', 23.70, 'paypal', 'A26,A27,A28'),
+(712, 36971, '2026-01-28', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-28 21:33:47', 'confirmada', 47.40, 'applepay', 'G22,G23,G24,G25,G26,G27'),
+(713, 36971, '2026-01-29', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-29 19:55:00', 'confirmada', 47.40, 'applepay', 'A10,A11,A12,A7,A8,A9'),
+(714, 243, '2026-01-30', 2, 8, 5, NULL, 'Afonso David', 'afonso2008david@gmail.com', '963315105', '2026-01-30 09:36:29', 'confirmada', 23.70, 'applepay', 'D7,D8,D9'),
+(715, 36971, '2026-02-01', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-01 17:19:09', 'confirmada', 47.40, 'applepay', 'J3,J4,J5,J6,J7,J8'),
+(716, 34738, '2026-02-02', 31, 15, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 09:25:02', 'confirmada', 47.40, 'applepay', 'I15,I16,I17,I18,I19,I20'),
+(717, 708, '2026-02-02', 4, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 10:19:23', 'confirmada', 47.40, 'applepay', 'F13,F14,F15,F16,F17,F18'),
+(718, 244, '2026-02-02', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 10:31:00', 'confirmada', 47.40, 'applepay', 'K25,K26,K27,K28,K29,K30'),
+(719, 244, '2026-02-02', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 10:36:53', 'confirmada', 47.40, 'applepay', 'C14,C15,C16,C17,C18,C19'),
+(720, 244, '2026-02-02', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 10:42:00', 'confirmada', 47.40, 'paypal', 'F10,F11,F12,F13,F14,F15'),
+(721, 244, '2026-02-02', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 11:08:14', 'confirmada', 47.40, 'applepay', 'J13,J14,J15,J16,J17,J18'),
+(722, 244, '2026-02-02', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 11:14:21', 'confirmada', 47.40, 'paypal', 'H23,H24,H25,H26,H27,H28'),
+(723, 244, '2026-02-02', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-02 11:23:39', 'confirmada', 47.40, 'applepay', 'I14,I15,I16,I17,I18,I19'),
+(724, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 17:07:22', 'confirmada', 47.40, 'applepay', 'J12,J13,J14,J15,J16,J17'),
+(725, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 17:26:42', 'confirmada', 47.40, 'applepay', 'C18,C19,C20,C21,C22,C23'),
+(726, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 17:32:20', 'confirmada', 7.90, 'paypal', 'I1'),
+(727, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 17:57:20', 'confirmada', 47.40, 'applepay', 'B23,B24,B25,B26,B27,B28'),
+(728, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:04:04', 'confirmada', 7.90, 'applepay', 'F14');
 
 -- --------------------------------------------------------
 
@@ -11686,7 +11796,7 @@ CREATE TABLE IF NOT EXISTS `reservas_exclusivas` (
   PRIMARY KEY (`id`),
   KEY `filme_id` (`filme_id`),
   KEY `usuario_id` (`usuario_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas_exclusivas`
@@ -11715,7 +11825,9 @@ INSERT INTO `reservas_exclusivas` (`id`, `tipo_sala`, `filme_id`, `data_sessao`,
 (21, 'romantica', 32, '2026-01-29', '16:30:00', 7, 350.00, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-25 18:19:56', 'confirmada'),
 (22, 'intimista', 28, '2026-01-30', '16:30:00', 8, 150.00, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-25 19:19:14', 'confirmada'),
 (23, 'intimista', 4, '2026-01-29', '19:00:00', 6, 150.00, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-01-27 13:18:40', 'confirmada'),
-(24, 'intimista', 24, '2026-01-31', '16:30:00', 7, 150.00, NULL, 'Afonso David', 'afonso2008david@gmail.com', '963315105', '2026-01-28 13:52:48', 'confirmada');
+(24, 'intimista', 24, '2026-01-31', '16:30:00', 7, 150.00, NULL, 'Afonso David', 'afonso2008david@gmail.com', '963315105', '2026-01-28 13:52:48', 'confirmada'),
+(25, 'intimista', 4, '2026-01-31', '16:30:00', 7, 150.00, NULL, 'Afonso', 'afonso2008david@gmail.com', '963315105', '2026-01-30 10:16:16', 'confirmada'),
+(26, 'premium', 52, '2026-02-06', '14:00:00', 7, 200.00, NULL, 'Afonso', 'afonso2008david@gmail.com', '963315105', '2026-01-30 12:13:17', 'confirmada');
 
 -- --------------------------------------------------------
 
@@ -12046,8 +12158,8 @@ CREATE TABLE IF NOT EXISTS `salas_exclusivas` (
 
 INSERT INTO `salas_exclusivas` (`id`, `nome`, `descricao`, `capacidade`) VALUES
 (1, 'Intimista', 'Uma sala intimista de cinema é um espaço pensado para proporcionar uma experiência mais pessoal e envolvente, com lotação reduzida, ambiente confortável e acústica cuidada, permitindo ao espectador sentir-se mais próximo do ecrã e da narrativa, ideal para sessões especiais, filmes de autor ou exibições privadas.', 30),
-(2, 'Vip', 'Uma sala VIP de cinema oferece uma experiência premium, combinando conforto de alto nível com exclusividade, através de poltronas reclináveis, maior espaço entre lugares, atendimento personalizado e um ambiente sofisticado, pensado para quem procura ver um filme com máximo conforto e luxo.', 20),
-(3, 'Premium', 'Uma sala Premium de cinema proporciona uma experiência superior à convencional, aliando conforto reforçado, qualidade de imagem e som avançados e um ambiente moderno e acolhedor, pensada para espectadores que procuram mais comodidade e qualidade sem chegar ao nível de exclusividade de uma sala VIP.', 15);
+(2, 'Vip', 'Uma sala VIP de cinema oferece uma experiência premium, combinando conforto de alto nível com exclusividade, através de poltronas reclináveis, maior espaço entre lugares, atendimento personalizado e um ambiente sofisticado, pensado para quem procura ver um filme com máximo conforto e luxo.', 15),
+(3, 'Premium', 'Uma sala Premium de cinema proporciona uma experiência superior à convencional, aliando conforto reforçado, qualidade de imagem e som avançados e um ambiente moderno e acolhedor, pensada para espectadores que procuram mais comodidade e qualidade sem chegar ao nível de exclusividade de uma sala VIP.', 20);
 
 -- --------------------------------------------------------
 
@@ -12175,23 +12287,26 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `avatar_personalizado` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo_usuario`, `criado_em`, `ultimo_login`, `avatar`, `avatar_id`, `is_admin`, `biografia`, `filme_favorito_id`, `avatar_personalizado`) VALUES
-(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$u7UcH2WZQVUcnQsM$3add7d0e3d3c7dfeb804d1a9cb43c175c0a97a5ccde7b714101250d802672bc6f62c2a9ca9b0fdec7ca217a8f5ab60e1aea2663ed862ebbc499f146d01409e1d', 'normal', '2025-11-03 20:23:37', '2026-01-28 13:43:23', 'imgs/profile/super-herois/OIP-removebg-preview (13).png', 4, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
-(11, 'Duarte', 'duartemariation@gmail.com', 'scrypt:32768:8:1$h5SKV2XnqVI4TCjn$3fbcc143a0ffdeff34037e6aaa861b2900517e152fa955de0336cefe00efb812b9d4989e720e9707c056974358a403d42ce410e4895ffccbacff862cf79381b4', 'normal', '2025-11-04 00:08:34', '2026-01-07 23:05:31', 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png', 37, 0, NULL, NULL, 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png'),
-(13, 'Amnin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-01-27 15:57:51', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
-(14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', 'scrypt:32768:8:1$b4qBlQCA6n19uNbC$c7a2c12ef1d6cb85bb483fb6aefba5a914a0380cb986b34161e76e1cca549dee28e65a4bb70a0133bfa29a7d345b8ce6c70c92be2ea3fb7b55374fb52a2a0872', 'normal', '2025-11-17 21:28:06', '2026-01-25 12:26:31', 'imgs/icons/user_icon34-removebg-preview.png', 29, 0, NULL, NULL, NULL),
+(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$KXYrw6ohKg9yaeRa$e745d1d657d19ee70a8e16007b9785a82b3e56f92a1e4cb0bc8357c58aaf5940a08337aaf4f52427f86dbdc064cc567e787b07f317dbc64029f5f6ed611558db', 'normal', '2025-11-03 20:23:37', '2026-02-03 17:25:29', 'imgs/profile/super-herois/OIP-removebg-preview (13).png', 4, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
+(11, 'Duarte', 'duartemariation@gmail.com', 'scrypt:32768:8:1$h5SKV2XnqVI4TCjn$3fbcc143a0ffdeff34037e6aaa861b2900517e152fa955de0336cefe00efb812b9d4989e720e9707c056974358a403d42ce410e4895ffccbacff862cf79381b4', 'normal', '2025-11-04 00:08:34', '2026-02-03 17:24:29', 'imgs/profile/80s/Phone_Home-removebg-preview.png', 37, 0, NULL, NULL, 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png'),
+(13, 'Amnin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-01-29 20:35:11', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
+(14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', 'scrypt:32768:8:1$b4qBlQCA6n19uNbC$c7a2c12ef1d6cb85bb483fb6aefba5a914a0380cb986b34161e76e1cca549dee28e65a4bb70a0133bfa29a7d345b8ce6c70c92be2ea3fb7b55374fb52a2a0872', 'normal', '2025-11-17 21:28:06', '2026-01-29 20:43:45', 'imgs/icons/user_icon34-removebg-preview.png', 29, 0, NULL, NULL, NULL),
 (15, 'André Almeida', 'andrea@gmail.com', 'scrypt:32768:8:1$vxnypx0d0A7g9NkJ$3d5776f833f4b231d7fb77320d5e249ecbce83f48fd00a08d9562ecfbac2de6ebaa51c7f31795256d612d6c8f53328b2158f721dd17cbaf3d13d29bc9f5202e9', 'normal', '2025-11-19 08:50:33', '2025-11-20 08:52:11', 'imgs/icons/user_icon34-removebg-preview.png', 5, 0, NULL, NULL, NULL),
 (21, 'Marta Silva', 'martasilva@gmail.com', 'scrypt:32768:8:1$UGh7InYCqj6X6I6G$bab6d731f06982739b6097ed2e43a5c4b97babbf6cd68ca3bebfc998d5e1d276b636c25767830d09d7e6c61b0ba62fc2b3070a9574d1d04422459f9c85710559', 'normal', '2025-11-20 09:25:15', '2025-11-22 11:39:11', 'imgs/icons/user_icon34-removebg-preview.png', 21, 0, NULL, NULL, NULL),
 (22, 'António Domingos', 'domingos27@gmail.com', 'scrypt:32768:8:1$9D8ErdPBgaI1n6aZ$6a44888d26aa6c577ab05d0211de9920558669ef6b4157264eb0436ca6d7b09a5fbd3613ed58ba41de4c72153fadacb9fe9ac74d47fb1cacb1d4fc02a9bf2f43', 'normal', '2025-11-20 09:27:20', '2025-11-20 09:27:20', 'imgs/icons/user_icon34-removebg-preview.png', 16, 0, NULL, NULL, NULL),
 (23, 'Denzel', 'denzelmanoel23@gmail.com', 'scrypt:32768:8:1$7sI90EcIo0Es8lup$6405999ee3238f19989d2eefa5fbf078c239b8eb79502cd8e1dde98c675ff10f7c4753f13b33d5544005fd966ee419001a8e64f1502326764c6b11eea83d8570', 'normal', '2025-11-20 09:33:35', '2025-11-20 17:17:41', 'imgs/avatars/default.png', 35, 0, NULL, NULL, 'imgs/avatars/default.png'),
-(24, 'Marco David', 'marcogdavid@gmail.com', 'scrypt:32768:8:1$It3tUW7G4yjLqS6I$b1f0443f2868693a877d9deb36637e7e963435535edca2517ee975903172d94db031bffd27dbae2d1e8bd9bf9897b8de24c568c8f3eb859b2a480f8471962802', 'normal', '2025-11-22 11:34:47', '2026-01-05 16:46:45', 'imgs/avatars/default.png', 25, 0, NULL, NULL, 'imgs/avatars/default.png'),
-(30, 'Maria Silva', 'maria.silva@email.com', 'senha123', 'normal', '0000-00-00 00:00:00', NULL, 'imgs/avatars/default.png', 1, 0, NULL, NULL, NULL);
+(24, 'Marco David', 'marcogdavid@gmail.com', 'scrypt:32768:8:1$It3tUW7G4yjLqS6I$b1f0443f2868693a877d9deb36637e7e963435535edca2517ee975903172d94db031bffd27dbae2d1e8bd9bf9897b8de24c568c8f3eb859b2a480f8471962802', 'normal', '2025-11-22 11:34:47', '2026-02-02 10:01:05', 'imgs/avatars/default.png', 25, 0, NULL, NULL, 'imgs/avatars/default.png'),
+(30, 'Maria Silva', 'maria.silva@email.com', 'senha123', 'normal', '0000-00-00 00:00:00', NULL, 'imgs/avatars/default.png', 1, 0, NULL, NULL, NULL),
+(44, 'Rodrigo António', 'antonio@gmail.com', 'scrypt:32768:8:1$0jPXIX1X19RaWbWh$fc793bd1ee0141b910c4a9a0daabb32cc6b9403765d598490b508ecafc8e04c3c3483205f0df0f3e127f3cc1c2cd9161a45074a66a0a04d0b647f34e65cdd504', 'normal', '2026-01-29 20:48:37', '2026-01-29 20:48:37', 'imgs/avatars/default.png', 37, 0, NULL, NULL, NULL),
+(45, 'José', 'jose@gmail.com', 'scrypt:32768:8:1$fBfbcrD3vVOdjF9y$f3245dba73ed003578a44d6a4290e6dc41121d6851b512a0d170a050fa01a9581304f71a04c76c39b11d32a11afd45018c139be06fad0a78b88f9d12905f4ae7', 'normal', '2026-01-29 20:58:00', '2026-02-03 17:24:55', 'imgs/avatars/default.png', 4, 0, NULL, NULL, NULL),
+(46, 'ce', 'ce@gmail.com', 'scrypt:32768:8:1$1EaJeQtRdOxIHHmM$7fe6543cbff4c130f64e935739065ccfe43ff3a1821ef2cd85a6f705d2ad06f4df1742b8874dfb36f351de3e69288c9435cafaa82e276037654f651d12ecf2db', 'normal', '2026-01-29 20:58:46', '2026-02-02 10:01:22', 'imgs/avatars/default.png', 11, 0, NULL, NULL, NULL);
 
 --
 -- Constraints for dumped tables
@@ -12222,6 +12337,12 @@ ALTER TABLE `caracteristica_produto_bar`
 ALTER TABLE `cinemas_favoritos`
   ADD CONSTRAINT `fk_favorito_cinema` FOREIGN KEY (`cinema_id`) REFERENCES `cinemas` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_favorito_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `codigos_desconto`
+--
+ALTER TABLE `codigos_desconto`
+  ADD CONSTRAINT `codigos_desconto_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `filmes_cinemas`
@@ -12272,6 +12393,12 @@ ALTER TABLE `lugares`
 ALTER TABLE `menu_produtos`
   ADD CONSTRAINT `fk_menu_produtos_menu` FOREIGN KEY (`menu_id`) REFERENCES `menus` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_menu_produtos_produto` FOREIGN KEY (`produto_id`) REFERENCES `bar` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `pontos_gastos`
+--
+ALTER TABLE `pontos_gastos`
+  ADD CONSTRAINT `pontos_gastos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `pontos_movimentos`

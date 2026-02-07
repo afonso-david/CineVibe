@@ -3,36 +3,94 @@
 {% block title %}Dashboard Admin - CineVibe{% endblock %}
 
 {% block content %}
-<!-- Page Title -->
-<div class="page-header" style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%); border-radius: 12px; border: 1px solid rgba(255, 214, 10, 0.2); display: flex; justify-content: space-between; align-items: center;">
+<!-- Page Header -->
+<div class="page-header" style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%); border-radius: 12px; border: 1px solid rgba(255, 214, 10, 0.2);">
     <h1 style="color: #FFD60A; font-size: 2rem; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fas fa-chart-bar"></i>
-        Dashboard
+        <i class="fas fa-chart-line"></i>
+        Dashboard Analytics
     </h1>
-    <div class="stats-summary">
-        <div class="stat-item">
-            <span class="stat-label">Taxa de Retorno</span>
-            <span class="stat-value">83.3%</span>
+    <p style="color: #8892B0; margin: 0.5rem 0 0 0;">Visão geral do desempenho do CineVibe</p>
+</div>
+
+<!-- Main Stats Cards -->
+<div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Receita Hoje -->
+    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Hoje</p>
+                <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_hoje) }}</h2>
+                <p style="margin: 0; font-size: 0.85rem; opacity: 0.8;">{{ reservas_hoje }} reservas</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+                <i class="fas fa-euro-sign" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receita Semanal -->
+    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Semanal</p>
+                <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_semana) }}</h2>
+                <p style="margin: 0; font-size: 0.85rem; opacity: 0.8;">
+                    {% if crescimento_semanal > 0 %}
+                        <i class="fas fa-arrow-up"></i> +{{ "%.1f"|format(crescimento_semanal) }}%
+                    {% elif crescimento_semanal < 0 %}
+                        <i class="fas fa-arrow-down"></i> {{ "%.1f"|format(crescimento_semanal) }}%
+                    {% else %}
+                        <i class="fas fa-minus"></i> 0%
+                    {% endif %}
+                </p>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+                <i class="fas fa-calendar-week" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receita Mensal -->
+    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Mensal</p>
+                <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_mes) }}</h2>
+                <p style="margin: 0; font-size: 0.85rem; opacity: 0.8;">Este mês</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+                <i class="fas fa-calendar-alt" style="font-size: 1.5rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receita Total -->
+    <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Total</p>
+                <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_total) }}</h2>
+                <p style="margin: 0; font-size: 0.85rem; opacity: 0.8;">{{ total_reservas }} reservas</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+                <i class="fas fa-chart-line" style="font-size: 1.5rem;"></i>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Stats Cards -->
-<div class="stats-grid">
+<!-- Secondary Stats -->
+<div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
     <div class="stat-card">
-        <div class="stat-icon">
-            <i class="fas fa-film"></i>
-        </div>
+        <div class="stat-icon"><i class="fas fa-film"></i></div>
         <div class="stat-info">
             <h3>{{ total_filmes }}</h3>
-            <p>Total de Filmes</p>
+            <p>Filmes</p>
         </div>
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon">
-            <i class="fas fa-building"></i>
-        </div>
+        <div class="stat-icon"><i class="fas fa-building"></i></div>
         <div class="stat-info">
             <h3>{{ total_cinemas }}</h3>
             <p>Cinemas</p>
@@ -40,136 +98,405 @@
     </div>
     
     <div class="stat-card">
-        <div class="stat-icon">
-            <i class="fas fa-ticket-alt"></i>
-        </div>
-        <div class="stat-info">
-            <h3>{{ reservas_hoje }}</h3>
-            <p>Reservas Hoje</p>
-        </div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-icon">
-            <i class="fas fa-users"></i>
-        </div>
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
         <div class="stat-info">
             <h3>{{ total_usuarios }}</h3>
             <p>Usuários</p>
         </div>
     </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
+        <div class="stat-info">
+            <h3>{{ novos_usuarios_semana }}</h3>
+            <p>Novos (7 dias)</p>
+        </div>
+    </div>
 </div>
 
-<!-- Recent Activity Table -->
-<div class="content-section">
+<!-- Charts Row -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Reservas Últimos 7 Dias -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-bar"></i> Reservas Últimos 7 Dias</h2>
+        </div>
+        <canvas id="reservasChart" style="max-height: 300px;"></canvas>
+    </div>
+
+    <!-- Horários Populares -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2><i class="fas fa-clock"></i> Horários Populares</h2>
+        </div>
+        <div style="padding: 1rem;">
+            {% for horario in horarios_populares %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #1B263B; border-radius: 8px; margin-bottom: 0.5rem;">
+                <span style="color: #FFD60A; font-weight: 600;">{{ horario.horario }}</span>
+                <span style="color: #8892B0;">{{ horario.total_reservas }} reservas</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Top Filmes e Cinemas -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Top 5 Filmes -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2><i class="fas fa-trophy"></i> Top 5 Filmes</h2>
+        </div>
+        <div style="padding: 1rem;">
+            {% for filme in top_filmes %}
+            <div style="display: flex; gap: 1rem; padding: 1rem; background: #1B263B; border-radius: 8px; margin-bottom: 0.75rem; align-items: center;">
+                <div style="width: 50px; height: 70px; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+                    {% if filme.poster_url %}
+                    <img src="{{ url_for('static', filename=filme.poster_url) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <div style="width: 100%; height: 100%; background: #0D1B2A; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-film" style="color: #FFD60A;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="margin: 0; color: #FFD60A; font-size: 0.95rem;">{{ filme.titulo }}</h4>
+                    <p style="margin: 0.25rem 0 0 0; color: #8892B0; font-size: 0.85rem;">
+                        {{ filme.total_reservas }} reservas • €{{ "%.2f"|format(filme.receita) }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Vendas por Cinema -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2><i class="fas fa-map-marker-alt"></i> Vendas por Cinema</h2>
+        </div>
+        <div style="padding: 1rem;">
+            {% for cinema in vendas_por_cinema %}
+            <div style="padding: 1rem; background: #1B263B; border-radius: 8px; margin-bottom: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <h4 style="margin: 0; color: #FFD60A; font-size: 0.95rem;">{{ cinema.nome }}</h4>
+                    <span style="color: #43e97b; font-weight: 600;">€{{ "%.2f"|format(cinema.receita) }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #8892B0; font-size: 0.85rem;">{{ cinema.localizacao }}</span>
+                    <span style="color: #8892B0; font-size: 0.85rem;">{{ cinema.total_reservas }} reservas</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Tipos de Sessão e Produtos Bar -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Tipos de Sessão -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2><i class="fas fa-ticket-alt"></i> Tipos de Sessão</h2>
+        </div>
+        <div style="padding: 2rem; display: flex; justify-content: center; align-items: center; min-height: 350px;">
+            <canvas id="tiposSessaoChart" style="max-height: 320px; max-width: 100%;"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Produtos Bar -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2><i class="fas fa-shopping-cart"></i> Top Produtos Bar</h2>
+        </div>
+        <div style="padding: 1rem;">
+            {% for produto in top_produtos_bar %}
+            <div style="display: flex; gap: 1rem; padding: 0.75rem; background: #1B263B; border-radius: 8px; margin-bottom: 0.5rem; align-items: center;">
+                <div style="width: 40px; height: 40px; border-radius: 6px; overflow: hidden; flex-shrink: 0; background: #000;">
+                    {% if produto.imagem_url %}
+                    <img src="{{ url_for('static', filename=produto.imagem_url) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-utensils" style="color: #FFD60A;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div style="flex: 1;">
+                    <span style="color: #FFD60A; font-weight: 500;">{{ produto.nome }}</span>
+                </div>
+                <span style="color: #8892B0;">{{ produto.total_vendas }} vendas</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Taxa de Ocupação das Salas -->
+<div class="content-section" style="margin-bottom: 2rem;">
     <div class="section-header">
-        <h2>Atividade Recente</h2>
+        <h2><i class="fas fa-door-open"></i> Taxa de Ocupação das Salas</h2>
     </div>
     <div class="table-container">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Cinema</th>
-                    <th>Filme</th>
-                    <th>Local</th>
-                    <th>Data</th>
                     <th>Sala</th>
+                    <th>Cinema</th>
+                    <th>Capacidade</th>
+                    <th>Reservas</th>
+                    <th>Taxa de Ocupação</th>
                 </tr>
             </thead>
             <tbody>
+                {% for sala in ocupacao_salas %}
                 <tr>
-                    <td><span class="badge badge-warning">#98</span></td>
-                    <td>Afonso</td>
-                    <td>Taxi Driver</td>
-                    <td>CineVibe São Miguel</td>
-                    <td>26/11 15:26</td>
-                    <td><span class="badge badge-info">H2</span></td>
+                    <td><strong>{{ sala.nome_sala }}</strong></td>
+                    <td>{{ sala.cinema_nome }}</td>
+                    <td>{{ sala.capacidade }}</td>
+                    <td>{{ sala.total_reservas }}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="flex: 1; height: 8px; background: #1B263B; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; background: {% if sala.taxa_ocupacao >= 80 %}#43e97b{% elif sala.taxa_ocupacao >= 50 %}#FFD60A{% else %}#f5576c{% endif %}; width: {{ sala.taxa_ocupacao }}%;"></div>
+                            </div>
+                            <span style="min-width: 50px; text-align: right; color: {% if sala.taxa_ocupacao >= 80 %}#43e97b{% elif sala.taxa_ocupacao >= 50 %}#FFD60A{% else %}#f5576c{% endif %};">
+                                {{ sala.taxa_ocupacao }}%
+                            </span>
+                        </div>
+                    </td>
                 </tr>
-                <tr>
-                    <td><span class="badge badge-warning">#97</span></td>
-                    <td>Afonso</td>
-                    <td>Demon Slayer – Infinity Castle</td>
-                    <td>CineVibe Aveiro</td>
-                    <td>26/11 15:14</td>
-                    <td><span class="badge badge-info">D7</span></td>
-                </tr>
-                <tr>
-                    <td><span class="badge badge-warning">#96</span></td>
-                    <td>Afonso</td>
-                    <td>Demon Slayer – Infinity Castle</td>
-                    <td>CineVibe Aveiro</td>
-                    <td>26/11 15:14</td>
-                    <td><span class="badge badge-info">D6</span></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Export Reports Section -->
+<!-- Últimas Reservas -->
 <div class="content-section">
+    <div class="section-header">
+        <h2><i class="fas fa-history"></i> Últimas Reservas</h2>
+    </div>
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Usuário</th>
+                    <th>Filme</th>
+                    <th>Cinema</th>
+                    <th>Lugares</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reserva in ultimas_reservas %}
+                <tr>
+                    <td><span class="badge badge-warning">#{{ reserva.id }}</span></td>
+                    <td>{{ reserva.usuario_nome }}</td>
+                    <td>{{ reserva.filme_titulo }}</td>
+                    <td>{{ reserva.cinema_nome }}</td>
+                    <td><span class="badge badge-info">{{ reserva.lugares }}</span></td>
+                    <td style="color: #43e97b; font-weight: 600;">€{{ "%.2f"|format(reserva.total) }}</td>
+                    <td>{{ reserva.data_reserva.strftime('%d/%m/%Y %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Exportar Relatórios -->
+<div class="content-section" style="margin-top: 2rem;">
     <div class="section-header">
         <h2><i class="fas fa-file-export"></i> Exportar Relatórios</h2>
     </div>
-    <div class="export-grid">
-        <button class="export-btn export-sales">
-            <i class="fas fa-chart-line"></i>
-            <span>Relatório de Vendas</span>
-        </button>
-        <button class="export-btn export-reservations">
-            <i class="fas fa-calendar-check"></i>
-            <span>Relatório de Reservas</span>
-        </button>
-        <button class="export-btn export-users">
-            <i class="fas fa-user-friends"></i>
-            <span>Relatório de Usuários</span>
-        </button>
-        <button class="export-btn export-products">
-            <i class="fas fa-box"></i>
-            <span>Relatório de Produtos</span>
-        </button>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; padding: 1rem;">
+        <a href="{{ url_for('exportar_relatorio', tipo='reservas') }}" class="export-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+            <i class="fas fa-ticket-alt" style="font-size: 2rem;"></i>
+            <div>
+                <h4 style="margin: 0; font-size: 1rem;">Relatório de Reservas</h4>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; opacity: 0.9;">Exportar todas as reservas</p>
+            </div>
+        </a>
+        
+        <a href="{{ url_for('exportar_relatorio', tipo='vendas') }}" class="export-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+            <i class="fas fa-chart-line" style="font-size: 2rem;"></i>
+            <div>
+                <h4 style="margin: 0; font-size: 1rem;">Relatório de Vendas</h4>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; opacity: 0.9;">Receitas por cinema e filme</p>
+            </div>
+        </a>
+        
+        <a href="{{ url_for('exportar_relatorio', tipo='usuarios') }}" class="export-btn" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+            <i class="fas fa-users" style="font-size: 2rem;"></i>
+            <div>
+                <h4 style="margin: 0; font-size: 1rem;">Relatório de Usuários</h4>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; opacity: 0.9;">Lista completa de usuários</p>
+            </div>
+        </a>
+        
+        <a href="{{ url_for('exportar_relatorio', tipo='filmes') }}" class="export-btn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+            <i class="fas fa-film" style="font-size: 2rem;"></i>
+            <div>
+                <h4 style="margin: 0; font-size: 1rem;">Relatório de Filmes</h4>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; opacity: 0.9;">Desempenho dos filmes</p>
+            </div>
+        </a>
     </div>
 </div>
 
-<!-- System Management Section -->
-<div class="content-section">
-    <div class="section-header">
-        <h2><i class="fas fa-cogs"></i> Gestão do Sistema</h2>
-    </div>
-    <div class="system-actions">
-        <button class="system-btn">
-            <i class="fas fa-database"></i>
-            <span>Backup da Base de Dados</span>
-        </button>
-        <button class="system-btn">
-            <i class="fas fa-sync-alt"></i>
-            <span>Atualizar Cache</span>
-        </button>
-        <button class="system-btn">
-            <i class="fas fa-chart-pie"></i>
-            <span>Relatórios Avançados</span>
-        </button>
-    </div>
-</div>
+<style>
+.export-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+</style>
+
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Adicionar interatividade aos botões
-    document.querySelectorAll('.export-btn, .system-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const action = this.querySelector('span').textContent;
-            alert(`Funcionalidade "${action}" em desenvolvimento`);
-        });
-    });
+// Gráfico de Reservas (Últimos 7 Dias)
+const reservasCtx = document.getElementById('reservasChart').getContext('2d');
+new Chart(reservasCtx, {
+    type: 'line',
+    data: {
+        labels: [{% for item in reservas_7dias %}'{{ item.data }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Reservas',
+            data: [{% for item in reservas_7dias %}{{ item.total }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            borderColor: '#FFD60A',
+            backgroundColor: 'rgba(255, 214, 10, 0.1)',
+            tension: 0.4,
+            fill: true
+        }, {
+            label: 'Receita (€)',
+            data: [{% for item in reservas_7dias %}{{ item.receita }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            borderColor: '#43e97b',
+            backgroundColor: 'rgba(67, 233, 123, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: '#8892B0' }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { color: '#8892B0' },
+                grid: { color: 'rgba(136, 146, 176, 0.1)' }
+            },
+            x: {
+                ticks: { color: '#8892B0' },
+                grid: { color: 'rgba(136, 146, 176, 0.1)' }
+            }
+        }
+    }
+});
 
-    // Destacar item ativo no menu
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', function() {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
+// Gráfico de Tipos de Sessão
+const tiposSessaoCtx = document.getElementById('tiposSessaoChart').getContext('2d');
+new Chart(tiposSessaoCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for tipo in tipos_sessao_stats %}'{{ tipo.nome }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for tipo in tipos_sessao_stats %}{{ tipo.total_reservas }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: [
+                '#667eea',  // Roxo
+                '#f093fb',  // Rosa
+                '#4facfe',  // Azul claro
+                '#43e97b',  // Verde
+                '#FFD60A',  // Amarelo
+                '#f5576c',  // Vermelho
+                '#fa709a',  // Rosa escuro
+                '#30cfd0',  // Turquesa
+                '#a8edea',  // Verde água
+                '#feca57'   // Laranja
+            ],
+            borderWidth: 3,
+            borderColor: '#0D1B2A',
+            hoverBorderWidth: 5,
+            hoverBorderColor: '#FFD60A',
+            hoverOffset: 15
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { 
+                    color: '#8892B0',
+                    padding: 20,
+                    font: {
+                        size: 13,
+                        family: 'Inter',
+                        weight: '500'
+                    },
+                    usePointStyle: true,
+                    pointStyle: 'circle'
+                }
+            },
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(13, 27, 42, 0.98)',
+                titleColor: '#FFD60A',
+                titleFont: {
+                    size: 16,
+                    weight: 'bold',
+                    family: 'Inter'
+                },
+                bodyColor: '#fff',
+                bodyFont: {
+                    size: 14,
+                    family: 'Inter'
+                },
+                borderColor: '#FFD60A',
+                borderWidth: 2,
+                padding: 16,
+                displayColors: true,
+                boxWidth: 15,
+                boxHeight: 15,
+                boxPadding: 8,
+                cornerRadius: 8,
+                callbacks: {
+                    title: function(context) {
+                        return '🎬 ' + context[0].label;
+                    },
+                    label: function(context) {
+                        let value = context.parsed || 0;
+                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        let percentage = ((value / total) * 100).toFixed(1);
+                        return [
+                            'Reservas: ' + value,
+                            'Percentagem: ' + percentage + '%'
+                        ];
+                    }
+                }
+            }
+        },
+        animation: {
+            animateRotate: true,
+            animateScale: true,
+            duration: 1000,
+            easing: 'easeInOutQuart'
+        },
+        interaction: {
+            mode: 'nearest',
+            intersect: true
+        }
+    }
+});
 </script>
 {% endblock %}

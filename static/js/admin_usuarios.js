@@ -704,7 +704,6 @@ loadingStyle.textContent = `
     
     .reserva-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15);
         border-color: rgba(255, 215, 0, 0.4);
         background: linear-gradient(135deg, #1e293b, #374151);
     }

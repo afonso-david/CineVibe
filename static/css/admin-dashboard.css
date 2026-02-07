@@ -292,7 +292,7 @@
 
 .export-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  
 }
 
 /* Responsivo */
@@ -359,3 +359,4 @@ h3 .icon-img {
 .menu-card:hover .icon {
   transform: scale(1.15);
 }
+

@@ -13,12 +13,6 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
-                    <span>CineVibe</span>
-                </div>
-            </div>
             
             <nav class="sidebar-nav">
                 <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
@@ -73,28 +67,51 @@
             <!-- User Profile Section -->
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="user-avatar">
-                        {% if session.get('user_id') %}
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        {% else %}
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        {% endif %}
+                    <div class="profile-background">
+                        <div class="profile-pattern"></div>
+                        <div class="profile-glow"></div>
                     </div>
-                    <div class="user-info">
-                        <div class="user-name">Admin</div>
-                        <div class="user-role">Administrador</div>
+                    <div class="profile-content">
+                        <div class="user-avatar">
+                            {% if user and (user.avatar_personalizado or user.avatar) %}
+                                <img src="{{ url_for('static', filename=user.avatar_personalizado if user.avatar_personalizado else user.avatar) }}" alt="Avatar" class="avatar-img">
+                            {% else %}
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                            {% endif %}
+                            <div class="avatar-ring"></div>
+                            <div class="avatar-status"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
+                            <div class="user-role">
+                                <i class="fas fa-crown"></i>
+                                <span>Administrador</span>
+                            </div>
+                            <div class="user-status">
+                                <i class="fas fa-circle"></i>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <a href="{{ url_for('perfil') }}" class="action-btn profile-btn" title="Gerir Perfil">
+                                <i class="fas fa-user-cog"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Terminar Sessão">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                        </div>
                     </div>
-                    <div class="user-actions">
-                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
-                            <i class="fas fa-user-cog"></i>
-                        </a>
-                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
+                    <div class="profile-decoration">
+                        <div class="decoration-line"></div>
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,6 +152,7 @@
                                 <option value="">Todos os Estados</option>
                                 <option value="em_exibicao">Em Exibição</option>
                                 <option value="brevemente">Brevemente</option>
+                                <option value="fora_cartaz">Fora de Cartaz</option>
                             </select>
                             <select id="generoFilter" class="filter-select">
                                 <option value="">Todos os Géneros</option>
@@ -289,8 +307,14 @@
                                         {% endif %}
                                     </td>
                                     <td class="state-cell">
-                                        <span class="state-badge {% if filme.estado == 'em_exibicao' %}em-exibicao{% else %}brevemente{% endif %}">
-                                            {% if filme.estado == 'em_exibicao' %}Em Exibição{% else %}Brevemente{% endif %}
+                                        <span class="state-badge {% if filme.estado == 'em_exibicao' %}em-exibicao{% elif filme.estado == 'brevemente' %}brevemente{% else %}fora-cartaz{% endif %}">
+                                            {% if filme.estado == 'em_exibicao' %}
+                                                Em Exibição
+                                            {% elif filme.estado == 'brevemente' %}
+                                                Brevemente
+                                            {% else %}
+                                                Fora de Cartaz
+                                            {% endif %}
                                         </span>
                                     </td>
                                     <td class="actions-cell">
@@ -575,6 +599,11 @@
         color: #0D1B2A;
     }
 
+    .state-badge.fora-cartaz {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+    }
+
     .stat-badge.em-exibicao {
         background: linear-gradient(135deg, #28a745, #218838);
         color: white;
@@ -583,6 +612,11 @@
     .stat-badge.brevemente {
         background: linear-gradient(135deg, #ffc107, #e0a800);
         color: #0D1B2A;
+    }
+
+    .stat-badge.fora-cartaz {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
     }
 
     .stat-badge.imdb {

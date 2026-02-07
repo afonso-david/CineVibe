@@ -290,7 +290,7 @@ body {
 .tipo-sessao-container .btn-sessao.active {
     background: linear-gradient(135deg, #FFD60A, #FFB703) !important;
     color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    
 }
 
 /* Para navegadores WebKit (Chrome, Safari) */
@@ -333,7 +333,7 @@ body {
 .horario-input:focus {
     outline: none;
     border-color: #ffd700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
     background: #2a2a2a;
 }
 
@@ -345,7 +345,7 @@ body {
 
 .horario-input:invalid {
     border-color: #e74c3c;
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+    
 }
 
 /* Estilos específicos para inputs de tempo - formato 24h FORÇADO */
@@ -366,7 +366,7 @@ input[type="time"] {
 input[type="time"]:focus {
     outline: none;
     border-color: #ffd700;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+    
 }
 
 /* FORÇA FORMATO 24 HORAS - REMOVE COMPLETAMENTE AM/PM */
@@ -413,7 +413,7 @@ input[type="time"]::-moz-time-picker {
 .form-input:focus, .form-select:focus, .form-textarea:focus {
     outline: none;
     border-color: #ffd700;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+    
 }
 
 .form-textarea {
@@ -469,7 +469,7 @@ input[type="time"]::-moz-time-picker {
 .ator-card:hover {
     transform: translateY(-2px);
     border-color: #ffd700;
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    
     background: #333;
 }
 
@@ -569,7 +569,7 @@ input[type="time"]::-moz-time-picker {
     border: 1px solid #333;
     z-index: 10000;
     position: relative;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    
 }
 
 .modal-header {
@@ -748,7 +748,7 @@ input[type="time"]::-moz-time-picker {
     background: linear-gradient(135deg, #FFD60A, #FFB703) !important;
     color: #ffffff !important;
     border-color: #ffd700;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    
 }
 
 .sessao-grupo {
@@ -1000,7 +1000,7 @@ input[type="time"]::-moz-time-picker {
 .cinema:hover {
     background: #333;
     border-color: rgba(255, 214, 10, 0.3);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    
 }
 
 .cinema-header {
@@ -1077,9 +1077,9 @@ input[type="time"]::-moz-time-picker {
     background: linear-gradient(135deg, #FFD60A, #FFB703);
     color: #ffffff !important;
     border-color: #FFD60A;
-    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
+    
     transform: translateY(-2px);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    
 }
 }
 
@@ -1125,7 +1125,7 @@ input[type="time"]::-moz-time-picker {
 
 .btn:disabled:hover {
     transform: none !important;
-    box-shadow: none !important;
+    
 }
 
 /* ===== MELHORIAS ESTÉTICAS PARA SESSÕES ===== */
@@ -1173,7 +1173,7 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: none;
+    
     position: relative;
     overflow: hidden;
 }
@@ -1197,21 +1197,21 @@ input[type="time"]::-moz-time-picker {
     background: rgba(78, 168, 222, 0.25);
     border-color: rgba(78, 168, 222, 0.5);
     transform: translateY(-2px);
-    box-shadow: none;
+    
 }
 
 .btn-sessao.active {
     background: linear-gradient(135deg, #FFD60A, #FFB703);
     color: #ffffff !important;
     border-color: #FFD60A;
-    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
+    
     transform: translateY(-2px);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    
 }
 
 .btn-sessao.active:hover {
     background: linear-gradient(135deg, #FFB703, #FF9500);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.5);
+    
 }
 
 /* Container para tipo de sessão com botão de remoção - SEM SOMBRA AZUL */
@@ -1223,7 +1223,7 @@ input[type="time"]::-moz-time-picker {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.15), rgba(78, 168, 222, 0.1));
     border: 2px solid rgba(78, 168, 222, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: none;
+    
     margin: 4px 8px 4px 4px; /* Espaço extra à direita para o botão */
 }
 
@@ -1231,7 +1231,7 @@ input[type="time"]::-moz-time-picker {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(78, 168, 222, 0.15));
     border-color: rgba(78, 168, 222, 0.5);
     transform: translateY(-2px);
-    box-shadow: none;
+    
 }
 
 .tipo-sessao-container .btn-sessao {
@@ -1239,7 +1239,7 @@ input[type="time"]::-moz-time-picker {
     background: transparent;
     border-radius: 25px;
     margin: 0;
-    box-shadow: none;
+    
     transform: none;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -1249,13 +1249,13 @@ input[type="time"]::-moz-time-picker {
 
 .tipo-sessao-container .btn-sessao.active {
     color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    
 }
 
 .tipo-sessao-container .btn-sessao:hover {
     background: transparent;
     transform: none;
-    box-shadow: none;
+    
 }
 
 .btn-remover-tipo-sessao {
@@ -1277,7 +1277,7 @@ input[type="time"]::-moz-time-picker {
     justify-content: center;
     opacity: 0.9;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+    
 }
 
 .btn-remover-tipo-sessao::before {
@@ -1300,13 +1300,13 @@ input[type="time"]::-moz-time-picker {
 .btn-remover-tipo-sessao:hover {
     background: linear-gradient(135deg, #c0392b, #a93226);
     transform: scale(1.1);
-    box-shadow: 0 4px 16px rgba(231, 76, 60, 0.6);
+    
     border-color: #fff;
 }
 
 .btn-remover-tipo-sessao:active {
     transform: scale(0.95);
-    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.8);
+    
 }
 
 .btn-remover-tipo-sessao i {
@@ -1314,7 +1314,7 @@ input[type="time"]::-moz-time-picker {
     font-weight: bold;
     position: relative;
     z-index: 1;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    
 }
 
 /* Mostrar botão de remoção com transição suave */
@@ -1336,10 +1336,10 @@ input[type="time"]::-moz-time-picker {
 
 @keyframes subtle-pulse {
     0%, 100% {
-        box-shadow: none;
+        
     }
     50% {
-        box-shadow: none;
+        
     }
 }
 
@@ -1361,7 +1361,7 @@ input[type="time"]::-moz-time-picker {
     background: rgba(255, 255, 255, 0.03);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
 }
 
 .sessao-grupo.hidden {
@@ -1411,7 +1411,7 @@ input[type="time"]::-moz-time-picker {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 3px 10px rgba(78, 168, 222, 0.3);
+    
     min-width: 70px;
     text-align: center;
 }
@@ -1419,7 +1419,7 @@ input[type="time"]::-moz-time-picker {
 .hora-btn:hover {
     background: linear-gradient(135deg, #3B91C0, #2A7AA8);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(78, 168, 222, 0.4);
+    
     border-color: rgba(78, 168, 222, 0.5);
 }
 
@@ -1427,7 +1427,7 @@ input[type="time"]::-moz-time-picker {
     background: linear-gradient(135deg, #FFD60A, #FFB703);
     border-color: #FFD60A;
     color: #0D1B2A;
-    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
+    
     transform: translateY(-2px);
 }
 
@@ -1498,7 +1498,7 @@ input[type="time"]::-moz-time-picker {
     background: rgba(46, 204, 113, 0.3) !important;
     border-color: rgba(46, 204, 113, 0.5) !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3) !important;
+    
 }
 
 /* Salas wrapper - melhorado */
@@ -1519,7 +1519,7 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.85rem;
     font-weight: 600;
     border: 1px solid rgba(255, 214, 10, 0.3);
-    box-shadow: 0 2px 6px rgba(255, 214, 10, 0.2);
+    
 }
 
 /* Estados especiais */
@@ -1575,7 +1575,7 @@ input[type="time"]::-moz-time-picker {
     background: rgba(46, 204, 113, 0.3);
     border-color: rgba(46, 204, 113, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+    
 }
 
 .btn-adicionar-tipo-sessao i {
@@ -1649,13 +1649,13 @@ input[type="time"]::-moz-time-picker {
     font-size: 1.1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.3);
+    
 }
 
 .hora-btn:hover {
     background: linear-gradient(135deg, #3B91C0, #2A7AA8);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.5);
+    
     border-color: rgba(78, 168, 222, 0.5);
 }
 
@@ -1663,7 +1663,7 @@ input[type="time"]::-moz-time-picker {
     background: linear-gradient(135deg, #FFD60A, #FFB703);
     border-color: #FFD60A;
     color: #0D1B2A;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.5);
+    
     transform: translateY(-3px);
 }
 
@@ -1674,7 +1674,7 @@ input[type="time"]::-moz-time-picker {
     color: #666;
     cursor: not-allowed;
     opacity: 0.5;
-    box-shadow: none;
+    
     transform: none;
 }
 
@@ -1812,7 +1812,7 @@ input[type="time"]::-moz-time-picker {
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    
     position: relative;
     overflow: hidden;
 }
@@ -1841,7 +1841,7 @@ input[type="time"]::-moz-time-picker {
     font-weight: 600;
     color: #ffffff;
     font-size: 16px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    
 }
 
 .sala-atual {
@@ -1853,7 +1853,7 @@ input[type="time"]::-moz-time-picker {
     font-size: 14px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    
     min-width: 120px;
     text-align: center;
 }
@@ -1868,7 +1868,7 @@ input[type="time"]::-moz-time-picker {
     font-size: 14px;
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -1876,7 +1876,7 @@ input[type="time"]::-moz-time-picker {
 .btn-editar-sala-tipo:hover {
     background: linear-gradient(135deg, #ffed4e 0%, #fff 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    
 }
 
 .btn-editar-sala-tipo:active {
@@ -2087,7 +2087,7 @@ input[type="time"]::-moz-time-picker {
 .btn-add-tipo-sessao:hover {
     background: linear-gradient(135deg, #218838, #1ea085);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    
 }
 
 .btn-add-tipo-sessao i {
@@ -2186,7 +2186,7 @@ input[type="time"]::-moz-time-picker {
 .genero-tag:hover {
     background: linear-gradient(135deg, #ffed4e, #ffd700);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    
 }
 
 .genero-nome {
@@ -2281,7 +2281,7 @@ input[type="time"]::-moz-time-picker {
 
 .modal-overlay .form-input:focus {
     border-color: #ffd700 !important;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    
 }
 
 .modal-overlay select option {
@@ -2481,7 +2481,7 @@ input[type="time"]::-moz-time-picker {
     background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
     border-radius: 8px;
     border: 2px solid #ffd700;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+    
     animation: slideIn 0.3s ease;
 }
 
@@ -2529,7 +2529,7 @@ input[type="time"]::-moz-time-picker {
 /* Animação para quando o ator é selecionado */
 .selected-actor.actor-selected {
     transform: scale(1.02);
-    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
+    
     border-color: #ffed4e;
 }
 
@@ -2631,7 +2631,7 @@ input[type="time"]::-moz-time-picker {
 .btn-add-tipo-sessao:hover {
     background: linear-gradient(135deg, #218838, #1ea085);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    
 }
 
 .btn-add-tipo-sessao i {
@@ -2659,7 +2659,7 @@ input[type="time"]::-moz-time-picker {
     border-radius: 12px;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    
     animation: modalSlideIn 0.3s ease-out;
 }
 
@@ -2754,7 +2754,7 @@ input[type="time"]::-moz-time-picker {
 .form-select:focus {
     outline: none;
     border-color: #ffd700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+    
 }
 
 .tipo-info {
@@ -2813,7 +2813,7 @@ input[type="time"]::-moz-time-picker {
 .btn-primary:hover:not(:disabled) {
     background: linear-gradient(135deg, #0056b3, #004085);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    
 }
 
 .btn-primary:disabled {
@@ -3150,7 +3150,7 @@ input[type="time"]::-moz-time-picker {
 #actorSearch:focus {
     outline: none;
     border-color: #ffd700;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.1);
+    
 }
 
 #actorSearch::placeholder {
@@ -3170,7 +3170,7 @@ input[type="time"]::-moz-time-picker {
     overflow-y: auto;
     z-index: 1000;
     display: none;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    
 }
 
 .search-results::-webkit-scrollbar {
@@ -3332,13 +3332,13 @@ input[type="time"]::-moz-time-picker {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+    
 }
 
 .btn-clear-selection:hover {
     background: #c0392b;
     transform: scale(1.1);
-    box-shadow: 0 4px 16px rgba(231, 76, 60, 0.6);
+    
 }
 
 .btn-clear-selection i {
@@ -3400,4 +3400,23 @@ input[type="time"]::-moz-time-picker {
     .lista-sessoes {
         justify-content: center;
     }
+}
+
+
+/* Modal de adicionar cinema - posicionar no topo para dropdown aparecer para baixo */
+#cinemaModal {
+    align-items: flex-start;
+    padding-top: 15vh;
+    padding-bottom: 10vh;
+}
+
+#cinemaModal .modal-content {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Garantir espaço abaixo do select para o dropdown */
+#cinemaModal .modal-body {
+    padding-bottom: 60px;
+    min-height: 200px;
 }

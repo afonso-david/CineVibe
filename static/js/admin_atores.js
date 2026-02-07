@@ -461,7 +461,6 @@ function showNotification(message, type = 'info') {
         z-index: 10000;
         transform: translateX(400px);
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     `;
     
     if (type === 'error') {

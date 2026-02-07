@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 03, 2026 at 06:04 PM
+-- Generation Time: Feb 07, 2026 at 12:23 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -473,7 +473,7 @@ CREATE TABLE IF NOT EXISTS `codigos_desconto` (
   UNIQUE KEY `codigo` (`codigo`),
   KEY `idx_codigo` (`codigo`),
   KEY `idx_usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `codigos_desconto`
@@ -499,7 +499,12 @@ INSERT INTO `codigos_desconto` (`id`, `codigo`, `usuario_id`, `premio_id`, `prem
 (17, 'NTOQTL6K', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 0, '2026-02-03 17:25:42', NULL, '2026-03-05 17:25:43'),
 (18, '9MUYY1Z8', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:31:26', NULL, '2026-03-05 17:31:27'),
 (19, '916QLAVR', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:39:58', NULL, '2026-03-05 17:39:59'),
-(20, 'GI2C9IC6', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:55:49', NULL, '2026-03-05 17:55:49');
+(20, 'GI2C9IC6', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 17:55:49', NULL, '2026-03-05 17:55:49'),
+(21, 'V7LA3XDF', 1, 6, 'Gomas(fini)', 0.00, 'valor_fixo', 3.00, 0, '2026-02-03 18:17:23', NULL, '2026-03-05 18:17:23'),
+(22, 'ECMW6DWJ', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 18:17:37', NULL, '2026-03-05 18:17:37'),
+(23, '4YHCU76A', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 18:25:11', NULL, '2026-03-05 18:25:12'),
+(24, '6UB00E7X', 1, 5, 'Snickers', 0.00, 'valor_fixo', 3.00, 0, '2026-02-03 18:28:49', NULL, '2026-03-05 18:28:50'),
+(25, 'MISTDN29', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 1, '2026-02-03 18:32:04', '2026-02-03 18:36:09', '2026-03-05 18:32:05');
 
 -- --------------------------------------------------------
 
@@ -11224,7 +11229,7 @@ INSERT INTO `menus` (`id`, `nome`, `descricao`, `preco_total`, `imagem_url`) VAL
 (2, 'Menu Nachos', 'Nachos mais Coca Cola', 5.50, 'imgs/Snacks/menu3.png'),
 (3, 'Menu Kids', 'Pipocas mais sumo', 5.00, 'imgs/Snacks/ChatGPT Image 5_11_2025, 18_19_29.png'),
 (4, 'Menu chocolate', 'Chocolate e bebida ', 6.50, 'imgs/Snacks/menu5.png'),
-(5, 'Menu Combo Duplo', 'dois menus combo', 14.00, 'imgs/Snacks/ChatGPT Image 22_11_2025, 11_58_26.png');
+(5, 'Menu Combo Duplo', 'dois menus combo', 14.00, 'imgs/menus/menu_e6158fa0.png');
 
 -- --------------------------------------------------------
 
@@ -11240,7 +11245,7 @@ CREATE TABLE IF NOT EXISTS `menu_produtos` (
   PRIMARY KEY (`id`),
   KEY `fk_menu_produtos_menu` (`menu_id`),
   KEY `fk_menu_produtos_produto` (`produto_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `menu_produtos`
@@ -11273,11 +11278,11 @@ INSERT INTO `menu_produtos` (`id`, `menu_id`, `produto_id`) VALUES
 (25, 4, 16),
 (26, 4, 1),
 (27, 4, 17),
-(28, 5, 1),
-(29, 5, 17),
-(30, 5, 13),
-(31, 5, 14),
-(32, 5, 16);
+(48, 5, 1),
+(49, 5, 17),
+(50, 5, 13),
+(51, 5, 14),
+(52, 5, 16);
 
 -- --------------------------------------------------------
 
@@ -11297,7 +11302,7 @@ CREATE TABLE IF NOT EXISTS `pontos_gastos` (
   PRIMARY KEY (`id`),
   KEY `idx_usuario_gastos` (`usuario_id`),
   KEY `idx_codigo_gastos` (`codigo_desconto`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `pontos_gastos`
@@ -11316,7 +11321,9 @@ INSERT INTO `pontos_gastos` (`id`, `usuario_id`, `premio_id`, `premio_nome`, `po
 (10, 1, 5, 'Snickers', 200, 'DXHSAS06', '2026-02-02 10:40:54'),
 (11, 1, 1, 'Coca Cola pequena', 200, 'N1JF0MPI', '2026-02-02 11:13:00'),
 (12, 1, 8, 'Pretzel', 100, 'TO02VEU6', '2026-02-03 17:05:55'),
-(13, 1, 1, 'Coca Cola pequena', 200, 'GJV5CEAZ', '2026-02-03 17:16:26');
+(13, 1, 1, 'Coca Cola pequena', 200, 'GJV5CEAZ', '2026-02-03 17:16:26'),
+(14, 1, 1, 'Coca Cola pequena', 200, '4YHCU76A', '2026-02-03 18:25:11'),
+(15, 1, 8, 'Pretzel', 100, 'MISTDN29', '2026-02-03 18:32:04');
 
 -- --------------------------------------------------------
 
@@ -11441,7 +11448,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   KEY `tipo_sessao_id` (`id_tipo_sessao`),
   KEY `idx_data_sessao` (`data_sessao`),
   KEY `fk_reserva_horario_sessao` (`id_horario_sessao`)
-) ENGINE=InnoDB AUTO_INCREMENT=729 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=734 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas`
@@ -11744,7 +11751,12 @@ INSERT INTO `reservas` (`id`, `id_horario_sessao`, `data_sessao`, `id_filme`, `i
 (725, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 17:26:42', 'confirmada', 47.40, 'applepay', 'C18,C19,C20,C21,C22,C23'),
 (726, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 17:32:20', 'confirmada', 7.90, 'paypal', 'I1'),
 (727, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 17:57:20', 'confirmada', 47.40, 'applepay', 'B23,B24,B25,B26,B27,B28'),
-(728, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:04:04', 'confirmada', 7.90, 'applepay', 'F14');
+(728, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:04:04', 'confirmada', 7.90, 'applepay', 'F14'),
+(729, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:07:51', 'confirmada', 7.90, 'paypal', 'I10'),
+(730, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:13:28', 'confirmada', 47.40, 'applepay', 'L10,L11,L12,L13,L14,L9'),
+(731, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:18:42', 'confirmada', 31.60, 'applepay', 'B10,B11,B12,B9'),
+(732, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:30:04', 'confirmada', 7.90, 'applepay', 'D7'),
+(733, 36971, '2026-02-03', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-03 18:36:18', 'confirmada', 47.40, 'applepay', 'C1,C2,C3,C4,C5,C6');
 
 -- --------------------------------------------------------
 
@@ -12267,6 +12279,35 @@ INSERT INTO `tipos_sessao` (`id`, `nome`, `descricao`, `preco_bilhete`, `preco`)
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `toppings`
+--
+
+DROP TABLE IF EXISTS `toppings`;
+CREATE TABLE IF NOT EXISTS `toppings` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `descricao` text,
+  `preco` decimal(6,2) NOT NULL,
+  `imagem_url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `toppings`
+--
+
+INSERT INTO `toppings` (`id`, `nome`, `descricao`, `preco`, `imagem_url`) VALUES
+(1, 'M&M\'s', 'Chocolate colorido crocante', 1.50, 'imgs\\Snacks\\topping_m&m.png\"'),
+(2, 'Biscoff', 'Biscoito caramelizado Biscoff', 1.80, 'imgs\\Snacks\\topping_biscoff.png\"'),
+(3, 'Caramelo', 'Caramelo doce', 1.20, 'imgs\\Snacks\\topping_caramelo.png\"'),
+(4, 'Manteiga', 'Manteiga derretida clássica', 0.80, 'imgs\\Snacks\\topping_mateiga.png\"'),
+(5, 'Piri Piri', 'Tempero picante piri piri', 1.00, 'imgs\\Snacks\\topping_piri piri.png\"'),
+(6, 'Oreo', 'Biscoito Oreo triturado', 1.70, 'imgs\\Snacks\\topping_oreo.png\"');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `usuarios`
 --
 
@@ -12294,9 +12335,9 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo_usuario`, `criado_em`, `ultimo_login`, `avatar`, `avatar_id`, `is_admin`, `biografia`, `filme_favorito_id`, `avatar_personalizado`) VALUES
-(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$KXYrw6ohKg9yaeRa$e745d1d657d19ee70a8e16007b9785a82b3e56f92a1e4cb0bc8357c58aaf5940a08337aaf4f52427f86dbdc064cc567e787b07f317dbc64029f5f6ed611558db', 'normal', '2025-11-03 20:23:37', '2026-02-03 17:25:29', 'imgs/profile/super-herois/OIP-removebg-preview (13).png', 4, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
+(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$KXYrw6ohKg9yaeRa$e745d1d657d19ee70a8e16007b9785a82b3e56f92a1e4cb0bc8357c58aaf5940a08337aaf4f52427f86dbdc064cc567e787b07f317dbc64029f5f6ed611558db', 'normal', '2025-11-03 20:23:37', '2026-02-03 18:24:54', 'imgs/profile/super-herois/OIP-removebg-preview (13).png', 4, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
 (11, 'Duarte', 'duartemariation@gmail.com', 'scrypt:32768:8:1$h5SKV2XnqVI4TCjn$3fbcc143a0ffdeff34037e6aaa861b2900517e152fa955de0336cefe00efb812b9d4989e720e9707c056974358a403d42ce410e4895ffccbacff862cf79381b4', 'normal', '2025-11-04 00:08:34', '2026-02-03 17:24:29', 'imgs/profile/80s/Phone_Home-removebg-preview.png', 37, 0, NULL, NULL, 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png'),
-(13, 'Amnin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-01-29 20:35:11', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
+(13, 'Amnin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-02-07 10:29:47', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
 (14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', 'scrypt:32768:8:1$b4qBlQCA6n19uNbC$c7a2c12ef1d6cb85bb483fb6aefba5a914a0380cb986b34161e76e1cca549dee28e65a4bb70a0133bfa29a7d345b8ce6c70c92be2ea3fb7b55374fb52a2a0872', 'normal', '2025-11-17 21:28:06', '2026-01-29 20:43:45', 'imgs/icons/user_icon34-removebg-preview.png', 29, 0, NULL, NULL, NULL),
 (15, 'André Almeida', 'andrea@gmail.com', 'scrypt:32768:8:1$vxnypx0d0A7g9NkJ$3d5776f833f4b231d7fb77320d5e249ecbce83f48fd00a08d9562ecfbac2de6ebaa51c7f31795256d612d6c8f53328b2158f721dd17cbaf3d13d29bc9f5202e9', 'normal', '2025-11-19 08:50:33', '2025-11-20 08:52:11', 'imgs/icons/user_icon34-removebg-preview.png', 5, 0, NULL, NULL, NULL),
 (21, 'Marta Silva', 'martasilva@gmail.com', 'scrypt:32768:8:1$UGh7InYCqj6X6I6G$bab6d731f06982739b6097ed2e43a5c4b97babbf6cd68ca3bebfc998d5e1d276b636c25767830d09d7e6c61b0ba62fc2b3070a9574d1d04422459f9c85710559', 'normal', '2025-11-20 09:25:15', '2025-11-22 11:39:11', 'imgs/icons/user_icon34-removebg-preview.png', 21, 0, NULL, NULL, NULL),

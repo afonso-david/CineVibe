@@ -250,12 +250,10 @@ function exportarRelatorio(tipo) {
 document.querySelectorAll('[onclick^="exportarRelatorio"]').forEach(btn => {
   btn.addEventListener('mouseenter', function() {
     this.style.transform = 'translateY(-2px)';
-    this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
   });
   
   btn.addEventListener('mouseleave', function() {
     this.style.transform = 'translateY(0)';
-    this.style.boxShadow = 'none';
   });
 });
 

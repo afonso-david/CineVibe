@@ -13,7 +13,7 @@
 
 .movie-card-pro:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    
     border-color: rgba(255, 215, 0, 0.5);
 }
 
@@ -238,7 +238,7 @@
     border-radius: 16px;
     padding: 24px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -279,7 +279,7 @@
 .search-box-pro input:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .search-box-pro input::placeholder {
@@ -307,7 +307,7 @@
 .filter-select:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .filter-select option {
@@ -372,7 +372,7 @@
 .view-btn.active {
     background: #FFD700;
     color: #1a1a2e;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    
 }
 
 .sort-controls {
@@ -394,7 +394,7 @@
 .sort-select:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .sort-select option {
@@ -415,7 +415,7 @@
     background: #1a1a2e;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -469,7 +469,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    
 }
 
 .top-bar-left {
@@ -526,12 +526,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+    
 }
 
 /* Modal Professional */
@@ -557,7 +557,7 @@
     max-width: 700px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -650,7 +650,7 @@
 .form-group textarea:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .form-group input::placeholder,
@@ -692,7 +692,7 @@
 
 .btn-confirm:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+    
 }
 
 .btn-cancel {

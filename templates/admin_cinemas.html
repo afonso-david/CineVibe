@@ -13,12 +13,6 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
-                    <span>CineVibe</span>
-                </div>
-            </div>
             
             <nav class="sidebar-nav">
                 <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
@@ -73,26 +67,51 @@
             <!-- User Profile Section -->
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="user-avatar">
-                        {% if user and user.avatar_url %}
-                            <img src="{{ user.avatar_url }}" alt="Avatar" class="avatar-img">
-                        {% else %}
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user"></i>
+                    <div class="profile-background">
+                        <div class="profile-pattern"></div>
+                        <div class="profile-glow"></div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="user-avatar">
+                            {% if user and (user.avatar_personalizado or user.avatar) %}
+                                <img src="{{ url_for('static', filename=user.avatar_personalizado if user.avatar_personalizado else user.avatar) }}" alt="Avatar" class="avatar-img">
+                            {% else %}
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                            {% endif %}
+                            <div class="avatar-ring"></div>
+                            <div class="avatar-status"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
+                            <div class="user-role">
+                                <i class="fas fa-crown"></i>
+                                <span>Administrador</span>
                             </div>
-                        {% endif %}
+                            <div class="user-status">
+                                <i class="fas fa-circle"></i>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <a href="{{ url_for('perfil') }}" class="action-btn profile-btn" title="Gerir Perfil">
+                                <i class="fas fa-user-cog"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Terminar Sessão">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                        </div>
                     </div>
-                    <div class="user-info">
-                        <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
-                        <div class="user-role">Administrador</div>
-                    </div>
-                    <div class="user-actions">
-                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
-                            <i class="fas fa-user-cog"></i>
-                        </a>
-                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
+                    <div class="profile-decoration">
+                        <div class="decoration-line"></div>
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,37 +187,7 @@
                     {% for cinema in cinemas %}
                     <div class="movie-card-pro" data-cinema-id="{{ cinema.id }}" data-regiao="{{ cinema.regiao or '' }}">
                         <div class="movie-poster">
-                            {% if cinema.nome == 'CineVibe São Miguel' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Aveiro_v2.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Funchal' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Funchal_v2.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Portimão' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Portimao.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Porto' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Porto.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Lisboa' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Lisboa.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Braga' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Braga.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Coimbra' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Coimbra_v2.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Faro' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Faro.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Évora' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Evora.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Leiria' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Leiria.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Viseu' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Viseu.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Santarém' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Santarem_v2.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Setúbal' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Setubal.png') }}" alt="{{ cinema.nome }}">
-                            {% elif cinema.nome == 'CineVibe Montijo' %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/CineVibe_Montijo.png') }}" alt="{{ cinema.nome }}">
-                            {% else %}
-                                <img src="{{ url_for('static', filename='imgs/cinemas/default.jpg') }}" alt="{{ cinema.nome }}">
-                            {% endif %}
+                            <img src="{{ url_for('static', filename=cinema.imagem if cinema.imagem else 'imgs/cinemas/default.jpg') }}" alt="{{ cinema.nome }}" onerror="this.src='{{ url_for('static', filename='imgs/cinemas/default.jpg') }}'">>
                             <div class="movie-overlay">
                                 <div class="movie-actions">
                                     <button class="action-btn edit" onclick="editarCinema({{ cinema.id }})" title="Editar">
@@ -328,7 +317,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="{{ url_for('admin_adicionar_cinema') }}" method="POST">
+            <form action="{{ url_for('admin_adicionar_cinema') }}" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-grid">
                         <div class="form-group">
@@ -340,6 +329,14 @@
                         </div>
                         
                         <div class="form-group">
+                            <label for="localizacao">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Localização *
+                            </label>
+                            <input type="text" id="localizacao" name="localizacao" required placeholder="Ex: Lisboa">
+                        </div>
+                        
+                        <div class="form-group">
                             <label for="regiao">
                                 <i class="fas fa-globe"></i>
                                 Região *
@@ -348,12 +345,24 @@
                                 <option value="">Selecionar região</option>
                                 <option value="Norte">Norte</option>
                                 <option value="Centro">Centro</option>
-                                <option value="Lisboa">Lisboa</option>
-                                <option value="Alentejo">Alentejo</option>
-                                <option value="Algarve">Algarve</option>
-                                <option value="Açores">Açores</option>
-                                <option value="Madeira">Madeira</option>
+                                <option value="Sul">Sul</option>
                             </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            <input type="email" id="email" name="email" placeholder="Ex: contacto@cinevibe.pt">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="imagem">
+                                <i class="fas fa-image"></i>
+                                Imagem do Cinema
+                            </label>
+                            <input type="file" id="imagem" name="imagem" accept="image/*">
                         </div>
                     </div>
                 </div>
@@ -380,7 +389,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="formEditarCinema" method="POST">
+            <form id="formEditarCinema" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-grid">
                         <div class="form-group">
@@ -408,11 +417,7 @@
                                 <option value="">Selecionar região</option>
                                 <option value="Norte">Norte</option>
                                 <option value="Centro">Centro</option>
-                                <option value="Lisboa">Lisboa</option>
-                                <option value="Alentejo">Alentejo</option>
-                                <option value="Algarve">Algarve</option>
-                                <option value="Açores">Açores</option>
-                                <option value="Madeira">Madeira</option>
+                                <option value="Sul">Sul</option>
                             </select>
                         </div>
                         
@@ -433,11 +438,21 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="edit_imagem_url">
+                            <label for="edit_imagem">
                                 <i class="fas fa-image"></i>
-                                URL da Imagem
+                                Imagem do Cinema
                             </label>
-                            <input type="url" id="edit_imagem_url" name="imagem_url">
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <input type="file" id="edit_imagem" name="imagem" accept="image/*" style="display: none;" onchange="previewEditImage(event)">
+                                <button type="button" onclick="document.getElementById('edit_imagem').click()" style="padding: 0.75rem; background: #FFD60A; color: #0D1B2A; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                    <i class="fas fa-upload"></i> Escolher Imagem
+                                </button>
+                                <div id="edit_preview_container" style="display: none; margin-top: 0.5rem;">
+                                    <img id="edit_preview_image" style="max-width: 200px; max-height: 150px; border-radius: 8px; object-fit: cover;">
+                                    <p id="edit_preview_name" style="margin-top: 0.5rem; color: #8892B0; font-size: 0.9rem;"></p>
+                                </div>
+                                <p id="edit_current_image" style="margin: 0; color: #8892B0; font-size: 0.85rem;"></p>
+                            </div>
                         </div>
                         
                         <div class="form-group full-width">

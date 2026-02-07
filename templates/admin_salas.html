@@ -237,12 +237,6 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
-                    <span>CineVibe</span>
-                </div>
-            </div>
             
             <nav class="sidebar-nav">
                 <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
@@ -293,6 +287,58 @@
                     <span>Voltar ao Site</span>
                 </a>
             </nav>
+            
+            <!-- User Profile Section -->
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="profile-background">
+                        <div class="profile-pattern"></div>
+                        <div class="profile-glow"></div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="user-avatar">
+                            {% if user and (user.avatar_personalizado or user.avatar) %}
+                                <img src="{{ url_for('static', filename=user.avatar_personalizado if user.avatar_personalizado else user.avatar) }}" alt="Avatar" class="avatar-img">
+                            {% else %}
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                            {% endif %}
+                            <div class="avatar-ring"></div>
+                            <div class="avatar-status"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
+                            <div class="user-role">
+                                <i class="fas fa-crown"></i>
+                                <span>Administrador</span>
+                            </div>
+                            <div class="user-status">
+                                <i class="fas fa-circle"></i>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <a href="{{ url_for('perfil') }}" class="action-btn profile-btn" title="Gerir Perfil">
+                                <i class="fas fa-user-cog"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Terminar Sessão">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="profile-decoration">
+                        <div class="decoration-line"></div>
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content -->
@@ -309,7 +355,7 @@
                     </div>
                 </div>
                 <div class="top-bar-right">
-                    <button class="btn-primary" onclick="alert('Funcionalidade em desenvolvimento')">
+                    <button class="btn-primary" onclick="abrirModalAdicionarSala()">
                         <i class="fas fa-plus"></i>
                         Adicionar Sala
                     </button>
@@ -446,6 +492,61 @@
         </main>
     </div>
 
+    <!-- Modal para Adicionar Sala -->
+    <div id="adicionarSalaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar Nova Sala</h3>
+                <button onclick="fecharModalAdicionarSala()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAdicionarSala" method="POST" action="{{ url_for('admin_adicionar_sala') }}">
+                    <div class="form-group">
+                        <label>Nome da Sala *</label>
+                        <input type="text" name="nome_sala" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cinema *</label>
+                        <select name="id_cinema" class="form-select" required>
+                            <option value="">Selecionar cinema</option>
+                            {% for cinema in cinemas %}
+                                <option value="{{ cinema.id }}">{{ cinema.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidade *</label>
+                        <input type="number" name="capacidade" class="form-input" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Sala</label>
+                        <select name="tipo_sala" class="form-select">
+                            <option value="Normal">Normal</option>
+                            <option value="IMAX">IMAX</option>
+                            <option value="4DX">4DX</option>
+                            <option value="VIP">VIP</option>
+                            <option value="Premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Filas</label>
+                        <input type="number" name="fileiras" class="form-input" min="1" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Lugares por Fila</label>
+                        <input type="number" name="lugares_por_fileira" class="form-input" min="1" value="20">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="fecharModalAdicionarSala()" class="btn btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Adicionar Sala</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para Editar Sala -->
     <div id="editarSalaModal" class="modal">
         <div class="modal-content">
@@ -485,11 +586,11 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Fileiras</label>
+                        <label>Filas</label>
                         <input type="number" id="editFileiras" class="form-input" min="1" value="10">
                     </div>
                     <div class="form-group">
-                        <label>Lugares por Fileira</label>
+                        <label>Lugares por Fila</label>
                         <input type="number" id="editLugaresPorFileira" class="form-input" min="1" value="20">
                     </div>
                 </form>
@@ -587,6 +688,17 @@
 
         // Variável global para armazenar o ID da sala sendo editada
         let salaEditandoId = null;
+
+        // Função para abrir modal de adicionar sala
+        function abrirModalAdicionarSala() {
+            document.getElementById('adicionarSalaModal').style.display = 'flex';
+        }
+
+        // Função para fechar modal de adicionar sala
+        function fecharModalAdicionarSala() {
+            document.getElementById('adicionarSalaModal').style.display = 'none';
+            document.getElementById('formAdicionarSala').reset();
+        }
 
         // Função para editar sala
         function editarSala(salaId) {
@@ -715,9 +827,14 @@
 
         // Fechar modal ao clicar fora
         window.onclick = function(event) {
-            const modal = document.getElementById('editarSalaModal');
-            if (event.target === modal) {
+            const modalEditar = document.getElementById('editarSalaModal');
+            const modalAdicionar = document.getElementById('adicionarSalaModal');
+            
+            if (event.target === modalEditar) {
                 fecharModalEditarSala();
+            }
+            if (event.target === modalAdicionar) {
+                fecharModalAdicionarSala();
             }
         }
     </script>

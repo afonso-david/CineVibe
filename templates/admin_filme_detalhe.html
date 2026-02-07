@@ -523,6 +523,7 @@ function salvarFilme() {
     .then(data => {
         if (data.success) {
             showNotification('Filme atualizado com sucesso!', 'success');
+            // Não precisa recarregar - os campos já estão atualizados visualmente
         } else {
             showNotification('Erro ao atualizar filme: ' + data.message, 'error');
         }

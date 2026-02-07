@@ -8,6 +8,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 import os
+import uuid
 import random
 import requests
 import secrets
@@ -399,6 +400,22 @@ def get_db_connection():
         database="cinevibe"
     )
 
+def get_current_user():
+    """Busca os dados do usuário logado"""
+    if 'user_id' not in session:
+        return None
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM usuarios WHERE id = %s", (session['user_id'],))
+        user = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return user
+    except:
+        return None
+
 def usar_codigo_desconto_reserva(user_id, codigo, premio_nome, pontos_gastos):
     """Função chamada quando um código de desconto é usado numa reserva"""
     try:
@@ -660,18 +677,19 @@ def home():
     cursor = conn.cursor(dictionary=True)
 
     try:
-        # Atualização automática de estados dos filmes
-        cursor.execute("""
-            UPDATE filmes 
-            SET estado = 'em_exibicao' 
-            WHERE estado = 'brevemente' 
-            AND data_lancamento IS NOT NULL
-            AND data_lancamento <= CURDATE()
-        """)
+        # Atualização automática de estados dos filmes - DESATIVADO para controlo manual
+        # cursor.execute("""
+        #     UPDATE filmes 
+        #     SET estado = 'em_exibicao' 
+        #     WHERE estado = 'brevemente' 
+        #     AND data_lancamento IS NOT NULL
+        #     AND data_lancamento <= CURDATE()
+        # """)
+        # 
+        # if cursor.rowcount > 0:
+        #     app.logger.info(f"🎬 Atualizados {cursor.rowcount} filmes para 'em_exibicao'")
+        #     conn.commit()
         
-        if cursor.rowcount > 0:
-            app.logger.info(f"🎬 Atualizados {cursor.rowcount} filmes para 'em_exibicao'")
-            conn.commit()
         # Buscar top 10 filmes baseado em:
         # 1. Número de reservas (mais populares)
         # 2. Data de lançamento (mais recentes)
@@ -2521,7 +2539,7 @@ def admin_dashboard():
         conn.close()
         return redirect(url_for('home'))
     
-    # Estatísticas gerais
+    # ===== ESTATÍSTICAS PRINCIPAIS =====
     cur.execute("SELECT COUNT(*) as total FROM filmes")
     total_filmes = cur.fetchone()['total']
     
@@ -2531,83 +2549,114 @@ def admin_dashboard():
     cur.execute("SELECT COUNT(*) as total FROM usuarios WHERE is_admin = FALSE")
     total_usuarios = cur.fetchone()['total']
     
+    cur.execute("SELECT COUNT(*) as total FROM reservas WHERE DATE(data_reserva) = CURDATE()")
+    reservas_hoje = cur.fetchone()['total']
+    
     cur.execute("SELECT COUNT(*) as total FROM reservas")
     total_reservas = cur.fetchone()['total']
     
-    # Vendas semanais (últimos 7 dias)
+    # ===== RECEITAS =====
     cur.execute("""
-        SELECT COALESCE(SUM(ts.preco_bilhete), 0) as total_vendas
-        FROM reservas r
-        JOIN tipos_sessao ts ON r.id_tipo_sessao = ts.id
-        WHERE r.data_reserva >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        SELECT COALESCE(SUM(total), 0) as total
+        FROM reservas
+        WHERE DATE(data_reserva) = CURDATE()
     """)
-    vendas_semanais = cur.fetchone()['total_vendas'] or 0
+    receita_hoje = float(cur.fetchone()['total'] or 0)
     
-    # Receita total de todos os tempos
     cur.execute("""
-        SELECT COALESCE(SUM(ts.preco_bilhete), 0) as receita_total
-        FROM reservas r
-        JOIN tipos_sessao ts ON r.id_tipo_sessao = ts.id
+        SELECT COALESCE(SUM(total), 0) as total
+        FROM reservas
+        WHERE YEARWEEK(data_reserva, 1) = YEARWEEK(CURDATE(), 1)
     """)
-    receita_total = cur.fetchone()['receita_total'] or 0
+    receita_semana = float(cur.fetchone()['total'] or 0)
     
-    # Top 10 snacks/produtos mais vendidos
     cur.execute("""
-        SELECT produto, COUNT(*) as vendas
-        FROM bar
-        GROUP BY produto
-        ORDER BY vendas DESC
-        LIMIT 10
+        SELECT COALESCE(SUM(total), 0) as total
+        FROM reservas
+        WHERE YEAR(data_reserva) = YEAR(CURDATE()) 
+        AND MONTH(data_reserva) = MONTH(CURDATE())
     """)
-    top_snacks = cur.fetchall()
+    receita_mes = float(cur.fetchone()['total'] or 0)
     
-    # Top 10 filmes mais vistos
     cur.execute("""
-        SELECT f.titulo, COUNT(r.id) as total_reservas
+        SELECT COALESCE(SUM(total), 0) as total
+        FROM reservas
+    """)
+    receita_total = float(cur.fetchone()['total'] or 0)
+    
+    # ===== CRESCIMENTO =====
+    # Comparar com semana anterior
+    cur.execute("""
+        SELECT COALESCE(SUM(total), 0) as total
+        FROM reservas
+        WHERE YEARWEEK(data_reserva, 1) = YEARWEEK(CURDATE(), 1) - 1
+    """)
+    receita_semana_anterior = float(cur.fetchone()['total'] or 0)
+    crescimento_semanal = ((receita_semana - receita_semana_anterior) / receita_semana_anterior * 100) if receita_semana_anterior > 0 else 0
+    
+    # ===== TOP 5 FILMES =====
+    cur.execute("""
+        SELECT f.titulo, f.poster_url, COUNT(r.id) as total_reservas,
+               COALESCE(SUM(r.total), 0) as receita
         FROM filmes f
-        JOIN reservas r ON f.id = r.id_filme
-        GROUP BY f.id, f.titulo
+        LEFT JOIN reservas r ON f.id = r.id_filme
+        GROUP BY f.id, f.titulo, f.poster_url
         ORDER BY total_reservas DESC
-        LIMIT 10
+        LIMIT 5
     """)
     top_filmes = cur.fetchall()
     
-    # Reservas por dia (últimos 7 dias)
+    # ===== RESERVAS POR DIA (ÚLTIMOS 7 DIAS) =====
     cur.execute("""
-        SELECT DATE(data_reserva) as data, COUNT(*) as total
+        SELECT DATE_FORMAT(data_reserva, '%d/%m') as data, 
+               COUNT(*) as total,
+               COALESCE(SUM(total), 0) as receita
         FROM reservas
-        WHERE data_reserva >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        WHERE data_reserva >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
         GROUP BY DATE(data_reserva)
-        ORDER BY data
+        ORDER BY DATE(data_reserva)
     """)
-    reservas_diarias = cur.fetchall()
+    reservas_7dias = cur.fetchall()
     
-    # Vendas por cinema
+    # ===== VENDAS POR CINEMA =====
     cur.execute("""
-        SELECT c.nome, COALESCE(SUM(ts.preco_bilhete), 0) as total_vendas
+        SELECT c.nome, c.localizacao,
+               COUNT(r.id) as total_reservas,
+               COALESCE(SUM(r.total), 0) as receita
         FROM cinemas c
         LEFT JOIN reservas r ON c.id = r.id_cinema
-        LEFT JOIN tipos_sessao ts ON r.id_tipo_sessao = ts.id
-        GROUP BY c.id, c.nome
-        ORDER BY total_vendas DESC
+        GROUP BY c.id, c.nome, c.localizacao
+        ORDER BY receita DESC
     """)
     vendas_por_cinema = cur.fetchall()
     
-    # Horários mais populares
+    # ===== HORÁRIOS MAIS POPULARES =====
     cur.execute("""
-        SELECT TIME_FORMAT(h.hora, '%H:%i') as horario, COUNT(r.id) as total_reservas
+        SELECT TIME_FORMAT(h.hora, '%H:%i') as horario, 
+               COUNT(r.id) as total_reservas
         FROM horarios_sessao hs
         JOIN horarios h ON hs.id_horario = h.id
-        JOIN reservas r ON hs.id = r.id_horario_sessao
+        LEFT JOIN reservas r ON hs.id = r.id_horario_sessao
         GROUP BY h.hora
         ORDER BY total_reservas DESC
-        LIMIT 6
+        LIMIT 5
     """)
     horarios_populares = cur.fetchall()
     
-    # Últimas 10 reservas
+    # ===== TIPOS DE SESSÃO MAIS VENDIDOS =====
     cur.execute("""
-        SELECT r.id, r.lugares, r.data_reserva,
+        SELECT ts.nome, COUNT(r.id) as total_reservas,
+               COALESCE(SUM(r.total), 0) as receita
+        FROM tipos_sessao ts
+        LEFT JOIN reservas r ON ts.id = r.id_tipo_sessao
+        GROUP BY ts.id, ts.nome
+        ORDER BY total_reservas DESC
+    """)
+    tipos_sessao_stats = cur.fetchall()
+    
+    # ===== ÚLTIMAS 10 RESERVAS =====
+    cur.execute("""
+        SELECT r.id, r.lugares, r.data_reserva, r.total,
                u.nome as usuario_nome,
                f.titulo as filme_titulo,
                c.nome as cinema_nome
@@ -2620,56 +2669,369 @@ def admin_dashboard():
     """)
     ultimas_reservas = cur.fetchall()
     
-    # Novos usuários (últimos 7 dias)
+    # ===== NOVOS USUÁRIOS (ÚLTIMOS 7 DIAS) =====
     cur.execute("""
         SELECT COUNT(*) as total
         FROM usuarios
         WHERE criado_em >= DATE_SUB(NOW(), INTERVAL 7 DAY)
         AND is_admin = FALSE
     """)
-    novos_usuarios = cur.fetchone()['total']
+    novos_usuarios_semana = cur.fetchone()['total']
     
-    # Usuários ativos (últimos 30 dias)
-    cur.execute("""
-        SELECT COUNT(DISTINCT id_usuario) as total
-        FROM reservas
-        WHERE data_reserva >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    """)
-    usuarios_ativos = cur.fetchone()['total']
+    # ===== PRODUTOS BAR MAIS VENDIDOS =====
+    try:
+        cur.execute("""
+            SELECT rb.produto as nome, b.imagem_url,
+                   SUM(rb.quantidade) as total_vendas
+            FROM reservas_bar rb
+            LEFT JOIN bar b ON rb.produto = b.produto
+            GROUP BY rb.produto, b.imagem_url
+            ORDER BY total_vendas DESC
+            LIMIT 5
+        """)
+        top_produtos_bar = cur.fetchall()
+    except:
+        top_produtos_bar = []
     
-    # Taxa de retorno (usuários que fizeram mais de 1 reserva)
+    # ===== TAXA DE OCUPAÇÃO POR SALA =====
     cur.execute("""
-        SELECT 
-            (COUNT(DISTINCT CASE WHEN total_reservas > 1 THEN id_usuario END) * 100.0 / 
-            NULLIF(COUNT(DISTINCT id_usuario), 0)) as taxa
-        FROM (
-            SELECT id_usuario, COUNT(*) as total_reservas
-            FROM reservas
-            GROUP BY id_usuario
-        ) as user_reservas
+        SELECT s.nome_sala, c.nome as cinema_nome,
+               s.capacidade,
+               COUNT(r.id) as total_reservas,
+               ROUND((COUNT(r.id) / s.capacidade * 100), 1) as taxa_ocupacao
+        FROM salas s
+        JOIN cinemas c ON s.id_cinema = c.id
+        LEFT JOIN horarios_sessao hs ON s.id = hs.id_sala
+        LEFT JOIN reservas r ON hs.id = r.id_horario_sessao
+        GROUP BY s.id, s.nome_sala, c.nome, s.capacidade
+        ORDER BY taxa_ocupacao DESC
+        LIMIT 10
     """)
-    taxa_retorno_result = cur.fetchone()
-    taxa_retorno = taxa_retorno_result['taxa'] if taxa_retorno_result and taxa_retorno_result['taxa'] else 0
+    ocupacao_salas = cur.fetchall()
     
     cur.close()
     conn.close()
     
     return render_template('admin_dashboard.html',
-                         total_filmes=total_filmes,
-                         total_cinemas=total_cinemas,
-                         total_usuarios=total_usuarios,
-                         total_reservas=total_reservas,
-                         vendas_semanais=vendas_semanais,
-                         receita_total=receita_total,
-                         top_snacks=top_snacks,
-                         top_filmes=top_filmes,
-                         reservas_diarias=reservas_diarias,
-                         vendas_por_cinema=vendas_por_cinema,
-                         horarios_populares=horarios_populares,
-                         ultimas_reservas=ultimas_reservas,
-                         novos_usuarios=novos_usuarios,
-                         usuarios_ativos=usuarios_ativos,
-                         taxa_retorno=taxa_retorno)
+        user=get_current_user(),
+        total_filmes=total_filmes,
+        total_cinemas=total_cinemas,
+        total_usuarios=total_usuarios,
+        reservas_hoje=reservas_hoje,
+        total_reservas=total_reservas,
+        receita_hoje=receita_hoje,
+        receita_semana=receita_semana,
+        receita_mes=receita_mes,
+        receita_total=receita_total,
+        crescimento_semanal=crescimento_semanal,
+        top_filmes=top_filmes,
+        reservas_7dias=reservas_7dias,
+        vendas_por_cinema=vendas_por_cinema,
+        horarios_populares=horarios_populares,
+        tipos_sessao_stats=tipos_sessao_stats,
+        ultimas_reservas=ultimas_reservas,
+        novos_usuarios_semana=novos_usuarios_semana,
+        top_produtos_bar=top_produtos_bar,
+        ocupacao_salas=ocupacao_salas
+    )
+
+# ==========================
+# Exportar Relatórios
+# ==========================
+@app.route('/admin/exportar/<tipo>')
+def exportar_relatorio(tipo):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    
+    # Verificar se é admin
+    cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
+    user = cur.fetchone()
+    
+    if not user or not user.get('is_admin'):
+        flash('Acesso negado', 'erro')
+        return redirect(url_for('home'))
+    
+    import csv
+    from io import StringIO
+    
+    output = StringIO()
+    writer = csv.writer(output)
+    
+    # Data e hora do relatório
+    data_relatorio = datetime.now().strftime('%d/%m/%Y às %H:%M')
+    
+    if tipo == 'reservas':
+        # ===== RELATÓRIO DE RESERVAS =====
+        cur.execute("""
+            SELECT r.id, r.data_reserva, r.data_sessao,
+                   u.nome as usuario, u.email,
+                   f.titulo as filme,
+                   c.nome as cinema, c.localizacao,
+                   ts.nome as tipo_sessao,
+                   r.lugares, r.total, r.status
+            FROM reservas r
+            LEFT JOIN usuarios u ON r.id_usuario = u.id
+            JOIN filmes f ON r.id_filme = f.id
+            JOIN cinemas c ON r.id_cinema = c.id
+            JOIN tipos_sessao ts ON r.id_tipo_sessao = ts.id
+            ORDER BY r.data_reserva DESC
+        """)
+        dados = cur.fetchall()
+        
+        # Cabeçalho do relatório
+        writer.writerow(['RELATÓRIO DE RESERVAS - CINEVIBE'])
+        writer.writerow([f'Gerado em: {data_relatorio}'])
+        writer.writerow([f'Total de Reservas: {len(dados)}'])
+        writer.writerow([])
+        
+        # Cabeçalhos das colunas
+        writer.writerow(['ID', 'Data Reserva', 'Data Sessão', 'Usuário', 'Email', 'Filme', 'Cinema', 'Localização', 'Tipo Sessão', 'Lugares', 'Valor (€)', 'Status'])
+        
+        # Dados
+        total_receita = 0
+        for row in dados:
+            writer.writerow([
+                row['id'],
+                row['data_reserva'].strftime('%d/%m/%Y %H:%M') if row['data_reserva'] else '',
+                row['data_sessao'].strftime('%d/%m/%Y') if row['data_sessao'] else '',
+                row['usuario'] or 'Convidado',
+                row['email'] or 'N/A',
+                row['filme'],
+                row['cinema'],
+                row['localizacao'],
+                row['tipo_sessao'],
+                row['lugares'],
+                f"{float(row['total']):.2f}",
+                row['status'].upper()
+            ])
+            total_receita += float(row['total'])
+        
+        # Totais
+        writer.writerow([])
+        writer.writerow(['', '', '', '', '', '', '', '', '', 'TOTAL:', f"{total_receita:.2f} €", ''])
+        
+        filename = f'CineVibe_Reservas_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+    
+    elif tipo == 'vendas':
+        # ===== RELATÓRIO DE VENDAS POR CINEMA =====
+        cur.execute("""
+            SELECT c.nome as cinema, c.localizacao,
+                   COUNT(r.id) as total_reservas,
+                   SUM(r.total) as receita_total
+            FROM cinemas c
+            LEFT JOIN reservas r ON c.id = r.id_cinema
+            GROUP BY c.id, c.nome, c.localizacao
+            ORDER BY receita_total DESC
+        """)
+        vendas_cinema = cur.fetchall()
+        
+        # ===== VENDAS POR FILME =====
+        cur.execute("""
+            SELECT f.titulo as filme, f.diretor,
+                   COUNT(r.id) as total_reservas,
+                   SUM(r.total) as receita_total
+            FROM filmes f
+            LEFT JOIN reservas r ON f.id = r.id_filme
+            GROUP BY f.id, f.titulo, f.diretor
+            HAVING total_reservas > 0
+            ORDER BY receita_total DESC
+        """)
+        vendas_filme = cur.fetchall()
+        
+        # Cabeçalho
+        writer.writerow(['RELATÓRIO DE VENDAS - CINEVIBE'])
+        writer.writerow([f'Gerado em: {data_relatorio}'])
+        writer.writerow([])
+        
+        # SEÇÃO 1: Vendas por Cinema
+        writer.writerow(['═══════════════════════════════════════════════════════'])
+        writer.writerow(['VENDAS POR CINEMA'])
+        writer.writerow(['═══════════════════════════════════════════════════════'])
+        writer.writerow([])
+        writer.writerow(['Cinema', 'Localização', 'Total Reservas', 'Receita Total (€)'])
+        
+        total_reservas_cinema = 0
+        total_receita_cinema = 0
+        for row in vendas_cinema:
+            receita = float(row['receita_total']) if row['receita_total'] else 0
+            writer.writerow([
+                row['cinema'],
+                row['localizacao'],
+                row['total_reservas'],
+                f"{receita:.2f}"
+            ])
+            total_reservas_cinema += row['total_reservas']
+            total_receita_cinema += receita
+        
+        writer.writerow([])
+        writer.writerow(['TOTAL', '', total_reservas_cinema, f"{total_receita_cinema:.2f} €"])
+        writer.writerow([])
+        writer.writerow([])
+        
+        # SEÇÃO 2: Vendas por Filme
+        writer.writerow(['═══════════════════════════════════════════════════════'])
+        writer.writerow(['VENDAS POR FILME'])
+        writer.writerow(['═══════════════════════════════════════════════════════'])
+        writer.writerow([])
+        writer.writerow(['Filme', 'Diretor', 'Total Reservas', 'Receita Total (€)'])
+        
+        total_reservas_filme = 0
+        total_receita_filme = 0
+        for row in vendas_filme:
+            receita = float(row['receita_total']) if row['receita_total'] else 0
+            writer.writerow([
+                row['filme'],
+                row['diretor'] or 'N/A',
+                row['total_reservas'],
+                f"{receita:.2f}"
+            ])
+            total_reservas_filme += row['total_reservas']
+            total_receita_filme += receita
+        
+        writer.writerow([])
+        writer.writerow(['TOTAL', '', total_reservas_filme, f"{total_receita_filme:.2f} €"])
+        
+        filename = f'CineVibe_Vendas_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+    
+    elif tipo == 'usuarios':
+        # ===== RELATÓRIO DE USUÁRIOS =====
+        cur.execute("""
+            SELECT u.id, u.nome, u.email, u.criado_em,
+                   COUNT(r.id) as total_reservas,
+                   COALESCE(SUM(r.total), 0) as total_gasto
+            FROM usuarios u
+            LEFT JOIN reservas r ON u.id = r.id_usuario
+            WHERE u.is_admin = FALSE
+            GROUP BY u.id, u.nome, u.email, u.criado_em
+            ORDER BY total_gasto DESC
+        """)
+        dados = cur.fetchall()
+        
+        # Cabeçalho
+        writer.writerow(['RELATÓRIO DE USUÁRIOS - CINEVIBE'])
+        writer.writerow([f'Gerado em: {data_relatorio}'])
+        writer.writerow([f'Total de Usuários: {len(dados)}'])
+        writer.writerow([])
+        
+        # Estatísticas gerais
+        total_usuarios = len(dados)
+        usuarios_ativos = sum(1 for u in dados if u['total_reservas'] > 0)
+        usuarios_inativos = total_usuarios - usuarios_ativos
+        
+        writer.writerow(['ESTATÍSTICAS GERAIS'])
+        writer.writerow(['Usuários Ativos (com reservas):', usuarios_ativos])
+        writer.writerow(['Usuários Inativos (sem reservas):', usuarios_inativos])
+        writer.writerow([])
+        writer.writerow([])
+        
+        # Cabeçalhos
+        writer.writerow(['ID', 'Nome', 'Email', 'Data Registo', 'Total Reservas', 'Total Gasto (€)', 'Status'])
+        
+        # Dados
+        total_reservas = 0
+        total_gasto = 0
+        for row in dados:
+            gasto = float(row['total_gasto'])
+            status = 'ATIVO' if row['total_reservas'] > 0 else 'INATIVO'
+            writer.writerow([
+                row['id'],
+                row['nome'],
+                row['email'],
+                row['criado_em'].strftime('%d/%m/%Y') if row['criado_em'] else 'N/A',
+                row['total_reservas'],
+                f"{gasto:.2f}",
+                status
+            ])
+            total_reservas += row['total_reservas']
+            total_gasto += gasto
+        
+        # Totais
+        writer.writerow([])
+        writer.writerow(['', '', '', 'TOTAIS:', total_reservas, f"{total_gasto:.2f} €", ''])
+        
+        filename = f'CineVibe_Usuarios_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+    
+    elif tipo == 'filmes':
+        # ===== RELATÓRIO DE FILMES =====
+        cur.execute("""
+            SELECT f.id, f.titulo, f.diretor, f.duracao, f.data_lancamento, f.estado,
+                   COUNT(r.id) as total_reservas,
+                   COALESCE(SUM(r.total), 0) as receita_total
+            FROM filmes f
+            LEFT JOIN reservas r ON f.id = r.id_filme
+            GROUP BY f.id, f.titulo, f.diretor, f.duracao, f.data_lancamento, f.estado
+            ORDER BY receita_total DESC
+        """)
+        dados = cur.fetchall()
+        
+        # Cabeçalho
+        writer.writerow(['RELATÓRIO DE DESEMPENHO DE FILMES - CINEVIBE'])
+        writer.writerow([f'Gerado em: {data_relatorio}'])
+        writer.writerow([f'Total de Filmes: {len(dados)}'])
+        writer.writerow([])
+        
+        # Estatísticas
+        filmes_com_reservas = sum(1 for f in dados if f['total_reservas'] > 0)
+        filmes_sem_reservas = len(dados) - filmes_com_reservas
+        filmes_em_exibicao = sum(1 for f in dados if f['estado'] == 'em_exibicao')
+        filmes_brevemente = sum(1 for f in dados if f['estado'] == 'brevemente')
+        
+        writer.writerow(['ESTATÍSTICAS GERAIS'])
+        writer.writerow(['Filmes com Reservas:', filmes_com_reservas])
+        writer.writerow(['Filmes sem Reservas:', filmes_sem_reservas])
+        writer.writerow(['Filmes em Exibição:', filmes_em_exibicao])
+        writer.writerow(['Filmes Brevemente:', filmes_brevemente])
+        writer.writerow([])
+        writer.writerow([])
+        
+        # Cabeçalhos
+        writer.writerow(['ID', 'Título', 'Diretor', 'Data Lançamento', 'Duração (min)', 'Estado', 'Total Reservas', 'Receita (€)', 'Status'])
+        
+        # Dados
+        total_reservas = 0
+        total_receita = 0
+        for row in dados:
+            receita = float(row['receita_total'])
+            status = 'POPULAR' if row['total_reservas'] > 50 else ('ATIVO' if row['total_reservas'] > 0 else 'SEM RESERVAS')
+            data_lanc = row['data_lancamento'].strftime('%d/%m/%Y') if row['data_lancamento'] else 'N/A'
+            estado = 'EM EXIBIÇÃO' if row['estado'] == 'em_exibicao' else 'BREVEMENTE'
+            
+            writer.writerow([
+                row['id'],
+                row['titulo'],
+                row['diretor'] or 'N/A',
+                data_lanc,
+                row['duracao'] or 'N/A',
+                estado,
+                row['total_reservas'],
+                f"{receita:.2f}",
+                status
+            ])
+            total_reservas += row['total_reservas']
+            total_receita += receita
+        
+        # Totais
+        writer.writerow([])
+        writer.writerow(['', '', '', '', '', 'TOTAIS:', total_reservas, f"{total_receita:.2f} €", ''])
+        
+        filename = f'CineVibe_Filmes_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+    
+    else:
+        flash('Tipo de relatório inválido', 'erro')
+        return redirect(url_for('admin_dashboard'))
+    
+    cur.close()
+    conn.close()
+    
+    # Criar resposta com o CSV
+    response = make_response(output.getvalue())
+    response.headers['Content-Type'] = 'text/csv; charset=utf-8-sig'  # UTF-8 com BOM para Excel
+    response.headers['Content-Disposition'] = f'attachment; filename={filename}'
+    
+    return response
 
 # ==========================
 # ADMIN - GESTÃO DE FILMES
@@ -2762,7 +3124,7 @@ def admin_filmes():
     cur.close()
     conn.close()
     
-    return render_template('admin_filmes.html', filmes=filmes, generos=generos)
+    return render_template('admin_filmes.html', user=get_current_user(), filmes=filmes, generos=generos)
 
 @app.route('/admin/filmes/<int:id_filme>')
 def admin_filme_detalhe(id_filme):
@@ -2999,6 +3361,7 @@ def admin_filme_detalhe(id_filme):
     cur.close()
     conn.close()
     return render_template('admin_filme_detalhe.html',
+                         user=get_current_user(),
                          filme=filme,
                          generos_filme=generos_filme,
                          todos_generos=todos_generos,
@@ -3889,7 +4252,8 @@ def admin_remover_horario(horario_id):
 def admin_adicionar_sala():
     """Adiciona uma nova sala"""
     if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'Não autorizado'}), 401
+        flash('Não autorizado', 'erro')
+        return redirect(url_for('login'))
     
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
@@ -3900,7 +4264,8 @@ def admin_adicionar_sala():
         user = cur.fetchone()
         
         if not user or not user.get('is_admin'):
-            return jsonify({'success': False, 'message': 'Acesso negado'}), 403
+            flash('Acesso negado', 'erro')
+            return redirect(url_for('admin_salas'))
         
         id_cinema = request.form.get('id_cinema')
         nome_sala = request.form.get('nome_sala')
@@ -3910,7 +4275,19 @@ def admin_adicionar_sala():
         lugares_por_fileira = request.form.get('lugares_por_fileira', 20)
         
         if not id_cinema or not nome_sala or not capacidade:
-            return jsonify({'success': False, 'message': 'Cinema, nome e capacidade são obrigatórios'})
+            flash('Cinema, nome e capacidade são obrigatórios', 'erro')
+            return redirect(url_for('admin_salas'))
+        
+        # Verificar se já existe uma sala com o mesmo nome neste cinema
+        cur.execute("""
+            SELECT id FROM salas 
+            WHERE id_cinema = %s AND nome_sala = %s
+        """, (id_cinema, nome_sala))
+        
+        sala_existente = cur.fetchone()
+        if sala_existente:
+            flash(f'Já existe uma sala com o nome "{nome_sala}" neste cinema', 'erro')
+            return redirect(url_for('admin_salas'))
         
         # Inserir nova sala
         cur.execute("""
@@ -3919,18 +4296,14 @@ def admin_adicionar_sala():
         """, (id_cinema, nome_sala, int(capacidade), tipo_sala, int(fileiras), int(lugares_por_fileira)))
         
         conn.commit()
-        sala_id = cur.lastrowid
-        
-        return jsonify({
-            'success': True,
-            'message': 'Sala adicionada com sucesso',
-            'sala_id': sala_id
-        })
+        flash('Sala adicionada com sucesso!', 'success')
+        return redirect(url_for('admin_salas'))
         
     except Exception as e:
         conn.rollback()
         app.logger.error(f"Erro ao adicionar sala: {str(e)}")
-        return jsonify({'success': False, 'message': f'Erro interno: {str(e)}'}), 500
+        flash(f'Erro ao adicionar sala: {str(e)}', 'erro')
+        return redirect(url_for('admin_salas'))
     finally:
         cur.close()
         conn.close()
@@ -3955,11 +4328,21 @@ def admin_editar_sala(sala_id):
         if not nome_sala or not capacidade or not id_cinema:
             return jsonify({'success': False, 'message': 'Nome, capacidade e cinema são obrigatórios'})
         
+        # Verificar se já existe outra sala com o mesmo nome neste cinema (excluindo a sala atual)
+        cursor.execute("""
+            SELECT id FROM salas 
+            WHERE id_cinema = %s AND nome_sala = %s AND id != %s
+        """, (int(id_cinema), nome_sala, sala_id))
+        
+        sala_existente = cursor.fetchone()
+        if sala_existente:
+            return jsonify({'success': False, 'message': f'Já existe outra sala com o nome "{nome_sala}" neste cinema'})
+        
         # Atualizar sala
         cursor.execute("""
             UPDATE salas 
-            SET nome_sala = ?, capacidade = ?, id_cinema = ?, tipo_sala = ?, fileiras = ?, lugares_por_fileira = ?
-            WHERE id = ?
+            SET nome_sala = %s, capacidade = %s, id_cinema = %s, tipo_sala = %s, fileiras = %s, lugares_por_fileira = %s
+            WHERE id = %s
         """, (nome_sala, int(capacidade), int(id_cinema), tipo_sala, int(fileiras), int(lugares_por_fileira), sala_id))
         
         conn.commit()
@@ -3984,7 +4367,7 @@ def admin_get_dados_sala(sala_id):
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     
     try:
         # Buscar dados da sala
@@ -3992,17 +4375,21 @@ def admin_get_dados_sala(sala_id):
             SELECT s.*, c.nome as cinema_nome
             FROM salas s
             LEFT JOIN cinemas c ON s.id_cinema = c.id
-            WHERE s.id = ?
+            WHERE s.id = %s
         """, (sala_id,))
         
-        row = cursor.fetchone()
+        sala = cursor.fetchone()
         
-        if not row:
+        if not sala:
             return jsonify({'success': False, 'message': 'Sala não encontrada'})
         
-        # Convert row to dictionary
-        columns = [description[0] for description in cursor.description]
-        sala = dict(zip(columns, row))
+        # Converter Decimal para int/float se necessário
+        if sala.get('capacidade'):
+            sala['capacidade'] = int(sala['capacidade'])
+        if sala.get('fileiras'):
+            sala['fileiras'] = int(sala['fileiras'])
+        if sala.get('lugares_por_fileira'):
+            sala['lugares_por_fileira'] = int(sala['lugares_por_fileira'])
         
         return jsonify({
             'success': True,
@@ -4011,6 +4398,8 @@ def admin_get_dados_sala(sala_id):
         
     except Exception as e:
         app.logger.error(f"Erro ao buscar dados da sala: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'success': False, 'message': f'Erro interno: {str(e)}'}), 500
     finally:
         cursor.close()
@@ -4023,21 +4412,22 @@ def admin_remover_sala(sala_id):
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     
     try:
-        # Verificar se há sessões usando esta sala
-        cursor.execute("SELECT COUNT(*) FROM sessoes WHERE sala_id = ?", (sala_id,))
-        count = cursor.fetchone()[0]
+        # Verificar se há horários de sessão usando esta sala
+        cursor.execute("SELECT COUNT(*) as count FROM horarios_sessao WHERE id_sala = %s", (sala_id,))
+        result = cursor.fetchone()
+        count = result['count'] if result else 0
         
         if count > 0:
             return jsonify({
                 'success': False, 
-                'message': f'Não é possível remover. Existem {count} sessões usando esta sala.'
+                'message': f'Não é possível remover. Existem {count} horários de sessão usando esta sala.'
             })
         
         # Remover sala
-        cursor.execute("DELETE FROM salas WHERE id = ?", (sala_id,))
+        cursor.execute("DELETE FROM salas WHERE id = %s", (sala_id,))
         conn.commit()
         
         return jsonify({
@@ -4046,7 +4436,10 @@ def admin_remover_sala(sala_id):
         })
         
     except Exception as e:
+        conn.rollback()
         app.logger.error(f"Erro ao remover sala: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'success': False, 'message': f'Erro interno: {str(e)}'}), 500
     finally:
         cursor.close()
@@ -4344,6 +4737,9 @@ def admin_editar_filme(id_filme):
         rotten_tomatoes_url = data.get('rotten_tomatoes_url')
         imdb_url = data.get('imdb_url')
         
+        # Debug: verificar o valor do estado recebido
+        print(f"DEBUG: Estado recebido = {estado}")
+        
         conn = get_db_connection()
         cur = conn.cursor()
         
@@ -4357,12 +4753,19 @@ def admin_editar_filme(id_filme):
         """, (titulo, sinopse, diretor, duracao, data_lancamento, idade_recomendada, estado, trailer_url, rotten_tomatoes_url, imdb_url, id_filme))
         
         conn.commit()
+        
+        # Debug: verificar se foi atualizado
+        cur.execute("SELECT estado FROM filmes WHERE id = %s", (id_filme,))
+        resultado = cur.fetchone()
+        print(f"DEBUG: Estado na BD após update = {resultado[0] if resultado else 'NULL'}")
+        
         cur.close()
         conn.close()
         
         return jsonify({'success': True, 'message': 'Filme atualizado com sucesso!'})
         
     except Exception as e:
+        print(f"DEBUG: Erro ao atualizar filme: {str(e)}")
         return jsonify({'success': False, 'message': f'Erro ao atualizar filme: {str(e)}'}), 500
 
 @app.route('/admin/filmes/<int:id_filme>/avaliacoes')
@@ -4437,6 +4840,7 @@ def admin_filme_avaliacoes(id_filme):
     conn.close()
     
     return render_template('admin_filme_avaliacoes.html',
+                         user=get_current_user(),
                          filme=filme,
                          avaliacoes=todas_avaliacoes,
                          stats=stats)
@@ -5431,111 +5835,149 @@ def admin_genero_filmes(genero_id):
 # ==========================
 # ADMIN - GESTÃO DE CINEMAS
 # ==========================
+# ROTAS ADMIN CINEMAS - VERSÃO LIMPA E FUNCIONAL
+
 @app.route('/admin/cinemas')
 def admin_cinemas():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
-    conn = get_db_connection()
-    cur = conn.cursor(dictionary=True)
-    
-    cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
-    user = cur.fetchone()
-    
-    if not user or not user.get('is_admin'):
-        flash("Acesso negado!", "erro")
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(dictionary=True)
+        
+        # Buscar todos os cinemas com contagem de salas e filmes
+        cur.execute("""
+            SELECT c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem,
+                   COUNT(DISTINCT s.id) as num_salas,
+                   COUNT(DISTINCT fc.filme_id) as num_filmes
+            FROM cinemas c
+            LEFT JOIN salas s ON c.id = s.id_cinema
+            LEFT JOIN filmes_cinemas fc ON c.id = fc.cinema_id
+            GROUP BY c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem
+            ORDER BY c.nome
+        """)
+        cinemas = cur.fetchall()
+        
+        print(f"[DEBUG] Cinemas encontrados: {len(cinemas)}")
+        
+        # Processar URLs das imagens
+        for cinema in cinemas:
+            print(f"[DEBUG] Cinema: {cinema['nome']}, Imagem: {cinema.get('imagem')}")
+            
+            # Garantir que sempre tem uma imagem
+            if not cinema.get('imagem') or cinema.get('imagem') in [None, '', 'None', 'null']:
+                cinema['imagem'] = 'imgs/cinemas/default.jpg'
+                print(f"[DEBUG] Sem imagem - usando default")
+            else:
+                imagem = str(cinema['imagem']).replace('\\', '/').replace('"', '').strip()
+                if not imagem.startswith(('http://', 'https://', 'imgs/')):
+                    if '/' not in imagem:
+                        imagem = f"imgs/cinemas/{imagem}"
+                    elif not imagem.startswith('imgs/'):
+                        imagem = f"imgs/cinemas/{imagem}"
+                cinema['imagem'] = imagem
+            
+            print(f"[DEBUG] Imagem final: {cinema['imagem']}")
+        
         cur.close()
         conn.close()
-        return redirect(url_for('home'))
-    
-    # Parâmetros de pesquisa e filtro
-    search = request.args.get('search', '')
-    regiao_filter = request.args.get('regiao', '')
-    
-    # Query base
-    query = """
-        SELECT c.*, 
-               COUNT(DISTINCT fc.filme_id) as num_filmes,
-               COUNT(DISTINCT s.id) as num_salas
-        FROM cinemas c
-        LEFT JOIN filmes_cinemas fc ON c.id = fc.cinema_id
-        LEFT JOIN salas s ON c.id = s.id_cinema
-    """
-    
-    # Condições de filtro
-    conditions = []
-    params = []
-    
-    if search:
-        conditions.append("(c.nome LIKE %s OR c.localizacao LIKE %s OR c.email LIKE %s)")
-        search_param = f"%{search}%"
-        params.extend([search_param, search_param, search_param])
-    
-    if regiao_filter:
-        conditions.append("c.regiao = %s")
-        params.append(regiao_filter)
-    
-    if conditions:
-        query += " WHERE " + " AND ".join(conditions)
-    
-    query += " GROUP BY c.id ORDER BY c.id DESC"
-    
-    cur.execute(query, params)
-    cinemas = cur.fetchall()
-    
-    # Buscar regiões únicas para filtro
-    cur.execute("SELECT DISTINCT regiao FROM cinemas WHERE regiao IS NOT NULL ORDER BY regiao")
-    regioes = [r['regiao'] for r in cur.fetchall()]
-    
-    cur.close()
-    conn.close()
-    
-    return render_template('admin_cinemas.html', 
-                         cinemas=cinemas, 
-                         regioes=regioes,
-                         search=search,
-                         regiao_filter=regiao_filter)
+        
+        return render_template('admin_cinemas.html', user=get_current_user(), cinemas=cinemas)
+    except Exception as e:
+        print(f"[ERRO] admin_cinemas: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        flash(f"Erro ao carregar cinemas: {str(e)}", "erro")
+        return render_template('admin_cinemas.html', user=get_current_user(), cinemas=[])
 
 @app.route('/admin/cinemas/adicionar', methods=['POST'])
 def admin_adicionar_cinema():
+    print("\n" + "="*50)
+    print("ROTA ADICIONAR CINEMA CHAMADA")
+    print("="*50)
+    
     if 'user_id' not in session:
+        print("ERRO: Usuário não autenticado")
         return redirect(url_for('login'))
     
-    conn = get_db_connection()
-    cur = conn.cursor(dictionary=True)
-    
-    cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
-    user = cur.fetchone()
-    
-    if not user or not user.get('is_admin'):
-        flash("Acesso negado!", "erro")
-        cur.close()
-        conn.close()
-        return redirect(url_for('home'))
-    
-    nome = request.form.get('nome')
-    regiao = request.form.get('regiao')
-    
-    if not nome or not regiao:
-        flash("Nome e região são obrigatórios!", "erro")
-        cur.close()
-        conn.close()
-        return redirect(url_for('admin_cinemas'))
-    
     try:
+        print(f"Form data: {request.form}")
+        print(f"Files: {request.files}")
+        
+        nome = request.form.get('nome', '').strip()
+        localizacao = request.form.get('localizacao', '').strip()
+        regiao = request.form.get('regiao', '').strip()
+        email = request.form.get('email', '').strip()
+        
+        print(f"Nome: {nome}")
+        print(f"Localização: {localizacao}")
+        print(f"Região: {regiao}")
+        print(f"Email: {email}")
+        
+        # Validação básica
+        if not nome or not localizacao:
+            print("ERRO: Campos obrigatórios vazios")
+            flash("Nome e localização são obrigatórios!", "erro")
+            return redirect(url_for('admin_cinemas'))
+        
+        # Upload de imagem
+        imagem = None
+        if 'imagem' in request.files:
+            file = request.files['imagem']
+            print(f"File: {file}")
+            print(f"Filename: {file.filename}")
+            
+            if file and file.filename:
+                from werkzeug.utils import secure_filename
+                
+                # Criar diretório se não existir
+                upload_folder = os.path.join('static', 'imgs', 'cinemas')
+                os.makedirs(upload_folder, exist_ok=True)
+                
+                # Gerar nome único
+                ext = os.path.splitext(secure_filename(file.filename))[1]
+                filename = f"cinema_{uuid.uuid4().hex[:8]}{ext}"
+                filepath = os.path.join(upload_folder, filename)
+                
+                # Salvar arquivo
+                file.save(filepath)
+                imagem = f"imgs/cinemas/{filename}"
+                print(f"Imagem salva: {imagem}")
+        
+        # Inserir na base de dados
+        print("Conectando à base de dados...")
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        print("Executando INSERT...")
         cur.execute("""
-            INSERT INTO cinemas (nome, regiao)
-            VALUES (%s, %s)
-        """, (nome, regiao))
+            INSERT INTO cinemas (nome, localizacao, regiao, email, imagem) 
+            VALUES (%s, %s, %s, %s, %s)
+        """, (nome, localizacao, regiao, email, imagem))
+        
+        print("Fazendo COMMIT...")
         conn.commit()
-        flash("Cinema adicionado com sucesso!", "sucesso")
+        
+        cinema_id = cur.lastrowid
+        print(f"Cinema adicionado com ID: {cinema_id}")
+        
+        cur.close()
+        conn.close()
+        
+        print("="*50)
+        print("SUCESSO!")
+        print("="*50 + "\n")
+        
+        flash(f"Cinema '{nome}' adicionado com sucesso!", "sucesso")
+        return redirect(url_for('admin_cinemas'))
+        
     except Exception as e:
-        conn.rollback()
+        print(f"ERRO: {str(e)}")
+        import traceback
+        traceback.print_exc()
         flash(f"Erro ao adicionar cinema: {str(e)}", "erro")
-    
-    cur.close()
-    conn.close()
-    return redirect(url_for('admin_cinemas'))
+        return redirect(url_for('admin_cinemas'))
 
 @app.route('/admin/cinemas/editar/<int:id_cinema>', methods=['GET', 'POST'])
 def admin_editar_cinema(id_cinema):
@@ -5545,57 +5987,58 @@ def admin_editar_cinema(id_cinema):
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
     
-    cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
-    user = cur.fetchone()
-    
-    if not user or not user.get('is_admin'):
-        flash("Acesso negado!", "erro")
-        cur.close()
-        conn.close()
-        return redirect(url_for('home'))
-    
     if request.method == 'POST':
+        print(f"\n=== EDITAR CINEMA ID: {id_cinema} ===")
         nome = request.form.get('nome')
         localizacao = request.form.get('localizacao')
         regiao = request.form.get('regiao')
         email = request.form.get('email')
-        telefone = request.form.get('telefone')
-        imagem_url = request.form.get('imagem_url')
-        descricao = request.form.get('descricao')
+        imagem = request.form.get('imagem_atual')
         
-        try:
-            cur.execute("""
-                UPDATE cinemas 
-                SET nome = %s, localizacao = %s, regiao = %s, email = %s, telefone = %s, imagem_url = %s, descricao = %s
-                WHERE id = %s
-            """, (nome, localizacao, regiao, email, telefone, imagem_url, descricao, id_cinema))
-            conn.commit()
-            flash("Cinema atualizado com sucesso!", "sucesso")
-        except Exception as e:
-            conn.rollback()
-            flash(f"Erro ao atualizar cinema: {str(e)}", "erro")
+        print(f"Imagem atual: {imagem}")
+        print(f"Files in request: {request.files}")
         
+        # Upload de nova imagem
+        if 'imagem' in request.files:
+            file = request.files['imagem']
+            print(f"File object: {file}")
+            print(f"File filename: {file.filename}")
+            
+            if file and file.filename:
+                from werkzeug.utils import secure_filename
+                upload_folder = os.path.join('static', 'imgs', 'cinemas')
+                os.makedirs(upload_folder, exist_ok=True)
+                ext = os.path.splitext(secure_filename(file.filename))[1]
+                filename = f"cinema_{uuid.uuid4().hex[:8]}{ext}"
+                filepath = os.path.join(upload_folder, filename)
+                file.save(filepath)
+                imagem = f"imgs/cinemas/{filename}"
+                print(f"Nova imagem salva: {imagem}")
+            else:
+                print("File vazio ou sem filename")
+        else:
+            print("'imagem' não está em request.files")
+        
+        print(f"Imagem final para UPDATE: {imagem}")
+        
+        cur.execute("UPDATE cinemas SET nome=%s, localizacao=%s, regiao=%s, email=%s, imagem=%s WHERE id=%s",
+                    (nome, localizacao, regiao, email, imagem, id_cinema))
+        print(f"Linhas afetadas: {cur.rowcount}")
+        conn.commit()
         cur.close()
         conn.close()
+        print("=== FIM EDITAR CINEMA ===\n")
+        flash("Cinema atualizado!", "sucesso")
         return redirect(url_for('admin_cinemas'))
     
-    # GET - buscar dados do cinema
+    # GET
     cur.execute("SELECT * FROM cinemas WHERE id = %s", (id_cinema,))
     cinema = cur.fetchone()
-    
     cur.close()
     conn.close()
     
-    if not cinema:
-        if request.headers.get('Content-Type') == 'application/json':
-            return jsonify({'error': 'Cinema não encontrado'}), 404
-        flash("Cinema não encontrado!", "erro")
-        return redirect(url_for('admin_cinemas'))
-    
-    # Se for uma requisição AJAX, retornar JSON
-    if request.headers.get('Accept') == 'application/json' or 'application/json' in request.headers.get('Accept', ''):
+    if request.headers.get('Accept') == 'application/json':
         return jsonify(cinema)
-    
     return render_template('admin_editar_cinema.html', cinema=cinema)
 
 @app.route('/admin/cinemas/remover/<int:id_cinema>', methods=['POST'])
@@ -5604,39 +6047,21 @@ def admin_remover_cinema(id_cinema):
         return redirect(url_for('login'))
     
     conn = get_db_connection()
-    cur = conn.cursor(dictionary=True)
+    cur = conn.cursor()
     
-    cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
-    user = cur.fetchone()
-    
-    if not user or not user.get('is_admin'):
-        flash("Acesso negado!", "erro")
-        cur.close()
-        conn.close()
-        return redirect(url_for('home'))
-    
-    try:
-        # Verificar se há reservas associadas
-        cur.execute("SELECT COUNT(*) as total FROM reservas WHERE id_cinema = %s", (id_cinema,))
-        reservas = cur.fetchone()['total']
-        
-        if reservas > 0:
-            flash(f"Não é possível remover este cinema. Existem {reservas} reservas associadas.", "erro")
-        else:
-            # Remover associações com filmes
-            cur.execute("DELETE FROM filmes_cinemas WHERE id_cinema = %s", (id_cinema,))
-            # Remover salas
-            cur.execute("DELETE FROM salas WHERE id_cinema = %s", (id_cinema,))
-            # Remover cinema
-            cur.execute("DELETE FROM cinemas WHERE id = %s", (id_cinema,))
-            conn.commit()
-            flash("Cinema removido com sucesso!", "sucesso")
-    except Exception as e:
-        conn.rollback()
-        flash(f"Erro ao remover cinema: {str(e)}", "erro")
-    
+    # Remover tudo em cascata
+    cur.execute("SET FOREIGN_KEY_CHECKS = 0")
+    cur.execute("DELETE FROM reservas WHERE id_cinema = %s", (id_cinema,))
+    cur.execute("DELETE FROM horarios_sessao WHERE id_cinema = %s", (id_cinema,))
+    cur.execute("DELETE FROM filmes_cinemas WHERE cinema_id = %s", (id_cinema,))
+    cur.execute("DELETE FROM salas WHERE id_cinema = %s", (id_cinema,))
+    cur.execute("DELETE FROM cinemas WHERE id = %s", (id_cinema,))
+    cur.execute("SET FOREIGN_KEY_CHECKS = 1")
+    conn.commit()
     cur.close()
     conn.close()
+    
+    flash("Cinema removido!", "sucesso")
     return redirect(url_for('admin_cinemas'))
 
 # ==========================
@@ -5663,9 +6088,10 @@ def admin_usuarios():
     search = request.args.get('search', '')
     
     try:
-        # Query base - buscar dados básicos primeiro
+        # Query base - buscar dados básicos primeiro incluindo avatar
         query = """
-            SELECT u.id, u.nome, u.email, u.criado_em, u.ultimo_login, u.is_admin
+            SELECT u.id, u.nome, u.email, u.criado_em, u.ultimo_login, u.is_admin, 
+                   u.avatar, u.avatar_personalizado, u.avatar_id
             FROM usuarios u
         """
         
@@ -5687,27 +6113,49 @@ def admin_usuarios():
             reservas_result = cur.fetchone()
             usuario['num_reservas'] = reservas_result['num_reservas'] if reservas_result else 0
             
-            # Tentar buscar avatar
-            try:
-                cur.execute("SELECT caminho FROM avatars WHERE id = (SELECT avatar_id FROM usuarios WHERE id = %s)", (usuario['id'],))
-                avatar_result = cur.fetchone()
-                if avatar_result and avatar_result['caminho']:
-                    avatar_url = avatar_result['caminho'].replace('\\', '/').replace('"', '').strip()
-                    if not avatar_url.startswith('/'):
-                        if not avatar_url.startswith('static/'):
-                            avatar_url = f"static/{avatar_url}"
-                        avatar_url = f"/{avatar_url}"
-                    usuario['avatar_url'] = avatar_url
-                else:
-                    usuario['avatar_url'] = '/static/imgs/icons/user_icon34-removebg-preview.png'
-            except:
-                # Se não existir tabela avatars ou der erro, usar avatar padrão
-                usuario['avatar_url'] = '/static/imgs/icons/user_icon34-removebg-preview.png'
+            # Buscar avatar - prioridade: avatar_personalizado válido > avatar da tabela avatars > campo avatar > ícone padrão
+            avatar_url = 'imgs/icons/user_icon34-removebg-preview.png'  # Valor padrão
+            
+            # 1. Tentar avatar_personalizado (mas ignorar se for default.png que não existe)
+            if usuario.get('avatar_personalizado') and usuario['avatar_personalizado']:
+                temp_url = str(usuario['avatar_personalizado']).replace('\\', '/').replace('"', '').strip()
+                # Ignorar se for o default.png que não existe
+                if temp_url and temp_url != 'None' and temp_url != '' and 'default.png' not in temp_url:
+                    avatar_url = temp_url
+                    print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando avatar_personalizado = {avatar_url}")
+            
+            # 2. Se não tiver avatar válido, tentar buscar da tabela avatars usando avatar_id
+            if (avatar_url == 'imgs/icons/user_icon34-removebg-preview.png' or 'default.png' in avatar_url) and usuario.get('avatar_id') and usuario['avatar_id']:
+                try:
+                    cur.execute("SELECT caminho FROM avatars WHERE id = %s", (usuario['avatar_id'],))
+                    avatar_result = cur.fetchone()
+                    if avatar_result and avatar_result.get('caminho'):
+                        temp_url = str(avatar_result['caminho']).replace('\\', '/').replace('"', '').strip()
+                        if temp_url and temp_url != 'None' and temp_url != '':
+                            avatar_url = temp_url
+                            print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando avatar da tabela avatars (id={usuario['avatar_id']}) = {avatar_url}")
+                except Exception as e:
+                    print(f"[DEBUG] Erro ao buscar avatar do usuário {usuario['id']}: {e}")
+            
+            # 3. Se ainda não tiver, usar o campo avatar (mas ignorar default.png)
+            if (avatar_url == 'imgs/icons/user_icon34-removebg-preview.png' or 'default.png' in avatar_url) and usuario.get('avatar') and usuario['avatar']:
+                temp_url = str(usuario['avatar']).replace('\\', '/').replace('"', '').strip()
+                if temp_url and temp_url != 'None' and temp_url != '' and 'default.png' not in temp_url:
+                    avatar_url = temp_url
+                    print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando campo avatar = {avatar_url}")
+            
+            # Garantir que sempre há um valor válido
+            if not avatar_url or avatar_url == 'None' or avatar_url == '':
+                avatar_url = 'imgs/icons/user_icon34-removebg-preview.png'
+                print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando fallback padrão")
+            
+            usuario['avatar_url'] = avatar_url
+            print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): avatar_url final = {avatar_url}")
         
         cur.close()
         conn.close()
         
-        return render_template('admin_usuarios.html', usuarios=usuarios, search=search)
+        return render_template('admin_usuarios.html', user=get_current_user(), usuarios=usuarios, search=search)
         
     except Exception as e:
         cur.close()
@@ -6028,6 +6476,7 @@ def admin_reservas():
     conn.close()
     
     return render_template('admin_reservas.html', 
+                         user=get_current_user(),
                          reservas=reservas, 
                          cinemas=cinemas,
                          search=search,
@@ -6331,8 +6780,8 @@ def debug_login_afonso():
 # ==========================
 @app.route('/filmes')
 def filmes():
-    # Atualização automática de estados dos filmes
-    atualizar_estados_filmes_automatico()
+    # Atualização automática de estados dos filmes - DESATIVADO para controlo manual
+    # atualizar_estados_filmes_automatico()
     
     # Capturar filtro de género da URL
     genero_filtro = request.args.get('genero', '').strip().lower()
@@ -9643,7 +10092,7 @@ def admin_atores():
     cursor.close()
     conn.close()
     
-    return render_template('admin_atores.html', atores=atores)
+    return render_template('admin_atores.html', user=get_current_user(), atores=atores)
 
 @app.route('/admin/atores/adicionar', methods=['POST'])
 def admin_adicionar_ator():
@@ -9873,14 +10322,37 @@ def admin_bar():
     """)
     produtos = cursor.fetchall()
     
-    # Buscar todos os menus
-    cursor.execute("SELECT id, nome, descricao, preco_total, imagem_url FROM menus ORDER BY nome")
+    # Buscar todos os menus com seus produtos
+    cursor.execute("""
+        SELECT m.id, m.nome, m.descricao, m.preco_total, m.imagem_url,
+               GROUP_CONCAT(b.produto SEPARATOR ', ') as produtos
+        FROM menus m
+        LEFT JOIN menu_produtos mp ON m.id = mp.menu_id
+        LEFT JOIN bar b ON mp.produto_id = b.id
+        GROUP BY m.id
+        ORDER BY m.nome
+    """)
     menus = cursor.fetchall()
+    
+    # Converter produtos de string para lista
+    for menu in menus:
+        if menu['produtos']:
+            menu['produtos'] = menu['produtos'].split(', ')
+        else:
+            menu['produtos'] = []
+    
+    # Buscar todos os toppings
+    cursor.execute("""
+        SELECT id, nome, descricao, preco, imagem_url
+        FROM toppings
+        ORDER BY nome
+    """)
+    toppings = cursor.fetchall()
     
     cursor.close()
     conn.close()
     
-    return render_template('admin_bar.html', produtos=produtos, menus=menus)
+    return render_template('admin_bar.html', user=get_current_user(), produtos=produtos, menus=menus, toppings=toppings)
 
 @app.route('/admin/bar/produtos/adicionar', methods=['POST'])
 def admin_adicionar_produto():
@@ -9889,25 +10361,61 @@ def admin_adicionar_produto():
     
     nome = request.form.get('nome')
     preco = request.form.get('preco')
-    imagem = request.form.get('imagem')
     tipo = request.form.get('tipo')
     
-    # Corrigir caminho da imagem
-    if imagem:
-        imagem = imagem.replace('\\', '/').replace('"', '').strip()
+    # Processar upload de imagem
+    imagem_path = None
+    
+    if 'imagem' in request.files:
+        file = request.files['imagem']
+        if file and file.filename:
+            import uuid
+            ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'jpg'
+            filename = f"{uuid.uuid4().hex}.{ext}"
+            
+            upload_folder = os.path.join('static', 'imgs', 'produtos')
+            os.makedirs(upload_folder, exist_ok=True)
+            filepath = os.path.join(upload_folder, filename)
+            file.save(filepath)
+            
+            imagem_path = f"imgs/produtos/{filename}"
     
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO bar (produto, preco, imagem_url, tipo)
         VALUES (%s, %s, %s, %s)
-    """, (nome, preco, imagem, tipo))
+    """, (nome, preco, imagem_path, tipo))
     conn.commit()
     cursor.close()
     conn.close()
     
     flash('Produto adicionado com sucesso!', 'success')
     return redirect(url_for('admin_bar'))
+
+@app.route('/admin/bar/produtos/<int:produto_id>/dados')
+def admin_get_produto_dados(produto_id):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Não autenticado'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM bar WHERE id = %s", (produto_id,))
+        produto = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        
+        if not produto:
+            return jsonify({'error': 'Produto não encontrado'}), 404
+        
+        # Limpar caminho da imagem
+        if produto.get('imagem_url'):
+            produto['imagem_url'] = produto['imagem_url'].replace('\\', '/').replace('"', '').strip()
+        
+        return jsonify(produto)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/admin/bar/produtos/editar/<int:produto_id>', methods=['POST'])
 def admin_editar_produto(produto_id):
@@ -9916,12 +10424,25 @@ def admin_editar_produto(produto_id):
     
     nome = request.form.get('nome')
     preco = request.form.get('preco')
-    imagem = request.form.get('imagem')
     tipo = request.form.get('tipo')
+    imagem_atual = request.form.get('imagem_atual')
     
-    # Corrigir caminho da imagem
-    if imagem:
-        imagem = imagem.replace('\\', '/').replace('"', '').strip()
+    # Processar upload de imagem
+    imagem_path = imagem_atual  # Manter imagem atual por padrão
+    
+    if 'imagem' in request.files:
+        file = request.files['imagem']
+        if file and file.filename:
+            import uuid
+            ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'jpg'
+            filename = f"{uuid.uuid4().hex}.{ext}"
+            
+            upload_folder = os.path.join('static', 'imgs', 'produtos')
+            os.makedirs(upload_folder, exist_ok=True)
+            filepath = os.path.join(upload_folder, filename)
+            file.save(filepath)
+            
+            imagem_path = f"imgs/produtos/{filename}"
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -9929,7 +10450,7 @@ def admin_editar_produto(produto_id):
         UPDATE bar
         SET produto = %s, preco = %s, imagem_url = %s, tipo = %s
         WHERE id = %s
-    """, (nome, preco, imagem, tipo, produto_id))
+    """, (nome, preco, imagem_path, tipo, produto_id))
     conn.commit()
     cursor.close()
     conn.close()
@@ -9958,6 +10479,69 @@ def admin_remover_produto(produto_id):
     flash('Produto removido com sucesso!', 'success')
     return redirect(url_for('admin_bar'))
 
+@app.route('/admin/bar/menus/<int:menu_id>/dados')
+def admin_menu_dados(menu_id):
+    """Retorna os dados de um menu em JSON para edição"""
+    if 'user_id' not in session:
+        return jsonify({'error': 'Não autenticado'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Log para debug
+        print(f"[DEBUG] Buscando menu ID: {menu_id}")
+        
+        # Buscar dados do menu
+        cursor.execute("""
+            SELECT id, nome, descricao, preco_total, imagem_url
+            FROM menus
+            WHERE id = %s
+        """, (menu_id,))
+        
+        menu = cursor.fetchone()
+        print(f"[DEBUG] Menu encontrado: {menu}")
+        
+        if not menu:
+            cursor.close()
+            conn.close()
+            return jsonify({'error': 'Menu não encontrado'}), 404
+        
+        # Converter Decimal para float para JSON
+        if menu['preco_total']:
+            menu['preco_total'] = float(menu['preco_total'])
+        
+        # Buscar produtos do menu
+        cursor.execute("""
+            SELECT b.id, b.produto as nome, b.preco
+            FROM bar b
+            JOIN menu_produtos mp ON b.id = mp.produto_id
+            WHERE mp.menu_id = %s
+        """, (menu_id,))
+        
+        produtos = cursor.fetchall()
+        print(f"[DEBUG] Produtos encontrados: {len(produtos)}")
+        
+        # Converter preços dos produtos para float
+        for produto in produtos:
+            if produto['preco']:
+                produto['preco'] = float(produto['preco'])
+        
+        menu['produtos'] = produtos
+        
+        cursor.close()
+        conn.close()
+        
+        print(f"[DEBUG] Retornando menu: {menu}")
+        return jsonify(menu)
+        
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar dados do menu {menu_id}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        app.logger.error(traceback.format_exc())
+        return jsonify({'error': f'Erro ao buscar dados: {str(e)}'}), 500
+
 @app.route('/admin/bar/menus/adicionar', methods=['POST'])
 def admin_adicionar_menu():
     if 'user_id' not in session:
@@ -9965,15 +10549,57 @@ def admin_adicionar_menu():
     
     nome = request.form.get('nome')
     descricao = request.form.get('descricao')
-    total = request.form.get('total')
-    imagem_url = request.form.get('imagem_url')
+    preco_total = request.form.get('preco_total')
+    produtos_ids = request.form.getlist('produtos[]')
+    
+    # Upload da imagem
+    imagem_url = None
+    if 'imagem' in request.files:
+        imagem_file = request.files['imagem']
+        if imagem_file and imagem_file.filename:
+            import os
+            import uuid
+            from werkzeug.utils import secure_filename
+            
+            # Criar diretório se não existir
+            upload_folder = os.path.join('static', 'imgs', 'menus')
+            os.makedirs(upload_folder, exist_ok=True)
+            
+            # Gerar nome único
+            ext = os.path.splitext(secure_filename(imagem_file.filename))[1]
+            filename = f"menu_{uuid.uuid4().hex[:8]}{ext}"
+            filepath = os.path.join(upload_folder, filename)
+            
+            # Salvar arquivo
+            imagem_file.save(filepath)
+            imagem_url = f"imgs/menus/{filename}"
+            
+            print(f"[DEBUG] Imagem salva: {imagem_url}")
+    
+    print(f"[DEBUG] Adicionando novo menu")
+    print(f"[DEBUG] Nome: {nome}")
+    print(f"[DEBUG] Produtos: {produtos_ids}")
     
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # Inserir menu
     cursor.execute("""
         INSERT INTO menus (nome, descricao, preco_total, imagem_url)
         VALUES (%s, %s, %s, %s)
-    """, (nome, descricao, total, imagem_url))
+    """, (nome, descricao, preco_total, imagem_url))
+    
+    menu_id = cursor.lastrowid
+    print(f"[DEBUG] Menu criado com ID: {menu_id}")
+    
+    # Adicionar produtos ao menu
+    for produto_id in produtos_ids:
+        if produto_id:  # Verificar se não está vazio
+            cursor.execute("""
+                INSERT INTO menu_produtos (menu_id, produto_id)
+                VALUES (%s, %s)
+            """, (menu_id, produto_id))
+    
     conn.commit()
     cursor.close()
     conn.close()
@@ -9988,16 +10614,68 @@ def admin_editar_menu(menu_id):
     
     nome = request.form.get('nome')
     descricao = request.form.get('descricao')
-    total = request.form.get('total')
-    imagem_url = request.form.get('imagem_url')
+    preco_total = request.form.get('preco_total')
+    produtos_ids = request.form.getlist('produtos[]')
+    imagem_atual = request.form.get('imagem_atual')
+    
+    # Upload da nova imagem (se houver)
+    imagem_url = imagem_atual  # Manter a imagem atual por padrão
+    if 'imagem' in request.files:
+        imagem_file = request.files['imagem']
+        if imagem_file and imagem_file.filename:
+            import os
+            import uuid
+            from werkzeug.utils import secure_filename
+            
+            # Criar diretório se não existir
+            upload_folder = os.path.join('static', 'imgs', 'menus')
+            os.makedirs(upload_folder, exist_ok=True)
+            
+            # Apagar imagem antiga se existir
+            if imagem_atual:
+                old_path = os.path.join('static', imagem_atual)
+                if os.path.exists(old_path):
+                    try:
+                        os.remove(old_path)
+                        print(f"[DEBUG] Imagem antiga removida: {old_path}")
+                    except Exception as e:
+                        print(f"[DEBUG] Erro ao remover imagem antiga: {e}")
+            
+            # Gerar nome único
+            ext = os.path.splitext(secure_filename(imagem_file.filename))[1]
+            filename = f"menu_{uuid.uuid4().hex[:8]}{ext}"
+            filepath = os.path.join(upload_folder, filename)
+            
+            # Salvar arquivo
+            imagem_file.save(filepath)
+            imagem_url = f"imgs/menus/{filename}"
+            
+            print(f"[DEBUG] Nova imagem salva: {imagem_url}")
+    
+    print(f"[DEBUG] Editando menu {menu_id}")
+    print(f"[DEBUG] Produtos recebidos: {produtos_ids}")
     
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # Atualizar dados do menu
     cursor.execute("""
         UPDATE menus
-        SET nome = %s, descricao = %s, total = %s, imagem_url = %s
+        SET nome = %s, descricao = %s, preco_total = %s, imagem_url = %s
         WHERE id = %s
-    """, (nome, descricao, total, imagem_url, menu_id))
+    """, (nome, descricao, preco_total, imagem_url, menu_id))
+    
+    # Remover produtos antigos
+    cursor.execute("DELETE FROM menu_produtos WHERE menu_id = %s", (menu_id,))
+    
+    # Adicionar novos produtos
+    for produto_id in produtos_ids:
+        if produto_id:  # Verificar se não está vazio
+            cursor.execute("""
+                INSERT INTO menu_produtos (menu_id, produto_id)
+                VALUES (%s, %s)
+            """, (menu_id, produto_id))
+    
     conn.commit()
     cursor.close()
     conn.close()
@@ -10106,6 +10784,168 @@ def admin_remover_produto_menu(menu_id, produto_id):
     return redirect(url_for('admin_menu_detalhe', menu_id=menu_id))
 
 # ==========================
+# ADMIN - GESTÃO DE TOPPINGS
+# ==========================
+@app.route('/admin/bar/toppings/adicionar', methods=['POST'])
+def admin_adicionar_topping():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    nome = request.form.get('nome')
+    descricao = request.form.get('descricao')
+    preco = request.form.get('preco')
+    
+    # Upload da imagem
+    imagem_url = None
+    if 'imagem' in request.files:
+        imagem_file = request.files['imagem']
+        if imagem_file and imagem_file.filename:
+            import os
+            import uuid
+            from werkzeug.utils import secure_filename
+            
+            # Criar diretório se não existir
+            upload_folder = os.path.join('static', 'imgs', 'toppings')
+            os.makedirs(upload_folder, exist_ok=True)
+            
+            # Gerar nome único
+            ext = os.path.splitext(secure_filename(imagem_file.filename))[1]
+            filename = f"topping_{uuid.uuid4().hex[:8]}{ext}"
+            filepath = os.path.join(upload_folder, filename)
+            
+            # Salvar arquivo
+            imagem_file.save(filepath)
+            imagem_url = f"imgs/toppings/{filename}"
+            
+            print(f"[DEBUG] Imagem do topping salva: {imagem_url}")
+    
+    print(f"[DEBUG] Adicionando novo topping: {nome}")
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Inserir topping
+    cursor.execute("""
+        INSERT INTO toppings (nome, descricao, preco, imagem_url)
+        VALUES (%s, %s, %s, %s)
+    """, (nome, descricao, preco, imagem_url))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    flash('Topping adicionado com sucesso!', 'success')
+    return redirect(url_for('admin_bar'))
+
+@app.route('/admin/bar/toppings/<int:topping_id>/dados')
+def admin_topping_dados(topping_id):
+    """Retorna os dados de um topping em JSON para edição"""
+    if 'user_id' not in session:
+        return jsonify({'error': 'Não autenticado'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Buscar dados do topping
+        cursor.execute("""
+            SELECT id, nome, descricao, preco, imagem_url
+            FROM toppings
+            WHERE id = %s
+        """, (topping_id,))
+        
+        topping = cursor.fetchone()
+        
+        if not topping:
+            cursor.close()
+            conn.close()
+            return jsonify({'error': 'Topping não encontrado'}), 404
+        
+        # Converter Decimal para float para JSON
+        if topping['preco']:
+            topping['preco'] = float(topping['preco'])
+        
+        cursor.close()
+        conn.close()
+        
+        return jsonify(topping)
+        
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar dados do topping {topping_id}: {str(e)}")
+        return jsonify({'error': f'Erro ao buscar dados: {str(e)}'}), 500
+
+@app.route('/admin/bar/toppings/editar/<int:topping_id>', methods=['POST'])
+def admin_editar_topping(topping_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    nome = request.form.get('nome')
+    descricao = request.form.get('descricao')
+    preco = request.form.get('preco')
+    imagem_atual = request.form.get('imagem_atual')
+    
+    # Upload da nova imagem (se houver)
+    imagem_url = imagem_atual  # Manter a imagem atual por padrão
+    if 'imagem' in request.files:
+        imagem_file = request.files['imagem']
+        if imagem_file and imagem_file.filename:
+            import os
+            import uuid
+            from werkzeug.utils import secure_filename
+            
+            # Criar diretório se não existir
+            upload_folder = os.path.join('static', 'imgs', 'toppings')
+            os.makedirs(upload_folder, exist_ok=True)
+            
+            # Gerar nome único
+            ext = os.path.splitext(secure_filename(imagem_file.filename))[1]
+            filename = f"topping_{uuid.uuid4().hex[:8]}{ext}"
+            filepath = os.path.join(upload_folder, filename)
+            
+            # Salvar arquivo
+            imagem_file.save(filepath)
+            imagem_url = f"imgs/toppings/{filename}"
+            
+            print(f"[DEBUG] Nova imagem salva: {imagem_url}")
+    
+    print(f"[DEBUG] Editando topping {topping_id}")
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Atualizar dados do topping
+    cursor.execute("""
+        UPDATE toppings
+        SET nome = %s, descricao = %s, preco = %s, imagem_url = %s
+        WHERE id = %s
+    """, (nome, descricao, preco, imagem_url, topping_id))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    flash('Topping atualizado com sucesso!', 'success')
+    return redirect(url_for('admin_bar'))
+
+@app.route('/admin/bar/toppings/remover/<int:topping_id>', methods=['POST'])
+def admin_remover_topping(topping_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Remover topping
+    cursor.execute("DELETE FROM toppings WHERE id = %s", (topping_id,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    flash('Topping removido com sucesso!', 'success')
+    return redirect(url_for('admin_bar'))
+
+# ==========================
 # ADMIN - GESTÃO DE SALAS
 # ==========================
 @app.route('/admin/salas')
@@ -10123,6 +10963,8 @@ def admin_salas():
                c.nome as cinema_nome, c.localizacao as cinema_localizacao
         FROM salas s
         INNER JOIN cinemas c ON s.id_cinema = c.id
+        GROUP BY s.id_cinema, s.nome_sala
+        HAVING s.id = MAX(s.id)
         ORDER BY s.id DESC
     """)
     rows = cursor.fetchall()
@@ -10140,7 +10982,7 @@ def admin_salas():
     cursor.close()
     conn.close()
     
-    return render_template('admin_salas.html', salas=salas, cinemas=cinemas)
+    return render_template('admin_salas.html', user=get_current_user(), salas=salas, cinemas=cinemas)
 
 @app.route('/admin/salas/adicionar', methods=['POST'])
 def admin_adicionar_sala_alt():
@@ -10237,29 +11079,72 @@ def admin_avatares():
     cursor.close()
     conn.close()
     
-    return render_template('admin_avatares.html', avatares=avatares, categorias=categorias)
+    return render_template('admin_avatares.html', user=get_current_user(), avatares=avatares, categorias=categorias)
 
 @app.route('/admin/avatares/adicionar', methods=['POST'])
 def admin_adicionar_avatar():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
-    nome = request.form.get('nome')
-    caminho = request.form.get('caminho')
-    categoria_id = request.form.get('categoria_id')
-    
-    # Corrigir caminho automaticamente
-    caminho = caminho.replace('\\', '/').replace('"', '').strip()
-    
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO avatars (nome, caminho, categoria_id) VALUES (%s, %s, %s)", (nome, caminho, categoria_id))
-    conn.commit()
-    cursor.close()
-    conn.close()
-    
-    flash('Avatar adicionado com sucesso!', 'success')
-    return redirect(url_for('admin_avatares'))
+    try:
+        nome = request.form.get('nome')
+        categoria_id = request.form.get('categoria_id')
+        
+        # Log para debug
+        app.logger.info(f"Tentando adicionar avatar: nome={nome}, categoria_id={categoria_id}")
+        
+        # Validar campos obrigatórios
+        if not nome:
+            flash('Nome é obrigatório!', 'erro')
+            return redirect(url_for('admin_avatares'))
+        
+        # Processar upload de imagem
+        caminho = None
+        if 'avatar_file' in request.files:
+            file = request.files['avatar_file']
+            app.logger.info(f"Ficheiro recebido: {file.filename if file else 'None'}")
+            
+            if file and file.filename:
+                # Gerar nome único para o ficheiro
+                ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'png'
+                filename = f"{uuid.uuid4()}.{ext}"
+                
+                # Criar diretório se não existir
+                upload_dir = os.path.join('static', 'imgs', 'avatars')
+                os.makedirs(upload_dir, exist_ok=True)
+                
+                # Salvar ficheiro
+                filepath = os.path.join(upload_dir, filename)
+                file.save(filepath)
+                
+                # Caminho relativo para a BD
+                caminho = f"imgs/avatars/{filename}"
+                app.logger.info(f"Ficheiro salvo em: {filepath}, caminho BD: {caminho}")
+        
+        # Se não houver upload, usar imagem padrão
+        if not caminho:
+            caminho = "imgs/icons/user_icon34-removebg-preview.png"
+            app.logger.info(f"Usando imagem padrão: {caminho}")
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO avatars (nome, caminho, categoria_id) VALUES (%s, %s, %s)", (nome, caminho, categoria_id))
+        conn.commit()
+        
+        # Verificar se foi inserido
+        avatar_id = cursor.lastrowid
+        app.logger.info(f"Avatar inserido com ID: {avatar_id}")
+        
+        cursor.close()
+        conn.close()
+        
+        flash('Avatar adicionado com sucesso!', 'success')
+        return redirect(url_for('admin_avatares'))
+        
+    except Exception as e:
+        app.logger.error(f"Erro ao adicionar avatar: {str(e)}")
+        flash(f'Erro ao adicionar avatar: {str(e)}', 'erro')
+        return redirect(url_for('admin_avatares'))
 
 @app.route('/admin/avatares/editar/<int:avatar_id>', methods=['POST'])
 def admin_editar_avatar(avatar_id):
@@ -10267,14 +11152,49 @@ def admin_editar_avatar(avatar_id):
         return redirect(url_for('login'))
     
     nome = request.form.get('nome')
-    caminho = request.form.get('caminho')
     categoria_id = request.form.get('categoria_id')
     
-    # Corrigir caminho automaticamente
-    caminho = caminho.replace('\\', '/').replace('"', '').strip()
+    # Validar campos obrigatórios
+    if not nome:
+        flash('Nome é obrigatório!', 'erro')
+        return redirect(url_for('admin_avatares'))
     
+    # Buscar caminho atual
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT caminho FROM avatars WHERE id = %s", (avatar_id,))
+    avatar_atual = cursor.fetchone()
+    
+    caminho = avatar_atual['caminho'] if avatar_atual else None
+    
+    # Processar upload de nova imagem (se fornecida)
+    if 'avatar_file' in request.files:
+        file = request.files['avatar_file']
+        if file and file.filename:
+            # Gerar nome único para o ficheiro
+            ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'png'
+            filename = f"{uuid.uuid4()}.{ext}"
+            
+            # Criar diretório se não existir
+            upload_dir = os.path.join('static', 'imgs', 'avatars')
+            os.makedirs(upload_dir, exist_ok=True)
+            
+            # Salvar ficheiro
+            filepath = os.path.join(upload_dir, filename)
+            file.save(filepath)
+            
+            # Caminho relativo para a BD
+            caminho = f"imgs/avatars/{filename}"
+            
+            # Remover imagem antiga se não for a padrão
+            if avatar_atual and avatar_atual['caminho'] != "imgs/icons/user_icon34-removebg-preview.png":
+                old_path = os.path.join('static', avatar_atual['caminho'])
+                if os.path.exists(old_path):
+                    try:
+                        os.remove(old_path)
+                    except:
+                        pass
+    
     cursor.execute("UPDATE avatars SET nome = %s, caminho = %s, categoria_id = %s WHERE id = %s", (nome, caminho, categoria_id, avatar_id))
     conn.commit()
     cursor.close()
@@ -10363,7 +11283,7 @@ def admin_tipos_sessao():
     cursor.close()
     conn.close()
     
-    return render_template('admin_tipos_sessao.html', tipos=tipos)
+    return render_template('admin_tipos_sessao.html', user=get_current_user(), tipos=tipos)
 
 @app.route('/admin/tipos-sessao/adicionar', methods=['POST'])
 def admin_adicionar_tipo_sessao_alt():

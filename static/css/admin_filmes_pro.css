@@ -8,7 +8,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    
 }
 
 .page-title {
@@ -82,7 +82,7 @@
     border-radius: 16px;
     padding: 24px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -123,7 +123,7 @@
 .search-box-pro input:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .search-box-pro input::placeholder {
@@ -160,7 +160,7 @@
 .year-btn.active {
     background: #FFD700;
     color: #1a1a2e;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    
 }
 
 .year-btn:hover:not(.active) {
@@ -183,7 +183,7 @@
 .filter-select:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .filter-select option {
@@ -240,7 +240,7 @@
 .view-btn.active {
     background: #FFD700;
     color: #1a1a2e;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    
 }
 
 .sort-select {
@@ -270,7 +270,7 @@
     background: #1a1a2e;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 215, 0, 0.2);
     position: relative;
@@ -278,7 +278,7 @@
 
 .movie-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(255, 215, 0, 0.2);
+    
     border-color: #FFD700;
 }
 
@@ -448,7 +448,7 @@
     background: #1a1a2e;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -616,7 +616,7 @@
     background: #16213e;
     border: 1px solid rgba(255, 215, 0, 0.2);
     border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    
     min-width: 180px;
     z-index: 1000;
     opacity: 0;
@@ -683,7 +683,7 @@
     max-width: 900px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -811,7 +811,7 @@
 .form-group textarea:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .form-group input::placeholder,
@@ -864,7 +864,7 @@
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+    
 }
 
 .btn-secondary {
@@ -1037,7 +1037,7 @@
     display: inline-block;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    
 }
 
 .poster-preview img {
@@ -1142,7 +1142,7 @@
     z-index: 1000;
     display: none;
     backdrop-filter: blur(15px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    
 }
 
 .multi-select-dropdown.show {
@@ -1289,3 +1289,4 @@
 .multi-select-dropdown::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #ff8c00 0%, #ffd700 100%);
 }
+

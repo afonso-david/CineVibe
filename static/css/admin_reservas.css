@@ -15,7 +15,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    
 }
 
 .top-bar-left {
@@ -115,7 +115,7 @@
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    
     color: white;
 }
 
@@ -136,7 +136,7 @@
     border-radius: 16px;
     padding: 24px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
@@ -177,7 +177,7 @@
 .search-box-pro input:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .search-box-pro input::placeholder {
@@ -206,7 +206,7 @@
 .filter-select:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    
 }
 
 .date-filters {
@@ -305,7 +305,7 @@
 .movies-table-container {
     background: #1a1a2e;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
     border: 1px solid rgba(255, 215, 0, 0.2);
     overflow: hidden;
 }
@@ -471,7 +471,7 @@
 
 .action-btn-table:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    
 }
 
 .action-btn-table.view {
@@ -532,7 +532,7 @@
     width: 90%;
     max-height: 90vh;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    
     border: 1px solid rgba(255, 215, 0, 0.3);
     transform: scale(0.95);
     animation: modalSlideIn 0.3s ease forwards;

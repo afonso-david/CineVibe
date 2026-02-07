@@ -292,9 +292,17 @@ function editarCinema(id) {
             document.getElementById('edit_localizacao').value = cinema.localizacao || '';
             document.getElementById('edit_regiao').value = cinema.regiao || '';
             document.getElementById('edit_email').value = cinema.email || '';
-            document.getElementById('edit_telefone').value = cinema.telefone || '';
-            document.getElementById('edit_imagem_url').value = cinema.imagem_url || '';
-            document.getElementById('edit_descricao').value = cinema.descricao || '';
+            
+            // Guardar imagem atual como hidden field
+            let hiddenImagem = document.getElementById('edit_imagem_atual');
+            if (!hiddenImagem) {
+                hiddenImagem = document.createElement('input');
+                hiddenImagem.type = 'hidden';
+                hiddenImagem.id = 'edit_imagem_atual';
+                hiddenImagem.name = 'imagem_atual';
+                document.getElementById('formEditarCinema').appendChild(hiddenImagem);
+            }
+            hiddenImagem.value = cinema.imagem || '';
             
             // Configurar o formulário para enviar para a rota correta
             document.getElementById('formEditarCinema').action = `/admin/cinemas/editar/${id}`;
@@ -336,56 +344,12 @@ function removerCinema(id, nome) {
         `Tem certeza que deseja remover o cinema "${nome}"?`,
         'Esta ação não pode ser desfeita e removerá todas as sessões associadas.',
         () => {
-            // Adicionar animação de saída
-            const row = document.querySelector(`tr[data-cinema-id="${id}"]`);
-            const card = document.querySelector(`div[data-cinema-id="${id}"]`);
-            
-            if (row) {
-                row.style.transition = 'all 0.4s ease';
-                row.style.transform = 'scale(0.8) translateX(-20px)';
-                row.style.opacity = '0';
-            }
-            
-            if (card) {
-                card.style.transition = 'all 0.4s ease';
-                card.style.transform = 'scale(0.8) translateY(-20px)';
-                card.style.opacity = '0';
-            }
-            
-            // Fazer requisição
-            fetch(`/admin/cinemas/remover/${id}`, {
-                method: 'POST'
-            })
-            .then(response => {
-                if (response.ok) {
-                    setTimeout(() => {
-                        location.reload();
-                    }, 400);
-                } else {
-                    showNotification('Erro ao remover cinema', 'error');
-                    // Reverter animação
-                    if (row) {
-                        row.style.transform = '';
-                        row.style.opacity = '1';
-                    }
-                    if (card) {
-                        card.style.transform = '';
-                        card.style.opacity = '1';
-                    }
-                }
-            })
-            .catch(() => {
-                showNotification('Erro ao remover cinema', 'error');
-                // Reverter animação
-                if (row) {
-                    row.style.transform = '';
-                    row.style.opacity = '1';
-                }
-                if (card) {
-                    card.style.transform = '';
-                    card.style.opacity = '1';
-                }
-            });
+            // Criar um formulário e submeter
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/admin/cinemas/remover/${id}`;
+            document.body.appendChild(form);
+            form.submit();
         }
     );
     
@@ -471,7 +435,6 @@ function showNotification(message, type = 'info') {
         z-index: 10000;
         transform: translateX(400px);
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     `;
     
     if (type === 'error') {
@@ -495,26 +458,24 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Validação do formulário de adicionar
+// Validação do formulário de adicionar - SIMPLES
 document.addEventListener('DOMContentLoaded', function() {
     const addForm = document.querySelector('#modalAdicionarCinema form');
     if (addForm) {
         addForm.addEventListener('submit', function(e) {
             const nome = document.getElementById('nome').value.trim();
-            const regiao = document.getElementById('regiao').value.trim();
+            const localizacao = document.getElementById('localizacao').value.trim();
             
-            if (!nome || !regiao) {
+            if (!nome || !localizacao) {
                 e.preventDefault();
-                showNotification('Por favor, preencha o nome e a região', 'error');
+                showNotification('Nome e localização são obrigatórios', 'error');
                 if (!nome) document.getElementById('nome').focus();
-                else if (!regiao) document.getElementById('regiao').focus();
-                return;
+                else if (!localizacao) document.getElementById('localizacao').focus();
+                return false;
             }
             
-            // Mostrar loading no botão
-            const submitBtn = this.querySelector('.btn-confirm');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adicionando...';
-            submitBtn.disabled = true;
+            // Deixar o formulário submeter normalmente
+            return true;
         });
     }
 });
@@ -550,3 +511,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+// Função para preview da imagem ao editar
+function previewEditImage(event) {
+    const file = event.target.files[0];
+    const previewContainer = document.getElementById('edit_preview_container');
+    const previewImage = document.getElementById('edit_preview_image');
+    const previewName = document.getElementById('edit_preview_name');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (previewImage) {
+                previewImage.src = e.target.result;
+            }
+            if (previewName) {
+                previewName.textContent = `Nova imagem: ${file.name}`;
+            }
+            if (previewContainer) {
+                previewContainer.style.display = 'block';
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}

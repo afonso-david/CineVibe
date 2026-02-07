@@ -13,12 +13,6 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
-                    <span>CineVibe</span>
-                </div>
-            </div>
             
             <nav class="sidebar-nav">
                 <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
@@ -73,26 +67,51 @@
             <!-- User Profile Section -->
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="user-avatar">
-                        {% if user and user.avatar_url %}
-                            <img src="{{ user.avatar_url }}" alt="Avatar" class="avatar-img">
-                        {% else %}
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user"></i>
+                    <div class="profile-background">
+                        <div class="profile-pattern"></div>
+                        <div class="profile-glow"></div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="user-avatar">
+                            {% if user and (user.avatar_personalizado or user.avatar) %}
+                                <img src="{{ url_for('static', filename=user.avatar_personalizado if user.avatar_personalizado else user.avatar) }}" alt="Avatar" class="avatar-img">
+                            {% else %}
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                            {% endif %}
+                            <div class="avatar-ring"></div>
+                            <div class="avatar-status"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
+                            <div class="user-role">
+                                <i class="fas fa-crown"></i>
+                                <span>Administrador</span>
                             </div>
-                        {% endif %}
+                            <div class="user-status">
+                                <i class="fas fa-circle"></i>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <a href="{{ url_for('perfil') }}" class="action-btn profile-btn" title="Gerir Perfil">
+                                <i class="fas fa-user-cog"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Terminar Sessão">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                        </div>
                     </div>
-                    <div class="user-info">
-                        <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
-                        <div class="user-role">Administrador</div>
-                    </div>
-                    <div class="user-actions">
-                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
-                            <i class="fas fa-user-cog"></i>
-                        </a>
-                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
+                    <div class="profile-decoration">
+                        <div class="decoration-line"></div>
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,16 +141,16 @@
                             <span>{{ menus|length }} Menus</span>
                         </div>
                     </div>
-                    <button class="btn-primary" onclick="abrirModalAdicionarProduto()">
+                    <button class="btn-primary" id="btnAdicionar" onclick="abrirModalAdicionarProduto()">
                         <i class="fas fa-plus"></i>
-                        Novo Produto
+                        <span id="btnAdicionarTexto">Novo Produto</span>
                     </button>
                 </div>
             </header>
 
             <!-- Content -->
             <div class="dashboard-content-pro">
-                <!-- Control Panel -->
+                <!-- Control Panel (fora das tabs para não desaparecer) -->
                 <div class="control-panel">
                     <div class="search-section">
                         <div class="search-box-pro">
@@ -179,6 +198,21 @@
                     </div>
                 </div>
 
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <button class="tab-btn" onclick="mostrarTab('produtos')">
+                        <i class="fas fa-utensils"></i> Produtos
+                    </button>
+                    <button class="tab-btn" onclick="mostrarTab('menus')">
+                        <i class="fas fa-list"></i> Menus
+                    </button>
+                    <button class="tab-btn" onclick="mostrarTab('toppings')">
+                        <i class="fas fa-cookie-bite"></i> Toppings
+                    </button>
+                </div>
+
+                <!-- Tab Produtos -->
+                <div id="tab-produtos" class="tab-content">
                 <!-- Grid View -->
                 <div class="movies-grid" id="produtos-grid" style="display: none;">
                     {% for produto in produtos %}
@@ -286,6 +320,218 @@
                     </div>
                 </div>
             </div>
+
+                <!-- Tab Menus -->
+                <div id="tab-menus" class="tab-content" style="display: none;">
+                    <!-- Grid View -->
+                    <div class="menus-grid" id="menus-grid" style="display: none;">
+                        {% for menu in menus %}
+                        <div class="menu-card" data-menu-id="{{ menu.id }}" data-preco="{{ menu.preco_total or 0 }}">
+                            {% if menu.imagem_url %}
+                            <div class="menu-image">
+                                <img src="{{ url_for('static', filename=menu.imagem_url) }}" alt="{{ menu.nome }}" onerror="this.src='/static/imgs/menus/default.svg'">
+                            </div>
+                            {% endif %}
+                            <div class="menu-header">
+                                <h3>{{ menu.nome }}</h3>
+                                <span class="menu-price">€{{ "%.2f"|format(menu.preco_total or 0) }}</span>
+                            </div>
+                            <div class="menu-description">
+                                {{ menu.descricao or 'Sem descrição' }}
+                            </div>
+                            <div class="menu-items">
+                                <h4>Produtos incluídos:</h4>
+                                <ul>
+                                    {% if menu.produtos %}
+                                        {% for produto in menu.produtos %}
+                                        <li>{{ produto }}</li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li>Nenhum produto</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="menu-actions">
+                                <button class="btn-edit" onclick="editarMenu({{ menu.id }})">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button class="btn-delete" onclick="removerMenu({{ menu.id }})">
+                                    <i class="fas fa-trash"></i> Remover
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Table View -->
+                    <div class="movies-table-container" id="menus-table">
+                        <div class="table-wrapper">
+                            <table class="movies-table-pro">
+                                <thead>
+                                    <tr>
+                                        <th class="poster-header">
+                                            <i class="fas fa-image"></i>
+                                            Imagem
+                                        </th>
+                                        <th class="title-header">
+                                            <i class="fas fa-list"></i>
+                                            Menu
+                                        </th>
+                                        <th class="director-header">
+                                            <i class="fas fa-align-left"></i>
+                                            Descrição
+                                        </th>
+                                        <th class="release-header">
+                                            <i class="fas fa-euro-sign"></i>
+                                            Preço
+                                        </th>
+                                        <th class="duration-header">
+                                            <i class="fas fa-utensils"></i>
+                                            Produtos
+                                        </th>
+                                        <th class="genre-header">
+                                            <i class="fas fa-cogs"></i>
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for menu in menus %}
+                                    <tr data-menu-id="{{ menu.id }}" data-preco="{{ menu.preco_total or 0 }}">
+                                        <td class="poster-cell">
+                                            <div class="movie-poster-small">
+                                                {% if menu.imagem_url %}
+                                                <img src="{{ url_for('static', filename=menu.imagem_url) }}" alt="{{ menu.nome }}" onerror="this.src='/static/imgs/menus/default.svg'">
+                                                {% else %}
+                                                <img src="/static/imgs/menus/default.svg" alt="Menu sem imagem">
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td class="title-cell">
+                                            <div class="movie-title-info">
+                                                <h4>{{ menu.nome }}</h4>
+                                            </div>
+                                        </td>
+                                        <td class="director-cell">{{ menu.descricao or 'Sem descrição' }}</td>
+                                        <td class="release-cell">€{{ "%.2f"|format(menu.preco_total or 0) }}</td>
+                                        <td class="duration-cell">
+                                            {% if menu.produtos %}
+                                                {{ menu.produtos|length }} produto(s)
+                                            {% else %}
+                                                Nenhum
+                                            {% endif %}
+                                        </td>
+                                        <td class="actions-cell">
+                                            <div class="movie-actions-table">
+                                                <button class="action-btn-table edit" onclick="editarMenu({{ menu.id }})" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="action-btn-table delete" onclick="removerMenu({{ menu.id }})" title="Remover">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Toppings -->
+                <div id="tab-toppings" class="tab-content" style="display: none;">
+                    <!-- Grid View -->
+                    <div class="toppings-grid" id="toppings-grid" style="display: none;">
+                        {% for topping in toppings %}
+                        <div class="topping-card" data-topping-id="{{ topping.id }}" data-preco="{{ topping.preco }}">
+                            {% if topping.imagem_url %}
+                            <div class="topping-image">
+                                <img src="{{ url_for('static', filename=topping.imagem_url.replace('\\', '/').replace('\"', '')) }}" alt="{{ topping.nome }}" onerror="this.src='/static/imgs/produtos/default.svg'">
+                            </div>
+                            {% endif %}
+                            <div class="topping-info">
+                                <h3>{{ topping.nome }}</h3>
+                                <p class="topping-description">{{ topping.descricao or 'Sem descrição' }}</p>
+                                <span class="topping-price">€{{ "%.2f"|format(topping.preco) }}</span>
+                            </div>
+                            <div class="topping-actions">
+                                <button class="btn-edit" onclick="editarTopping({{ topping.id }})">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button class="btn-delete" onclick="removerTopping({{ topping.id }})">
+                                    <i class="fas fa-trash"></i> Remover
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Table View -->
+                    <div class="movies-table-container" id="toppings-table">
+                        <div class="table-wrapper">
+                            <table class="movies-table-pro">
+                                <thead>
+                                    <tr>
+                                        <th class="poster-header">
+                                            <i class="fas fa-image"></i>
+                                            Imagem
+                                        </th>
+                                        <th class="title-header">
+                                            <i class="fas fa-cookie-bite"></i>
+                                            Topping
+                                        </th>
+                                        <th class="director-header">
+                                            <i class="fas fa-align-left"></i>
+                                            Descrição
+                                        </th>
+                                        <th class="release-header">
+                                            <i class="fas fa-euro-sign"></i>
+                                            Preço
+                                        </th>
+                                        <th class="genre-header">
+                                            <i class="fas fa-cogs"></i>
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for topping in toppings %}
+                                    <tr data-topping-id="{{ topping.id }}" data-preco="{{ topping.preco }}">
+                                        <td class="poster-cell">
+                                            <div class="movie-poster-small">
+                                                {% if topping.imagem_url %}
+                                                <img src="{{ url_for('static', filename=topping.imagem_url.replace('\\', '/').replace('\"', '')) }}" alt="{{ topping.nome }}" onerror="this.src='/static/imgs/produtos/default.svg'">
+                                                {% else %}
+                                                <img src="/static/imgs/produtos/default.svg" alt="Topping sem imagem">
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td class="title-cell">
+                                            <div class="movie-title-info">
+                                                <h4>{{ topping.nome }}</h4>
+                                            </div>
+                                        </td>
+                                        <td class="director-cell">{{ topping.descricao or 'Sem descrição' }}</td>
+                                        <td class="release-cell">€{{ "%.2f"|format(topping.preco) }}</td>
+                                        <td class="actions-cell">
+                                            <div class="movie-actions-table">
+                                                <button class="action-btn-table edit" onclick="editarTopping({{ topping.id }})" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="action-btn-table delete" onclick="removerTopping({{ topping.id }})" title="Remover">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -299,7 +545,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ url_for('admin_adicionar_produto') }}" method="POST">
+                <form action="{{ url_for('admin_adicionar_produto') }}" method="POST" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="nome_produto">Nome do Produto *</label>
@@ -319,9 +565,16 @@
                             <label for="preco_produto">Preço (€) *</label>
                             <input type="number" id="preco_produto" name="preco" step="0.01" min="0" required>
                         </div>
-                        <div class="form-group">
-                            <label for="imagem_produto">URL da Imagem</label>
-                            <input type="url" id="imagem_produto" name="imagem_url">
+                        <div class="form-group full-width">
+                            <label for="imagem_produto">Imagem do Produto</label>
+                            <div class="upload-container">
+                                <input type="file" id="imagem_produto" name="imagem" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-upload" onclick="document.getElementById('imagem_produto').click()">
+                                    <i class="fas fa-upload"></i> Escolher Imagem
+                                </button>
+                                <span id="nome_imagem_produto" class="file-name">Nenhuma imagem selecionada</span>
+                                <div id="preview_imagem_produto" class="image-preview"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-actions">
@@ -348,7 +601,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formEditarProduto" method="POST">
+                <form id="formEditarProduto" method="POST" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="edit_nome_produto">Nome do Produto *</label>
@@ -368,13 +621,292 @@
                             <label for="edit_preco_produto">Preço (€) *</label>
                             <input type="number" id="edit_preco_produto" name="preco" step="0.01" min="0" required>
                         </div>
-                        <div class="form-group">
-                            <label for="edit_imagem_produto">URL da Imagem</label>
-                            <input type="url" id="edit_imagem_produto" name="imagem_url">
+                        <div class="form-group full-width">
+                            <label for="edit_imagem_produto">Imagem do Produto</label>
+                            <div class="upload-container">
+                                <input type="file" id="edit_imagem_produto" name="imagem" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-upload" onclick="document.getElementById('edit_imagem_produto').click()">
+                                    <i class="fas fa-upload"></i> Escolher Nova Imagem
+                                </button>
+                                <span id="nome_edit_imagem_produto" class="file-name">Nenhuma imagem selecionada</span>
+                                <div id="preview_edit_imagem_produto" class="image-preview"></div>
+                                <input type="hidden" id="imagem_atual_produto" name="imagem_atual">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-actions">
                         <button type="button" class="btn-cancel" onclick="fecharModal('modalEditarProduto')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-confirm">
+                            <i class="fas fa-save"></i>
+                            Salvar Alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Menu -->
+    <div id="modalAdicionarMenu" class="modal-overlay" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus"></i> Adicionar Novo Menu</h2>
+                <button class="btn-close" onclick="fecharModal('modalAdicionarMenu')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAdicionarMenu" method="POST" action="{{ url_for('admin_adicionar_menu') }}" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="nome_menu">Nome do Menu *</label>
+                            <input type="text" id="nome_menu" name="nome" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="descricao_menu">Descrição</label>
+                            <textarea id="descricao_menu" name="descricao" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="preco_menu">Preço Total (€) *</label>
+                            <input type="number" id="preco_menu" name="preco_total" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="imagem_menu">Imagem do Menu</label>
+                            <div class="upload-container">
+                                <input type="file" id="imagem_menu" name="imagem" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-upload" onclick="document.getElementById('imagem_menu').click()">
+                                    <i class="fas fa-upload"></i> Escolher Imagem
+                                </button>
+                                <span id="nome_imagem_menu" class="file-name">Nenhuma imagem selecionada</span>
+                                <div id="preview_imagem_menu" class="image-preview"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="produtos-section">
+                        <h3><i class="fas fa-utensils"></i> Produtos do Menu</h3>
+                        <div id="produtos-novo-menu-list" class="produtos-list">
+                            <p class="no-produtos">Nenhum produto adicionado</p>
+                        </div>
+                        <button type="button" class="btn-add-produto" onclick="abrirSeletorProdutosNovoMenu()">
+                            <i class="fas fa-plus"></i> Adicionar Produto
+                        </button>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="fecharModal('modalAdicionarMenu')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-confirm">
+                            <i class="fas fa-save"></i>
+                            Criar Menu
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Menu -->
+    <div id="modalEditarMenu" class="modal-overlay" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editar Menu</h2>
+                <button class="btn-close" onclick="fecharModal('modalEditarMenu')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarMenu" method="POST" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="edit_nome_menu">Nome do Menu *</label>
+                            <input type="text" id="edit_nome_menu" name="nome" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="edit_descricao_menu">Descrição</label>
+                            <textarea id="edit_descricao_menu" name="descricao" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_preco_menu">Preço Total (€) *</label>
+                            <input type="number" id="edit_preco_menu" name="preco_total" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="edit_imagem_menu">Imagem do Menu</label>
+                            <div class="upload-container">
+                                <input type="file" id="edit_imagem_menu" name="imagem" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-upload" onclick="document.getElementById('edit_imagem_menu').click()">
+                                    <i class="fas fa-upload"></i> Escolher Nova Imagem
+                                </button>
+                                <span id="nome_edit_imagem_menu" class="file-name">Nenhuma imagem selecionada</span>
+                                <div id="preview_edit_imagem_menu" class="image-preview"></div>
+                                <input type="hidden" id="imagem_atual_menu" name="imagem_atual">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="produtos-section">
+                        <h3><i class="fas fa-utensils"></i> Produtos do Menu</h3>
+                        <div id="produtos-menu-list" class="produtos-list">
+                            <!-- Produtos serão carregados aqui via JavaScript -->
+                        </div>
+                        <button type="button" class="btn-add-produto" onclick="abrirSeletorProdutos()">
+                            <i class="fas fa-plus"></i> Adicionar Produto
+                        </button>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="fecharModal('modalEditarMenu')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-confirm">
+                            <i class="fas fa-save"></i>
+                            Salvar Alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Seletor de Produtos -->
+    <div id="modalSeletorProdutos" class="modal-overlay" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2><i class="fas fa-shopping-basket"></i> Adicionar Produtos ao Menu</h2>
+                <button class="btn-close" onclick="fecharModal('modalSeletorProdutos')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="seletor-search">
+                    <input type="text" id="searchProdutosSeletor" placeholder="Buscar produtos..." class="search-input">
+                </div>
+                
+                <div class="produtos-disponiveis" id="produtosDisponiveis">
+                    {% for produto in produtos %}
+                    <div class="produto-seletor-item" data-produto-id="{{ produto.id }}" data-produto-nome="{{ produto.nome }}" data-produto-preco="{{ produto.preco }}">
+                        <div class="produto-seletor-info">
+                            {% if produto.imagem %}
+                            <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}" class="produto-seletor-img">
+                            {% else %}
+                            <div class="produto-seletor-img-placeholder">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            {% endif %}
+                            <div class="produto-seletor-details">
+                                <h4>{{ produto.nome }}</h4>
+                                <span class="produto-seletor-tipo">{{ produto.tipo }}</span>
+                                <span class="produto-seletor-preco">€{{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-produto-menu" onclick="adicionarProdutoAoMenu({{ produto.id }}, '{{ produto.nome }}', {{ produto.preco }})">
+                            <i class="fas fa-plus"></i> Adicionar
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-confirm" onclick="fecharModal('modalSeletorProdutos')">
+                        <i class="fas fa-check"></i> Concluir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Topping -->
+    <div id="modalAdicionarTopping" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus"></i> Adicionar Novo Topping</h2>
+                <button class="btn-close" onclick="fecharModal('modalAdicionarTopping')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAdicionarTopping" method="POST" action="{{ url_for('admin_adicionar_topping') }}" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="nome_topping">Nome do Topping *</label>
+                            <input type="text" id="nome_topping" name="nome" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="descricao_topping">Descrição</label>
+                            <textarea id="descricao_topping" name="descricao" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="preco_topping">Preço (€) *</label>
+                            <input type="number" id="preco_topping" name="preco" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="imagem_topping">Imagem do Topping</label>
+                            <div class="upload-container">
+                                <input type="file" id="imagem_topping" name="imagem" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-upload" onclick="document.getElementById('imagem_topping').click()">
+                                    <i class="fas fa-upload"></i> Escolher Imagem
+                                </button>
+                                <span id="nome_imagem_topping" class="file-name">Nenhuma imagem selecionada</span>
+                                <div id="preview_imagem_topping" class="image-preview"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="fecharModal('modalAdicionarTopping')">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-confirm">
+                            <i class="fas fa-save"></i>
+                            Adicionar Topping
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Topping -->
+    <div id="modalEditarTopping" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editar Topping</h2>
+                <button class="btn-close" onclick="fecharModal('modalEditarTopping')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarTopping" method="POST" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="edit_nome_topping">Nome do Topping *</label>
+                            <input type="text" id="edit_nome_topping" name="nome" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="edit_descricao_topping">Descrição</label>
+                            <textarea id="edit_descricao_topping" name="descricao" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_preco_topping">Preço (€) *</label>
+                            <input type="number" id="edit_preco_topping" name="preco" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="edit_imagem_topping">Imagem do Topping</label>
+                            <div class="upload-container">
+                                <input type="file" id="edit_imagem_topping" name="imagem" accept="image/*" style="display: none;">
+                                <button type="button" class="btn-upload" onclick="document.getElementById('edit_imagem_topping').click()">
+                                    <i class="fas fa-upload"></i> Escolher Nova Imagem
+                                </button>
+                                <span id="nome_edit_imagem_topping" class="file-name">Nenhuma imagem selecionada</span>
+                                <div id="preview_edit_imagem_topping" class="image-preview"></div>
+                                <input type="hidden" id="imagem_atual_topping" name="imagem_atual">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="fecharModal('modalEditarTopping')">
                             Cancelar
                         </button>
                         <button type="submit" class="btn-confirm">

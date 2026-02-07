@@ -242,12 +242,6 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
-                    <span>CineVibe</span>
-                </div>
-            </div>
             
             <nav class="sidebar-nav">
                 <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
@@ -302,26 +296,51 @@
             <!-- User Profile Section -->
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="user-avatar">
-                        {% if user and user.avatar_url %}
-                            <img src="{{ user.avatar_url }}" alt="Avatar" class="avatar-img">
-                        {% else %}
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user"></i>
+                    <div class="profile-background">
+                        <div class="profile-pattern"></div>
+                        <div class="profile-glow"></div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="user-avatar">
+                            {% if user and (user.avatar_personalizado or user.avatar) %}
+                                <img src="{{ url_for('static', filename=user.avatar_personalizado if user.avatar_personalizado else user.avatar) }}" alt="Avatar" class="avatar-img">
+                            {% else %}
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                            {% endif %}
+                            <div class="avatar-ring"></div>
+                            <div class="avatar-status"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
+                            <div class="user-role">
+                                <i class="fas fa-crown"></i>
+                                <span>Administrador</span>
                             </div>
-                        {% endif %}
+                            <div class="user-status">
+                                <i class="fas fa-circle"></i>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <a href="{{ url_for('perfil') }}" class="action-btn profile-btn" title="Gerir Perfil">
+                                <i class="fas fa-user-cog"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Terminar Sessão">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <div class="btn-glow"></div>
+                            </a>
+                        </div>
                     </div>
-                    <div class="user-info">
-                        <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
-                        <div class="user-role">Administrador</div>
-                    </div>
-                    <div class="user-actions">
-                        <a href="{{ url_for('perfil') }}" class="action-btn" title="Ver Perfil">
-                            <i class="fas fa-user-cog"></i>
-                        </a>
-                        <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Sair da Conta">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
+                    <div class="profile-decoration">
+                        <div class="decoration-line"></div>
+                        <div class="decoration-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -376,6 +395,14 @@
                     </div>
                     
                     <div class="view-controls">
+                        <div class="view-toggle">
+                            <button class="view-btn" data-view="grid" title="Vista em Grelha">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="view-btn active" data-view="table" title="Vista em Tabela">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
                         <div class="sort-controls">
                             <select class="sort-select" id="sortSelect">
                                 <option value="id">Ordenar por ID</option>
@@ -386,8 +413,37 @@
                     </div>
                 </div>
 
+                <!-- Grid View -->
+                <div class="movies-grid" id="avatares-grid" style="display: none;">
+                    {% for avatar in avatares %}
+                    <div class="movie-card-pro" data-avatar-id="{{ avatar.id }}" data-categoria="{{ avatar.categoria_nome or '' }}">
+                        <div class="movie-poster">
+                            <img src="{{ url_for('static', filename=avatar.caminho) }}" 
+                                 alt="{{ avatar.nome }}"
+                                 onerror="this.src='{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}'">
+                            <div class="movie-overlay">
+                                <div class="movie-actions">
+                                    <button class="action-btn edit" onclick="alert('Editar avatar {{ avatar.id }}')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="alert('Remover avatar {{ avatar.nome }}')" title="Remover">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="movie-info">
+                            <h3>{{ avatar.nome }}</h3>
+                            <div class="movie-meta">
+                                <span class="genre">{{ avatar.categoria_nome or 'Sem categoria' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
                 <!-- Table View -->
-                <div class="movies-table-container">
+                <div class="movies-table-container" id="avatares-table">
                     {% if avatares %}
                     <div class="table-wrapper">
                         <table class="movies-table-pro">
@@ -572,11 +628,18 @@
     </div>
 
     <script>
+        // Variáveis globais
+        let currentView = 'table';
+
         // JavaScript para filtros e pesquisa
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const categoriaFilter = document.getElementById('categoriaFilter');
             const sortSelect = document.getElementById('sortSelect');
+
+            // Inicializar controles de visualização
+            initializeViewControls();
+            updateViewDisplay();
 
             // Pesquisa
             if (searchInput) {
@@ -594,12 +657,49 @@
             }
         });
 
+        // Controles de visualização
+        function initializeViewControls() {
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const view = this.dataset.view;
+                    switchView(view);
+                });
+            });
+        }
+
+        function switchView(view) {
+            currentView = view;
+            
+            // Atualizar botões
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.view === view) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            updateViewDisplay();
+        }
+
+        function updateViewDisplay() {
+            const gridElement = document.getElementById('avatares-grid');
+            const tableElement = document.getElementById('avatares-table');
+            
+            if (currentView === 'grid') {
+                if (gridElement) gridElement.style.display = 'grid';
+                if (tableElement) tableElement.style.display = 'none';
+            } else {
+                if (gridElement) gridElement.style.display = 'none';
+                if (tableElement) tableElement.style.display = 'block';
+            }
+        }
+
         function applyFilters() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const categoriaFilter = document.getElementById('categoriaFilter').value;
             
+            // Filtrar tabela
             const rows = document.querySelectorAll('.movies-table-pro tbody tr');
-            
             rows.forEach(row => {
                 const nome = row.querySelector('h4').textContent.toLowerCase();
                 const categoria = row.dataset.categoria || '';
@@ -613,27 +713,68 @@
                     row.style.display = 'none';
                 }
             });
+
+            // Filtrar grid
+            const cards = document.querySelectorAll('.movies-grid .movie-card-pro');
+            cards.forEach(card => {
+                const nome = card.querySelector('h3').textContent.toLowerCase();
+                const categoria = card.dataset.categoria || '';
+                
+                const matchesSearch = nome.includes(searchTerm);
+                const matchesCategoria = !categoriaFilter || categoria.toLowerCase() === categoriaFilter.toLowerCase();
+                
+                if (matchesSearch && matchesCategoria) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         }
 
         function sortAvatares() {
             const sortBy = document.getElementById('sortSelect').value;
+            
+            // Ordenar tabela
             const tableBody = document.querySelector('.movies-table-pro tbody');
-            const rows = Array.from(tableBody.querySelectorAll('tr'));
-            
-            rows.sort((a, b) => {
-                switch(sortBy) {
-                    case 'nome':
-                        return a.querySelector('h4').textContent.localeCompare(b.querySelector('h4').textContent);
-                    case 'categoria':
-                        const catA = a.dataset.categoria || '';
-                        const catB = b.dataset.categoria || '';
-                        return catA.localeCompare(catB);
-                    default:
-                        return parseInt(a.dataset.avatarId) - parseInt(b.dataset.avatarId);
-                }
-            });
-            
-            rows.forEach(row => tableBody.appendChild(row));
+            if (tableBody) {
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                
+                rows.sort((a, b) => {
+                    switch(sortBy) {
+                        case 'nome':
+                            return a.querySelector('h4').textContent.localeCompare(b.querySelector('h4').textContent);
+                        case 'categoria':
+                            const catA = a.dataset.categoria || '';
+                            const catB = b.dataset.categoria || '';
+                            return catA.localeCompare(catB);
+                        default:
+                            return parseInt(a.dataset.avatarId) - parseInt(b.dataset.avatarId);
+                    }
+                });
+                
+                rows.forEach(row => tableBody.appendChild(row));
+            }
+
+            // Ordenar grid
+            const gridContainer = document.getElementById('avatares-grid');
+            if (gridContainer) {
+                const cards = Array.from(gridContainer.querySelectorAll('.movie-card-pro'));
+                
+                cards.sort((a, b) => {
+                    switch(sortBy) {
+                        case 'nome':
+                            return a.querySelector('h3').textContent.localeCompare(b.querySelector('h3').textContent);
+                        case 'categoria':
+                            const catA = a.dataset.categoria || '';
+                            const catB = b.dataset.categoria || '';
+                            return catA.localeCompare(catB);
+                        default:
+                            return parseInt(a.dataset.avatarId) - parseInt(b.dataset.avatarId);
+                    }
+                });
+                
+                cards.forEach(card => gridContainer.appendChild(card));
+            }
         }
 
         function limparFiltros() {

@@ -9396,7 +9396,7 @@ def selecao_bar():
 
 @app.route('/bar')
 def bar():
-    """Página principal do bar com menus da base de dados"""
+    """Página principal do bar com menus e toppings da base de dados"""
     
     try:
         # Conectar à base de dados
@@ -9424,13 +9424,35 @@ def bar():
             else:
                 menu['imagem_url'] = 'imgs/bar/menu-default.svg'
         
-        app.logger.info(f"Menus encontrados: {len(menus)}")
+        # Buscar toppings da base de dados
+        cursor.execute("""
+            SELECT id, nome, descricao, preco, imagem_url
+            FROM toppings 
+            ORDER BY nome
+        """)
+        toppings = cursor.fetchall()
+        
+        # Processar URLs das imagens para toppings
+        for topping in toppings:
+            if topping.get('imagem_url'):
+                imagem_url = topping['imagem_url'].replace('\\', '/').replace('"', '').strip()
+                if not imagem_url.startswith(('http://', 'https://', 'imgs/')):
+                    if '/' not in imagem_url:
+                        imagem_url = f"imgs/toppings/{imagem_url}"
+                    elif not imagem_url.startswith('imgs/'):
+                        imagem_url = f"imgs/toppings/{imagem_url}"
+                topping['imagem_url'] = imagem_url
+            else:
+                topping['imagem_url'] = 'imgs/toppings/topping-default.svg'
+        
+        app.logger.info(f"Menus encontrados: {len(menus)}, Toppings encontrados: {len(toppings)}")
         
         cursor.close()
         conn.close()
         
         return render_template('bar.html', 
                              menus=menus,
+                             toppings=toppings,
                              logged_in=session.get('user_authenticated', False),
                              avatar=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png'))
                              
@@ -9439,6 +9461,7 @@ def bar():
         # Em caso de erro, mostrar página básica sem menus
         return render_template('bar.html', 
                              menus=[],
+                             toppings=[],
                              logged_in=session.get('user_authenticated', False),
                              avatar=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png'))
 @app.route('/resumo_reserva', methods=['GET', 'POST'])

@@ -75,7 +75,6 @@
                 <div class="container">
                     <div class="section-header">
                         <h2 class="section-title">
-                            <i class="fas fa-utensils"></i>
                             Nossos Menus Especiais
                         </h2>
                         <p class="section-subtitle">
@@ -102,10 +101,6 @@
                                     {% endif %}
                                     <div class="menu-footer">
                                         <span class="menu-price-text">€{{ "%.2f"|format(menu.preco) }}</span>
-                                        <button class="menu-btn" onclick="verDetalhesMenu({{ menu.id }})">
-                                            <i class="fas fa-eye"></i>
-                                            Ver Detalhes
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +116,48 @@
                 </div>
             </section>
 
+            <!-- Seção de Toppings -->
+            <section class="toppings-section" id="toppings">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            Toppings & Extras
+                        </h2>
+                        <p class="section-subtitle">
+                            Personalize a sua experiência com os nossos deliciosos toppings
+                        </p>
+                    </div>
+                    
+                    <div class="toppings-grid">
+                        {% if toppings %}
+                            {% for topping in toppings %}
+                            <div class="topping-card">
+                                <div class="topping-image">
+                                    <img src="{{ url_for('static', filename=topping.imagem_url) }}" 
+                                         alt="{{ topping.nome }}" 
+                                         onerror="this.src='{{ url_for('static', filename='imgs/toppings/topping_placeholder.jpg') }}'">
+                                </div>
+                                <div class="topping-content">
+                                    <h3 class="topping-name">{{ topping.nome }}</h3>
+                                    {% if topping.descricao %}
+                                    <p class="topping-description">{{ topping.descricao }}</p>
+                                    {% endif %}
+                                    <div class="topping-footer">
+                                        <span class="topping-price">€{{ "%.2f"|format(topping.preco) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-toppings">
+                                <i class="fas fa-cookie-bite"></i>
+                                <h3>Toppings em Breve</h3>
+                                <p>Estamos a preparar deliciosos toppings para si. Volte em breve!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
 
 
 

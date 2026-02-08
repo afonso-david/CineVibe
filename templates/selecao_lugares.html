@@ -325,11 +325,53 @@
         }
     }
 
+    // Função para ajustar largura da linha divisória
+    function adjustDividerWidth() {
+        const dividers = document.querySelectorAll('.divider-line-horizontal');
+        const seatRows = document.querySelectorAll('.seat-row');
+        
+        if (seatRows.length > 0 && dividers.length > 0) {
+            // Pegar a primeira fileira de lugares (não divisória)
+            let firstSeatRow = null;
+            for (let row of seatRows) {
+                if (row.querySelectorAll('.seat').length > 0) {
+                    firstSeatRow = row;
+                    break;
+                }
+            }
+            
+            if (firstSeatRow) {
+                // Calcular largura baseada nos lugares visíveis
+                const seats = firstSeatRow.querySelectorAll('.seat');
+                if (seats.length > 0) {
+                    const firstSeat = seats[0];
+                    const lastSeat = seats[seats.length - 1];
+                    
+                    // Calcular largura do primeiro ao último lugar
+                    const firstSeatRect = firstSeat.getBoundingClientRect();
+                    const lastSeatRect = lastSeat.getBoundingClientRect();
+                    const totalWidth = lastSeatRect.right - firstSeatRect.left;
+                    
+                    dividers.forEach(divider => {
+                        divider.style.width = `${totalWidth}px`;
+                    });
+                }
+            }
+        }
+    }
+
     // Inicializar e fazer seleção automática
     document.addEventListener('DOMContentLoaded', function() {
         updateSummary();
         // Aguardar um pouco para garantir que tudo foi carregado
         setTimeout(autoSelectSeats, 100);
+        // Ajustar largura da linha divisória
+        setTimeout(adjustDividerWidth, 200);
+    });
+    
+    // Reajustar ao redimensionar janela
+    window.addEventListener('resize', function() {
+        setTimeout(adjustDividerWidth, 100);
     });
     </script>
 </body>

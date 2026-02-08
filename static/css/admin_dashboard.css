@@ -902,8 +902,7 @@ los específicos para páginas admin */
 
 .movie-card:hover {
     transform: translateY(-5px);
-    
-    border-color: #FFD60A;
+    box-shadow: none;
 }
 
 .movie-poster {

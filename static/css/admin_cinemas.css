@@ -13,8 +13,7 @@
 
 .movie-card-pro:hover {
     transform: translateY(-5px);
-    
-    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: none;
 }
 
 .movie-poster {

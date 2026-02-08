@@ -532,11 +532,11 @@
                     </div>
                     <div class="form-group">
                         <label>Filas</label>
-                        <input type="number" name="fileiras" class="form-input" min="1" value="10">
+                        <input type="number" name="filas" class="form-input" min="1" value="10">
                     </div>
                     <div class="form-group">
                         <label>Lugares por Fila</label>
-                        <input type="number" name="lugares_por_fileira" class="form-input" min="1" value="20">
+                        <input type="number" name="lugares_por_fila" class="form-input" min="1" value="20">
                     </div>
                     <div class="modal-footer">
                         <button type="button" onclick="fecharModalAdicionarSala()" class="btn btn-secondary">Cancelar</button>
@@ -587,11 +587,11 @@
                     </div>
                     <div class="form-group">
                         <label>Filas</label>
-                        <input type="number" id="editFileiras" class="form-input" min="1" value="10">
+                        <input type="number" id="editFilas" class="form-input" min="1" value="10">
                     </div>
                     <div class="form-group">
                         <label>Lugares por Fila</label>
-                        <input type="number" id="editLugaresPorFileira" class="form-input" min="1" value="20">
+                        <input type="number" id="editLugaresPorFila" class="form-input" min="1" value="20">
                     </div>
                 </form>
             </div>
@@ -717,8 +717,8 @@
                         document.getElementById('editCinema').value = sala.id_cinema || '';
                         document.getElementById('editCapacidade').value = sala.capacidade || '';
                         document.getElementById('editTipoSala').value = sala.tipo_sala || 'Normal';
-                        document.getElementById('editFileiras').value = sala.fileiras || 10;
-                        document.getElementById('editLugaresPorFileira').value = sala.lugares_por_fileira || 20;
+                        document.getElementById('editFilas').value = sala.filas || 10;
+                        document.getElementById('editLugaresPorFila').value = sala.lugares_por_fila || 20;
                         
                         // Abrir modal
                         document.getElementById('editarSalaModal').style.display = 'flex';
@@ -750,8 +750,8 @@
             formData.append('id_cinema', document.getElementById('editCinema').value);
             formData.append('capacidade', document.getElementById('editCapacidade').value);
             formData.append('tipo_sala', document.getElementById('editTipoSala').value);
-            formData.append('fileiras', document.getElementById('editFileiras').value);
-            formData.append('lugares_por_fileira', document.getElementById('editLugaresPorFileira').value);
+            formData.append('filas', document.getElementById('editFilas').value);
+            formData.append('lugares_por_fila', document.getElementById('editLugaresPorFila').value);
 
             console.log('Salvando sala:', salaEditandoId);
             

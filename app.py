@@ -4271,8 +4271,8 @@ def admin_adicionar_sala():
         nome_sala = request.form.get('nome_sala')
         capacidade = request.form.get('capacidade')
         tipo_sala = request.form.get('tipo_sala', 'Normal')
-        fileiras = request.form.get('fileiras', 10)
-        lugares_por_fileira = request.form.get('lugares_por_fileira', 20)
+        filas = request.form.get('filas', 10)
+        lugares_por_fila = request.form.get('lugares_por_fila', 20)
         
         if not id_cinema or not nome_sala or not capacidade:
             flash('Cinema, nome e capacidade são obrigatórios', 'erro')
@@ -4291,9 +4291,9 @@ def admin_adicionar_sala():
         
         # Inserir nova sala
         cur.execute("""
-            INSERT INTO salas (id_cinema, nome_sala, capacidade, tipo_sala, fileiras, lugares_por_fileira)
+            INSERT INTO salas (id_cinema, nome_sala, capacidade, tipo_sala, filas, lugares_por_fila)
             VALUES (%s, %s, %s, %s, %s, %s)
-        """, (id_cinema, nome_sala, int(capacidade), tipo_sala, int(fileiras), int(lugares_por_fileira)))
+        """, (id_cinema, nome_sala, int(capacidade), tipo_sala, int(filas), int(lugares_por_fila)))
         
         conn.commit()
         flash('Sala adicionada com sucesso!', 'success')
@@ -4322,8 +4322,8 @@ def admin_editar_sala(sala_id):
         capacidade = request.form.get('capacidade')
         id_cinema = request.form.get('id_cinema')
         tipo_sala = request.form.get('tipo_sala', 'Normal')
-        fileiras = request.form.get('fileiras', 10)
-        lugares_por_fileira = request.form.get('lugares_por_fileira', 20)
+        filas = request.form.get('filas', 10)
+        lugares_por_fila = request.form.get('lugares_por_fila', 20)
         
         if not nome_sala or not capacidade or not id_cinema:
             return jsonify({'success': False, 'message': 'Nome, capacidade e cinema são obrigatórios'})
@@ -4341,9 +4341,9 @@ def admin_editar_sala(sala_id):
         # Atualizar sala
         cursor.execute("""
             UPDATE salas 
-            SET nome_sala = %s, capacidade = %s, id_cinema = %s, tipo_sala = %s, fileiras = %s, lugares_por_fileira = %s
+            SET nome_sala = %s, capacidade = %s, id_cinema = %s, tipo_sala = %s, filas = %s, lugares_por_fila = %s
             WHERE id = %s
-        """, (nome_sala, int(capacidade), int(id_cinema), tipo_sala, int(fileiras), int(lugares_por_fileira), sala_id))
+        """, (nome_sala, int(capacidade), int(id_cinema), tipo_sala, int(filas), int(lugares_por_fila), sala_id))
         
         conn.commit()
         
@@ -4386,10 +4386,10 @@ def admin_get_dados_sala(sala_id):
         # Converter Decimal para int/float se necessário
         if sala.get('capacidade'):
             sala['capacidade'] = int(sala['capacidade'])
-        if sala.get('fileiras'):
-            sala['fileiras'] = int(sala['fileiras'])
-        if sala.get('lugares_por_fileira'):
-            sala['lugares_por_fileira'] = int(sala['lugares_por_fileira'])
+        if sala.get('filas'):
+            sala['filas'] = int(sala['filas'])
+        if sala.get('lugares_por_fila'):
+            sala['lugares_por_fila'] = int(sala['lugares_por_fila'])
         
         return jsonify({
             'success': True,
@@ -6926,6 +6926,47 @@ def filme_detalhe(id_filme):
         
         app.logger.info(f"Horários encontrados para filme {id_filme}: {len(horarios_filme)}")
         
+        # CORREÇÃO AUTOMÁTICA: Atualizar horários sem sala na base de dados
+        horarios_sem_sala_ids = [h['id'] for h in horarios_filme if not h.get('id_sala')]
+        
+        if horarios_sem_sala_ids:
+            app.logger.warning(f"Corrigindo {len(horarios_sem_sala_ids)} horários sem sala na BD...")
+            
+            for horario_id in horarios_sem_sala_ids:
+                # Buscar o cinema do horário
+                horario_data = next((h for h in horarios_filme if h['id'] == horario_id), None)
+                if horario_data and horario_data.get('id_cinema'):
+                    # Buscar primeira sala do cinema
+                    cursor.execute("""
+                        SELECT id FROM salas 
+                        WHERE id_cinema = %s 
+                        ORDER BY id LIMIT 1
+                    """, (horario_data['id_cinema'],))
+                    sala = cursor.fetchone()
+                    
+                    if sala:
+                        # Atualizar na base de dados
+                        cursor.execute("""
+                            UPDATE horarios_sessao 
+                            SET id_sala = %s 
+                            WHERE id = %s
+                        """, (sala['id'], horario_id))
+                        app.logger.info(f"Horário {horario_id} atualizado com sala {sala['id']}")
+            
+            conn.commit()
+            
+            # Recarregar horários após correção
+            cursor.execute("""
+                SELECT hs.id, hs.id_cinema, hs.id_tipo_sessao, hs.id_sala, h.hora, s.nome_sala
+                FROM horarios_sessao hs
+                JOIN horarios h ON hs.id_horario = h.id
+                LEFT JOIN salas s ON hs.id_sala = s.id
+                WHERE hs.id_filme = %s
+                ORDER BY h.hora
+            """, (id_filme,))
+            horarios_filme = cursor.fetchall()
+            app.logger.info(f"Horários recarregados após correção: {len(horarios_filme)}")
+        
         # Converter hora de timedelta para string formatada e filtrar horários passados
         from datetime import timedelta, datetime, time
         
@@ -8129,11 +8170,61 @@ def selecao_lugares():
         hora_val = horario['hora']
         horario['hora_str'] = hora_val.strftime("%H:%M") if hasattr(hora_val, 'strftime') else str(hora_val)
         
-        # Buscar dados da sala
+        # Buscar dados da sala COM informações de layout
+        capacidade_sala = horario.get('capacidade')
+        id_sala = horario.get('id_sala')
+        
+        if capacidade_sala is None or id_sala is None:
+            app.logger.warning(f"Capacidade ou id_sala None para horário {id_horario_sessao}")
+            # Buscar diretamente da tabela salas
+            if id_sala:
+                cursor.execute("SELECT capacidade, filas, lugares_por_fila, lugares_acessiveis FROM salas WHERE id = %s", (id_sala,))
+                sala_info = cursor.fetchone()
+                if sala_info:
+                    capacidade_sala = sala_info.get('capacidade', 100)
+                    filas = sala_info.get('filas', 10)
+                    lugares_por_fila = sala_info.get('lugares_por_fila', 10)
+                    lugares_acessiveis = sala_info.get('lugares_acessiveis', None)
+                else:
+                    capacidade_sala = 100
+                    filas = 10
+                    lugares_por_fila = 10
+                    lugares_acessiveis = None
+            else:
+                capacidade_sala = 100
+                filas = 10
+                lugares_por_fila = 10
+                lugares_acessiveis = None
+        else:
+            # Buscar informações de layout da sala
+            cursor.execute("SELECT filas, lugares_por_fila, lugares_acessiveis FROM salas WHERE id = %s", (id_sala,))
+            sala_layout = cursor.fetchone()
+            if sala_layout:
+                filas = sala_layout.get('filas', 10)
+                lugares_por_fila = sala_layout.get('lugares_por_fila', 10)
+                lugares_acessiveis = sala_layout.get('lugares_acessiveis', None)
+            else:
+                filas = 10
+                lugares_por_fila = 10
+                lugares_acessiveis = None
+        
+        # Converter lugares_acessiveis de JSON string para lista Python
+        if lugares_acessiveis and isinstance(lugares_acessiveis, str):
+            import json
+            try:
+                lugares_acessiveis = json.loads(lugares_acessiveis)
+            except:
+                lugares_acessiveis = None
+        
         sala = {
             'nome_sala': horario.get('nome_sala', 'Sala 1'),
-            'capacidade': horario.get('capacidade', 100)
+            'capacidade': capacidade_sala,
+            'filas': filas,
+            'lugares_por_fila': lugares_por_fila,
+            'lugares_acessiveis': lugares_acessiveis
         }
+        
+        app.logger.info(f"Sala final - Nome: {sala['nome_sala']}, Capacidade: {sala['capacidade']}, Filas: {sala['filas']}, Lugares/Fila: {sala['lugares_por_fila']}, Acessíveis: {lugares_acessiveis}")
         
         # Buscar lugares ocupados para esta sessão específica
         cursor.execute("""
@@ -8165,8 +8256,13 @@ def selecao_lugares():
         print(f"Lugares: {sorted(lugares_ocupados_set)}")
         print(f"{'='*80}\n")
         
-        # Gerar layout da sala baseado na capacidade COM lugares ocupados
-        lugares = gerar_layout_sala(sala['capacidade'], list(lugares_ocupados_set))
+        # Gerar layout da sala baseado nos dados reais COM lugares ocupados
+        lugares = gerar_layout_sala(
+            sala['filas'], 
+            sala['lugares_por_fila'], 
+            list(lugares_ocupados_set),
+            sala.get('lugares_acessiveis')
+        )
         
         # 🔍 DEBUG: VERIFICAR SE OS LUGARES TÊM A FLAG ocupado=True
         lugares_ocupados_no_layout = []
@@ -8221,23 +8317,43 @@ def selecao_lugares():
         user_avatar=get_user_avatar()
     )
 
-def gerar_layout_sala(capacidade, lugares_ocupados):
-    """Gera o layout da sala baseado na capacidade"""
-    lugares_por_fileira = 30
-    num_fileiras = (capacidade + lugares_por_fileira - 1) // lugares_por_fileira
+def gerar_layout_sala(filas, lugares_por_fila, lugares_ocupados, lugares_acessiveis=None):
+    """Gera o layout da sala baseado nas filas e lugares por fila reais da BD"""
+    # Validar parâmetros
+    if filas is None or filas <= 0:
+        app.logger.error(f"Número de filas inválido: {filas}")
+        filas = 10
+    
+    if lugares_por_fila is None or lugares_por_fila <= 0:
+        app.logger.error(f"Lugares por fila inválido: {lugares_por_fila}")
+        lugares_por_fila = 10
     
     # Converter para set para busca rápida
     lugares_ocupados_set = set(lugares_ocupados) if lugares_ocupados else set()
     
     layout = []
     divisoes_horizontais = []
-    if num_fileiras >= 4:
-        meio_sala = num_fileiras // 2
-        divisoes_horizontais = [meio_sala - 2]
     
-    for i in range(num_fileiras):
+    # Adicionar divisão horizontal no meio da sala se tiver 4+ filas
+    if filas >= 4:
+        meio_sala = filas // 2
+        divisoes_horizontais = [meio_sala - 1]
+    
+    # Usar lugares acessíveis da BD ou fallback para valores padrão
+    if lugares_acessiveis is None or not lugares_acessiveis:
+        # Fallback: última fila, 2 lugares em cada ponta
+        ultima_fila = chr(64 + filas)
+        lugares_acessiveis = [
+            f"{ultima_fila}1",
+            f"{ultima_fila}2",
+            f"{ultima_fila}{lugares_por_fila - 1}",
+            f"{ultima_fila}{lugares_por_fila}"
+        ]
+    
+    lugares_acessiveis_set = set(lugares_acessiveis)
+    
+    for i in range(filas):
         letra_fileira = chr(65 + i)  # A, B, C, etc.
-        lugares_nesta_fileira = min(lugares_por_fileira, capacidade - (i * lugares_por_fileira))
         
         fileira = {
             'letra': letra_fileira,
@@ -8245,24 +8361,22 @@ def gerar_layout_sala(capacidade, lugares_ocupados):
             'tipo': 'fileira'
         }
         
-        for j in range(lugares_nesta_fileira):
+        for j in range(lugares_por_fila):
             nome_lugar = f"{letra_fileira}{j+1}"
             
-            # Lugares acessíveis específicos
-            lugares_acessiveis = ['F1', 'F2', 'F29', 'F30']
-            
-            # VERIFICAÇÃO SIMPLES: está no set?
+            # Verificar se está ocupado
             esta_ocupado = nome_lugar in lugares_ocupados_set
             
             lugar = {
                 'nome': nome_lugar,
                 'ocupado': esta_ocupado,
-                'acessivel': nome_lugar in lugares_acessiveis
+                'acessivel': nome_lugar in lugares_acessiveis_set
             }
             fileira['lugares'].append(lugar)
         
         layout.append(fileira)
         
+        # Adicionar divisão horizontal se necessário
         if i in divisoes_horizontais:
             divisao = {
                 'tipo': 'divisao_horizontal',
@@ -8271,6 +8385,7 @@ def gerar_layout_sala(capacidade, lugares_ocupados):
             }
             layout.append(divisao)
     
+    app.logger.info(f"Layout gerado: {filas} filas x {lugares_por_fila} lugares = {filas * lugares_por_fila} lugares totais")
     return layout
     
 
@@ -9982,51 +10097,140 @@ def toggle_cinema_favorito():
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
     
-    data = request.get_json()
-    id_cinema = data.get('id_cinema')
-    
-    if not id_cinema:
-        return jsonify({'success': False, 'message': 'ID do cinema necessário'})
-    
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
     try:
-        cursor.execute("""
-            SELECT id FROM cinemas_favoritos 
-            WHERE id_usuario = %s AND id_cinema = %s
-        """, (session['user_id'], id_cinema))
+        data = request.get_json()
+        id_cinema = data.get('id_cinema')
         
-        favorito = cursor.fetchone()
+        if not id_cinema:
+            return jsonify({'success': False, 'message': 'ID do cinema necessário'})
         
-        if favorito:
+        app.logger.info(f"Toggle cinema favorito - user: {session['user_id']}, cinema: {id_cinema}")
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        try:
+            # Verificar se já é favorito
             cursor.execute("""
-                DELETE FROM cinemas_favoritos 
+                SELECT id FROM cinemas_favoritos 
                 WHERE usuario_id = %s AND cinema_id = %s
             """, (session['user_id'], id_cinema))
-            message = 'Cinema removido dos favoritos!'
-            is_favorito = False
-        else:
-            cursor.execute("""
-                INSERT INTO cinemas_favoritos (usuario_id, cinema_id)
-                VALUES (%s, %s)
-            """, (session['user_id'], id_cinema))
-            message = 'Cinema adicionado aos favoritos!'
-            is_favorito = True
-        
-        conn.commit()
-        return jsonify({
-            'success': True, 
-            'message': message,
-            'is_favorito': is_favorito
-        })
-        
+            
+            favorito = cursor.fetchone()
+            app.logger.info(f"Favorito existente: {favorito}")
+            
+            if favorito:
+                # Remover dos favoritos
+                cursor.execute("""
+                    DELETE FROM cinemas_favoritos 
+                    WHERE usuario_id = %s AND cinema_id = %s
+                """, (session['user_id'], id_cinema))
+                message = 'Cinema removido dos favoritos!'
+                is_favorito = False
+                app.logger.info(f"Cinema {id_cinema} removido dos favoritos")
+            else:
+                # Adicionar aos favoritos
+                cursor.execute("""
+                    INSERT INTO cinemas_favoritos (usuario_id, cinema_id)
+                    VALUES (%s, %s)
+                """, (session['user_id'], id_cinema))
+                message = 'Cinema adicionado aos favoritos!'
+                is_favorito = True
+                app.logger.info(f"Cinema {id_cinema} adicionado aos favoritos")
+            
+            conn.commit()
+            
+            return jsonify({
+                'success': True, 
+                'message': message,
+                'is_favorito': is_favorito
+            })
+            
+        except mysql.connector.Error as db_err:
+            conn.rollback()
+            app.logger.error(f"Erro de BD ao toggle cinema favorito: {str(db_err)}")
+            return jsonify({'success': False, 'message': f'Erro de base de dados: {str(db_err)}'})
+        finally:
+            try:
+                cursor.close()
+            except:
+                pass
+            try:
+                conn.close()
+            except:
+                pass
+                
     except Exception as e:
-        conn.rollback()
+        app.logger.error(f"Erro geral ao toggle cinema favorito: {str(e)}")
+        import traceback
+        app.logger.error(traceback.format_exc())
         return jsonify({'success': False, 'message': f'Erro: {str(e)}'})
-    finally:
-        cursor.close()
-        conn.close()
+
+# Rota alternativa com URL diferente (usada pelo template cinemas.html)
+@app.route('/toggle_favorito_cinema/<int:cinema_id>', methods=['POST'])
+def toggle_favorito_cinema(cinema_id):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Login necessário'})
+    
+    try:
+        app.logger.info(f"Toggle favorito cinema - user: {session['user_id']}, cinema: {cinema_id}")
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        try:
+            # Verificar se já é favorito
+            cursor.execute("""
+                SELECT id FROM cinemas_favoritos 
+                WHERE usuario_id = %s AND cinema_id = %s
+            """, (session['user_id'], cinema_id))
+            
+            favorito = cursor.fetchone()
+            
+            if favorito:
+                # Remover dos favoritos
+                cursor.execute("""
+                    DELETE FROM cinemas_favoritos 
+                    WHERE usuario_id = %s AND cinema_id = %s
+                """, (session['user_id'], cinema_id))
+                message = 'Cinema removido dos favoritos!'
+                is_favorito = False
+            else:
+                # Adicionar aos favoritos
+                cursor.execute("""
+                    INSERT INTO cinemas_favoritos (usuario_id, cinema_id)
+                    VALUES (%s, %s)
+                """, (session['user_id'], cinema_id))
+                message = 'Cinema adicionado aos favoritos!'
+                is_favorito = True
+            
+            conn.commit()
+            
+            return jsonify({
+                'success': True, 
+                'message': message,
+                'is_favorito': is_favorito
+            })
+            
+        except mysql.connector.Error as db_err:
+            conn.rollback()
+            app.logger.error(f"Erro de BD: {str(db_err)}")
+            return jsonify({'success': False, 'message': f'Erro de base de dados: {str(db_err)}'})
+        finally:
+            try:
+                cursor.close()
+            except:
+                pass
+            try:
+                conn.close()
+            except:
+                pass
+                
+    except Exception as e:
+        app.logger.error(f"Erro geral: {str(e)}")
+        import traceback
+        app.logger.error(traceback.format_exc())
+        return jsonify({'success': False, 'message': f'Erro: {str(e)}'})
 
 @app.route('/atualizar_perfil', methods=['POST'])
 def atualizar_perfil():
@@ -11267,6 +11471,69 @@ def admin_remover_categoria_avatar(categoria_id):
     
     flash('Categoria removida com sucesso!', 'success')
     return redirect(url_for('admin_avatares'))
+
+# ==========================
+# ROTA PARA CORRIGIR HORÁRIOS SEM SALA
+# ==========================
+@app.route('/admin/corrigir-salas-horarios')
+def admin_corrigir_salas_horarios():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        # Buscar todos os horários sem sala
+        cursor.execute("""
+            SELECT hs.id, hs.id_cinema, hs.id_filme, hs.id_tipo_sessao, c.nome as cinema_nome
+            FROM horarios_sessao hs
+            JOIN cinemas c ON hs.id_cinema = c.id
+            WHERE hs.id_sala IS NULL
+            ORDER BY c.nome
+        """)
+        horarios_sem_sala = cursor.fetchall()
+        
+        # Corrigir automaticamente
+        corrigidos = 0
+        nao_corrigidos = 0
+        
+        for horario in horarios_sem_sala:
+            # Buscar primeira sala disponível do cinema
+            cursor.execute("""
+                SELECT id, nome_sala
+                FROM salas
+                WHERE id_cinema = %s
+                ORDER BY id
+                LIMIT 1
+            """, (horario['id_cinema'],))
+            sala = cursor.fetchone()
+            
+            if sala:
+                # Atualizar horário com a sala
+                cursor.execute("""
+                    UPDATE horarios_sessao
+                    SET id_sala = %s
+                    WHERE id = %s
+                """, (sala['id'], horario['id']))
+                corrigidos += 1
+                app.logger.info(f"Horário {horario['id']} atualizado com sala {sala['nome_sala']}")
+            else:
+                nao_corrigidos += 1
+                app.logger.warning(f"Cinema {horario['cinema_nome']} não tem salas cadastradas")
+        
+        conn.commit()
+        
+        flash(f'✅ Corrigidos {corrigidos} horários! {nao_corrigidos} não puderam ser corrigidos (cinemas sem salas).', 'success')
+        return redirect(url_for('admin_dashboard'))
+        
+    except Exception as e:
+        app.logger.error(f"Erro ao corrigir salas: {str(e)}")
+        flash(f'Erro ao corrigir salas: {str(e)}', 'erro')
+        return redirect(url_for('admin_dashboard'))
+    finally:
+        cursor.close()
+        conn.close()
 
 # ==========================
 # ADMIN - GESTÃO DE TIPOS DE SESSÃO

@@ -9350,6 +9350,29 @@ def selecao_bar():
         app.logger.info(f"  - snacks: {len(produtos['snacks'])} produtos") 
         app.logger.info(f"  - bebidas: {len(produtos['bebidas'])} produtos")
         
+        # Buscar toppings da base de dados
+        cursor.execute("""
+            SELECT id, nome, descricao, preco, imagem_url
+            FROM toppings 
+            ORDER BY nome
+        """)
+        toppings = cursor.fetchall()
+        
+        # Processar URLs das imagens para toppings
+        for topping in toppings:
+            if topping.get('imagem_url'):
+                imagem_url = topping['imagem_url'].replace('\\', '/').replace('"', '').strip()
+                if not imagem_url.startswith(('http://', 'https://', 'imgs/')):
+                    if '/' not in imagem_url:
+                        imagem_url = f"imgs/toppings/{imagem_url}"
+                    elif not imagem_url.startswith('imgs/'):
+                        imagem_url = f"imgs/toppings/{imagem_url}"
+                topping['imagem_url'] = imagem_url
+            else:
+                topping['imagem_url'] = 'imgs/toppings/topping-default.svg'
+        
+        app.logger.info(f"  - toppings: {len(toppings)} produtos")
+        
         # Guardar dados na sessão
         salvar_dados_reserva_sessao(
             filme_id=int(filme_id),
@@ -9379,6 +9402,7 @@ def selecao_bar():
                              data_sessao=data_sessao,
                              lugares_selecionados=lugares_selecionados,
                              produtos=produtos,
+                             toppings=toppings,
                              user_authenticated='user_id' in session,
                              user_avatar=get_user_avatar())
                              
@@ -9393,6 +9417,266 @@ def selecao_bar():
         import traceback
         app.logger.error(f"❌ Traceback: {traceback.format_exc()}")
         return f"<h1>Erro Debug</h1><p>{str(e)}</p><pre>{traceback.format_exc()}</pre>"
+
+@app.route('/selecao_toppings')
+def selecao_toppings():
+    """Página de seleção de toppings após escolher produtos do bar"""
+    
+    conn = None
+    try:
+        app.logger.info("🔍 INÍCIO SELECAO_TOPPINGS")
+        app.logger.info("=" * 60)
+        
+        # Obter parâmetros
+        filme_id = request.args.get('filme_id') or session.get('filme_id')
+        cinema_id = request.args.get('cinema_id') or session.get('cinema_id')
+        id_tipo_sessao = request.args.get('id_tipo_sessao') or session.get('id_tipo_sessao')
+        id_horario_sessao = request.args.get('id_horario_sessao') or session.get('id_horario_sessao')
+        data_sessao = request.args.get('data_sessao') or session.get('data_sessao')
+        lugares = request.args.get('lugares') or ','.join(session.get('lugares_selecionados', []))
+        produtos_bar_json = request.args.get('produtos_bar', '[]')
+        
+        app.logger.info(f"📋 Parâmetros recebidos:")
+        app.logger.info(f"   - filme_id: {filme_id}")
+        app.logger.info(f"   - cinema_id: {cinema_id}")
+        app.logger.info(f"   - id_tipo_sessao: {id_tipo_sessao}")
+        app.logger.info(f"   - produtos_bar_json: {produtos_bar_json}")
+        
+        if not all([filme_id, cinema_id, id_horario_sessao, id_tipo_sessao]):
+            app.logger.error("❌ Dados da reserva incompletos")
+            flash("Dados da reserva incompletos", "erro")
+            return redirect(url_for('home'))
+        
+        # Parse produtos do bar
+        import json
+        try:
+            produtos_bar = json.loads(produtos_bar_json)
+            app.logger.info(f"✅ Produtos parseados: {len(produtos_bar)} produtos")
+        except Exception as e:
+            app.logger.error(f"❌ Erro ao parsear produtos: {e}")
+            produtos_bar = []
+        
+        if not produtos_bar:
+            # Se não há produtos, redirecionar direto para resumo
+            app.logger.info("⚠️ Nenhum produto selecionado, redirecionando para resumo")
+            return redirect(url_for('resumo_reserva',
+                                  filme_id=filme_id,
+                                  cinema_id=cinema_id,
+                                  tipo_sessao_id=id_tipo_sessao,
+                                  horario_id=id_horario_sessao,
+                                  data_sessao=data_sessao,
+                                  lugares=lugares,
+                                  quantidade=len(lugares.split(',')),
+                                  produtos_bar='[]'))
+        
+        # Conectar à BD
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Buscar dados do filme
+        cursor.execute("SELECT * FROM filmes WHERE id = %s", (filme_id,))
+        filme = cursor.fetchone()
+        
+        if not filme:
+            flash("Filme não encontrado", "erro")
+            return redirect(url_for('home'))
+        
+        # Corrigir poster_url
+        poster_url = filme.get('poster_url', 'imgs/filmes/placeholder.jpg')
+        if poster_url and not poster_url.startswith(('http://', 'https://', 'imgs/')):
+            poster_url = f"imgs/filmes/{poster_url}"
+        filme['poster_url'] = poster_url
+        
+        # Buscar dados do cinema
+        cursor.execute("SELECT * FROM cinemas WHERE id = %s", (cinema_id,))
+        cinema = cursor.fetchone()
+        
+        # Buscar dados do tipo de sessão
+        cursor.execute("SELECT * FROM tipos_sessao WHERE id = %s", (id_tipo_sessao,))
+        tipo_sessao = cursor.fetchone()
+        
+        # Buscar dados do horário
+        cursor.execute("""
+            SELECT hs.*, h.hora
+            FROM horarios_sessao hs
+            JOIN horarios h ON hs.id_horario = h.id
+            WHERE hs.id = %s
+        """, (id_horario_sessao,))
+        horario = cursor.fetchone()
+        
+        if horario:
+            hora_val = horario['hora']
+            horario['hora_str'] = hora_val.strftime("%H:%M") if hasattr(hora_val, 'strftime') else str(hora_val)
+        
+        # Processar lugares selecionados
+        lugares_selecionados = lugares.split(',') if lugares else []
+        
+        # Buscar detalhes dos produtos selecionados
+        produtos_detalhes = []
+        produtos_com_toppings = []
+        
+        app.logger.info(f"📦 Processando {len(produtos_bar)} produtos do bar")
+        
+        for produto in produtos_bar:
+            produto_id = produto.get('id')
+            quantidade = produto.get('quantidade', 1)
+            tipo_produto_enviado = produto.get('tipo', 'bar')  # Novo campo
+            
+            app.logger.info(f"🔍 Verificando produto ID: {produto_id}, tipo: {tipo_produto_enviado}")
+            
+            # Verificar se é topping (começa com 'topping_')
+            if str(produto_id).startswith('topping_'):
+                app.logger.info(f"⏭️ Pulando topping: {produto_id}")
+                continue
+            
+            # Buscar produto baseado no tipo enviado
+            produto_info = None
+            
+            if tipo_produto_enviado == 'menu':
+                # Buscar em menus
+                app.logger.info(f"🔍 Buscando em menus...")
+                cursor.execute("""
+                    SELECT id, nome as produto, preco_total as preco, 'menu' as categoria, imagem_url
+                    FROM menus
+                    WHERE id = %s
+                """, (produto_id,))
+                produto_info = cursor.fetchone()
+                
+                if produto_info:
+                    app.logger.info(f"✅ Menu encontrado: {produto_info['produto']}")
+            else:
+                # Buscar produto no bar
+                app.logger.info(f"🔍 Buscando em bar...")
+                cursor.execute("""
+                    SELECT id, produto, preco, categoria, imagem_url
+                    FROM bar
+                    WHERE id = %s
+                """, (produto_id,))
+                produto_info = cursor.fetchone()
+                
+                if produto_info:
+                    app.logger.info(f"✅ Produto do bar encontrado: {produto_info['produto']}")
+            
+            if produto_info:
+                produto_info['quantidade'] = quantidade
+                produtos_detalhes.append(produto_info)
+                
+                # Verificar se este produto tem toppings associados
+                tipo_produto = 'menu' if produto_info['categoria'] == 'menu' else 'bar'
+                app.logger.info(f"🔍 Tipo de produto confirmado: {tipo_produto}")
+                
+                if tipo_produto == 'menu':
+                    cursor.execute("""
+                        SELECT COUNT(*) as total
+                        FROM toppings_produtos
+                        WHERE id_menu = %s AND tipo_produto = 'menu'
+                    """, (produto_id,))
+                else:
+                    cursor.execute("""
+                        SELECT COUNT(*) as total
+                        FROM toppings_produtos
+                        WHERE id_produto = %s AND tipo_produto = 'bar'
+                    """, (produto_id,))
+                
+                result = cursor.fetchone()
+                app.logger.info(f"🔍 Toppings associados: {result['total'] if result else 0}")
+                
+                if result and result['total'] > 0:
+                    produtos_com_toppings.append({
+                        'id': produto_id,
+                        'tipo': tipo_produto,
+                        'nome': produto_info['produto']
+                    })
+                    app.logger.info(f"✅ Produto com toppings adicionado: {produto_info['produto']}")
+            else:
+                app.logger.warning(f"⚠️ Produto ID {produto_id} não encontrado")
+        
+        # Se não há produtos com toppings, redirecionar para resumo
+        if not produtos_com_toppings:
+            app.logger.info("ℹ️ Nenhum produto com toppings, redirecionando para resumo")
+            return redirect(url_for('resumo_reserva',
+                                  filme_id=filme_id,
+                                  cinema_id=cinema_id,
+                                  tipo_sessao_id=id_tipo_sessao,
+                                  horario_id=id_horario_sessao,
+                                  data_sessao=data_sessao,
+                                  lugares=lugares,
+                                  quantidade=len(lugares_selecionados),
+                                  produtos_bar=produtos_bar_json))
+        
+        # Buscar todos os toppings disponíveis para os produtos selecionados
+        toppings_disponiveis = []
+        for produto in produtos_com_toppings:
+            if produto['tipo'] == 'menu':
+                cursor.execute("""
+                    SELECT DISTINCT t.id, t.nome, t.descricao, t.preco, t.imagem_url
+                    FROM toppings_produtos tp
+                    JOIN toppings t ON tp.id_topping = t.id
+                    WHERE tp.id_menu = %s AND tp.tipo_produto = 'menu'
+                    ORDER BY t.nome
+                """, (produto['id'],))
+            else:
+                cursor.execute("""
+                    SELECT DISTINCT t.id, t.nome, t.descricao, t.preco, t.imagem_url
+                    FROM toppings_produtos tp
+                    JOIN toppings t ON tp.id_topping = t.id
+                    WHERE tp.id_produto = %s AND tp.tipo_produto = 'bar'
+                    ORDER BY t.nome
+                """, (produto['id'],))
+            
+            toppings = cursor.fetchall()
+            for topping in toppings:
+                # Evitar duplicados
+                if not any(t['id'] == topping['id'] for t in toppings_disponiveis):
+                    # Processar URL da imagem
+                    if topping.get('imagem_url'):
+                        imagem_url = topping['imagem_url'].replace('\\', '/').replace('"', '').strip()
+                        if not imagem_url.startswith(('http://', 'https://', 'imgs/')):
+                            if '/' not in imagem_url:
+                                imagem_url = f"imgs/toppings/{imagem_url}"
+                            elif not imagem_url.startswith('imgs/'):
+                                imagem_url = f"imgs/toppings/{imagem_url}"
+                        topping['imagem_url'] = imagem_url
+                    else:
+                        topping['imagem_url'] = 'imgs/toppings/topping-default.svg'
+                    
+                    toppings_disponiveis.append(topping)
+        
+        app.logger.info(f"🍿 {len(produtos_com_toppings)} produtos com toppings")
+        app.logger.info(f"🍿 {len(toppings_disponiveis)} toppings disponíveis")
+        
+        cursor.close()
+        conn.close()
+        
+        return render_template('selecao_toppings.html',
+                             filme=filme,
+                             cinema=cinema,
+                             horario=horario,
+                             tipo_sessao=tipo_sessao,
+                             filme_id=filme_id,
+                             cinema_id=cinema_id,
+                             id_tipo_sessao=id_tipo_sessao,
+                             tipo_sessao_id=id_tipo_sessao,
+                             id_horario_sessao=id_horario_sessao,
+                             horario_id=id_horario_sessao,
+                             data_sessao=data_sessao,
+                             lugares_selecionados=lugares_selecionados,
+                             lugares=lugares,
+                             produtos_bar=produtos_detalhes,
+                             produtos_bar_json=produtos_bar_json,
+                             produtos_com_toppings=produtos_com_toppings,
+                             toppings=toppings_disponiveis,
+                             user_authenticated='user_id' in session,
+                             user_avatar=get_user_avatar())
+                             
+    except Exception as e:
+        app.logger.error(f"❌ Erro na rota /selecao_toppings: {e}")
+        import traceback
+        app.logger.error(f"❌ Traceback: {traceback.format_exc()}")
+        if conn:
+            conn.close()
+        flash("Erro ao carregar página de toppings", "erro")
+        return redirect(url_for('home'))
 
 @app.route('/bar')
 def bar():
@@ -9497,10 +9781,12 @@ def resumo_reserva():
         lugares = request.args.get('lugares', '') or ','.join(session.get('lugares_selecionados', []))
         quantidade = request.args.get('quantidade', '1')
         produtos_bar = request.args.get('produtos_bar', '[]')
+        toppings_json = request.args.get('toppings', '[]')
         
         app.logger.info(f"🔍 RESUMO_RESERVA - Parâmetros:")
         app.logger.info(f"   filme_id={filme_id}, id_tipo_sessao={id_tipo_sessao}")
         app.logger.info(f"   lugares={lugares}")
+        app.logger.info(f"   toppings_json={toppings_json}")
         
         # Validar dados essenciais
         if not all([filme_id, cinema_id, id_horario_sessao, id_tipo_sessao]):
@@ -9575,19 +9861,38 @@ def resumo_reserva():
         
         # Calcular total do bar se há produtos selecionados
         produtos_bar_detalhados = []
+        
+        app.logger.info(f"📦 Processando produtos do bar: {len(produtos_selecionados)} produtos")
+        app.logger.info(f"📦 Produtos recebidos: {produtos_selecionados}")
+        
         if produtos_selecionados:
             for produto in produtos_selecionados:
                 produto_id = produto.get('id')
                 quantidade_prod = int(produto.get('quantidade', 1))
+                tipo_produto_enviado = produto.get('tipo', 'bar')  # Novo campo
                 
-                # Tentar buscar primeiro na tabela menus
-                cursor.execute("SELECT nome as produto, preco_total as preco FROM menus WHERE id = %s", (produto_id,))
-                produto_info = cursor.fetchone()
+                app.logger.info(f"🔍 Buscando produto ID: {produto_id}, tipo: {tipo_produto_enviado}, quantidade: {quantidade_prod}")
                 
-                if not produto_info:
-                    # Se não encontrou nos menus, buscar na tabela bar
+                produto_info = None
+                
+                # Buscar baseado no tipo
+                if tipo_produto_enviado == 'menu':
+                    # Tentar buscar primeiro na tabela menus
+                    cursor.execute("SELECT nome as produto, preco_total as preco FROM menus WHERE id = %s", (produto_id,))
+                    produto_info = cursor.fetchone()
+                    
+                    if produto_info:
+                        app.logger.info(f"✅ Menu encontrado: {produto_info['produto']}")
+                else:
+                    # Buscar na tabela bar
                     cursor.execute("SELECT produto, preco FROM bar WHERE id = %s", (produto_id,))
                     produto_info = cursor.fetchone()
+                    
+                    if produto_info:
+                        app.logger.info(f"✅ Produto do bar encontrado: {produto_info['produto']}")
+                
+                if not produto_info:
+                    app.logger.error(f"❌ Produto ID {produto_id} não encontrado!")
                 
                 if produto_info:
                     preco_unitario = float(produto_info['preco'])
@@ -9601,8 +9906,52 @@ def resumo_reserva():
                         'preco_unitario': preco_unitario,
                         'preco_total': preco_total_produto
                     })
+                    app.logger.info(f"✅ Produto adicionado ao resumo: {produto_info['produto']} x{quantidade_prod} = €{preco_total_produto}")
         
-        total_geral = total_bilhetes + total_bar
+        app.logger.info(f"📊 Total bar: €{total_bar}, Total produtos: {len(produtos_bar_detalhados)}")
+        
+        # Processar toppings selecionados
+        toppings_selecionados = []
+        total_toppings = 0.0
+        
+        try:
+            import json
+            toppings_list = json.loads(toppings_json) if toppings_json != '[]' else []
+            app.logger.info(f"🍿 Processando toppings: {len(toppings_list)} toppings")
+            
+            if toppings_list:
+                for topping in toppings_list:
+                    topping_id = topping.get('id')
+                    quantidade_topping = int(topping.get('quantidade', 1))
+                    
+                    app.logger.info(f"🔍 Buscando topping ID: {topping_id}, quantidade: {quantidade_topping}")
+                    
+                    # Buscar topping na base de dados
+                    cursor.execute("SELECT nome, preco FROM toppings WHERE id = %s", (topping_id,))
+                    topping_info = cursor.fetchone()
+                    
+                    if topping_info:
+                        preco_unitario = float(topping_info['preco'])
+                        preco_total_topping = preco_unitario * quantidade_topping
+                        total_toppings += preco_total_topping
+                        
+                        # Adicionar topping com detalhes para o template
+                        toppings_selecionados.append({
+                            'nome': topping_info['nome'],
+                            'quantidade': quantidade_topping,
+                            'preco_unitario': preco_unitario,
+                            'preco_total': preco_total_topping
+                        })
+                        app.logger.info(f"✅ Topping adicionado ao resumo: {topping_info['nome']} x{quantidade_topping} = €{preco_total_topping}")
+                    else:
+                        app.logger.error(f"❌ Topping ID {topping_id} não encontrado!")
+        except Exception as e:
+            app.logger.error(f"❌ Erro ao processar toppings: {e}")
+            toppings_selecionados = []
+        
+        app.logger.info(f"📊 Total toppings: €{total_toppings}, Total toppings: {len(toppings_selecionados)}")
+        
+        total_geral = total_bilhetes + total_bar + total_toppings
         
         cursor.close()
         conn.close()
@@ -9639,9 +9988,11 @@ def resumo_reserva():
                              lugares_selecionados=lugares_selecionados,
                              produtos_selecionados=produtos_selecionados,
                              produtos_bar=produtos_bar_detalhados,
+                             toppings=toppings_selecionados,
                              preco_bilhete=preco_bilhete,
                              total_bilhetes=total_bilhetes,
                              total_bar=total_bar,
+                             total_toppings=total_toppings,
                              total_geral=total_geral,
                              quantidade=len(lugares_selecionados),
                              user_authenticated='user_id' in session,
@@ -9948,6 +10299,71 @@ def api_pesquisa():
         'cinemas': cinemas,
         'menus': menus
     })
+
+# ==========================
+# API para verificar toppings de produtos
+# ==========================
+@app.route('/api/check_toppings')
+def api_check_toppings():
+    """Verifica se um produto/menu tem toppings associados"""
+    produto_id = request.args.get('produto_id')
+    tipo = request.args.get('tipo', 'bar')  # 'bar' ou 'menu'
+    
+    if not produto_id:
+        return jsonify({'has_toppings': False, 'toppings': []})
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Buscar toppings associados ao produto/menu
+        if tipo == 'menu':
+            cursor.execute("""
+                SELECT DISTINCT t.id, t.nome, t.descricao, t.preco, t.imagem_url
+                FROM toppings_produtos tp
+                JOIN toppings t ON tp.id_topping = t.id
+                WHERE tp.id_menu = %s AND tp.tipo_produto = 'menu'
+                ORDER BY t.nome
+            """, (produto_id,))
+        else:  # bar
+            cursor.execute("""
+                SELECT DISTINCT t.id, t.nome, t.descricao, t.preco, t.imagem_url
+                FROM toppings_produtos tp
+                JOIN toppings t ON tp.id_topping = t.id
+                WHERE tp.id_produto = %s AND tp.tipo_produto = 'bar'
+                ORDER BY t.nome
+            """, (produto_id,))
+        
+        toppings = cursor.fetchall()
+        
+        # Processar URLs das imagens
+        for topping in toppings:
+            if topping.get('imagem_url'):
+                imagem_url = topping['imagem_url'].replace('\\', '/').replace('"', '').strip()
+                if not imagem_url.startswith(('http://', 'https://', 'imgs/')):
+                    if '/' not in imagem_url:
+                        imagem_url = f"imgs/toppings/{imagem_url}"
+                    elif not imagem_url.startswith('imgs/'):
+                        imagem_url = f"imgs/toppings/{imagem_url}"
+                topping['imagem_url'] = imagem_url
+            else:
+                topping['imagem_url'] = 'imgs/toppings/topping-default.svg'
+        
+        cursor.close()
+        conn.close()
+        
+        has_toppings = len(toppings) > 0
+        
+        app.logger.info(f"🍿 Verificação toppings: produto_id={produto_id}, tipo={tipo}, toppings={len(toppings)}")
+        
+        return jsonify({
+            'has_toppings': has_toppings,
+            'toppings': toppings
+        })
+        
+    except Exception as e:
+        app.logger.error(f"❌ Erro ao verificar toppings: {e}")
+        return jsonify({'has_toppings': False, 'toppings': [], 'error': str(e)})
 
 # ==========================
 # Pesquisa Global

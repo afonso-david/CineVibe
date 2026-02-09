@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reserva de Bilhetes | CineVibe</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva_quantity_clean.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/reserva_clean.js') }}" defer></script>
 </head>
 <body>
     <div class="page-wrapper">
@@ -127,9 +129,9 @@
                     <div class="custom-quantity">
                         <h4>Ou escolha uma quantidade personalizada:</h4>
                         <div class="quantity-input-group">
-                            <button class="quantity-btn" id="decreaseBtn">-</button>
-                            <input type="number" class="quantity-input" id="customQuantity" value="1" min="1" max="20">
-                            <button class="quantity-btn" id="increaseBtn">+</button>
+                            <button type="button" class="quantity-btn" id="decreaseBtn">-</button>
+                            <input type="number" class="quantity-input" id="customQuantity" value="1" min="1" max="{{ sala.capacidade }}" step="1">
+                            <button type="button" class="quantity-btn" id="increaseBtn">+</button>
                         </div>
                     </div>
                     
@@ -153,7 +155,80 @@
         </main>
     </div>
 
+    <!-- Modal de Sugestão de Sala Exclusiva -->
+    <div id="exclusiveRoomModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-crown"></i>
+                <h2>Sugestão de Sala Exclusiva</h2>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">
+                    O valor total da sua reserva (<span id="totalPrice"></span>) é superior ao preço de uma sala exclusiva!
+                </p>
+                <p class="modal-suggestion">
+                    Por apenas <strong id="exclusivePrice">100.00€</strong>, pode reservar uma sala inteira só para o seu grupo, com mais privacidade e conforto.
+                </p>
+                <div class="modal-benefits">
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Sala privada só para o seu grupo</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Escolha o filme que quiser</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Horário flexível</span>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Experiência VIP exclusiva</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeExclusiveModal()">
+                    <i class="fas fa-times"></i>
+                    Continuar com Reserva Normal
+                </button>
+                <a href="{{ url_for('sessao_exclusiva') }}" class="modal-btn modal-btn-primary">
+                    <i class="fas fa-crown"></i>
+                    Reservar Sala Exclusiva
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
+    // Configuração de preços
+    const TICKET_PRICE = {{ filme_sessao.preco }};
+    const EXCLUSIVE_ROOM_PRICE = 100.00; // Preço base da sala exclusiva
+    const MAX_CAPACITY = {{ sala.capacidade }}; // Capacidade máxima da sala
+    let modalShown = false; // Flag para mostrar modal apenas uma vez
+    
+    // Função para fechar o modal
+    function closeExclusiveModal() {
+        document.getElementById('exclusiveRoomModal').style.display = 'none';
+        modalShown = true; // Marca que o modal já foi mostrado
+    }
+    
+    // Função para verificar se deve mostrar o modal
+    function checkExclusiveRoomSuggestion(quantity) {
+        const totalPrice = TICKET_PRICE * quantity;
+        
+        // Se o preço total for maior que o preço da sala exclusiva e o modal ainda não foi mostrado
+        if (totalPrice > EXCLUSIVE_ROOM_PRICE && !modalShown) {
+            // Atualizar valores no modal
+            document.getElementById('totalPrice').textContent = totalPrice.toFixed(2) + '€';
+            document.getElementById('exclusivePrice').textContent = EXCLUSIVE_ROOM_PRICE.toFixed(2) + '€';
+            
+            // Mostrar modal
+            document.getElementById('exclusiveRoomModal').style.display = 'flex';
+        }
+    }
+    
     // JavaScript para funcionalidade
     document.addEventListener('DOMContentLoaded', function() {
         const quantityOptions = document.querySelectorAll('.quantity-option');
@@ -187,40 +262,29 @@
                 advanceBtn.disabled = false;
                 updateButtonText();
                 
-                // Adiciona efeito visual
-                this.style.transform = 'translateY(-3px) scale(1.05)';
-                setTimeout(() => {
-                    this.style.transform = 'translateY(-3px)';
-                }, 200);
+                // Verificar se deve sugerir sala exclusiva
+                checkExclusiveRoomSuggestion(selectedQuantity);
             });
         });
         
         // Botões de quantidade personalizada
-        decreaseBtn.addEventListener('click', function() {
+        decreaseBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             let current = parseInt(customQuantity.value);
             if (current > 1) {
                 customQuantity.value = current - 1;
                 updateSelection();
-                
-                // Efeito visual
-                this.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
             }
         });
         
-        increaseBtn.addEventListener('click', function() {
+        increaseBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             let current = parseInt(customQuantity.value);
-            if (current < 20) {
+            if (current < MAX_CAPACITY) {
                 customQuantity.value = current + 1;
                 updateSelection();
-                
-                // Efeito visual
-                this.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 150);
             }
         });
         
@@ -230,8 +294,8 @@
             let value = parseInt(this.value);
             if (isNaN(value) || value < 1) {
                 this.value = 1;
-            } else if (value > 20) {
-                this.value = 20;
+            } else if (value > MAX_CAPACITY) {
+                this.value = MAX_CAPACITY;
             }
             updateSelection();
         });
@@ -265,6 +329,9 @@
             // Habilita/desabilita botão avançar
             advanceBtn.disabled = selectedQuantity < 1;
             updateButtonText();
+            
+            // Verificar se deve sugerir sala exclusiva
+            checkExclusiveRoomSuggestion(selectedQuantity);
         }
         
         function updateButtonText() {
@@ -282,136 +349,6 @@
             advanceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
             advanceBtn.disabled = true;
         });
-        // Seleção de quantidade melhorada
-        quantityOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                // Remover seleção anterior
-                quantityOptions.forEach(opt => opt.classList.remove('selected'));
-                
-                // Adicionar seleção atual
-                this.classList.add('selected');
-                
-                // Efeito de pulso
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = 'translateY(-5px) scale(1)';
-                }, 150);
-                
-                // Atualizar quantidade selecionada
-                const quantity = this.dataset.quantity;
-                console.log(`Quantidade selecionada: ${quantity}`);
-                
-                // Aqui você pode adicionar lógica para atualizar o preço total
-                updateTotalPrice(quantity);
-            });
-            
-            // Efeito hover melhorado
-            option.addEventListener('mouseenter', function() {
-                if (!this.classList.contains('selected')) {
-                    this.style.transform = 'translateY(-3px)';
-                }
-            });
-            
-            option.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('selected')) {
-                    this.style.transform = 'translateY(0)';
-                }
-            });
-        });
-        
-        // Função para atualizar preço total
-        function updateTotalPrice(quantity) {
-            const pricePerTicket = {{ filme_sessao.preco }};
-            const totalPrice = (pricePerTicket * quantity).toFixed(2);
-            
-            // Criar ou atualizar elemento de preço total
-            let totalPriceElement = document.getElementById('total-price');
-            if (!totalPriceElement) {
-                totalPriceElement = document.createElement('div');
-                totalPriceElement.id = 'total-price';
-                totalPriceElement.style.cssText = `
-                    text-align: center;
-                    margin-top: 2rem;
-                    padding: 1.5rem;
-                    background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(78, 168, 222, 0.1));
-                    border-radius: 15px;
-                    border: 2px solid rgba(255, 214, 10, 0.3);
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    color: #FFD60A;
-                    font-family: 'Montserrat', sans-serif;
-                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-                    animation: fadeInUp 0.5s ease;
-                `;
-                document.querySelector('.ticket-selection').appendChild(totalPriceElement);
-            }
-            
-            totalPriceElement.innerHTML = `
-                <i class="fas fa-calculator" style="margin-right: 10px; color: #4EA8DE;"></i>
-                Total: €${totalPrice}
-                <div style="font-size: 0.9rem; color: #B8C5D1; margin-top: 0.5rem;">
-                    ${quantity} bilhete${quantity > 1 ? 's' : ''} × €${pricePerTicket.toFixed(2)}
-                </div>
-            `;
-            
-            // Efeito de animação
-            totalPriceElement.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                totalPriceElement.style.transform = 'scale(1)';
-            }, 100);
-        }
-        
-        // Animação de entrada melhorada
-        setTimeout(() => {
-            quantityOptions.forEach((option, index) => {
-                option.style.opacity = '0';
-                option.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    option.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                    option.style.opacity = '1';
-                    option.style.transform = 'translateY(0)';
-                }, index * 150);
-            });
-        }, 200);
-        
-        // Adicionar animações CSS
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-            
-            .quantity-option {
-                position: relative;
-                overflow: hidden;
-            }
-            
-            .quantity-option::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 0;
-                height: 0;
-                background: radial-gradient(circle, rgba(255, 214, 10, 0.3) 0%, transparent 70%);
-                transform: translate(-50%, -50%);
-                transition: all 0.3s ease;
-                border-radius: 50%;
-            }
-            
-            .quantity-option:active::after {
-                width: 200px;
-                height: 200px;
-            }
-        `;
-        document.head.appendChild(style);
     });
     </script>
 </body>

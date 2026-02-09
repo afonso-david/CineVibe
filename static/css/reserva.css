@@ -160,21 +160,20 @@ main {
     padding: 0 20px;
 }
 
-/* Card de informações do filme - IGUAL À PÁGINA DE RESERVA */
+/* Card de informações do filme - ELEGANTE COM DETALHES VISUAIS */
 .movie-info-card {
-    background: linear-gradient(135deg, 
-        rgba(255, 214, 10, 0.15) 0%, 
-        rgba(78, 168, 222, 0.1) 50%, 
-        rgba(255, 214, 10, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.95) 0%, rgba(13, 27, 42, 0.98) 100%);
     border-radius: 20px;
     padding: 2.5rem;
     margin-bottom: 2rem;
-    border: 2px solid rgba(255, 214, 10, 0.4);
+    border: 2px solid rgba(78, 168, 222, 0.4);
     backdrop-filter: blur(15px);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(78, 168, 222, 0.1) inset;
 }
 
+/* Linha decorativa superior - gradiente azul/amarelo */
 .movie-info-card::before {
     content: '';
     position: absolute;
@@ -182,7 +181,20 @@ main {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE, #FFD60A);
+    background: linear-gradient(90deg, transparent, #4EA8DE 30%, #FFD60A 70%, transparent);
+}
+
+/* Círculo decorativo azul no canto superior direito */
+.movie-info-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(78, 168, 222, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .movie-info-content {
@@ -190,21 +202,24 @@ main {
     gap: 2rem;
     align-items: center;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
 .movie-poster {
     width: 140px;
     height: 200px;
     object-fit: cover;
-    border-radius: 15px;
-    
-    border: 3px solid rgba(255, 214, 10, 0.5);
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    border: 3px solid rgba(78, 168, 222, 0.5);
+    transition: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(78, 168, 222, 0.2);
+    position: relative;
 }
 
 .movie-poster:hover {
-    transform: scale(1.05);
-    border-color: #FFD60A;
+    transform: none;
+    border-color: rgba(78, 168, 222, 0.5);
 }
 
 .movie-details {
@@ -213,71 +228,104 @@ main {
 }
 
 .movie-title {
-    color: #FFD60A;
+    color: #4EA8DE;
     font-size: 2.2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
+    text-shadow: 0 2px 8px rgba(78, 168, 222, 0.3);
+    position: relative;
+    display: inline-block;
+}
+
+/* Linha decorativa sob o título */
+.movie-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #4EA8DE, #FFD60A);
+    border-radius: 2px;
 }
 
 .movie-info-item {
     display: flex;
     align-items: center;
-    margin-bottom: 0.8rem;
-    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    padding: 0.6rem 1rem;
+    background: rgba(78, 168, 222, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid rgba(78, 168, 222, 0.4);
 }
 
 .movie-info-item i {
-    width: 20px;
+    width: 24px;
     margin-right: 12px;
     color: #4EA8DE;
+    font-size: 1.1rem;
 }
 
 .cinema-name {
-    color: #4EA8DE;
+    color: #E8EEF2;
     font-weight: 600;
 }
 
 .session-type {
-    color: #FFD60A;
-    font-weight: 500;
+    color: #4EA8DE;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.2), rgba(78, 168, 222, 0.1));
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    box-shadow: 0 2px 8px rgba(78, 168, 222, 0.2);
 }
 
 .session-time {
     color: #B8C5D1;
+    font-weight: 500;
 }
 
 .room-info {
     color: #B8C5D1;
+    font-weight: 500;
 }
 
 .ticket-price {
     color: #FFD60A;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.15), rgba(255, 214, 10, 0.08));
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    display: inline-block;
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 214, 10, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Seleção de quantidade - ELEGANTE CINEVIBE */
 .ticket-selection {
-    background: linear-gradient(145deg, 
-        rgba(27, 38, 59, 0.3) 0%, 
-        rgba(13, 27, 42, 0.5) 100%);
+    background: linear-gradient(135deg, 
+        rgba(27, 38, 59, 0.5) 0%, 
+        rgba(13, 27, 42, 0.7) 100%);
     border-radius: 20px;
     padding: 2.5rem;
     margin: 2rem 0;
+    border: 1px solid rgba(78, 168, 222, 0.2);
     backdrop-filter: blur(15px);
-  
-    
 }
 
 .ticket-selection h3 {
-    color: #FFD60A;
+    
     font-size: 1.8rem;
     margin-bottom: 2rem;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
-    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.4);
+    text-shadow: none;
 }
 
 /* Grid de quantidade - MELHORADO COM CORES CINEVIBE */
@@ -289,10 +337,10 @@ main {
 }
 
 .quantity-option {
-    background: linear-gradient(145deg, 
-        rgba(27, 38, 59, 0.4) 0%, 
-        rgba(13, 27, 42, 0.6) 100%);
-    border: 2px solid rgba(255, 214, 10, 0.2);
+    background: linear-gradient(135deg, 
+        rgba(27, 38, 59, 0.6) 0%, 
+        rgba(13, 27, 42, 0.8) 100%);
+    border: 2px solid rgba(78, 168, 222, 0.3);
     border-radius: 15px;
     padding: 2rem 1rem;
     text-align: center;
@@ -300,55 +348,40 @@ main {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
 }
 
-.quantity-option::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.1), transparent);
-    transition: left 0.5s ease;
-}
-
-.quantity-option:hover::before {
-    left: 100%;
-}
-
 .quantity-option:hover {
-    background: linear-gradient(145deg, 
-        rgba(27, 38, 59, 0.6) 0%, 
-        rgba(13, 27, 42, 0.8) 100%);
-    border-color: rgba(255, 214, 10, 0.4);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, 
+        rgba(78, 168, 222, 0.1) 0%, 
+        rgba(27, 38, 59, 0.75) 100%);
+    border-color: rgba(78, 168, 222, 0.45);
+    transform: none;
+    box-shadow: none;
 }
 
 .quantity-option.selected {
-    background: linear-gradient(145deg, 
-        rgba(255, 214, 10, 0.2) 0%, 
-        rgba(78, 168, 222, 0.15) 100%);
-    border-color: rgba(255, 214, 10, 0.6);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(255, 214, 10, 0.3);
+    background: linear-gradient(135deg, 
+        rgba(78, 168, 222, 0.2) 0%, 
+        rgba(27, 38, 59, 0.8) 100%);
+    border-color: rgba(78, 168, 222, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.3);
 }
 
 .quantity-number {
     font-size: 2.2rem;
     font-weight: 700;
-    color: #FFD60A;
+    color: #4EA8DE;
     margin-bottom: 0.5rem;
     font-family: 'Montserrat', sans-serif;
-    text-shadow: 0 1px 3px rgba(255, 214, 10, 0.3);
+    text-shadow: none;
 }
 
 .quantity-option.selected .quantity-number {
-    color: #FFD60A;
-    text-shadow: 0 2px 6px rgba(255, 214, 10, 0.5);
+    color: #4EA8DE;
+    text-shadow: none;
 }
 
 .quantity-label {
@@ -363,20 +396,20 @@ main {
     color: #E8EEF2;
     font-weight: 700;
 }
-    border-color: #FFD60A;
+    border-color: rgba(78, 168, 222, 0.5);
     transform: translateY(-2px);
 }
 
 .quantity-option.selected {
-    background: rgba(255, 214, 10, 0.3);
-    border-color: #FFD60A;
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8));
+    border-color: rgba(78, 168, 222, 0.6);
+    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.3);
 }
 
 .quantity-number {
     font-size: 2rem;
     font-weight: bold;
-    color: #FFD60A;
+    color: #4EA8DE;
     margin-bottom: 0.5rem;
 }
 
@@ -407,8 +440,8 @@ main {
 }
 
 .quantity-btn {
-    background: linear-gradient(135deg, #FFD60A, #4EA8DE);
-    color: #0D1B2A;
+    background: linear-gradient(135deg, #4EA8DE, #3B91C0);
+    color: white;
     border: none;
     width: 45px;
     height: 45px;
@@ -417,23 +450,23 @@ main {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
+    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .quantity-btn:hover {
-    background: linear-gradient(135deg, #4EA8DE, #FFD60A);
+    background: linear-gradient(135deg, #3B91C0, #2E7A9B);
     color: white;
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.4);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(78, 168, 222, 0.4);
 }
 
 .quantity-input {
-    background: rgba(27, 38, 59, 0.6);
-    border: 2px solid rgba(255, 214, 10, 0.3);
-    color: #FFD60A;
+    background: rgba(27, 38, 59, 0.8);
+    border: 2px solid rgba(78, 168, 222, 0.4);
+    color: #4EA8DE;
     padding: 0.8rem;
     width: 80px;
     text-align: center;
@@ -447,16 +480,16 @@ main {
 
 .quantity-input:focus {
     outline: none;
-    border-color: #FFD60A;
-    box-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
+    border-color: #4EA8DE;
+    
     background: rgba(27, 38, 59, 0.8);
 }
 
 /* Botão avançar - ELEGANTE CINEVIBE */
 .advance-btn {
-    background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
-    color: #0D1B2A;
-    border: 2px solid rgba(255, 214, 10, 0.3);
+    background: linear-gradient(135deg, #4EA8DE 0%, #3B91C0 100%);
+    color: white;
+    border: 2px solid rgba(78, 168, 222, 0.4);
     padding: 1rem 2rem;
     border-radius: 25px;
     font-size: 1.1rem;
@@ -472,32 +505,17 @@ main {
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
+    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.3);
     position: relative;
     overflow: hidden;
 }
 
-.advance-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.advance-btn:hover::before {
-    left: 100%;
-}
-
 .advance-btn:hover {
-    background: linear-gradient(135deg, #4EA8DE 0%, #FFD60A 100%);
+    background: linear-gradient(135deg, #3B91C0 0%, #2E7A9B 100%);
     color: white;
-    border-color: rgba(78, 168, 222, 0.5);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(78, 168, 222, 0.4);
+    border-color: rgba(78, 168, 222, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5);
 }
 
 .advance-btn:disabled {
@@ -528,7 +546,7 @@ main {
         transparent, 
         rgba(255, 255, 255, 0.2), 
         transparent);
-    animation: shimmer 3s infinite;
+    animation: none;
 }
 
 .page-header h1 {
@@ -590,12 +608,9 @@ main {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, 
-        rgba(255, 215, 0, 0.1) 0%,
-        transparent 50%,
-        rgba(255, 215, 0, 0.1) 100%);
+    background: transparent;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: none;
     border-radius: 15px;
 }
 
@@ -828,7 +843,7 @@ main {
     top: -10px;
     right: -10px;
     font-size: 1.5rem;
-    animation: pulse 2s infinite;
+    animation: none;
 }
 
 /* 🌟 LOADING PREMIUM */
@@ -836,10 +851,10 @@ main {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(255, 215, 0, 0.3);
+    border: 3px solid rgba(78, 168, 222, 0.3);
     border-radius: 50%;
-    border-top-color: #FFD60A;
-    animation: spin 1s ease-in-out infinite;
+    border-top-color: #4EA8DE;
+    animation: none;
 }
 
 @keyframes spin {
@@ -848,30 +863,29 @@ main {
 
 /* 🎭 EFEITOS DE HOVER ESPECIAIS */
 .hover-glow:hover {
-    animation: glow 2s infinite;
+    animation: none;
 }
 
 .hover-float:hover {
-    animation: float 2s infinite;
+    animation: none;
 }
 
 .hover-pulse:hover {
-    animation: pulse 1.5s infinite;
+    animation: none;
 }
 
 /* 🎫 SELEÇÃO DE QUANTIDADE PREMIUM */
 .ticket-selection {
     background: linear-gradient(135deg, 
-        rgba(138, 43, 226, 0.1) 0%,
-        rgba(220, 20, 60, 0.1) 50%,
-        rgba(255, 140, 0, 0.1) 100%);
+        rgba(27, 38, 59, 0.5) 0%,
+        rgba(13, 27, 42, 0.7) 100%);
     border-radius: 20px;
     padding: 30px;
     margin-bottom: 30px;
     backdrop-filter: blur(15px);
-    border: 2px solid rgba(138, 43, 226, 0.3);
+    border: 2px solid rgba(78, 168, 222, 0.3);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    animation: fadeInScale 0.8s ease-out 0.6s both;
+    animation: none;
 }
 
 /* 🔢 GRID DE QUANTIDADE */
@@ -884,14 +898,14 @@ main {
 
 .quantity-option {
     background: linear-gradient(135deg, 
-        rgba(255, 215, 0, 0.1) 0%,
-        rgba(255, 140, 0, 0.1) 100%);
-    border: 2px solid rgba(255, 215, 0, 0.3);
+        rgba(27, 38, 59, 0.6) 0%,
+        rgba(13, 27, 42, 0.8) 100%);
+    border: 2px solid rgba(78, 168, 222, 0.3);
     border-radius: 15px;
     padding: 20px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: none;
     backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden;
@@ -904,11 +918,8 @@ main {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.2), 
-        transparent);
-    transition: left 0.5s;
+    background: transparent;
+    transition: none;
 }
 
 .quantity-option:hover::before {
@@ -916,27 +927,27 @@ main {
 }
 
 .quantity-option:hover {
-    transform: translateY(-5px) scale(1.05);
-    border-color: rgba(255, 215, 0, 0.6);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-    animation: glow 2s infinite;
+    transform: none;
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.1), rgba(27, 38, 59, 0.75));
+    border-color: rgba(78, 168, 222, 0.45);
+    box-shadow: none;
+    animation: none;
 }
-
 .quantity-option.selected {
     background: linear-gradient(135deg, 
-        rgba(255, 214, 10, 0.3) 0%,
-        rgba(78, 168, 222, 0.15) 100%);
-    border-color: #FFD60A;
+        rgba(78, 168, 222, 0.25) 0%,
+        rgba(27, 38, 59, 0.8) 100%);
+    border-color: rgba(78, 168, 222, 0.6);
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(255, 214, 10, 0.4);
+    box-shadow: 0 10px 25px rgba(78, 168, 222, 0.4);
 }
 
 .quantity-number {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #FFD60A;
+    color: #4EA8DE;
     margin-bottom: 10px;
-    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.3);
+    text-shadow: none;
 }
 
 .quantity-label {
@@ -992,7 +1003,7 @@ main {
 .quantity-btn:hover {
     transform: scale(1.1);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    animation: pulse 1s infinite;
+    animation: none;
 }
 
 .quantity-btn:active {
@@ -1281,13 +1292,15 @@ main {
     }
 }
 
-/* Animações adicionais */
+/* ANIMAÇÕES DESATIVADAS
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
+*/
 
+/* ANIMAÇÕES DESATIVADAS
 @keyframes slideInFromLeft {
     from {
         opacity: 0;
@@ -1309,27 +1322,23 @@ main {
         transform: translateX(0);
     }
 }
+*/
 
 .movie-info-card {
-    animation: slideInFromLeft 0.8s ease;
+    animation: none;
 }
 
 .ticket-selection {
-    animation: slideInFromRight 0.8s ease;
+    animation: none;
 }
 
-/* Efeitos de hover melhorados */
-.movie-info-item:hover i {
-    color: #FFD60A;
-    transform: scale(1.2);
-    transition: all 0.3s ease;
-}
+/* Efeitos de hover melhorados - REMOVIDOS */
 
 /* Loading state para imagens */
 .movie-poster {
     background: linear-gradient(45deg, #1B263B, #0D1B2A);
     background-size: 400% 400%;
-    animation: gradientShift 2s ease infinite;
+    animation: none;
 }
 
 @keyframes gradientShift {
@@ -1343,56 +1352,89 @@ main {
     background: none;
 }
 
-/* ===== CORES CINEVIBE SIMPLES E LIMPAS ===== */
+/* ===== CORES CINEVIBE SUAVES E ELEGANTES ===== */
+
+/* Desativar TODAS as animações e transições */
+*,
+*::before,
+*::after {
+    animation: none !important;
+    transition: none !important;
+}
+
+.movie-info-card,
+.ticket-selection,
+.quantity-option,
+.advance-btn,
+.continue-btn,
+.quantity-btn,
+body,
+body::before {
+    animation: none !important;
+}
+
+/* FORÇAR REMOÇÃO DE AMARELO */
+.quantity-option,
+.quantity-option:hover,
+.quantity-option:active,
+.quantity-option:focus,
+.quantity-option.selected {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.6), rgba(13, 27, 42, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.3) !important;
+}
+
+.quantity-option.selected {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
+}
 
 .movie-title, .ticket-price {
     color: #FFD60A !important;
 }
 
-/* Seção de seleção - AZUL */
+/* Seção de seleção - TONS SUAVES */
 .ticket-selection {
-    background: rgba(78, 168, 222, 0.1) !important;
-    border: 2px solid #4EA8DE !important;
-    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.3) !important;
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.5), rgba(13, 27, 42, 0.7)) !important;
+    border: 1px solid rgba(78, 168, 222, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 .ticket-selection h3 {
     color: #FFD60A !important;
 }
 
-/* Botões de quantidade - AMARELO quando não selecionado, AZUL quando selecionado */
 .quantity-option {
-    background: rgba(255, 214, 10, 0.1) !important;
-    border: 2px solid #FFD60A !important;
-    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.2) !important;
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.6), rgba(13, 27, 42, 0.8)) !important;
+    border: 2px solid rgba(78, 168, 222, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .quantity-option:hover {
-    background: rgba(255, 214, 10, 0.2) !important;
-    border-color: #FFD60A !important;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4) !important;
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.1), rgba(27, 38, 59, 0.75)) !important;
+    border-color: rgba(78, 168, 222, 0.45) !important;
+    box-shadow: none !important;
 }
 
 .quantity-option.selected {
-    background: #4EA8DE !important;
-    border-color: #4EA8DE !important;
-    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5) !important;
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
+    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.3) !important;
 }
 
 .quantity-number {
-    color: #FFD60A !important;
-}
-
-.quantity-option.selected .quantity-number {
-    color: white !important;
-}
-
-.quantity-label {
     color: #4EA8DE !important;
 }
 
+.quantity-option.selected .quantity-number {
+    color: #4EA8DE !important;
+}
+
+.quantity-label {
+    color: #B8C5D1 !important;
+}
+
 .quantity-option.selected .quantity-label {
-    color: white !important;
+    color: #E8EEF2 !important;
 }
 
 /* Informações do filme */
@@ -1408,11 +1450,11 @@ main {
     color: #4EA8DE !important;
 }
 
-/* Quantidade personalizada - AZUL */
+/* Quantidade personalizada - TONS SUAVES */
 .custom-quantity {
-    background: rgba(78, 168, 222, 0.1) !important;
-    border: 2px solid #4EA8DE !important;
-    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.3) !important;
+    background: rgba(27, 38, 59, 0.4) !important;
+    border: 2px solid rgba(78, 168, 222, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 }
 
 .custom-quantity h4 {
@@ -1420,34 +1462,333 @@ main {
 }
 
 .quantity-controls {
-    border: 2px solid #FFD60A !important;
+    border: 1px solid rgba(78, 168, 222, 0.3) !important;
 }
 
 .quantity-btn {
-    background: #FFD60A !important;
-    color: #0D1B2A !important;
+    background: linear-gradient(135deg, #4EA8DE, #3B91C0) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.3) !important;
 }
 
 .quantity-btn:hover {
-    background: #4EA8DE !important;
+    background: linear-gradient(135deg, #3B91C0, #2E7A9B) !important;
     color: white !important;
 }
 
 .quantity-input {
-    color: #FFD60A !important;
+    color: #4EA8DE !important;
+    border-color: rgba(78, 168, 222, 0.4) !important;
 }
 
-/* Botões principais - AMARELO */
+/* Botões principais - AZUL SUAVE */
 .continue-btn, .advance-btn, [class*="btn-"] {
-    background: #FFD60A !important;
-    color: #0D1B2A !important;
-    border: 2px solid #FFD60A !important;
-    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4) !important;
+    background: linear-gradient(135deg, #4EA8DE, #3B91C0) !important;
+    color: white !important;
+    border: 2px solid rgba(78, 168, 222, 0.4) !important;
+    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.3) !important;
 }
 
 .continue-btn:hover, .advance-btn:hover, [class*="btn-"]:hover {
-    background: #4EA8DE !important;
+    background: linear-gradient(135deg, #3B91C0, #2E7A9B) !important;
     color: white !important;
-    border-color: #4EA8DE !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
     box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5) !important;
+}
+
+
+/* ===== FORÇAR REMOÇÃO TOTAL DE AMARELO ===== */
+.quantity-option,
+.quantity-option *,
+.quantity-option:hover,
+.quantity-option:active,
+.quantity-option:focus,
+.quantity-option.selected,
+.quantity-option.selected * {
+    background-color: transparent !important;
+    border-color: rgba(78, 168, 222, 0.3) !important;
+    color: #4EA8DE !important;
+    transition: none !important;
+    animation: none !important;
+}
+
+.quantity-option {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.6), rgba(13, 27, 42, 0.8)) !important;
+}
+
+.quantity-option.selected {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
+}
+
+.quantity-number {
+    color: #4EA8DE !important;
+}
+
+.quantity-label {
+    color: #B8C5D1 !important;
+}
+
+.quantity-option.selected .quantity-label {
+    color: #E8EEF2 !important;
+}
+
+
+/* ===== REMOVER COMPLETAMENTE EFEITOS DE CLIQUE E FOCUS ===== */
+.quantity-option,
+.quantity-option *,
+.quantity-option:hover,
+.quantity-option:active,
+.quantity-option:active *,
+.quantity-option:focus,
+.quantity-option:focus *,
+.quantity-option:focus-visible,
+.quantity-option.selected,
+.quantity-option.selected:active,
+.quantity-option.selected:focus,
+.quantity-option.selected:focus-visible {
+    outline: none !important;
+    outline-width: 0 !important;
+    outline-style: none !important;
+    outline-color: transparent !important;
+}
+
+.quantity-option:active,
+.quantity-option:focus,
+.quantity-option:focus-visible {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.6), rgba(13, 27, 42, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.3) !important;
+}
+
+.quantity-option.selected:active,
+.quantity-option.selected:focus,
+.quantity-option.selected:focus-visible {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
+}
+
+/* Remover qualquer highlight do browser */
+.quantity-option::-moz-focus-inner {
+    border: 0 !important;
+}
+
+.quantity-option {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+
+/* ===================================================
+   MODAL DE SALA EXCLUSIVA
+=================================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.98) 0%, rgba(13, 27, 42, 0.98) 100%);
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    border: 2px solid rgba(255, 214, 10, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 214, 10, 0.2) inset;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Linha decorativa superior */
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #FFD60A 30%, #4EA8DE 70%, transparent);
+}
+
+.modal-header {
+    padding: 2rem 2.5rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+}
+
+.modal-header i {
+    font-size: 3rem;
+    color: #FFD60A;
+    margin-bottom: 1rem;
+    display: block;
+    text-shadow: 0 0 20px rgba(255, 214, 10, 0.5);
+}
+
+.modal-header h2 {
+    color: #FFD60A;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.3);
+}
+
+.modal-body {
+    padding: 2rem 2.5rem;
+}
+
+.modal-message {
+    color: #E8EEF2;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.modal-message span {
+    color: #FFD60A;
+    font-weight: 700;
+}
+
+.modal-suggestion {
+    color: #B8C5D1;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 214, 10, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 214, 10, 0.2);
+}
+
+.modal-suggestion strong {
+    color: #FFD60A;
+    font-size: 1.3rem;
+}
+
+.modal-benefits {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    background: rgba(78, 168, 222, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid rgba(78, 168, 222, 0.4);
+}
+
+.benefit-item i {
+    color: #4EA8DE;
+    font-size: 1.2rem;
+}
+
+.benefit-item span {
+    color: #E8EEF2;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.modal-footer {
+    padding: 1.5rem 2.5rem 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(78, 168, 222, 0.2);
+}
+
+.modal-btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    border: 2px solid;
+}
+
+.modal-btn i {
+    font-size: 1.1rem;
+}
+
+.modal-btn-primary {
+    background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
+    color: #0D1B2A;
+    border-color: rgba(255, 214, 10, 0.4);
+    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.3);
+}
+
+.modal-btn-primary:hover {
+    background: linear-gradient(135deg, #4EA8DE 0%, #FFD60A 100%);
+    color: white;
+    border-color: rgba(78, 168, 222, 0.6);
+    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5);
+    transform: translateY(-2px);
+}
+
+.modal-btn-secondary {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.8), rgba(13, 27, 42, 0.8));
+    color: #E8EEF2;
+    border-color: rgba(78, 168, 222, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-btn-secondary:hover {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.3), rgba(27, 38, 59, 0.9));
+    color: #FFD60A;
+    border-color: rgba(255, 214, 10, 0.5);
+    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 95%;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .modal-btn {
+        min-width: 100%;
+    }
 }

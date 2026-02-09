@@ -175,6 +175,29 @@
                         </div>
                         {% endif %}
 
+                        <!-- Toppings -->
+                        {% if toppings and toppings|length > 0 %}
+                        <div class="bar-section">
+                            <div class="section-title">
+                                <i class="fas fa-cookie-bite"></i>
+                                <h2>Toppings</h2>
+                            </div>
+                            <div class="bar-items">
+                                {% for topping in toppings %}
+                                <div class="bar-item">
+                                    <div class="item-info">
+                                        <span class="item-name">{{ topping.quantidade }}x {{ topping.nome }}</span>
+                                        <span class="item-price-unit">€{{ "%.2f"|format(topping.preco_unitario) }} cada</span>
+                                    </div>
+                                    <div class="item-price">
+                                        €{{ "%.2f"|format(topping.preco_total) }}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
                         <!-- Total -->
                         <div class="total-section">
                             <div class="total-breakdown">
@@ -186,6 +209,12 @@
                                 <div class="subtotal-item">
                                     <span>Produtos do Bar</span>
                                     <span>€{{ "%.2f"|format(total_bar) }}</span>
+                                </div>
+                                {% endif %}
+                                {% if total_toppings > 0 %}
+                                <div class="subtotal-item">
+                                    <span>Toppings</span>
+                                    <span>€{{ "%.2f"|format(total_toppings) }}</span>
                                 </div>
                                 {% endif %}
                                 <div class="total-divider"></div>

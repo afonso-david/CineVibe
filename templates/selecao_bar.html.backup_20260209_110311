@@ -82,30 +82,18 @@
 
                 <!-- Bar Selection -->
                 <div class="bar-selection">
-                    <!-- Header com Scooby-Doo -->
-                    <div class="section-header-with-image">
-                        <div class="section-header-content">
-                            <div class="section-header">
-                                <i class="fas fa-utensils"></i>
-                                <h3>Deseja algo do nosso Bar?</h3>
-                                <p>Aproveite e peça os seus snacks favoritos para desfrutar durante o filme!</p>
-                            </div>
+                    <div class="section-header">
+                        <i class="fas fa-utensils"></i>
+                        <h3>Deseja algo do nosso Bar?</h3>
+                        <p>Aproveite e peça os seus snacks favoritos para desfrutar durante o filme!</p>
+                    </div>
 
-                            <!-- Skip Option -->
-                            <div class="skip-option">
-                                <button type="button" class="skip-btn" onclick="continuarComProdutos()">
-                                    <i class="fas fa-forward"></i>
-                                    Não, obrigado. Continuar sem produtos do bar
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Imagem Scooby-Doo -->
-                        <div class="section-header-image">
-                            <img src="{{ url_for('static', filename='imgs/Snacks/b4c7d921ddde7c22b827bc9c4fa6efbb-removebg-preview.png') }}" 
-                                 alt="Scooby-Doo" 
-                                 class="scooby-image">
-                        </div>
+                    <!-- Skip Option -->
+                    <div class="skip-option">
+                        <a href="{{ url_for('selecao_toppings', filme_id=filme_id, cinema_id=cinema_id, tipo_sessao_id=tipo_sessao_id, horario_id=horario_id, data_sessao=data_sessao, lugares=lugares_selecionados|join(','), quantidade=lugares_selecionados|length, produtos_bar='[]') }}" class="skip-btn">
+                            <i class="fas fa-forward"></i>
+                            Não, obrigado. Continuar sem produtos do bar
+                        </a>
                     </div>
 
                     <!-- Menu Categories -->
@@ -131,7 +119,7 @@
                             <div class="category-content active" id="menus">
                                 <div class="products-grid">
                                     {% for produto in produtos.menus %}
-                                    <div class="product-card menu-card" data-product-id="{{ produto.id }}" data-tipo="menu">
+                                    <div class="product-card menu-card" data-product-id="{{ produto.id }}">
                                         <div class="product-image">
                                             {% if produto.imagem_url %}
                                             <img src="{{ url_for('static', filename=produto.imagem_url) }}" 
@@ -148,9 +136,9 @@
                                             <p>{{ produto.descricao if produto.descricao else 'Menu completo' }}</p>
                                             <div class="product-price">€{{ "%.2f"|format(produto.preco) }}</div>
                                             <div class="quantity-controls">
-                                                <button class="qty-btn" onclick="changeQuantity('{{ produto.id }}', -1, 'menu')">-</button>
+                                                <button class="qty-btn" onclick="changeQuantity('{{ produto.id }}', -1)">-</button>
                                                 <span class="quantity" id="{{ produto.id }}-qty">0</span>
-                                                <button class="qty-btn" onclick="changeQuantity('{{ produto.id }}', 1, 'menu')">+</button>
+                                                <button class="qty-btn" onclick="changeQuantity('{{ produto.id }}', 1)">+</button>
                                             </div>
                                         </div>
                                     </div>
@@ -293,8 +281,223 @@
             "bebidas": {{ produtos.bebidas | tojson if produtos and produtos.bebidas else '[]' | safe }}
         }
     </script>
-    
-    <!-- JavaScript externo -->
-    <script src="{{ url_for('static', filename='js/selecao_bar.js') }}?v={{ range(1, 999999) | random }}"></script>
+
+    <script>
+        console.log('=== DEBUG SELECAO BAR ===');
+        
+        let cart = {};
+        let products = {
+            menus: [],
+            snacks: [],
+            bebidas: []
+        };
+        
+        // Carregar produtos do elemento JSON
+        try {
+            const produtosData = document.getElementById('produtos-data');
+            if (produtosData) {
+                const jsonText = produtosData.textContent;
+                console.log('📄 JSON bruto:', jsonText);
+                products = JSON.parse(jsonText);
+                console.log('✅ Produtos carregados:', products);
+                console.log('  - Menus:', products.menus?.length || 0);
+                console.log('  - Snacks:', products.snacks?.length || 0);
+                console.log('  - Bebidas:', products.bebidas?.length || 0);
+                
+                // Mostrar detalhes dos snacks
+                if (products.snacks && products.snacks.length > 0) {
+                    console.log('📦 SNACKS DETALHADOS:');
+                    products.snacks.forEach(s => {
+                        console.log(`   - ID ${s.id}: ${s.produto} (€${s.preco})`);
+                    });
+                }
+            } else {
+                console.error('❌ Elemento produtos-data não encontrado');
+            }
+        } catch(e) {
+            console.error('❌ Erro ao carregar produtos:', e);
+            console.error('Stack:', e.stack);
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.dataset.category;
+                console.log('🔄 Mudando para categoria:', category);
+                
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('.category-content').forEach(c => c.classList.remove('active'));
+                const categoryElement = document.getElementById(category);
+                if (categoryElement) {
+                    categoryElement.classList.add('active');
+                    console.log('✅ Categoria ativada:', category);
+                } else {
+                    console.error('❌ Categoria não encontrada:', category);
+                }
+            });
+        });
+
+        // FUNÇÃO PRINCIPAL - changeQuantity
+        function changeQuantity(productId, change) {
+            console.log('🔧 changeQuantity chamado:', {productId, change, tipo: typeof productId});
+            
+            // Garantir que productId é string
+            productId = String(productId);
+            
+            if (!cart[productId]) {
+                cart[productId] = 0;
+                console.log('   Inicializando carrinho para produto:', productId);
+            }
+            
+            cart[productId] += change;
+            if (cart[productId] < 0) cart[productId] = 0;
+            
+            console.log('   Nova quantidade:', cart[productId]);
+            console.log('   Carrinho completo:', cart);
+            
+            const qtyElement = document.getElementById(productId + '-qty');
+            if (qtyElement) {
+                qtyElement.textContent = cart[productId];
+                console.log('✅ Quantidade atualizada no DOM');
+            } else {
+                console.error('❌ Elemento não encontrado:', productId + '-qty');
+                console.log('   Tentando encontrar elemento...');
+                const allQtyElements = document.querySelectorAll('[id$="-qty"]');
+                console.log('   Elementos de quantidade encontrados:', allQtyElements.length);
+                allQtyElements.forEach(el => console.log('      -', el.id));
+            }
+            
+            updateCartSummary();
+        }
+        
+        // Tornar função global
+        window.changeQuantity = changeQuantity;
+        
+        function updateCartSummary() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const cartSummary = document.getElementById('cartSummary');
+            const produtosBarInput = document.getElementById('produtosBarInput');
+            const skipBtn = document.querySelector('.skip-btn');
+            
+            let total = 0;
+            let itemsHtml = '';
+            let hasItems = false;
+            
+            // Preparar produtos para o formulário
+            const produtosSelecionados = [];
+            
+            for (let productId in cart) {
+                if (cart[productId] > 0) {
+                    hasItems = true;
+                    
+                    // Adicionar ao array de produtos selecionados
+                    produtosSelecionados.push({
+                        id: productId,
+                        quantidade: cart[productId]
+                    });
+                    
+                    // Encontrar produto nas categorias
+                    let product = null;
+                    for (let categoria in products) {
+                        if (products[categoria] && Array.isArray(products[categoria])) {
+                            product = products[categoria].find(p => p.id == productId);
+                            if (product) break;
+                        }
+                    }
+                    
+                    if (product) {
+                        const subtotal = product.preco * cart[productId];
+                        total += subtotal;
+                        
+                        itemsHtml += `
+                            <div class="cart-item">
+                                <span>${product.produto} x${cart[productId]}</span>
+                                <span>€${subtotal.toFixed(2)}</span>
+                            </div>
+                        `;
+                    }
+                }
+            }
+            
+            if (cartItems) cartItems.innerHTML = itemsHtml;
+            if (cartTotal) cartTotal.textContent = total.toFixed(2);
+            if (cartSummary) cartSummary.style.display = hasItems ? 'block' : 'none';
+            
+            // Atualizar texto do botão skip
+            if (skipBtn) {
+                if (hasItems) {
+                    skipBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Continuar';
+                } else {
+                    skipBtn.innerHTML = '<i class="fas fa-forward"></i> Não, obrigado. Continuar sem produtos do bar';
+                }
+            }
+            
+            // Atualizar campo hidden do formulário
+            if (produtosBarInput) {
+                produtosBarInput.value = JSON.stringify(produtosSelecionados);
+                console.log('Campo hidden atualizado:', produtosBarInput.value);
+            }
+        }
+
+        // Configurar event listeners quando DOM carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM carregado, configurando event listeners...');
+            
+            // Testar se os botões existem
+            const allButtons = document.querySelectorAll('.qty-btn');
+            console.log(`🔘 Total de botões encontrados: ${allButtons.length}`);
+            
+            // Verificar botões das pipocas salgadas (ID 1)
+            const pipocasBtn = document.querySelector('button[onclick*="changeQuantity(\'1\'"]');
+            if (pipocasBtn) {
+                console.log('✅ Botão das Pipocas Salgadas encontrado');
+            } else {
+                console.error('❌ Botão das Pipocas Salgadas NÃO encontrado');
+            }
+            
+            const form = document.getElementById('resumoForm');
+            const linkBackup = document.getElementById('linkBackup');
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    console.log('Formulário sendo submetido...');
+                    
+                    // Atualizar produtos antes da submissão
+                    const produtosSelecionados = [];
+                    for (let productId in cart) {
+                        if (cart[productId] > 0) {
+                            produtosSelecionados.push({
+                                id: productId,
+                                quantidade: cart[productId]
+                            });
+                        }
+                    }
+                    
+                    const produtosInput = document.getElementById('produtosBarInput');
+                    if (produtosInput) {
+                        produtosInput.value = JSON.stringify(produtosSelecionados);
+                        console.log('Produtos finais:', produtosInput.value);
+                    }
+                    
+                    // Mostrar link de backup após 3 segundos se não redirecionar
+                    setTimeout(function() {
+                        if (linkBackup) {
+                            linkBackup.style.display = 'inline-flex';
+                            console.log('Mostrando link de backup...');
+                        }
+                    }, 3000);
+                });
+            }
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>

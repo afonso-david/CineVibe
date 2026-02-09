@@ -1,0 +1,140 @@
+/* ===================================================
+   BOTÕES DE QUANTIDADE - VERSÃO LIMPA SEM AMARELO
+=================================================== */
+
+/* Container da grid */
+.quantity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* Botão base - APENAS AZUL */
+.quantity-option {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.6), rgba(13, 27, 42, 0.8)) !important;
+    border: 2px solid rgba(78, 168, 222, 0.3) !important;
+    border-radius: 15px !important;
+    padding: 2rem 1rem !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* Hover - APENAS AZUL MAIS CLARO */
+.quantity-option:hover {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.1), rgba(27, 38, 59, 0.75)) !important;
+    border-color: rgba(78, 168, 222, 0.45) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Active (quando clica) - APENAS AZUL */
+.quantity-option:active {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.15), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.5) !important;
+    box-shadow: none !important;
+    transform: none !important;
+    outline: none !important;
+}
+
+/* Focus - APENAS AZUL */
+.quantity-option:focus,
+.quantity-option:focus-visible {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.6), rgba(13, 27, 42, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.3) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Selecionado - AZUL MAIS FORTE */
+.quantity-option.selected {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Selecionado + Hover */
+.quantity-option.selected:hover {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.3), rgba(27, 38, 59, 0.85)) !important;
+    border-color: rgba(78, 168, 222, 0.7) !important;
+}
+
+/* Selecionado + Active */
+.quantity-option.selected:active {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
+}
+
+/* Selecionado + Focus */
+.quantity-option.selected:focus,
+.quantity-option.selected:focus-visible {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
+    border-color: rgba(78, 168, 222, 0.6) !important;
+}
+
+/* Número */
+.quantity-number {
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    color: #4EA8DE !important;
+    margin-bottom: 0.5rem !important;
+    font-family: 'Montserrat', sans-serif !important;
+    text-shadow: none !important;
+}
+
+.quantity-option.selected .quantity-number {
+    color: #4EA8DE !important;
+}
+
+/* Label */
+.quantity-label {
+    color: #B8C5D1 !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+
+.quantity-option.selected .quantity-label {
+    color: #E8EEF2 !important;
+    font-weight: 700 !important;
+}
+
+/* Remover TODOS os efeitos do browser */
+.quantity-option::-moz-focus-inner {
+    border: 0 !important;
+}
+
+.quantity-option {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .quantity-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .quantity-option {
+        padding: 1.5rem 0.5rem !important;
+    }
+    
+    .quantity-number {
+        font-size: 1.8rem !important;
+    }
+    
+    .quantity-label {
+        font-size: 0.8rem !important;
+    }
+}

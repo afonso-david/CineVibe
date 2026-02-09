@@ -320,22 +320,20 @@
     text-shadow: 0 2px 6px rgba(255, 214, 10, 0.7);
 }
 
-/* Card de informações do filme - IGUAL À PÁGINA DE RESERVA */
+/* Card de informações do filme - ELEGANTE COM DETALHES VISUAIS */
 .movie-info-card {
-    background: linear-gradient(135deg, 
-        rgba(255, 214, 10, 0.15) 0%, 
-        rgba(78, 168, 222, 0.1) 50%, 
-        rgba(255, 214, 10, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.95) 0%, rgba(13, 27, 42, 0.98) 100%);
     border-radius: 20px;
     padding: 2.5rem;
     margin-bottom: 2rem;
-    border: 2px solid rgba(255, 214, 10, 0.4);
+    border: 2px solid rgba(78, 168, 222, 0.4);
     backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px rgba(255, 214, 10, 0.2);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(78, 168, 222, 0.1) inset;
 }
 
+/* Linha decorativa superior - gradiente azul/amarelo */
 .movie-info-card::before {
     content: '';
     position: absolute;
@@ -343,7 +341,20 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE, #FFD60A);
+    background: linear-gradient(90deg, transparent, #4EA8DE 30%, #FFD60A 70%, transparent);
+}
+
+/* Círculo decorativo azul no canto superior direito */
+.movie-info-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(78, 168, 222, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .movie-info-content {
@@ -351,22 +362,24 @@
     gap: 2rem;
     align-items: center;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
 .movie-poster {
     width: 140px;
     height: 200px;
     object-fit: cover;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
-    border: 3px solid rgba(255, 214, 10, 0.5);
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    border: 3px solid rgba(78, 168, 222, 0.5);
+    transition: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(78, 168, 222, 0.2);
+    position: relative;
 }
 
 .movie-poster:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 35px rgba(255, 214, 10, 0.5);
-    border-color: #FFD60A;
+    transform: none;
+    border-color: rgba(78, 168, 222, 0.5);
 }
 
 .movie-details {
@@ -375,52 +388,82 @@
 }
 
 .movie-title {
-    color: #FFD60A;
+    color: #4EA8DE;
     font-size: 2.2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.3);
+    text-shadow: 0 2px 8px rgba(78, 168, 222, 0.3);
+    position: relative;
+    display: inline-block;
+}
+
+/* Linha decorativa sob o título */
+.movie-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #4EA8DE, #FFD60A);
+    border-radius: 2px;
 }
 
 .movie-info-item {
     display: flex;
     align-items: center;
-    margin-bottom: 0.8rem;
-    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    padding: 0.6rem 1rem;
+    background: rgba(78, 168, 222, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid rgba(78, 168, 222, 0.4);
 }
 
 .movie-info-item i {
-    width: 20px;
+    width: 24px;
     margin-right: 12px;
     color: #4EA8DE;
-    text-shadow: 0 1px 3px rgba(78, 168, 222, 0.3);
+    font-size: 1.1rem;
 }
 
 .cinema-name {
-    color: #4EA8DE;
+    color: #E8EEF2;
     font-weight: 600;
-    text-shadow: 0 1px 3px rgba(78, 168, 222, 0.2);
 }
 
 .session-type {
-    color: #FFD60A;
-    font-weight: 500;
+    color: #4EA8DE;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.2), rgba(78, 168, 222, 0.1));
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    box-shadow: 0 2px 8px rgba(78, 168, 222, 0.2);
 }
 
 .session-time {
     color: #B8C5D1;
+    font-weight: 500;
 }
 
 .room-info {
     color: #B8C5D1;
+    font-weight: 500;
 }
 
 .ticket-price {
     color: #FFD60A;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    text-shadow: 0 2px 6px rgba(255, 214, 10, 0.4);
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.15), rgba(255, 214, 10, 0.08));
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    display: inline-block;
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 214, 10, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Divisórias verticais */

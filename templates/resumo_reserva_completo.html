@@ -150,10 +150,16 @@
                             </div>
                             <div class="bar-items">
                                 {% for produto in produtos_bar %}
-                                <div class="bar-item">
+                                <div class="bar-item {% if produto.is_menu %}menu-item{% endif %}">
                                     <div class="item-info">
-                                        <span class="item-name">{{ produto.quantidade }}x {{ produto.nome }}</span>
-                                        <span class="item-price-unit">€{{ "%.2f"|format(produto.preco_unitario) }} cada</span>
+                                        <span class="item-name">
+                                            {% if produto.quantidade > 1 %}{{ produto.quantidade }}x {% endif %}
+                                            {{ produto.nome }}
+                                        </span>
+                                        {% if produto.detalhes %}
+                                        <span class="item-details">{{ produto.detalhes }}</span>
+                                        {% endif %}
+                                        <span class="item-price-unit">€{{ "%.2f"|format(produto.preco_unitario) }}{% if produto.quantidade > 1 %} cada{% endif %}</span>
                                     </div>
                                     <div class="item-price">
                                         €{{ "%.2f"|format(produto.preco_total) }}

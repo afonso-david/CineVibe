@@ -134,11 +134,7 @@
     transform: scale(1.1);
 }
 
-/* ==========================
-   ESTILOS ESPECÍFICOS PARA SELEÇÃO DE LUGARES
-========================== */
 
-/* Estilos específicos para seleção de lugares */
 
 .seat-selection {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
@@ -398,7 +394,7 @@
     display: inline-block;
 }
 
-/* Linha decorativa sob o título */
+
 .movie-title::after {
     content: '';
     position: absolute;
@@ -466,7 +462,7 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Divisórias verticais */
+
 .vertical-divider {
     display: flex;
     align-items: center;
@@ -506,13 +502,13 @@
     filter: blur(1px);
 }
 
-/* Linha invisível para alinhamento */
+
 .vertical-line.invisible {
     opacity: 0;
     pointer-events: none;
 }
 
-/* Espaçadores para alinhamento das fileiras */
+
 .seat-spacer {
     width: 20px;
     height: 20px;
@@ -521,15 +517,15 @@
     pointer-events: none;
 }
 
-/* Divisória fantasma para alinhamento */
+
 .phantom-divider .vertical-line {
     opacity: 0;
     pointer-events: none;
 }
 
 .seat {
-    width: 18px;  /* Reduzido de 20px para 18px */
-    height: 18px; /* Reduzido de 20px para 18px */
+    width: 18px;  
+    height: 18px; 
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -577,7 +573,7 @@
     z-index: 1;
 }
 
-/* Lugares ocupados - mesma cor mas com cruz branca */
+
 .seat.occupied {
     background: #03050F;
     border: 2px solid #0C112B;
@@ -596,7 +592,7 @@
     transform: translate(-50%, -50%);
 }
 
-/* Lugares acessíveis com sombreado verde e imagem */
+
 .seat.accessible {
     background-color: #03050F;
     border: 2px solid #0C112B;
@@ -626,7 +622,7 @@
     transform: scale(1.05);
 }
 
-/* Legenda */
+
 .seat-legend {
     display: flex;
     justify-content: center;
@@ -716,7 +712,7 @@
     filter: brightness(1.5) contrast(1.2);
 }
 
-/* Resumo da reserva */
+
 .booking-summary {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
     border-radius: 20px;
@@ -752,7 +748,7 @@
     font-weight: 600;
 }
 
-/* Navigation Buttons */
+
 .navigation-buttons {
     display: flex;
     gap: 1rem;
@@ -849,7 +845,7 @@
     box-shadow: none;
 }
 
-/* Responsive - mantendo sala toda visível */
+
 @media (max-width: 768px) {
     .seat-selection {
         padding: 1rem;

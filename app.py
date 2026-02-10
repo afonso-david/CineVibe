@@ -633,7 +633,10 @@ def get_user_avatar():
             # Buscar avatar personalizado OU avatar da galeria
             cursor.execute("""
                 SELECT 
-                    COALESCE(u.avatar, a.caminho) as avatar_path
+                    CASE 
+                        WHEN u.avatar IS NOT NULL AND u.avatar != '' THEN u.avatar
+                        ELSE a.caminho
+                    END as avatar_path
                 FROM usuarios u 
                 LEFT JOIN avatars a ON u.avatar_id = a.id 
                 WHERE u.id = %s
@@ -847,14 +850,26 @@ def login():
         session['user_nome'] = user['nome']
         session['user_email'] = user['email']
         
-        # Buscar o avatar do usuário
-        cur.execute(
-            "SELECT a.caminho FROM usuarios u LEFT JOIN avatars a ON u.avatar_id = a.id WHERE u.id = %s",
-            (user['id'],)
-        )
+        # Buscar o avatar do usuário (personalizado OU da galeria)
+        cur.execute("""
+            SELECT 
+                CASE 
+                    WHEN u.avatar IS NOT NULL AND u.avatar != '' THEN u.avatar
+                    ELSE a.caminho
+                END as avatar_path
+            FROM usuarios u 
+            LEFT JOIN avatars a ON u.avatar_id = a.id 
+            WHERE u.id = %s
+        """, (user['id'],))
         avatar_data = cur.fetchone()
-        if avatar_data and avatar_data['caminho']:
-            session['user_avatar'] = avatar_data['caminho'].replace('\\', '/').replace('"', '').strip()
+        if avatar_data and avatar_data['avatar_path']:
+            avatar = avatar_data['avatar_path'].replace('\\', '/').replace('"', '').strip()
+            # Remover prefixos desnecessários
+            if avatar.startswith('static/'):
+                avatar = avatar[7:]
+            if avatar.startswith('/static/'):
+                avatar = avatar[8:]
+            session['user_avatar'] = avatar
         else:
             session['user_avatar'] = 'imgs/icons/user_icon34-removebg-preview.png'
 
@@ -1354,12 +1369,11 @@ def registo():
                 
                 if result and result['caminho']:
                     avatar_path = result['caminho'].replace('\\', '/').replace('"', '').strip()
-                    # Garantir que o caminho está correto
-                    if not avatar_path.startswith('imgs/'):
-                        if avatar_path.startswith('static/'):
-                            avatar_path = avatar_path[7:]  # Remove 'static/'
-                        if not avatar_path.startswith('imgs/'):
-                            avatar_path = f"imgs/{avatar_path}"
+                    # Remover prefixos desnecessários
+                    if avatar_path.startswith('static/'):
+                        avatar_path = avatar_path[7:]
+                    if avatar_path.startswith('/static/'):
+                        avatar_path = avatar_path[8:]
                     print(f"DEBUG - Avatar encontrado: {avatar_path}")
                 else:
                     # Fallback final para avatar padrão
@@ -1374,6 +1388,12 @@ def registo():
             session['user_nome'] = nome
             session['user_email'] = email
             session['user_avatar'] = avatar_path
+            
+            print(f"✅ DEBUG REGISTO - Sessão criada:")
+            print(f"   - user_id: {user_id}")
+            print(f"   - user_nome: {nome}")
+            print(f"   - user_email: {email}")
+            print(f"   - user_avatar: {avatar_path}")
 
             return redirect(url_for("home"))
             
@@ -2051,12 +2071,11 @@ def perfil():
         if avatar:
             avatar = avatar.replace('\\', '/').replace('"', '').strip()
             
-            # Garantir que o caminho está correto
-            if not avatar.startswith('imgs/'):
-                if avatar.startswith('static/'):
-                    avatar = avatar[7:]  # Remove 'static/'
-                if not avatar.startswith('imgs/'):
-                    avatar = f"imgs/{avatar}"
+            # Remover prefixos desnecessários
+            if avatar.startswith('static/'):
+                avatar = avatar[7:]
+            if avatar.startswith('/static/'):
+                avatar = avatar[8:]
         
         # Verificação final
         if not avatar or avatar == 'imgs/' or avatar == 'imgs':
@@ -2211,15 +2230,45 @@ def recompensas():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
-    # Buscar avatar do usuário
+    # Buscar dados do usuário incluindo avatar
     cursor.execute("""
-        SELECT COALESCE(u.avatar, a.caminho) AS avatar
-        FROM usuarios u
-        LEFT JOIN avatars a ON u.avatar_id = a.id
+        SELECT u.id, u.nome, u.email, u.avatar, u.avatar_id,
+               a.caminho as avatar_path
+        FROM usuarios u 
+        LEFT JOIN avatars a ON u.avatar_id = a.id 
         WHERE u.id = %s
     """, (user_id,))
-    user_data = cursor.fetchone()
-    avatar = user_data['avatar'].replace('\\', '/').replace('"', '').strip() if user_data and user_data.get('avatar') else 'imgs/icons/user_icon34-removebg-preview.png'
+    user = cursor.fetchone()
+    
+    # Processar avatar com a mesma lógica do perfil
+    avatar = None
+    
+    # Prioridade: avatar da tabela avatars → avatar direto do usuario → fallback
+    if user and user.get('avatar_path'):
+        avatar = str(user['avatar_path'])
+    elif user and user.get('avatar'):
+        avatar = str(user['avatar'])
+    else:
+        avatar = 'imgs/icons/user_icon34-removebg-preview.png'
+    
+    # Limpar e normalizar avatar
+    if avatar:
+        avatar = avatar.replace('\\', '/').replace('"', '').strip()
+        
+        # Remover prefixos desnecessários
+        if avatar.startswith('static/'):
+            avatar = avatar[7:]
+        if avatar.startswith('/static/'):
+            avatar = avatar[8:]
+    
+    # Verificação final
+    if not avatar or avatar == 'imgs/' or avatar == 'imgs':
+        avatar = 'imgs/icons/user_icon34-removebg-preview.png'
+    
+    # Atualizar sessão com avatar correto
+    session['user_avatar'] = avatar
+    
+    print(f"🔍 DEBUG RECOMPENSAS - Avatar final: {avatar}")
     
     # Calcular pontos disponíveis usando a função centralizada
     pontos = calcular_pontos_usuario(session['user_id'], cursor)
@@ -2274,6 +2323,12 @@ def recompensas():
     cursor.close()
     conn.close()
     
+    print(f"🎬 DEBUG RECOMPENSAS - Renderizando template com:")
+    print(f"   - logged_in: True")
+    print(f"   - avatar: {avatar}")
+    print(f"   - pontos: {pontos}")
+    print(f"   - recompensas: {len(recompensas)} itens")
+    
     return render_template('recompensas.html', logged_in=True, avatar=avatar, pontos=pontos, recompensas=recompensas)
 
 # ==========================
@@ -2292,7 +2347,11 @@ def premios():
         user_id = session['user_id']
         # Buscar avatar do usuário
         cursor.execute("""
-            SELECT COALESCE(u.avatar, a.caminho) AS avatar
+            SELECT 
+                CASE 
+                    WHEN u.avatar IS NOT NULL AND u.avatar != '' THEN u.avatar
+                    ELSE a.caminho
+                END AS avatar
             FROM usuarios u
             LEFT JOIN avatars a ON u.avatar_id = a.id
             WHERE u.id = %s
@@ -2300,6 +2359,11 @@ def premios():
         user_data = cursor.fetchone()
         if user_data and user_data.get('avatar'):
             avatar = user_data['avatar'].replace('\\', '/').replace('"', '').strip()
+            # Remover prefixos desnecessários
+            if avatar.startswith('static/'):
+                avatar = avatar[7:]
+            if avatar.startswith('/static/'):
+                avatar = avatar[8:]
     
     # Buscar todos os prémios da base de dados
     cursor.execute("""
@@ -6749,14 +6813,22 @@ def debug_login_afonso():
             session['user_nome'] = user['nome']
             session['user_email'] = user['email']
             
-            # Buscar avatar
-            cursor.execute(
-                "SELECT a.caminho FROM usuarios u LEFT JOIN avatars a ON u.avatar_id = a.id WHERE u.id = %s",
-                (user['id'],)
-            )
+            # Buscar avatar (personalizado OU da galeria)
+            cursor.execute("""
+                SELECT COALESCE(u.avatar, a.caminho) as avatar_path
+                FROM usuarios u 
+                LEFT JOIN avatars a ON u.avatar_id = a.id 
+                WHERE u.id = %s
+            """, (user['id'],))
             avatar_data = cursor.fetchone()
-            if avatar_data and avatar_data['caminho']:
-                session['user_avatar'] = avatar_data['caminho'].replace('\\', '/').replace('"', '').strip()
+            if avatar_data and avatar_data['avatar_path']:
+                avatar = avatar_data['avatar_path'].replace('\\', '/').replace('"', '').strip()
+                # Remover prefixos desnecessários
+                if avatar.startswith('static/'):
+                    avatar = avatar[7:]
+                if avatar.startswith('/static/'):
+                    avatar = avatar[8:]
+                session['user_avatar'] = avatar
             else:
                 session['user_avatar'] = 'imgs/icons/user_icon34-removebg-preview.png'
             
@@ -9418,6 +9490,71 @@ def selecao_bar():
         app.logger.error(f"❌ Traceback: {traceback.format_exc()}")
         return f"<h1>Erro Debug</h1><p>{str(e)}</p><pre>{traceback.format_exc()}</pre>"
 
+@app.route('/api/menu_produtos/<int:menu_id>')
+def api_menu_produtos(menu_id):
+    """API para buscar produtos disponíveis de um menu"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Buscar produtos do menu
+        cursor.execute("""
+            SELECT DISTINCT b.id, b.produto, b.categoria, b.imagem_url, b.icone
+            FROM menu_produtos mp
+            JOIN bar b ON mp.produto_id = b.id
+            WHERE mp.menu_id = %s
+            ORDER BY b.categoria, b.produto
+        """, (menu_id,))
+        
+        produtos = cursor.fetchall()
+        
+        # Organizar por categoria
+        snacks = [p for p in produtos if p['categoria'] == 'snacks']
+        bebidas = [p for p in produtos if p['categoria'] == 'bebidas']
+        
+        # Verificar se algum snack é pipocas (produtos que podem ter toppings)
+        tem_pipocas = any('pipoca' in p['produto'].lower() for p in snacks)
+        
+        # Se tem pipocas, buscar todos os toppings disponíveis
+        toppings = []
+        if tem_pipocas:
+            cursor.execute("""
+                SELECT id, nome, descricao, preco, imagem_url
+                FROM toppings
+                ORDER BY nome
+            """)
+            toppings_raw = cursor.fetchall()
+            
+            # Processar URLs das imagens
+            for topping in toppings_raw:
+                if topping.get('imagem_url'):
+                    imagem_url = topping['imagem_url'].replace('\\', '/').replace('"', '').strip()
+                    if not imagem_url.startswith(('http://', 'https://', 'imgs/')):
+                        if '/' not in imagem_url:
+                            imagem_url = f"imgs/toppings/{imagem_url}"
+                        elif not imagem_url.startswith('imgs/'):
+                            imagem_url = f"imgs/toppings/{imagem_url}"
+                    topping['imagem_url'] = imagem_url
+                else:
+                    topping['imagem_url'] = 'imgs/toppings/topping-default.svg'
+            
+            toppings = toppings_raw
+        
+        cursor.close()
+        conn.close()
+        
+        return jsonify({
+            'success': True,
+            'snacks': snacks,
+            'bebidas': bebidas,
+            'toppings': toppings,
+            'has_toppings': len(toppings) > 0
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar produtos do menu: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/selecao_toppings')
 def selecao_toppings():
     """Página de seleção de toppings após escolher produtos do bar"""
@@ -9870,6 +10007,7 @@ def resumo_reserva():
                 produto_id = produto.get('id')
                 quantidade_prod = int(produto.get('quantidade', 1))
                 tipo_produto_enviado = produto.get('tipo', 'bar')  # Novo campo
+                configs = produto.get('configs', [])  # Configurações do menu (snack, bebida, toppings)
                 
                 app.logger.info(f"🔍 Buscando produto ID: {produto_id}, tipo: {tipo_produto_enviado}, quantidade: {quantidade_prod}")
                 
@@ -9883,6 +10021,59 @@ def resumo_reserva():
                     
                     if produto_info:
                         app.logger.info(f"✅ Menu encontrado: {produto_info['produto']}")
+                        
+                        # Processar cada configuração do menu
+                        for idx, config in enumerate(configs):
+                            snack_id = config.get('snackId')
+                            bebida_id = config.get('bebidaId')
+                            toppings_menu = config.get('toppings', [])
+                            
+                            # Buscar detalhes do snack
+                            snack_nome = "Snack"
+                            if snack_id:
+                                cursor.execute("SELECT produto FROM bar WHERE id = %s", (snack_id,))
+                                snack_info = cursor.fetchone()
+                                if snack_info:
+                                    snack_nome = snack_info['produto']
+                            
+                            # Buscar detalhes da bebida
+                            bebida_nome = "Bebida"
+                            if bebida_id:
+                                cursor.execute("SELECT produto FROM bar WHERE id = %s", (bebida_id,))
+                                bebida_info = cursor.fetchone()
+                                if bebida_info:
+                                    bebida_nome = bebida_info['produto']
+                            
+                            # Buscar detalhes dos toppings
+                            toppings_nomes = []
+                            preco_toppings_menu = 0.0
+                            if toppings_menu:
+                                for topping_id in toppings_menu:
+                                    cursor.execute("SELECT nome, preco FROM toppings WHERE id = %s", (topping_id,))
+                                    topping_info = cursor.fetchone()
+                                    if topping_info:
+                                        toppings_nomes.append(topping_info['nome'])
+                                        preco_toppings_menu += float(topping_info['preco'])
+                            
+                            # Calcular preço total deste menu (preço base + toppings)
+                            preco_unitario = float(produto_info['preco']) + preco_toppings_menu
+                            preco_total_produto = preco_unitario
+                            total_bar += preco_total_produto
+                            
+                            # Adicionar produto com detalhes expandidos
+                            detalhes_texto = f"{snack_nome} + {bebida_nome}"
+                            if toppings_nomes:
+                                detalhes_texto += f" + Toppings: {', '.join(toppings_nomes)}"
+                            
+                            produtos_bar_detalhados.append({
+                                'nome': f"{produto_info['produto']} (#{idx+1})",
+                                'detalhes': detalhes_texto,
+                                'quantidade': 1,
+                                'preco_unitario': preco_unitario,
+                                'preco_total': preco_total_produto,
+                                'is_menu': True
+                            })
+                            app.logger.info(f"✅ Menu detalhado adicionado: {detalhes_texto}")
                 else:
                     # Buscar na tabela bar
                     cursor.execute("SELECT produto, preco FROM bar WHERE id = %s", (produto_id,))
@@ -9890,23 +10081,22 @@ def resumo_reserva():
                     
                     if produto_info:
                         app.logger.info(f"✅ Produto do bar encontrado: {produto_info['produto']}")
+                        preco_unitario = float(produto_info['preco'])
+                        preco_total_produto = preco_unitario * quantidade_prod
+                        total_bar += preco_total_produto
+                        
+                        # Adicionar produto com detalhes para o template
+                        produtos_bar_detalhados.append({
+                            'nome': produto_info['produto'],
+                            'quantidade': quantidade_prod,
+                            'preco_unitario': preco_unitario,
+                            'preco_total': preco_total_produto,
+                            'is_menu': False
+                        })
+                        app.logger.info(f"✅ Produto adicionado ao resumo: {produto_info['produto']} x{quantidade_prod} = €{preco_total_produto}")
                 
                 if not produto_info:
                     app.logger.error(f"❌ Produto ID {produto_id} não encontrado!")
-                
-                if produto_info:
-                    preco_unitario = float(produto_info['preco'])
-                    preco_total_produto = preco_unitario * quantidade_prod
-                    total_bar += preco_total_produto
-                    
-                    # Adicionar produto com detalhes para o template
-                    produtos_bar_detalhados.append({
-                        'nome': produto_info['produto'],
-                        'quantidade': quantidade_prod,
-                        'preco_unitario': preco_unitario,
-                        'preco_total': preco_total_produto
-                    })
-                    app.logger.info(f"✅ Produto adicionado ao resumo: {produto_info['produto']} x{quantidade_prod} = €{preco_total_produto}")
         
         app.logger.info(f"📊 Total bar: €{total_bar}, Total produtos: {len(produtos_bar_detalhados)}")
         
@@ -12891,6 +13081,11 @@ def atualizar_avatar():
         
         if avatar_data:
             new_avatar = avatar_data[0].replace('\\', '/').replace('"', '').strip()
+            # Remover prefixos desnecessários
+            if new_avatar.startswith('static/'):
+                new_avatar = new_avatar[7:]
+            if new_avatar.startswith('/static/'):
+                new_avatar = new_avatar[8:]
             session['user_avatar'] = new_avatar  # Atualizar na sessão
         
         conn.commit()

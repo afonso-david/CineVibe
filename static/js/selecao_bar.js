@@ -1,7 +1,9 @@
 console.log('=== SELECAO BAR JS ===');
 
 let cart = {};
-let products = { menus: [], snacks: [], bebidas: [] };
+let products = { menus: [], snacks: [], bebidas: [], toppings: [] };
+let menuConfigAtual = null; // {menuId, quantidade, snackId, bebidaId, toppings: []}
+let menusConfigurados = {}; // {menuId_index: {snackId, bebidaId, toppings: []}}
 
 // Carregar produtos
 try {
@@ -9,26 +11,16 @@ try {
     if (produtosData) {
         products = JSON.parse(produtosData.textContent);
         
-        // NORMALIZAR: garantir que todos os produtos têm a propriedade 'produto'
+        // Normalizar menus
         if (products.menus) {
             products.menus = products.menus.map(m => ({
                 ...m,
-                produto: m.produto || m.nome  // Usar 'nome' se 'produto' não existir
+                produto: m.produto || m.nome
             }));
         }
         
-        console.log('✅ Produtos carregados e normalizados:', products);
-        console.log('   Menus:', products.menus?.length || 0);
-        console.log('   Snacks:', products.snacks?.length || 0);
-        console.log('   Bebidas:', products.bebidas?.length || 0);
-        
-        // DEBUG: Mostrar IDs dos menus
-        if (products.menus && products.menus.length > 0) {
-            console.log('📋 IDs dos Menus:');
-            products.menus.forEach(m => {
-                console.log(`   - ID ${m.id}: ${m.produto || m.nome}`);
-            });
-        }
+        console.log('✅ Produtos carregados:', products);
+        console.log('   Toppings disponíveis:', products.toppings?.length || 0);
     }
 } catch(e) {
     console.error('❌ Erro ao carregar produtos:', e);
@@ -45,69 +37,320 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
 });
 
-// FUNÇÃO PRINCIPAL
+// FUNÇÃO PRINCIPAL - Modificada para menus
 function changeQuantity(productId, change, tipo = null) {
-    console.log('═══════════════════════════════════════');
-    console.log('🔧 changeQuantity CHAMADO');
-    console.log('   productId:', productId, '(tipo:', typeof productId, ')');
-    console.log('   change:', change);
-    console.log('   tipo fornecido:', tipo);
+    console.log('changeQuantity:', productId, change, tipo);
     
     productId = String(productId);
     
-    // Se tipo não foi fornecido, tentar detectar
+    // Detectar tipo se não fornecido
     if (!tipo) {
-        console.log('   🔍 Tipo não fornecido, tentando detectar...');
-        // Verificar se é um menu
         const menuEncontrado = products.menus && products.menus.find(p => String(p.id) === productId);
-        if (menuEncontrado) {
-            tipo = 'menu';
-            console.log('   ✅ Detectado como MENU:', menuEncontrado.produto || menuEncontrado.nome);
-        } else {
-            tipo = 'bar';
-            console.log('   ✅ Detectado como BAR (produto individual)');
-        }
-    } else {
-        console.log('   ✅ Tipo fornecido explicitamente:', tipo);
+        tipo = menuEncontrado ? 'menu' : 'bar';
     }
     
-    console.log('   📌 TIPO FINAL:', tipo);
-    console.log('   📌 PRODUCT ID FINAL:', productId);
+    // Se é um menu e está aumentando, abrir modal
+    if (tipo === 'menu' && change > 0) {
+        abrirModalMenu(productId);
+        return;
+    }
     
-    // Criar chave única com tipo
+    // Se é um menu e está diminuindo, remover configuração
+    if (tipo === 'menu' && change < 0) {
+        const cartKey = `${tipo}_${productId}`;
+        if (cart[cartKey] && cart[cartKey].quantidade > 0) {
+            cart[cartKey].quantidade--;
+            
+            // Remover última configuração
+            const configs = Object.keys(menusConfigurados).filter(k => k.startsWith(`${productId}_`));
+            if (configs.length > 0) {
+                const ultimaConfig = configs[configs.length - 1];
+                delete menusConfigurados[ultimaConfig];
+            }
+            
+            if (cart[cartKey].quantidade === 0) {
+                delete cart[cartKey];
+            }
+        }
+        
+        const qtyElement = document.getElementById(productId + '-qty');
+        if (qtyElement) {
+            qtyElement.textContent = cart[cartKey] ? cart[cartKey].quantidade : 0;
+        }
+        
+        updateCartSummary();
+        return;
+    }
+    
+    // Para produtos normais (snacks e bebidas)
     const cartKey = `${tipo}_${productId}`;
-    console.log('   🔑 Chave do carrinho:', cartKey);
-    
     if (!cart[cartKey]) cart[cartKey] = { id: productId, tipo: tipo, quantidade: 0 };
     cart[cartKey].quantidade += change;
     if (cart[cartKey].quantidade < 0) cart[cartKey].quantidade = 0;
     
-    // Remover do cart se quantidade for 0
     if (cart[cartKey].quantidade === 0) {
         delete cart[cartKey];
-        console.log('   🗑️ Removido do carrinho (quantidade = 0)');
-    } else {
-        console.log('   ✅ Quantidade atualizada:', cart[cartKey].quantidade);
     }
     
-    console.log('   📦 Carrinho completo:', JSON.parse(JSON.stringify(cart)));
-    
-    // Atualizar DOM
     const qtyElement = document.getElementById(productId + '-qty');
     if (qtyElement) {
         qtyElement.textContent = cart[cartKey] ? cart[cartKey].quantidade : 0;
-        console.log('   ✅ DOM atualizado');
-    } else {
-        console.error('   ❌ Elemento DOM não encontrado:', productId + '-qty');
     }
-    
-    console.log('═══════════════════════════════════════');
     
     updateCartSummary();
 }
 
+// MODAL DE CONFIGURAÇÃO DE MENU
+async function abrirModalMenu(menuId) {
+    console.log('🔓 Abrindo modal para menu:', menuId);
+    
+    menuConfigAtual = {
+        menuId: menuId,
+        snackId: null,
+        bebidaId: null,
+        toppings: [] // Array de IDs de toppings selecionados
+    };
+    
+    try {
+        // Buscar produtos do menu via API
+        const response = await fetch(`/api/menu_produtos/${menuId}`);
+        const data = await response.json();
+        
+        if (!data.success) {
+            alert('Erro ao carregar produtos do menu');
+            return;
+        }
+        
+        console.log('📦 Produtos do menu:', data);
+        
+        // Preencher snacks
+        const snacksContainer = document.getElementById('modalSnacks');
+        snacksContainer.innerHTML = '';
+        data.snacks.forEach(snack => {
+            const card = criarCardProdutoModal(snack, 'snack');
+            snacksContainer.appendChild(card);
+        });
+        
+        // Preencher bebidas
+        const bebidasContainer = document.getElementById('modalBebidas');
+        bebidasContainer.innerHTML = '';
+        data.bebidas.forEach(bebida => {
+            const card = criarCardProdutoModal(bebida, 'bebida');
+            bebidasContainer.appendChild(card);
+        });
+        
+        // Mostrar/esconder seção de toppings baseado se o menu tem toppings
+        const sectionToppings = document.getElementById('sectionToppings');
+        if (data.has_toppings && data.toppings.length > 0) {
+            // Carregar toppings específicos do menu
+            const toppingsContainer = document.getElementById('modalToppings');
+            toppingsContainer.innerHTML = '';
+            data.toppings.forEach(topping => {
+                const card = criarCardToppingModal(topping);
+                toppingsContainer.appendChild(card);
+            });
+            sectionToppings.style.display = 'block';
+            console.log('✅ Toppings do menu carregados:', data.toppings.length);
+        } else {
+            sectionToppings.style.display = 'none';
+            console.log('⚠️ Menu sem toppings');
+        }
+        
+        // Mostrar modal e bloquear scroll
+        const modal = document.getElementById('modalMenuProdutos');
+        modal.style.display = 'flex';
+        document.body.classList.add('modal-open');
+        
+    } catch (error) {
+        console.error('❌ Erro ao abrir modal:', error);
+        alert('Erro ao carregar produtos do menu');
+    }
+}
+
+function criarCardToppingModal(topping) {
+    const card = document.createElement('div');
+    card.className = 'menu-produto-card topping-card';
+    card.dataset.toppingId = topping.id;
+    
+    if (topping.imagem_url) {
+        const img = document.createElement('img');
+        // Limpar e corrigir o caminho da imagem
+        let imagemUrl = topping.imagem_url.replace(/\\/g, '/').replace(/"/g, '').trim();
+        
+        // Se não começa com http ou /static, adicionar /static/
+        if (!imagemUrl.startsWith('http') && !imagemUrl.startsWith('/static/')) {
+            if (imagemUrl.startsWith('imgs/')) {
+                imagemUrl = `/static/${imagemUrl}`;
+            } else if (!imagemUrl.startsWith('/')) {
+                imagemUrl = `/static/imgs/toppings/${imagemUrl}`;
+            } else {
+                imagemUrl = `/static${imagemUrl}`;
+            }
+        }
+        
+        img.src = imagemUrl;
+        img.alt = topping.nome;
+        img.style.width = '80px';
+        img.style.height = '80px';
+        img.style.objectFit = 'contain';
+        
+        img.onerror = function() {
+            console.warn('Imagem não carregou:', imagemUrl);
+            this.style.display = 'none';
+            const icon = document.createElement('div');
+            icon.className = 'menu-produto-icon';
+            icon.innerHTML = '<i class="fas fa-candy-cane"></i>';
+            this.parentNode.insertBefore(icon, this);
+        };
+        card.appendChild(img);
+    } else {
+        const icon = document.createElement('div');
+        icon.className = 'menu-produto-icon';
+        icon.innerHTML = '<i class="fas fa-candy-cane"></i>';
+        card.appendChild(icon);
+    }
+    
+    const nome = document.createElement('h5');
+    nome.textContent = topping.nome;
+    card.appendChild(nome);
+    
+    const preco = document.createElement('p');
+    preco.style.color = '#FFD700';
+    preco.style.fontSize = '0.85rem';
+    preco.style.marginTop = '0.25rem';
+    preco.textContent = `+€${parseFloat(topping.preco).toFixed(2)}`;
+    card.appendChild(preco);
+    
+    card.addEventListener('click', function() {
+        toggleToppingModal(topping.id);
+    });
+    
+    return card;
+}
+
+function criarCardProdutoModal(produto, tipo) {
+    const card = document.createElement('div');
+    card.className = 'menu-produto-card';
+    card.dataset.produtoId = produto.id;
+    card.dataset.tipo = tipo;
+    
+    if (produto.imagem_url) {
+        const img = document.createElement('img');
+        img.src = `/static/${produto.imagem_url}`;
+        img.alt = produto.produto;
+        img.onerror = function() {
+            this.style.display = 'none';
+            const icon = document.createElement('div');
+            icon.className = 'menu-produto-icon';
+            icon.innerHTML = `<i class="${produto.icone || 'fas fa-box'}"></i>`;
+            this.parentNode.insertBefore(icon, this);
+        };
+        card.appendChild(img);
+    } else {
+        const icon = document.createElement('div');
+        icon.className = 'menu-produto-icon';
+        icon.innerHTML = `<i class="${produto.icone || 'fas fa-box'}"></i>`;
+        card.appendChild(icon);
+    }
+    
+    const nome = document.createElement('h5');
+    nome.textContent = produto.produto;
+    card.appendChild(nome);
+    
+    card.addEventListener('click', function() {
+        selecionarProdutoModal(produto.id, tipo);
+    });
+    
+    return card;
+}
+
+function selecionarProdutoModal(produtoId, tipo) {
+    console.log('Selecionado:', produtoId, tipo);
+    
+    // Remover seleção anterior do mesmo tipo
+    const container = tipo === 'snack' ? 'modalSnacks' : 'modalBebidas';
+    document.querySelectorAll(`#${container} .menu-produto-card`).forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Adicionar seleção ao card clicado
+    event.currentTarget.classList.add('selected');
+    
+    // Atualizar configuração atual
+    if (tipo === 'snack') {
+        menuConfigAtual.snackId = produtoId;
+    } else {
+        menuConfigAtual.bebidaId = produtoId;
+    }
+    
+    // Habilitar botão confirmar se ambos estiverem selecionados
+    const btnConfirmar = document.getElementById('btnConfirmarMenu');
+    btnConfirmar.disabled = !(menuConfigAtual.snackId && menuConfigAtual.bebidaId);
+}
+
+function toggleToppingModal(toppingId) {
+    const card = document.querySelector(`[data-topping-id="${toppingId}"]`);
+    
+    if (menuConfigAtual.toppings.includes(toppingId)) {
+        // Remover topping
+        menuConfigAtual.toppings = menuConfigAtual.toppings.filter(id => id !== toppingId);
+        card.classList.remove('selected');
+    } else {
+        // Adicionar topping
+        menuConfigAtual.toppings.push(toppingId);
+        card.classList.add('selected');
+    }
+    
+    console.log('Toppings selecionados:', menuConfigAtual.toppings);
+}
+
+function confirmarMenuConfig() {
+    if (!menuConfigAtual.snackId || !menuConfigAtual.bebidaId) {
+        alert('Por favor, selecione um snack e uma bebida');
+        return;
+    }
+    
+    console.log('✅ Configuração confirmada:', menuConfigAtual);
+    
+    // Adicionar ao carrinho
+    const cartKey = `menu_${menuConfigAtual.menuId}`;
+    if (!cart[cartKey]) {
+        cart[cartKey] = { id: menuConfigAtual.menuId, tipo: 'menu', quantidade: 0, configs: [] };
+    }
+    cart[cartKey].quantidade++;
+    
+    // Salvar configuração (incluindo toppings)
+    cart[cartKey].configs.push({
+        snackId: menuConfigAtual.snackId,
+        bebidaId: menuConfigAtual.bebidaId,
+        toppings: [...menuConfigAtual.toppings] // Copiar array de toppings
+    });
+    
+    // Atualizar DOM
+    const qtyElement = document.getElementById(menuConfigAtual.menuId + '-qty');
+    if (qtyElement) {
+        qtyElement.textContent = cart[cartKey].quantidade;
+    }
+    
+    updateCartSummary();
+    fecharModalMenu();
+}
+
+function fecharModalMenu() {
+    document.getElementById('modalMenuProdutos').style.display = 'none';
+    document.body.classList.remove('modal-open'); // Restaurar scroll
+    menuConfigAtual = null;
+    
+    // Limpar seleções
+    document.querySelectorAll('.menu-produto-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    document.getElementById('btnConfirmarMenu').disabled = true;
+}
+
 function updateCartSummary() {
-    console.log('📊 ═══ UPDATE CART SUMMARY ═══');
+    console.log('📊 Atualizando resumo do carrinho');
     
     const cartItems = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
@@ -120,53 +363,39 @@ function updateCartSummary() {
     let hasItems = false;
     const produtosSelecionados = [];
     
-    console.log('📦 Itens no carrinho:', Object.keys(cart).length);
-    
     for (let cartKey in cart) {
         const item = cart[cartKey];
-        console.log(`   🔍 Processando: ${cartKey}`, item);
         
         if (item.quantidade > 0) {
             hasItems = true;
             
-            // Adicionar ao array com tipo identificado
-            produtosSelecionados.push({
+            // Adicionar ao array
+            const produtoData = {
                 id: item.id,
                 quantidade: item.quantidade,
                 tipo: item.tipo
-            });
+            };
             
-            console.log(`   ✅ Adicionado: ID=${item.id}, Tipo=${item.tipo}, Qtd=${item.quantidade}`);
+            // Se é menu, adicionar configurações
+            if (item.tipo === 'menu' && item.configs) {
+                produtoData.configs = item.configs;
+            }
             
-            // Encontrar produto baseado no tipo
+            produtosSelecionados.push(produtoData);
+            
+            // Encontrar produto
             let product = null;
-            
             if (item.tipo === 'menu') {
                 product = products.menus?.find(p => String(p.id) === String(item.id));
-                if (product) {
-                    console.log(`   ✅ Menu encontrado: ${product.produto || product.nome}`);
-                } else {
-                    console.error(`   ❌ Menu ID ${item.id} NÃO encontrado!`);
-                }
             } else {
-                // Tentar em snacks
-                product = products.snacks?.find(p => String(p.id) === String(item.id));
-                if (product) {
-                    console.log(`   ✅ Snack encontrado: ${product.produto}`);
-                } else {
-                    // Tentar em bebidas
-                    product = products.bebidas?.find(p => String(p.id) === String(item.id));
-                    if (product) {
-                        console.log(`   ✅ Bebida encontrada: ${product.produto}`);
-                    } else {
-                        console.error(`   ❌ Produto ID ${item.id} NÃO encontrado em nenhuma categoria!`);
-                    }
-                }
+                product = products.snacks?.find(p => String(p.id) === String(item.id)) ||
+                         products.bebidas?.find(p => String(p.id) === String(item.id));
             }
             
             if (product) {
                 const nomeProduto = product.produto || product.nome || 'Produto';
-                const subtotal = product.preco * item.quantidade;
+                const preco = product.preco || product.preco_total || 0;
+                const subtotal = preco * item.quantidade;
                 total += subtotal;
                 
                 itemsHtml += `
@@ -180,26 +409,21 @@ function updateCartSummary() {
     }
     
     console.log('💰 Total:', total.toFixed(2));
-    console.log('📤 Produtos a enviar:', JSON.stringify(produtosSelecionados));
+    console.log('📤 Produtos:', produtosSelecionados);
     
     if (cartItems) cartItems.innerHTML = itemsHtml;
     if (cartTotal) cartTotal.textContent = total.toFixed(2);
     if (cartSummary) cartSummary.style.display = hasItems ? 'block' : 'none';
     
-    // Atualizar botão skip
     if (skipBtn) {
         skipBtn.innerHTML = hasItems ? 
             '<i class="fas fa-arrow-right"></i> Continuar' : 
             '<i class="fas fa-forward"></i> Não, obrigado. Continuar sem produtos do bar';
     }
     
-    // Atualizar campo hidden
     if (produtosBarInput) {
         produtosBarInput.value = JSON.stringify(produtosSelecionados);
-        console.log('✅ Campo hidden atualizado');
     }
-    
-    console.log('📊 ═══ FIM UPDATE CART SUMMARY ═══');
 }
 
 function goBack() {
@@ -207,39 +431,17 @@ function goBack() {
 }
 
 function continuarComProdutos() {
-    // Atualizar o carrinho antes de submeter
-    updateCartSummary();
-    
-    // Submeter o formulário
-    const form = document.getElementById('resumoForm');
-    if (form) {
-        form.submit();
-    }
+    document.getElementById('resumoForm').submit();
 }
-
-// Prevenir submissão do formulário se não houver produtos
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('resumoForm');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            // Atualizar produtos antes de submeter
-            updateCartSummary();
-            
-            const produtosInput = document.getElementById('produtosBarInput');
-            const produtosValue = produtosInput ? produtosInput.value : '[]';
-            
-            console.log('📤 Submetendo formulário com produtos:', produtosValue);
-            
-            // Se não houver produtos no carrinho, avisar
-            if (Object.keys(cart).length === 0 || Object.values(cart).every(q => q === 0)) {
-                console.log('⚠️ Nenhum produto no carrinho');
-            }
-        });
-    }
-});
 
 // Tornar funções globais
 window.changeQuantity = changeQuantity;
 window.continuarComProdutos = continuarComProdutos;
+window.goBack = goBack;
+window.abrirModalMenu = abrirModalMenu;
+window.fecharModalMenu = fecharModalMenu;
+window.confirmarMenuConfig = confirmarMenuConfig;
+window.selecionarProdutoModal = selecionarProdutoModal;
+window.toggleToppingModal = toggleToppingModal;
 
 console.log('✅ JavaScript carregado');

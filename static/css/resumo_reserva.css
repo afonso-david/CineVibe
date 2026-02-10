@@ -79,9 +79,12 @@
 /* Layout Principal */
 .resumo-layout {
     display: grid;
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 1.2fr 1fr;
     gap: 2rem;
     margin-top: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Card do Resumo */
@@ -201,30 +204,30 @@
     align-items: center;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 1.25rem;
+    padding: 0.9rem 1rem;
     border: 1px solid rgba(255, 214, 10, 0.2);
 }
 
 .ticket-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
 }
 
 .ticket-type {
     color: #FFFFFF;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .ticket-places {
     color: #8B949E;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .ticket-price {
     color: #FFD60A;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 700;
 }
 
@@ -328,11 +331,11 @@
 .customer-card {
     background: linear-gradient(135deg, #1B2838 0%, #2A3F54 100%);
     border-radius: 20px;
-    padding: 2rem;
+    padding: 2rem 4rem;
     border: 1px solid #3A4F64;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     height: fit-content;
-    max-width: 400px;
+    max-width: 600px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -369,7 +372,6 @@
     height: 80px;
     border-radius: 50%;
     border: 3px solid #FFD60A;
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
 }
 
 .user-info h3 {
@@ -546,13 +548,11 @@
 .btn-primary {
     background: linear-gradient(135deg, #FFD60A 0%, #F39C12 100%);
     color: #0D1B2A;
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.4);
     flex-wrap: wrap;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.6);
 }
 
 .btn-primary .amount {
@@ -702,7 +702,7 @@
 .bar-items {
     background: rgba(27, 40, 56, 0.3);
     border-radius: 12px;
-    padding: 1rem;
+    padding: 0.75rem;
     border: 1px solid rgba(255, 214, 10, 0.2);
 }
 
@@ -710,7 +710,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: 0.75rem 0.5rem;
     border-bottom: 1px solid rgba(255, 214, 10, 0.1);
 }
 
@@ -721,25 +721,25 @@
 .item-info {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.25rem;
 }
 
 .item-name {
     color: #4EA8DE;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .item-price-unit {
     color: #B8C5D1;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     opacity: 0.8;
 }
 
 .item-price {
     color: #FFD60A;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -777,4 +777,23 @@
     .item-price {
         align-self: flex-end;
     }
+}
+
+/* Detalhes dos menus */
+.item-details {
+    display: block;
+    font-size: 0.85rem;
+    color: #FFD700;
+    margin-top: 0.25rem;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.menu-item {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 165, 0, 0.05));
+    border-left: 3px solid #FFD700;
+}
+
+.menu-item .item-name {
+    color: #FFD700;
 }

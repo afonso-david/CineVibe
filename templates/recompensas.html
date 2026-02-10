@@ -22,9 +22,10 @@
                     <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
                 </div>
                 <div class="user-icon">
+                    <!-- DEBUG: logged_in={{ logged_in }}, avatar={{ avatar }} -->
                     {% if logged_in %}
                         <a href="{{ url_for('perfil') }}">
-                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic active-profile" alt="Perfil">
+                            <img src="{{ url_for('static', filename=avatar if avatar else 'imgs/icons/user_icon34-removebg-preview.png') }}" class="user-pic active-profile" alt="Perfil" onerror="this.src='{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}'">
                         </a>
                     {% else %}
                         <a href="{{ url_for('login') }}">

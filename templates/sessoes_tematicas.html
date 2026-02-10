@@ -52,41 +52,6 @@
       
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-background">
-            <div class="hero-overlay"></div>
-            <div class="floating-particles">
-                <div class="particle" style="--delay: 0s; --duration: 8s; --size: 4px;"></div>
-                <div class="particle" style="--delay: 1s; --duration: 10s; --size: 6px;"></div>
-                <div class="particle" style="--delay: 2s; --duration: 12s; --size: 3px;"></div>
-                <div class="particle" style="--delay: 3s; --duration: 9s; --size: 5px;"></div>
-                <div class="particle" style="--delay: 4s; --duration: 11s; --size: 4px;"></div>
-            </div>
-        </div>
-        
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span>Experiências Temáticas</span>
-            </div>
-            <h1 class="hero-title">
-                <span class="title-line">Sessões</span>
-                <span class="title-line highlight">Temáticas</span>
-            </h1>
-            <p class="hero-subtitle">
-                Mergulhe em universos únicos onde cada tema conta uma história diferente. 
-                Escolha a sua aventura cinematográfica.
-            </p>
-        </div>
-        
-        <div class="scroll-indicator">
-            <div class="scroll-text">Explore os temas</div>
-            <div class="scroll-arrow">
-                ↓
-            </div>
-        </div>
-    </section>
-
     <!-- Themes Section -->
     <section class="themes-section" id="themes">
         <div class="container">
@@ -273,67 +238,6 @@
         </div>
     </section>
 
-    <!-- Info Section -->
-    <section class="info-section">
-        <div class="container">
-            <div class="info-content">
-                <h2>Como Funcionam as Sessões Temáticas</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <div class="info-number">01</div>
-                        <h3>Reserve Online</h3>
-                        <p>Escolha o tema, data e horário que mais lhe convém através da nossa plataforma online.</p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <div class="info-number">02</div>
-                        <h3>Ambiente Transformado</h3>
-                        <p>Chegue e encontre a sala completamente transformada de acordo com o tema escolhido.</p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <div class="info-number">03</div>
-                        <h3>Experiência Completa</h3>
-                        <p>Desfrute de uma experiência cinematográfica única com todos os detalhes pensados para si.</p>
-                    </div>
-                    
-                    <div class="info-card">
-                        <div class="info-number">04</div>
-                        <h3>Memórias Eternas</h3>
-                        <p>Leve consigo recordações inesquecíveis de uma noite verdadeiramente especial.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-background">
-            <div class="cta-overlay"></div>
-        </div>
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">Pronto Para a Aventura?</h2>
-                <p class="cta-subtitle">
-                    Não perca a oportunidade de viver uma experiência cinematográfica única. 
-                    Escolha o seu tema favorito e reserve já hoje.
-                </p>
-                <div class="cta-buttons">
-                    <a href="{{ url_for('sessao_vintage') }}" class="cta-btn vintage">
-                        <span>Vintage</span>
-                    </a>
-                    <a href="{{ url_for('sessao_romance') }}" class="cta-btn romance">
-                        <span>Romance</span>
-                    </a>
-                    <a href="{{ url_for('sessao_terror') }}" class="cta-btn terror">
-                        <span>Terror</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-main">
@@ -443,15 +347,7 @@
             });
         });
 
-        // Parallax effect
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('.hero-background');
-            if (parallax) {
-                const speed = scrolled * 0.3;
-                parallax.style.transform = `translateY(${speed}px)`;
-            }
-        });
+        // Parallax effect removed
 
         // Theme card hover effects
         document.querySelectorAll('.theme-card').forEach(card => {

@@ -253,12 +253,12 @@
                             Voltar aos Lugares
                         </button>
                         
-                        <!-- Formulário para toppings -->
-                        <form id="resumoForm" method="GET" action="{{ url_for('selecao_toppings') }}" style="display: inline;">
+                        <!-- Formulário para resumo -->
+                        <form id="resumoForm" method="GET" action="{{ url_for('resumo_reserva') }}" style="display: inline;">
                             <input type="hidden" name="filme_id" value="{{ filme_id }}">
                             <input type="hidden" name="cinema_id" value="{{ cinema_id }}">
-                            <input type="hidden" name="id_tipo_sessao" value="{{ tipo_sessao_id }}">
-                            <input type="hidden" name="id_horario_sessao" value="{{ horario_id }}">
+                            <input type="hidden" name="tipo_sessao_id" value="{{ tipo_sessao_id }}">
+                            <input type="hidden" name="horario_id" value="{{ horario_id }}">
                             <input type="hidden" name="data_sessao" value="{{ data_sessao }}">
                             <input type="hidden" name="lugares" value="{{ lugares_selecionados|join(',') if lugares_selecionados else '' }}">
                             <input type="hidden" name="quantidade" value="{{ lugares_selecionados|length if lugares_selecionados else 1 }}">
@@ -283,6 +283,56 @@
 
             </div>
         </main>
+        
+        <!-- Modal de Seleção de Produtos do Menu -->
+        <div id="modalMenuProdutos" class="modal-menu" style="display: none;">
+            <div class="modal-menu-content">
+                <div class="modal-menu-header">
+                    <h3><i class="fas fa-box-open"></i> Configure o seu Menu</h3>
+                    <button class="modal-close" onclick="fecharModalMenu()">&times;</button>
+                </div>
+                
+                <div class="modal-menu-body">
+                    <div class="menu-config-info">
+                        <p>Escolha <strong>1 snack</strong> e <strong>1 bebida</strong> para o seu menu</p>
+                    </div>
+                    
+                    <!-- Seleção de Snack -->
+                    <div class="menu-section">
+                        <h4><i class="fas fa-cookie-bite"></i> Escolha o seu Snack</h4>
+                        <div class="menu-produtos-grid" id="modalSnacks">
+                            <!-- Preenchido via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Seleção de Bebida -->
+                    <div class="menu-section">
+                        <h4><i class="fas fa-glass-cheers"></i> Escolha a sua Bebida</h4>
+                        <div class="menu-produtos-grid" id="modalBebidas">
+                            <!-- Preenchido via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Seleção de Toppings (aparece apenas se o menu tiver toppings) -->
+                    <div class="menu-section" id="sectionToppings" style="display: none;">
+                        <h4><i class="fas fa-candy-cane"></i> Adicione Toppings (Opcional)</h4>
+                        <div class="menu-config-info" style="margin-bottom: 1rem;">
+                            <p>Personalize as suas pipocas com toppings deliciosos!</p>
+                        </div>
+                        <div class="menu-produtos-grid" id="modalToppings">
+                            <!-- Preenchido via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-menu-footer">
+                    <button class="btn-cancelar" onclick="fecharModalMenu()">Cancelar</button>
+                    <button class="btn-confirmar" onclick="confirmarMenuConfig()" id="btnConfirmarMenu" disabled>
+                        <i class="fas fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Dados para JavaScript -->
@@ -290,7 +340,8 @@
         {
             "menus": {{ produtos.menus | tojson if produtos and produtos.menus else '[]' | safe }},
             "snacks": {{ produtos.snacks | tojson if produtos and produtos.snacks else '[]' | safe }},
-            "bebidas": {{ produtos.bebidas | tojson if produtos and produtos.bebidas else '[]' | safe }}
+            "bebidas": {{ produtos.bebidas | tojson if produtos and produtos.bebidas else '[]' | safe }},
+            "toppings": {{ toppings | tojson if toppings else '[]' | safe }}
         }
     </script>
     

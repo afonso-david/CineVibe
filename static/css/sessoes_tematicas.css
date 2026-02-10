@@ -358,58 +358,46 @@ main {
    THEMES SECTION PREMIUM
 ========================== */
 .themes-section {
-    padding: 10rem 0;
-    background: linear-gradient(180deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%);
+    padding: 4rem 0 6rem 0;
+    background: #0D1B2A;
     position: relative;
     overflow: hidden;
 }
 
 .themes-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 25% 25%, rgba(255, 214, 10, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(78, 168, 222, 0.05) 0%, transparent 50%);
-    pointer-events: none;
+    display: none;
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 6rem;
+    margin-bottom: 3rem;
     position: relative;
     z-index: 2;
 }
 
 .section-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 6vw, 5rem);
-    font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #FFD60A 50%, #4EA8DE 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1.5rem;
-    text-shadow: 0 4px 20px rgba(255, 214, 10, 0.2);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFD60A;
+    margin-bottom: 1rem;
+    text-shadow: none;
 }
 
 .section-subtitle {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.8);
-    max-width: 700px;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 600px;
     margin: 0 auto;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .themes-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
-    max-width: 1600px;
+    gap: 2rem;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
     position: relative;
@@ -422,7 +410,7 @@ main {
     backdrop-filter: blur(20px);
     border-radius: 24px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: none !important;
     cursor: pointer;
     height: 850px;
     width: 100%;
@@ -436,9 +424,7 @@ main {
         linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 105, 20, 0.1) 100%),
         linear-gradient(180deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.9) 100%);
     border: 1px solid rgba(212, 175, 55, 0.3);
-    box-shadow: 
-        0 20px 60px rgba(212, 175, 55, 0.15),
-        0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: none !important;
 }
 
 .theme-card.romance {
@@ -446,9 +432,7 @@ main {
         linear-gradient(135deg, rgba(255, 105, 180, 0.15) 0%, rgba(255, 20, 147, 0.1) 100%),
         linear-gradient(180deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.9) 100%);
     border: 1px solid rgba(255, 105, 180, 0.3);
-    box-shadow: 
-        0 20px 60px rgba(255, 105, 180, 0.15),
-        0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: none !important;
 }
 
 .theme-card.terror {
@@ -456,9 +440,7 @@ main {
         linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(139, 0, 0, 0.1) 100%),
         linear-gradient(180deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.9) 100%);
     border: 1px solid rgba(220, 20, 60, 0.3);
-    box-shadow: 
-        0 20px 60px rgba(220, 20, 60, 0.15),
-        0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: none !important;
 }
 
 .theme-card::before {
@@ -476,7 +458,7 @@ main {
 }
 
 .theme-card:hover::before {
-    opacity: 1;
+    opacity: 0 !important;
 }
 
 .theme-image {
@@ -494,7 +476,7 @@ main {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: none !important;
     filter: brightness(0.8) contrast(1.1) saturate(1.2);
 }
 
@@ -523,47 +505,41 @@ main {
 .theme-card:hover .theme-overlay {
     background: linear-gradient(
         180deg,
-        rgba(0, 0, 0, 0.2) 0%,
-        rgba(0, 0, 0, 0.4) 50%,
-        rgba(0, 0, 0, 0.8) 100%
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.7) 100%
     );
 }
 
 .theme-card:hover {
-    transform: translateY(-20px) scale(1.02);
+    transform: none !important;
 }
 
 .theme-card.vintage:hover {
     background: 
-        linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(139, 105, 20, 0.2) 100%),
-        linear-gradient(180deg, rgba(42, 42, 42, 0.85) 0%, rgba(26, 26, 26, 0.95) 100%);
-    border-color: rgba(212, 175, 55, 0.6);
-    box-shadow: 
-        0 40px 80px rgba(212, 175, 55, 0.3),
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 60px rgba(212, 175, 55, 0.2);
+        linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 105, 20, 0.1) 100%),
+        linear-gradient(180deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.9) 100%);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .theme-card.romance:hover {
     background: 
-        linear-gradient(135deg, rgba(255, 105, 180, 0.25) 0%, rgba(255, 20, 147, 0.2) 100%),
-        linear-gradient(180deg, rgba(42, 42, 42, 0.85) 0%, rgba(26, 26, 26, 0.95) 100%);
-    border-color: rgba(255, 105, 180, 0.6);
-    box-shadow: 
-        0 40px 80px rgba(255, 105, 180, 0.3),
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 60px rgba(255, 105, 180, 0.2);
+        linear-gradient(135deg, rgba(255, 105, 180, 0.15) 0%, rgba(255, 20, 147, 0.1) 100%),
+        linear-gradient(180deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.9) 100%);
+    border-color: rgba(255, 105, 180, 0.3);
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .theme-card.terror:hover {
     background: 
-        linear-gradient(135deg, rgba(220, 20, 60, 0.25) 0%, rgba(139, 0, 0, 0.2) 100%),
-        linear-gradient(180deg, rgba(42, 42, 42, 0.85) 0%, rgba(26, 26, 26, 0.95) 100%);
-    border-color: rgba(220, 20, 60, 0.6);
-    box-shadow: 
-        0 40px 80px rgba(220, 20, 60, 0.3),
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 60px rgba(220, 20, 60, 0.2);
+        linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(139, 0, 0, 0.1) 100%),
+        linear-gradient(180deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.9) 100%);
+    border-color: rgba(220, 20, 60, 0.3);
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 /* Base theme content */
@@ -575,45 +551,46 @@ main {
     display: flex;
     flex-direction: column;
     margin-top: 220px;
-    backdrop-filter: blur(15px);
+    backdrop-filter: none !important;
     min-height: 500px;
     border-radius: 0 0 24px 24px;
     justify-content: flex-start;
     gap: 2rem;
+    box-shadow: none !important;
 }
 
 /* Theme-specific content backgrounds */
 .vintage .theme-content {
     background: 
         linear-gradient(180deg, 
-            rgba(212, 175, 55, 0.12) 0%, 
-            rgba(139, 105, 20, 0.08) 30%,
-            rgba(42, 42, 42, 0.96) 70%,
-            rgba(26, 26, 26, 0.99) 100%
+            rgba(212, 175, 55, 0.2) 0%, 
+            rgba(139, 105, 20, 0.15) 30%,
+            rgba(42, 42, 42, 1) 70%,
+            rgba(26, 26, 26, 1) 100%
         );
-    border-top: 2px solid rgba(212, 175, 55, 0.3);
+    border-top: none !important;
 }
 
 .romance .theme-content {
     background: 
         linear-gradient(180deg, 
-            rgba(255, 105, 180, 0.12) 0%, 
-            rgba(255, 20, 147, 0.08) 30%,
-            rgba(42, 42, 42, 0.96) 70%,
-            rgba(26, 26, 26, 0.99) 100%
+            rgba(255, 105, 180, 0.2) 0%, 
+            rgba(255, 20, 147, 0.15) 30%,
+            rgba(42, 42, 42, 1) 70%,
+            rgba(26, 26, 26, 1) 100%
         );
-    border-top: 2px solid rgba(255, 105, 180, 0.3);
+    border-top: none !important;
 }
 
 .terror .theme-content {
     background: 
         linear-gradient(180deg, 
-            rgba(220, 20, 60, 0.12) 0%, 
-            rgba(139, 0, 0, 0.08) 30%,
-            rgba(42, 42, 42, 0.96) 70%,
-            rgba(26, 26, 26, 0.99) 100%
+            rgba(220, 20, 60, 0.2) 0%, 
+            rgba(139, 0, 0, 0.15) 30%,
+            rgba(42, 42, 42, 1) 70%,
+            rgba(26, 26, 26, 1) 100%
         );
-    border-top: 2px solid rgba(220, 20, 60, 0.3);
+    border-top: none !important;
 }
 
 /* Theme header with badge */
@@ -652,7 +629,7 @@ main {
     background: linear-gradient(135deg, var(--romance-pink) 0%, var(--romance-red) 100%);
     border-color: var(--romance-red);
     color: white;
-    animation: pulse 2s ease-in-out infinite;
+    animation: none !important;
     box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
 }
 
@@ -700,12 +677,12 @@ main {
     gap: 15px;
     padding: 1rem 0;
     color: rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
+    transition: none !important;
     position: relative;
     font-weight: 500;
     letter-spacing: 0.3px;
     font-size: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: none !important;
 }
 
 .highlight-item::before {
@@ -726,6 +703,7 @@ main {
     height: 1px;
     width: 0;
     transition: width 0.4s ease;
+    display: none !important;
 }
 
 .vintage .highlight-item::before {
@@ -734,6 +712,7 @@ main {
 
 .vintage .highlight-item::after {
     background: linear-gradient(90deg, #D4AF37, transparent);
+    display: none !important;
 }
 
 .romance .highlight-item::before {
@@ -742,6 +721,7 @@ main {
 
 .romance .highlight-item::after {
     background: linear-gradient(90deg, #FF69B4, transparent);
+    display: none !important;
 }
 
 .terror .highlight-item::before {
@@ -750,6 +730,7 @@ main {
 
 .terror .highlight-item::after {
     background: linear-gradient(90deg, #DC143C, transparent);
+    display: none !important;
 }
 
 .highlight-item:last-child {
@@ -757,29 +738,27 @@ main {
 }
 
 .highlight-item:hover {
-    transform: translateX(10px);
-    padding-left: 15px;
+    /* Sem efeitos hover */
 }
 
 .highlight-item:hover::before {
-    transform: scale(1.3);
-    opacity: 1;
+    /* Sem efeitos hover */
 }
 
 .highlight-item:hover::after {
-    width: 100%;
+    /* Sem efeitos hover */
 }
 
 .vintage .highlight-item:hover {
-    color: rgba(212, 175, 55, 0.85);
+    /* Sem efeitos hover */
 }
 
 .romance .highlight-item:hover {
-    color: rgba(255, 105, 180, 0.85);
+    /* Sem efeitos hover */
 }
 
 .terror .highlight-item:hover {
-    color: rgba(220, 20, 60, 0.85);
+    /* Sem efeitos hover */
 }
 
 /* Theme actions section */
@@ -1784,91 +1763,50 @@ main {
 }
 
 /* ==========================
-   PADRÕES E EFEITOS DOS TEMAS
+   PADRÕES E EFEITOS DOS TEMAS - REMOVIDOS
 ========================== */
 .theme-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: all 0.4s ease;
-    z-index: 1;
+    display: none !important;
 }
 
 .theme-pattern {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    display: none !important;
 }
 
 .vintage-pattern {
-    background: 
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 20px,
-            rgba(212, 175, 55, 0.08) 20px,
-            rgba(212, 175, 55, 0.08) 40px
-        ),
-        radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.15) 0%, transparent 50%);
+    display: none !important;
 }
 
 .romance-pattern {
-    background: 
-        repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 25px,
-            rgba(255, 105, 180, 0.08) 25px,
-            rgba(255, 105, 180, 0.08) 50px
-        ),
-        radial-gradient(circle at 70% 30%, rgba(255, 20, 147, 0.15) 0%, transparent 50%);
+    display: none !important;
 }
 
 .terror-pattern {
-    background: 
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 15px,
-            rgba(220, 20, 60, 0.08) 15px,
-            rgba(220, 20, 60, 0.08) 30px
-        ),
-        radial-gradient(circle at 20% 80%, rgba(139, 0, 0, 0.15) 0%, transparent 50%);
+    display: none !important;
 }
 
 .theme-glow {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    right: -50%;
-    bottom: -50%;
-    transform: scale(0);
-    transition: all 0.4s ease;
+    display: none !important;
 }
 
 .vintage-glow {
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+    display: none !important;
 }
 
 .romance-glow {
-    background: radial-gradient(circle, rgba(255, 105, 180, 0.2) 0%, transparent 70%);
+    display: none !important;
 }
 
 .terror-glow {
-    background: radial-gradient(circle, rgba(220, 20, 60, 0.2) 0%, transparent 70%);
+    display: none !important;
 }
 
 .theme-card:hover .theme-background {
-    opacity: 1;
+    display: none !important;
 }
 
 .theme-card:hover .theme-glow {
-    transform: scale(1);
+    display: none !important;
 }
 
 /* ==========================

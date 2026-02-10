@@ -1774,6 +1774,65 @@ v-center a:hover::after,
 
 
 /* ==========================
+   PÁGINA SELECAO_TOPPINGS - IMAGENS MAIORES
+========================== */
+/* Aumentar imagens dos toppings na página de seleção */
+.products-grid .product-card .product-image {
+    height: 250px;
+    min-height: 250px;
+}
+
+.products-grid .product-card .product-image img.product-img {
+    max-width: 220px !important;
+    max-height: 220px !important;
+    width: 220px !important;
+    height: 220px !important;
+    object-fit: contain;
+}
+
+.products-grid .product-card .product-icon-fallback i {
+    font-size: 5rem;
+}
+
+/* Responsive para imagens de toppings */
+@media (max-width: 768px) {
+    .products-grid .product-card .product-image {
+        height: 220px;
+        min-height: 220px;
+    }
+    
+    .products-grid .product-card .product-image img.product-img {
+        max-width: 180px !important;
+        max-height: 180px !important;
+        width: 180px !important;
+        height: 180px !important;
+    }
+    
+    .products-grid .product-card .product-icon-fallback i {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid .product-card .product-image {
+        height: 200px;
+        min-height: 200px;
+    }
+    
+    .products-grid .product-card .product-image img.product-img {
+        max-width: 160px !important;
+        max-height: 160px !important;
+        width: 160px !important;
+        height: 160px !important;
+    }
+    
+    .products-grid .product-card .product-icon-fallback i {
+        font-size: 3.5rem;
+    }
+}
+
+
+/* ==========================
    PRODUTOS SELECIONADOS (PÁGINA TOPPINGS)
 ========================== */
 .produtos-selecionados {

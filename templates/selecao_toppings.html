@@ -90,10 +90,22 @@
 
                     <!-- Skip Option -->
                     <div class="skip-option">
-                        <a href="{{ url_for('resumo_reserva', filme_id=filme_id, cinema_id=cinema_id, tipo_sessao_id=tipo_sessao_id, horario_id=horario_id, data_sessao=data_sessao, lugares=lugares, quantidade=lugares_selecionados|length, produtos_bar=produtos_bar_json) }}" class="skip-btn">
-                            <i class="fas fa-forward"></i>
-                            Continuar sem toppings
-                        </a>
+                        <form id="topContinueForm" method="GET" action="{{ url_for('resumo_reserva') }}">
+                            <input type="hidden" name="filme_id" value="{{ filme_id }}">
+                            <input type="hidden" name="cinema_id" value="{{ cinema_id }}">
+                            <input type="hidden" name="tipo_sessao_id" value="{{ tipo_sessao_id }}">
+                            <input type="hidden" name="horario_id" value="{{ horario_id }}">
+                            <input type="hidden" name="data_sessao" value="{{ data_sessao }}">
+                            <input type="hidden" name="lugares" value="{{ lugares }}">
+                            <input type="hidden" name="quantidade" value="{{ lugares_selecionados|length }}">
+                            <input type="hidden" name="produtos_bar" value="{{ produtos_bar_json }}">
+                            <input type="hidden" name="toppings" id="topToppingsInput" value="[]">
+                            
+                            <button type="submit" class="skip-btn" id="topContinueBtn">
+                                <i class="fas fa-forward"></i>
+                                <span id="topBtnText">Continuar sem toppings</span>
+                            </button>
+                        </form>
                     </div>
 
                     <!-- Toppings Grid -->
@@ -215,10 +227,14 @@
             const cartTotal = document.getElementById('cartTotal');
             const cartSummary = document.getElementById('cartSummary');
             const toppingsInput = document.getElementById('toppingsInput');
+            const topToppingsInput = document.getElementById('topToppingsInput');
+            const topBtnText = document.getElementById('topBtnText');
+            const topContinueBtn = document.getElementById('topContinueBtn');
             
             let total = 0;
             let itemsHtml = '';
             let hasItems = false;
+            let totalToppings = 0;
             
             // Preparar toppings para o formulário
             const toppingsSelecionados = [];
@@ -226,6 +242,7 @@
             for (let toppingId in cart) {
                 if (cart[toppingId] > 0) {
                     hasItems = true;
+                    totalToppings += cart[toppingId];
                     
                     // Remover prefixo 'topping_' do ID
                     const realId = toppingId.replace('topping_', '');
@@ -257,10 +274,34 @@
             if (cartTotal) cartTotal.textContent = total.toFixed(2);
             if (cartSummary) cartSummary.style.display = hasItems ? 'block' : 'none';
             
-            // Atualizar campo hidden do formulário
+            // Atualizar campo hidden do formulário inferior
             if (toppingsInput) {
                 toppingsInput.value = JSON.stringify(toppingsSelecionados);
                 console.log('Toppings selecionados:', toppingsInput.value);
+            }
+            
+            // Sincronizar campo hidden do formulário superior
+            if (topToppingsInput) {
+                topToppingsInput.value = JSON.stringify(toppingsSelecionados);
+            }
+            
+            // Atualizar texto e ícone do botão superior
+            if (topBtnText && topContinueBtn) {
+                if (hasItems) {
+                    topBtnText.textContent = `Continuar com ${totalToppings} topping${totalToppings > 1 ? 's' : ''}`;
+                    // Trocar ícone para check
+                    const icon = topContinueBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-check';
+                    }
+                } else {
+                    topBtnText.textContent = 'Continuar sem toppings';
+                    // Manter ícone de forward
+                    const icon = topContinueBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-forward';
+                    }
+                }
             }
         }
 

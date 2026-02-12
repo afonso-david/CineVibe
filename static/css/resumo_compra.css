@@ -1,6 +1,5 @@
-/* ===== RESUMO DA COMPRA STYLES ===== */
 
-/* Reset and Base */
+
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +20,6 @@ body {
     padding: 0 20px;
 }
 
-/* Header */
 .header {
     background: rgba(15, 20, 25, 0.95);
     backdrop-filter: blur(10px);
@@ -80,7 +78,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Progress Bar */
 .progress-container {
     background: rgba(26, 35, 50, 0.8);
     padding: 2rem 0;
@@ -161,7 +158,6 @@ body {
     font-weight: 600;
 }
 
-/* Main Content */
 .main-content {
     padding: 3rem 0;
 }
@@ -173,7 +169,6 @@ body {
     align-items: start;
 }
 
-/* Order Summary Card */
 .order-summary-card {
     background: linear-gradient(135deg, rgba(26, 35, 50, 0.95), rgba(15, 20, 25, 0.95));
     border-radius: 25px;
@@ -227,7 +222,6 @@ body {
     z-index: 1;
 }
 
-/* Section Titles */
 .section-title {
     display: flex;
     align-items: center;
@@ -247,7 +241,6 @@ body {
     color: #ffffff;
 }
 
-/* Movie Info Section */
 .movie-card {
     display: flex;
     gap: 2rem;
@@ -291,7 +284,6 @@ body {
     text-align: center;
 }
 
-/* Tickets Section */
 .tickets-list {
     padding: 2rem 2.5rem;
 }
@@ -331,7 +323,6 @@ body {
     text-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
 }
 
-/* Bar Section */
 .bar-items {
     padding: 2rem 2.5rem;
 }
@@ -388,7 +379,6 @@ body {
     color: rgba(255, 255, 255, 0.3);
 }
 
-/* Total Section */
 .total-section {
     background: rgba(255, 215, 0, 0.08);
     border-top: 2px solid rgba(255, 215, 0, 0.3);
@@ -426,7 +416,6 @@ body {
     text-shadow: 0 3px 15px rgba(255, 215, 0, 0.4);
 }
 
-/* Action Buttons */
 .action-buttons {
     display: flex;
     gap: 1.5rem;
@@ -499,7 +488,6 @@ body {
     font-size: 1.3rem;
 }
 
-/* Customer Sidebar */
 .customer-sidebar {
     display: flex;
     flex-direction: column;
@@ -590,7 +578,6 @@ body {
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* Security Features */
 .security-features {
     padding: 2rem;
 }
@@ -609,7 +596,6 @@ body {
     text-align: center;
 }
 
-/* Footer */
 .footer {
     background: rgba(15, 20, 25, 0.95);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -657,7 +643,6 @@ body {
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .resumo-layout {
         grid-template-columns: 1fr;
@@ -691,10 +676,6 @@ body {
     }
 }
 
-/* =
-==================================
-   FORMULÁRIO DE DADOS DO CLIENTE
-   =================================== */
 .customer-data-section {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     border: 2px solid #ffd700;

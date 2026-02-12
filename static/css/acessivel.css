@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -94,7 +88,6 @@ v-center a:hover::after,
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -133,7 +126,6 @@ v-center a:hover::after,
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -148,14 +140,7 @@ v-center a:hover::after,
 .user-icon img:hover {
   background-color: #18AFC6;
   transform: scale(1.1);
-}/*/* 
-
-
-/* ==========================
-   BANNER (IMAGEM MELHORADA)
-   - mantém object-fit
-   - adiciona transições e hover suave
-========================== */
+}
 .banner {
     position: relative;
     width: 100%;
@@ -167,18 +152,16 @@ v-center a:hover::after,
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(50%); /* escurece o fundo para destacar texto */
+    filter: brightness(50%); 
     transition: transform 0.6s ease, filter 0.3s ease;
     will-change: transform;
 }
 
-/* pequeno zoom e ajuste de brilho ao hover */
 .banner img:hover {
     transform: scale(1.04);
     filter: brightness(60%);
 }
 
-/* ajuste de foco da imagem para telas pequenas (evita cortar elementos importantes) */
 @media (max-width: 900px) {
   .banner img { object-position: center top; }
 }
@@ -188,10 +171,10 @@ v-center a:hover::after,
 
 .banner-content {
     position: absolute;
-    top: 10%; /* sobe o conteúdo */
+    top: 10%; 
     left: 50%;
     transform: translateX(-50%);
-    color: #FFD700;  /* texto em amarelo */
+    color: #FFD700;  
     text-align: center;
     width: 90%;
     max-width: 1200px;
@@ -210,18 +193,16 @@ v-center a:hover::after,
     line-height: 1.6;
 }
 
-/* Grid 2x2 para os motivos */
 .reasons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    row-gap: 60px; /* espaço vertical entre linhas */
-    column-gap: 80px; /* espaço horizontal entre colunas */
+    row-gap: 60px; 
+    column-gap: 80px; 
     justify-items: center; 
     margin-top: 60px;
     padding: 0 40px;
 }
 
-/* Reason link wrapper for accessibility */
 .reason-link {
     display: block;
     text-decoration: none;
@@ -236,7 +217,7 @@ v-center a:hover::after,
 }
 
 .reason {
-    background: rgba(255, 255, 255, 0.05); /* fundo transparente mais moderno */
+    background: rgba(255, 255, 255, 0.05); 
     padding: 30px 25px;
     border-radius: 20px;
     display: flex;
@@ -246,23 +227,18 @@ v-center a:hover::after,
     max-width: 600px;
     font-size: 1.1rem;
     text-align: left;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* sombra suave */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); 
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     cursor: pointer;
 }
 
 .reason-link:hover .reason,
 .reason-link:focus .reason {
-    transform: scale(1.02); /* apenas escala, sem movimento vertical */
+    transform: scale(1.02); 
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-    background: rgba(255, 255, 255, 0.1); /* ligeiro brilho */
+    background: rgba(255, 255, 255, 0.1); 
 }
 
-/* ==========================
-   ÍCONES DAS RAZÕES (MELHORADOS)
-   - imagens completas e centradas
-   - mantém cores originais
-========================== */
 .reason-icon {
     width: 120px;
     height: 90px;
@@ -272,7 +248,7 @@ v-center a:hover::after,
     border-radius: 45px;
     background: linear-gradient(135deg, #22314A, #283b5c);
     box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    padding: 15px; /* espaço interno para a imagem não tocar nas bordas */
+    padding: 15px; 
     transition: transform 0.35s ease, box-shadow 0.35s ease;
     will-change: transform;
 }
@@ -280,8 +256,8 @@ v-center a:hover::after,
 .reason-icon img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* mostra a imagem completa sem cortar */
-    object-position: center; /* centra a imagem */
+    object-fit: contain; 
+    object-position: center; 
     display: block;
     filter: none;
     transition: transform 0.35s ease, filter 0.35s ease;
@@ -299,7 +275,6 @@ v-center a:hover::after,
     filter: drop-shadow(0 6px 12px rgba(255,215,0,0.12));
 }
 
-/* Responsividade */
 @media (max-width: 900px) {
   .reason-icon { width: 100px; height: 75px; border-radius: 37px; }
 }
@@ -308,18 +283,14 @@ v-center a:hover::after,
   .reason-icon { width: 80px; height: 60px; border-radius: 30px; }
 }
 
-
 .reason p {
     font-size: 1.1rem;
     color: #fff;
     margin: 0;
-    line-height: 1.6;       /* melhor leitura do texto */
+    line-height: 1.6;       
     font-weight: 400;
 }
 
-
-
-/* Responsividade geral */
 @media (max-width: 700px) {
   .footer-container {
     flex-direction: column;
@@ -340,7 +311,6 @@ v-center a:hover::after,
     margin-top: 0;
   }
 
-  /* torna grid das reasons 1 coluna em mobile */
   .reasons {
     grid-template-columns: 1fr;
     gap: 25px;
@@ -348,13 +318,11 @@ v-center a:hover::after,
     padding: 0 12px;
   }
 
-  /* ajusta tamanho da search para ecrãs pequenos */
   .search-container input {
     width: 180px;
     font-size: 14px;
   }
 
-  /* Improve touch targets on mobile */
   .reason-link {
     min-height: 44px;
   }
@@ -366,11 +334,6 @@ v-center a:hover::after,
   }
 }
 
-/* ==========================
-   ADDITIONAL ACCESSIBILITY IMPROVEMENTS
-========================== */
-
-/* Skip to main content link */
 .skip-link {
   position: absolute;
   top: -40px;
@@ -387,7 +350,6 @@ v-center a:hover::after,
   top: 6px;
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: high) {
   .reason {
     border: 2px solid #fff;
@@ -401,7 +363,6 @@ v-center a:hover::after,
   }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -419,7 +380,6 @@ v-center a:hover::after,
   }
 }
 
-/* Screen reader only text */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -432,15 +392,10 @@ v-center a:hover::after,
   border: 0;
 }
 
-/* Ensure minimum color contrast */
 .banner-content {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Better focus indic/
-* ==========================
-   PAGE WRAPPER
-========================== */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -451,10 +406,6 @@ main {
   flex: 1 0 auto;
 }
 
-
-/* ==========================
-   FOOTER PROFISSIONAL
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -898,7 +849,6 @@ main {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;

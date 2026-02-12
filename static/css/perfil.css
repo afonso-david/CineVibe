@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -95,7 +89,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -134,7 +127,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -162,7 +154,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Main Container */
 .perfil-main {
     min-height: 100vh;
     padding: 40px 20px;
@@ -173,7 +164,6 @@ a {
     margin: 0 auto;
 }
 
-/* Card Principal do Perfil */
 .perfil-card {
     background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);
     border-radius: 30px;
@@ -220,7 +210,6 @@ a {
     100% { opacity: 1; }
 }
 
-/* Seção Esquerda */
 .perfil-left {
     position: relative;
     z-index: 2;
@@ -318,7 +307,6 @@ a {
     font-size: 1rem;
 }
 
-/* Container do Email */
 .email-container {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.1), rgba(255, 214, 10, 0.05));
     border: 2px solid rgba(78, 168, 222, 0.3);
@@ -374,7 +362,6 @@ a {
     transform: scale(1.05);
 }
 
-/* Ícone na parte inferior da imagem */
 .avatar-badge-bottom {
     position: absolute;
     bottom: -5px;
@@ -398,8 +385,6 @@ a {
     0%, 100% { transform: translateX(-50%) scale(1); }
     50% { transform: translateX(-50%) scale(1.1); }
 }
-
-
 
 .profile-actions {
     display: flex;
@@ -482,7 +467,6 @@ a {
     background: linear-gradient(135deg, #3B8BC4, #2E7CB8, #2471A3);
 }
 
-/* Seção Direita - Pontos */
 .perfil-right {
     position: relative;
     z-index: 2;
@@ -673,7 +657,6 @@ a {
     background: linear-gradient(135deg, #FFB703, #FF9500, #FF8C00);
 }
 
-/* Seções Adicionais */
 .section-title {
     font-size: 2.5rem;
     font-weight: 900;
@@ -700,8 +683,6 @@ a {
     border-radius: 2px;
 }
 
-
-/* Filmes */
 .filmes-section {
     margin-bottom: 40px;
 }
@@ -881,7 +862,6 @@ a {
     font-size: 0.8rem;
 }
 
-/* Empty State Melhorado */
 .empty-state {
     grid-column: 1 / -1;
     text-align: center;
@@ -933,7 +913,6 @@ a {
     box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
 }
 
-/* Cinemas Favoritos */
 .cinemas-section {
     margin-bottom: 40px;
 }
@@ -1168,7 +1147,6 @@ a {
     background: linear-gradient(135deg, #3B8BC4, #2E7CB8);
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .perfil-card {
         flex-direction: column;
@@ -1226,7 +1204,6 @@ a {
     }
 }
 
-/* Modal de Avaliação */
 .modal-avaliacao {
     position: fixed;
     top: 0;
@@ -1340,17 +1317,6 @@ a {
     transform: scale(1.1);
 }
 
-/* CSS para meias estrelas removido - agora só usamos estrelas inteiras */
-/*
-.star.half {
-    position: relative;
-    color: #444;
-}
-
-.star.half::before {
-    content: '★';
-    position: absolute;
-*/
     left: 0;
     top: 0;
     width: 50%;
@@ -1459,7 +1425,6 @@ a {
     box-shadow: none;
 }
 
-/* Responsividade do Modal */
 @media (max-width: 768px) {
     .modal-content-avaliacao {
         width: 95%;
@@ -1486,7 +1451,6 @@ a {
     }
 }
 
-/* Footer Melhorado */
 .footer {
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
     border-top: 3px solid transparent;
@@ -1574,7 +1538,6 @@ a {
     font-size: 0.95rem;
 }
 
-/* Animações adicionais para elementos interativos */
 .user-email:hover {
     color: #FFD60A;
     transform: translateX(5px);
@@ -1590,7 +1553,6 @@ a {
     50% { transform: scale(1.2); }
 }
 
-/* Modal de Seleção de Avatar */
 .modal-avatar {
     position: fixed;
     top: 0;
@@ -1637,7 +1599,7 @@ a {
     align-items: center;
     padding: 30px 40px;
     border-bottom: 3px solid rgba(255, 214, 10, 0.3);
-    background: transparent; /* Remover gradiente que pode causar flash */
+    background: transparent; 
 }
 
 .modal-header-avatar h2 {
@@ -1712,7 +1674,7 @@ a {
     border-left: 5px solid #FFD60A;
     padding: 15px 20px;
     border-radius: 0 15px 15px 0;
-    background: transparent; /* Remover gradiente que causa flash */
+    background: transparent; 
 }
 
 .category-header h3 {
@@ -1770,7 +1732,6 @@ a {
     border-radius: 12px;
 }
 
-/* Responsividade do Modal de Avatar */
 @media (max-width: 768px) {
     .modal-content-avatar {
         width: 98%;
@@ -1896,7 +1857,6 @@ a {
     box-shadow: 0 5px 15px rgba(78, 168, 222, 0.4);
 }
 
-/* Botões de Confirmação */
 .modal-footer-avatar {
     display: flex;
     justify-content: space-between;
@@ -1978,16 +1938,13 @@ a {
     box-shadow: 0 5px 15px rgba(255, 214, 10, 0.4);
 }
 
-
-/* CSS para container das categorias de avatar */
 .avatar-categories {
     background: transparent !important;
     padding: 0;
     margin: 0;
-    min-height: 200px; /* Altura mínima para evitar mudanças bruscas */
+    min-height: 200px; 
 }
 
-/* Garantir que não há cores de fundo indesejadas */
 .avatar-categories *,
 .avatar-categories *::before,
 .avatar-categories *::after {
@@ -1998,7 +1955,6 @@ a {
     animation: none !important;
 }
 
-/* Remover estilos padrão de parágrafos que podem causar flash */
 .avatar-categories p {
     background: transparent !important;
     color: #B8C5D1 !important;
@@ -2007,7 +1963,6 @@ a {
     text-align: center !important;
 }
 
-/* Exceções específicas para elementos que DEVEM ter fundo */
 .avatar-categories .avatar-option {
     background: linear-gradient(135deg, #2C3E50, #1B263B) !important;
     transition: transform 0.2s ease !important;
@@ -2036,14 +1991,12 @@ a {
     transform: translateY(-2px);
 }
 
-/* Forçar transparência em headers de categoria */
 .avatar-categories .category-header {
     background: transparent !important;
     background-color: transparent !important;
     background-image: none !important;
 }
 
-/* Remover qualquer flash de cores nos elementos de categoria */
 .avatar-categories .avatar-category {
     background: transparent !important;
     background-color: transparent !important;
@@ -2087,7 +2040,6 @@ a {
     transition: none !important;
 }
 
-/* Regra super agressiva para evitar qualquer flash de cores */
 .avatar-categories div:not(.avatar-option) {
     background: transparent !important;
     background-color: transparent !important;
@@ -2096,7 +2048,6 @@ a {
     box-shadow: none !important;
 }
 
-/* Garantir que elementos criados dinamicamente não tenham cores estranhas */
 .avatar-categories [style*="background"] {
     background: transparent !important;
     background-color: transparent !important;
@@ -2108,7 +2059,7 @@ a {
     background-color: transparent !important;
     background-image: none !important;
 }
-/* ===== CSS MOVIDO DO HTML ===== */
+
 .user-header {
     display: flex;
     align-items: center;
@@ -2259,7 +2210,6 @@ a {
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
 }
 
-/* Modal de Alterar Senha */
 .modal-alterar-senha {
     position: fixed;
     top: 0;
@@ -2420,7 +2370,6 @@ a {
     transform: none;
 }
 
-/* ===== ESTATÍSTICAS MELHORADAS ===== */
 .stats-section {
     margin: 60px 0;
     background: none;
@@ -2474,7 +2423,6 @@ a {
     opacity: 1;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);

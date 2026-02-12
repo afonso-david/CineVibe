@@ -14,9 +14,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -33,7 +30,6 @@ a {
   margin-top: 20px;
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -83,7 +79,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -122,7 +117,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -135,15 +129,10 @@ a {
 }
 
 .user-icon img:hover {
-  background-color: #18AFC6;  /* azul de destaque */
-  transform: scale(1.1);      /* ligeiro zoom ao passar o rato */
+  background-color: #18AFC6;  
+  transform: scale(1.1);      
 }
 
-
-
-/* ==========================
-   CINEMA SECTION
-========================== */
 .cinema-section {
   background: #0D1B2A;
   padding: 0 20px 60px;
@@ -152,9 +141,6 @@ a {
   margin-top: 100px;
 }
 
-/* ==========================
-   FILTROS
-========================== */
 .filter-container {
   max-width: 900px;
   margin: 0 auto 50px;
@@ -204,9 +190,6 @@ a {
   cursor: pointer;
 }
 
-/* ==========================
-   CINEMA GRID
-========================== */
 .cinema-grid {
   display: grid;
   gap: 30px;
@@ -227,9 +210,6 @@ a {
   }
 }
 
-/* ==========================
-   CINEMA CARD
-========================== */
 .cinema-card {
   background: linear-gradient(135deg, #1B263B 0%, #15202E 100%);
   border-radius: 16px;
@@ -375,9 +355,6 @@ a {
   transform: translateY(-2px);
 }
 
-/* ==========================
-   NO CINEMAS MESSAGE
-========================== */
 .no-cinemas {
   grid-column: 1 / -1;
   text-align: center;
@@ -386,9 +363,6 @@ a {
   font-size: 1.2rem;
 }
 
-/* ==========================
-   INFO SECTION
-========================== */
 .info-section {
   max-width: 1400px;
   margin: 80px auto 0;
@@ -425,9 +399,6 @@ a {
   font-size: 1rem;
 }
 
-/* ==========================
-   RESPONSIVE
-========================== */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2.5rem;
@@ -492,12 +463,6 @@ a {
   }
 }
 
-
-
-
-/* ==========================
-   FOOTER PROFISSIONAL
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -925,7 +890,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1024px) {
   .footer-container {
     grid-template-columns: 1fr 1fr;
@@ -1043,8 +1007,6 @@ a {
   }
 }
 
-
-/* Imagens dos Cinemas */
 .cinema-image {
   position: relative;
   width: 100%;
@@ -1064,7 +1026,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Botão Favorito */
 .btn-favorito {
   position: absolute;
   top: 15px;

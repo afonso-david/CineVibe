@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessão Exclusiva | CineVibe</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sessao_exclusiva.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
-    
-    <!-- Meta tags para SEO -->
+
     <meta name="description" content="Sessões exclusivas e personalizadas no CineVibe - Experiências cinematográficas únicas">
     <meta name="keywords" content="cinema, sessões exclusivas, experiências VIP, CineVibe">
     <meta property="og:title" content="Sessão Exclusiva | CineVibe">
@@ -25,7 +22,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -51,7 +48,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -63,9 +59,8 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-        <!-- Main Content -->
         <main>
-            <!-- Hero Section -->
+            
             <section class="hero-section">
                 <div class="hero-background" style="background-image: url('{{ url_for("static", filename="imgs/filmes/taxi-driver-filmi.jpg") }}');"></div>
                 <div class="hero-overlay"></div>
@@ -83,7 +78,6 @@
                 </div>
             </section>
 
-            <!-- Salas Section -->
             <section class="salas-section" id="salas">
                 <div class="container">
                     <h2 class="section-title">Salas Exclusivas</h2>
@@ -219,7 +213,6 @@
                 </div>
             </section>
 
-            <!-- Features Section -->
             <section class="features-section">
                 <div class="container">
                     <h2 class="section-title">Serviços Exclusivos</h2>
@@ -261,7 +254,6 @@
                 </div>
             </section>
 
-            <!-- CTA Section -->
             <section class="cta-section">
                 <div class="cta-content">
                     <h2 class="cta-title">Pronto Para Uma Experiência Única?</h2>
@@ -377,19 +369,15 @@
         </footer>
     </div>
 
-    <!-- Modal Matrix Login -->
     <div id="matrixModal" class="matrix-modal" style="display: none;">
         <div class="matrix-overlay"></div>
-        
-        <!-- Imagem de fundo com tamanho do container original -->
+
         <div class="matrix-background-image"></div>
-        
-        <!-- Botão de fechar flutuante -->
+
         <button class="matrix-close" onclick="closeMatrixModal()">
             <i class="fas fa-times"></i>
         </button>
-        
-        <!-- Conteúdo flutuante sem container -->
+
         <div class="matrix-character">
         </div>
         
@@ -427,12 +415,10 @@
         <div class="matrix-quote">
             "Lembre-se... tudo o que estou a oferecer é a verdade, nada mais."
         </div>
-        
-        <!-- Matrix Rain Effect -->
+
         <canvas id="matrixRain" class="matrix-rain"></canvas>
     </div>
 
-    <!-- Modal de Reserva Exclusiva -->
     <div id="reservaExclusivaModal" class="modal-reserva-exclusiva" style="display: none;">
         <div class="modal-content-reserva">
             <div class="modal-header-reserva">
@@ -447,7 +433,7 @@
             
             <div class="modal-body-reserva">
                 <form id="formReservaExclusiva">
-                    <!-- Informações da Sala -->
+                    
                     <div class="sala-info">
                         <h3 id="salaNome">Sala VIP Premium</h3>
                         <div class="sala-preco">
@@ -456,7 +442,6 @@
                         </div>
                     </div>
 
-                    <!-- Seleção de Filme -->
                     <div class="form-group-reserva">
                         <label for="filmeSelect">Escolha o Filme</label>
                         <select id="filmeSelect" name="filme" required>
@@ -464,13 +449,11 @@
                         </select>
                     </div>
 
-                    <!-- Data da Sessão -->
                     <div class="form-group-reserva">
                         <label for="dataSelect">Data da Sessão</label>
                         <input type="date" id="dataSelect" name="data" required min="">
                     </div>
 
-                    <!-- Hora da Sessão -->
                     <div class="form-group-reserva">
                         <label for="horaSelect">Hora da Sessão</label>
                         <select id="horaSelect" name="hora" required>
@@ -483,7 +466,6 @@
                         </select>
                     </div>
 
-                    <!-- Número de Pessoas -->
                     <div class="form-group-reserva">
                         <label for="numPessoas">Número de Pessoas</label>
                         <select id="numPessoas" name="pessoas" required>
@@ -501,7 +483,6 @@
                         </select>
                     </div>
 
-                    <!-- Dados do Cliente (se não logado) -->
                     <div id="dadosCliente" style="display: none;">
                         <h4>Dados de Contacto</h4>
                         <div class="form-group-reserva">
@@ -518,7 +499,6 @@
                         </div>
                     </div>
 
-                    <!-- Resumo do Pedido -->
                     <div class="resumo-pedido">
                         <h4>Resumo do Pedido</h4>
                         <div class="resumo-item">

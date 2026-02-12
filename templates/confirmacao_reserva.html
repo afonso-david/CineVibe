@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -33,7 +33,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -45,11 +44,9 @@
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main style="padding: 2rem 0; background: #0D1B2A; min-height: 100vh;">
             <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
-                
-                <!-- Success Message -->
+
                 <div class="success-header">
                     <div class="success-icon">
                         <i class="fas fa-check-circle"></i>
@@ -58,7 +55,6 @@
                     <p>A sua reserva foi processada com sucesso. Receberá um email de confirmação em breve.</p>
                 </div>
 
-                <!-- Reservation Details -->
                 <div class="reservation-card">
                     <div class="card-header">
                         <h2><i class="fas fa-ticket-alt"></i> Detalhes da Reserva</h2>
@@ -68,7 +64,7 @@
                     </div>
 
                     <div class="reservation-content">
-                        <!-- Movie Info -->
+                        
                         <div class="movie-section">
                             <img src="{{ reserva.poster_url if reserva.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
                                  alt="{{ reserva.titulo }}" class="movie-poster">
@@ -97,14 +93,12 @@
                             </div>
                         </div>
 
-                        <!-- Customer Info -->
                         <div class="customer-section">
                             <h4><i class="fas fa-user"></i> Dados do Cliente</h4>
                             <p><strong>Nome:</strong> {{ reserva.nome_cliente }}</p>
                             <p><strong>Email:</strong> {{ reserva.email_cliente }}</p>
                         </div>
 
-                        <!-- Bar Items -->
                         {% if bar_items %}
                         <div class="bar-section">
                             <h4><i class="fas fa-utensils"></i> Itens do Bar</h4>
@@ -117,7 +111,6 @@
                         </div>
                         {% endif %}
 
-                        <!-- Payment Info -->
                         <div class="payment-section">
                             <h4><i class="fas fa-credit-card"></i> Pagamento</h4>
                             <div class="payment-row">
@@ -132,7 +125,6 @@
                     </div>
                 </div>
 
-                <!-- Important Notes -->
                 <div class="notes-card">
                     <h3><i class="fas fa-info-circle"></i> Informações Importantes</h3>
                     <ul>
@@ -146,7 +138,6 @@
                     </ul>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="action-buttons">
                     <button class="print-btn" onclick="window.print()">
                         <i class="fas fa-print"></i>

@@ -110,7 +110,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -137,7 +137,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}" class="active">Filmes</a>
@@ -148,7 +147,7 @@
             <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav> 
-       <!-- Banner Cinematográfico -->
+       
         <section class="banner" style="background-image: url('{{ url_for('static', filename=filme.imagem_grande) if filme.imagem_grande else url_for('static', filename='imgs/filmes/banner-default.jpg') }}');">
             <div class="banner-content">
                 <div class="poster-wrapper">
@@ -165,8 +164,7 @@
                     </button>
                 </div>
             </div>
-            
-            <!-- Botão de Play do Trailer -->
+
             {% if filme.trailer_url %}
             <div class="trailer-play-overlay">
                 <button class="trailer-play-btn" onclick="abrirTrailer('{{ filme.trailer_url }}', '{{ filme.titulo }}')">
@@ -179,9 +177,9 @@
             </div>
             {% endif %}
         </section> 
-       <!-- Conteúdo Principal -->
+       
         <main class="conteudo-principal">
-            <!-- Sinopse Completa -->
+            
             {% if filme.sinopse %}
             <section class="sinopse-completa">
                 <h2>Sinopse</h2>
@@ -189,9 +187,8 @@
             </section>
             {% endif %}
 
-            <!-- Container Elenco + Detalhes -->
             <div class="elenco-detalhes-wrapper">
-                <!-- Elenco Principal -->
+                
                 {% if elenco %}
                 <section class="elenco">
                     <h2>Elenco Principal</h2>
@@ -210,7 +207,7 @@
                     </div>
                 </section>
                 {% endif %}  
-              <!-- Informações do Filme -->
+              
                 <section class="informacoes-direita">
                     <h2>Informações</h2>
                     
@@ -264,7 +261,7 @@
                         </div>
                         {% endif %}
                     </div>         
-           <!-- Avaliações Externas -->
+           
                     {% if filme.rotten_tomatoes_score or filme.imdb_rating %}
                     <div class="info-divider"></div>
                     <h3 class="avaliacoes-titulo">Avaliações</h3>
@@ -331,7 +328,7 @@
                         {% endif %}
                     </div>
                     {% endif %}         
-           <!-- Críticas e Avaliações dos Usuários -->
+           
                     <div class="avaliacoes-usuarios-container">
                         <div class="info-divider"></div>
                         <div class="avaliacoes-header">
@@ -343,10 +340,10 @@
                         </div>
                         
                         {% if logged_in %}
-                        <!-- Seção de Avaliação do Utilizador -->
+                        
                         {% if user_avaliacao %}
                         <div class="minha-avaliacao-card" id="minhaAvaliacaoCard">
-                            <!-- Modo Visualização -->
+                            
                             <div class="modo-visualizacao" id="modoVisualizacao">
                                 <div class="card-header-minha">
                                     <div class="usuario-info-minha">
@@ -384,7 +381,6 @@
                                 </div>
                             </div>
 
-                            <!-- Modo Edição -->
                             <div class="modo-edicao" id="modoEdicao" style="display: none;">
                                 <div class="form-header-inline">
                                     <img src="{{ url_for('static', filename=avatar) }}" 
@@ -439,7 +435,7 @@
                             </div>
                         </div>
                         {% else %}
-                        <!-- Prompt para Avaliar -->
+                        
                         <div class="prompt-avaliar">
                             <div class="prompt-content">
                                 <img src="{{ url_for('static', filename=avatar) }}" 
@@ -457,8 +453,7 @@
                         </div>
                         {% endif %}
                         {% endif %}
-                        
-                        <!-- Lista de Todas as Avaliações -->
+
                         {% if avaliacoes %}
                         {% for avaliacao in avaliacoes %}
                         <div class="minha-avaliacao-card">
@@ -501,20 +496,19 @@
                 </section>
             </div>
         </main>      
-  <!-- Sessões e Horários -->
+  
         <section class="sessoes" id="sessoes">
             <h2>Sessões e Horários</h2>
-            
-            <!-- Navegação de Dias -->
+
             <div class="nav-dias">
                 <h3 class="nav-dias-titulo">Selecione o Dia</h3>
                 <div class="dias-container" id="diasContainer">
-                    <!-- Dias serão gerados dinamicamente pelo JavaScript -->
+                    
                 </div>
             </div>
 
             <div class="sessoes-wrapper">
-                <!-- Filtros por Região -->
+                
                 <div class="filtros-regiao">
                     <button class="filtro-regiao-btn active" data-regiao="todas" onclick="filtrarPorRegiao('todas')">
                         Todas as Regiões
@@ -526,14 +520,12 @@
                     {% endfor %}
                 </div>
 
-                <!-- Lista de Cinemas -->
                 <div class="cinemas-lista" id="cinemasLista">
                     {% for cinema in filme_cinemas %}
                     <div class="cinema" data-regiao="{{ cinema.regiao|lower }}">
                         <h3 class="nome-cinema">{{ cinema.nome }}</h3>
                         <p style="color: #B8C5D1; margin-bottom: 20px;">{{ cinema.regiao }}</p>
-                        
-                        <!-- Botões de Tipos de Sessão -->
+
                         <div class="botoes-sessao">
                             {% if tipos_sessao_por_cinema.get(cinema.id) %}
                                 {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
@@ -549,7 +541,6 @@
                             {% endif %}
                         </div>
 
-                        <!-- Grupos de Sessões (inicialmente ocultos) -->
                         {% if tipos_sessao_por_cinema.get(cinema.id) %}
                             {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
                             <div class="sessao-grupo hidden" 
@@ -558,10 +549,10 @@
                                  data-tipo="{{ tipo.id }}">
                                 <div class="horarios">
                                     <div class="horarios-wrapper" id="horarios-{{ cinema.id }}-{{ tipo.id }}">
-                                        <!-- Horários serão carregados dinamicamente -->
+                                        
                                     </div>
                                     <div class="salas-wrapper" id="salas-{{ cinema.id }}-{{ tipo.id }}">
-                                        <!-- Informações das salas serão mostradas aqui -->
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -580,7 +571,7 @@
                 </div>
             </div>
         </section>    
-    <!-- Painel Flutuante de Compra -->
+    
         <div id="comprar-bilhete-flutuante">
             <div class="conteudo-bilhete">
                 <div id="info-bilhete">
@@ -595,19 +586,15 @@
             </div>
         </div>
 
-        <!-- Modal Matrix Login -->
         <div id="matrixModal" class="matrix-modal" style="display: none;">
             <div class="matrix-overlay"></div>
-            
-            <!-- Imagem de fundo com tamanho do container original -->
+
             <div class="matrix-background-image"></div>
-            
-            <!-- Botão de fechar flutuante -->
+
             <button class="matrix-close" onclick="closeMatrixModal()">
                 <i class="fas fa-times"></i>
             </button>
-            
-            <!-- Conteúdo flutuante sem container -->
+
             <div class="matrix-character">
             </div>
             
@@ -645,28 +632,26 @@
             <div class="matrix-quote">
                 "Lembre-se... tudo o que estou a oferecer é a verdade, nada mais."
             </div>
-            
-            <!-- Matrix Rain Effect -->
+
             <canvas id="matrixRain" class="matrix-rain"></canvas>
         </div>
-        
-        <!-- Modal do Trailer -->
+
         <div class="modal-overlay" id="modalTrailer">
             <div class="modal-content modal-trailer">
                 <button class="modal-close" onclick="fecharTrailer()">&times;</button>
                 <div class="trailer-modal-content">
                     <h2 id="trailerTitulo">Trailer</h2>
                     <div class="trailer-video-container" id="trailerContainer">
-                        <!-- Vídeo será inserido aqui dinamicamente -->
+                        
                     </div>
                 </div>
             </div>
         </div>   
-     <!-- Footer -->
+     
         <footer class="footer">
             <div class="footer-main">
                 <div class="footer-container">
-                    <!-- Logo e Descrição -->
+                    
                     <div class="footer-section">
                         <div class="footer-logo">
                             <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
@@ -740,8 +725,7 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Footer Bottom -->
+
             <div class="footer-bottom">
                 <div class="footer-bottom-container">
                     <div class="footer-bottom-content">
@@ -764,7 +748,7 @@
             </div>
         </footer>
     </div> 
-   <!-- JavaScript Premium -->
+   
     <script>
         // Dados do filme e horários (passados do backend)
         const filmeId = {{ filme.id }};

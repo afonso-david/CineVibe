@@ -1,6 +1,5 @@
-/* ===== ADMIN BAR PROFESSIONAL STYLES - Following admin_filmes_pro.css ===== */
 
-/* Top Bar Professional */
+
 .top-bar-pro {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     padding: 24px 32px;
@@ -69,14 +68,12 @@
     font-size: 0.9rem;
 }
 
-/* Dashboard Content Professional */
 .dashboard-content-pro {
     padding: 32px;
     background: #0f0f23;
     min-height: calc(100vh - 140px);
 }
 
-/* Control Panel */
 .control-panel {
     background: #1a1a2e;
     border-radius: 16px;
@@ -268,7 +265,6 @@
     border-color: #FFD700;
 }
 
-/* Grid View */
 .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -406,7 +402,6 @@
     font-size: 0.9rem;
 }
 
-/* Table View */
 .movies-table-container {
     background: #1a1a2e;
     border-radius: 16px;
@@ -558,7 +553,6 @@
     transform: translateY(-2px);
 }
 
-/* Modal Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -718,7 +712,6 @@
     transform: translateY(-2px);
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .movies-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -783,8 +776,6 @@
     }
 }
 
-
-/* ===== TABS STYLES ===== */
 .tabs-container {
     display: flex;
     gap: 12px;
@@ -834,7 +825,6 @@
     display: block;
 }
 
-/* ===== MENUS STYLES ===== */
 .menus-container {
     background: #1a1a2e;
     border-radius: 16px;
@@ -1012,8 +1002,6 @@
     transform: translateY(-2px);
 }
 
-
-/* ===== MODAL EDITAR MENU ===== */
 .modal-large {
     max-width: 800px;
 }
@@ -1139,7 +1127,6 @@
     transform: translateY(-2px);
 }
 
-/* Modal Seletor de Produtos */
 .seletor-search {
     margin-bottom: 20px;
 }
@@ -1306,7 +1293,6 @@
     font-style: italic;
 }
 
-/* Upload de Imagens */
 .upload-container {
     display: flex;
     flex-direction: column;
@@ -1363,8 +1349,6 @@
     display: block;
 }
 
-
-/* Admin Profile no Top Bar */
 .admin-profile-top {
     display: flex;
     align-items: center;
@@ -1433,8 +1417,6 @@
     gap: 20px;
 }
 
-
-/* Toppings Section */
 .toppings-container {
     padding: 24px;
 }

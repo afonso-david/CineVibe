@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -33,7 +33,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -45,11 +44,9 @@
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main style="padding: 2rem 0; background: #0D1B2A; min-height: 100vh;">
             <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-                
-                <!-- Movie Info Card -->
+
                 <div class="movie-info-card">
                     <div class="movie-info-content">
                         {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
@@ -83,26 +80,23 @@
                     </div>
                 </div>
 
-                <!-- Seat Selection -->
                 <div class="seat-selection">
                     <h3>Selecione {{ quantidade }} lugar{{ 'es' if quantidade > 1 else '' }}</h3>
-                    
-                    <!-- Cinema Screen -->
+
                     <div class="cinema-screen"></div>
-                    
-                    <!-- Seat Map -->
+
                     <div class="seat-map">
                         {% for fileira in lugares %}
                             {% if fileira.tipo == 'divisao_horizontal' %}
-                                <!-- Divisão Horizontal -->
+                                
                                 <div class="seat-divider">
                                     <div class="divider-line-horizontal"></div>
                                 </div>
                             {% else %}
-                                <!-- Fileira Normal -->
+                                
                                 <div class="seat-row">
                                     {% for lugar in fileira.lugares %}
-                                    <!-- DEBUG: {{ lugar.nome }} ocupado={{ lugar.ocupado }} -->
+                                    
                                     <div class="seat {{ 'occupied' if lugar.ocupado else ('accessible' if lugar.acessivel else 'available') }}" 
                                          data-seat="{{ lugar.nome }}"
                                          data-row="{{ fileira.letra }}"
@@ -114,8 +108,7 @@
                                 </div>
                             {% endif %}
                         {% endfor %}
-                        
-                        <!-- Entradas da Sala -->
+
                         <div class="cinema-entrances">
                             <div class="entrance entrance-left">
                                 <img src="{{ url_for('static', filename='imgs/icons/entrada.png') }}" alt="Entrada Esquerda">
@@ -127,8 +120,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Legend -->
+
                     <div class="seat-legend">
                         <div class="legend-item">
                             <div class="legend-seat legend-available"></div>
@@ -147,8 +139,7 @@
                             <span>Ocupado</span>
                         </div>
                     </div>
-                    
-                    <!-- Selection Summary -->
+
                     <div class="selection-summary">
                         <div class="summary-row">
                             <span>Lugares selecionados:</span>
@@ -163,8 +154,7 @@
                             <span id="totalPrice">€0.00</span>
                         </div>
                     </div>
-                    
-                    <!-- Buttons -->
+
                     <div class="button-group">
                         <a href="{{ url_for('reserva', horario=id_horario_sessao, cinema=cinema_id, tipo=id_tipo_sessao, data=data_sessao) }}" class="back-btn">
                             <i class="fas fa-arrow-left"></i> Voltar

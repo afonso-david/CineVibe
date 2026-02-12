@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
 </head>
 <body>
-    <!-- Header -->
+    
     <header class="header">
         <div class="container">
             <div class="logo">
@@ -36,7 +36,6 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="container">
             <div class="page-header">
@@ -45,7 +44,7 @@
             </div>
             
             <div class="pagamento-container">
-                <!-- Resumo da Reserva -->
+                
                 <div class="resumo-reserva">
                     <h2><i class="fas fa-ticket-alt"></i> Resumo da Reserva</h2>
                     
@@ -102,12 +101,11 @@
                     </div>
                 </div>
 
-                <!-- Métodos de Pagamento -->
                 <div class="metodos-pagamento">
                     <h2><i class="fas fa-lock"></i> Escolha o Método de Pagamento</h2>
                     
                     <div class="payment-methods">
-                        <!-- Cartão de Crédito/Débito -->
+                        
                         <div class="payment-method" data-method="card">
                             <div class="method-header">
                                 <div class="method-icon">
@@ -123,7 +121,6 @@
                             </div>
                         </div>
 
-                        <!-- PayPal -->
                         <div class="payment-method" data-method="paypal">
                             <div class="method-header">
                                 <div class="method-icon paypal">
@@ -139,7 +136,6 @@
                             </div>
                         </div>
 
-                        <!-- MB Way -->
                         <div class="payment-method" data-method="mbway">
                             <div class="method-header">
                                 <div class="method-icon mbway">
@@ -155,7 +151,6 @@
                             </div>
                         </div>
 
-                        <!-- Multibanco -->
                         <div class="payment-method" data-method="multibanco">
                             <div class="method-header">
                                 <div class="method-icon multibanco">
@@ -172,7 +167,6 @@
                         </div>
                     </div>
 
-                    <!-- Botões de Ação -->
                     <div class="action-buttons">
                         <button type="button" class="btn-secondary" onclick="history.back()">
                             <i class="fas fa-arrow-left"></i>
@@ -189,7 +183,6 @@
         </div>
     </main>
 
-    <!-- Modal de Loading -->
     <div id="loadingModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="loading-content">
@@ -200,7 +193,6 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
         let selectedMethod = null;
 
@@ -258,7 +250,7 @@
     </script>
 </body>
 </html>
-                        <!-- Informações do filme -->
+                        
                         <div class="secao-resumo">
                             <h3>🎬 Filme</h3>
                             <div class="filme-info">
@@ -272,8 +264,7 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Informações da sessão -->
+
                         <div class="secao-resumo">
                             <h3>🎭 Sessão</h3>
                             <p><strong>Cinema:</strong> {{ dados_pagamento.cinema.nome or 'N/A' }}</p>
@@ -281,15 +272,13 @@
                             <p><strong>Horário:</strong> {{ dados_pagamento.horario.hora_str or 'N/A' }}</p>
                             <p><strong>Tipo:</strong> {{ dados_pagamento.tipo_sessao.nome or 'N/A' }}</p>
                         </div>
-                        
-                        <!-- Lugares -->
+
                         <div class="secao-resumo">
                             <h3>🪑 Lugares</h3>
                             <p><strong>Lugares selecionados:</strong> {{ dados_pagamento.lugares|join(', ') if dados_pagamento.lugares else 'Nenhum' }}</p>
                             <p><strong>Quantidade:</strong> {{ dados_pagamento.lugares|length if dados_pagamento.lugares else 0 }}</p>
                         </div>
-                        
-                        <!-- Itens do Bar -->
+
                         {% if dados_pagamento.bar_detalhes %}
                         <div class="secao-resumo">
                             <h3>🍿 Bar</h3>
@@ -304,8 +293,7 @@
                             </div>
                         </div>
                         {% endif %}
-                        
-                        <!-- Total -->
+
                         <div class="secao-resumo total-secao">
                             <h3>💰 Preços</h3>
                             <div class="preco-linha">
@@ -326,7 +314,7 @@
                     </div>
                     
                     {% else %}
-                    <!-- Resumo para outros tipos de pagamento -->
+                    
                     <div class="reserva-detalhes">
                         <p><strong>Filme:</strong> {{ filme.titulo if filme else 'N/A' }}</p>
                         <p><strong>Cinema:</strong> {{ cinema.nome if cinema else 'N/A' }}</p>
@@ -336,11 +324,10 @@
                     </div>
                     {% endif %}
                 </div>
-                
-                <!-- Seção de Dados do Cliente / Métodos de Pagamento -->
+
                 <div class="checkout-section">
                     {% if logged_in %}
-                    <!-- Usuário logado - mostrar info e métodos de pagamento -->
+                    
                     <div class="user-info-section">
                         <h2>👤 Dados do Cliente</h2>
                         <div class="user-info">
@@ -355,8 +342,7 @@
                     
                     <div class="metodos-pagamento">
                         <h2>💳 Método de Pagamento</h2>
-                        
-                        <!-- Seção de Código de Desconto -->
+
                         <div class="codigo-desconto-section">
                             <div class="codigo-desconto-header">
                                 <h3><i class="fas fa-tag"></i> Código de Desconto</h3>
@@ -458,7 +444,7 @@
                     </div>
                     
                     {% else %}
-                    <!-- Usuário não logado - formulário de dados -->
+                    
                     <div class="guest-form-section">
                         <h2>👤 Dados do Cliente</h2>
                         <form id="guestForm" class="guest-form">
@@ -493,8 +479,7 @@
                             </button>
                         </form>
                     </div>
-                    
-                    <!-- Métodos de pagamento (inicialmente ocultos) -->
+
                     <div class="metodos-pagamento" id="metodosSection" style="display: none;">
                         <h2>💳 Método de Pagamento</h2>
                         <div class="pagamento-opcoes">
@@ -554,7 +539,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">

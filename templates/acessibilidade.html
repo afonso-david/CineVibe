@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -37,7 +37,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -49,9 +48,8 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Section -->
+        
         <section class="hero-section">
             <div class="hero-text">
                 <div class="hero-badge">Cinema Para Todos</div>
@@ -76,7 +74,6 @@
             </div>
         </section>
 
-        <!-- Stats Section -->
         <section class="stats-section">
             <div class="stats-grid">
                 <div class="stat-item">
@@ -98,7 +95,6 @@
             </div>
         </section>
 
-        <!-- Services Section -->
         <section class="benefits-section" id="servicos">
             <div class="section-header">
                 <h2>Os Nossos Serviços de Acessibilidade</h2>
@@ -126,7 +122,6 @@
             </div>
         </section>
 
-        <!-- About Section -->
         <section class="about-section">
             <div class="section-header">
                 <h2>O Nosso Compromisso com a Acessibilidade</h2>
@@ -158,7 +153,6 @@
             </div>
         </section>
 
-        <!-- Steps Section -->
         <section class="steps-section">
             <div class="section-header">
                 <h2>Como Aceder aos Nossos Serviços</h2>
@@ -186,7 +180,6 @@
             </div>
         </section>
 
-        <!-- Testimonials Section -->
         <section class="testimonials-section">
             <div class="section-header">
                 <h2>Histórias da Nossa Comunidade</h2>
@@ -229,7 +222,6 @@
             </div>
         </section>
 
-        <!-- FAQ Section -->
         <section class="faq-section">
             <div class="section-header">
                 <h2>Perguntas Frequentes</h2>
@@ -263,7 +255,6 @@
             </div>
         </section>
 
-        <!-- CTA Section -->
         <section class="cta-section">
             <div class="cta-content">
                 <h2>Pronto para uma experiência cinematográfica inclusiva?</h2>
@@ -290,11 +281,10 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-main">
             <div class="footer-container">
-                <!-- Logo e Descrição -->
+                
                 <div class="footer-section">
                     <div class="footer-logo">
                         <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
@@ -311,7 +301,6 @@
                     </div>
                 </div>
 
-                <!-- Links Rápidos -->
                 <div class="footer-section">
                     <h4>Links Rápidos</h4>
                     <ul class="footer-links">
@@ -324,7 +313,6 @@
                     </ul>
                 </div>
 
-                <!-- Experiências -->
                 <div class="footer-section">
                     <h4>Acessibilidade</h4>
                     <ul class="footer-links">
@@ -336,7 +324,6 @@
                     </ul>
                 </div>
 
-                <!-- Suporte -->
                 <div class="footer-section">
                     <h4>Suporte</h4>
                     <ul class="footer-links">
@@ -349,7 +336,6 @@
                     </ul>
                 </div>
 
-                <!-- Newsletter -->
                 <div class="footer-section newsletter-section">
                     <h4>Newsletter</h4>
                     <p>Receba as últimas novidades, promoções exclusivas e estreias em primeira mão.</p>
@@ -397,7 +383,6 @@
         </div>
     </footer>
 
-    <!-- Smooth Scroll Script -->
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {

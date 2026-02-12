@@ -1,13 +1,11 @@
-/* Página de Pesquisa - CineVibe */
 
-/* Container principal */
+
 .pesquisa-container {
   padding: 40px 80px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Títulos e texto */
 .pesquisa-title {
   color: #FFD60A;
   font-family: 'Montserrat', sans-serif;
@@ -30,14 +28,12 @@
   font-size: 1.8rem;
 }
 
-/* Grid de filmes */
 .pesquisa-filmes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
 }
 
-/* Grid de cinemas */
 .pesquisa-cinemas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -76,7 +72,6 @@
   font-weight: 600;
 }
 
-/* Grid de menus */
 .pesquisa-menus-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -117,7 +112,6 @@
   font-weight: 700;
 }
 
-/* Sem resultados */
 .pesquisa-no-results {
   text-align: center;
   padding: 60px 20px;
@@ -139,7 +133,6 @@
   font-weight: 700;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .pesquisa-container {
     padding: 20px;

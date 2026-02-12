@@ -1,6 +1,5 @@
-/* ===== ADMIN CINEMAS PROFESSIONAL STYLES ===== */
 
-/* Grid View Styles */
+
 .movie-card-pro {
     background: rgba(31, 41, 55, 0.8);
     border-radius: 16px;
@@ -143,7 +142,6 @@
     background: linear-gradient(135deg, #f59e0b, #d97706);
 }
 
-/* Table View Styles */
 .cinema-title-info h4 {
     font-size: 1rem;
     font-weight: 600;
@@ -224,14 +222,12 @@
     transform: scale(1.1);
 }
 
-/* Dashboard Content Professional */
 .dashboard-content-pro {
     padding: 32px;
     background: #0f0f23;
     min-height: calc(100vh - 140px);
 }
 
-/* Control Panel */
 .control-panel {
     background: #1a1a2e;
     border-radius: 16px;
@@ -285,7 +281,6 @@
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* Filter Controls */
 .filter-group {
     display: flex;
     gap: 16px;
@@ -335,7 +330,6 @@
     transform: translateY(-1px);
 }
 
-/* View Controls */
 .view-controls {
     display: flex;
     justify-content: space-between;
@@ -401,7 +395,6 @@
     color: #ffffff;
 }
 
-/* Movies Grid */
 .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -409,7 +402,6 @@
     padding: 20px 0;
 }
 
-/* Table View */
 .movies-table-container {
     background: #1a1a2e;
     border-radius: 16px;
@@ -460,7 +452,6 @@
     background: rgba(255, 215, 0, 0.05);
 }
 
-/* Top Bar Professional */
 .top-bar-pro {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     padding: 24px 32px;
@@ -533,7 +524,6 @@
     
 }
 
-/* Modal Professional */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -706,7 +696,6 @@
     border-color: #FFD700;
 }
 
-/* Empty State */
 .empty-state {
     text-align: center;
     padding: 80px 20px;
@@ -733,7 +722,6 @@
     margin: 0;
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .movies-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -95,7 +89,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -134,7 +127,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -151,14 +143,12 @@ a {
   transform: scale(1.1);
 }
 
-/* Main Content */
 .main-content {
     max-width: 1400px;
     margin: 0 auto;
     padding: 4rem 2rem;
 }
 
-/* Hero Section */
 .hero-section {
     display: grid;
     grid-template-columns: 1fr 600px;
@@ -236,7 +226,6 @@ a {
     display: none;
 }
 
-/* Steps Section */
 .steps-section {
     margin-bottom: 6rem;
 }
@@ -290,7 +279,6 @@ a {
     line-height: 1.6;
 }
 
-/* CTA Section */
 .cta-section {
     background: rgba(255, 214, 10, 0.1);
     border: 1px solid rgba(255, 214, 10, 0.2);
@@ -330,7 +318,6 @@ a {
     box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
-/* About Section - Design Premium igual ao LGP */
 .about-section {
     padding: 120px 0;
     background: 
@@ -499,7 +486,6 @@ a {
     opacity: 0.9;
 }
 
-/* Enhanced Hero Section */
 .hero-badge {
     display: inline-block;
     background: rgba(255, 214, 10, 0.2);
@@ -555,7 +541,6 @@ a {
     color: #0d1b2a;
 }
 
-/* Stats Section */
 .stats-section {
     background: rgba(255, 214, 10, 0.05);
     padding: 4rem 2rem;
@@ -588,7 +573,6 @@ a {
     font-weight: 500;
 }
 
-/* Section Headers */
 .section-header {
     text-align: center;
     margin-bottom: 4rem;
@@ -608,14 +592,12 @@ a {
     margin: 0 auto;
 }
 
-/* Enhanced Steps */
 .step-icon {
     font-size: 2rem;
     margin-top: 1rem;
     opacity: 0.7;
 }
 
-/* Benefits Section */
 .benefits-section {
     margin-bottom: 6rem;
 }
@@ -661,7 +643,6 @@ a {
     line-height: 1.6;
 }
 
-/* Testimonials Section */
 .testimonials-section {
     background: rgba(0, 0, 0, 0.2);
     padding: 6rem 2rem;
@@ -709,7 +690,6 @@ a {
     font-size: 0.9rem;
 }
 
-/* Examples Section */
 .examples-section {
     margin-bottom: 6rem;
     padding: 6rem 0;
@@ -934,7 +914,6 @@ a {
     box-shadow: 0 12px 35px rgba(255, 214, 10, 0.4);
 }
 
-/* Enhanced CTA Section */
 .cta-content {
     text-align: center;
     margin-bottom: 2rem;
@@ -989,7 +968,6 @@ a {
     font-weight: bold;
 }
 
-/* FAQ Section */
 .faq-section {
     margin-bottom: 6rem;
 }
@@ -1027,7 +1005,6 @@ a {
     line-height: 1.6;
 }
 
-/* Footer */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -1471,7 +1448,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -1558,7 +1534,6 @@ a {
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .hero-section {
         grid-template-columns: 1fr;
@@ -1616,7 +1591,6 @@ a {
         text-align: center;
     }
 
-    /* Examples Section Responsive */
     .examples-grid {
         grid-template-columns: 1fr;
         gap: 2rem;

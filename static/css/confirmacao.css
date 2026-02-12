@@ -1,11 +1,10 @@
-/* Confirmação Styles */
+
 
 .page-wrapper {
     min-height: 100vh;
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #415A77 100%);
 }
 
-/* Header Styles */
 header {
     background: rgba(13, 27, 42, 0.95);
     backdrop-filter: blur(10px);
@@ -52,7 +51,6 @@ header {
     object-fit: cover;
 }
 
-/* Navigation */
 .nav-center {
     background: rgba(27, 38, 59, 0.9);
     padding: 1rem 0;
@@ -89,7 +87,6 @@ header {
     width: 100%;
 }
 
-/* Success Header */
 .success-header {
     text-align: center;
     margin-bottom: 3rem;
@@ -124,7 +121,6 @@ header {
     line-height: 1.6;
 }
 
-/* Reservation Card */
 .reservation-card {
     background: linear-gradient(135deg, rgba(13, 27, 42, 0.9), rgba(27, 38, 59, 0.7));
     border-radius: 20px;
@@ -171,7 +167,6 @@ header {
     padding: 2rem;
 }
 
-/* Movie Section */
 .movie-section {
     display: flex;
     gap: 2rem;
@@ -211,7 +206,6 @@ header {
     text-align: center;
 }
 
-/* Customer Section */
 .customer-section {
     margin-bottom: 2rem;
     padding-bottom: 2rem;
@@ -239,7 +233,6 @@ header {
     color: #4EA8DE;
 }
 
-/* Bar Section */
 .bar-section {
     margin-bottom: 2rem;
     padding-bottom: 2rem;
@@ -271,7 +264,6 @@ header {
     border-bottom: none;
 }
 
-/* Payment Section */
 .payment-section h4 {
     color: #FFD60A;
     font-size: 1.3rem;
@@ -312,7 +304,6 @@ header {
     text-transform: capitalize;
 }
 
-/* Notes Card */
 .notes-card {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
     border-radius: 15px;
@@ -355,7 +346,6 @@ header {
     font-size: 1.2rem;
 }
 
-/* Action Buttons */
 .action-buttons {
     display: flex;
     gap: 1rem;
@@ -416,7 +406,6 @@ header {
     box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
 
-/* Print Styles */
 @media print {
     .nav-center, .action-buttons {
         display: none !important;
@@ -437,7 +426,6 @@ header {
     }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .success-header h1 {
         font-size: 2rem;

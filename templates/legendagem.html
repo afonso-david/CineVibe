@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Legendagem | CineVibe - Cinema Acessível Para Todos</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/legendagem.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
-    
-    <!-- Meta tags para SEO -->
+
     <meta name="description" content="Legendagem profissional no CineVibe. Cinema inclusivo com legendas de qualidade para uma experiência cinematográfica completa.">
     <meta name="keywords" content="legendagem, cinema acessível, legendas, CineVibe, inclusão">
     <meta property="og:title" content="Legendagem | CineVibe - Cinema Acessível Para Todos">
@@ -25,7 +22,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -51,7 +48,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -63,9 +59,8 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-        <!-- Main Content -->
         <main id="main-content">
-            <!-- Banner Section -->
+            
             <section class="banner" role="banner">
                 <img src="{{ url_for('static', filename='imgs/CC-example.jpg') }}" alt="Imagem representativa da Legendagem - cinema inclusivo com legendas especiais">
                 <div class="banner-content">
@@ -85,7 +80,6 @@
                 </div>
             </section>
 
-            <!-- About Section -->
             <section class="about-section">
                 <div class="section-header">
                     <h2>O que é a Legendagem Especial?</h2>
@@ -117,7 +111,6 @@
                 </div>
             </section>
 
-            <!-- Exemplos de Legendagem -->
             <section class="examples-section">
                 <div class="section-header">
                     <h2>Exemplos de Legendagem</h2>
@@ -201,7 +194,6 @@
                 </div>
             </section>
 
-            <!-- CTA Section após exemplos -->
             <section class="cta-legendagem-section">
                 <div class="container">
                     <div class="cta-legendagem-box">
@@ -212,7 +204,6 @@
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="footer-main">
                 <div class="footer-container">
@@ -313,7 +304,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript -->
     <script>
         // Smooth scroll para links internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

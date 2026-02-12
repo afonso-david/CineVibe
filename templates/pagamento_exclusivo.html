@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento Exclusivo | CineVibe</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
     
@@ -351,7 +349,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -373,7 +371,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -385,16 +382,15 @@
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main>
             <div class="pagamento-container">
-                <!-- Formulário de Pagamento -->
+                
                 <div class="pagamento-main">
                     <h1 class="page-title">Finalizar Reserva</h1>
                     <p class="page-subtitle">Complete o pagamento da sua experiência exclusiva</p>
                     
                     <form id="formPagamento">
-                        <!-- Método de Pagamento -->
+                        
                         <div class="form-section">
                             <h3 class="section-title">
                                 <i class="fas fa-credit-card"></i>
@@ -428,7 +424,6 @@
                             </div>
                         </div>
 
-                        <!-- Dados do Cartão (mostrado apenas se cartão selecionado) -->
                         <div class="form-section" id="dadosCartao" style="display: none;">
                             <h3 class="section-title">
                                 <i class="fas fa-lock"></i>
@@ -454,7 +449,6 @@
                             </div>
                         </div>
 
-                        <!-- Dados MB WAY (mostrado apenas se MB WAY selecionado) -->
                         <div class="form-section" id="dadosMbway" style="display: none;">
                             <h3 class="section-title">
                                 <i class="fas fa-mobile-alt"></i>
@@ -470,7 +464,6 @@
                             </div>
                         </div>
 
-                        <!-- PayPal Form -->
                         <div class="form-section" id="dadosPaypal" style="display: none;">
                             <h3 class="section-title">
                                 <i class="fab fa-paypal"></i>
@@ -482,7 +475,6 @@
                             </div>
                         </div>
 
-                        <!-- Apple Pay Form -->
                         <div class="form-section" id="dadosApplepay" style="display: none;">
                             <h3 class="section-title">
                                 <i class="fab fa-apple"></i>
@@ -498,7 +490,6 @@
                             </div>
                         </div>
 
-                        <!-- Gift Card Form -->
                         <div class="form-section" id="dadosGiftcard" style="display: none;">
                             <h3 class="section-title">
                                 <i class="fas fa-gift"></i>
@@ -525,7 +516,6 @@
                     </form>
                 </div>
 
-                <!-- Resumo da Reserva -->
                 <div class="pagamento-sidebar">
                     <div class="resumo-reserva">
                         <h3 class="resumo-title">Resumo da Reserva</h3>
@@ -564,7 +554,6 @@
         </main>
     </div>
 
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loading-spinner"></div>

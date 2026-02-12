@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -37,7 +37,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}"class="active">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -49,7 +48,6 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-    <!-- Progress Bar -->
     <div class="progress-container">
         <div class="progress-bar">
             <div class="step completed">
@@ -85,18 +83,16 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="container">
             <div class="resumo-layout">
-                <!-- Order Summary Card -->
+                
                 <div class="order-summary-card">
                     <div class="summary-header">
                         <h1><i class="fas fa-receipt"></i> Resumo da Sua Compra</h1>
                         <p>Verifique todos os detalhes antes de prosseguir para o pagamento</p>
                     </div>
-                    
-                    <!-- Movie Info Section -->
+
                     <div class="movie-info-section">
                         <div class="section-title">
                             <i class="fas fa-film"></i>
@@ -118,7 +114,6 @@
                         </div>
                     </div>
 
-                    <!-- Tickets Section -->
                     <div class="tickets-section">
                         <div class="section-title">
                             <i class="fas fa-ticket-alt"></i>
@@ -137,7 +132,6 @@
                         </div>
                     </div>
 
-                    <!-- Bar Items Section -->
                     {% if produtos_bar_selecionados %}
                     <div class="bar-section">
                         <div class="section-title">
@@ -171,7 +165,6 @@
                     </div>
                     {% endif %}
 
-                    <!-- Total Section -->
                     <div class="total-section">
                         <div class="total-breakdown">
                             <div class="subtotal-item">
@@ -192,7 +185,6 @@
                         </div>
                     </div>
 
-                    <!-- Dados do Cliente (apenas para não logados) -->
                     {% if not logged_in %}
                     <div class="customer-data-section">
                         <div class="section-header">
@@ -236,7 +228,6 @@
                     </div>
                     {% endif %}
 
-                    <!-- Action Buttons -->
                     <div class="action-buttons">
                         <button type="button" class="btn-secondary" onclick="voltarParaBar()">
                             <i class="fas fa-arrow-left"></i>
@@ -250,7 +241,6 @@
                     </div>
                 </div>
 
-                <!-- Customer Info Sidebar -->
                 <div class="customer-sidebar">
                     <div class="customer-card">
                         <div class="customer-header">
@@ -282,7 +272,6 @@
                         {% endif %}
                     </div>
 
-                    <!-- Security Info -->
                     <div class="security-card">
                         <div class="security-header">
                             <h3><i class="fas fa-shield-alt"></i> Segurança</h3>
@@ -307,7 +296,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">

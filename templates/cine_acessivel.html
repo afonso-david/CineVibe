@@ -10,10 +10,9 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Skip to main content for screen readers -->
-        <a href="#main-content" class="skip-link">Saltar para o conteúdo principal</a>
         
-        <!-- Header -->
+        <a href="#main-content" class="skip-link">Saltar para o conteúdo principal</a>
+
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -39,7 +38,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center" role="navigation" aria-label="Navegação principal">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -51,16 +49,14 @@
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main id="main-content">
-            <!-- Banner Section -->
+            
             <section class="banner" role="banner">
                 <img src="{{ url_for('static', filename='imgs/cineacessivel.png') }}" alt="Imagem representativa do CineAcessível - cinema inclusivo para todos">
                 <div class="banner-content">
                     <h1>CineAcessível</h1>
                     <p>O cinema é para todos. Descubra as nossas soluções de acessibilidade que tornam a experiência cinematográfica inclusiva e acessível a pessoas com diferentes necessidades.</p>
-                    
-                    <!-- Grid 2x2 das razões -->
+
                     <div class="reasons" role="list">
                         <a href="{{ url_for('acessibilidade') }}" class="reason-link" role="listitem">
                             <div class="reason">
@@ -105,7 +101,6 @@
                 </div>
             </section>
 
-            <!-- Sessões Acessíveis Section -->
             {% if sessoes_acessiveis %}
             <section class="sessoes-acessiveis-section" aria-labelledby="sessoes-title">
                 <div class="container">
@@ -269,7 +264,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript -->
     <script>
         // Função para mostrar informações de acessibilidade
         function showAccessibilityInfo(sessaoId) {
@@ -390,7 +384,6 @@
         }
     </script>
 
-    <!-- Estilos adicionais para o modal -->
     <style>
         .accessibility-modal {
             position: fixed;

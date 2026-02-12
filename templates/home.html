@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineVibe - A Sua Experiência Cinematográfica</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes-section.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
-    
-    <!-- Meta tags para SEO -->
+
     <meta name="description" content="CineVibe - A melhor experiência cinematográfica com filmes em estreia, salas premium e serviços exclusivos.">
     <meta name="keywords" content="cinema, filmes, estreias, bilhetes, CineVibe, sessões exclusivas">
     <meta property="og:title" content="CineVibe - A Sua Experiência Cinematográfica">
@@ -25,7 +22,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -51,7 +48,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}"class="active">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -63,11 +59,10 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-        <!-- Main Content -->
         <main>
-            <!-- Hero Banner com Trailers -->
+            
             <section class="hero-banner" id="banner">
-                <!-- Video Player Local -->
+                
                 <video id="videoPlayer" 
                        width="100%" 
                        height="100%" 
@@ -78,16 +73,12 @@
                     <source src="{{ url_for('static', filename='Vídeos/Trailers/superman-trailer.mp4') }}" type="video/mp4">
                    
                 </video>
-                
-                <!-- Imagem de fallback -->
+
                 <img id="posterImage" 
                      src="{{ url_for('static', filename='imgs/filmes/superman-poster.jpg') }}" 
                      alt="Imagem do Filme"
                      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
-                
-                
-                
-                <!-- Conteúdo do banner -->
+
                 <div class="hero-content">
                     <div class="hero-info">
                         <h1 id="filmeTitle">Superman (2025)</h1>
@@ -122,7 +113,6 @@
                 </div>
             </section>
 
-            <!-- Seção de Navegação Rápida - DESIGN PREMIUM -->
             <section class="navigation-cards-section">
                 <div class="container">
                     <div class="section-header-premium">
@@ -243,12 +233,10 @@
                 </div>
             </section>
 
-            <!-- Nova Seção: Descobre o Melhor do Cinema -->
             <section class="discover-cinema">
                 <div class="discover-background">
                     <img src="{{ url_for('static', filename='imgs/iron-man-marvels-avengers-2023-ed.jpg') }}" alt="Cinema Background">
                 </div>
-                <div class="discover-overlay"></div>
                 <div class="discover-content">
                     <div class="discover-text">
                         <h2>Descobre o Melhor do Cinema</h2>
@@ -282,7 +270,6 @@
                 </div>
             </section>
 
-            <!-- Seção de Filmes Mais Vistos -->
             <section class="featured-movies">
                 <div class="container">
                     <div class="section-header">
@@ -344,7 +331,6 @@
                 </div>
             </section>
 
-            <!-- Seção de Experiências -->
             <section class="experiences-section">
                 <div class="container">
                     <div class="section-header">
@@ -382,16 +368,11 @@
                                 <i class="fas fa-universal-access" style="display: none;"></i>
                             </div>
                         </div>
-                        
-               
+
                     </div>
                 </div>
             </section>
 
-            <!-- Seção de Estatísticas -->
-
-
-            <!-- Call to Action -->
         </main>        
         <footer class="footer">
             <div class="footer-main">
@@ -493,7 +474,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript -->
     <script>
         console.log('🎬 CineVibe Homepage iniciada');
 
@@ -918,14 +898,13 @@
                 });
             });
 
-            // Intersection Observer para animação da imagem da seção Discover
             const discoverImageObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     console.log('🖼️ Discover image intersection:', entry.isIntersecting);
                     if (entry.isIntersecting) {
                         console.log('✅ Animando imagem discover');
                         entry.target.classList.add('animate-in');
-                        discoverImageObserver.unobserve(entry.target); // Animar apenas uma vez
+                        discoverImageObserver.unobserve(entry.target);
                     }
                 });
             }, {
@@ -933,7 +912,6 @@
                 rootMargin: '0px 0px -50px 0px'
             });
 
-            // Observar a imagem da seção discover
             const discoverImage = document.querySelector('.discover-image');
             if (discoverImage) {
                 console.log('🎯 Observando discover image');
@@ -943,7 +921,6 @@
             }
         });
     </script>
-
 
 </body>
 </html>

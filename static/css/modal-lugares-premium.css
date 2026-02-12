@@ -1,8 +1,5 @@
-/* ============================================
-   MODAL DE LUGARES - DESIGN ULTRA PREMIUM
-============================================ */
 
-/* Overlay do modal */
+
 .modal-lugares-overlay {
   position: fixed !important;
   top: 0 !important;
@@ -33,7 +30,6 @@
   visibility: visible !important;
 }
 
-/* Padrão decorativo no fundo do modal */
 .modal-lugares-overlay::before {
   content: '';
   position: absolute;
@@ -63,7 +59,6 @@
   }
 }
 
-/* Container principal do modal */
 .modal-lugares-container {
   background: linear-gradient(145deg, 
     rgba(20, 27, 61, 0.98) 0%, 
@@ -91,7 +86,6 @@
   transform: scale(1) translateY(0);
 }
 
-/* Header do modal */
 .modal-lugares-header {
   display: flex;
   align-items: center;
@@ -177,7 +171,6 @@
   box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
 }
 
-/* Conteúdo do modal */
 .modal-lugares-content {
   padding: 30px;
   max-height: 60vh;
@@ -200,7 +193,6 @@
   border-radius: 3px;
 }
 
-/* Seção de tipos de lugares */
 .tipos-lugares-section {
   margin-bottom: 30px;
 }
@@ -318,7 +310,6 @@
   opacity: 0.8;
 }
 
-/* Seção de informações importantes */
 .info-importantes-section {
   margin-bottom: 20px;
 }
@@ -406,7 +397,6 @@
   opacity: 0.8;
 }
 
-/* Footer do modal */
 .modal-lugares-footer {
   padding: 20px 30px;
   border-top: 1px solid rgba(0, 217, 255, 0.2);
@@ -446,7 +436,6 @@
   font-size: 1rem;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .modal-lugares-container {
     margin: 10px;

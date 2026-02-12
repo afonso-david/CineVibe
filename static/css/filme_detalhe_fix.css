@@ -1,11 +1,9 @@
-/* FIX SIMPLES E DIRETO - Botões Sempre Visíveis */
 
-/* Modal com padding inferior grande */
+
 .modal-content {
   padding-bottom: 200px !important;
 }
 
-/* Botões no fluxo normal com espaço */
 .botoes-navegacao {
   margin-top: 30px !important;
   padding: 20px !important;
@@ -15,7 +13,6 @@
   flex-wrap: wrap !important;
 }
 
-/* Espaço após produtos */
 .produtos-grid,
 .menus-grid {
   margin-bottom: 50px !important;

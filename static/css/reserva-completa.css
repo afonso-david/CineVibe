@@ -1,6 +1,4 @@
-/* ==========================
-   RESERVA COMPLETA - DESIGN PREMIUM
-========================== */
+
 
 * {
     margin: 0;
@@ -22,9 +20,6 @@ body {
     flex-direction: column;
 }
 
-/* ==========================
-   HEADER
-========================== */
 .header {
     background: rgba(15, 15, 35, 0.95);
     backdrop-filter: blur(20px);
@@ -99,9 +94,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* ==========================
-   MAIN CONTENT
-========================== */
 .reserva-main {
     flex: 1;
     padding: 40px 20px;
@@ -110,9 +102,6 @@ body {
     width: 100%;
 }
 
-/* ==========================
-   PROGRESS BAR
-========================== */
 .progress-container {
     margin-bottom: 40px;
 }
@@ -185,9 +174,6 @@ body {
     text-align: center;
 }
 
-/* ==========================
-   CONTENT LAYOUT
-========================== */
 .content-container {
     display: grid;
     grid-template-columns: 1fr 350px;
@@ -195,9 +181,6 @@ body {
     align-items: start;
 }
 
-/* ==========================
-   STEPS COLUMN
-========================== */
 .steps-column {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
@@ -233,9 +216,6 @@ body {
     line-height: 1.6;
 }
 
-/* ==========================
-   STEP 1 - QUANTIDADE
-========================== */
 .quantidade-selector {
     max-width: 500px;
     margin: 0 auto;
@@ -325,9 +305,6 @@ body {
     background: rgba(255, 255, 255, 0.08);
 }
 
-/* ==========================
-   STEP 2 - LUGARES
-========================== */
 .sala-container {
     max-width: 600px;
     margin: 0 auto;
@@ -469,9 +446,6 @@ body {
     border-color: #9c88ff;
 }
 
-/* ==========================
-   STEP 3 - PRODUTOS
-========================== */
 .produtos-container {
     max-width: 800px;
     margin: 0 auto;
@@ -568,9 +542,6 @@ body {
     color: #E0E6ED;
 }
 
-/* ==========================
-   STEP 4 - RESUMO
-========================== */
 .resumo-container {
     max-width: 600px;
     margin: 0 auto;
@@ -672,9 +643,6 @@ body {
     color: #FFD60A;
 }
 
-/* ==========================
-   STEP 5 - PAGAMENTO
-========================== */
 .pagamento-container {
     max-width: 600px;
     margin: 0 auto;
@@ -806,9 +774,6 @@ body {
     font-size: 1.2rem;
 }
 
-/* ==========================
-   STEP ACTIONS
-========================== */
 .step-actions {
     display: flex;
     justify-content: space-between;
@@ -865,9 +830,6 @@ body {
     box-shadow: none;
 }
 
-/* ==========================
-   RESUMO FIXO
-========================== */
 .resumo-fixo {
     position: sticky;
     top: 100px;
@@ -953,9 +915,6 @@ body {
     color: #FFD60A;
 }
 
-/* ==========================
-   MODALS
-========================== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1073,9 +1032,6 @@ body {
     background: rgba(255, 255, 255, 0.15);
 }
 
-/* ==========================
-   RESPONSIVIDADE
-========================== */
 @media (max-width: 1200px) {
     .content-container {
         grid-template-columns: 1fr;

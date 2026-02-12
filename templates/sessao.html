@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessão Só Para Ti | CineVibe</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sessao_clean.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
-    
-    <!-- Meta tags para SEO -->
+
     <meta name="description" content="Sessões exclusivas e personalizadas no CineVibe - Experiências cinematográficas únicas">
     <meta name="keywords" content="cinema, sessões exclusivas, experiências VIP, CineVibe">
     <meta property="og:title" content="Sessão Só Para Ti | CineVibe">
@@ -25,7 +22,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -51,7 +48,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}"">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -63,9 +59,8 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-        <!-- Main Content -->
         <main>
-            <!-- Hero Section Premium -->
+            
             <section class="hero-section">
                 <div class="hero-background">
                     <img src="{{ url_for('static', filename='imgs/1398872.jpg') }}" alt="Cinema Background">
@@ -119,7 +114,6 @@
                 </div>
             </section>
 
-            <!-- Options Section Premium -->
             <section class="options-section" id="options">
                 <div class="container">
                     <div class="section-header">
@@ -128,7 +122,7 @@
                     </div>
                     
                     <div class="options-grid">
-                        <!-- Sessão Exclusiva -->
+                        
                         <div class="option-card exclusive">
                             <div class="card-image">
                                 <a href="{{ url_for('sessao_exclusiva') }}">
@@ -173,8 +167,7 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Sessão Temática -->
+
                         <div class="option-card thematic">
                             <div class="card-image">
                                 <a href="{{ url_for('sessao_tematica') }}">
@@ -225,8 +218,6 @@
                 </div>
             </section>
 
-           
-            <!-- CTA Section -->
             <section class="cta-section">
                 <div class="cta-background">
                     <div class="cta-overlay"></div>
@@ -353,7 +344,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript -->
     <script>
         // Função para scroll suave para as opções
         function scrollToOptions() {

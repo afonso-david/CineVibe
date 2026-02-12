@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 html {
   overflow-y: scroll;
   height: 100%;
@@ -13,9 +11,6 @@ body {
   color: white;
 }
 
-/* ==========================
-   PAGE WRAPPER
-========================== */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -31,9 +26,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -58,7 +50,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -111,7 +102,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -150,7 +140,6 @@ a {
   cursor: pointer;
 }
 
-/* Dropdown de Resultados de Pesquisa */
 .search-results {
   position: absolute;
   top: calc(100% + 5px);
@@ -252,7 +241,6 @@ a {
   box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -269,9 +257,6 @@ a {
   transform: scale(1.1);
 }
 
-/* ==========================
-   HERO SECTION
-========================== */
 .hero-section {
   background-size: cover;
   background-position: center;
@@ -349,7 +334,6 @@ a {
   opacity: 0.95;
 }
 
-/* Responsivo Hero */
 @media (max-width: 1024px) {
   .hero-container {
     padding: 60px 40px;
@@ -386,9 +370,6 @@ a {
   }
 }
 
-/* ==========================
-   CONTENT SECTION
-========================== */
 .content-section {
   padding: 50px 20px 30px;
   background: linear-gradient(180deg, #0D1B2A 0%, #1B263B 100%);
@@ -605,9 +586,6 @@ a {
   margin: 0;
 }
 
-/* ==========================
-   ACCESSIBILITY FEATURES GRID
-========================== */
 .accessibility-features {
   margin: 60px 0;
   text-align: center;
@@ -719,9 +697,6 @@ a {
   margin: 0 auto;
 }
 
-/* ==========================
-   CTA SECTION
-========================== */
 .cta-section {
   text-align: center;
   padding: 70px 50px;
@@ -766,9 +741,6 @@ a {
   background: linear-gradient(135deg, #FFB703, #FF9500);
 }
 
-/* ==========================
-   FOOTER PROFISSIONAL AJEITADO
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -1324,9 +1296,6 @@ a {
   }
 }
 
-/* ==========================
-   PAGE WRAPPER
-========================== */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -1337,9 +1306,6 @@ main {
   flex: 1 0 auto;
 }
 
-/* ==========================
-   RESPONSIVIDADE
-========================== */
 @media (max-width: 768px) {
   .hero-content h1 {
     font-size: 2.2rem;

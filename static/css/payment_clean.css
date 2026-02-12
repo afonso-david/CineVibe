@@ -1,6 +1,5 @@
-/* MODAL DE PAGAMENTO MODERNO E COMERCIAL */
 
-/* Overlay */
+
 .payment-modal-overlay {
   position: fixed;
   top: 0;
@@ -25,7 +24,6 @@
   visibility: visible;
 }
 
-/* Container Principal */
 .payment-modal-container {
   background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
   border-radius: 24px;
@@ -44,7 +42,6 @@
   transform: scale(1) translateY(0);
 }
 
-/* Header Elegante */
 .payment-header {
   background: linear-gradient(135deg, #1F2937 0%, #111827 100%);
   padding: 0;
@@ -140,7 +137,6 @@
   transform: rotate(90deg);
 }
 
-/* Barra de Progresso */
 .payment-progress {
   padding: 0 32px 24px 32px;
   position: relative;
@@ -177,7 +173,6 @@
   letter-spacing: 1px;
 }
 
-/* Conteúdo Principal */
 .payment-content {
   padding: 32px;
   overflow-y: auto;
@@ -185,7 +180,6 @@
   min-height: 400px;
 }
 
-/* Total Destacado */
 .payment-total-card {
   background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(255, 183, 3, 0.15));
   border: 3px solid #FFD60A;
@@ -265,7 +259,6 @@
   font-weight: 600;
 }
 
-/* Métodos de Pagamento */
 .payment-methods-section {
   margin-bottom: 32px;
 }
@@ -297,7 +290,6 @@
   margin-right: auto;
 }
 
-/* Novos Cards de Imagem Limpos */
 .payment-method-image-card {
   background: #FFFFFF;
   border: 3px solid rgba(0, 217, 255, 0.2);
@@ -370,7 +362,6 @@
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
 }
 
-/* Seção de Formulário */
 .payment-form-section {
   animation: slideInUp 0.4s ease;
 }
@@ -399,7 +390,6 @@
   }
 }
 
-/* Botão Voltar */
 .back-button-container {
   margin-bottom: 24px;
   display: flex;
@@ -439,7 +429,6 @@
   transform: translateX(-2px);
 }
 
-/* Formulários */
 .method-form {
   display: none;
   padding: 32px;
@@ -457,7 +446,6 @@
   animation: slideDown 0.4s ease;
 }
 
-/* Títulos dos formulários */
 .method-form h4 {
   color: #00D9FF;
   font-size: 1.2rem;
@@ -537,7 +525,6 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* Info Boxes */
 .payment-info-box {
   background: rgba(0, 217, 255, 0.1);
   border: 1px solid rgba(0, 217, 255, 0.2);
@@ -557,7 +544,6 @@
   margin-top: 2px;
 }
 
-/* Multibanco Reference */
 .mb-reference-preview h5 {
   color: #FFFFFF;
   font-size: 1.1rem;
@@ -615,7 +601,6 @@
   font-size: 1.1rem;
 }
 
-/* Informações dos métodos nos formulários */
 .paypal-info,
 .applepay-info,
 .googlepay-info {
@@ -662,7 +647,6 @@
   font-size: 1rem;
 }
 
-/* Footer */
 .payment-footer {
   background: rgba(0, 0, 0, 0.3);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -757,7 +741,6 @@
   left: 100%;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .payment-modal-container {
     margin: 10px;
@@ -796,8 +779,7 @@
   .method-form {
     padding: 24px;
   }
-  
-  /* Grid responsivo - 2 colunas em tablet */
+
   .payment-methods-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
@@ -821,7 +803,7 @@
 }
 
 @media (max-width: 480px) {
-  /* 2 colunas em mobile */
+  
   .payment-methods-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
@@ -853,7 +835,6 @@
   }
 }
 
-/* Compatibilidade com código existente */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -876,8 +857,7 @@
   display: flex;
   opacity: 1;
 }
-/* Botõe
-s de Pagamento nos Formulários */
+
 .form-payment-button {
   margin-top: 24px;
   display: flex;
@@ -934,7 +914,6 @@ s de Pagamento nos Formulários */
   left: 100%;
 }
 
-/* Estilos específicos para diferentes métodos */
 .btn-payment-method[onclick*="paypal"] {
   background: linear-gradient(135deg, #0070ba 0%, #003087 100%);
   box-shadow: 0 6px 20px rgba(0, 112, 186, 0.3);
@@ -985,15 +964,13 @@ s de Pagamento nos Formulários */
   box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
 }
 
-/* Responsive para botões */
 @media (max-width: 480px) {
   .btn-payment-method {
     padding: 14px 24px;
     font-size: 1rem;
     min-width: 180px;
   }
-}/* Seção 
-de Tipo de Reserva */
+}
 .reservation-type-section {
   margin-bottom: 30px;
 }
@@ -1202,7 +1179,6 @@ de Tipo de Reserva */
   transform: translateX(-3px);
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .reservation-options {
     grid-template-columns: 1fr;
@@ -1227,12 +1203,10 @@ de Tipo de Reserva */
   min-height: 200px;
 }
 
-/* Scroll suave para o conteúdo */
 .payment-content {
   scroll-behavior: smooth;
 }
 
-/* Garantir que o modal apareça sempre */
 .payment-modal-overlay {
   z-index: 99999 !important;
 }
@@ -1253,15 +1227,13 @@ de Tipo de Reserva */
   z-index: 5000 !important;
 }
 
-/* Garantir visibilidade da seção de métodos de pagamento */
 #payment-selection {
   display: block !important;
 }
 
 #payment-form-section {
   display: none !important;
-}/* Esti
-los para página standalone */
+}
 .payment-standalone body {
   margin: 0;
   padding: 0;
@@ -1282,7 +1254,6 @@ los para página standalone */
   visibility: visible !important;
 }
 
-/* Espaçamento para botões de pagamento */
 .form-payment-button {
   margin-top: 24px;
   display: flex;

@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -22,7 +22,7 @@
                     <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
                 </div>
                 <div class="user-icon">
-                    <!-- DEBUG: logged_in={{ logged_in }}, avatar={{ avatar }} -->
+                    
                     {% if logged_in %}
                         <a href="{{ url_for('perfil') }}">
                             <img src="{{ url_for('static', filename=avatar if avatar else 'imgs/icons/user_icon34-removebg-preview.png') }}" class="user-pic active-profile" alt="Perfil" onerror="this.src='{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}'">
@@ -37,7 +37,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -49,9 +48,8 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Section -->
+        
         <section class="hero-recompensas">
             <div class="hero-content">
                 <div class="hero-left">
@@ -69,7 +67,6 @@
             </div>
         </section>
 
-        <!-- Trajetória de Níveis -->
         <section class="trajetoria-section">
             <div class="container">
                 <h2 class="section-title">
@@ -94,7 +91,7 @@
                     </div>
 
                     <div class="levels-container">
-                        <!-- Nível Bronze -->
+                        
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 0 else '' }} {{ 'active' if (pontos or 0) < 1000 else '' }}">
                             <div class="level-circle">
                                 <img src="{{ url_for('static', filename='imgs/descarregar__21_-removebg-preview.png') }}" alt="Bronze" class="level-icon">
@@ -112,7 +109,6 @@
                             </div>
                         </div>
 
-                        <!-- Nível Prata -->
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 1000 else '' }} {{ 'active' if 1000 <= (pontos or 0) < 2500 else '' }}">
                             <div class="level-circle">
                                 <img src="{{ url_for('static', filename='imgs/3D_Glasses_Clipart_Graphic_in_SVG_PNG_JPG_-_Stylish_3D_Goggles_Illustration_-_Cricut_Compatible_-_Downloadable_Image_-_Etsy-removebg-preview.png') }}" alt="Prata" class="level-icon">
@@ -130,7 +126,6 @@
                             </div>
                         </div>
 
-                        <!-- Nível Ouro -->
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 2500 else '' }} {{ 'active' if 2500 <= (pontos or 0) < 5000 else '' }}">
                             <div class="level-circle">
                                 <img src="{{ url_for('static', filename='imgs/90th_Academy_Awards_Damien_Chazelle_Statue_PNG-removebg-preview.png') }}" alt="Ouro" class="level-icon">
@@ -148,7 +143,6 @@
                             </div>
                         </div>
 
-                        <!-- Nível Diamante -->
                         <div class="level-item {{ 'achieved' if (pontos or 0) >= 5000 else '' }} {{ 'active' if (pontos or 0) >= 5000 else '' }}">
                             <div class="level-circle">
                                 <img src="{{ url_for('static', filename='imgs/Hollywood star remove.png') }}" alt="Diamante" class="level-icon">
@@ -170,7 +164,6 @@
             </div>
         </section>
 
-        <!-- Recompensas Disponíveis -->
         <section class="recompensas-disponiveis">
             <div class="container">
                 <h2 class="section-title">
@@ -196,7 +189,6 @@
             </div>
         </section>
 
-        <!-- Como Ganhar Pontos -->
         <section class="como-ganhar">
             <div class="container">
                 <h2 class="section-title">
@@ -253,7 +245,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-main">
             <div class="footer-container">
@@ -353,7 +344,6 @@
         </div>
     </footer>
 
-    <!-- Smooth Scroll Script -->
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -488,6 +478,6 @@
             }, 300);
         }
     </script>
-    </div> <!-- Closing page-wrapper -->
+    </div> 
 </body>
 </html>

@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - CineVibe</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -44,7 +42,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}"class="active">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -56,10 +53,9 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-    <!-- Main Content -->
     <main class="checkout-main">
         <div class="container">
-            <!-- Progress Bar -->
+            
             <div class="progress-bar">
                 <div class="progress-step completed">
                     <div class="step-circle">
@@ -93,7 +89,7 @@
             <h1><i class="fas fa-shopping-cart"></i> Finalizar Reserva</h1>
             
             <div class="checkout-container">
-                <!-- Resumo da Reserva -->
+                
                 <div class="resumo-section">
                     <div class="section-header">
                         <h2><i class="fas fa-ticket-alt"></i> Resumo da Reserva</h2>
@@ -157,7 +153,6 @@
                     </div>
                 </div>
 
-                <!-- Dados do Cliente -->
                 <div class="dados-section">
                     <div class="section-header">
                         <h2><i class="fas fa-user"></i> Dados do Cliente</h2>
@@ -178,12 +173,10 @@
                             <p><i class="fas fa-envelope"></i> Email confirmado</p>
                         </div>
                         {% endif %}
-                        
-                        <!-- Métodos de Pagamento / Formulários -->
+
                         <div class="payment-section">
                             <h3><i class="fas fa-credit-card"></i> Métodos de Pagamento</h3>
-                            
-                            <!-- Seção de Código de Desconto Integrada -->
+
                             <div class="codigo-desconto-integrated">
                                 <div class="codigo-desconto-header">
                                     <div class="codigo-title">
@@ -228,8 +221,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Métodos de Pagamento -->
+
                             <div id="payment-methods-container" class="payment-methods-grid">
                                 <div class="payment-method-item" data-method="mbway">
                                     <img src="{{ url_for('static', filename='imgs/pagamento/Quais_sao_as_vantagens_de_aderir_ao_MBway-removebg-preview (1).png') }}" alt="MB WAY">
@@ -256,18 +248,16 @@
                                     <span>Gift Cards</span>
                                 </div>
                             </div>
-                            
-                            <!-- Formulários de Pagamento -->
+
                             <div id="payment-forms-container" style="display: none;">
-                                <!-- Botão Voltar -->
+                                
                                 <div class="back-to-methods">
                                     <button type="button" class="btn-back" onclick="voltarMetodos()">
                                         <i class="fas fa-arrow-left"></i>
                                         Escolher outro método
                                     </button>
                                 </div>
-                                
-                                <!-- MB WAY Form -->
+
                                 <div id="mbway-form" class="payment-form" style="display: none;">
                                     <h4><img src="{{ url_for('static', filename='imgs/pagamento/Quais_sao_as_vantagens_de_aderir_ao_MBway-removebg-preview (1).png') }}" alt="MB WAY" class="form-icon"> MB WAY</h4>
                                     <div class="form-group">
@@ -280,7 +270,6 @@
                                     </div>
                                 </div>
 
-                                <!-- PayPal Form -->
                                 <div id="paypal-form" class="payment-form" style="display: none;">
                                     <h4><img src="{{ url_for('static', filename='imgs/pagamento/paypal-removebg-preview.png') }}" alt="PayPal" class="form-icon"> PayPal</h4>
                                     <div class="paypal-info">
@@ -289,7 +278,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Cartão Form (Mastercard/Visa) -->
                                 <div id="card-form" class="payment-form" style="display: none;">
                                     <h4><i class="fas fa-credit-card"></i> <span id="card-title">Cartão de Crédito/Débito</span></h4>
                                     <div class="form-group">
@@ -316,7 +304,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Apple Pay Form -->
                                 <div id="applepay-form" class="payment-form" style="display: none;">
                                     <h4><img src="{{ url_for('static', filename='imgs/pagamento/apple-removebg-preview.png') }}" alt="Apple Pay" class="form-icon"> Apple Pay</h4>
                                     <div class="applepay-info">
@@ -329,7 +316,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Gift Card Form -->
                                 <div id="giftcard-form" class="payment-form" style="display: none;">
                                     <h4><i class="fas fa-gift"></i> Gift Card</h4>
                                     <div class="form-group">
@@ -365,7 +351,6 @@
         </div>
     </main>
 
-    <!-- Modal de Loading Profissional -->
     <div id="loadingModal" class="modal" style="display: none;">
         <div class="modal-content loading-modal">
             <div class="loading-content">
@@ -405,7 +390,6 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
         let selectedPaymentMethod = null;
 
@@ -947,6 +931,6 @@
             }
         });
     </script>
-    </div> <!-- Fechar page-wrapper -->
+    </div> 
 </body>
 </html>

@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Língua Gestual Portuguesa | CineVibe - Cinema Acessível Para Todos</title>
-    
-    <!-- CSS Crítico Inline para evitar FOUC -->
+
     <style>
         /* CSS crítico para evitar flash sem estilo */
         body {
@@ -100,11 +99,9 @@
             display: none;
         }
     </style>
-    
-    <!-- CSS principal -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/lgp.css') }}">
-    
-    <!-- Preload fonte crítica -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -113,11 +110,11 @@
     <meta name="description" content="Interpretação em Língua Gestual Portuguesa no CineVibe. Cinema inclusivo com tradução especializada para a comunidade surda.">
 </head>
 <body>
-    <!-- Loading Spinner -->
+    
     <div class="loading-spinner"></div>
     
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -143,7 +140,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -155,11 +151,10 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Banner -->
+        
         <section class="hero-banner" id="banner">
-            <!-- Video de Fundo -->
+            
             <video id="heroVideo" 
                    width="100%" 
                    height="100%" 
@@ -169,11 +164,10 @@
                    preload="auto"
                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
                 <source src="{{ url_for('static', filename='Vídeos/A MINECRAFT MOVIE Official American Sign Language Trailer Max - HBO Max (720p, h264).mp4') }}" type="video/mp4">
-                <!-- Fallback para browsers que não suportam vídeo -->
+                
                 Seu navegador não suporta vídeos HTML5.
             </video>
-            
-            <!-- Conteúdo do banner -->
+
             <div class="hero-content">
                 <div class="hero-text">
                     <div class="hero-badge">Cinema Inclusivo</div>
@@ -199,10 +193,6 @@
             </div>
         </section>
 
-        <!-- Stats Section -->
-        
-
-        <!-- About Section -->
         <section class="about-section">
             <div class="section-header">
                 <h2>O que é a Interpretação em LGP?</h2>
@@ -234,10 +224,6 @@
             </div>
         </section>
 
-        <!-- Benefits Section -->
-       
-
-        <!-- Testimonials Section -->
         <section class="testimonials-section">
             <div class="section-header">
                 <h2>O que diz a nossa comunidade</h2>
@@ -280,7 +266,6 @@
             </div>
         </section>
 
-        <!-- CTA Section -->
         <section class="cta-section">
             <div class="cta-content">
                 <h2>Pronto para uma experiência cinematográfica em LGP?</h2>
@@ -306,7 +291,6 @@
             </div>
         </section>
 
-        <!-- FAQ Section -->
         <section class="faq-section">
             <div class="section-header">
                 <h2>Perguntas Frequentes</h2>
@@ -333,7 +317,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
   <footer class="footer">
             <div class="footer-main">
                 <div class="footer-container">
@@ -433,7 +416,6 @@
             </div>
         </footer>
 
-    <!-- JavaScript para controlar carregamento e evitar FOUC -->
     <script>
         // Remover FOUC - mostrar conteúdo apenas quando CSS estiver carregado
         document.addEventListener('DOMContentLoaded', function() {
@@ -449,7 +431,6 @@
         });
     </script>
 
-    <!-- Smooth Scroll Script -->
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {

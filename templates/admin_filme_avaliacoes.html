@@ -249,7 +249,7 @@
 
 {% block content %}
 <div class="avaliacoes-page">
-    <!-- Header -->
+    
     <div class="page-header">
         <div class="header-info">
             {% if filme.poster_url %}
@@ -265,7 +265,6 @@
         </button>
     </div>
 
-    <!-- Estatísticas Resumo -->
     <div class="stats-resumo">
         <div class="stat-card">
             <span class="stat-number">{{ "%.1f"|format(stats.rating_medio or 0) }}</span>
@@ -277,7 +276,6 @@
         </div>
     </div>
 
-    <!-- Breakdown por Rating -->
     {% if stats.total_avaliacoes > 0 %}
     <div class="rating-breakdown">
         <h3><i class="fas fa-chart-bar"></i> Distribuição de Ratings</h3>
@@ -296,7 +294,6 @@
     </div>
     {% endif %}
 
-    <!-- Lista de Avaliações -->
     {% if avaliacoes %}
     <div class="avaliacoes-grid">
         {% for avaliacao in avaliacoes %}

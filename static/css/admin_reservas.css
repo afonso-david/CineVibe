@@ -1,13 +1,11 @@
-/* ===== ADMIN RESERVAS - DESIGN CONSISTENTE COM OUTRAS PÁGINAS ADMIN ===== */
 
-/* Layout Principal */
+
 .admin-layout {
     background: #0f0f23;
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Top Bar Professional - Consistente com outras páginas admin */
 .top-bar-pro {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     padding: 24px 32px;
@@ -59,7 +57,6 @@
     font-weight: 400;
 }
 
-/* Quick Stats - Consistente com outras páginas admin */
 .quick-stats {
     display: flex;
     gap: 24px;
@@ -95,7 +92,6 @@
     font-size: 0.9rem;
 }
 
-/* Button Primary - Consistent with admin pages */
 .btn-primary {
     background: linear-gradient(135deg, #28a745, #20c997);
     color: white;
@@ -123,14 +119,12 @@
     font-size: 0.9rem;
 }
 
-/* Dashboard Content Professional */
 .dashboard-content-pro {
     padding: 32px;
     background: #0f0f23;
     min-height: calc(100vh - 140px);
 }
 
-/* Control Panel - Consistente com outras páginas admin */
 .control-panel {
     background: #1a1a2e;
     border-radius: 16px;
@@ -256,7 +250,6 @@
     border-color: #FFD700;
 }
 
-/* View Controls */
 .view-controls {
     display: flex;
     justify-content: space-between;
@@ -301,7 +294,6 @@
     min-width: 180px;
 }
 
-/* Table Container - Consistente com outras páginas admin */
 .movies-table-container {
     background: #1a1a2e;
     border-radius: 16px;
@@ -314,7 +306,6 @@
     overflow-x: auto;
 }
 
-/* Table Professional Styles */
 .movies-table-pro {
     width: 100%;
     border-collapse: collapse;
@@ -359,7 +350,6 @@
     font-weight: 400;
 }
 
-/* Cell Specific Styles */
 .reservation-id {
     font-weight: 700;
     color: #4ea8de;
@@ -415,7 +405,6 @@
     font-style: italic;
 }
 
-/* Status Badges - Cores consistentes */
 .status-badge {
     padding: 6px 12px;
     border-radius: 20px;
@@ -446,7 +435,6 @@
     border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
-/* Action Buttons - Consistente com outras páginas admin */
 .movie-actions-table {
     display: flex;
     gap: 6px;
@@ -504,7 +492,6 @@
     border-color: #ef4444;
 }
 
-/* Modal Styles - Fundo claro para contraste */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -597,7 +584,6 @@
     max-height: calc(90vh - 120px);
 }
 
-/* Reservation Details */
 .reservation-details {
     padding: 25px;
     color: #ffffff;
@@ -699,7 +685,6 @@
     background: rgba(239, 68, 68, 0.1);
 }
 
-/* Loading & Error States */
 .loading {
     text-align: center;
     padding: 40px;
@@ -732,7 +717,6 @@
     display: block;
 }
 
-/* Empty State */
 .sem-resultados td {
     text-align: center;
     padding: 50px 30px;
@@ -748,7 +732,6 @@
     color: rgba(255, 255, 255, 0.4);
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .dashboard-content-pro {
         padding: 24px 16px;
@@ -864,7 +847,6 @@
     }
 }
 
-/* Utility Classes */
 .hidden {
     display: none !important;
     visibility: hidden !important;

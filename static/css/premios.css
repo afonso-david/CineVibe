@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -95,7 +89,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -134,7 +127,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -151,18 +143,12 @@ a {
   transform: scale(1.1);
 }
 
-/* ==========================
-   MAIN CONTENT
-========================== */
 .main-content {
     max-width: 1400px;
     margin: 0 auto;
     padding: 4rem 2rem;
 }
 
-/* ==========================
-   HERO SECTION
-========================== */
 .hero-section {
     display: grid;
     grid-template-columns: 1fr 400px;
@@ -300,9 +286,6 @@ a {
     z-index: -1;
 }
 
-/* ==========================
-   SECTION HEADERS
-========================== */
 .section-header {
     text-align: center;
     margin-bottom: 4rem;
@@ -323,9 +306,6 @@ a {
     line-height: 1.6;
 }
 
-/* ==========================
-   HOW IT WORKS SECTION
-========================== */
 .how-it-works-section {
     margin-bottom: 6rem;
 }
@@ -387,9 +367,6 @@ a {
     line-height: 1.6;
 }
 
-/* ==========================
-   PRÉMIOS SECTION
-========================== */
 .premios-section {
     margin-bottom: 6rem;
 }
@@ -509,9 +486,6 @@ a {
     box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
 }
 
-/* ==========================
-   STATS SECTION
-========================== */
 .stats-section {
     background: rgba(255, 214, 10, 0.05);
     padding: 4rem 2rem;
@@ -560,9 +534,6 @@ a {
     font-weight: 500;
 }
 
-/* ==========================
-   CTA SECTION
-========================== */
 .cta-section {
     background: rgba(255, 214, 10, 0.1);
     border: 1px solid rgba(255, 214, 10, 0.2);
@@ -634,9 +605,6 @@ a {
     font-weight: bold;
 }
 
-/* ==========================
-   FAQ SECTION
-========================== */
 .faq-section {
     margin-bottom: 6rem;
 }
@@ -674,9 +642,6 @@ a {
     line-height: 1.6;
 }
 
-/* ==========================
-   FOOTER
-========================== */
 .footer {
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%);
     color: #E2E8F0;
@@ -970,9 +935,6 @@ a {
     opacity: 1;
 }
 
-/* ==========================
-   RESPONSIVE
-========================== */
 @media (max-width: 768px) {
     .hero-section {
         grid-template-columns: 1fr;

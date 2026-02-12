@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 html {
   overflow-y: scroll;
   height: 100%;
@@ -16,9 +14,6 @@ body {
   min-height: 100vh;
 }
 
-/* ==========================
-   PAGE WRAPPER
-========================== */
 main {
   flex: 1 0 auto;
 }
@@ -28,9 +23,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -55,7 +47,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -108,7 +99,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -147,7 +137,6 @@ a {
   cursor: pointer;
 }
 
-/* Dropdown de Resultados de Pesquisa */
 .search-results {
   position: absolute;
   top: calc(100% + 5px);
@@ -249,7 +238,6 @@ a {
   box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -265,9 +253,7 @@ a {
   background-color: #18AFC6;
   transform: scale(1.1);
 }
-/* ==========================
-   REGISTER SECTION PREMIUM
-========================== */
+
 .register-section {
   flex: 1 0 auto;
   display: flex;
@@ -290,9 +276,6 @@ a {
   backdrop-filter: blur(20px);
 }
 
-/* ==========================
-   PAINEL LATERAL ESQUERDO
-========================== */
 .register-side-panel {
   background: linear-gradient(135deg, #1a252f, #2c3e50);
   padding: 60px 50px;
@@ -382,9 +365,6 @@ a {
   font-weight: 500;
 }
 
-/* ==========================
-   PAINEL DO FORMULÁRIO
-========================== */
 .register-form-panel {
   padding: 60px 50px;
   display: flex;
@@ -432,7 +412,6 @@ a {
   opacity: 0.9;
 }
 
-/* Error Message */
 .error-message {
   display: flex;
   align-items: center;
@@ -452,9 +431,6 @@ a {
   75% { transform: translateX(10px); }
 }
 
-/* ==========================
-   FORMULÁRIO
-========================== */
 .register-form {
   display: flex;
   flex-direction: column;
@@ -539,9 +515,6 @@ a {
   color: #FFD60A;
 }
 
-/* ==========================
-   AVATAR SECTION
-========================== */
 .avatar-section {
   margin-top: 10px;
   padding: 25px;
@@ -689,7 +662,6 @@ a {
   color: #000;
 }
 
-/* Upload Section */
 .upload-section {
   margin-top: 15px;
 }
@@ -722,9 +694,6 @@ a {
   display: none;
 }
 
-/* ==========================
-   BOTÃO DE REGISTO
-========================== */
 .btn-register {
   display: flex;
   align-items: center;
@@ -778,9 +747,6 @@ a {
   transform: translateX(5px);
 }
 
-/* ==========================
-   FOOTER DO FORMULÁRIO
-========================== */
 .form-footer {
   text-align: center;
   padding-top: 20px;
@@ -803,9 +769,6 @@ a {
   color: #4EA8DE;
 }
 
-/* ==========================
-   RESPONSIVIDADE
-========================== */
 @media (max-width: 1024px) {
   .register-wrapper {
     grid-template-columns: 1fr;
@@ -901,9 +864,6 @@ a {
   }
 }
 
-/* ==========================
-   FOOTER PROFISSIONAL AJEITADO
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -914,7 +874,6 @@ a {
   width: 100%;
 }
 
-/* Transição suave da secção anterior */
 .footer::before {
   content: '';
   position: absolute;
@@ -953,7 +912,6 @@ a {
   align-items: start;
 }
 
-/* Seções do footer */
 .footer-section {
   position: relative;
 }
@@ -1009,7 +967,6 @@ a {
   opacity: 0.9;
 }
 
-/* Redes sociais */
 .footer-social {
   display: flex;
   gap: 18px;
@@ -1069,7 +1026,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Links do footer */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -1112,7 +1068,6 @@ a {
   left: -15px;
 }
 
-/* Newsletter */
 .newsletter-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   padding: 35px;
@@ -1213,7 +1168,6 @@ a {
   box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
 }
 
-/* Contactos no footer */
 .footer-contact {
   margin-top: 20px;
 }
@@ -1231,7 +1185,6 @@ a {
   font-size: 16px;
 }
 
-/* Footer bottom */
 .footer-bottom {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(13, 27, 42, 0.6));
   padding: 40px 0 50px;
@@ -1307,7 +1260,6 @@ a {
   width: 100%;
 }
 
-/* Certificações */
 .footer-certifications {
   display: flex;
   align-items: center;
@@ -1341,7 +1293,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -1377,7 +1328,7 @@ a {
     text-align: center;
   }
 }
-/* Dropdown de Resultados de Pesquisa */
+
 .search-results {
   position: absolute;
   top: calc(100% + 5px);
@@ -1477,8 +1428,7 @@ a {
 .search-view-all:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
-}/* 
-IMAGEM DE PERFIL DO UTILIZADOR */
+}
 .user-pic {
   background-color: #1B263B;
   border-radius: 50%;
@@ -1561,9 +1511,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   flex-shrink: 0;
 }
 
-/* ==========================
-   MODAL AVATAR ESTILO NETFLIX
-========================== */
 .avatar-modal {
   display: none;
   position: fixed;
@@ -1648,9 +1595,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   transform: scale(1.1);
 }
 
-/* ==========================
-   CATEGORIAS ESTILO NETFLIX
-========================== */
 .avatar-categories-netflix {
   display: flex;
   gap: 15px;
@@ -1696,9 +1640,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   font-weight: 700;
 }
 
-/* ==========================
-   GRID DE AVATARES ESTILO NETFLIX
-========================== */
 .avatar-grid-netflix {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -1783,9 +1724,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   height: 18px;
 }
 
-/* ==========================
-   SECÇÃO DE UPLOAD
-========================== */
 .avatar-upload-section {
   margin-bottom: 30px;
 }
@@ -1824,9 +1762,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   font-size: 0.95rem;
 }
 
-/* ==========================
-   FOOTER DO MODAL
-========================== */
 .avatar-modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -1869,9 +1804,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
 }
 
-/* ==========================
-   RESPONSIVIDADE DO MODAL
-========================== */
 @media (max-width: 768px) {
   .avatar-modal-content {
     padding: 25px;
@@ -1897,7 +1829,7 @@ IMAGEM DE PERFIL DO UTILIZADOR */
     width: 100%;
   }
 }
-/* Classes para mensagens de avatar */
+
 .avatar-no-available {
   color: #999;
   text-align: center;

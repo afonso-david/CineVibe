@@ -12,9 +12,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -39,7 +36,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -92,7 +88,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -131,7 +126,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -148,7 +142,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Container principal */
 main {
     padding: 2rem 0;
     min-height: calc(100vh - 200px);
@@ -160,7 +153,6 @@ main {
     padding: 0 20px;
 }
 
-/* Card de informações do filme - ELEGANTE COM DETALHES VISUAIS */
 .movie-info-card {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.95) 0%, rgba(13, 27, 42, 0.98) 100%);
     border-radius: 20px;
@@ -173,7 +165,6 @@ main {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(78, 168, 222, 0.1) inset;
 }
 
-/* Linha decorativa superior - gradiente azul/amarelo */
 .movie-info-card::before {
     content: '';
     position: absolute;
@@ -184,7 +175,6 @@ main {
     background: linear-gradient(90deg, transparent, #4EA8DE 30%, #FFD60A 70%, transparent);
 }
 
-/* Círculo decorativo azul no canto superior direito */
 .movie-info-card::after {
     content: '';
     position: absolute;
@@ -238,7 +228,6 @@ main {
     display: inline-block;
 }
 
-/* Linha decorativa sob o título */
 .movie-title::after {
     content: '';
     position: absolute;
@@ -306,7 +295,6 @@ main {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Seleção de quantidade - ELEGANTE CINEVIBE */
 .ticket-selection {
     background: linear-gradient(135deg, 
         rgba(27, 38, 59, 0.5) 0%, 
@@ -328,7 +316,6 @@ main {
     text-shadow: none;
 }
 
-/* Grid de quantidade - MELHORADO COM CORES CINEVIBE */
 .quantity-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -418,7 +405,6 @@ main {
     font-size: 0.9rem;
 }
 
-/* Quantidade personalizada - ELEGANTE CINEVIBE */
 .custom-quantity {
     margin: 2rem 0;
     text-align: center;
@@ -485,7 +471,6 @@ main {
     background: rgba(27, 38, 59, 0.8);
 }
 
-/* Botão avançar - ELEGANTE CINEVIBE */
 .advance-btn {
     background: linear-gradient(135deg, #4EA8DE 0%, #3B91C0 100%);
     color: white;
@@ -527,7 +512,6 @@ main {
     box-shadow: none;
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .quantity-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -561,7 +545,6 @@ main {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* 🎬 CARD DO FILME ELEGANTE CINEVIBE */
 .filme-card {
     background: linear-gradient(145deg, 
         rgba(27, 38, 59, 0.4) 0%, 
@@ -581,7 +564,6 @@ main {
     border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* 🖼️ POSTER PREMIUM */
 .poster-container {
     position: relative;
     overflow: hidden;
@@ -618,7 +600,6 @@ main {
     opacity: 1;
 }
 
-/* 📊 INFORMAÇÕES DO FILME */
 .filme-info {
     padding: 20px;
 }
@@ -645,7 +626,6 @@ main {
     font-weight: 600;
 }
 
-/* 🎫 DETALHES DA SESSÃO ELEGANTE CINEVIBE */
 .sessao-detalhes {
     background: linear-gradient(145deg, 
         rgba(27, 38, 59, 0.3) 0%, 
@@ -675,7 +655,6 @@ main {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* 📅 GRID DE INFORMAÇÕES */
 .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -721,7 +700,6 @@ main {
     margin: 0;
 }
 
-/* 🎯 BOTÕES ELEGANTE CINEVIBE */
 .btn-premium {
     background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
     border: 2px solid rgba(255, 214, 10, 0.3);
@@ -774,7 +752,6 @@ main {
     transform: translateY(-1px);
 }
 
-/* 🔙 BOTÃO VOLTAR ELEGANTE */
 .btn-voltar {
     background: linear-gradient(135deg, 
         rgba(27, 38, 59, 0.8) 0%, 
@@ -804,7 +781,6 @@ main {
     border-color: rgba(255, 214, 10, 0.5);
 }
 
-/* 📱 RESPONSIVIDADE PREMIUM */
 @media (max-width: 768px) {
     .container {
         margin: 10px;
@@ -832,7 +808,6 @@ main {
     }
 }
 
-/* 🎨 EFEITOS ESPECIAIS */
 .sparkle {
     position: relative;
 }
@@ -846,7 +821,6 @@ main {
     animation: none;
 }
 
-/* 🌟 LOADING PREMIUM */
 .loading-premium {
     display: inline-block;
     width: 20px;
@@ -861,7 +835,6 @@ main {
     to { transform: rotate(360deg); }
 }
 
-/* 🎭 EFEITOS DE HOVER ESPECIAIS */
 .hover-glow:hover {
     animation: none;
 }
@@ -874,7 +847,6 @@ main {
     animation: none;
 }
 
-/* 🎫 SELEÇÃO DE QUANTIDADE PREMIUM */
 .ticket-selection {
     background: linear-gradient(135deg, 
         rgba(27, 38, 59, 0.5) 0%,
@@ -888,7 +860,6 @@ main {
     animation: none;
 }
 
-/* 🔢 GRID DE QUANTIDADE */
 .quantity-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -958,7 +929,6 @@ main {
     letter-spacing: 1px;
 }
 
-/* 🎛️ QUANTIDADE PERSONALIZADA */
 .custom-quantity {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
@@ -1030,7 +1000,6 @@ main {
     box-shadow: 0 0 20px rgba(255, 214, 10, 0.4);
 }
 
-/* 🚀 BOTÕES DE NAVEGAÇÃO */
 .navigation-buttons {
     display: flex;
     gap: 20px;
@@ -1042,7 +1011,6 @@ main {
     flex: 1;
 }
 
-/* 📱 RESPONSIVIDADE AVANÇADA */
 @media (max-width: 768px) {
     .quantity-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1099,7 +1067,6 @@ main {
     }
 }
 
-/* 🎨 EFEITOS ESPECIAIS ADICIONAIS */
 .ticket-selection:hover {
     transform: translateY(-2px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -1112,7 +1079,6 @@ main {
 .quantity-option:nth-child(5) { animation-delay: 0.5s; }
 .quantity-option:nth-child(6) { animation-delay: 0.6s; }
 
-/* ✨ LOADING STATE */
 .btn-premium:disabled {
     opacity: 0.7;
     cursor: not-allowed;
@@ -1192,7 +1158,6 @@ main {
     outline: none;
 }
 
-/* Botão continuar - MELHORADO */
 .continue-btn {
     background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
     border: none;
@@ -1239,7 +1204,6 @@ main {
     transform: translateY(0);
 }
 
-/* Responsividade melhorada */
 @media (max-width: 768px) {
     .movie-info-content {
         flex-direction: column;
@@ -1292,38 +1256,6 @@ main {
     }
 }
 
-/* ANIMAÇÕES DESATIVADAS
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-*/
-
-/* ANIMAÇÕES DESATIVADAS
-@keyframes slideInFromLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes slideInFromRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-*/
-
 .movie-info-card {
     animation: none;
 }
@@ -1332,9 +1264,6 @@ main {
     animation: none;
 }
 
-/* Efeitos de hover melhorados - REMOVIDOS */
-
-/* Loading state para imagens */
 .movie-poster {
     background: linear-gradient(45deg, #1B263B, #0D1B2A);
     background-size: 400% 400%;
@@ -1352,9 +1281,6 @@ main {
     background: none;
 }
 
-/* ===== CORES CINEVIBE SUAVES E ELEGANTES ===== */
-
-/* Desativar TODAS as animações e transições */
 *,
 *::before,
 *::after {
@@ -1373,7 +1299,6 @@ body::before {
     animation: none !important;
 }
 
-/* FORÇAR REMOÇÃO DE AMARELO */
 .quantity-option,
 .quantity-option:hover,
 .quantity-option:active,
@@ -1392,7 +1317,6 @@ body::before {
     color: #FFD60A !important;
 }
 
-/* Seção de seleção - TONS SUAVES */
 .ticket-selection {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.5), rgba(13, 27, 42, 0.7)) !important;
     border: 1px solid rgba(78, 168, 222, 0.3) !important;
@@ -1437,7 +1361,6 @@ body::before {
     color: #E8EEF2 !important;
 }
 
-/* Informações do filme */
 .cinema-name {
     color: #4EA8DE !important;
 }
@@ -1450,7 +1373,6 @@ body::before {
     color: #4EA8DE !important;
 }
 
-/* Quantidade personalizada - TONS SUAVES */
 .custom-quantity {
     background: rgba(27, 38, 59, 0.4) !important;
     border: 2px solid rgba(78, 168, 222, 0.3) !important;
@@ -1481,7 +1403,6 @@ body::before {
     border-color: rgba(78, 168, 222, 0.4) !important;
 }
 
-/* Botões principais - AZUL SUAVE */
 .continue-btn, .advance-btn, [class*="btn-"] {
     background: linear-gradient(135deg, #4EA8DE, #3B91C0) !important;
     color: white !important;
@@ -1496,8 +1417,6 @@ body::before {
     box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5) !important;
 }
 
-
-/* ===== FORÇAR REMOÇÃO TOTAL DE AMARELO ===== */
 .quantity-option,
 .quantity-option *,
 .quantity-option:hover,
@@ -1533,8 +1452,6 @@ body::before {
     color: #E8EEF2 !important;
 }
 
-
-/* ===== REMOVER COMPLETAMENTE EFEITOS DE CLIQUE E FOCUS ===== */
 .quantity-option,
 .quantity-option *,
 .quantity-option:hover,
@@ -1567,7 +1484,6 @@ body::before {
     border-color: rgba(78, 168, 222, 0.6) !important;
 }
 
-/* Remover qualquer highlight do browser */
 .quantity-option::-moz-focus-inner {
     border: 0 !important;
 }
@@ -1578,11 +1494,6 @@ body::before {
     -webkit-user-select: none !important;
     user-select: none !important;
 }
-
-
-/* ===================================================
-   MODAL DE SALA EXCLUSIVA
-=================================================== */
 
 .modal-overlay {
     position: fixed;
@@ -1610,7 +1521,6 @@ body::before {
     overflow: hidden;
 }
 
-/* Linha decorativa superior */
 .modal-content::before {
     content: '';
     position: absolute;
@@ -1767,7 +1677,6 @@ body::before {
     transform: translateY(-2px);
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .modal-content {
         max-width: 95%;

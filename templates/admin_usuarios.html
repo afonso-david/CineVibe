@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="admin-layout">
-        <!-- Sidebar -->
+        
         <aside class="sidebar">
             
             <nav class="sidebar-nav">
@@ -63,8 +63,7 @@
                     <span>Voltar ao Site</span>
                 </a>
             </nav>
-        
-            <!-- User Profile Section -->
+
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <div class="profile-background">
@@ -117,9 +116,8 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Top Bar -->
+            
             <header class="top-bar-pro">
                 <div class="top-bar-left">
                     <div class="page-title">
@@ -148,9 +146,8 @@
                 </div>
             </header>
 
-            <!-- Content -->
             <div class="dashboard-content-pro">
-                <!-- Control Panel -->
+                
                 <div class="control-panel">
                     <div class="search-section">
                         <div class="search-box-pro">
@@ -196,7 +193,6 @@
                     </div>
                 </div>
 
-                <!-- Grid View -->
                 <div class="movies-grid" id="usuarios-grid" style="display: none;">
                     {% for usuario in usuarios %}
                     <div class="movie-card-pro" data-usuario-id="{{ usuario.id }}" data-admin="{{ usuario.is_admin }}" data-criado="{{ usuario.criado_em }}">
@@ -229,7 +225,6 @@
                     {% endfor %}
                 </div>
 
-                <!-- Table View -->
                 <div class="movies-table-container" id="usuarios-table">
                     <div class="table-wrapper">
                         <table class="movies-table-pro">
@@ -310,7 +305,6 @@
         </main>
     </div>
 
-    <!-- Modal Adicionar Usuário -->
     <div id="modalAdicionarUsuario" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
@@ -356,7 +350,6 @@
         </div>
     </div>
 
-    <!-- Modal Ver Usuário Detalhes -->
     <div id="modalVerUsuario" class="modal-overlay" style="display: none;">
         <div class="modal-content large">
             <div class="modal-header">
@@ -367,7 +360,7 @@
             </div>
             <div class="modal-body">
                 <div id="usuarioDetalhesContent">
-                    <!-- Conteúdo carregado via AJAX -->
+                    
                 </div>
             </div>
             <div class="modal-actions">

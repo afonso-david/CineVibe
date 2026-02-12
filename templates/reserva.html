@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -38,7 +38,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}"class="active">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -50,11 +49,9 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-        <!-- Main Content -->
         <main style="padding: 2rem 0; background: #0D1B2A;">
             <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-                
-                <!-- Movie Info Card -->
+
                 <div class="movie-info-card">
                     <div class="movie-info-content">
                         {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
@@ -88,11 +85,9 @@
                     </div>
                 </div>
 
-                <!-- Ticket Quantity Selection -->
                 <div class="ticket-selection">
                     <h3>Selecione a Quantidade de Bilhetes</h3>
-                    
-                    <!-- Grid com 6 opções -->
+
                     <div class="quantity-grid">
                         <div class="quantity-option" data-quantity="1">
                             <div class="quantity-number">1</div>
@@ -124,8 +119,7 @@
                             <div class="quantity-label">Bilhetes</div>
                         </div>
                     </div>
-                    
-                    <!-- Seção para quantidade personalizada -->
+
                     <div class="custom-quantity">
                         <h4>Ou escolha uma quantidade personalizada:</h4>
                         <div class="quantity-input-group">
@@ -134,8 +128,7 @@
                             <button type="button" class="quantity-btn" id="increaseBtn">+</button>
                         </div>
                     </div>
-                    
-                    <!-- Botão Avançar -->
+
                     <form method="POST" action="{{ url_for('selecao_lugares') }}">
                         <input type="hidden" name="filme_id" value="{{ filme.id }}">
                         <input type="hidden" name="cinema_id" value="{{ cinema.id }}">
@@ -155,7 +148,6 @@
         </main>
     </div>
 
-    <!-- Modal de Sugestão de Sala Exclusiva -->
     <div id="exclusiveRoomModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">

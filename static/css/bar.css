@@ -1,6 +1,5 @@
-/* ===== BAR PAGE STYLES - PROFESSIONAL DESIGN ===== */
 
-/* Base Styles */
+
 html {
     overflow-y: scroll;
 }
@@ -24,7 +23,6 @@ a {
     padding: 0 20px;
 }
 
-/* Header Styles */
 .top-nav {
     display: flex;
     align-items: center;
@@ -141,7 +139,6 @@ a {
     transform: scale(1.1);
 }
 
-/* Hero Section */
 .hero-bar {
     background-color: #0d1117;
     background-image: url('/static/imgs/Snacks/fundo 2.png');
@@ -281,12 +278,10 @@ a {
     font-size: 1.2rem;
 }
 
-/* Main Content */
 main {
     flex: 1 0 auto;
 }
 
-/* Section Styles */
 .menus-section,
 .produtos-section {
     padding: 5rem 0;
@@ -316,7 +311,6 @@ main {
     text-align: center;
 }
 
-/* Menu Cards */
 .menus-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -339,7 +333,6 @@ main {
     display: none;
 }
 
-/* Remover hover */
 .menu-card {
     transform: none !important;
     transition: none !important;
@@ -442,7 +435,6 @@ main {
     margin-right: 0.5rem;
 }
 
-/* Filtros */
 .filtros-produtos {
     text-align: center;
     margin-bottom: 3rem;
@@ -478,7 +470,6 @@ main {
     box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
 }
 
-/* Categoria Section */
 .categoria-section {
     margin-bottom: 4rem;
 }
@@ -501,7 +492,6 @@ main {
     color: #F77F00;
 }
 
-/* Produtos Grid */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -653,7 +643,6 @@ main {
     text-align: center;
 }
 
-/* Empty State */
 .empty-state {
     text-align: center;
     padding: 4rem 2rem;
@@ -672,7 +661,6 @@ main {
     margin-bottom: 1rem;
 }
 
-/* Carrinho Flutuante */
 .carrinho-flutuante {
     position: fixed;
     top: 50%;
@@ -826,14 +814,12 @@ main {
     margin-right: 0.5rem;
 }
 
-/* Page Wrapper */
 .page-wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* Footer Styles (mantendo o existente) */
 .footer {
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
     color: #fff;
@@ -1277,7 +1263,6 @@ main {
     border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Scrollbar Customization */
 .carrinho-items::-webkit-scrollbar {
     width: 6px;
 }
@@ -1296,7 +1281,6 @@ main {
     background: linear-gradient(135deg, #F77F00, #FFD60A);
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .footer-container {
         grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -1443,7 +1427,7 @@ main {
         padding: 12px 20px;
     }
 }
-/* Seção de Produtos */
+
 .produtos-section {
     padding: 4rem 0;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -1468,7 +1452,6 @@ main {
     margin-bottom: 3rem;
 }
 
-/* Filtros */
 .filtros-produtos {
     display: flex;
     justify-content: center;
@@ -1511,7 +1494,6 @@ main {
     font-size: 1.1rem;
 }
 
-/* Grid de Produtos */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1633,7 +1615,6 @@ main {
     letter-spacing: 0.5px;
 }
 
-/* Animações de filtro */
 .produto-card.hidden {
     display: none;
 }
@@ -1654,7 +1635,6 @@ main {
     }
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .filtros-produtos {
         gap: 0.5rem;
@@ -1674,7 +1654,7 @@ main {
         font-size: 2rem;
     }
 }
-/* Mensagem quando não há produtos */
+
 .no-products, .no-products-filter {
     grid-column: 1 / -1;
     text-align: center;
@@ -1688,9 +1668,6 @@ main {
     opacity: 0.7;
 }
 
-/* ===== PREMIUM MENU CARDS STYLES ===== */
-
-/* Section Header Premium */
 .section-header-premium {
     text-align: center;
     margin-bottom: 4rem;
@@ -1732,7 +1709,6 @@ main {
     opacity: 0.9;
 }
 
-/* Premium Menu Grid */
 .menus-grid-premium {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -1742,7 +1718,6 @@ main {
     margin: 0 auto;
 }
 
-/* Premium Menu Card */
 .menu-card-premium {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.95), rgba(44, 62, 80, 0.95));
     border-radius: 25px;
@@ -1778,7 +1753,6 @@ main {
     border-color: rgba(255, 214, 10, 0.6);
 }
 
-/* Menu Image Container */
 .menu-image-container {
     position: relative;
     height: 280px;
@@ -1808,7 +1782,6 @@ main {
     font-size: 4rem;
 }
 
-/* Menu Overlay */
 .menu-overlay {
     position: absolute;
     top: 0;
@@ -1829,7 +1802,6 @@ main {
     opacity: 1;
 }
 
-/* Menu Badges */
 .menu-badges {
     position: absolute;
     top: 20px;
@@ -1860,7 +1832,6 @@ main {
     color: white;
 }
 
-/* Ver Menu Button Premium */
 .btn-ver-menu-premium {
     background: linear-gradient(135deg, #FFD60A, #F77F00);
     color: #1B263B;
@@ -1885,14 +1856,12 @@ main {
     background: linear-gradient(135deg, #F77F00, #FFD60A);
 }
 
-/* Menu Content */
 .menu-content {
     padding: 2rem;
     position: relative;
     z-index: 2;
 }
 
-/* Menu Header */
 .menu-header {
     display: flex;
     justify-content: space-between;
@@ -1909,7 +1878,6 @@ main {
     letter-spacing: 0.5px;
 }
 
-/* Menu Rating */
 .menu-rating {
     display: flex;
     align-items: center;
@@ -1933,7 +1901,6 @@ main {
     font-size: 0.9rem;
 }
 
-/* Menu Description */
 .menu-description {
     color: #B8C5D1;
     font-size: 1rem;
@@ -1942,7 +1909,6 @@ main {
     opacity: 0.9;
 }
 
-/* Menu Highlights */
 .menu-highlights {
     display: flex;
     justify-content: space-between;
@@ -1980,7 +1946,6 @@ main {
     font-weight: 600;
 }
 
-/* Menu Footer */
 .menu-footer {
     display: flex;
     justify-content: space-between;
@@ -1990,7 +1955,6 @@ main {
     border-top: 2px solid rgba(255, 214, 10, 0.2);
 }
 
-/* Menu Price Container */
 .menu-price-container {
     display: flex;
     flex-direction: column;
@@ -2025,7 +1989,6 @@ main {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Menu Actions */
 .menu-actions {
     display: flex;
     flex-direction: column;
@@ -2058,7 +2021,6 @@ main {
     background: linear-gradient(135deg, #F77F00, #FFD60A);
 }
 
-/* Menu Benefits Section */
 .menus-benefits {
     margin-top: 5rem;
     padding: 3rem 2rem;
@@ -2123,7 +2085,6 @@ main {
     opacity: 0.9;
 }
 
-/* Responsive Design for Premium Menus */
 @media (max-width: 1200px) {
     .menus-grid-premium {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -2246,9 +2207,6 @@ main {
     }
 }
 
-/* ===== NOVA SEÇÃO DE MENUS - BAR PAGE ===== */
-
-/* Section Header */
 .section-header {
     text-align: center;
     margin-bottom: 4rem;
@@ -2281,7 +2239,6 @@ main {
     opacity: 0.9;
 }
 
-/* Menus Grid */
 .menus-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -2291,7 +2248,6 @@ main {
     margin: 0 auto;
 }
 
-/* Menu Card */
 .menu-card {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.95), rgba(44, 62, 80, 0.95));
     border-radius: 16px;
@@ -2326,7 +2282,6 @@ main {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Menu Image */
 .menu-image {
     position: relative;
     height: 200px;
@@ -2342,7 +2297,6 @@ main {
     transform: none;
 }
 
-/* Menu Overlay - Oculto */
 .menu-overlay {
     display: none;
 }
@@ -2356,7 +2310,6 @@ main {
     font-size: 1rem;
 }
 
-/* Menu Content */
 .menu-content {
     padding: 1.5rem;
     position: relative;
@@ -2380,7 +2333,6 @@ main {
     opacity: 0.9;
 }
 
-/* Menu Footer */
 .menu-footer {
     display: flex;
     justify-content: space-between;
@@ -2418,7 +2370,6 @@ main {
     background: linear-gradient(135deg, #F77F00, #FFD60A);
 }
 
-/* No Menus State */
 .no-menus {
     grid-column: 1 / -1;
     text-align: center;
@@ -2448,7 +2399,6 @@ main {
     line-height: 1.6;
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .menus-grid {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -2539,7 +2489,7 @@ main {
         font-size: 1.4rem;
     }
 }
-/* ===== PRODUTOS SECTION ===== */
+
 .produtos-section {
     padding: 80px 0;
     background: linear-gradient(135deg, #1B263B 0%, #2C3E50 100%);
@@ -2736,7 +2686,6 @@ main {
     box-shadow: 0 8px 20px rgba(255, 214, 10, 0.3);
 }
 
-/* ===== CARRINHO FLUTUANTE ===== */
 .carrinho-flutuante {
     position: fixed;
     top: 50%;
@@ -2926,7 +2875,6 @@ main {
     box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
 }
 
-/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .category-filters {
         gap: 10px;
@@ -2974,10 +2922,6 @@ main {
     }
 }
 
-
-/* ==========================
-   SEÇÃO DE TOPPINGS
-========================== */
 .toppings-section {
     padding: 5rem 0;
     background: linear-gradient(135deg, #0F1419 0%, #1B263B 50%, #2C3E50 100%);
@@ -3079,7 +3023,6 @@ main {
     color: #B8C5D1;
 }
 
-/* Responsive para toppings */
 @media (max-width: 768px) {
     .toppings-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

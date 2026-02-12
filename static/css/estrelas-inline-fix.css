@@ -1,6 +1,5 @@
-/* CSS LIMPO PARA ESTRELAS INLINE - SEM CONFLITOS */
 
-/* Resetar completamente as estrelas */
+
 .stars-inline .star-inline {
     position: relative !important;
     display: inline-block !important;
@@ -10,8 +9,7 @@
     user-select: none !important;
     line-height: 1 !important;
     margin: 0 2px !important;
-    
-    /* NUNCA alterar o tamanho */
+
     transform: none !important;
     transition: color 0.2s ease !important;
     animation: none !important;
@@ -19,7 +17,6 @@
     scale: none !important;
 }
 
-/* Estrela completa - apenas cor dourada */
 .stars-inline .star-inline.full-star {
     color: #FFD60A !important;
     text-shadow: 0 0 10px rgba(255, 214, 10, 0.5) !important;
@@ -27,7 +24,6 @@
     font-size: 1rem !important;
 }
 
-/* Meia estrela - metade preenchida */
 .stars-inline .star-inline.half-star {
     color: #444 !important;
     text-shadow: none !important;
@@ -49,7 +45,6 @@
     transform: none !important;
 }
 
-/* Hover - apenas mudança de cor */
 .stars-inline .star-inline:hover {
     color: #FFD60A !important;
     text-shadow: 0 0 15px rgba(255, 214, 10, 0.8) !important;
@@ -59,7 +54,6 @@
     filter: none !important;
 }
 
-/* Remover qualquer efeito de escala ou animação */
 .stars-inline .star-inline:active,
 .stars-inline .star-inline:focus,
 .stars-inline .star-inline.active {
@@ -69,7 +63,6 @@
     filter: none !important;
 }
 
-/* Garantir que o pseudo-elemento da meia estrela também não mude */
 .stars-inline .star-inline.half-star:hover::before {
     transform: none !important;
     font-size: 1rem !important;

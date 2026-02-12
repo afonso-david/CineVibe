@@ -1,6 +1,4 @@
-/* ==========================
-   PÁGINA DE PAGAMENTO
-========================== */
+
 body {
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
     min-height: 100vh;
@@ -30,9 +28,6 @@ body {
     padding: 0 1rem;
 }
 
-/* ==========================
-   RESUMO DA COMPRA
-========================== */
 .resumo-reserva {
     background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
     border-radius: 20px;
@@ -153,16 +148,12 @@ body {
     box-shadow: 0 4px 20px rgba(255, 214, 10, 0.1);
 }
 
-/* ==========================
-   SEÇÃO DE CHECKOUT
-========================== */
 .checkout-section {
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-/* Informações do usuário logado */
 .user-info-section {
     background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
     border-radius: 20px;
@@ -206,7 +197,6 @@ body {
     color: #4EA8DE;
 }
 
-/* Formulário para convidados */
 .guest-form-section {
     background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
     border-radius: 20px;
@@ -261,7 +251,6 @@ body {
     color: rgba(184, 197, 209, 0.6);
 }
 
-/* Métodos de Pagamento */
 .metodos-pagamento {
     background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.95));
     border-radius: 20px;
@@ -431,7 +420,6 @@ body {
     font-size: 1.1rem;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .pagamento-container {
         grid-template-columns: 1fr;
@@ -540,8 +528,7 @@ body {
         justify-content: center;
     }
 }
-/* Es
-tilos para seções antigas de pagamento com imagens */
+
 .pagamento-opcoes {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -616,16 +603,12 @@ tilos para seções antigas de pagamento com imagens */
     color: #4EA8DE;
 }
 
-/* Responsividade para seções antigas */
 @media (max-width: 768px) {
     .pagamento-opcoes {
         grid-template-columns: 1fr;
     }
 }
 
-/* ==========================
-   SEÇÃO DE CÓDIGO DE DESCONTO
-========================== */
 .codigo-desconto-section {
     margin-bottom: 2rem;
     padding: 1.5rem;
@@ -832,7 +815,6 @@ tilos para seções antigas de pagamento com imagens */
     font-weight: 700;
 }
 
-/* Animações */
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -844,7 +826,6 @@ tilos para seções antigas de pagamento com imagens */
     }
 }
 
-/* Responsividade para código de desconto */
 @media (max-width: 768px) {
     .codigo-input-group {
         flex-direction: column;

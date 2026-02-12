@@ -1,6 +1,5 @@
-/* ===== ADMIN FILMES PROFESSIONAL STYLES ===== */
 
-/* Top Bar Professional */
+
 .top-bar-pro {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     padding: 24px 32px;
@@ -69,14 +68,12 @@
     font-size: 0.9rem;
 }
 
-/* Dashboard Content Professional */
 .dashboard-content-pro {
     padding: 32px;
     background: #0f0f23;
     min-height: calc(100vh - 140px);
 }
 
-/* Control Panel */
 .control-panel {
     background: #1a1a2e;
     border-radius: 16px;
@@ -258,7 +255,6 @@
     color: #ffffff;
 }
 
-/* Movies Grid */
 .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -443,7 +439,6 @@
     color: #FFD700;
 }
 
-/* Table View */
 .movies-table-container {
     background: #1a1a2e;
     border-radius: 16px;
@@ -560,7 +555,6 @@
     text-align: center;
 }
 
-/* Table Actions */
 .table-actions-pro {
     display: flex;
     gap: 8px;
@@ -604,7 +598,6 @@
     transform: scale(1.1);
 }
 
-/* Dropdown */
 .dropdown {
     position: relative;
 }
@@ -660,7 +653,6 @@
     margin: 8px 0;
 }
 
-/* Modal Professional */
 .modal-overlay-pro {
     position: fixed;
     top: 0;
@@ -879,7 +871,6 @@
     border-color: #FFD700;
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .movies-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -981,7 +972,7 @@
         font-size: 1rem;
     }
 }
-/* 📤 UPLOAD DE POSTER */
+
 .file-upload-container {
     position: relative;
     margin-top: 10px;
@@ -1074,7 +1065,6 @@
     transform: scale(1.1);
 }
 
-/* 📱 RESPONSIVIDADE */
 @media (max-width: 768px) {
     .file-upload-area {
         padding: 30px 15px;
@@ -1090,7 +1080,6 @@
     }
 }
 
-/* 🎭 MULTI-SELECT GÉNEROS */
 .multi-select-container {
     position: relative;
     margin-top: 10px;
@@ -1219,7 +1208,6 @@
     color: #ffd700;
 }
 
-/* 🎨 TAGS SELECIONADAS */
 .selected-genres-tags {
     display: flex;
     flex-wrap: wrap;
@@ -1251,7 +1239,6 @@
     opacity: 1;
 }
 
-/* 📱 RESPONSIVIDADE */
 @media (max-width: 768px) {
     .multi-select-dropdown {
         max-height: 150px;
@@ -1271,7 +1258,6 @@
     }
 }
 
-/* 🎯 SCROLLBAR PERSONALIZADA */
 .multi-select-dropdown::-webkit-scrollbar {
     width: 6px;
 }

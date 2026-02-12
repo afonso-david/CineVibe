@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -37,7 +37,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -49,17 +48,15 @@
             <a href="{{ url_for('contactos') }}" class="active">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main class="contactos-main">
-            <!-- Hero Section -->
+            
             <div class="contactos-hero">
                 <h1>Contactos</h1>
                 <p>Entre em contacto connosco. Estamos aqui para ajudar com qualquer questão sobre a sua experiência cinematográfica.</p>
             </div>
-            
-            <!-- Contactos Container -->
+
             <div class="contactos-container">
-                <!-- Formulário -->
+                
                 <div class="contacto-form-section">
                     <h2><i class="fas fa-envelope"></i> Envie-nos uma Mensagem</h2>
                     <form method="POST">
@@ -93,8 +90,7 @@
                         </button>
                     </form>
                 </div>
-                
-                <!-- Informações de Contacto -->
+
                 <div class="contacto-info-section">
                     <h2><i class="fas fa-info-circle"></i> Informações de Contacto</h2>
                     
@@ -156,11 +152,10 @@
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="footer-main">
                 <div class="footer-container">
-                    <!-- Logo e Descrição -->
+                    
                     <div class="footer-section">
                         <div class="footer-logo">
                             <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
@@ -176,7 +171,6 @@
                         </div>
                     </div>
 
-                    <!-- Links Rápidos -->
                     <div class="footer-section">
                         <h4>Links Rápidos</h4>
                         <ul class="footer-links">
@@ -189,7 +183,6 @@
                         </ul>
                     </div>
 
-                    <!-- Experiências -->
                     <div class="footer-section">
                         <h4>Experiências</h4>
                         <ul class="footer-links">
@@ -199,7 +192,6 @@
                         </ul>
                     </div>
 
-                    <!-- Suporte -->
                     <div class="footer-section">
                         <h4>Suporte</h4>
                         <ul class="footer-links">
@@ -210,7 +202,6 @@
                         </ul>
                     </div>
 
-                    <!-- Newsletter -->
                     <div class="footer-section newsletter-section">
                         <h4>Newsletter</h4>
                         <p>Receba as últimas novidades, promoções exclusivas e estreias em primeira mão.</p>
@@ -259,7 +250,6 @@
         </footer>
     </div>
 
-    <!-- Scripts -->
     <script>
         // Search functionality
         document.getElementById('searchInput').addEventListener('input', function(e) {

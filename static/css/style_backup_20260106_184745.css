@@ -1,15 +1,12 @@
-/* Importar fontes comerciais */
+
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bebas+Neue:wght@400&family=Inter:ital,wght@0,400;0,500;1,400&display=swap');
 
-/* ==========================
-   BASE GERAL
-========================== */
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   background-color: #0D1B2A;
   color: white;
-  overflow-x: hidden; /* Impede scroll horizontal na página */
+  overflow-x: hidden; 
   overflow-y: auto;
 }
 
@@ -18,9 +15,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -45,7 +39,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -97,7 +90,6 @@ v-center a:hover::after,
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -136,7 +128,6 @@ v-center a:hover::after,
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -151,14 +142,12 @@ v-center a:hover::after,
 .user-icon img:hover {
   background-color: #18AFC6;
   transform: scale(1.1);
-}/*
-
-/* BANNER PRINCIPAL */
+}
 .hero-banner {
     position: relative;
-    height: 70vh; /* Reduzido de 100vh para 70vh */
+    height: 70vh; 
     overflow: hidden;
-    margin-top: 0; /* Banner encostado ao menu */
+    margin-top: 0; 
 }
 
 .banner-video-container {
@@ -209,24 +198,24 @@ v-center a:hover::after,
     z-index: 5;
     text-align: left;
     max-width: 600px;
-    padding: 60px 40px 40px 40px; /* Mais padding no topo */
-    top: 50%; /* Centralizar verticalmente */
+    padding: 60px 40px 40px 40px; 
+    top: 50%; 
     left: 40px;
-    transform: translateY(-50%); /* Ajuste fino da centralização */
+    transform: translateY(-50%); 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 200px; /* Garantir altura mínima */
+    min-height: 200px; 
 }
 
 .banner-title {
-    font-size: 3.5rem; /* Ligeiramente menor para caber melhor */
+    font-size: 3.5rem; 
     font-weight: 900;
     margin-bottom: 15px;
     font-family: 'Orbitron', sans-serif;
     text-shadow: 0 0 30px rgb(0, 255, 255);
-    line-height: 1.1; /* Melhor espaçamento entre linhas */
-    word-wrap: break-word; /* Quebrar palavras longas se necessário */
+    line-height: 1.1; 
+    word-wrap: break-word; 
 }
 
 .glitch-effect {
@@ -286,7 +275,7 @@ v-center a:hover::after,
     opacity: 0.9;
     color: #00ffff;
     line-height: 1.3;
-    max-width: 500px; /* Limitar largura para melhor legibilidade */
+    max-width: 500px; 
 }
 
 .banner-buttons {
@@ -296,7 +285,6 @@ v-center a:hover::after,
     flex-wrap: wrap;
 }
 
-/* BOTÕES PREMIUM */
 .premium-btn {
     position: relative;
     display: inline-block;
@@ -364,7 +352,6 @@ v-center a:hover::after,
     }
 }
 
-/* INDICADORES DO BANNER */
 .banner-indicators {
     position: absolute;
     bottom: 30px;
@@ -391,7 +378,6 @@ v-center a:hover::after,
     transform: scale(1.2);
 }
 
-/* SEÇÃO DO BAR */
 .bar-section {
     padding: 100px 0;
     background: rgb(0, 0, 0);
@@ -450,9 +436,6 @@ v-center a:hover::after,
     line-height: 1.6;
 }
 
-/* ==========================
-   SEÇÃO DE SESSÕES TEMÁTICAS
-========================== */
 .thematic-sessions-section {
     padding: 120px 0;
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%);
@@ -795,7 +778,6 @@ v-center a:hover::after,
     }
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .sessions-grid {
         grid-template-columns: 1fr;
@@ -820,7 +802,6 @@ v-center a:hover::after,
     }
 }
 
-/* SEÇÃO DE ACESSIBILIDADE */
 .accessibility-section {
     padding: 100px 0;
     position: relative;
@@ -877,7 +858,6 @@ v-center a:hover::after,
     line-height: 1.6;
 }
 
-/* RODAPÉ */
 .footer {
     background: rgb(0, 0, 0);
     backdrop-filter: blur(20px);
@@ -927,16 +907,15 @@ v-center a:hover::after,
     color: #999;
 }
 
-/* RESPONSIVIDADE */
 @media (max-width: 768px) {
     .banner-title {
-    font-size: 3.5rem; /* Ligeiramente menor para caber melhor */
+    font-size: 3.5rem; 
     font-weight: 900;
     margin-bottom: 15px;
     font-family: 'Orbitron', sans-serif;
     text-shadow: 0 0 30px rgb(0, 255, 255);
-    line-height: 1.1; /* Melhor espaçamento entre linhas */
-    word-wrap: break-word; /* Quebrar palavras longas se necessário */
+    line-height: 1.1; 
+    word-wrap: break-word; 
 }
     
     .banner-buttons {
@@ -975,7 +954,6 @@ v-center a:hover::after,
     }
 }
 
-/* ANIMAÇÕES DE ENTRADA */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -991,7 +969,6 @@ v-center a:hover::after,
     animation: fadeInUp 0.8s ease forwards;
 }
 
-/* LOADING SKELETON */
 .skeleton {
     background: linear-gradient(90deg, rgb(255, 255, 255) 25%, rgb(255, 255, 255) 50%, rgb(255, 255, 255) 75%);
     background-size: 200% 100%;
@@ -1003,7 +980,6 @@ v-center a:hover::after,
     100% { background-position: 200% 0; }
 }
 
-/* Botões de navegação do carousel */
 .carousel-btn {
     position: absolute;
     top: 50%;
@@ -1030,7 +1006,6 @@ v-center a:hover::after,
     box-shadow: 0 10px 20px rgb(0, 212, 255);
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .movies-carousel-container {
         padding: 0 20px;
@@ -1238,7 +1213,6 @@ v-center a:hover::after,
     font-weight: 500;
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .movies-carousel-container {
         padding: 0 20px;
@@ -1448,7 +1422,6 @@ v-center a:hover::after,
     font-weight: 500;
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .movies-carousel-container {
         padding: 0 20px;
@@ -1909,7 +1882,6 @@ v-center a:hover::after,
   border-color: rgb(255, 214, 10);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -2084,9 +2056,6 @@ v-center a:hover::after,
   }
 }
 
-/* ==========================
-   PAGE WRAPPER
-========================== */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -2102,9 +2071,6 @@ main {
   flex-shrink: 0;
 }
 
-/* ===== HOMEPAGE PROFISSIONAL ===== */
-
-/* Seção de Destaques */
 .highlights-section {
     padding: 100px 0;
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
@@ -2212,7 +2178,6 @@ main {
     box-shadow: 0 10px 25px rgb(0, 212, 255);
 }
 
-/* Seção de Filmes em Destaque */
 .featured-movies-section {
     padding: 100px 0;
     background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
@@ -2341,7 +2306,6 @@ main {
     border-radius: 30px;
 }
 
-/* Seção de Tecnologia */
 .technology-section {
     padding: 100px 0;
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
@@ -2436,7 +2400,6 @@ main {
     100% { box-shadow: 0 0 0 0 rgb(0, 212, 255); }
 }
 
-/* Seção de Testemunhos */
 .testimonials-section {
     padding: 100px 0;
     background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
@@ -2512,7 +2475,6 @@ main {
     color: #00d4ff;
 }
 
-/* Animações */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -2528,7 +2490,6 @@ main {
     animation: fadeInUp 0.8s ease-out;
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .section-title {
         font-size: 2.2rem;
@@ -2596,7 +2557,6 @@ main {
     }
 }
 
-/* CORREÇÃO ESPECÍFICA PARA BANNER TEXT */
 @media (max-height: 600px) {
     .banner-content {
         top: 40%;
@@ -2630,9 +2590,7 @@ main {
         font-size: 1rem;
     }
 }
-/* ==========================
-   CARD VER FILMES - DESIGN PROFISSIONAL REFINADO
-========================== */
+
 .filmes-showcase-section {
     padding: 120px 0;
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
@@ -2842,7 +2800,6 @@ main {
     z-index: 2;
 }
 
-/* Responsividade */
 @media (max-width: 1200px) {
     .showcase-wrapper {
         grid-template-columns: 1fr;
@@ -2939,11 +2896,6 @@ main {
     }
 }
 
-/* ==========================
-
-/* ==========================
-
-/* Imagem de fundo cinematográfica */
 .top10-background-image {
     position: absolute;
     top: 0;
@@ -2975,32 +2927,11 @@ main {
     );
 }
 
-/* Container principal */
-
-/* Títulos da seção */
-
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }
 
-/* Container do carousel */
-
-/* Carousel principal */
-
-/* Cards dos filmes */
-
-/* Hover effect no card */
-
-/* Badge de ranking */
-
-/* Poster principal */
-
-/* Botões de navegação */
-
-/* Barra de scroll personalizada */
-
-/* Indicador de scroll */
 .scroll-indicator {
     position: absolute;
     bottom: -40px;
@@ -3011,7 +2942,6 @@ main {
     opacity: 0.7;
 }
 
-/* Responsividade */
 @media (max-width: 1200px) {
 
 }
@@ -3020,7 +2950,6 @@ main {
 
 }
 
-/* Animações de entrada */
 @keyframes slideInFromLeft {
     from {
         opacity: 0;
@@ -3032,42 +2961,11 @@ main {
     }
 }
 
-/* CORREÇÃO HOVER DEFINITIVA */
-
-/* CORREÇÃO DEFINITIVA - HOVER EFFECTS */
-
-/* HOVER GARANTIDO */
-
-/* OVERLAY GARANTIDO */
-
-/* POSTER ZOOM */
-
-/* Fundo cinematográfico com partículas */
-
-/* Títulos elegantes */
-
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }
 
-/* Container do carousel melhorado */
-
-/* Carousel com melhor apresentação */
-
-/* Cards dos filmes - Design Premium */
-
-/* Hover effect cinematográfico */
-
-/* Poster com melhor apresentação */
-
-/* Overlay com gradiente cinematográfico */
-
-/* Botões de navegação premium */
-
-/* Efeitos de luz nos cards */
-
-/* Responsividade melhorada */
 @media (max-width: 1200px) {
 
 }
@@ -3076,7 +2974,6 @@ main {
 
 }
 
-/* Animações de entrada */
 @keyframes slideInUp {
     from {
         opacity: 0;
@@ -3088,7 +2985,6 @@ main {
     }
 }
 
-/* Remover imagem de fundo */
 .top10-background-image {
     display: none !important;
 }
@@ -3101,28 +2997,11 @@ main {
     display: none !important;
 }
 
-/* Títulos elegantes */
-
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }
 
-/* Container do carousel */
-
-/* Carousel principal */
-
-/* Cards dos filmes - Design Premium */
-
-/* Hover effect cinematográfico */
-
-/* Poster com melhor apresentação */
-
-/* Overlay com informações */
-
-/* Botões de navegação */
-
-/* Responsividade */
 @media (max-width: 1200px) {
 
 }
@@ -3131,7 +3010,6 @@ main {
 
 }
 
-/* Animações de entrada */
 @keyframes slideInFromLeft {
     from {
         opacity: 0;
@@ -3143,14 +3021,11 @@ main {
     }
 }
 
-/* Títulos */
-
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }
 
-/* LAYOUT GRID - DIFERENTE DO VINTAGE */
 .top10-grid-container {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -3158,7 +3033,6 @@ main {
     margin-bottom: 40px;
 }
 
-/* Filme principal (posição #1) */
 .top10-featured {
     position: relative;
     height: 600px;
@@ -3196,7 +3070,6 @@ main {
 
 .top10-featured 
 
-/* Lista dos outros filmes (posições #2-#5) */
 .top10-sidebar {
     display: flex;
     flex-direction: column;
@@ -3257,7 +3130,6 @@ main {
     font-weight: 400;
 }
 
-/* Grid dos filmes restantes (posições #6-#10) */
 .top10-bottom-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -3317,7 +3189,6 @@ main {
     white-space: nowrap;
 }
 
-/* Responsividade */
 @media (max-width: 1200px) {
     .top10-grid-container {
         grid-template-columns: 1.5fr 1fr;
@@ -3369,7 +3240,6 @@ main {
     }
 }
 
-/* Animações de entrada */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -3404,28 +3274,11 @@ main {
 .top10-small-card:nth-child(4) { animation-delay: 0.8s; }
 .top10-small-card:nth-child(5) { animation-delay: 0.9s; }
 
-/* Títulos */
-
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
 }
 
-/* Container do carousel */
-
-/* Carousel principal */
-
-/* Cards dos filmes */
-
-/* Hover effect */
-
-/* Poster */
-
-/* Overlay com informações */
-
-/* Botões de navegação */
-
-/* Responsividade */
 @media (max-width: 1200px) {
 
 }
@@ -3434,7 +3287,6 @@ main {
 
 }
 
-/* Animações de entrada */
 @keyframes slideInFromLeft {
     from {
         opacity: 0;
@@ -3446,9 +3298,6 @@ main {
     }
 }
 
-/* Barra de scroll personalizada para Top 10 */
-
-/* Indicador de scroll */
 .scroll-indicator {
     position: absolute;
     bottom: -40px;
@@ -3459,85 +3308,6 @@ main {
     opacity: 0.7;
 }
 
-/* Container do poster */
-
-/* Ajustar overlay para funcionar com o novo sistema */
-
-/* Animação elegante de entrada no hover */
-
-/* Hover elegante do card - OVERRIDE COMPLETO */
-
-/* Ranking badge com melhor integração */
-
-/* Remover sistema anterior de poster-container */
-
-/* Imagem principal como fundo */
-
-/* Hover - troca de imagem de fundo */
-
-/* Ranking badge sobreposto */
-
-/* Conteúdo sobreposto na parte inferior */
-
-/* Hover - animação sutil do conteúdo */
-
-/* Hover elegante do card */
-
-/* Efeito de brilho no hover */
-
-/* Performance otimizada */
-
-/* Género elegante - OCULTO POR PADRÃO */
-
-/* Duração elegante - OCULTA POR PADRÃO */
-
-/* Animação elegante de entrada APENAS NO HOVER */
-
-/* Hover elegante do card */
-
-/* Ranking badge - sempre visível mas com hover */
-
-/* Performance otimizada */
-
-/* Container do poster - ESTRUTURA CORRETA */
-
-/* Overlay de informações - OCULTO POR PADRÃO */
-
-/* HOVER - ANIMAÇÕES DAS INFORMAÇÕES */
-
-/* HOVER DO CARD */
-
-/* Efeito de brilho */
-
-/* Género elegante - EXATO DA PÁGINA FILMES */
-
-/* Duração elegante - EXATO DA PÁGINA FILMES */
-
-/* Animação elegante de entrada no hover - EXATO DA PÁGINA FILMES */
-
-/* Performance otimizada - EXATO DA PÁGINA FILMES */
-
-/* Efeito sutil na troca de imagem - EXATO DA PÁGINA FILMES */
-
-/* Remover qualquer efeito de fade */
-
-/* Container do carousel */
-
-/* Carousel principal */
-
-/* Cards dos filmes */
-
-/* Badge de ranking */
-
-/* Container do poster */
-
-/* Overlay com informações */
-
-/* Botões de navegação */
-
-/* Barra de scroll personalizada */
-
-/* Responsividade */
 @media (max-width: 768px) {
 
 }
@@ -3545,10 +3315,6 @@ main {
 @media (max-width: 480px) {
 
 }
-
-/* ========================== 
-   TOP 10 FILMES MAIS VISTOS - VERSÃO LIMPA
-========================== */
 
 .top10-filmes-section {
     position: relative;

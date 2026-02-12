@@ -1,8 +1,5 @@
-/* ========================================
-   DASHBOARD ESPECÍFICO
-   ======================================== */
 
-/* Ícones como imagens */
+
 .icon-img {
   width: 20px;
   height: 20px;
@@ -19,7 +16,6 @@
   vertical-align: middle;
 }
 
-/* Header com menu mobile */
 .admin-header-flex {
   display: flex;
   align-items: center;
@@ -28,7 +24,6 @@
   position: relative;
 }
 
-/* Alertas de Sucesso */
 .alert-success {
   background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
   padding: 20px;
@@ -55,7 +50,6 @@
   color: #fff;
 }
 
-/* Alertas de Vendas */
 .alert-sales {
   background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(255, 214, 10, 0.1));
   padding: 20px;
@@ -82,7 +76,6 @@
   color: #fff;
 }
 
-/* Filtros de Período */
 .period-filter-container {
   background: rgba(255, 255, 255, 0.05);
   padding: 20px;
@@ -126,7 +119,6 @@
   font-weight: 600;
 }
 
-/* Gráficos */
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -144,7 +136,6 @@
   max-height: 300px;
 }
 
-/* Top Filmes e Produtos */
 .top-items-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -157,7 +148,6 @@
   font-weight: 600;
 }
 
-/* Horários Populares */
 .horarios-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -183,7 +173,6 @@
   font-size: 0.9rem;
 }
 
-/* Atividade Recente */
 .activity-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -201,7 +190,6 @@
   font-weight: 600;
 }
 
-/* Estatísticas de Usuários */
 .user-stats-container {
   margin-bottom: 20px;
 }
@@ -250,7 +238,6 @@
   color: #2196f3;
 }
 
-/* Botões de Exportação */
 .export-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -295,7 +282,6 @@
   
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
   .charts-grid,
   .top-items-grid,
@@ -314,12 +300,6 @@
   }
 }
 
-
-/* ========================================
-   MELHORIAS NOS ÍCONES
-   ======================================== */
-
-/* Ícone de filtro especial - maior e com animação sutil */
 .period-filter-title .icon-img {
   width: 36px !important;
   height: 36px !important;
@@ -340,15 +320,12 @@
   }
 }
 
-/* Melhorar todos os ícones H3 */
 h3 .icon-img {
   width: 32px !important;
   height: 32px !important;
   margin-right: 12px;
 }
 
-
-/* Emojis nos cards de gestão - amarelos */
 .menu-card .icon {
   font-size: 64px;
   margin-bottom: 15px;

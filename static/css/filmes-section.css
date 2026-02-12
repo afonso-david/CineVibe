@@ -1,6 +1,4 @@
-/* ==========================
-   SEÇÃO FILMES MAIS VISTOS - ESTILO PÁGINA FILMES
-========================== */
+
 .featured-movies {
     padding: 100px 0;
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
@@ -70,7 +68,6 @@
     display: none;
 }
 
-/* FILME CARD - IGUAL À PÁGINA FILMES */
 .filme-card {
     flex: 0 0 300px;
     position: relative;
@@ -104,7 +101,6 @@
     position: relative;
 }
 
-/* RANKING BADGE */
 .movie-rank {
     position: absolute;
     top: 15px;
@@ -119,7 +115,6 @@
     box-shadow: 0 4px 12px rgba(255, 214, 10, 0.4);
 }
 
-/* CONTAINER DO POSTER */
 .poster-container {
     position: relative;
     width: 100%;
@@ -128,7 +123,6 @@
     border-radius: 12px;
 }
 
-/* Efeito de brilho sutil */
 .poster-container::before {
     content: '';
     position: absolute;
@@ -152,7 +146,6 @@
     opacity: 1;
 }
 
-/* POSTER PRINCIPAL */
 .poster-main {
     position: absolute;
     top: 0;
@@ -167,7 +160,6 @@
     -webkit-backface-visibility: hidden;
 }
 
-/* POSTER HOVER */
 .poster-hover {
     position: absolute;
     top: 0;
@@ -183,7 +175,6 @@
     -webkit-backface-visibility: hidden;
 }
 
-/* Estado hover - troca de imagem suave */
 .filme-card:hover .poster-main {
     opacity: 0;
     transform: scale(1.05);
@@ -194,7 +185,6 @@
     transform: scale(1.05);
 }
 
-/* OVERLAY COM INFORMAÇÕES */
 .filme-overlay {
     position: absolute;
     bottom: 0;
@@ -224,7 +214,6 @@
     opacity: 1;
 }
 
-/* TÍTULO */
 .filme-info .titulo {
     font-size: 1.4rem;
     font-weight: 800;
@@ -242,7 +231,6 @@
     transition-delay: 0.1s;
 }
 
-/* GÉNERO */
 .filme-info .genero {
     font-size: 0.9rem;
     color: #4EA8DE;
@@ -259,7 +247,6 @@
     transition-delay: 0.2s;
 }
 
-/* DURAÇÃO */
 .filme-info .duracao {
     font-size: 0.8rem;
     color: #ffffff;
@@ -274,7 +261,6 @@
     transition-delay: 0.3s;
 }
 
-/* ESTATÍSTICAS DO FILME */
 .movie-stats {
     margin-top: 8px;
 }
@@ -296,7 +282,6 @@
     font-size: 0.9rem;
 }
 
-/* Animação de entrada no hover */
 .filme-card:hover .filme-info .titulo,
 .filme-card:hover .filme-info .genero,
 .filme-card:hover .filme-info .duracao,
@@ -305,7 +290,6 @@
     opacity: 1;
 }
 
-/* BOTÕES DO CAROUSEL */
 .carousel-btn {
     position: absolute;
     top: 50%;
@@ -337,7 +321,6 @@
     right: -30px;
 }
 
-/* MENSAGEM QUANDO NÃO HÁ FILMES */
 .no-movies-message {
     flex: 1;
     text-align: center;
@@ -381,7 +364,6 @@
     right: -25px;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .featured-movies .section-header h2 {
         font-size: 2.5rem;

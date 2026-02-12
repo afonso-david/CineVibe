@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="admin-filme-container">
-    <!-- Header -->
+    
     <div class="page-header">
         <div class="header-left">
             <h1><i class="fas fa-film"></i> {{ filme.titulo }}</h1>
@@ -25,9 +25,8 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="filme-content">
-        <!-- Poster e Informações Básicas -->
+        
         <div class="filme-header">
             <div class="poster-container">
                 {% if filme.poster_url %}
@@ -95,8 +94,7 @@
                         <label>URL do Trailer</label>
                         <input type="url" id="trailer_url" value="{{ filme.trailer_url or '' }}" class="form-input" placeholder="https://www.youtube.com/watch?v=...">
                     </div>
-                    
-                    <!-- Géneros do Filme -->
+
                     <div class="info-group full-width">
                         <label>Géneros</label>
                         <div class="generos-section">
@@ -125,13 +123,11 @@
             </div>
         </div>
 
-        <!-- Sinopse -->
         <div class="section">
             <h3><i class="fas fa-align-left"></i> Sinopse</h3>
             <textarea id="sinopse" class="form-textarea" rows="4" placeholder="Descrição do filme...">{{ filme.sinopse or '' }}</textarea>
         </div>
 
-        <!-- Atores -->
         <div class="section">
             <div class="section-header">
                 <h3><i class="fas fa-users"></i> Atores</h3>
@@ -167,7 +163,6 @@
             </div>
         </div>
 
-        <!-- Cinemas -->
         <div class="section">
             <div class="section-header">
                 <h3><i class="fas fa-building"></i> Cinemas em Exibição</h3>
@@ -192,8 +187,7 @@
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
-                    
-                    <!-- Botões de Tipos de Sessão -->
+
                     <div class="botoes-sessao">
                         {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
                         <div class="tipo-sessao-container">
@@ -210,22 +204,19 @@
                             </button>
                         </div>
                         {% endfor %}
-                        
-                        <!-- Botão para adicionar tipo de sessão -->
+
                         <button class="btn-adicionar-tipo-sessao" 
                                 onclick="adicionarTipoSessao({{ cinema.id }})">
                             <i class="fas fa-plus"></i> Adicionar Tipo
                         </button>
                     </div>
-                    
-                    <!-- Grupos de Sessão (Horários) -->
+
                     {% for tipo in tipos_sessao_por_cinema[cinema.id] %}
                     <div class="sessao-grupo hidden" 
                          id="sessao-{{ cinema.id }}-{{ tipo.id }}"
                          data-cinema="{{ cinema.id }}" 
                          data-tipo="{{ tipo.id }}">
-                        
-                        <!-- Cabeçalho com informações da sala do tipo de sessão -->
+
                         <div class="sessao-info-header">
                             <div class="sala-tipo-sessao">
                                 <span class="sala-label">Sala para {{ tipo.nome }}:</span>
@@ -238,7 +229,7 @@
                         
                         <div class="horarios">
                             <div class="horarios-wrapper" id="horarios-{{ cinema.id }}-{{ tipo.id }}">
-                                <!-- Horários serão carregados dinamicamente -->
+                                
                             </div>
                         </div>
                     </div>
@@ -260,7 +251,6 @@
             {% endif %}
         </div>
 
-        <!-- Avaliações -->
         <div class="section">
             <div class="section-header">
                 <h3><i class="fas fa-star"></i> Avaliações</h3>
@@ -274,8 +264,7 @@
                     </span>
                 </div>
             </div>
-            
-            <!-- Avaliações Externas -->
+
             <div class="avaliacoes-externas">
                 <h4><i class="fas fa-external-link-alt"></i> Links de Avaliações Externas</h4>
                 <div class="external-ratings-grid">
@@ -357,7 +346,6 @@
     </div>
 </div>
 
-<!-- Modal para Adicionar/Editar Ator -->
 <div id="actorModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -373,8 +361,7 @@
                     <input type="text" id="actorSearch" class="form-input" placeholder="Digite o nome do ator..." autocomplete="off">
                     <div id="actorSearchResults" class="search-results"></div>
                 </div>
-                
-                <!-- Ator selecionado -->
+
                 <div id="selectedActorInfo" class="selected-actor" style="display: none;">
                     <div class="selected-actor-card">
                         <div class="selected-actor-photo">
@@ -389,8 +376,7 @@
                         </button>
                     </div>
                 </div>
-                
-                <!-- Select oculto para compatibilidade -->
+
                 <select id="actorSelect" class="form-select" style="display: none;">
                     <option value="">Selecionar ator</option>
                     {% for ator in todos_atores %}
@@ -410,7 +396,6 @@
     </div>
 </div>
 
-<!-- Modal para Adicionar Cinema -->
 <div id="cinemaModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -437,7 +422,6 @@
     </div>
 </div>
 
-<!-- Modal para Adicionar Género -->
 <div id="generoModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -464,7 +448,6 @@
     </div>
 </div>
 
-<!-- Modal para Adicionar Tipo de Sessão -->
 <div id="tipoSessaoModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">

@@ -1,6 +1,5 @@
-/* ===== ADMIN USUARIOS PROFESSIONAL STYLES - Following admin_filmes_pro.css ===== */
 
-/* Top Bar Professional */
+
 .top-bar-pro {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     padding: 24px 32px;
@@ -69,14 +68,12 @@
     font-size: 0.9rem;
 }
 
-/* Dashboard Content Professional */
 .dashboard-content-pro {
     padding: 32px;
     background: #0f0f23;
     min-height: calc(100vh - 140px);
 }
 
-/* Control Panel */
 .control-panel {
     background: #1a1a2e;
     border-radius: 16px;
@@ -271,7 +268,6 @@
     
 }
 
-/* Grid View */
 .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -426,7 +422,6 @@
     white-space: nowrap;
 }
 
-/* Table View */
 .movies-table-container {
     background: #1a1a2e;
     border-radius: 16px;
@@ -598,7 +593,6 @@
     transform: translateY(-2px);
 }
 
-/* Modal Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -774,7 +768,6 @@
     
 }
 
-/* User Details Content */
 .user-details {
     display: grid;
     grid-template-columns: 200px 1fr;
@@ -824,7 +817,6 @@
     color: #ffffff;
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .movies-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -894,7 +886,6 @@
     }
 }
 
-/* ===== RESERVAS HORIZONTAL SCROLL STYLING ===== */
 .reservas-section {
     margin-top: 40px;
     padding-top: 30px;
@@ -1115,7 +1106,6 @@
     white-space: nowrap;
 }
 
-/* Estado vazio */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -1144,7 +1134,6 @@
     line-height: 1.5;
 }
 
-/* Scrollbar horizontal personalizada */
 .reservas-list::-webkit-scrollbar {
     height: 10px;
 }
@@ -1165,7 +1154,6 @@
     background: linear-gradient(to right, #FFA500, #FF8C00);
 }
 
-/* Responsividade para reservas */
 @media (max-width: 1400px) {
     .reserva-card {
         flex: 0 0 320px;
@@ -1254,7 +1242,6 @@
     }
 }
 
-/* User details styling */
 .user-details {
     padding: 20px 0;
     margin-bottom: 20px;
@@ -1355,7 +1342,6 @@
     font-size: 0.9rem;
 }
 
-/* Loading and error states */
 .loading {
     display: flex;
     justify-content: center;

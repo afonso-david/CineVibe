@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -32,7 +32,6 @@
             </div>
         </header>
 
-        <!-- Progress Bar -->
         <div class="progress-container">
             <div class="progress-step completed">
                 <div class="step-number">1</div>
@@ -55,10 +54,9 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <main>
             <div class="container">
-                <!-- Movie Info -->
+                
                 <div class="movie-info-card">
                     <img src="{{ filme.poster_url if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
                          alt="{{ filme.titulo }}" class="movie-poster">
@@ -71,16 +69,13 @@
                     </div>
                 </div>
 
-                <!-- Seat Selection -->
                 <div class="seat-selection-container">
                     <h2>Selecione os seus lugares</h2>
-                    
-                    <!-- Screen -->
+
                     <div class="screen">
                         <div class="screen-text">ECRÃ</div>
                     </div>
 
-                    <!-- Seat Map -->
                     <div class="seat-map" id="seatMap">
                         {% for lugar in lugares %}
                         <div class="seat {{ 'occupied' if lugar.ocupado else 'available' }}" 
@@ -92,7 +87,6 @@
                         {% endfor %}
                     </div>
 
-                    <!-- Legend -->
                     <div class="seat-legend">
                         <div class="legend-item">
                             <div class="seat available"></div>
@@ -108,7 +102,6 @@
                         </div>
                     </div>
 
-                    <!-- Selected Seats Info -->
                     <div class="selected-seats-info">
                         <h3>Lugares Selecionados</h3>
                         <div id="selectedSeatsList">Nenhum lugar selecionado</div>
@@ -117,7 +110,6 @@
                         </div>
                     </div>
 
-                    <!-- Continue Button -->
                     <form method="POST" action="{{ url_for('bar') }}" id="seatsForm">
                         <input type="hidden" name="filme_id" value="{{ filme.id }}">
                         <input type="hidden" name="cinema_id" value="{{ cinema.id }}">

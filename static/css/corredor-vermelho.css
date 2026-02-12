@@ -1,8 +1,5 @@
-/* ============================================
-   DIVISÕES VERMELHAS - VERTICAL E HORIZONTAL
-============================================ */
 
-/* Override completo do corredor central VERTICAL */
+
 .wide-center-aisle {
   width: 8px !important;
   height: 22px !important;
@@ -13,7 +10,6 @@
   justify-content: center !important;
 }
 
-/* Traços vermelhos verticais no corredor */
 .wide-center-aisle::before {
   content: '' !important;
   position: absolute !important;
@@ -33,7 +29,6 @@
   z-index: 10 !important;
 }
 
-/* Linha divisória adicional horizontal */
 .wide-center-aisle::after {
   content: '' !important;
   position: absolute !important;
@@ -46,23 +41,16 @@
   z-index: 5 !important;
 }
 
-/* ============================================
-   SEPARAÇÃO HORIZONTAL ESTÉTICA
-============================================ */
-
-/* Container da sala com espaçamento para separação */
 .wide-cinema-hall {
   position: relative !important;
-  gap: 8px !important; /* Espaçamento entre filas */
+  gap: 8px !important; 
 }
 
-/* Separação horizontal entre as filas do meio */
 .wide-cinema-row:nth-child(6) {
   margin-bottom: 12px !important;
   position: relative !important;
 }
 
-/* Linha divisória horizontal estética (entre filas, não por cima) */
 .wide-cinema-row:nth-child(6)::after {
   content: '' !important;
   position: absolute !important;
@@ -81,7 +69,6 @@
   pointer-events: none !important;
 }
 
-/* Força aplicação em todos os contextos */
 .wide-cinema-hall .wide-center-aisle,
 .sala-dinamica .wide-center-aisle,
 div.wide-center-aisle {
@@ -89,7 +76,6 @@ div.wide-center-aisle {
   background: transparent !important;
 }
 
-/* Responsivo para mobile */
 @media (max-width: 768px) {
   .wide-center-aisle {
     width: 6px !important;
@@ -101,7 +87,6 @@ div.wide-center-aisle {
   }
 }
 
-/* Animação sutil para os traços */
 @keyframes pulse-red {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
@@ -110,34 +95,21 @@ div.wide-center-aisle {
 .wide-center-aisle::before {
   animation: pulse-red 3s ease-in-out infinite !important;
 }
-/* ============================================
-   CONFIGURAÇÕES PARA DIVISÃO ÚNICA
-============================================ */
 
-/* Garantir que a divisão seja visível */
 .wide-cinema-hall {
   padding: 20px 40px !important;
   overflow: visible !important;
 }
 
-/* Configuração básica das filas */
 .wide-cinema-row {
   position: relative !important;
 }
-/* Divisões horizontais aplicadas: 1765877079 */
 
-/* Divisão central única aplicada: 1765877323 */
-/* ============================================
-   MELHORIAS ESTÉTICAS PARA DIVISÕES
-============================================ */
-
-/* Espaçamento adicional para criar separação visual clara */
 .wide-cinema-row:nth-child(6) {
   border-bottom: 1px solid rgba(255, 0, 0, 0.1) !important;
   padding-bottom: 6px !important;
 }
 
-/* Sombra sutil para destacar a separação (dentro dos limites) */
 .wide-cinema-row:nth-child(6)::before {
   content: '' !important;
   position: absolute !important;
@@ -156,18 +128,15 @@ div.wide-center-aisle {
   z-index: 3 !important;
 }
 
-/* Melhorar o espaçamento geral da sala */
 .wide-cinema-hall {
   padding: 30px 50px !important;
 }
 
-/* Garantir que os lugares não sejam afetados pelas divisões */
 .wide-cinema-seat {
   z-index: 10 !important;
   position: relative !important;
 }
 
-/* Efeito de profundidade para a separação */
 .wide-cinema-row:nth-child(7) {
   margin-top: 4px !important;
   position: relative !important;
@@ -190,43 +159,34 @@ div.wide-center-aisle {
   ) !important;
   z-index: 2 !important;
 }
-/* Melhorias estéticas aplicadas: 1765877695 */
-/* ============================================
-   MELHORIAS ESTÉTICAS PARA SAÍDAS DE EMERGÊNCIA
-============================================ */
 
-/* Posicionar saídas moderadamente afastadas dos lugares */
 .wide-emergency-exit.left-exit {
-  left: -100px !important; /* Moderadamente afastada para a esquerda */
+  left: -100px !important; 
   background: linear-gradient(135deg, #00d4aa, #00b894) !important;
   border: 2px solid #00e676 !important;
   box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3) !important;
 }
 
 .wide-emergency-exit.right-exit {
-  right: -100px !important; /* Moderadamente afastada para a direita */
+  right: -100px !important; 
   background: linear-gradient(135deg, #00d4aa, #00b894) !important;
   border: 2px solid #00e676 !important;
   box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3) !important;
 }
 
-/* CAMINHO HORIZONTAL DIRETO - VAI APENAS PARA OS RESPETIVOS LADOS */
-
-/* Remover parte vertical - não há ::after */
 .wide-emergency-exit.left-exit::after,
 .wide-emergency-exit.right-exit::after {
   content: none !important;
   display: none !important;
 }
 
-/* APENAS CAMINHO HORIZONTAL - Vai direto para os lados */
 .wide-emergency-exit.left-exit::before {
   content: '' !important;
   position: absolute !important;
-  top: 50% !important; /* Centrado na porta */
-  left: 100% !important; /* Começa do lado direito da porta */
+  top: 50% !important; 
+  left: 100% !important; 
   transform: translateY(-50%) !important;
-  width: 120px !important; /* Vai para a DIREITA */
+  width: 120px !important; 
   height: 3px !important;
   background: repeating-linear-gradient(
     to right,
@@ -241,10 +201,10 @@ div.wide-center-aisle {
 .wide-emergency-exit.right-exit::before {
   content: '' !important;
   position: absolute !important;
-  top: 50% !important; /* Centrado na porta */
-  right: 100% !important; /* Começa do lado esquerdo da porta */
+  top: 50% !important; 
+  right: 100% !important; 
   transform: translateY(-50%) !important;
-  width: 120px !important; /* Vai para a ESQUERDA */
+  width: 120px !important; 
   height: 3px !important;
   background: repeating-linear-gradient(
     to left,
@@ -256,18 +216,12 @@ div.wide-center-aisle {
   z-index: 5 !important;
 }
 
-/* Manter o ícone original da porta (não alterar) */
-
-/* Efeito hover para linha verde VERTICAL */
 .wide-emergency-exit:hover {
   transform: scale(1.1) !important;
   box-shadow: 0 6px 20px rgba(0, 212, 170, 0.5) !important;
   border-color: #00ff88 !important;
 }
 
-/* Hover no caminho HORIZONTAL DIRETO - fica mais brilhante */
-
-/* Hover APENAS na parte HORIZONTAL */
 .wide-emergency-exit.left-exit:hover::before {
   background: repeating-linear-gradient(
     to right,
@@ -290,7 +244,6 @@ div.wide-center-aisle {
   height: 4px !important;
 }
 
-/* Sombra ambiente para simular iluminação de emergência */
 .wide-emergency-exit {
   position: relative !important;
 }
@@ -299,17 +252,15 @@ div.wide-center-aisle {
   box-shadow: 0 0 10px rgba(0, 230, 118, 0.4) !important;
 }
 
-/* Responsividade para portas moderadamente afastadas */
 @media (max-width: 768px) {
   .wide-emergency-exit.left-exit {
-    left: -75px !important; /* Proporcionalmente afastada */
+    left: -75px !important; 
   }
   
   .wide-emergency-exit.right-exit {
-    right: -75px !important; /* Proporcionalmente afastada */
+    right: -75px !important; 
   }
-  
-  /* APENAS caminho horizontal menor */
+
   .wide-emergency-exit.left-exit::before,
   .wide-emergency-exit.right-exit::before {
     width: 90px !important;
@@ -319,30 +270,20 @@ div.wide-center-aisle {
 
 @media (max-width: 480px) {
   .wide-emergency-exit.left-exit {
-    left: -65px !important; /* Moderadamente afastada em mobile */
+    left: -65px !important; 
   }
   
   .wide-emergency-exit.right-exit {
-    right: -65px !important; /* Moderadamente afastada em mobile */
+    right: -65px !important; 
   }
-  
-  /* Caminho horizontal ainda menor */
+
   .wide-emergency-exit.left-exit::before,
   .wide-emergency-exit.right-exit::before {
     width: 80px !important;
     height: 2px !important;
   }
 }
-/* Caminho ao corredor aplicado: 1765878394 */
 
-/* Caminho em L aplicado: 1765878741 */
-/* Caminho verde comprido restaurado: 1765963234 */
-/* ==
-==========================================
-   ÍCONES DAS PORTAS DE EMERGÊNCIA
-============================================ */
-
-/* Ícone da porta - sobrepor o ícone existente */
 .wide-emergency-exit {
   display: flex !important;
   align-items: center !important;
@@ -352,7 +293,6 @@ div.wide-center-aisle {
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
 }
 
-/* Adicionar ícone de porta como conteúdo principal */
 .wide-emergency-exit::before {
   content: '🚪' !important;
   position: relative !important;
@@ -362,7 +302,6 @@ div.wide-center-aisle {
   animation: pulse-door 2s ease-in-out infinite !important;
 }
 
-/* Animação sutil para o ícone da porta */
 @keyframes pulse-door {
   0%, 100% { 
     transform: scale(1);
@@ -374,7 +313,6 @@ div.wide-center-aisle {
   }
 }
 
-/* Hover melhorado para o ícone */
 .wide-emergency-exit:hover::before {
   font-size: 22px !important;
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1)) !important;
@@ -382,7 +320,6 @@ div.wide-center-aisle {
   transform: scale(1.1) !important;
 }
 
-/* Garantir que o ícone seja sempre visível */
 .wide-emergency-exit.left-exit::before,
 .wide-emergency-exit.right-exit::before {
   content: '🚪' !important;
@@ -392,7 +329,6 @@ div.wide-center-aisle {
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6)) !important;
 }
 
-/* Responsividade para o ícone */
 @media (max-width: 768px) {
   .wide-emergency-exit::before {
     font-size: 16px !important;
@@ -413,17 +349,11 @@ div.wide-center-aisle {
   }
 }
 
-/* ============================================
-   ÍCONES DAS PORTAS - IMAGEM PNG
-============================================ */
-
-/* Remover definições conflitantes de ::before para ícones */
 .wide-emergency-exit.left-exit::before,
 .wide-emergency-exit.right-exit::before {
   content: none !important;
 }
 
-/* Estilizar o ícone PNG diretamente no elemento */
 .wide-emergency-exit {
   display: flex !important;
   align-items: center !important;
@@ -433,7 +363,6 @@ div.wide-center-aisle {
   animation: pulse-door 2s ease-in-out infinite !important;
 }
 
-/* Estilizar a imagem PNG dentro da saída */
 .wide-emergency-exit img {
   width: 100% !important;
   height: 100% !important;
@@ -441,7 +370,6 @@ div.wide-center-aisle {
   filter: brightness(1.2) contrast(1.1) !important;
 }
 
-/* Animação sutil para o ícone da porta */
 @keyframes pulse-door {
   0%, 100% { 
     transform: scale(1);
@@ -453,7 +381,6 @@ div.wide-center-aisle {
   }
 }
 
-/* Hover melhorado para a imagem PNG */
 .wide-emergency-exit:hover {
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1)) !important;
   animation: none !important;
@@ -465,7 +392,6 @@ div.wide-center-aisle {
   transform: scale(1.05) !important;
 }
 
-/* Responsividade para a imagem PNG */
 @media (max-width: 768px) {
   .wide-emergency-exit {
     padding: 3px !important;
@@ -486,4 +412,3 @@ div.wide-center-aisle {
   }
 }
 
-/* Portas moderadamente afastadas (-100px): 1765965789 */

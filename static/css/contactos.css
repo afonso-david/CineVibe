@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 html {
   overflow-y: scroll;
   height: 100%;
@@ -13,9 +11,6 @@ body {
   color: white;
 }
 
-/* ==========================
-   PAGE WRAPPER
-========================== */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -31,9 +26,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -58,7 +50,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -111,7 +102,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -150,7 +140,6 @@ a {
   cursor: pointer;
 }
 
-/* Dropdown de Resultados de Pesquisa */
 .search-results {
   position: absolute;
   top: calc(100% + 5px);
@@ -252,7 +241,6 @@ a {
   box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -269,7 +257,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Main Content */
 .contactos-main {
   flex: 1;
   padding: 40px 20px;
@@ -306,7 +293,6 @@ a {
   margin-top: 40px;
 }
 
-/* Formulário */
 .contacto-form-section {
   background: rgba(30, 42, 58, 0.9);
   padding: 40px;
@@ -377,7 +363,6 @@ a {
   box-shadow: 0 8px 25px rgba(255, 214, 10, 0.5);
 }
 
-/* Informações de Contacto */
 .contacto-info-section {
   display: flex;
   flex-direction: column;
@@ -477,7 +462,6 @@ a {
   text-decoration: underline;
 }
 
-/* Footer */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -907,7 +891,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsive */
 @media (max-width: 968px) {
   .contactos-container {
     grid-template-columns: 1fr;

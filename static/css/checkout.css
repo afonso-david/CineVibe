@@ -1,4 +1,4 @@
-/* CHECKOUT CSS MELHORADO */
+
 
 .checkout-main {
     min-height: 100vh;
@@ -18,7 +18,6 @@
     pointer-events: none;
 }
 
-/* Progress Bar */
 .progress-bar {
     display: flex;
     align-items: center;
@@ -111,7 +110,6 @@
     margin: 0 auto;
 }
 
-/* Resumo da Reserva */
 .resumo-section {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     backdrop-filter: blur(15px);
@@ -302,7 +300,6 @@
     margin-top: 0.5rem;
 }
 
-/* Dados do Cliente */
 .dados-section {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     backdrop-filter: blur(15px);
@@ -381,7 +378,6 @@
     width: 20px;
 }
 
-/* Métodos de Pagamento Preview */
 .payment-preview {
     margin-top: 2rem;
     padding: 1.5rem;
@@ -443,7 +439,6 @@
     text-align: center;
 }
 
-/* Métodos de Pagamento Aceites */
 .payment-methods-section {
     margin-top: 2rem;
     padding: 2rem;
@@ -547,12 +542,10 @@
     text-align: center;
 }
 
-/* Cores específicas para Gift Cards (único ícone restante) */
-.payment-method-item:nth-child(6) i { /* Gift Cards */
+.payment-method-item:nth-child(6) i { 
     color: #ff6b6b;
 }
 
-/* Botões */
 .action-buttons {
     display: flex;
     gap: 1.5rem;
@@ -650,7 +643,6 @@
     flex-shrink: 0;
 }
 
-/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -696,7 +688,6 @@
     color: #B8C5D1;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .checkout-container {
         grid-template-columns: 1fr;
@@ -810,8 +801,7 @@
     .resumo-section, .dados-section {
         padding: 1.5rem;
     }
-}/* Formu
-lários de Pagamento */
+}
 #payment-forms {
     margin-top: 2rem;
     animation: slideIn 0.3s ease;
@@ -974,7 +964,6 @@ lários de Pagamento */
     font-weight: 600;
 }
 
-/* Container dos Formulários */
 #payment-forms-container {
     animation: slideInUp 0.4s ease;
 }
@@ -990,7 +979,6 @@ lários de Pagamento */
     }
 }
 
-/* Botão Voltar aos Métodos */
 .back-to-methods {
     margin-bottom: 1.5rem;
 }
@@ -1027,7 +1015,6 @@ lários de Pagamento */
     transform: translateX(-3px);
 }
 
-/* Transições suaves para mudança de conteúdo */
 #payment-methods-container {
     transition: all 0.3s ease;
 }
@@ -1041,7 +1028,6 @@ lários de Pagamento */
     animation: slideInUp 0.4s ease;
 }
 
-/* Melhorias nos formulários de pagamento */
 .payment-form {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     backdrop-filter: blur(15px);
@@ -1063,7 +1049,6 @@ lários de Pagamento */
     }
 }
 
-/* Responsividade para novos elementos */
 @media (max-width: 768px) {
     .btn-back {
         padding: 0.7rem 1.2rem;
@@ -1084,8 +1069,7 @@ lários de Pagamento */
     .back-to-methods {
         margin-bottom: 1rem;
     }
-}/* Loadi
-ng Modal Profissional */
+}
 .loading-modal {
     background: linear-gradient(135deg, #0D1B2A, #1B263B);
     padding: 3rem;
@@ -1242,7 +1226,6 @@ ng Modal Profissional */
     font-weight: 500;
 }
 
-/* Animações de entrada */
 .loading-modal {
     animation: modalSlideIn 0.4s ease;
 }
@@ -1258,7 +1241,6 @@ ng Modal Profissional */
     }
 }
 
-/* Responsividade do loading */
 @media (max-width: 768px) {
     .loading-modal {
         padding: 2rem;
@@ -1303,8 +1285,6 @@ ng Modal Profissional */
     }
 }
 
-
-/* Mensagem informativa para convidados */
 .user-info-guest {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     border: 2px solid #ffd700;
@@ -1334,7 +1314,6 @@ ng Modal Profissional */
     border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Melhorar o container dos lugares */
 .lugares-info {
     background: rgba(255, 214, 10, 0.08);
     padding: 1.5rem;
@@ -1361,7 +1340,6 @@ ng Modal Profissional */
     align-items: center;
 }
 
-/* Responsividade para lugares */
 @media (max-width: 768px) {
     .lugar-badge {
         padding: 0.35rem 0.8rem;
@@ -1384,9 +1362,7 @@ ng Modal Profissional */
         padding: 1rem;
     }
 }
-/* ==========================
-   CÓDIGO DE DESCONTO INTEGRADO
-========================== */
+
 .codigo-desconto-integrated {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1612,7 +1588,6 @@ ng Modal Profissional */
     transform: scale(1.1);
 }
 
-/* Animações */
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -1624,7 +1599,6 @@ ng Modal Profissional */
     }
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .codigo-desconto-header {
         flex-direction: column;
@@ -1682,8 +1656,6 @@ ng Modal Profissional */
     }
 }
 
-
-/* Remover backdrop-filter e bolinhas de fundo */
 .checkout-main::before {
     display: none !important;
 }
@@ -1706,12 +1678,10 @@ ng Modal Profissional */
     display: none !important;
 }
 
-/* Esconder seção de resumo da reserva */
 .resumo-section {
     display: none !important;
 }
 
-/* Aumentar largura do dados-section */
 .dados-section {
     max-width: none !important;
     width: 100% !important;
@@ -1719,12 +1689,10 @@ ng Modal Profissional */
     margin: 0 auto !important;
 }
 
-/* Esconder dados do cliente */
 .user-info {
     display: none !important;
 }
 
-/* Alinhar todos os métodos de pagamento lado a lado */
 .payment-methods-grid {
     display: grid !important;
     grid-template-columns: repeat(6, 1fr) !important;
@@ -1743,13 +1711,10 @@ ng Modal Profissional */
     }
 }
 
-/* Esconder título e badge de segurança */
 .section-header {
     display: none !important;
 }
 
-
-/* Aumentar tamanho dos containers dos métodos de pagamento */
 .payment-method-item {
     min-height: 100px !important;
     padding: 1.2rem 1rem !important;

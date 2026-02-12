@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento - Sessão {{ tipo_sessao.title() }} | CineVibe</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/payment_clean.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
@@ -383,7 +381,7 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+    
     <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -409,7 +407,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -423,7 +420,7 @@
 
     <main class="main-content">
         <div class="payment-container">
-            <!-- Informações da Reserva -->
+            
             <div class="booking-summary">
                 <div class="summary-header">
                     <h2><i class="fas fa-ticket-alt"></i> Resumo da Reserva</h2>
@@ -469,13 +466,11 @@
                 </div>
             </div>
 
-            <!-- Área de Pagamento -->
             <div class="payment-section">
                 <div class="payment-header">
                     <h2><i class="fas fa-credit-card"></i> Finalizar Reserva</h2>
                 </div>
-                
-                <!-- Seleção de Sala Exclusiva -->
+
                 <div class="sala-selection-section">
                     <h2><i class="fas fa-door-open"></i> Escolha a Sala Exclusiva</h2>
                     <div class="salas-grid">
@@ -502,11 +497,10 @@
                         {% endfor %}
                     </div>
                 </div>
-                
-                <!-- Seção de Dados do Cliente / Métodos de Pagamento -->
+
                 <div class="checkout-section">
                     {% if logged_in %}
-                    <!-- Usuário logado - mostrar info e métodos de pagamento -->
+                    
                     <div class="user-info-section">
                         <h2>👤 Dados do Cliente</h2>
                         <div class="user-info">
@@ -518,7 +512,7 @@
                     <div class="metodos-pagamento">
                         <h2>💳 Método de Pagamento</h2>
                         <div class="payment-methods">
-                            <!-- Cartão de Crédito/Débito -->
+                            
                             <div class="payment-method" data-method="card">
                                 <div class="method-header">
                                     <div class="method-icon">
@@ -535,7 +529,6 @@
                                 </div>
                             </div>
 
-                            <!-- PayPal -->
                             <div class="payment-method" data-method="paypal">
                                 <div class="method-header">
                                     <div class="method-icon paypal">
@@ -551,7 +544,6 @@
                                 </div>
                             </div>
 
-                            <!-- MB Way -->
                             <div class="payment-method" data-method="mbway">
                                 <div class="method-header">
                                     <div class="method-icon mbway">
@@ -567,7 +559,6 @@
                                 </div>
                             </div>
 
-                            <!-- Apple Pay -->
                             <div class="payment-method" data-method="applepay">
                                 <div class="method-header">
                                     <div class="method-icon">
@@ -583,7 +574,6 @@
                                 </div>
                             </div>
 
-                            <!-- Google Pay -->
                             <div class="payment-method" data-method="googlepay">
                                 <div class="method-header">
                                     <div class="method-icon">
@@ -600,7 +590,6 @@
                             </div>
                         </div>
 
-                        <!-- Botões de Ação -->
                         <div class="action-buttons">
                             <button type="button" class="btn-secondary" onclick="history.back()">
                                 <i class="fas fa-arrow-left"></i>
@@ -614,7 +603,7 @@
                         </div>
                     </div>
                     {% else %}
-                    <!-- Usuário não logado - formulário de dados -->
+                    
                     <div class="guest-form-section">
                         <h2>👤 Dados do Cliente</h2>
                         <form id="guestForm" class="guest-form">
@@ -647,12 +636,11 @@
                             </button>
                         </form>
                     </div>
-                    
-                    <!-- Métodos de pagamento (inicialmente ocultos) -->
+
                     <div class="metodos-pagamento" id="metodosSection" style="display: none;">
                         <h2>💳 Método de Pagamento</h2>
                         <div class="payment-methods">
-                            <!-- Cartão de Crédito/Débito -->
+                            
                             <div class="payment-method" data-method="card">
                                 <div class="method-header">
                                     <div class="method-icon">
@@ -669,7 +657,6 @@
                                 </div>
                             </div>
 
-                            <!-- PayPal -->
                             <div class="payment-method" data-method="paypal">
                                 <div class="method-header">
                                     <div class="method-icon paypal">
@@ -685,7 +672,6 @@
                                 </div>
                             </div>
 
-                            <!-- MB Way -->
                             <div class="payment-method" data-method="mbway">
                                 <div class="method-header">
                                     <div class="method-icon mbway">
@@ -701,7 +687,6 @@
                                 </div>
                             </div>
 
-                            <!-- Apple Pay -->
                             <div class="payment-method" data-method="applepay">
                                 <div class="method-header">
                                     <div class="method-icon">
@@ -717,7 +702,6 @@
                                 </div>
                             </div>
 
-                            <!-- Google Pay -->
                             <div class="payment-method" data-method="googlepay">
                                 <div class="method-header">
                                     <div class="method-icon">
@@ -752,7 +736,6 @@
         </div>
     </main>
 
-    <!-- Modal de Escolha Interativo (igual ao filme_detalhe) -->
     <div class="modal-overlay" id="modalLogin">
         <div class="choice-modal-content">
             <button class="choice-close-btn" onclick="fecharModalLogin()">
@@ -764,13 +747,11 @@
             
             <div class="choice-image-background">
                 <img src="{{ url_for('static', filename='imgs/273b7b060e96f9828f8c73db76c00b31.jpg') }}" alt="Escolha sua opção" class="choice-full-image">
-                
-                <!-- Opção Esquerda - Login (Vermelho) -->
+
                 <div class="choice-pill choice-left red-pill" onclick="fazerLogin()">
                     INICIAR SESSÃO
                 </div>
-                
-                <!-- Opção Direita - Convidado (Azul) -->
+
                 <div class="choice-pill choice-right blue-pill" onclick="continuarComoConvidado()">
                     CONVIDADO
                 </div>
@@ -778,7 +759,6 @@
         </div>
     </div>
 
-    <!-- Modal de Loading -->
     <div id="loadingModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="loading-content">

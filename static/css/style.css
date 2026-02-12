@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -95,7 +89,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -134,7 +127,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -151,9 +143,6 @@ a {
   transform: scale(1.1);
 }
 
-/* ==========================
-   SEÇÃO DESCOBRE O CINEMA - MELHORADA
-========================== */
 .discover-cinema {
     position: relative;
     padding: 120px 0;
@@ -297,9 +286,7 @@ a {
         linear-gradient(135deg, rgba(255, 214, 10, 0.15), rgba(78, 168, 222, 0.08)),
         rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 214, 10, 0.4);
-    box-shadow: 
-        0 15px 40px rgba(255, 214, 10, 0.2),
-        0 0 30px rgba(255, 214, 10, 0.1);
+   
 }
 
 .cinema-stat-number {
@@ -341,7 +328,6 @@ a {
     display: inline-flex;
     align-items: center;
     gap: 15px;
-    background: linear-gradient(135deg, #FFD60A 0%, #FFB703 100%);
     color: #000;
     padding: 20px 40px;
     border-radius: 50px;
@@ -353,9 +339,7 @@ a {
     text-decoration: none;
     position: relative;
     overflow: hidden;
-    box-shadow: 
-        0 8px 30px rgba(255, 214, 10, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+   
 }
 
 .discover-btn::before {
@@ -376,10 +360,6 @@ a {
 .discover-btn:hover {
     background: linear-gradient(135deg, #FFB703 0%, #FF8500 100%);
     transform: translateY(-4px) scale(1.05);
-    box-shadow: 
-        0 15px 40px rgba(255, 214, 10, 0.6),
-        0 0 30px rgba(255, 214, 10, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .discover-btn i {
@@ -428,7 +408,6 @@ a {
     transform: scale(1.1);
 }
 
-/* Efeitos de partículas flutuantes */
 .discover-cinema::after {
     content: '';
     position: absolute;
@@ -519,13 +498,11 @@ a {
     transition: all 0.3s ease;
     text-decoration: none;
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255, 200, 0, 0.4);
 }
 
 .discover-btn:hover {
     background-color: #FFB703;
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(255, 214, 10, 0.3);
 }
 
 .discover-btn i {
@@ -559,7 +536,6 @@ a {
     display: block;
 }
 
-/* Responsividade para a seção Descobre o Cinema */
 @media (max-width: 1200px) {
     .discover-content {
         grid-template-columns: 1fr 350px;
@@ -638,7 +614,6 @@ a {
     }
 }
 
-/* Contador de visualizações dos filmes */
 .movie-views {
     display: flex;
     align-items: center;
@@ -652,9 +627,6 @@ a {
     color: #FFD60A;
 }
 
-/* ==========================
-   SEÇÃO FILMES MAIS VISTOS
-========================== */
 .featured-movies {
     padding: 100px 0;
     background: 
@@ -665,7 +637,6 @@ a {
     overflow: hidden;
 }
 
-/* Overlay dourado sutil */
 .featured-movies::before {
     content: '';
     position: absolute;
@@ -884,7 +855,6 @@ a {
     right: -25px;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .featured-movies .section-header h2 {
         font-size: 2.5rem;
@@ -923,7 +893,7 @@ a {
         padding: 15px;
     }
 }
-/* Correção para imagens das sessões temáticas */
+
 .movie-card img,
 .filme-card img,
 .poster-container img {
@@ -938,9 +908,6 @@ a {
     max-width: 250px;
 }
 
-/* ==========================
-   FOOTER PROFISSIONAL
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -951,7 +918,6 @@ a {
   width: 100%;
 }
 
-/* Transição suave da secção anterior */
 .footer::before {
   content: '';
   position: absolute;
@@ -990,7 +956,6 @@ a {
   align-items: start;
 }
 
-/* Seções do footer */
 .footer-section {
   position: relative;
 }
@@ -1046,7 +1011,6 @@ a {
   opacity: 0.9;
 }
 
-/* Redes sociais */
 .footer-social {
   display: flex;
   gap: 18px;
@@ -1106,7 +1070,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Links do footer */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -1149,7 +1112,6 @@ a {
   left: -15px;
 }
 
-/* Newsletter */
 .newsletter-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   padding: 35px;
@@ -1250,7 +1212,6 @@ a {
     box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
 }
 
-/* Contactos no footer */
 .footer-contact {
   margin-top: 20px;
 }
@@ -1268,7 +1229,6 @@ a {
   font-size: 16px;
 }
 
-/* Footer bottom */
 .footer-bottom {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(13, 27, 42, 0.6));
   padding: 40px 0 50px;
@@ -1344,7 +1304,6 @@ a {
   width: 100%;
 }
 
-/* Certificações */
 .footer-certifications {
   display: flex;
   align-items: center;
@@ -1378,7 +1337,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -1415,12 +1373,6 @@ a {
   }
 }
 
-/* ==========================
-   HOME PAGE SPECIFIC STYLES
-   (Moved from templates/home.html)
-========================== */
-
-/* Hero Banner com altura maximizada */
 .hero-banner {
     position: relative;
     height: 90vh;
@@ -1466,7 +1418,6 @@ a {
     opacity: 0;
 }
 
-/* Estados simples e funcionais */
 .hero-banner.showing-image #videoPlayer {
     opacity: 0;
 }
@@ -1483,7 +1434,6 @@ a {
     opacity: 0;
 }
 
-/* Overlay suave */
 .hero-overlay {
     position: absolute;
     top: 0;
@@ -1494,7 +1444,6 @@ a {
     z-index: 2;
 }
 
-/* Seção Discover com transição suave */
 .discover-cinema {
     position: relative;
     margin-top: -100px;
@@ -1518,12 +1467,10 @@ a {
     transition: opacity 1s ease;
 }
 
-/* Mostrar conteúdo apenas quando imagem está visível */
 .hero-banner.showing-image .hero-content {
     opacity: 1;
 }
 
-/* Esconder conteúdo durante trailers */
 .hero-banner.showing-video .hero-content {
     opacity: 0;
 }
@@ -1581,7 +1528,6 @@ a {
     backdrop-filter: blur(10px);
 }
 
-/* Seções da homepage */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -1734,9 +1680,6 @@ a {
     filter: brightness(0) saturate(100%) invert(85%) sepia(100%) saturate(2500%) hue-rotate(35deg) brightness(1.4) contrast(1.2);
 }
 
-/* Animações removidas para design mais limpo */
-
-/* Animação para a imagem da seção Discover */
 .discover-cinema .discover-image {
     opacity: 0 !important;
     transform: translateX(50px) !important;
@@ -1755,8 +1698,6 @@ a {
 .discover-cinema .discover-image.animate-in .image-frame {
     transform: rotate(3deg) !important;
 }
-
-/* ===== SEÇÃO DE NAVEGAÇÃO RÁPIDA - DESIGN PREMIUM ===== */
 
 .navigation-cards-section {
     padding: 120px 0;
@@ -1779,7 +1720,6 @@ a {
     pointer-events: none;
 }
 
-/* Header Premium */
 .section-header-premium {
     text-align: center;
     margin-bottom: 80px;
@@ -1847,7 +1787,6 @@ a {
     font-weight: 300;
 }
 
-/* Grid Premium */
 .navigation-cards-grid-premium {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -1860,7 +1799,6 @@ a {
     z-index: 2;
 }
 
-/* Cards Premium */
 .nav-card-premium {
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
     border-radius: 25px;
@@ -1906,7 +1844,6 @@ a {
     border-color: rgba(255, 214, 10, 0.5);
 }
 
-/* Background específico para cada card */
 .nav-card-background {
     position: absolute;
     top: 0;
@@ -1940,7 +1877,6 @@ a {
         rgba(13, 27, 42, 0.95) 100%);
 }
 
-/* Imagem Premium */
 .nav-card-image-premium {
     height: 200px;
     position: relative;
@@ -1995,7 +1931,6 @@ a {
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
 }
 
-/* Conteúdo Premium */
 .nav-card-content-premium {
     padding: 30px;
     position: relative;
@@ -2126,7 +2061,6 @@ a {
     width: 25px;
 }
 
-/* Animação de pulso sutil para os cards */
 @keyframes cardPulse {
     0%, 100% {
         box-shadow: 
@@ -2220,7 +2154,6 @@ a {
     border: 2px solid #000;
 }
 
-/* Responsividade */
 @media (max-width: 1200px) {
     .experiences-grid {
         gap: 40px;
@@ -2377,8 +2310,6 @@ a {
         font-size: 0.95rem;
     }
 }
-
-/* ===== RESPONSIVIDADE PARA NAVIGATION CARDS PREMIUM ===== */
 
 @media (max-width: 1200px) {
     .navigation-cards-grid-premium {

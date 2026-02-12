@@ -1,4 +1,4 @@
-/* Página Cinema Filmes - CineVibe */
+
 
 * {
   margin: 0;
@@ -13,7 +13,6 @@ body {
   min-height: 100vh;
 }
 
-/* Header */
 header {
   background: rgba(15, 15, 35, 0.95);
   backdrop-filter: blur(10px);
@@ -72,7 +71,6 @@ header {
   border-radius: 50%;
 }
 
-/* Navigation */
 .nav-center {
   background: rgba(0, 0, 0, 0.3);
   padding: 1rem 0;
@@ -92,14 +90,12 @@ header {
   color: #4f46e5;
 }
 
-/* Main Content */
 .main-content {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-/* Cinema Header */
 .cinema-header {
   display: flex;
   justify-content: space-between;
@@ -147,7 +143,6 @@ header {
   transform: translateY(-2px);
 }
 
-/* Filters */
 .filters {
   display: flex;
   gap: 2rem;
@@ -179,7 +174,6 @@ header {
   min-width: 200px;
 }
 
-/* Filmes Grid */
 .filmes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -187,7 +181,6 @@ header {
   margin-bottom: 2rem;
 }
 
-/* Filme Card */
 .filme-card {
   position: relative;
   border-radius: 15px;
@@ -232,7 +225,6 @@ header {
   opacity: 1;
 }
 
-/* Filme Overlay */
 .filme-overlay {
   position: absolute;
   bottom: 0;
@@ -303,7 +295,6 @@ header {
   transform: translateY(-2px);
 }
 
-/* No Films State */
 .no-films {
   text-align: center;
   padding: 4rem 2rem;
@@ -323,7 +314,6 @@ header {
   margin-bottom: 2rem;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .cinema-header {
     flex-direction: column;

@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -33,7 +33,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -45,11 +44,9 @@
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main class="main-content">
             <div class="container">
-                
-                <!-- Progress Bar -->
+
                 <div class="progress-bar">
                     <div class="step completed">
                         <div class="step-number">1</div>
@@ -70,14 +67,13 @@
                 </div>
 
                 <div class="content-wrapper">
-                    <!-- Resumo da Compra -->
+                    
                     <div class="purchase-summary">
                         <div class="summary-header">
                             <i class="fas fa-receipt"></i>
                             <h2>Resumo da sua Compra</h2>
                         </div>
 
-                        <!-- Informações do Filme -->
                         <div class="movie-section">
                             <h3><i class="fas fa-film"></i> Sessão de Cinema</h3>
                             <div class="movie-info-card">
@@ -98,7 +94,6 @@
                             </div>
                         </div>
 
-                        <!-- Produtos do Bar -->
                         {% if produtos_selecionados %}
                         <div class="bar-section">
                             <h3><i class="fas fa-utensils"></i> Produtos do Bar</h3>
@@ -119,7 +114,6 @@
                         </div>
                         {% endif %}
 
-                        <!-- Total Geral -->
                         <div class="total-section">
                             <div class="total-breakdown">
                                 <div class="total-item">
@@ -139,7 +133,6 @@
                         </div>
                     </div>
 
-                    <!-- Dados do Cliente -->
                     <div class="customer-data">
                         <div class="data-header">
                             <i class="fas fa-user"></i>
@@ -147,7 +140,7 @@
                         </div>
 
                         {% if user_authenticated %}
-                        <!-- Utilizador Logado -->
+                        
                         <div class="logged-user-info">
                             <div class="user-card">
                                 <div class="user-avatar">
@@ -167,7 +160,7 @@
                             </div>
                         </div>
                         {% else %}
-                        <!-- Utilizador Não Logado -->
+                        
                         <div class="guest-form">
                             <div class="form-note">
                                 <i class="fas fa-info-circle"></i>
@@ -208,7 +201,6 @@
                     </div>
                 </div>
 
-                <!-- Botões de Ação -->
                 <div class="action-buttons">
                     <button class="btn-secondary" onclick="voltarBar()">
                         <i class="fas fa-arrow-left"></i>

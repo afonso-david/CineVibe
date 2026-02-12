@@ -240,7 +240,7 @@
 </head>
 <body>
     <div class="admin-layout">
-        <!-- Sidebar -->
+        
         <aside class="sidebar">
             
             <nav class="sidebar-nav">
@@ -292,8 +292,7 @@
                     <span>Voltar ao Site</span>
                 </a>
             </nav>
-        
-            <!-- User Profile Section -->
+
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <div class="profile-background">
@@ -346,9 +345,8 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Top Bar -->
+            
             <header class="top-bar-pro">
                 <div class="top-bar-left">
                     <div class="page-title">
@@ -371,9 +369,8 @@
                 </div>
             </header>
 
-            <!-- Dashboard Content -->
             <div class="dashboard-content-pro">
-                <!-- Control Panel -->
+                
                 <div class="control-panel">
                     <div class="search-section">
                         <div class="search-box-pro">
@@ -413,7 +410,6 @@
                     </div>
                 </div>
 
-                <!-- Grid View -->
                 <div class="movies-grid" id="avatares-grid" style="display: none;">
                     {% for avatar in avatares %}
                     <div class="movie-card-pro" data-avatar-id="{{ avatar.id }}" data-categoria="{{ avatar.categoria_nome or '' }}">
@@ -442,7 +438,6 @@
                     {% endfor %}
                 </div>
 
-                <!-- Table View -->
                 <div class="movies-table-container" id="avatares-table">
                     {% if avatares %}
                     <div class="table-wrapper">
@@ -522,7 +517,6 @@
         </main>
     </div>
 
-    <!-- Modal Adicionar Avatar -->
     <div id="modalAdicionarAvatar" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
@@ -575,7 +569,6 @@
         </div>
     </div>
 
-    <!-- Modal Gerir Categorias -->
     <div id="modalGerirCategorias" class="modal-overlay" style="display: none;">
         <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header">
@@ -585,7 +578,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Adicionar Nova Categoria -->
+                
                 <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(55, 65, 81, 0.3);">
                     <h3 style="color: #FFD700; margin-bottom: 15px;">
                         <i class="fas fa-plus"></i> Adicionar Nova Categoria
@@ -602,7 +595,6 @@
                     </form>
                 </div>
 
-                <!-- Lista de Categorias Existentes -->
                 <div>
                     <h3 style="color: #FFD700; margin-bottom: 15px;">
                         <i class="fas fa-list"></i> Categorias Existentes

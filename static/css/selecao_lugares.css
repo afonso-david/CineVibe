@@ -1,6 +1,4 @@
-/* ==========================
-   HEADER / NAV PARA SELEÇÃO DE LUGARES
-========================== */
+
 .top-nav {
     display: flex;
     align-items: center;
@@ -25,7 +23,6 @@
     -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
     display: flex;
     gap: 20px;
@@ -78,7 +75,6 @@
     color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
     display: flex;
     align-items: center;
@@ -117,7 +113,6 @@
     cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
     background-color: #1B263B;
     border-radius: 50%;
@@ -133,8 +128,6 @@
     background-color: #18AFC6;
     transform: scale(1.1);
 }
-
-
 
 .seat-selection {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
@@ -198,14 +191,13 @@
 
 .seat-row {
     display: flex;
-    gap: 0.15rem;  /* Reduzido de 0.2rem para 0.15rem */
+    gap: 0.15rem;  
     align-items: center;
     justify-content: center;
     width: 100%;
     margin-bottom: 0.2rem;
 }
 
-/* Linha divisória horizontal */
 .seat-divider {
     width: 100%;
     display: flex;
@@ -248,7 +240,6 @@
     border-radius: 2px;
 }
 
-/* Entradas da Sala */
 .cinema-entrances {
     position: relative;
     width: 100%;
@@ -316,7 +307,6 @@
     text-shadow: 0 2px 6px rgba(255, 214, 10, 0.7);
 }
 
-/* Card de informações do filme - ELEGANTE COM DETALHES VISUAIS */
 .movie-info-card {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.95) 0%, rgba(13, 27, 42, 0.98) 100%);
     border-radius: 20px;
@@ -329,7 +319,6 @@
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(78, 168, 222, 0.1) inset;
 }
 
-/* Linha decorativa superior - gradiente azul/amarelo */
 .movie-info-card::before {
     content: '';
     position: absolute;
@@ -340,7 +329,6 @@
     background: linear-gradient(90deg, transparent, #4EA8DE 30%, #FFD60A 70%, transparent);
 }
 
-/* Círculo decorativo azul no canto superior direito */
 .movie-info-card::after {
     content: '';
     position: absolute;
@@ -393,7 +381,6 @@
     position: relative;
     display: inline-block;
 }
-
 
 .movie-title::after {
     content: '';
@@ -462,7 +449,6 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-
 .vertical-divider {
     display: flex;
     align-items: center;
@@ -502,12 +488,10 @@
     filter: blur(1px);
 }
 
-
 .vertical-line.invisible {
     opacity: 0;
     pointer-events: none;
 }
-
 
 .seat-spacer {
     width: 20px;
@@ -516,7 +500,6 @@
     visibility: hidden;
     pointer-events: none;
 }
-
 
 .phantom-divider .vertical-line {
     opacity: 0;
@@ -573,7 +556,6 @@
     z-index: 1;
 }
 
-
 .seat.occupied {
     background: #03050F;
     border: 2px solid #0C112B;
@@ -591,7 +573,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
 
 .seat.accessible {
     background-color: #03050F;
@@ -621,7 +602,6 @@
     box-shadow: 0 0 4px #00FF00, 0 0 8px #00FF00;
     transform: scale(1.05);
 }
-
 
 .seat-legend {
     display: flex;
@@ -712,7 +692,6 @@
     filter: brightness(1.5) contrast(1.2);
 }
 
-
 .booking-summary {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
     border-radius: 20px;
@@ -747,7 +726,6 @@
     color: #4EA8DE;
     font-weight: 600;
 }
-
 
 .navigation-buttons {
     display: flex;
@@ -844,7 +822,6 @@
     transform: none;
     box-shadow: none;
 }
-
 
 @media (max-width: 768px) {
     .seat-selection {
@@ -1000,10 +977,7 @@
         gap: 0.5rem;
     }
 }
-/*
- ==========================
-   CONTROLES E BOTÕES
-========================== */
+
 .button-group {
     display: flex;
     gap: 1rem;
@@ -1080,7 +1054,6 @@
     font-size: 0.9rem;
 }
 
-/* Resumo da seleção */
 .selection-summary {
     background: rgba(13, 27, 42, 0.9);
     border-radius: 12px;
@@ -1117,7 +1090,6 @@
     font-size: 1.2rem;
 }
 
-/* Responsive para controles */
 @media (max-width: 768px) {
     .button-group {
         flex-direction: column;

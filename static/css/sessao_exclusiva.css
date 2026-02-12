@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 :root {
     --primary-gold: #FFD60A;
     --secondary-gold: #FFA500;
@@ -22,9 +20,6 @@
     --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* ==========================
-   BASE GERAL
-========================== */
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -39,9 +34,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -66,7 +58,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -119,7 +110,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -158,7 +148,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -175,9 +164,6 @@ a {
   transform: scale(1.1);
 }
 
-/* ==========================
-   HERO SECTION
-========================== */
 .hero-section {
     position: relative;
     height: 100vh;
@@ -373,9 +359,6 @@ a {
     transform: translateX(2px);
 }
 
-/* ==========================
-   SALAS SECTION
-========================== */
 .salas-section {
     padding: 8rem 0;
     background: var(--gradient-dark);
@@ -651,9 +634,6 @@ a {
     font-size: 0.8rem;
 }
 
-/* ==========================
-   FEATURES SECTION - ENHANCED
-========================== */
 .features-section {
     padding: 8rem 0;
     background: 
@@ -792,9 +772,6 @@ a {
     opacity: 0.9;
 }
 
-/* ==========================
-   CTA SECTION - ENHANCED
-========================== */
 .cta-section {
     padding: 8rem 0;
     background: 
@@ -903,9 +880,6 @@ a {
     transform: translateX(5px) scale(1.1);
 }
 
-/* ==========================
-   RESPONSIVIDADE - 3 SALAS LADO A LADO
-========================== */
 @media (max-width: 1400px) {
     .container {
         padding: 0 1.5rem;
@@ -1013,8 +987,7 @@ a {
         font-size: 1.2rem;
         margin-bottom: 4rem;
     }
-    
-    /* Manter 3 salas lado a lado em tablets */
+
     .salas-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
@@ -1092,7 +1065,6 @@ a {
     }
 }
 
-/* Apenas em dispositivos móveis pequenos empilhar verticalmente */
 @media (max-width: 768px) {
     .top-nav {
         padding: 1rem 1.5rem;
@@ -1167,8 +1139,7 @@ a {
         font-size: 1.1rem;
         margin-bottom: 3rem;
     }
-    
-    /* Empilhar salas verticalmente apenas em móveis */
+
     .salas-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -1434,9 +1405,6 @@ a {
     }
 }
 
-/* ==========================
-   ACCESSIBILITY & FOCUS STATES
-========================== */
 .btn-reservar:focus,
 .hero-cta:focus,
 .cta-button:focus {
@@ -1454,9 +1422,6 @@ a {
     outline: none;
 }
 
-/* ==========================
-   PERFORMANCE OPTIMIZATIONS
-========================== */
 .sala-card,
 .feature-card,
 .hero-content,
@@ -1473,9 +1438,6 @@ a {
     -webkit-backface-visibility: hidden;
 }
 
-/* ==========================
-   PRINT STYLES
-========================== */
 @media print {
     .hero-section,
     .features-section,
@@ -1497,7 +1459,6 @@ a {
     }
 }
 
-/* Footer Styles */
 .footer {
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%);
     color: #E2E8F0;
@@ -1582,36 +1543,6 @@ a {
     display: flex;
     gap: 15px;
 }
-
-/* Comentado para usar o CSS do style.css (igual ao home.html) */
-/* .footer-social a {
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(78, 168, 222, 0.1));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 214, 10, 0.2);
-}
-
-.footer-social a:hover {
-    background: linear-gradient(135deg, #FFD60A, #4EA8DE);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(255, 214, 10, 0.3);
-}
-
-.footer-social a img {
-    width: 20px;
-    height: 20px;
-    filter: brightness(0) invert(1);
-    transition: filter 0.3s ease;
-}
-
-.footer-social a:hover img {
-    filter: brightness(0) invert(0);
-} */
 
 .footer-links {
     list-style: none;
@@ -1796,7 +1727,6 @@ a {
     opacity: 1;
 }
 
-/* Footer Responsividade */
 @media (max-width: 1200px) {
     .footer-container {
         grid-template-columns: 2fr 1fr 1fr 1.5fr;
@@ -1836,9 +1766,6 @@ a {
     }
 }
 
-/* ==========================
-   MODAL MATRIX - VERSÃO CINEMATOGRÁFICA MELHORADA
-========================== */
 .matrix-modal {
     position: fixed;
     top: 0;
@@ -1872,7 +1799,6 @@ a {
     z-index: 1;
 }
 
-/* Imagem de fundo com efeitos cinematográficos */
 .matrix-background-image {
     position: absolute;
     top: 50%;
@@ -2166,7 +2092,6 @@ a {
     margin-top: 40px;
 }
 
-/* Matrix Rain Canvas - MELHORADO */
 .matrix-rain {
     position: absolute;
     top: 0;
@@ -2174,11 +2099,10 @@ a {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 2; /* Aumentado para aparecer mais, mas ainda abaixo do modal */
-    opacity: 0.9; /* Aumentado para ser mais visível */
+    z-index: 2; 
+    opacity: 0.9; 
 }
 
-/* Responsividade do Modal Matrix */
 @media (max-width: 768px) {
     .matrix-content {
         padding: 30px 20px;

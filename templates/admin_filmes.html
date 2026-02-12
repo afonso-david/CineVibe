@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="admin-layout">
-        <!-- Sidebar -->
+        
         <aside class="sidebar">
             
             <nav class="sidebar-nav">
@@ -63,8 +63,7 @@
                     <span>Voltar ao Site</span>
                 </a>
             </nav>
-        
-            <!-- User Profile Section -->
+
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <div class="profile-background">
@@ -117,9 +116,8 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Top Bar -->
+            
             <header class="top-bar-pro">
                 <div class="top-bar-left">
                     <div class="page-title">
@@ -138,9 +136,8 @@
                 </div>
             </header>
 
-            <!-- Dashboard Content -->
             <div class="dashboard-content-pro">
-                <!-- Control Panel -->
+                
                 <div class="control-panel">
                     <div class="search-section">
                         <div class="search-box-pro">
@@ -190,7 +187,6 @@
                     </div>
                 </div>
 
-                <!-- Grid View -->
                 <div class="movies-grid" id="filmes-grid" style="display: none;">
                     {% for filme in filmes %}
                     <div class="movie-card-grid" data-filme-id="{{ filme.id }}" data-estado="{{ filme.estado }}" data-generos="{{ filme.generos or '' }}">
@@ -221,7 +217,6 @@
                     {% endfor %}
                 </div>
 
-                <!-- Table View -->
                 <div class="movies-table-container" id="filmes-table">
                     {% if filmes %}
                     <div class="table-wrapper">
@@ -346,7 +341,6 @@
         </main>
     </div>
 
-    <!-- Modal para Adicionar Filme -->
     <div id="modalAdicionarFilme" class="modal-overlay" style="display: none;">
         <div class="modal-container">
             <div class="modal-header">
@@ -400,12 +394,11 @@
                         <textarea id="sinopse" name="sinopse" required rows="4"
                                   placeholder="Digite a sinopse do filme..."></textarea>
                     </div>
-                    
-                    <!-- Campos ocultos com valores padrão -->
+
                     <input type="hidden" name="diretor" value="A definir">
                     <input type="hidden" name="data_lancamento" value="2024-01-01">
                     <input type="hidden" name="estado" value="em_exibicao">
-                    <input type="hidden" name="generos[]" value="1"> <!-- Género padrão: Ação -->
+                    <input type="hidden" name="generos[]" value="1"> 
                 </div>
                 
                 <div class="modal-footer">

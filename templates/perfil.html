@@ -323,7 +323,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -349,7 +349,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -361,12 +360,11 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-    <!-- Main Content -->
     <main class="perfil-main">
         <div class="perfil-container">
-            <!-- Card Principal do Perfil -->
+            
             <div class="perfil-card">
-                <!-- Seção Esquerda - Informações do Usuário -->
+                
                 <div class="perfil-left">
                     <div class="user-header">
                         <h1 class="user-name" id="userName">{{ user.nome.upper() }}</h1>
@@ -445,7 +443,6 @@
                     </div>
                 </div>
 
-                <!-- Seção Direita - Pontos e Recompensas -->
                 <div class="perfil-right">
                     <div class="pontos-card">
                         <div class="pontos-icon">
@@ -469,7 +466,6 @@
                 </div>
             </div>
 
-            <!-- Seção de Estatísticas -->
             <div class="stats-section">
                 <h2 class="section-title">As Minhas Estatísticas</h2>
                 <div class="stats-grid">
@@ -496,7 +492,6 @@
                 </div>
             </div>
 
-            <!-- Filmes Vistos -->
             <div class="filmes-section">
                 <h2 class="section-title">Filmes Vistos</h2>
                 <div class="filmes-grid">
@@ -550,7 +545,6 @@
                 </div>
             </div>
 
-            <!-- Cinemas Favoritos -->
             <div class="cinemas-section">
                 <h2 class="section-title">Os Meus Cinemas Favoritos</h2>
                 <div class="cinemas-grid">
@@ -605,7 +599,6 @@
         </div>
     </main>
 
-    <!-- Modal de Avaliação -->
     <div id="avaliacaoModal" class="modal-avaliacao" style="display: none;">
         <div class="modal-content-avaliacao">
             <div class="modal-header">
@@ -646,7 +639,6 @@
         </div>
     </div>
 
-    <!-- Modal de Seleção de Avatar -->
     <div id="avatarModal" class="modal-avatar" style="display: none;">
         <div class="modal-content-avatar">
             <div class="modal-header-avatar">
@@ -660,7 +652,7 @@
             </div>
             <div class="modal-body-avatar">
                 <div class="avatar-categories">
-                    <!-- Conteúdo carregado via JavaScript -->
+                    
                 </div>
             </div>
             <div class="modal-footer-avatar">
@@ -676,7 +668,6 @@
         </div>
     </div>
 
-    <!-- Modal de Alterar Senha -->
     <div id="alterarSenhaModal" class="modal-alterar-senha" style="display: none;">
         <div class="modal-content-senha">
             <div class="modal-header-senha">
@@ -723,7 +714,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-main">
             <div class="footer-container">
@@ -823,7 +813,6 @@
         </div>
     </footer>
 
-    <!-- JavaScript inline para evitar problemas de loading -->
     <script>
         let editandoNome = false;
         let nomeOriginal = "{{ user.nome }}";

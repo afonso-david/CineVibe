@@ -1,12 +1,8 @@
-/* Importar o CSS base da audiodescrição */
+
 @import url('audiodescricao.css');
 
-/* Importar estilos do hero-banner da home */
 @import url('style.css');
 
-/* Footer exatamente igual ao da sessao.html - usar CSS do style.css */
-
-/* Garantir que o footer seja exatamente igual ao da home */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -17,7 +13,6 @@
   width: 100%;
 }
 
-/* Transição suave da secção anterior */
 .footer::before {
   content: '';
   position: absolute;
@@ -56,7 +51,6 @@
   align-items: start;
 }
 
-/* Seções do footer */
 .footer-section {
   position: relative;
 }
@@ -112,7 +106,6 @@
   opacity: 0.9;
 }
 
-/* Redes sociais */
 .footer-social {
   display: flex;
   gap: 18px;
@@ -172,7 +165,6 @@
   transform: scale(1.1);
 }
 
-/* Links do footer */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -215,7 +207,6 @@
   left: -15px;
 }
 
-/* Newsletter */
 .newsletter-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   padding: 35px;
@@ -316,7 +307,6 @@
     box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
 }
 
-/* Contactos no footer */
 .footer-contact {
   margin-top: 20px;
 }
@@ -334,7 +324,6 @@
   font-size: 16px;
 }
 
-/* Footer bottom */
 .footer-bottom {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(13, 27, 42, 0.6));
   padding: 40px 0 50px;
@@ -410,7 +399,6 @@
   width: 100%;
 }
 
-/* Certificações */
 .footer-certifications {
   display: flex;
   align-items: center;
@@ -444,7 +432,6 @@
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -481,43 +468,37 @@
   }
 }
 
-
-/* Remover margin do main-content para colar ao header */
 .main-content {
     margin-top: 0 !important;
     padding-top: 0 !important;
 }
 
-/* Garantir que não há espaços no body */
 body {
     margin: 0 !important;
     padding: 0 !important;
 }
 
-/* Remover qualquer espaço entre nav e hero-banner */
 nav.nav-center + .main-content .hero-banner {
     margin-top: 0 !important;
 }
 
-/* Ajustar posição do hero-banner para colar ao nav */
 .hero-banner {
     position: relative;
-    height: 120vh; /* Aumentado para 120vh */
-    min-height: 900px; /* Aumentado para 900px */
+    height: 120vh; 
+    min-height: 900px; 
     overflow: hidden;
-    /* Quebrar os limites do container */
+    
     width: 100vw;
     margin-left: calc(-50vw + 50%);
     margin-right: calc(-50vw + 50%);
     left: 0;
     right: 0;
-    /* Colar ao header removendo margin-top */
+    
     margin-top: 0;
-    /* Mover ligeiramente para cima para colar ao nav */
+    
     top: -1px;
 }
 
-/* Garantir que o vídeo ocupa toda a área e esconde logos */
 .hero-banner video {
     position: absolute;
     top: 0;
@@ -526,12 +507,11 @@ nav.nav-center + .main-content .hero-banner {
     height: 100%;
     object-fit: cover;
     z-index: 1;
-    /* Escalar moderadamente e posicionar para esconder o logo "max" mas manter a intérprete visível */
+    
     transform: scale(1.15);
     object-position: center bottom;
 }
 
-/* Sobrescrever apenas o tamanho da imagem para LGP */
 .hero-image img {
     width: 100%;
     max-width: 500px !important;
@@ -546,7 +526,6 @@ nav.nav-center + .main-content .hero-banner {
     align-items: center;
 }
 
-/* Ajustar o hero-content para layout LGP */
 .hero-banner .hero-content {
     position: absolute;
     top: 0;
@@ -563,21 +542,19 @@ nav.nav-center + .main-content .hero-banner {
     margin: 0 auto;
 }
 
-/* Garantir que o conteúdo fica visível sobre o vídeo */
 .hero-banner .hero-text,
 .hero-banner .hero-image {
     position: relative;
     z-index: 3;
 }
 
-/* Melhorar a legibilidade do texto sobre o vídeo */
 .hero-banner .hero-text h1 {
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.9);
     color: #FFFFFF;
     font-size: 4rem;
     font-weight: 800;
     margin-bottom: 1rem;
-    /* Adicionar outline para melhor contraste */
+    
     -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
 }
 
@@ -587,7 +564,7 @@ nav.nav-center + .main-content .hero-banner {
     font-size: 1.5rem;
     margin-bottom: 1rem;
     font-weight: 600;
-    /* Adicionar outline sutil */
+    
     -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.2);
 }
 
@@ -597,7 +574,7 @@ nav.nav-center + .main-content .hero-banner {
     font-size: 1.1rem;
     margin-bottom: 2rem;
     font-weight: 500;
-    /* Fundo semi-transparente para melhor legibilidade */
+    
     background: rgba(0, 0, 0, 0.4);
     padding: 1rem;
     border-radius: 8px;
@@ -619,7 +596,6 @@ nav.nav-center + .main-content .hero-banner {
     backdrop-filter: blur(10px);
 }
 
-/* Melhorar os botões sobre o vídeo */
 .hero-banner .btn-primary {
     background: linear-gradient(135deg, #FFD60A, #FFA500) !important;
     color: #0D1B2A !important;
@@ -663,7 +639,6 @@ nav.nav-center + .main-content .hero-banner {
     box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
-/* Features com melhor contraste */
 .hero-features {
     display: flex;
     flex-direction: column;
@@ -708,7 +683,6 @@ nav.nav-center + .main-content .hero-banner {
     margin-top: 2rem;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .hero-banner {
         margin-left: calc(-50vw + 50%);
@@ -736,11 +710,6 @@ nav.nav-center + .main-content .hero-banner {
     }
 }
 
-/* ==========================
-   MELHORIAS ESTÉTICAS PARA O RESTO DA PÁGINA
-========================== */
-
-/* Seção About - Design Premium */
 .about-section {
     padding: 120px 0;
     background: 
@@ -772,7 +741,7 @@ nav.nav-center + .main-content .hero-banner {
 .about-section .section-header h2 {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
-    color: #FFD60A; /* Cor sólida sem gradiente */
+    color: #FFD60A; 
     margin-bottom: 30px;
     font-family: 'Montserrat', sans-serif;
     line-height: 1.1;
@@ -814,7 +783,7 @@ nav.nav-center + .main-content .hero-banner {
     display: grid;
     grid-template-columns: 120px 1fr;
     gap: 40px;
-    align-items: center; /* Voltando para center para alinhar com o novo layout fixo */
+    align-items: center; 
     padding: 45px;
     background: 
         linear-gradient(135deg, rgba(255, 214, 10, 0.08), rgba(78, 168, 222, 0.05)),
@@ -865,13 +834,13 @@ nav.nav-center + .main-content .hero-banner {
     margin-top: 15px;
     margin-bottom: 15px;
     padding: 5px 0;
-    /* Forçar tamanho fixo e consistente */
+    
     width: 120px;
     height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Garantir que todos os números têm exatamente o mesmo tamanho */
+    
     min-width: 120px;
     max-width: 120px;
     min-height: 80px;
@@ -881,7 +850,7 @@ nav.nav-center + .main-content .hero-banner {
 .feature-number::after {
     content: '';
     position: absolute;
-    bottom: -15px; /* Ajustado de -10px para -15px para acomodar o espaço extra */
+    bottom: -15px; 
     left: 50%;
     transform: translateX(-50%);
     width: 60px;
@@ -891,7 +860,7 @@ nav.nav-center + .main-content .hero-banner {
 }
 
 .feature-content {
-    padding-top: 0; /* Removido padding superior já que agora está centralizado */
+    padding-top: 0; 
 }
 
 .feature-content h3 {
@@ -911,7 +880,6 @@ nav.nav-center + .main-content .hero-banner {
     opacity: 0.9;
 }
 
-/* Seção Testimonials - Design Elegante */
 .testimonials-section {
     padding: 120px 0;
     background: 
@@ -933,7 +901,7 @@ nav.nav-center + .main-content .hero-banner {
 .testimonials-section .section-header h2 {
     font-size: clamp(2.5rem, 4vw, 3.5rem);
     font-weight: 800;
-    color: #FFD60A; /* Cor sólida sem gradiente */
+    color: #FFD60A; 
     margin-bottom: 20px;
     font-family: 'Montserrat', sans-serif;
 }
@@ -1010,7 +978,6 @@ nav.nav-center + .main-content .hero-banner {
     opacity: 0.8;
 }
 
-/* Seção CTA - Design Impactante */
 .cta-section {
     padding: 120px 0;
     background: 
@@ -1048,7 +1015,7 @@ nav.nav-center + .main-content .hero-banner {
 .cta-content h2 {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 900;
-    color: #FFD60A; /* Cor sólida sem gradiente */
+    color: #FFD60A; 
     margin-bottom: 25px;
     font-family: 'Montserrat', sans-serif;
     line-height: 1.1;
@@ -1139,7 +1106,6 @@ nav.nav-center + .main-content .hero-banner {
     font-weight: bold;
 }
 
-/* Seção FAQ - Design Moderno */
 .faq-section {
     padding: 120px 0;
     background: 
@@ -1159,7 +1125,7 @@ nav.nav-center + .main-content .hero-banner {
 .faq-section .section-header h2 {
     font-size: clamp(2.5rem, 4vw, 3.5rem);
     font-weight: 800;
-    color: #FFD60A; /* Cor sólida sem gradiente */
+    color: #FFD60A; 
     margin-bottom: 20px;
     font-family: 'Montserrat', sans-serif;
 }
@@ -1214,7 +1180,6 @@ nav.nav-center + .main-content .hero-banner {
     opacity: 0.9;
 }
 
-/* Responsividade para as novas seções */
 @media (max-width: 768px) {
     .feature-item {
         grid-template-columns: 1fr;
@@ -1257,5 +1222,4 @@ nav.nav-center + .main-content .hero-banner {
         padding: 25px 20px;
     }
 }
-
 

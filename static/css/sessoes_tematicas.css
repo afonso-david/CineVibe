@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -95,7 +89,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -134,7 +127,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -150,10 +142,6 @@ a {
   background-color: #18AFC6;
   transform: scale(1.1);
 }
-
-/* ==========================
-   ESTILOS ESPECÍFICOS DA SESSAO
-========================== */
 
 :root {
     --primary-gold: #FFD700;
@@ -172,8 +160,7 @@ a {
     --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.4);
     --border-radius: 12px;
     --transition: all 0.3s ease;
-    
-    /* Cores dos temas */
+
     --vintage-gold: #D4AF37;
     --romance-pink: #FF69B4;
     --romance-red: #FF1493;
@@ -186,15 +173,11 @@ a {
     background: var(--gradient-dark);
 }
 
-/* Main Content */
 main {
     position: relative;
     z-index: 1;
 }
 
-/* ==========================
-   HERO SECTION PREMIUM
-========================== */
 .hero-section {
     position: relative;
     height: 100vh;
@@ -354,9 +337,6 @@ main {
     }
 }
 
-/* ==========================
-   THEMES SECTION PREMIUM
-========================== */
 .themes-section {
     padding: 4rem 0 6rem 0;
     background: #0D1B2A;
@@ -404,7 +384,6 @@ main {
     z-index: 2;
 }
 
-/* Base theme card styling */
 .theme-card {
     position: relative;
     backdrop-filter: blur(20px);
@@ -418,7 +397,6 @@ main {
     margin: 0 auto;
 }
 
-/* Theme-specific card backgrounds and styling */
 .theme-card.vintage {
     background: 
         linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 105, 20, 0.1) 100%),
@@ -542,7 +520,6 @@ main {
     transform: none !important;
 }
 
-/* Base theme content */
 .theme-content {
     position: relative;
     z-index: 10;
@@ -559,7 +536,6 @@ main {
     box-shadow: none !important;
 }
 
-/* Theme-specific content backgrounds */
 .vintage .theme-content {
     background: 
         linear-gradient(180deg, 
@@ -593,7 +569,6 @@ main {
     border-top: none !important;
 }
 
-/* Theme header with badge */
 .theme-header {
     display: flex;
     justify-content: flex-end;
@@ -639,7 +614,6 @@ main {
     color: #DC143C;
 }
 
-/* Theme info section */
 .theme-info {
     flex: 0 0 auto;
     margin-bottom: 1.5rem;
@@ -662,7 +636,6 @@ main {
     margin: 0;
 }
 
-/* Theme highlights section */
 .theme-highlights {
     flex: 1;
     display: flex;
@@ -738,30 +711,29 @@ main {
 }
 
 .highlight-item:hover {
-    /* Sem efeitos hover */
+    
 }
 
 .highlight-item:hover::before {
-    /* Sem efeitos hover */
+    
 }
 
 .highlight-item:hover::after {
-    /* Sem efeitos hover */
+    
 }
 
 .vintage .highlight-item:hover {
-    /* Sem efeitos hover */
+    
 }
 
 .romance .highlight-item:hover {
-    /* Sem efeitos hover */
+    
 }
 
 .terror .highlight-item:hover {
-    /* Sem efeitos hover */
+    
 }
 
-/* Theme actions section */
 .theme-actions {
     flex: 0 0 auto;
     display: flex;
@@ -871,7 +843,6 @@ main {
     background: linear-gradient(135deg, #FF0000 0%, #DC143C 100%);
 }
 
-/* Info Section */
 .info-section {
     padding: 8rem 0;
     background: #1B263B;
@@ -962,7 +933,6 @@ main {
     font-size: 1.05rem;
 }
 
-/* CTA Section */
 .cta-section {
     position: relative;
     padding: 8rem 0;
@@ -1073,198 +1043,6 @@ main {
     box-shadow: var(--shadow-medium);
 }
 
-/* ==========================
-   FOOTER PREMIUM - COMMENTED OUT TO USE STYLE.CSS
-========================== */
-/*
-.footer {
-    background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
-    padding: 6rem 0 3rem;
-    border-top: 1px solid rgba(255, 214, 10, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-.footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #FFD60A, #4EA8DE, transparent);
-}
-
-.footer::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(255, 214, 10, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(78, 168, 222, 0.03) 0%, transparent 50%);
-    pointer-events: none;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 4rem;
-    margin-bottom: 4rem;
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 2rem;
-    position: relative;
-    z-index: 2;
-}
-
-.footer-section h3,
-.footer-section h4 {
-    color: #FFD60A;
-    margin-bottom: 2rem;
-    font-weight: 700;
-    font-size: 1.3rem;
-    font-family: 'Playfair Display', serif;
-}
-
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 2rem;
-}
-
-.footer-logo img {
-    width: 50px;
-    height: 50px;
-    filter: drop-shadow(0 4px 8px rgba(255, 214, 10, 0.3));
-}
-
-.footer-logo h3 {
-    font-family: 'Playfair Display', serif;
-    color: #FFD60A;
-    margin: 0;
-    font-size: 2rem;
-}
-
-.footer-section p {
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.8;
-    margin-bottom: 2rem;
-    font-size: 1.05rem;
-}
-
-.footer-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-section ul li {
-    margin-bottom: 1rem;
-}
-
-.footer-section ul li a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    position: relative;
-    padding-left: 20px;
-}
-
-.footer-section ul li a::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: #FFD60A;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.footer-section ul li a:hover {
-    color: #FFD60A;
-    transform: translateX(10px);
-}
-
-.footer-section ul li a:hover::before {
-    opacity: 1;
-}
-
-.social-links {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.social-links a {
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.7);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 1.2rem;
-}
-
-.social-links a:hover {
-    background: linear-gradient(135deg, #FFD60A, #4EA8DE);
-    color: #0D1B2A;
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 10px 25px rgba(255, 214, 10, 0.3);
-    border-color: #FFD60A;
-}
-
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 500;
-}
-
-.contact-item i {
-    color: #FFD60A;
-    width: 24px;
-    font-size: 1.2rem;
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 3rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
-    position: relative;
-    z-index: 2;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
-}
-
-.footer-bottom p {
-    font-size: 1rem;
-    margin: 0;
-    font-weight: 500;
-}
-*/
-
-/* Responsive Design */
 @media (max-width: 1400px) {
     .themes-grid {
         gap: 2.5rem;
@@ -1486,9 +1264,7 @@ main {
     .cta-section {
         padding: 4rem 0;
     }
-}/* ==========================
-   BOTÕES PRINCIPAIS PREMIUM
-========================== */
+}
 .theme-cta {
     margin: 2rem 0;
     text-align: center;
@@ -1606,12 +1382,9 @@ main {
         0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Ajustar altura dos cards */
 .theme-card {
     height: 900px;
-}/* ==========================
-   BOTÕES SOBRE IMAGENS PREMIUM
-========================== */
+}
 .image-button {
     position: absolute;
     top: 50%;
@@ -1717,7 +1490,6 @@ main {
     transform: scale(1.15) translateY(-3px);
 }
 
-/* Melhorar o overlay das imagens */
 .theme-overlay {
     background: linear-gradient(
         180deg,
@@ -1737,7 +1509,6 @@ main {
     );
 }
 
-/* Responsividade para botões das imagens */
 @media (max-width: 768px) {
     .image-btn {
         padding: 12px 20px;
@@ -1746,7 +1517,7 @@ main {
     }
     
     .image-button {
-        opacity: 1; /* Sempre visível em mobile */
+        opacity: 1; 
     }
 }
 
@@ -1758,13 +1529,10 @@ main {
     }
     
     .image-btn span {
-        display: none; /* Só mostrar ícone em telas muito pequenas */
+        display: none; 
     }
 }
 
-/* ==========================
-   PADRÕES E EFEITOS DOS TEMAS - REMOVIDOS
-========================== */
 .theme-background {
     display: none !important;
 }
@@ -1809,9 +1577,6 @@ main {
     display: none !important;
 }
 
-/* ==========================
-   ANIMAÇÕES ADICIONAIS
-========================== */
 @keyframes pulse {
     0%, 100% { 
         transform: scale(1); 
@@ -1834,9 +1599,6 @@ main {
     }
 }
 
-/* ==========================
-   CONTAINER RESPONSIVO
-========================== */
 .container {
     max-width: 1400px;
     margin: 0 auto;

@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -34,7 +34,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -46,11 +45,9 @@
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main style="padding: 2rem 0; background: #0D1B2A; min-height: 100vh;">
             <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-                
-                <!-- Movie Info Card (igual a selecao_lugares) -->
+
                 <div class="movie-info-card">
                     <div class="movie-info-content">
                         {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
@@ -80,9 +77,8 @@
                     </div>
                 </div>
 
-                <!-- Bar Selection -->
                 <div class="bar-selection">
-                    <!-- Header com Scooby-Doo -->
+                    
                     <div class="section-header-with-image">
                         <div class="section-header-content">
                             <div class="section-header">
@@ -91,7 +87,6 @@
                                 <p>Aproveite e peça os seus snacks favoritos para desfrutar durante o filme!</p>
                             </div>
 
-                            <!-- Skip Option -->
                             <div class="skip-option">
                                 <button type="button" class="skip-btn" onclick="continuarComProdutos()">
                                     <i class="fas fa-forward"></i>
@@ -99,8 +94,7 @@
                                 </button>
                             </div>
                         </div>
-                        
-                        <!-- Imagem Scooby-Doo -->
+
                         <div class="section-header-image">
                             <img src="{{ url_for('static', filename='imgs/Snacks/b4c7d921ddde7c22b827bc9c4fa6efbb-removebg-preview.png') }}" 
                                  alt="Scooby-Doo" 
@@ -108,7 +102,6 @@
                         </div>
                     </div>
 
-                    <!-- Menu Categories -->
                     <div class="menu-categories">
                         <div class="category-tabs">
                             <button class="tab-btn active" data-category="menus">
@@ -125,9 +118,8 @@
                             </button>
                         </div>
 
-                        <!-- Menu Content -->
                         <div class="menu-content">
-                            <!-- Menus -->
+                            
                             <div class="category-content active" id="menus">
                                 <div class="products-grid">
                                     {% for produto in produtos.menus %}
@@ -163,7 +155,6 @@
                                 </div>
                             </div>
 
-                            <!-- Snacks -->
                             <div class="category-content" id="snacks">
                                 <div class="products-grid">
                                     {% for produto in produtos.snacks %}
@@ -199,7 +190,6 @@
                                 </div>
                             </div>
 
-                            <!-- Bebidas -->
                             <div class="category-content" id="bebidas">
                                 <div class="products-grid">
                                     {% for produto in produtos.bebidas %}
@@ -237,7 +227,6 @@
                         </div>
                     </div>
 
-                    <!-- Cart Summary -->
                     <div class="cart-summary" id="cartSummary" style="display: none;">
                         <h4><i class="fas fa-shopping-cart"></i> Resumo do Pedido</h4>
                         <div class="cart-items" id="cartItems"></div>
@@ -246,14 +235,12 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="action-buttons">
                         <button class="back-btn" onclick="goBack()">
                             <i class="fas fa-arrow-left"></i>
                             Voltar aos Lugares
                         </button>
-                        
-                        <!-- Formulário para resumo -->
+
                         <form id="resumoForm" method="GET" action="{{ url_for('resumo_reserva') }}" style="display: inline;">
                             <input type="hidden" name="filme_id" value="{{ filme_id }}">
                             <input type="hidden" name="cinema_id" value="{{ cinema_id }}">
@@ -269,8 +256,7 @@
                                 Continuar
                             </button>
                         </form>
-                        
-                        <!-- Link direto como backup -->
+
                         <a href="{{ url_for('resumo_reserva', filme_id=filme_id, cinema_id=cinema_id, tipo_sessao_id=tipo_sessao_id, horario_id=horario_id, data_sessao=data_sessao, lugares=lugares_selecionados|join(','), quantidade=lugares_selecionados|length, produtos_bar='[]') }}" 
                            class="continue-btn" 
                            style="display: none; text-decoration: none; margin-left: 1rem;"
@@ -283,8 +269,7 @@
 
             </div>
         </main>
-        
-        <!-- Modal de Seleção de Produtos do Menu -->
+
         <div id="modalMenuProdutos" class="modal-menu" style="display: none;">
             <div class="modal-menu-content">
                 <div class="modal-menu-header">
@@ -296,31 +281,28 @@
                     <div class="menu-config-info">
                         <p>Escolha <strong>1 snack</strong> e <strong>1 bebida</strong> para o seu menu</p>
                     </div>
-                    
-                    <!-- Seleção de Snack -->
+
                     <div class="menu-section">
                         <h4><i class="fas fa-cookie-bite"></i> Escolha o seu Snack</h4>
                         <div class="menu-produtos-grid" id="modalSnacks">
-                            <!-- Preenchido via JavaScript -->
+                            
                         </div>
                     </div>
-                    
-                    <!-- Seleção de Bebida -->
+
                     <div class="menu-section">
                         <h4><i class="fas fa-glass-cheers"></i> Escolha a sua Bebida</h4>
                         <div class="menu-produtos-grid" id="modalBebidas">
-                            <!-- Preenchido via JavaScript -->
+                            
                         </div>
                     </div>
-                    
-                    <!-- Seleção de Toppings (aparece apenas se o menu tiver toppings) -->
+
                     <div class="menu-section" id="sectionToppings" style="display: none;">
                         <h4><i class="fas fa-candy-cane"></i> Adicione Toppings (Opcional)</h4>
                         <div class="menu-config-info" style="margin-bottom: 1rem;">
                             <p>Personalize as suas pipocas com toppings deliciosos!</p>
                         </div>
                         <div class="menu-produtos-grid" id="modalToppings">
-                            <!-- Preenchido via JavaScript -->
+                            
                         </div>
                     </div>
                 </div>
@@ -335,7 +317,6 @@
         </div>
     </div>
 
-    <!-- Dados para JavaScript -->
     <script type="application/json" id="produtos-data">
         {
             "menus": {{ produtos.menus | tojson if produtos and produtos.menus else '[]' | safe }},
@@ -344,8 +325,7 @@
             "toppings": {{ toppings | tojson if toppings else '[]' | safe }}
         }
     </script>
-    
-    <!-- JavaScript externo -->
+
     <script src="{{ url_for('static', filename='js/selecao_bar.js') }}?v={{ range(1, 999999) | random }}"></script>
 </body>
 </html>

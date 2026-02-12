@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -95,7 +89,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -134,7 +127,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -172,7 +164,6 @@ a {
   padding: 0;
 }
 
-/* Hero Recompensas */
 .hero-recompensas {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%) !important;
   padding: 80px 20px !important;
@@ -226,7 +217,7 @@ a {
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  color: #FFD60A !important; /* Fallback */
+  color: #FFD60A !important; 
   line-height: 1.1 !important;
 }
 
@@ -248,7 +239,6 @@ a {
   box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .hero-content {
     flex-direction: column !important;
@@ -284,17 +274,14 @@ a {
   font-weight: 900 !important;
   line-height: 1 !important;
   margin-bottom: 15px !important;
-  
-  /* Gradiente com fallback */
+
   background: linear-gradient(135deg, #FFD60A 0%, #FFA500 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  
-  /* Fallback para browsers que não suportam background-clip */
+
   color: #FFD60A !important;
-  
-  /* Garantir visibilidade */
+
   display: block !important;
   text-align: center !important;
 }
@@ -639,7 +626,6 @@ a {
   filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(180deg) !important;
 }
 
-/* Responsividade para níveis */
 @media (max-width: 1200px) {
   .levels-container {
     grid-template-columns: repeat(2, 1fr);
@@ -669,7 +655,6 @@ a {
   }
 }
 
-/* Recompensas Disponíveis */
 .recompensas-disponiveis {
   background: linear-gradient(to bottom, #1a1a1a 0%, #0D1B2A 100%);
   padding: 80px 0;
@@ -769,7 +754,6 @@ a {
   }
 }
 
-/* Custom Modal Styles */
 .custom-modal {
   position: fixed;
   top: 0;
@@ -997,7 +981,6 @@ a {
   opacity: 1;
 }
 
-/* Responsividade melhorada */
 @media (max-width: 1200px) {
   .ganhar-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1473,7 +1456,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;

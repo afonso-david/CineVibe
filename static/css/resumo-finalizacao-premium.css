@@ -1,8 +1,5 @@
-/* ============================================
-   RESUMO E FINALIZAÇÃO - DESIGN ULTRA PREMIUM
-============================================ */
 
-/* Layout principal */
+
 .resumo-layout {
   display: grid;
   grid-template-columns: 1fr 400px;
@@ -11,10 +8,6 @@
   margin: 0 auto;
   padding: 30px 20px;
 }
-
-/* ============================================
-   COLUNA ESQUERDA - RESUMO DA RESERVA
-============================================ */
 
 .resumo-coluna {
   background: linear-gradient(145deg, 
@@ -75,7 +68,6 @@
   margin: 0;
 }
 
-/* Seções do resumo */
 .resumo-section {
   margin-bottom: 25px;
   background: linear-gradient(135deg, 
@@ -159,7 +151,6 @@
   color: var(--secondary);
 }
 
-/* Total final */
 .resumo-item-moderno.total-especial {
   background: linear-gradient(135deg, 
     var(--secondary) 0%, 
@@ -189,10 +180,6 @@
   font-weight: 900;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-
-/* ============================================
-   COLUNA DIREITA - DADOS PESSOAIS
-============================================ */
 
 .dados-coluna {
   display: flex;
@@ -253,7 +240,6 @@
   margin: 0;
 }
 
-/* Usuário logado */
 .user-info-container {
   background: linear-gradient(135deg, 
     rgba(0, 230, 118, 0.1) 0%, 
@@ -291,7 +277,6 @@
   margin: 0;
 }
 
-/* Formulário para não logados */
 .dados-form {
   margin-top: 20px;
   display: flex;
@@ -347,7 +332,6 @@
   opacity: 0.7;
 }
 
-/* Informações de segurança */
 .finalizacao-info {
   display: flex;
   align-items: center;
@@ -369,7 +353,6 @@
   text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
 }
 
-/* Botão finalizar */
 .btn-finalizar {
   width: 100%;
   padding: 18px 25px;
@@ -440,10 +423,6 @@
 .btn-icon i {
   font-size: 1.2rem;
 }
-
-/* ============================================
-   RESPONSIVIDADE
-============================================ */
 
 @media (max-width: 1024px) {
   .resumo-layout {

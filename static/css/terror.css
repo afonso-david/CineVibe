@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL TERROR
-========================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 body {
@@ -18,7 +16,6 @@ a {
   color: inherit;
 }
 
-/* Scrollbar personalizada */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -36,9 +33,6 @@ a {
   background: linear-gradient(135deg, rgb(139, 30, 30), rgb(180, 40, 40));
 }
 
-/* ==========================
-   VARIÁVEIS TERROR
-========================== */
 :root {
     --terror-red: rgb(180, 40, 40);
     --terror-dark: rgb(139, 30, 30);
@@ -61,9 +55,6 @@ a {
     background: linear-gradient(135deg, rgb(85, 20, 20) 0%, rgb(110, 25, 25) 50%, rgb(85, 20, 20) 100%);
 }
 
-/* ==========================
-   HERO SECTION TERROR
-========================== */
 .hero-section {
     position: relative;
     height: 100vh;
@@ -74,11 +65,10 @@ a {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* Fallback caso a imagem não carregue */
+    
     background-color: #0D1B2A;
 }
 
-/* Fallback caso a imagem não carregue */
 .hero-section::before {
     content: '';
     position: absolute;
@@ -115,7 +105,6 @@ a {
     backdrop-filter: blur(1px);
 }
 
-/* Efeito de névoa assombrada */
 .hero-section::after {
     content: '';
     position: absolute;
@@ -251,9 +240,6 @@ a {
     box-shadow: 0 20px 50px rgba(139, 0, 0, 0.3);
 }
 
-/* ==========================
-   FEATURES SECTION - MELHORADA
-========================== */
 .features-section {
     padding: 10rem 0;
     background: 
@@ -269,7 +255,6 @@ a {
     overflow: hidden;
 }
 
-/* Transição suave da hero section */
 .features-section::before {
     content: '';
     position: absolute;
@@ -286,7 +271,6 @@ a {
     z-index: 1;
 }
 
-/* Overlay vermelho sutil */
 .features-section::after {
     content: '';
     position: absolute;
@@ -394,7 +378,6 @@ a {
         inset 0 2px 8px rgba(255, 255, 255, 0.1);
 }
 
-/* Reflexo sutil no ícone */
 .feature-icon::before {
     content: '';
     position: absolute;
@@ -494,9 +477,6 @@ a {
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* ==========================
-   MOVIES SECTION
-========================== */
 .movies-section {
     padding: 10rem 0;
     background: 
@@ -511,8 +491,6 @@ a {
     position: relative;
     overflow: hidden;
 }
-
-
 
 .movies-section .section-header {
     text-align: center;
@@ -701,9 +679,6 @@ a {
     font-weight: 500;
 }
 
-/* ==========================
-   PRICING SECTION
-========================== */
 .pricing-section {
     padding: 10rem 0;
     background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
@@ -831,18 +806,12 @@ a {
     box-shadow: 0 15px 40px rgba(220, 20, 60, 0.4);
 }
 
-/* ==========================
-   CONTAINER E UTILITÁRIOS
-========================== */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
 }
 
-/* ==========================
-   RESPONSIVIDADE - MELHORADA
-========================== */
 @media (max-width: 1200px) {
     .features-grid {
         max-width: 1000px;
@@ -1149,9 +1118,6 @@ a {
     opacity: 1;
 }
 
-
-
-/* Botões do Carousel */
 .carousel-btn {
     position: absolute;
     top: 60%;
@@ -1189,7 +1155,6 @@ a {
     right: 15px;
 }
 
-/* Estado sem filmes */
 .no-movies {
     display: flex;
     flex-direction: column;
@@ -1220,7 +1185,6 @@ a {
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* Performance otimizada */
 .filme-card {
     will-change: transform;
     backface-visibility: hidden;
@@ -1234,7 +1198,6 @@ a {
     -webkit-backface-visibility: hidden;
 }
 
-/* Responsividade do Carousel */
 @media (max-width: 768px) {
     .movies-carousel {
         padding: 0 40px;
@@ -1297,10 +1260,7 @@ a {
         margin-bottom: 8px;
     }
 }
-/*
- ==========================
-   REACTIONS VIDEO SECTION
-========================== */
+
 .reactions-section {
     padding: 12rem 0;
     background: 
@@ -1450,7 +1410,6 @@ a {
     font-size: 1.2rem;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .reactions-section {
         padding: 6rem 0;
@@ -1499,9 +1458,7 @@ a {
         font-size: 1rem;
     }
 }
-/* ==========================
-   FOOTER - IGUAL À HOME
-========================== */
+
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -1512,7 +1469,6 @@ a {
   width: 100%;
 }
 
-/* Transição suave da secção anterior */
 .footer::before {
   content: '';
   position: absolute;
@@ -1551,7 +1507,6 @@ a {
   align-items: start;
 }
 
-/* Seções do footer */
 .footer-section {
   position: relative;
 }
@@ -1607,7 +1562,6 @@ a {
   opacity: 0.9;
 }
 
-/* Redes sociais */
 .footer-social {
   display: flex;
   gap: 18px;
@@ -1667,7 +1621,6 @@ a {
   transform: scale(1.1);
 }
 
-/* Links do footer */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -1710,7 +1663,6 @@ a {
   left: -15px;
 }
 
-/* Newsletter */
 .newsletter-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   padding: 35px;
@@ -1811,7 +1763,6 @@ a {
     box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
 }
 
-/* Contactos no footer */
 .footer-contact {
   margin-top: 20px;
 }
@@ -1829,7 +1780,6 @@ a {
   font-size: 16px;
 }
 
-/* Footer bottom */
 .footer-bottom {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(13, 27, 42, 0.6));
   padding: 40px 0 50px;
@@ -1905,7 +1855,6 @@ a {
   width: 100%;
 }
 
-/* Certificações */
 .footer-certifications {
   display: flex;
   align-items: center;
@@ -1939,7 +1888,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;

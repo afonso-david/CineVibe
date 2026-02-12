@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 html {
   overflow-y: scroll;
   height: 100%;
@@ -13,14 +11,10 @@ body {
   color: white;
 }
 
-/* Utility Classes */
 .hidden {
   display: none !important;
 }
 
-/* ==========================
-   PAGE WRAPPER
-========================== */
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -36,9 +30,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -63,7 +54,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -116,7 +106,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -155,7 +144,6 @@ a {
   cursor: pointer;
 }
 
-/* Dropdown de Resultados de Pesquisa */
 .search-results {
   position: absolute;
   top: calc(100% + 5px);
@@ -257,7 +245,6 @@ a {
   box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -274,9 +261,6 @@ a {
   transform: scale(1.1);
 }
 
-/* ==========================
-   BANNER - ESTILO CINEMATOGRÁFICO
-========================== */
 .banner {
   position: relative;
   width: 100%;
@@ -290,7 +274,6 @@ a {
   overflow: visible;
 }
 
-/* Overlay sutil para legibilidade */
 .banner::before {
   content: "";
   position: absolute;
@@ -308,7 +291,6 @@ a {
   z-index: 1;
 }
 
-/* Gradiente inferior */
 .banner::after {
   content: "";
   position: absolute;
@@ -425,15 +407,10 @@ a {
   left: 100%;
 }
 
-
-
 .btn-bilhete:active {
   transform: translateY(-2px) scale(1.02);
 }
 
-/* ==========================
-   CONTEÚDO PRINCIPAL - LAYOUT COMPACTO
-========================== */
 .conteudo-principal {
   padding: 40px 80px;
   max-width: 1400px;
@@ -443,9 +420,6 @@ a {
   overflow-x: hidden;
 }
 
-/* ==========================
-   SINOPSE COMPLETA - DESIGN COMPACTO
-========================== */
 .sinopse-completa {
   margin-bottom: 40px;
   background: rgba(27, 38, 59, 0.3);
@@ -499,9 +473,6 @@ a {
   font-weight: 400;
 }
 
-/* ==========================
-   CONTAINER ELENCO + DETALHES - VERTICAL
-========================== */
 .elenco-detalhes-wrapper {
   display: flex;
   flex-direction: column;
@@ -509,9 +480,6 @@ a {
   margin-bottom: 40px;
 }
 
-/* ==========================
-   ELENCO PRINCIPAL - DESIGN MODERNO EM GRID
-========================== */
 .elenco {
   flex: 1;
   min-width: 0;
@@ -563,7 +531,6 @@ a {
   backdrop-filter: blur(5px);
 }
 
-/* Barra superior colorida */
 .ator::before {
   content: '';
   position: absolute;
@@ -639,9 +606,6 @@ a {
   color: #5BBFED;
 }
 
-/* ==========================
-   INFORMAÇÕES - DESIGN HORIZONTAL COMPACTO
-========================== */
 .informacoes-direita {
   flex: 1;
   width: 100%;
@@ -743,9 +707,6 @@ a {
   font-weight: 700;
 }
 
-/* ==========================
-   AVALIAÇÕES - DESIGN PREMIUM
-========================== */
 .avaliacoes-titulo {
   font-size: 1.3rem;
   color: #FFD60A;
@@ -979,9 +940,6 @@ a {
   transform: rotate(15deg);
 }
 
-/* ==========================
-   SESSÕES E FILTROS - DESIGN MODERNO
-========================== */
 .sessoes {
   color: #E8EEF2;
   font-family: 'Nunito Sans', sans-serif;
@@ -1061,9 +1019,6 @@ a {
   transform: translateX(5px);
 }
 
-/* ==========================
-   CINEMAS + SESSÕES - DESIGN PREMIUM
-========================== */
 .cinemas-lista {
   display: flex;
   flex-direction: column;
@@ -1093,7 +1048,6 @@ a {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Botões de sessão */
 .botoes-sessao {
   display: flex;
   flex-wrap: wrap;
@@ -1128,7 +1082,6 @@ a {
   transform: translateY(-2px);
 }
 
-/* Sessão grupo e horários */
 .sessao-grupo {
   position: relative;
   overflow: visible !important;
@@ -1196,9 +1149,6 @@ a {
   box-shadow: none;
 }
 
-/* ==========================
-   SALAS
-========================== */
 .salas-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -1224,9 +1174,6 @@ a {
   transform: translateY(-2px);
 }
 
-/* ==========================
-   NAVEGAÇÃO DE DIAS - DESIGN COMPACTO
-========================== */
 .nav-dias {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%);
   padding: 25px 60px 30px 60px;
@@ -1391,13 +1338,6 @@ a {
   color: #0D1B2A;
 }
 
-
-
-/* ==========================
-   RESPONSIVO
-========================== */
-
-/* Responsividade do Banner */
 @media (max-width: 1024px) {
   .banner {
     height: 550px;
@@ -1635,10 +1575,6 @@ a {
   }
 }
 
-
-/* ==========================
-   PAINEL DE COMPRA FLUTUANTE - DESIGN PREMIUM
-========================== */
 #comprar-bilhete-flutuante {
   position: fixed;
   bottom: 0;
@@ -1714,10 +1650,8 @@ a {
   box-shadow: 0 12px 30px rgba(255, 214, 10, 0.5);
 }
 
-
-/* Estilo para o botão de horário selecionado */
 .hora-btn.selected {
-    background-color: #FFD60A; /* Cor amarela para indicar seleção */
+    background-color: #FFD60A; 
     color: #0D1B2A;
     box-shadow: 0 0 10px rgba(255, 214, 10, 0.8);
     transform: scale(1.05);
@@ -1729,12 +1663,6 @@ a {
     color: #ccc;
 }
 
-/* ==========================
-   MODAL DE VERIFICAÇÃO DE LOGIN
-========================== */
-/* ==========================
-   MODAL DE VERIFICAÇÃO DE LOGIN - DESIGN PREMIUM
-========================== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1779,7 +1707,6 @@ a {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
 }
 
-/* Efeito de brilho no fundo */
 .modal-content::before {
     content: '';
     position: absolute;
@@ -1802,7 +1729,6 @@ a {
     opacity: 1;
 }
 
-/* Ícone decorativo no topo */
 .modal-icon {
     position: absolute;
     top: -35px;
@@ -1927,7 +1853,6 @@ a {
     transform: translateY(-1px);
 }
 
-/* Ícones nos botões */
 .btn-login::after {
     content: ' 👤';
     margin-left: 8px;
@@ -1938,7 +1863,6 @@ a {
     margin-left: 8px;
 }
 
-/* Texto do rodapé do modal */
 .modal-footer-text {
     margin-top: 25px;
     margin-bottom: 0;
@@ -1949,7 +1873,6 @@ a {
     animation: pulse 2s ease-in-out infinite;
 }
 
-/* Botão de fechar elegante */
 .modal-close {
     position: absolute;
     top: 20px;
@@ -1985,7 +1908,6 @@ a {
     transform: rotate(90deg) scale(0.95);
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .modal-content {
         padding: 50px 30px 35px 30px;
@@ -2028,9 +1950,6 @@ a {
     }
 }
 
-/* ==========================
-   FOOTER PROFISSIONAL - COPIADO EXATAMENTE DA HOME
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -2458,7 +2377,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1024px) {
   .footer-container {
     grid-template-columns: 1fr 1fr;
@@ -2576,9 +2494,6 @@ a {
   }
 }
 
-/* ==========================
-   AVALIAÇÕES EXTERNAS (ROTTEN TOMATOES / IMDB) - DESIGN PREMIUM
-========================== */
 .info-divider {
   height: 3px;
   background: linear-gradient(90deg, transparent, rgba(255, 214, 10, 0.5), rgba(78, 168, 222, 0.5), transparent);
@@ -2634,7 +2549,6 @@ a {
   filter: brightness(1.2);
 }
 
-/* Card de Rating - Design Moderno */
 .rating-link {
   display: flex;
   align-items: center;
@@ -2672,7 +2586,6 @@ a {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Score com estilo de badge */
 .rating-score {
   font-size: 1.8rem;
   font-weight: 900;
@@ -2685,7 +2598,6 @@ a {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Cores do Rotten Tomatoes com backgrounds */
 .rating-score.fresh {
   color: #00FF00;
   background: linear-gradient(135deg, rgba(0, 255, 0, 0.15), rgba(0, 209, 0, 0.1));
@@ -2707,7 +2619,6 @@ a {
   box-shadow: 0 0 20px rgba(255, 68, 68, 0.2), inset 0 0 20px rgba(255, 68, 68, 0.1);
 }
 
-/* IMDb com estilo dourado */
 .rating-score.imdb-score {
   color: #F5C518;
   background: linear-gradient(135deg, rgba(245, 197, 24, 0.15), rgba(245, 197, 24, 0.1));
@@ -2715,7 +2626,6 @@ a {
   box-shadow: 0 0 20px rgba(245, 197, 24, 0.2), inset 0 0 20px rgba(245, 197, 24, 0.1);
 }
 
-/* Ícone de link externo melhorado */
 .external-link-icon {
   font-size: 1.3rem;
   color: #4EA8DE;
@@ -2742,13 +2652,11 @@ a {
   transform: scale(1.08);
 }
 
-/* Versão sem link (quando não há URL) */
 .info-value .rating-score {
   display: inline-block;
   margin: 0;
 }
 
-/* Animação de entrada */
 .avaliacao-item {
   animation: slideInRight 0.5s ease-out;
 }
@@ -2776,7 +2684,6 @@ a {
   animation-delay: 0.3s;
 }
 
-/* Container das avaliações com fundo especial */
 .avaliacoes-container {
   display: flex;
   flex-direction: column;
@@ -2810,7 +2717,6 @@ a {
   z-index: 1;
 }
 
-/* Efeito de brilho nos scores */
 .rating-score::after {
   content: '';
   position: absolute;
@@ -2833,12 +2739,10 @@ a {
   50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
-/* Hover effect no card completo */
 .rating-link:active {
   transform: translateY(-2px) translateX(2px) scale(0.98);
 }
 
-/* Badges de qualidade */
 .badge-quality {
   display: inline-block;
   padding: 3px 10px;
@@ -2856,7 +2760,6 @@ a {
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Badges Rotten Tomatoes */
 .fresh-badge {
   background: linear-gradient(135deg, #00FF00, #00D100);
   color: #000;
@@ -2875,7 +2778,6 @@ a {
   box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
 }
 
-/* Badges IMDb */
 .imdb-excellent {
   background: linear-gradient(135deg, #00FF88, #00CC66);
   color: #000;
@@ -2900,7 +2802,6 @@ a {
   box-shadow: 0 2px 8px rgba(136, 136, 136, 0.3);
 }
 
-/* Melhorar o label das avaliações */
 .avaliacao-item .info-label {
   display: flex;
   align-items: center;
@@ -2912,7 +2813,6 @@ a {
   font-weight: 600;
 }
 
-/* Responsivo para avaliações */
 @media (max-width: 768px) {
   .rating-score {
     font-size: 1.5rem;
@@ -2939,8 +2839,6 @@ a {
   }
 }
 
-
-/* Seção de Avaliações */
 .avaliacoes-section {
   margin-top: 60px;
   padding: 40px;
@@ -3123,8 +3021,6 @@ a {
   margin: 0;
 }
 
-
-/* Botão Play no Banner */
 .play-button {
   position: absolute;
   top: 50%;
@@ -3164,7 +3060,6 @@ a {
   }
 }
 
-/* Modal do Trailer */
 .trailer-modal {
   display: none;
   position: fixed;
@@ -3246,7 +3141,6 @@ a {
   border: none;
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
   .play-button {
     width: 80px;
@@ -3265,9 +3159,6 @@ a {
   }
 }
 
-/* ==========================
-   TRAILER PLAY BUTTON - DESIGN PREMIUM
-========================== */
 .trailer-play-overlay {
     position: absolute;
     top: 50%;
@@ -3322,7 +3213,7 @@ a {
 .play-icon {
     width: 40px;
     height: 40px;
-    margin-left: 4px; /* Ajustar visualmente o ícone de play */
+    margin-left: 4px; 
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     transition: all 0.3s ease;
 }
@@ -3335,7 +3226,6 @@ a {
     margin-top: -5px;
 }
 
-/* Modal do Trailer */
 .modal-trailer {
     max-width: 90vw;
     max-height: 90vh;
@@ -3362,9 +3252,6 @@ a {
     background: #000;
 }
 
-/* ==========================
-   AVALIAÇÕES COMPACTAS - DESIGN PREMIUM
-========================== */
 .avaliacoes-usuarios-container {
     margin-top: 30px;
 }
@@ -3492,7 +3379,6 @@ a {
     transform: translateY(-1px);
 }
 
-/* Login Prompt Compacto */
 .login-prompt-compact {
     display: flex;
     align-items: center;
@@ -3525,7 +3411,6 @@ a {
     transform: translateY(-1px);
 }
 
-/* Lista de Avaliações Compacta */
 .avaliacoes-lista-compact {
     margin-top: 20px;
 }
@@ -3629,7 +3514,6 @@ a {
     opacity: 0.8;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .trailer-play-btn {
         width: 100px;
@@ -3689,9 +3573,6 @@ a {
     }
 }
 
-/* ==========================
-   MODAL DE ESCOLHA RESERVA - DESIGN PREMIUM
-========================== */
 .modal-escolha-reserva {
     max-width: 500px;
     width: 90vw;
@@ -3735,7 +3616,6 @@ a {
     margin-bottom: 30px;
 }
 
-/* Opções de Escolha */
 .modal-escolha-opcoes {
     display: flex;
     flex-direction: column;
@@ -3822,7 +3702,6 @@ a {
     font-weight: 400;
 }
 
-/* Informações da Reserva */
 .modal-info-reserva {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
@@ -3847,7 +3726,6 @@ a {
     font-weight: 600;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .modal-escolha-reserva {
         width: 95vw;
@@ -3922,7 +3800,6 @@ a {
     }
 }
 
-/* Animação de entrada do modal */
 .modal-overlay.visible .modal-escolha-reserva {
     animation: modalSlideIn 0.4s ease-out;
 }
@@ -3937,12 +3814,7 @@ a {
         transform: translateY(0) scale(1);
     }
 }
-/* ==
-=========================
-   ESTILOS DE AVALIAÇÕES
-   ========================== */
 
-/* Estilos limpos para a seção de críticas */
 .avaliacoes-usuarios-container {
     margin-top: 30px;
 }
@@ -3973,7 +3845,6 @@ a {
     font-weight: 600;
 }
 
-/* Formulário elegante */
 .nova-avaliacao-form {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(78, 168, 222, 0.05));
     border: 1px solid rgba(255, 214, 10, 0.2);
@@ -4106,7 +3977,6 @@ a {
     background: rgba(220, 53, 69, 0.3);
 }
 
-/* Cards de avaliação elegantes */
 .avaliacoes-lista-modern {
     display: flex;
     flex-direction: column;
@@ -4225,7 +4095,6 @@ a {
     border-left: 3px solid #FFD60A;
 }
 
-/* Botão ver mais elegante */
 .ver-mais-section {
     text-align: center;
     margin-top: 20px;
@@ -4258,7 +4127,6 @@ a {
     transform: translateX(4px);
 }
 
-/* Estado vazio elegante */
 .sem-avaliacoes-modern {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.1), rgba(255, 214, 10, 0.05));
     border: 2px dashed rgba(78, 168, 222, 0.3);
@@ -4289,7 +4157,6 @@ a {
     color: #B8C5D1;
 }
 
-/* Novos estilos elegantes para avaliações */
 .minha-avaliacao-card {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.15), rgba(78, 168, 222, 0.08));
     border: 2px solid rgba(255, 214, 10, 0.4);
@@ -4600,7 +4467,6 @@ a {
     box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
 }
 
-/* Estilos para edição inline */
 .modo-edicao {
     animation: slideDown 0.3s ease;
 }
@@ -4775,8 +4641,7 @@ a {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
 }
-/* E
-stilos específicos para o modal do trailer */
+
 #modalTrailer {
     z-index: 10000 !important;
 }
@@ -4808,8 +4673,7 @@ stilos específicos para o modal do trailer */
     margin: 0 0 20px 0;
     padding: 20px;
     background: rgba(13, 27, 42, 0.9);
-}/* 
-Estilos para meias estrelas */
+}
 .star-inline {
     position: relative;
     display: inline-block;
@@ -4826,7 +4690,6 @@ Estilos para meias estrelas */
     filter: brightness(1.2);
 }
 
-/* Efeito de hover para mostrar preview */
 .stars-inline:hover .star-inline {
     opacity: 0.7;
 }
@@ -4843,7 +4706,6 @@ Estilos para meias estrelas */
     transform: scale(1.3) !important;
 }
 
-/* Animação suave para as estrelas */
 @keyframes starPulse {
     0% { transform: scale(1.1); }
     50% { transform: scale(1.2); }
@@ -4852,14 +4714,12 @@ Estilos para meias estrelas */
 
 .star-inline.active {
     animation: starPulse 0.3s ease-in-out;
-}/* Es
-tilos melhorados para meias estrelas */
+}
 .star-inline.full-star {
     color: #FFD60A !important;
     text-shadow: 0 0 10px rgba(255, 214, 10, 0.5) !important;
 }
 
-/* Meia estrela - usando gradiente para mostrar apenas metade preenchida */
 .star-inline.half-star {
     position: relative;
     color: #444 !important;
@@ -4877,7 +4737,6 @@ tilos melhorados para meias estrelas */
     z-index: 1;
 }
 
-/* Alternativa usando clip-path para navegadores modernos */
 @supports (clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%)) {
     .star-inline.half-star {
         background: linear-gradient(90deg, #FFD60A 50%, #444 50%);
@@ -4889,34 +4748,31 @@ tilos melhorados para meias estrelas */
     }
 }
 
-/* Melhorar o hover das estrelas */
 .star-inline:hover {
     transform: scale(1.15) !important;
     transition: all 0.2s ease;
 }
 
-/* Preview de hover */
 .stars-inline .star-inline:hover {
     color: #FFD60A !important;
     text-shadow: 0 0 15px rgba(255, 214, 10, 0.8) !important;
 }/
 * Correção para meias estrelas - tamanho normal */
 .star-inline {
-    transform: scale(1) !important; /* Sempre tamanho normal */
+    transform: scale(1) !important; 
 }
 
 .star-inline.full-star {
     color: #FFD60A !important;
     text-shadow: 0 0 10px rgba(255, 214, 10, 0.5) !important;
-    transform: scale(1) !important; /* Tamanho normal */
+    transform: scale(1) !important; 
 }
 
-/* Meia estrela - apenas metade preenchida, tamanho normal */
 .star-inline.half-star {
     position: relative;
     color: #444 !important;
     text-shadow: none !important;
-    transform: scale(1) !important; /* Tamanho normal */
+    transform: scale(1) !important; 
 }
 
 .star-inline.half-star::before {
@@ -4931,18 +4787,15 @@ tilos melhorados para meias estrelas */
     z-index: 2;
 }
 
-/* Hover apenas com pequeno aumento */
 .star-inline:hover {
     transform: scale(1.05) !important;
     transition: all 0.2s ease;
 }
 
-/* Garantir que estrelas ativas não mudem de tamanho */
 .star-inline.full-star:not(:hover),
 .star-inline.half-star:not(:hover) {
     transform: scale(1) !important;
-}/* CO
-RREÇÃO FINAL - Estrelas com tamanho fixo */
+}
 .stars-inline .star-inline {
     font-size: 2rem !important;
     transform: none !important;
@@ -4964,13 +4817,11 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
     font-size: 2rem !important;
 }
 
-/* Remover qualquer animação de escala */
 .star-inline.active {
     animation: none !important;
     transform: none !important;
 }
 
-/* Sobrescrever estilos anteriores que possam estar causando problemas */
 .star-inline,
 .star-inline:hover,
 .star-inline:active,
@@ -4980,8 +4831,7 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
     transform: none !important;
     font-size: 2rem !important;
     display: inline-block !important;
-}/*
- LIMPEZA FINAL - Remover todos os conflitos de tamanho das estrelas */
+}
 .stars-inline .star-inline,
 .stars-inline .star-inline:hover,
 .stars-inline .star-inline:active,
@@ -4997,21 +4847,16 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
     filter: none !important;
 }
 
-/* Garantir que o hover só muda a cor */
 .stars-inline .star-inline:hover {
     color: #FFD60A !important;
     text-shadow: 0 0 15px rgba(255, 214, 10, 0.8) !important;
 }
 
-/* Meia estrela com tamanho fixo */
 .stars-inline .star-inline.half-star::before {
     font-size: 2rem !important;
     transform: none !important;
 }
-/* =
-=========================
-   BOTÃO DE TRAILER - DESIGN PREMIUM MELHORADO
-========================== */
+
 .trailer-play-overlay {
   position: absolute;
   top: 50%;
@@ -5081,7 +4926,7 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   transition: all 0.3s ease;
   position: relative;
   z-index: 2;
-  margin-left: 4px; /* Ajuste visual para centralizar o triângulo */
+  margin-left: 4px; 
 }
 
 .play-ripple,
@@ -5149,7 +4994,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   transform: translate(-50%, -50%) scale(1.05);
 }
 
-/* Efeito de brilho no hover */
 .trailer-play-btn::after {
   content: '';
   position: absolute;
@@ -5178,7 +5022,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
   .trailer-play-btn {
     width: 100px;
@@ -5221,9 +5064,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   }
 }
 
-/* ==========================
-   MELHORIAS NO BANNER
-========================== */
 .banner {
   position: relative;
   width: 100%;
@@ -5235,10 +5075,9 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   background-position: center top;
   background-repeat: no-repeat;
   overflow: visible;
-  background-attachment: fixed; /* Efeito parallax */
+  background-attachment: fixed; 
 }
 
-/* Overlay com gradiente mais sofisticado */
 .banner::before {
   content: "";
   position: absolute;
@@ -5258,7 +5097,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   z-index: 1;
 }
 
-/* Gradiente inferior mais dramático */
 .banner::after {
   content: "";
   position: absolute;
@@ -5276,7 +5114,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   z-index: 1;
 }
 
-/* Efeito de partículas flutuantes */
 .banner-content::before {
   content: '';
   position: absolute;
@@ -5303,7 +5140,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   75% { transform: translateY(-15px) translateX(3px); }
 }
 
-/* Melhorar o poster com efeitos mais dramáticos */
 .poster-wrapper::before {
   content: "";
   position: absolute;
@@ -5334,7 +5170,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   opacity: 1;
 }
 
-/* Título com efeito de texto mais dramático */
 .filme-info h1 {
   font-size: 4rem;
   margin-bottom: 30px;
@@ -5349,7 +5184,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   position: relative;
 }
 
-/* Efeito de brilho no título */
 .filme-info h1::before {
   content: attr(data-text);
   position: absolute;
@@ -5373,7 +5207,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   100% { background-position: 200% 0; }
 }
 
-/* Botão de bilhete com efeitos mais sofisticados */
 .btn-bilhete {
   padding: 18px 50px;
   background: linear-gradient(135deg, #FFD60A 0%, #FFB703 50%, #FF9500 100%);
@@ -5393,7 +5226,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   overflow: hidden;
 }
 
-/* Efeito de ondas no botão */
 .btn-bilhete::after {
   content: '';
   position: absolute;
@@ -5425,9 +5257,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   transform: translateY(-2px) scale(1.02);
 }
 
-/* ==========================
-   MELHORIAS NA SEÇÃO DE INFORMAÇÕES
-========================== */
 .informacoes-direita {
   flex: 1;
   width: 100%;
@@ -5445,7 +5274,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   overflow: hidden;
 }
 
-/* Efeito de brilho sutil no fundo */
 .informacoes-direita::after {
   content: '';
   position: absolute;
@@ -5467,7 +5295,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   to { transform: rotate(360deg); }
 }
 
-/* Melhorar os itens de informação */
 .info-item {
   display: inline-flex;
   align-items: center;
@@ -5508,9 +5335,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   box-shadow: 0 5px 15px rgba(255, 214, 10, 0.2);
 }
 
-/* ==========================
-   MELHORIAS NAS AVALIAÇÕES EXTERNAS
-========================== */
 .avaliacoes-container {
   display: flex;
   flex-direction: column;
@@ -5529,7 +5353,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Efeito de partículas no fundo das avaliações */
 .avaliacoes-container::before {
   content: '';
   position: absolute;
@@ -5550,7 +5373,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   50% { opacity: 0.9; }
 }
 
-/* Melhorar os cards de rating */
 .rating-link {
   display: flex;
   align-items: center;
@@ -5570,7 +5392,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Efeito de onda no hover */
 .rating-link::after {
   content: '';
   position: absolute;
@@ -5606,7 +5427,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
     radial-gradient(circle at 10% 90%, rgba(255, 214, 10, 0.08) 0%, transparent 50%);
 }
 
-/* Melhorar os scores com efeitos de neon */
 .rating-score.fresh {
   color: #00FF88;
   background: 
@@ -5659,7 +5479,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   text-shadow: 0 0 10px rgba(245, 197, 24, 0.5);
 }
 
-/* Animação de pulsação nos scores */
 .rating-score {
   animation: score-pulse 3s ease-in-out infinite;
 }
@@ -5678,10 +5497,7 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   0% { filter: brightness(1); }
   50% { filter: brightness(1.3); }
   100% { filter: brightness(1.1); }
-}/* =====
-=====================
-   MELHORIAS NOS TÍTULOS DAS SEÇÕES
-========================== */
+}
 .section-icon {
   font-size: 1.2rem;
   margin-right: 10px;
@@ -5694,9 +5510,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   50% { transform: translateY(-3px); }
 }
 
-/* ==========================
-   ELENCO MELHORADO - DESIGN PREMIUM
-========================== */
 .elenco h2 {
   font-size: 1.8rem;
   margin-bottom: 30px;
@@ -5748,7 +5561,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   backdrop-filter: blur(10px);
 }
 
-/* Efeito de brilho no fundo */
 .ator::before {
   content: '';
   position: absolute;
@@ -5775,7 +5587,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   opacity: 1;
 }
 
-/* Barra superior colorida */
 .ator::after {
   content: '';
   position: absolute;
@@ -5926,9 +5737,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   opacity: 1;
 }
 
-/* ==========================
-   INFORMAÇÕES MELHORADAS
-========================== */
 .informacoes-direita h2 {
   font-size: 1.8rem;
   margin-bottom: 25px;
@@ -6033,7 +5841,7 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
 }
 
 .info-label::after {
-  content: none; /* Remove os dois pontos */
+  content: none; 
 }
 
 .info-item:hover .info-label {
@@ -6052,9 +5860,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   color: #FFFFFF;
 }
 
-/* ==========================
-   SINOPSE MELHORADA
-========================== */
 .sinopse-completa {
   margin-bottom: 50px;
   background: 
@@ -6138,7 +5943,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   position: relative;
 }
 
-/* Efeito de primeira letra */
 .sinopse-content p::first-letter {
   font-size: 3.5rem;
   font-weight: 700;
@@ -6150,9 +5954,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* ==========================
-   ANIMAÇÕES DE ENTRADA
-========================== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -6186,7 +5987,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   }
 }
 
-/* Aplicar animações */
 .sinopse-completa {
   animation: fadeInUp 0.8s ease-out;
 }
@@ -6206,9 +6006,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
 .ator:nth-child(5) { animation: fadeInUp 0.6s ease-out 0.5s both; }
 .ator:nth-child(6) { animation: fadeInUp 0.6s ease-out 0.6s both; }
 
-/* ==========================
-   RESPONSIVO MELHORADO
-========================== */
 @media (max-width: 768px) {
   .atores {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -6282,10 +6079,7 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   .informacoes-direita h2 {
     font-size: 1.5rem;
   }
-}/* ======
-====================
-   SESSÕES MELHORADAS - DESIGN PREMIUM
-========================== */
+}
 .sessoes {
   color: #E8EEF2;
   font-family: 'Nunito Sans', sans-serif;
@@ -6329,9 +6123,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   text-shadow: 0 2px 10px rgba(255, 214, 10, 0.3);
 }
 
-/* ==========================
-   NAVEGAÇÃO DE DIAS MELHORADA
-========================== */
 .nav-dias {
   background: 
     linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%),
@@ -6400,7 +6191,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   animation: bounce-icon 2s ease-in-out infinite;
 }
 
-/* Dias container melhorado */
 .dias-container {
   display: flex;
   gap: 15px;
@@ -6526,9 +6316,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* ==========================
-   FILTROS DE REGIÃO MELHORADOS
-========================== */
 .filtros-regiao {
   display: flex;
   flex-direction: column;
@@ -6636,9 +6423,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   opacity: 1;
 }
 
-/* ==========================
-   CINEMAS MELHORADOS
-========================== */
 .cinemas-lista {
   display: flex;
   flex-direction: column;
@@ -6730,9 +6514,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   font-size: 0.9rem;
 }
 
-/* ==========================
-   BOTÕES DE SESSÃO MELHORADOS
-========================== */
 .botoes-sessao {
   display: flex;
   flex-wrap: wrap;
@@ -6815,9 +6596,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   opacity: 1;
 }
 
-/* ==========================
-   HORÁRIOS MELHORADOS
-========================== */
 .horarios-header {
   margin-bottom: 15px;
 }
@@ -6923,9 +6701,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   box-shadow: none;
 }
 
-/* ==========================
-   SALAS MELHORADAS
-========================== */
 .salas-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -6958,9 +6733,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
-/* ==========================
-   MENSAGEM SEM CINEMAS
-========================== */
 .no-cinemas-message {
   text-align: center;
   padding: 80px 40px;
@@ -6995,9 +6767,6 @@ RREÇÃO FINAL - Estrelas com tamanho fixo */
   opacity: 0.9;
 }
 
-/* ==========================
-   RESPONSIVO PARA SESSÕES
-========================== */
 @media (max-width: 1024px) {
   .sessoes-wrapper {
     flex-direction: column;

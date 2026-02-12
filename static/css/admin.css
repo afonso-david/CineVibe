@@ -21,7 +21,6 @@ html {
   height: 100%;
 }
 
-/* Estilizar scrollbar */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -42,15 +41,11 @@ html {
   background: rgba(255, 214, 10, 0.5);
 }
 
-/* Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 214, 10, 0.3) rgba(0, 0, 0, 0.3);
 }
 
-/* ==========================
-   SIDEBAR
-========================== */
 .admin-sidebar {
   position: fixed;
   left: 0;
@@ -271,7 +266,6 @@ html {
   z-index: 999;
 }
 
-/* Main Content */
 .admin-main-content {
   margin-left: 280px;
   min-height: 100vh;
@@ -298,7 +292,6 @@ html {
   background: rgba(255, 214, 10, 0.2);
 }
 
-/* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -699,10 +692,6 @@ html {
   color: #fff;
 }
 
-
-/* ==========================
-   FOOTER PROFISSIONAL AJEITADO
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -713,7 +702,6 @@ html {
   width: 100%;
 }
 
-/* Transição suave da secção anterior */
 .footer::before {
   content: '';
   position: absolute;
@@ -752,7 +740,6 @@ html {
   align-items: start;
 }
 
-/* Seções do footer */
 .footer-section {
   position: relative;
 }
@@ -808,7 +795,6 @@ html {
   opacity: 0.9;
 }
 
-/* Redes sociais */
 .footer-social {
   display: flex;
   gap: 18px;
@@ -868,7 +854,6 @@ html {
   transform: scale(1.1);
 }
 
-/* Links do footer */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -911,7 +896,6 @@ html {
   left: -15px;
 }
 
-/* Newsletter */
 .newsletter-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   padding: 35px;
@@ -1012,7 +996,6 @@ html {
   
 }
 
-/* Contactos no footer */
 .footer-contact {
   margin-top: 20px;
 }
@@ -1030,7 +1013,6 @@ html {
   font-size: 16px;
 }
 
-/* Footer bottom */
 .footer-bottom {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(13, 27, 42, 0.6));
   padding: 40px 0 50px;
@@ -1106,7 +1088,6 @@ html {
   width: 100%;
 }
 
-/* Certificações */
 .footer-certifications {
   display: flex;
   align-items: center;
@@ -1140,7 +1121,6 @@ html {
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -1164,7 +1144,6 @@ html {
   }
 }
 
-/* Responsividade do Sidebar */
 @media (max-width: 1024px) {
   .admin-sidebar {
     transform: translateX(-100%);
@@ -1222,14 +1201,12 @@ html {
     text-align: center;
   }
 
-  /* Botões de ação em mobile */
   .btn-action {
     padding: 8px 12px;
     font-size: 0.85rem;
     min-width: 90px;
   }
 
-  /* Coluna de ações em mobile */
   td > div {
     flex-direction: column !important;
     gap: 8px !important;
@@ -1247,7 +1224,7 @@ html {
     width: 100%;
   }
 }
-/* Dropdown de Resultados de Pesquisa */
+
 .search-results {
   position: absolute;
   top: calc(100% + 5px);
@@ -1347,8 +1324,7 @@ html {
 .search-view-all:hover {
   transform: scale(1.05);
   
-}/* 
-IMAGEM DE PERFIL DO UTILIZADOR */
+}
 .user-pic {
   background-color: #1B263B;
   border-radius: 50%;
@@ -1369,9 +1345,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   
 }
 
-/* ==========================
-   DROPDOWN DE PERFIL
-========================== */
 .user-profile-dropdown {
   position: relative;
 }
@@ -1432,9 +1405,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   flex-shrink: 0;
 }
 
-/* ==========================
-   MODAL AVATAR ESTILO NETFLIX
-========================== */
 .avatar-modal {
   display: none;
   position: fixed;
@@ -1519,9 +1489,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   transform: scale(1.1);
 }
 
-/* ==========================
-   CATEGORIAS ESTILO NETFLIX
-========================== */
 .avatar-categories-netflix {
   display: flex;
   gap: 15px;
@@ -1567,9 +1534,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   font-weight: 700;
 }
 
-/* ==========================
-   GRID DE AVATARES ESTILO NETFLIX
-========================== */
 .avatar-grid-netflix {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -1654,9 +1618,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   height: 18px;
 }
 
-/* ==========================
-   SECÇÃO DE UPLOAD
-========================== */
 .avatar-upload-section {
   margin-bottom: 30px;
 }
@@ -1695,9 +1656,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   font-size: 0.95rem;
 }
 
-/* ==========================
-   FOOTER DO MODAL
-========================== */
 .avatar-modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -1740,9 +1698,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   
 }
 
-/* ==========================
-   RESPONSIVIDADE DO MODAL
-========================== */
 @media (max-width: 768px) {
   .avatar-modal-content {
     padding: 25px;
@@ -1769,10 +1724,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   }
 }
 
-
-/* ==========================
-   DASHBOARD ESPECÍFICO
-========================== */
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -1855,10 +1806,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   border-color: #FFD60A;
 }
 
-
-/* ==========================
-   FOOTER ADMIN
-========================== */
 .admin-footer {
   margin-top: 60px;
   padding: 30px 0;
@@ -1954,11 +1901,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   }
 }
 
-/* ========================================
-   ÍCONES FONT AWESOME
-   ======================================== */
-
-/* Ícones na sidebar */
 .nav-item i {
   width: 20px;
   font-size: 20px;
@@ -1976,7 +1918,6 @@ IMAGEM DE PERFIL DO UTILIZADOR */
   color: #FFD60A;
 }
 
-/* Ícones nos títulos */
 h1 i,
 h2 i {
   font-size: 32px;
@@ -1992,7 +1933,6 @@ h3 i {
   vertical-align: middle;
 }
 
-/* Ícones nos cards de gestão */
 .menu-card .icon i {
   font-size: 64px;
   color: #FFD60A;
@@ -2004,7 +1944,6 @@ h3 i {
   transform: scale(1.15);
 }
 
-/* Ícones nos alertas */
 .alert-success-icon i {
   font-size: 48px;
   color: #4caf50;
@@ -2015,23 +1954,16 @@ h3 i {
   color: #FFD60A;
 }
 
-/* Ícones nos botões */
 .sidebar-toggle i,
 .mobile-menu-btn i {
   font-size: 24px;
   color: #fff;
 }
 
-/* Avatar do admin */
 .user-avatar i {
   font-size: 32px;
   color: #FFD60A;
 }
-
-
-/* ========================================
-   ÍCONES DE FILTRO
-   ======================================== */
 
 .filter-icon {
   width: 24px;
@@ -2053,8 +1985,6 @@ label {
   gap: 8px;
 }
 
-
-/* Ícone no título da página (page_title) */
 .admin-header h1 .icon-img {
   width: 40px;
   height: 40px;
@@ -2062,11 +1992,6 @@ label {
   vertical-align: middle;
   filter: brightness(0) saturate(100%) invert(82%) sepia(85%) saturate(1000%) hue-rotate(359deg) brightness(103%) contrast(104%);
 }
-
-
-/* ========================================
-   BOTÕES DE AÇÃO PADRONIZADOS
-   ======================================== */
 
 .btn-action {
   display: inline-flex;
@@ -2116,8 +2041,6 @@ label {
   
 }
 
-
-/* Espaçamento do ícone no título da página */
 .admin-header h1 i {
   margin-right: 0;
   font-size: 1.8rem;

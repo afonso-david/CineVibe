@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -34,7 +34,6 @@
             </div>
         </header>
 
-        <!-- Navegação -->
         <nav class="nav-center">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -46,11 +45,9 @@
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <!-- Main Content -->
         <main style="padding: 2rem 0; background: #0D1B2A; min-height: 100vh;">
             <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-                
-                <!-- Movie Info Card -->
+
                 <div class="movie-info-card">
                     <div class="movie-info-content">
                         {% set poster_path = filme.poster_url.replace('imgs/filmes/', '') if filme.poster_url and 'imgs/filmes/' in filme.poster_url else filme.poster_url %}
@@ -80,7 +77,6 @@
                     </div>
                 </div>
 
-                <!-- Toppings Selection -->
                 <div class="bar-selection">
                     <div class="section-header">
                         <i class="fas fa-cookie-bite"></i>
@@ -88,7 +84,6 @@
                         <p>Personalize as suas pipocas com toppings deliciosos!</p>
                     </div>
 
-                    <!-- Skip Option -->
                     <div class="skip-option">
                         <form id="topContinueForm" method="GET" action="{{ url_for('resumo_reserva') }}">
                             <input type="hidden" name="filme_id" value="{{ filme_id }}">
@@ -108,7 +103,6 @@
                         </form>
                     </div>
 
-                    <!-- Toppings Grid -->
                     <div class="products-grid">
                         {% if toppings %}
                             {% for topping in toppings %}
@@ -148,7 +142,6 @@
                         {% endif %}
                     </div>
 
-                    <!-- Cart Summary -->
                     <div class="cart-summary" id="cartSummary" style="display: none;">
                         <h4><i class="fas fa-shopping-cart"></i> Resumo dos Toppings</h4>
                         <div class="cart-items" id="cartItems"></div>
@@ -157,14 +150,12 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="action-buttons">
                         <button class="back-btn" onclick="goBack()">
                             <i class="fas fa-arrow-left"></i>
                             Voltar ao Bar
                         </button>
-                        
-                        <!-- Formulário para resumo -->
+
                         <form id="resumoForm" method="GET" action="{{ url_for('resumo_reserva') }}" style="display: inline;">
                             <input type="hidden" name="filme_id" value="{{ filme_id }}">
                             <input type="hidden" name="cinema_id" value="{{ cinema_id }}">
@@ -188,7 +179,6 @@
         </main>
     </div>
 
-    <!-- Dados para JavaScript -->
     <script type="application/json" id="toppings-data">
         {{ toppings | tojson | safe }}
     </script>

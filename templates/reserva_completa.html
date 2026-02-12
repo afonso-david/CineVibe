@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header class="header">
             <div class="nav-left">
                 <a href="{{ url_for('home') }}">
@@ -39,9 +39,8 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="reserva-main">
-            <!-- Progress Bar -->
+            
             <div class="progress-container">
                 <div class="progress-bar">
                     <div class="progress-line">
@@ -72,12 +71,10 @@
                 </div>
             </div>
 
-            <!-- Content Container -->
             <div class="content-container">
-                <!-- Left Column - Steps -->
+                
                 <div class="steps-column">
-                    
-                    <!-- Step 1: Quantidade de Bilhetes -->
+
                     <div class="step-content active" id="step1">
                         <div class="step-header">
                             <h2>🎫 Quantos bilhetes?</h2>
@@ -111,7 +108,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: Seleção de Lugares -->
                     <div class="step-content" id="step2">
                         <div class="step-header">
                             <h2>🎬 Escolha seus lugares</h2>
@@ -124,7 +120,7 @@
                             </div>
                             
                             <div class="mapa-sala" id="mapaSala">
-                                <!-- Lugares serão gerados dinamicamente -->
+                                
                             </div>
                             
                             <div class="legenda">
@@ -157,7 +153,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Produtos do Bar -->
                     <div class="step-content" id="step3">
                         <div class="step-header">
                             <h2>🍿 Produtos do Bar</h2>
@@ -264,7 +259,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 4: Resumo da Compra -->
                     <div class="step-content" id="step4">
                         <div class="step-header">
                             <h2>📋 Resumo da Compra</h2>
@@ -286,14 +280,14 @@
                             <div class="resumo-lugares">
                                 <h4>🎫 Bilhetes</h4>
                                 <div id="resumoLugares">
-                                    <!-- Lugares selecionados serão mostrados aqui -->
+                                    
                                 </div>
                             </div>
                             
                             <div class="resumo-produtos" id="resumoProdutos">
                                 <h4>🍿 Produtos do Bar</h4>
                                 <div id="listaProdutos">
-                                    <!-- Produtos selecionados serão mostrados aqui -->
+                                    
                                 </div>
                             </div>
                             
@@ -323,7 +317,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 5: Pagamento -->
                     <div class="step-content" id="step5">
                         <div class="step-header">
                             <h2>💳 Pagamento</h2>
@@ -361,7 +354,7 @@
                             </div>
                             
                             <div class="dados-pagamento">
-                                <!-- Cartão de Crédito -->
+                                
                                 <div class="pagamento-form active" id="formCartao">
                                     <h4>Dados do Cartão</h4>
                                     <div class="form-group">
@@ -383,8 +376,7 @@
                                         <input type="text" id="nomeCartao" placeholder="Nome como aparece no cartão">
                                     </div>
                                 </div>
-                                
-                                <!-- MB WAY -->
+
                                 <div class="pagamento-form" id="formMbway">
                                     <h4>MB WAY</h4>
                                     <div class="form-group">
@@ -396,8 +388,7 @@
                                         Receberá uma notificação no seu telemóvel para confirmar o pagamento.
                                     </p>
                                 </div>
-                                
-                                <!-- PayPal -->
+
                                 <div class="pagamento-form" id="formPaypal">
                                     <h4>PayPal</h4>
                                     <p class="paypal-info">
@@ -419,7 +410,6 @@
                     </div>
                 </div>
 
-                <!-- Right Column - Resumo Fixo -->
                 <div class="resumo-fixo">
                     <div class="resumo-card">
                         <h3>Resumo da Reserva</h3>
@@ -460,7 +450,6 @@
         </main>
     </div>
 
-    <!-- Loading Modal -->
     <div class="modal-overlay" id="loadingModal">
         <div class="modal-content loading-modal">
             <div class="loading-spinner"></div>
@@ -469,7 +458,6 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
     <div class="modal-overlay" id="successModal">
         <div class="modal-content success-modal">
             <div class="success-icon">

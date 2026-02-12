@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessão Terror - CineVibe | A Sua Experiência Cinematográfica</title>
-    
-    <!-- Fontes -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/terror.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
-    
-    <!-- Meta tags para SEO -->
+
     <meta name="description" content="Sessão Terror - Experiências cinematográficas assustadoras para os mais corajosos no CineVibe.">
     <meta name="keywords" content="cinema, terror, filmes de terror, sessões especiais, CineVibe, experiência assustadora">
     <meta property="og:title" content="Sessão Terror - CineVibe">
@@ -25,7 +22,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -51,7 +48,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -64,7 +60,6 @@
     </nav>
         </nav>
 
-        <!-- Hero Section -->
         <section class="hero-section" style="background-image: url('{{ url_for('static', filename='imgs/1731317621822-i.avif') }}');">
             <div class="hero-background">
                 <div class="hero-overlay"></div>
@@ -96,7 +91,6 @@
             </div>
         </section>
 
-        <!-- Features Section -->
         <section class="features-section">
             <div class="container">
                 <h2 class="section-title">Uma Experiência Aterrorizante</h2>
@@ -129,7 +123,6 @@
             </div>
         </section>
 
-        <!-- Movies Section -->
         <section class="movies-section" id="filmes">
             <div class="container">
                 <div class="section-header">
@@ -197,7 +190,6 @@
             </div>
         </section>
 
-        <!-- Reactions Video Section -->
         <section class="reactions-section" id="reservar">
             <div class="container">
                 <div class="section-header">
@@ -224,7 +216,6 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="footer-main">
                 <div class="footer-container">
@@ -325,7 +316,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript -->
     <script>
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

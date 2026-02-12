@@ -258,18 +258,16 @@
 </head>
 <body>
     <div class="email-container">
-        <!-- Header -->
+        
         <div class="header">
             <div class="logo">🎬 CineVibe</div>
             <div class="subtitle">Confirmação de Reserva #{{ reserva_id }}</div>
         </div>
 
-        <!-- Success Message -->
         <div class="success-message">
             ✅ A sua reserva foi confirmada com sucesso!
         </div>
 
-        <!-- Movie Information -->
         <div class="reserva-info">
             <div class="section-title">Informações do Filme</div>
             <div class="info-row">
@@ -290,7 +288,6 @@
             </div>
         </div>
 
-        <!-- Reservation Details -->
         <div class="reserva-info">
             <div class="section-title"> Detalhes da Reserva</div>
             <div class="info-row">
@@ -311,7 +308,6 @@
             </div>
         </div>
 
-        <!-- Seats Section -->
         {% if lugares %}
         <div class="lugares-section">
             <div class="lugares-title"> Lugares Reservados</div>
@@ -325,7 +321,6 @@
         </div>
         {% endif %}
 
-        <!-- Bar Items (if any) -->
         {% if bar_items and bar_items|length > 0 %}
         <div class="bar-section">
             <div class="section-title"> Itens do Bar</div>
@@ -338,13 +333,11 @@
         </div>
         {% endif %}
 
-        <!-- Total -->
         <div class="total-section">
             <div class="total-label"> Total da Reserva</div>
             <div class="total-amount">{{ preco_total }}</div>
         </div>
 
-        <!-- QR Code Section -->
         <div class="qr-section">
             <div class="qr-title"> Código da Reserva</div>
             <div class="qr-code">#{{ reserva_id }}</div>
@@ -353,7 +346,6 @@
             </div>
         </div>
 
-        <!-- Instructions -->
         <div class="instructions">
             <h4> Instruções Importantes:</h4>
             <ul>
@@ -367,7 +359,6 @@
             </ul>
         </div>
 
-        <!-- Footer -->
         <div class="footer">
             <div class="footer-logo">CineVibe</div>
             <div class="footer-text">

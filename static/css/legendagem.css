@@ -1,7 +1,5 @@
-/* Legendagem Page Styles */
-/* Integração com o CSS base do site */
 
-/* Banner Section seguindo padrão da página principal de acessibilidade */
+
 .banner {
     position: relative;
     min-height: 100vh;
@@ -47,7 +45,6 @@
     color: #FFFFFF;
 }
 
-/* Hero Badge */
 .hero-badge {
     display: inline-block;
     background: rgba(255, 214, 10, 0.2);
@@ -87,7 +84,6 @@
     max-width: 800px;
 }
 
-/* Hero Features */
 .hero-features {
     display: flex;
     flex-direction: column;
@@ -118,7 +114,6 @@
     font-size: 0.9rem;
 }
 
-/* Hero CTA */
 .hero-cta {
     display: flex;
     gap: 1rem;
@@ -172,7 +167,6 @@
     transform: translateY(-2px);
 }
 
-/* Seção Legendas CC */
 .legendas-cc-section {
     padding: 6rem 0;
     background: rgba(13, 27, 42, 0.95);
@@ -194,7 +188,6 @@
     margin-bottom: 4rem;
 }
 
-/* Lado Esquerdo */
 .legendas-cc-left {
     padding-right: 2rem;
 }
@@ -249,7 +242,6 @@
     flex-shrink: 0;
 }
 
-/* Lado Direito */
 .legendas-cc-right {
     display: flex;
     flex-direction: column;
@@ -297,7 +289,6 @@
     margin: 0;
 }
 
-/* Título da seção inferior */
 .cc-examples-title {
     text-align: center;
     padding-top: 2rem;
@@ -312,7 +303,6 @@
     font-weight: 700;
 }
 
-/* Grid de Exemplos */
 .cc-examples-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -372,7 +362,6 @@
     line-height: 1.3;
 }
 
-/* Responsivo para a seção CC */
 @media (max-width: 768px) {
     .legendas-cc-content {
         grid-template-columns: 1fr;
@@ -465,7 +454,6 @@
     }
 }
 
-/* CTA Section após exemplos */
 .cta-legendagem-section {
     padding: 6rem 0;
     background: rgba(13, 27, 42, 0.95);
@@ -520,7 +508,6 @@
     background: linear-gradient(135deg, #FFB703, #FFD60A);
 }
 
-/* Responsivo para CTA */
 @media (max-width: 768px) {
     .cta-legendagem-section {
         padding: 4rem 0;
@@ -559,7 +546,6 @@
     }
 }
 
-/* Seções de conteúdo */
 .stats-section {
     padding: 6rem 0;
     background: rgba(255, 214, 10, 0.05);
@@ -596,7 +582,6 @@
     font-weight: 500;
 }
 
-/* About Section - Design Premium igual ao LGP */
 .about-section {
     padding: 120px 0;
     background: 
@@ -765,7 +750,6 @@
     opacity: 0.9;
 }
 
-/* Examples Section */
 .examples-section {
     margin-bottom: 6rem;
     padding: 6rem 0;
@@ -1149,7 +1133,6 @@
     line-height: 1.6;
 }
 
-/* Responsivo */
 @media (max-width: 1200px) {
     .banner-content h1 {
         font-size: 3.5rem;
@@ -1261,7 +1244,6 @@
     }
 }
 
-/* Animações */
 .banner-content {
     animation: fadeInUp 1s ease-out;
 }
@@ -1277,7 +1259,6 @@
     }
 }
 
-/* Footer */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -1721,7 +1702,6 @@
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;

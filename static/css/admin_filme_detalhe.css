@@ -1,4 +1,4 @@
-/* Admin Filme Detalhe - CSS Original Limpo */
+
 
 * {
     margin: 0;
@@ -231,7 +231,6 @@ body {
     padding: 8px;
 }
 
-/* Posicionamento do modal de géneros - ligeiramente acima do centro para dropdown aparecer em baixo */
 #generoModal {
     align-items: flex-start;
     padding-top: 20vh;
@@ -244,12 +243,10 @@ body {
     position: relative;
 }
 
-/* Garantir que há espaço suficiente abaixo do select */
 #generoModal .modal-body {
     padding-bottom: 50px;
 }
 
-/* Posicionamento do modal de tipos de sessão - igual ao modal de géneros */
 #tipoSessaoModal {
     align-items: flex-start;
     padding-top: 20vh;
@@ -262,25 +259,21 @@ body {
     position: relative;
 }
 
-/* Garantir que há espaço suficiente abaixo dos selects */
 #tipoSessaoModal .modal-body {
     padding-bottom: 50px;
 }
 
-/* Estilo do select de géneros */
 #generoSelect {
     position: relative;
     z-index: 1;
 }
 
-/* Estilo dos selects de tipos de sessão */
 #tipoSessaoSelect,
 #salaTipoSessaoSelect {
     position: relative;
     z-index: 1;
 }
 
-/* Correção da cor do texto dos botões de sessão ativos - FUNDO DOURADO E TEXTO BRANCO */
 .btn-sessao.active,
 .botoes-sessao .btn-sessao.active,
 .cinema .btn-sessao.active,
@@ -293,7 +286,6 @@ body {
     
 }
 
-/* Para navegadores WebKit (Chrome, Safari) */
 #generoSelect::-webkit-scrollbar,
 #tipoSessaoSelect::-webkit-scrollbar,
 #salaTipoSessaoSelect::-webkit-scrollbar {
@@ -313,7 +305,6 @@ body {
     border-radius: 4px;
 }
 
-/* Estilos específicos para inputs de horário customizados */
 .horario-input {
     font-family: 'Courier New', monospace;
     font-size: 1.1rem;
@@ -348,7 +339,6 @@ body {
     
 }
 
-/* Estilos específicos para inputs de tempo - formato 24h FORÇADO */
 input[type="time"] {
     background: #1a1a1a;
     border: 1px solid #333;
@@ -369,7 +359,6 @@ input[type="time"]:focus {
     
 }
 
-/* FORÇA FORMATO 24 HORAS - REMOVE COMPLETAMENTE AM/PM */
 input[type="time"]::-webkit-datetime-edit-ampm-field {
     display: none !important;
     visibility: hidden !important;
@@ -403,7 +392,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     background: transparent;
 }
 
-/* Para Firefox */
 input[type="time"]::-moz-time-picker {
     background: #1a1a1a;
     color: #fff;
@@ -667,7 +655,6 @@ input[type="time"]::-moz-time-picker {
     background: #3498db;
 }
 
-/* Cinema and Session Styles */
 .cinemas-lista {
     display: flex;
     flex-direction: column;
@@ -716,7 +703,6 @@ input[type="time"]::-moz-time-picker {
     flex-wrap: wrap;
 }
 
-/* Mensagem quando não há tipos de sessão */
 .no-tipos-sessao {
     color: #888;
     font-style: italic;
@@ -976,7 +962,7 @@ input[type="time"]::-moz-time-picker {
         gap: 10px;
     }
 }
-/* Cinemas - Estilo igual ao filme_detalhe */
+
 .cinemas-lista {
     display: flex;
     flex-direction: column;
@@ -1017,7 +1003,6 @@ input[type="time"]::-moz-time-picker {
     font-family: 'Inter', sans-serif;
 }
 
-/* Cinema region and address - HIDDEN FOR CLEANER LOOK */
 .cinema-regiao {
     display: none;
 }
@@ -1046,7 +1031,6 @@ input[type="time"]::-moz-time-picker {
     border-color: rgba(231, 76, 60, 0.5);
 }
 
-/* Botões de sessão - igual ao filme_detalhe */
 .botoes-sessao {
     display: flex;
     flex-wrap: wrap;
@@ -1083,9 +1067,6 @@ input[type="time"]::-moz-time-picker {
 }
 }
 
-
-
-/* Estilo para o modal de tipos de sessão */
 .cinema-info {
     background: linear-gradient(135deg, #1a1a1a, #2d2d2d) !important;
     border: 1px solid #444;
@@ -1100,14 +1081,12 @@ input[type="time"]::-moz-time-picker {
     color: #FFD60A;
 }
 
-/* Divider no modal */
 .modal-body hr {
     border: none;
     height: 1px;
     background: linear-gradient(90deg, transparent, #444, transparent);
 }
 
-/* Ajuda do formulário */
 .form-help {
     display: block;
     margin-top: 5px;
@@ -1116,7 +1095,6 @@ input[type="time"]::-moz-time-picker {
     font-style: italic;
 }
 
-/* Botão desabilitado */
 .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -1128,9 +1106,6 @@ input[type="time"]::-moz-time-picker {
     
 }
 
-/* ===== MELHORIAS ESTÉTICAS PARA SESSÕES ===== */
-
-/* Container principal das sessões */
 .sessoes-container {
     margin-top: 20px;
     padding: 20px;
@@ -1154,7 +1129,6 @@ input[type="time"]::-moz-time-picker {
     color: #B8C5D1;
 }
 
-/* Botões de tipos de sessão - melhorados */
 .botoes-sessao {
     display: flex;
     flex-wrap: wrap;
@@ -1214,7 +1188,6 @@ input[type="time"]::-moz-time-picker {
     
 }
 
-/* Container para tipo de sessão com botão de remoção - SEM SOMBRA AZUL */
 .tipo-sessao-container {
     position: relative;
     display: inline-block;
@@ -1224,7 +1197,7 @@ input[type="time"]::-moz-time-picker {
     border: 2px solid rgba(78, 168, 222, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    margin: 4px 8px 4px 4px; /* Espaço extra à direita para o botão */
+    margin: 4px 8px 4px 4px; 
 }
 
 .tipo-sessao-container:hover {
@@ -1317,7 +1290,6 @@ input[type="time"]::-moz-time-picker {
     
 }
 
-/* Mostrar botão de remoção com transição suave */
 .tipo-sessao-container .btn-remover-tipo-sessao {
     opacity: 0;
     transform: scale(0.8);
@@ -1329,7 +1301,6 @@ input[type="time"]::-moz-time-picker {
     transform: scale(1);
 }
 
-/* Efeito de pulso sutil no hover do container - SEM SOMBRA AZUL */
 .tipo-sessao-container:hover {
     animation: subtle-pulse 2s infinite;
 }
@@ -1343,7 +1314,6 @@ input[type="time"]::-moz-time-picker {
     }
 }
 
-/* Ajustar espaçamento dos botões de sessão */
 .botoes-sessao {
     display: flex;
     flex-wrap: wrap;
@@ -1352,7 +1322,6 @@ input[type="time"]::-moz-time-picker {
     padding: 15px 0;
 }
 
-/* Grupos de sessão - melhorados */
 .sessao-grupo {
     position: relative;
     overflow: visible !important;
@@ -1373,7 +1342,6 @@ input[type="time"]::-moz-time-picker {
     margin-top: 0;
 }
 
-/* Container de horários - melhorado */
 .horarios-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -1382,7 +1350,6 @@ input[type="time"]::-moz-time-picker {
     padding: 15px 0;
 }
 
-/* Item individual de horário */
 .horario-item {
     display: flex;
     align-items: center;
@@ -1400,7 +1367,6 @@ input[type="time"]::-moz-time-picker {
     transform: translateY(-1px);
 }
 
-/* Botões de horário - melhorados */
 .hora-btn {
     padding: 10px 18px;
     background: linear-gradient(135deg, #4EA8DE, #3B91C0);
@@ -1431,7 +1397,6 @@ input[type="time"]::-moz-time-picker {
     transform: translateY(-2px);
 }
 
-/* Ações de horário */
 .horario-actions {
     display: flex;
     gap: 6px;
@@ -1477,7 +1442,6 @@ input[type="time"]::-moz-time-picker {
     transform: translateY(-1px);
 }
 
-/* Botão adicionar horário - melhorado */
 .add-horario-btn {
     padding: 12px 20px !important;
     background: rgba(46, 204, 113, 0.2) !important;
@@ -1501,7 +1465,6 @@ input[type="time"]::-moz-time-picker {
     
 }
 
-/* Salas wrapper - melhorado */
 .salas-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -1522,7 +1485,6 @@ input[type="time"]::-moz-time-picker {
     
 }
 
-/* Estados especiais */
 .no-tipos-sessao {
     text-align: center;
     padding: 30px;
@@ -1530,7 +1492,6 @@ input[type="time"]::-moz-time-picker {
     font-style: italic;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .botoes-sessao {
         flex-direction: column;
@@ -1552,9 +1513,6 @@ input[type="time"]::-moz-time-picker {
     }
 }
 
-/* ===== FIM DAS MELHORIAS ESTÉTICAS ===== */
-
-/* Botão adicionar tipo de sessão */
 .btn-adicionar-tipo-sessao {
     padding: 12px 20px;
     background: rgba(46, 204, 113, 0.2);
@@ -1582,7 +1540,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.8rem;
 }
 
-/* Sessão grupo e horários - igual ao filme_detalhe */
 .sessao-grupo {
     position: relative;
     overflow: visible !important;
@@ -1597,7 +1554,6 @@ input[type="time"]::-moz-time-picker {
     margin-top: 20px;
 }
 
-/* Horários com botões de edição */
 .horarios-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -1678,7 +1634,6 @@ input[type="time"]::-moz-time-picker {
     transform: none;
 }
 
-/* Botões de edição de horários */
 .btn-edit-horario,
 .btn-delete-horario {
     padding: 8px;
@@ -1718,7 +1673,6 @@ input[type="time"]::-moz-time-picker {
     transform: translateY(-2px);
 }
 
-/* Botões de adicionar */
 .btn-add-horario,
 .btn-add-sala {
     padding: 10px 16px;
@@ -1743,7 +1697,6 @@ input[type="time"]::-moz-time-picker {
     transform: translateY(-2px);
 }
 
-/* Salas com botões de edição */
 .salas-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -1789,7 +1742,6 @@ input[type="time"]::-moz-time-picker {
     transform: translateY(-1px);
 }
 
-/* Modal overlay - DESIGN PREMIUM E ELEGANTE */
 .modal-overlay {
     position: fixed !important;
     top: 0 !important;
@@ -1805,7 +1757,6 @@ input[type="time"]::-moz-time-picker {
     animation: fadeIn 0.4s ease !important;
 }
 
-/* Estilos para a nova interface de sala por tipo de sessão */
 .sessao-info-header {
     background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
     border: 1px solid rgba(255, 215, 0, 0.3);
@@ -1889,7 +1840,6 @@ input[type="time"]::-moz-time-picker {
     align-items: center;
 }
 
-/* Loading e estados */
 .loading-horarios {
     text-align: center;
     padding: 20px;
@@ -1918,7 +1868,7 @@ input[type="time"]::-moz-time-picker {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-/* Seção de Avaliações */
+
 .avaliacoes-stats {
     display: flex;
     align-items: center;
@@ -2050,7 +2000,6 @@ input[type="time"]::-moz-time-picker {
     line-height: 1.4;
 }
 
-/* Botão para adicionar tipo de sessão */
 .btn-add-tipo-sessao {
     background: linear-gradient(135deg, #28a745, #20c997);
     color: white;
@@ -2067,7 +2016,6 @@ input[type="time"]::-moz-time-picker {
     margin-left: 10px;
 }
 
-/* Botão para adicionar tipo de sessão */
 .btn-add-tipo-sessao {
     background: linear-gradient(135deg, #28a745, #20c997);
     color: white;
@@ -2094,7 +2042,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.8rem;
 }
 
-/* Modal para tipos de sessão */
 #modalAdicionarTipo .modal-content {
     max-width: 500px;
 }
@@ -2144,7 +2091,6 @@ input[type="time"]::-moz-time-picker {
     color: #007bff;
 }
 
-/* Responsividade para avaliações */
 @media (max-width: 768px) {
     .avaliacao-header {
         flex-direction: column;
@@ -2157,7 +2103,6 @@ input[type="time"]::-moz-time-picker {
     }
 }
 
-/* Géneros na área de informações básicas */
 .generos-section {
     margin-top: 10px;
 }
@@ -2249,7 +2194,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.7rem;
 }
 
-/* Responsivo para géneros na área de informações */
 @media (max-width: 768px) {
     .generos-grid {
         gap: 6px;
@@ -2272,7 +2216,6 @@ input[type="time"]::-moz-time-picker {
     }
 }
 
-/* ===== ESTILOS PARA MODAL DE ADICIONAR HORÁRIO ===== */
 .modal-overlay .form-input {
     background-color: #1a1a1a !important;
     color: #ffffff !important;
@@ -2307,7 +2250,6 @@ input[type="time"]::-moz-time-picker {
     transition: all 0.3s ease !important;
 }
 
-/* Garantir que o select tenha o mesmo estilo das outras listas */
 #selectHorario {
     background-color: #1a1a1a !important;
     color: #ffffff !important;
@@ -2329,7 +2271,6 @@ input[type="time"]::-moz-time-picker {
     background-color: #333 !important;
 }
 
-/* Melhorar aparência geral do modal */
 .modal-overlay .modal-content {
     background: #1a1a1a !important;
     border: 1px solid #333 !important;
@@ -2359,7 +2300,6 @@ input[type="time"]::-moz-time-picker {
     background: #444 !important;
 }
 
-/* ===== PESQUISA DE ATORES ===== */
 .search-container {
     position: relative;
     width: 100%;
@@ -2526,7 +2466,6 @@ input[type="time"]::-moz-time-picker {
     font-weight: bold;
 }
 
-/* Animação para quando o ator é selecionado */
 .selected-actor.actor-selected {
     transform: scale(1.02);
     
@@ -2557,7 +2496,6 @@ input[type="time"]::-moz-time-picker {
     text-align: center;
 }
 
-/* Loading state */
 .search-loading {
     padding: 12px 16px;
     color: #888;
@@ -2572,9 +2510,6 @@ input[type="time"]::-moz-time-picker {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
-
-/* ===== ESTILOS PARA GESTÃO DE TIPOS DE SESSÃO ===== */
 
 .tipo-sessao-container {
     position: relative;
@@ -2638,7 +2573,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.8rem;
 }
 
-/* Modal para adicionar tipos de sessão */
 .modal {
     display: none;
     position: fixed;
@@ -2822,7 +2756,6 @@ input[type="time"]::-moz-time-picker {
     opacity: 0.6;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .modal-content {
         width: 95%;
@@ -2846,7 +2779,6 @@ input[type="time"]::-moz-time-picker {
     }
 }
 
-/* Estilos para pesquisa de atores */
 .search-results {
     position: absolute;
     top: 100%;
@@ -2912,7 +2844,6 @@ input[type="time"]::-moz-time-picker {
     color: #ff6b6b;
 }
 
-/* Ator selecionado */
 .selected-actor-info {
     margin-top: 10px;
 }
@@ -2967,12 +2898,10 @@ input[type="time"]::-moz-time-picker {
     background: #ff3742;
 }
 
-/* Posicionamento relativo para o container de pesquisa */
 .form-group {
     position: relative;
 }
 
-/* ===== SESSÕES SIMPLES ===== */
 .sessoes-simples {
     margin-top: 15px;
     padding: 15px;
@@ -3009,7 +2938,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.9rem;
 }
 
-/* ===== MODAL GERIR SESSÕES ===== */
 .tipos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -3043,7 +2971,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 0.8rem;
 }
 
-/* ===== CINEMA INFO NO MODAL ===== */
 .cinema-info {
     margin-bottom: 20px;
     padding: 15px;
@@ -3063,7 +2990,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 1.1rem;
 }
 
-/* Estilos para o modal de gestão de sessões */
 .tipos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -3126,15 +3052,11 @@ input[type="time"]::-moz-time-picker {
     color: #888;
 }
 
-/* ===== ACTOR SEARCH STYLES ===== */
-
-/* Container principal da pesquisa de atores */
 .actor-search-container {
     position: relative;
     margin-bottom: 15px;
 }
 
-/* Campo de pesquisa de atores */
 #actorSearch {
     width: 100%;
     background: #1a1a1a;
@@ -3157,7 +3079,6 @@ input[type="time"]::-moz-time-picker {
     color: #666;
 }
 
-/* Container dos resultados da pesquisa */
 .search-results {
     position: absolute;
     top: 100%;
@@ -3190,7 +3111,6 @@ input[type="time"]::-moz-time-picker {
     background: #666;
 }
 
-/* Item individual nos resultados da pesquisa */
 .search-result-item {
     display: flex;
     align-items: center;
@@ -3210,7 +3130,6 @@ input[type="time"]::-moz-time-picker {
     transform: translateX(2px);
 }
 
-/* Foto do ator nos resultados */
 .result-photo {
     flex-shrink: 0;
     width: 40px;
@@ -3226,7 +3145,6 @@ input[type="time"]::-moz-time-picker {
     object-fit: cover;
 }
 
-/* Informações do ator nos resultados */
 .result-info {
     flex: 1;
 }
@@ -3244,7 +3162,6 @@ input[type="time"]::-moz-time-picker {
     color: #888;
 }
 
-/* Estados especiais dos resultados */
 .search-loading,
 .no-results,
 .search-error {
@@ -3263,7 +3180,6 @@ input[type="time"]::-moz-time-picker {
     color: #e74c3c;
 }
 
-/* Container do ator selecionado */
 .selected-actor {
     margin-top: 15px;
     padding: 15px;
@@ -3273,7 +3189,6 @@ input[type="time"]::-moz-time-picker {
     display: none;
 }
 
-/* Card do ator selecionado */
 .selected-actor-card {
     display: flex;
     align-items: center;
@@ -3281,7 +3196,6 @@ input[type="time"]::-moz-time-picker {
     position: relative;
 }
 
-/* Foto do ator selecionado */
 .selected-actor-photo {
     flex-shrink: 0;
     width: 60px;
@@ -3297,7 +3211,6 @@ input[type="time"]::-moz-time-picker {
     object-fit: cover;
 }
 
-/* Detalhes do ator selecionado */
 .selected-actor-details {
     flex: 1;
 }
@@ -3315,7 +3228,6 @@ input[type="time"]::-moz-time-picker {
     color: #ccc;
 }
 
-/* Botão para limpar seleção */
 .btn-clear-selection {
     position: absolute;
     top: -5px;
@@ -3345,7 +3257,6 @@ input[type="time"]::-moz-time-picker {
     font-size: 10px;
 }
 
-/* Responsividade para pesquisa de atores */
 @media (max-width: 768px) {
     .search-results {
         max-height: 250px;
@@ -3383,9 +3294,6 @@ input[type="time"]::-moz-time-picker {
     }
 }
 
-/* ===== END ACTOR SEARCH STYLES ===== */
-
-/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .tipos-grid {
         grid-template-columns: 1fr;
@@ -3402,8 +3310,6 @@ input[type="time"]::-moz-time-picker {
     }
 }
 
-
-/* Modal de adicionar cinema - posicionar no topo para dropdown aparecer para baixo */
 #cinemaModal {
     align-items: flex-start;
     padding-top: 15vh;
@@ -3415,7 +3321,6 @@ input[type="time"]::-moz-time-picker {
     overflow-y: auto;
 }
 
-/* Garantir espaço abaixo do select para o dropdown */
 #cinemaModal .modal-body {
     padding-bottom: 60px;
     min-height: 200px;

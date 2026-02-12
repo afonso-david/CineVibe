@@ -1,4 +1,4 @@
-/* Página de Reserva Confirmada - CineVibe */
+
 
 .confirmacao-container {
   max-width: 800px;
@@ -165,7 +165,6 @@
   transform: translateY(-3px);
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .confirmacao-container {
     margin: 20px;

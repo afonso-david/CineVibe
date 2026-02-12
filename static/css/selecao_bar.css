@@ -1,4 +1,4 @@
-/* Estilos específicos para seleção do bar */
+
 
 body {
   margin: 0;
@@ -14,9 +14,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   MOVIE INFO CARD - ELEGANTE COM DETALHES VISUAIS
-========================== */
 .movie-info-card {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.95) 0%, rgba(13, 27, 42, 0.98) 100%);
     border-radius: 20px;
@@ -29,7 +26,6 @@ a {
     
 }
 
-/* Linha decorativa superior - gradiente azul/amarelo */
 .movie-info-card::before {
     content: '';
     position: absolute;
@@ -40,7 +36,6 @@ a {
     background: linear-gradient(90deg, transparent, #4EA8DE 30%, #FFD60A 70%, transparent);
 }
 
-/* Círculo decorativo azul no canto superior direito */
 .movie-info-card::after {
     content: '';
     position: absolute;
@@ -94,7 +89,6 @@ a {
     display: inline-block;
 }
 
-/* Linha decorativa sob o título */
 .movie-title::after {
     content: '';
     position: absolute;
@@ -167,9 +161,6 @@ a {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -194,7 +185,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -246,7 +236,6 @@ v-center a:hover::after,
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -285,7 +274,6 @@ v-center a:hover::after,
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -300,9 +288,7 @@ v-center a:hover::after,
 .user-icon img:hover {
   background-color: #18AFC6;
   transform: scale(1.1);
-}/*/* 
-
-/* Reservation Summary */
+}
 .reservation-summary {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.05), rgba(65, 90, 119, 0.03));
     border-radius: 20px;
@@ -312,45 +298,6 @@ v-center a:hover::after,
     backdrop-filter: blur(10px);
 }
 
-/* CSS antigo do movie-info - REMOVIDO para usar movie-info-card */
-/*
-.movie-info {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.movie-poster {
-    width: 80px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
-    
-}
-
-.movie-details h2 {
-    color: #4EA8DE;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-}
-
-.movie-details p {
-    color: #B8C5D1;
-    margin-bottom: 0.3rem;
-    font-size: 0.95rem;
-}
-
-.movie-details i {
-    color: #4EA8DE;
-    margin-right: 0.5rem;
-    width: 16px;
-}
-*/
-
-/* Bar Selection */
 .bar-selection {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.05), rgba(65, 90, 119, 0.03));
     border-radius: 20px;
@@ -387,7 +334,6 @@ v-center a:hover::after,
     margin: 0 auto;
 }
 
-/* Skip Option */
 .skip-option {
     text-align: center;
     margin-bottom: 3rem;
@@ -420,7 +366,6 @@ v-center a:hover::after,
     margin-right: 0.5rem;
 }
 
-/* Menu Categories */
 .category-tabs {
     display: flex;
     justify-content: center;
@@ -463,7 +408,6 @@ v-center a:hover::after,
     font-size: 1.2rem;
 }
 
-/* Menu Content */
 .category-content {
     display: none;
 }
@@ -479,7 +423,6 @@ v-center a:hover::after,
     margin-bottom: 2rem;
 }
 
-/* Product Cards - todos iguais */
 .product-card {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.9), rgba(44, 62, 80, 0.9));
     border-radius: 20px;
@@ -602,7 +545,6 @@ v-center a:hover::after,
     text-align: center;
 }
 
-/* No Products Message */
 .no-products {
     text-align: center;
     padding: 3rem 2rem;
@@ -627,7 +569,6 @@ v-center a:hover::after,
     font-style: italic;
 }
 
-/* ===== MODAL DE SELEÇÃO DE MENU ===== */
 .menu-modal {
     display: none;
     position: fixed;
@@ -854,7 +795,6 @@ v-center a:hover::after,
     
 }
 
-/* Responsive para modal */
 @media (max-width: 768px) {
     .menu-modal-content {
         width: 95%;
@@ -880,7 +820,6 @@ v-center a:hover::after,
     }
 }
 
-/* Todas as imagens dos produtos padronizadas */
 .product-image img.product-img {
     max-width: 120px;
     max-height: 120px;
@@ -939,7 +878,6 @@ v-center a:hover::after,
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* Quantity Controls */
 .quantity-controls {
     display: flex;
     align-items: center;
@@ -987,7 +925,6 @@ v-center a:hover::after,
     backdrop-filter: blur(5px);
 }
 
-/* Cart Summary */
 .cart-summary {
     background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(27, 38, 59, 0.8));
     border-radius: 20px;
@@ -1048,7 +985,6 @@ v-center a:hover::after,
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* Action Buttons */
 .action-buttons {
     display: flex;
     gap: 1.5rem;
@@ -1148,7 +1084,6 @@ v-center a:hover::after,
     font-size: 1.2rem;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .top-nav {
         padding: 0.8rem 1rem;
@@ -1240,22 +1175,18 @@ v-center a:hover::after,
         height: 35px;
         font-size: 1rem;
     }
-}/* ====
-======================
-   MENUS - IMAGENS MAIORES
-========================== */
+}
 .menu-card .product-image img.product-img {
-    max-width: 320px !important;  /* Aumentado para 320px */
-    max-height: 320px !important; /* Aumentado para 320px */
-    width: 320px !important;      /* Forçar largura */
-    height: 320px !important;     /* Forçar altura */
+    max-width: 320px !important;  
+    max-height: 320px !important; 
+    width: 320px !important;      
+    height: 320px !important;     
     object-fit: contain;
     transition: all 0.3s ease;
     filter: drop-shadow(0 4px 15px rgba(0,0,0,0.5));
     border-radius: 12px;
 }
 
-/* Seletor ainda mais específico para garantir que funciona */
 .products-grid .menu-card .product-image img.product-img,
 #menus .menu-card .product-image img.product-img,
 .category-content .menu-card .product-image img.product-img {
@@ -1265,7 +1196,6 @@ v-center a:hover::after,
     height: 320px !important;
 }
 
-/* Ajustar o container da imagem para menus */
 .menu-card .product-image {
     margin-bottom: 1.5rem;
     height: 200px;
@@ -1275,7 +1205,6 @@ v-center a:hover::after,
     justify-content: center;
 }
 
-/* Responsive para menus */
 @media (max-width: 768px) {
     .menu-card .product-image img.product-img {
         max-width: 260px !important;
@@ -1310,10 +1239,6 @@ v-center a:hover::after,
     }
 }
 
-
-/* ==========================
-   SEÇÃO DE TOPPINGS
-========================== */
 .toppings-section {
     margin-top: 3rem;
     padding: 2rem;
@@ -1423,7 +1348,6 @@ v-center a:hover::after,
     color: #B8C5D1;
 }
 
-/* Responsive para toppings */
 @media (max-width: 768px) {
     .toppings-grid {
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -1462,10 +1386,6 @@ v-center a:hover::after,
     }
 }
 
-
-/* ==========================
-   MODAL DE TOPPINGS
-========================== */
 .topping-modal {
     display: none;
     position: fixed;
@@ -1725,7 +1645,6 @@ v-center a:hover::after,
     
 }
 
-/* Responsive para modal de toppings */
 @media (max-width: 768px) {
     .topping-modal-content {
         width: 95%;
@@ -1771,11 +1690,6 @@ v-center a:hover::after,
     }
 }
 
-
-/* ==========================
-   PÁGINA SELECAO_TOPPINGS - IMAGENS MAIORES
-========================== */
-/* Aumentar imagens dos toppings na página de seleção */
 .products-grid .product-card .product-image {
     height: 250px;
     min-height: 250px;
@@ -1793,7 +1707,6 @@ v-center a:hover::after,
     font-size: 5rem;
 }
 
-/* Responsive para imagens de toppings */
 @media (max-width: 768px) {
     .products-grid .product-card .product-image {
         height: 220px;
@@ -1830,10 +1743,6 @@ v-center a:hover::after,
     }
 }
 
-
-/* ==========================
-   PRODUTOS SELECIONADOS (PÁGINA TOPPINGS)
-========================== */
 .produtos-selecionados {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.1), rgba(255, 214, 10, 0.05));
     border-radius: 15px;
@@ -1892,7 +1801,6 @@ v-center a:hover::after,
     border: 1px solid rgba(255, 214, 10, 0.3);
 }
 
-/* Responsive para produtos selecionados */
 @media (max-width: 768px) {
     .produtos-selecionados {
         padding: 1rem;
@@ -1916,10 +1824,6 @@ v-center a:hover::after,
     }
 }
 
-
-/* ==========================
-   HEADER COM SCOOBY-DOO
-========================== */
 .section-header-with-image {
     display: flex;
     align-items: center;
@@ -1948,7 +1852,6 @@ v-center a:hover::after,
     height: auto;
 }
 
-/* Ajustar section-header quando dentro do novo container */
 .section-header-content .section-header {
     text-align: left;
     margin-bottom: 2rem;
@@ -1968,7 +1871,6 @@ v-center a:hover::after,
     margin-bottom: 0;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .section-header-with-image {
         flex-direction: column;
@@ -2005,11 +1907,6 @@ v-center a:hover::after,
     }
 }
 
-/* ===================================
-   MODAL DE CONFIGURAÇÃO DE MENU
-   =================================== */
-
-/* Bloquear scroll quando modal está aberto */
 body.modal-open {
     overflow: hidden !important;
     position: fixed !important;
@@ -2206,7 +2103,6 @@ body.modal-open {
     cursor: not-allowed;
 }
 
-/* Scrollbar personalizada para o modal */
 .modal-menu-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -2225,10 +2121,6 @@ body.modal-open {
     background: rgba(255, 215, 0, 0.5);
 }
 
-
-/* ===================================
-   REMOVER TODAS AS BOX SHADOWS
-   =================================== */
 * {
     box-shadow: none !important;
 }

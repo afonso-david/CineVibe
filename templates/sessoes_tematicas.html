@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -38,7 +38,6 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav class="nav-center">
         <a href="{{ url_for('home') }}"">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
@@ -52,7 +51,6 @@
       
     </header>
 
-    <!-- Themes Section -->
     <section class="themes-section" id="themes">
         <div class="container">
             <div class="section-header">
@@ -61,7 +59,7 @@
             </div>
             
             <div class="themes-grid">
-                <!-- Vintage Theme -->
+                
                 <div class="theme-card vintage" data-theme="vintage">
                     <div class="theme-image">
                         <img src="{{ url_for('static', filename='imgs/A1PRNm5wKtwlhPmPvmRk2MEXwwG.jpg') }}" alt="Sessão Vintage">
@@ -118,8 +116,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Romance Theme -->
+
                 <div class="theme-card romance" data-theme="romance">
                     <div class="theme-image">
                         <img src="{{ url_for('static', filename='imgs/AAAABQviwRi9D1MAfx6Yl4ApfCUEDDW03_fiZt35ct4l-Zqs1JQ6_OBdlPo5Izt5GIJUAum8A--kta20z1pGYjZrTtEhMuCudgnZYQ-A.jpg') }}" alt="Sessão Romance">
@@ -176,8 +173,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Terror Theme -->
+
                 <div class="theme-card terror" data-theme="terror">
                     <div class="theme-image">
                         <img src="{{ url_for('static', filename='imgs/1731317621822-i.avif') }}" alt="Sessão Terror">
@@ -238,7 +234,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-main">
             <div class="footer-container">
@@ -338,7 +333,6 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script>
         // Smooth scrolling
         document.querySelector('.scroll-indicator').addEventListener('click', () => {

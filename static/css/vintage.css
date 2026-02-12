@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -94,7 +88,6 @@ a {
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -133,7 +126,6 @@ a {
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -150,14 +142,12 @@ a {
   transform: scale(1.1);
 }
 
-/* Container */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
 }
 
-/* Hero Section */
 .hero-section {
   position: relative;
   min-height: 100vh;
@@ -192,7 +182,6 @@ a {
   pointer-events: none;
 }
 
-/* Film Grain Effect */
 .film-grain {
   position: absolute;
   top: 0;
@@ -387,7 +376,6 @@ a {
   60% { transform: translateY(-5px); }
 }
 
-/* Footer override for vintage theme */
 .footer {
   border-top: 2px solid #d4a574 !important;
 }
@@ -400,7 +388,6 @@ a {
   background: #d4a574 !important;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 4rem;
@@ -421,7 +408,7 @@ a {
     font-size: 3rem;
   }
 }
-/* Features Section */
+
 .features-section {
   padding: 10rem 0;
   background: 
@@ -647,7 +634,6 @@ a {
   z-index: 1;
 }
 
-/* Ajuste específico para a primeira imagem (filmes clássicos) */
 .feature-card:nth-child(1) .feature-icon img {
   object-fit: contain !important;
   padding: 15px !important;
@@ -655,7 +641,6 @@ a {
   height: 200px !important;
 }
 
-/* Ajuste específico para a segunda imagem (ambiente retrô) */
 .feature-card:nth-child(2) .feature-icon img {
   object-fit: cover !important;
   padding: 0px !important;
@@ -663,7 +648,6 @@ a {
   height: 200px !important;
 }
 
-/* Ajuste específico para a terceira imagem (música) */
 .feature-card:nth-child(3) .feature-icon img {
   object-fit: contain !important;
   padding: 20px !important;
@@ -730,7 +714,7 @@ a {
   color: #e5ddd0;
   text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
-/* Experience Section */
+
 .experience-section {
   position: relative;
   min-height: 100vh;
@@ -1022,9 +1006,7 @@ a {
   color: #e5ddd0;
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
 }
-/* ==========================
-   MOVIES SECTION - IGUAL AO TERROR MAS VINTAGE
-========================== */
+
 .movies-section {
     padding: 10rem 0;
     background: 
@@ -1039,8 +1021,6 @@ a {
     position: relative;
     overflow: hidden;
 }
-
-
 
 .movies-section .section-header {
     text-align: center;
@@ -1229,7 +1209,6 @@ a {
     font-weight: 500;
 }
 
-/* Estado sem filmes */
 .no-movies {
     display: flex;
     flex-direction: column;
@@ -1260,7 +1239,6 @@ a {
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* Performance otimizada */
 .filme-card {
     will-change: transform;
     backface-visibility: hidden;
@@ -1274,9 +1252,6 @@ a {
     -webkit-backface-visibility: hidden;
 }
 
-/* ==========================
-   MOVIES CAROUSEL - VINTAGE
-========================== */
 .movies-carousel {
     position: relative;
     max-width: 1400px;
@@ -1461,7 +1436,6 @@ a {
     opacity: 1;
 }
 
-/* Botões do Carousel */
 .carousel-btn {
     position: absolute;
     top: 60%;
@@ -1499,7 +1473,6 @@ a {
     right: 15px;
 }
 
-/* Estado sem filmes */
 .no-movies {
     display: flex;
     flex-direction: column;
@@ -1530,7 +1503,6 @@ a {
     color: rgba(255, 255, 255, 0.6);
 }
 
-/* Responsividade do Carousel */
 @media (max-width: 768px) {
     .movies-carousel {
         padding: 0 40px;
@@ -1593,7 +1565,7 @@ a {
         margin-bottom: 8px;
     }
 }
-/* Bar Section - Novo Design */
+
 .bar-section {
   padding: 10rem 0;
   background: 
@@ -1727,7 +1699,6 @@ a {
   }
 }
 
-/* Responsive para Features */
 @media (max-width: 768px) {
   .feature-icon {
     width: 210px;
@@ -1788,7 +1759,6 @@ a {
   }
 }
 
-/* Atmosphere Section - 3 Bilhetes Lado a Lado SEM MOLDURAS */
 .atmosphere-section {
   padding: 8rem 0;
   background: 
@@ -1887,7 +1857,6 @@ a {
   filter: drop-shadow(0 30px 80px rgba(212, 165, 116, 0.6));
 }
 
-/* Efeito de rotação alternada mais sutil */
 .ticket-item:nth-child(1) img {
   transform: rotate(-2deg);
 }
@@ -1912,7 +1881,6 @@ a {
   transform: rotate(0deg) scale(1.05);
 }
 
-/* Responsive */
 @media (max-width: 1400px) {
   .tickets-showcase {
     gap: 2.5rem;
@@ -1968,7 +1936,6 @@ a {
   }
 }
 
-/* CTA Section */
 .cta-section {
   padding: 6rem 0;
   background: linear-gradient(135deg, #2c1810 0%, #4a3428 50%, #6b4e3d 100%);
@@ -2004,7 +1971,6 @@ a {
   z-index: 101;
 }
 
-/* Responsive */
 @media (max-width: 968px) {
   .experience-features {
     grid-template-columns: 1fr;

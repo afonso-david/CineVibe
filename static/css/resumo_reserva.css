@@ -1,6 +1,5 @@
-/* Resumo da Reserva - CSS */
 
-/* Progress Bar */
+
 .progress-container {
     background: #1B2838;
     padding: 1rem 0;
@@ -76,7 +75,6 @@
     color: #FFD60A;
 }
 
-/* Layout Principal */
 .resumo-layout {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -87,7 +85,6 @@
     margin-right: auto;
 }
 
-/* Card do Resumo */
 .resumo-card {
     background: linear-gradient(135deg, #1B2838 0%, #2A3F54 100%);
     border-radius: 20px;
@@ -119,7 +116,6 @@
     font-size: 1rem;
 }
 
-/* Seções */
 .section-title {
     display: flex;
     align-items: center;
@@ -141,7 +137,6 @@
     margin: 0;
 }
 
-/* Informações do Filme */
 .movie-section {
     margin-bottom: 2rem;
 }
@@ -193,7 +188,6 @@
     width: 16px;
 }
 
-/* Bilhetes */
 .tickets-section {
     margin-bottom: 2rem;
 }
@@ -231,7 +225,6 @@
     font-weight: 700;
 }
 
-/* Produtos do Bar */
 .bar-section {
     margin-bottom: 2rem;
 }
@@ -289,7 +282,6 @@
     display: block;
 }
 
-/* Total */
 .total-section {
     background: rgba(255, 214, 10, 0.1);
     border-radius: 15px;
@@ -327,7 +319,6 @@
     padding-top: 0.5rem;
 }
 
-/* Card do Cliente */
 .customer-card {
     background: linear-gradient(135deg, #1B2838 0%, #2A3F54 100%);
     border-radius: 20px;
@@ -358,7 +349,6 @@
     gap: 0.5rem;
 }
 
-/* Utilizador Logado */
 .user-logged-in {
     text-align: center;
 }
@@ -419,7 +409,6 @@
     margin-right: 0.5rem;
 }
 
-/* Formulário de Convidado */
 .guest-form {
     margin-bottom: 2rem;
 }
@@ -501,7 +490,6 @@
     flex-shrink: 0;
 }
 
-/* Botões de Ação */
 .action-buttons {
     display: flex;
     gap: 1rem;
@@ -525,10 +513,10 @@
     justify-content: center;
     gap: 0.5rem;
     text-decoration: none;
-    min-width: 0; /* Permite que o flex item encolha */
+    min-width: 0; 
     max-width: 100%;
     box-sizing: border-box;
-    white-space: normal; /* Permite quebra de linha */
+    white-space: normal; 
     text-align: center;
     line-height: 1.3;
 }
@@ -565,7 +553,6 @@
     white-space: nowrap;
 }
 
-/* Informações de Segurança */
 .security-info {
     background: rgba(46, 204, 113, 0.1);
     border-radius: 15px;
@@ -606,7 +593,6 @@
     text-align: center;
 }
 
-/* Responsivo */
 @media (max-width: 1024px) {
     .resumo-layout {
         grid-template-columns: 1fr;
@@ -694,7 +680,7 @@
         margin-left: 0.3rem;
     }
 }
-/* Produtos do Bar */
+
 .bar-section {
     margin-bottom: 2rem;
 }
@@ -766,7 +752,6 @@
     font-style: italic;
 }
 
-/* Responsive para produtos do bar */
 @media (max-width: 768px) {
     .bar-item {
         flex-direction: column;
@@ -779,7 +764,6 @@
     }
 }
 
-/* Detalhes dos menus */
 .item-details {
     display: block;
     font-size: 0.85rem;

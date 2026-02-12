@@ -1,6 +1,4 @@
-/* ==========================
-   BASE GERAL
-========================== */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -15,9 +13,6 @@ a {
   color: inherit;
 }
 
-/* ==========================
-   HEADER / NAV
-========================== */
 .top-nav {
   display: flex;
   align-items: center;
@@ -42,7 +37,6 @@ a {
   -webkit-transform: translateZ(0);
 }
 
-/* MENU CENTRAL */
 .nav-center {
   display: flex;
   gap: 20px;
@@ -94,7 +88,6 @@ v-center a:hover::after,
   color: #4EA8DE;
 }
 
-/* DIREITA: PESQUISA + UTILIZADOR */
 .nav-right {
   display: flex;
   align-items: center;
@@ -133,7 +126,6 @@ v-center a:hover::after,
   cursor: pointer;
 }
 
-/* ÍCONE UTILIZADOR */
 .user-icon img {
   background-color: #1B263B;
   border-radius: 50%;
@@ -148,10 +140,7 @@ v-center a:hover::after,
 .user-icon img:hover {
   background-color: #18AFC6;
   transform: scale(1.1);
-}/*
- ==========================
-   TÍTULOS BONITOS
-========================== */
+}
 .filmes-titulos {
   display: flex;
   justify-content: flex-start;
@@ -193,10 +182,7 @@ v-center a:hover::after,
 
 .filmes-titulos h1.active {
   color: #FFD60A;
-}/* =
-=========================
-   FILTROS SUPER BONITOS E MODERNOS
-========================== */
+}
 .filtros {
   display: flex;
   gap: 18px;
@@ -225,7 +211,6 @@ v-center a:hover::after,
   position: relative;
 }
 
-/* Efeito de brilho no container */
 .filtros::before {
   content: '';
   position: absolute;
@@ -237,7 +222,6 @@ v-center a:hover::after,
   border-radius: 20px 20px 0 0;
 }
 
-/* Scrollbar super elegante */
 .filtros::-webkit-scrollbar {
   height: 8px;
 }
@@ -259,7 +243,6 @@ v-center a:hover::after,
   transform: scaleY(1.2);
 }
 
-/* Checkbox escondido mas acessível */
 .filtros input[type="checkbox"] {
   position: absolute !important;
   width: 1px; 
@@ -270,8 +253,7 @@ v-center a:hover::after,
   clip: rect(0 0 0 0);
   white-space: nowrap; 
   border: 0;
-}/* Lab
-els como chips premium */
+}
 .filtros label {
   display: inline-flex;
   align-items: center;
@@ -298,7 +280,6 @@ els como chips premium */
   backdrop-filter: blur(10px);
 }
 
-/* Efeito shimmer no fundo */
 .filtros label::after {
   content: '';
   position: absolute;
@@ -319,7 +300,6 @@ els como chips premium */
   left: 100%;
 }
 
-/* Indicador visual premium */
 .filtros label::before {
   content: '';
   width: 10px;
@@ -331,8 +311,7 @@ els como chips premium */
   box-shadow: 
     0 2px 8px rgba(255, 255, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}/* Hover sup
-er elegante */
+}
 .filtros label:hover {
   background: linear-gradient(
     135deg,
@@ -356,7 +335,6 @@ er elegante */
     0 2px 8px rgba(78, 168, 222, 0.3);
 }
 
-/* Estado ativo/selecionado premium */
 .filtros input[type="checkbox"]:checked + label,
 .filtros label.active {
   background: linear-gradient(
@@ -386,7 +364,6 @@ er elegante */
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Efeito de pulso no ativo */
 .filtros input[type="checkbox"]:checked + label::before,
 .filtros label.active::before {
   animation: pulse 2s infinite;
@@ -404,7 +381,6 @@ er elegante */
   }
 }
 
-/* Efeito de entrada dos filtros */
 .filtros label {
   opacity: 0;
   transform: translateY(20px);
@@ -430,9 +406,6 @@ er elegante */
   }
 }
 
-/* ==========================
-   GRID LIMPO
-========================== */
 .filmes-grid {
   max-width: 1200px;
   margin: 0 auto;
@@ -450,9 +423,6 @@ er elegante */
   display: grid;
 }
 
-/* ==========================
-   CARDS CINEMATOGRÁFICOS
-========================== */
 .filme-card {
   position: relative;
   width: 100%;
@@ -490,15 +460,8 @@ er elegante */
 
 .filme-card:hover img.poster {
   transform: scale(1.05);
-}/* Seção removida - overlay redefinido mais abaixo */
+}
 
-/* Definições antigas removidas - elementos redefinidos mais abaixo */
-
-/* Efeito de brilho removido para melhor visualização das imagens */
-
-/* ==========================
-   FOOTER PROFISSIONAL
-========================== */
 .footer {
   background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
   color: #fff;
@@ -509,7 +472,6 @@ er elegante */
   width: 100%;
 }
 
-/* Transição suave da secção anterior */
 .footer::before {
   content: '';
   position: absolute;
@@ -548,7 +510,6 @@ er elegante */
   align-items: start;
 }
 
-/* Seções do footer */
 .footer-section {
   position: relative;
 }
@@ -604,7 +565,6 @@ er elegante */
   opacity: 0.9;
 }
 
-/* Redes sociais */
 .footer-social {
   display: flex;
   gap: 18px;
@@ -664,7 +624,6 @@ er elegante */
   transform: scale(1.1);
 }
 
-/* Links do footer */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -707,7 +666,6 @@ er elegante */
   left: -15px;
 }
 
-/* Newsletter */
 .newsletter-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
   padding: 35px;
@@ -808,7 +766,6 @@ er elegante */
   box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
 }
 
-/* Contactos no footer */
 .footer-contact {
   margin-top: 20px;
 }
@@ -826,7 +783,6 @@ er elegante */
   font-size: 16px;
 }
 
-/* Footer bottom */
 .footer-bottom {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(13, 27, 42, 0.6));
   padding: 40px 0 50px;
@@ -902,7 +858,6 @@ er elegante */
   width: 100%;
 }
 
-/* Certificações */
 .footer-certifications {
   display: flex;
   align-items: center;
@@ -950,7 +905,6 @@ er elegante */
   border-color: rgba(255, 214, 10, 0.4);
 }
 
-/* Responsividade do Footer */
 @media (max-width: 1200px) {
   .footer-container {
     grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -1005,8 +959,7 @@ er elegante */
   .footer-certifications {
     justify-content: center;
   }
-  
-  /* Responsividade da página de filmes */
+
   .filmes-titulos {
     gap: 40px;
     margin: 30px 0;
@@ -1141,7 +1094,7 @@ er elegante */
     padding: 12px 20px;
   }
 }
-/* Container do poster */
+
 .poster-container {
   position: relative;
   width: 100%;
@@ -1150,7 +1103,6 @@ er elegante */
   border-radius: 12px;
 }
 
-/* Efeito de brilho sutil */
 .poster-container::before {
   content: '';
   position: absolute;
@@ -1174,7 +1126,6 @@ er elegante */
   opacity: 1;
 }
 
-/* Poster principal */
 .poster-main {
   position: absolute;
   top: 0;
@@ -1186,7 +1137,6 @@ er elegante */
   z-index: 1;
 }
 
-/* Poster hover */
 .poster-hover {
   position: absolute;
   top: 0;
@@ -1199,7 +1149,6 @@ er elegante */
   z-index: 2;
 }
 
-/* Estado hover - troca de imagem suave */
 .filme-card:hover .poster-main {
   opacity: 0;
 }
@@ -1208,7 +1157,6 @@ er elegante */
   opacity: 1;
 }
 
-/* Informações elegantes na parte inferior com desfocado preto */
 .filme-overlay {
   position: absolute;
   bottom: 0;
@@ -1238,7 +1186,6 @@ er elegante */
   opacity: 1;
 }
 
-/* Título elegante na parte inferior */
 .filme-info .titulo {
   font-size: 1.4rem;
   font-weight: 800;
@@ -1256,7 +1203,6 @@ er elegante */
   transition-delay: 0.1s;
 }
 
-/* Género elegante */
 .filme-info .genero {
   font-size: 0.9rem;
   color: #4EA8DE;
@@ -1273,7 +1219,6 @@ er elegante */
   transition-delay: 0.2s;
 }
 
-/* Duração elegante */
 .filme-info .duracao {
   font-size: 0.8rem;
   color: #ffffff;
@@ -1295,9 +1240,6 @@ er elegante */
   transition-delay: 0.3s;
 }
 
-/* Rating removido conforme solicitado */
-
-/* Animação elegante de entrada no hover */
 .filme-card:hover .filme-info .titulo,
 .filme-card:hover .filme-info .genero,
 .filme-card:hover .filme-info .duracao {
@@ -1305,18 +1247,12 @@ er elegante */
   opacity: 1;
 }
 
-
-
-
-
-/* Performance otimizada */
 .filme-card {
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-/* Performance otimizada */
 .poster-main,
 .poster-hover {
   will-change: transform, opacity;
@@ -1324,7 +1260,6 @@ er elegante */
   -webkit-backface-visibility: hidden;
 }
 
-/* Hover elegante do card */
 .filme-card:hover {
   transform: translateY(-10px) scale(1.02);
   box-shadow: 
@@ -1332,7 +1267,6 @@ er elegante */
     0 0 30px rgba(0, 217, 255, 0.15);
 }
 
-/* Efeito sutil na troca de imagem */
 .filme-card:hover .poster-hover {
   opacity: 1;
   transform: scale(1.05);
@@ -1343,7 +1277,6 @@ er elegante */
   transform: scale(1.05);
 }
 
-/* Adicionar transformação suave aos posters */
 .poster-main,
 .poster-hover {
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);

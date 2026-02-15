@@ -22,12 +22,14 @@ app.secret_key = "troca_isto_por_uma_chave_secreta_e_complexa"
 DEVELOPMENT_MODE = True  
 
 if DEVELOPMENT_MODE:
+    pass
 
     GOOGLE_CLIENT_ID = "development-mode"
     GOOGLE_CLIENT_SECRET = "development-mode"
     FACEBOOK_APP_ID = "development-mode"
     FACEBOOK_APP_SECRET = "development-mode"
 else:
+    pass
  
     GOOGLE_CLIENT_ID = "your-google-client-id.googleusercontent.com"
     GOOGLE_CLIENT_SECRET = "your-google-client-secret"
@@ -42,6 +44,7 @@ try:
     EMAIL_PASSWORD = EMAIL_CONFIG['PASSWORD']
     EMAIL_USE_TLS = EMAIL_CONFIG['USE_TLS']
 except ImportError:
+    pass
     
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_PORT = 587
@@ -57,6 +60,7 @@ EMAIL_PASSWORD = 'goxm upky dcyx nbyx'
 EMAIL_USE_TLS = True
 
 def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token):
+    pass
     
     try:
         app.logger.info(f"Enviando email de recuperação para: {destinatario_email}")
@@ -293,7 +297,6 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
         server.sendmail(EMAIL_USER, destinatario_email, text)
         server.quit()
         
-        app.logger.info(f"✅ Email de recuperação enviado com sucesso para {destinatario_email}")
         return True
         
     except smtplib.SMTPAuthenticationError as e:
@@ -309,6 +312,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
         return False
 
 def enviar_email_confirmacao(destinatario_email, destinatario_nome, dados_reserva):
+    pass
    
     try:
         app.logger.info(f"Enviando email para: {destinatario_email}")
@@ -359,7 +363,6 @@ def enviar_email_confirmacao(destinatario_email, destinatario_nome, dados_reserv
         server.sendmail(EMAIL_USER, destinatario_email, text)
         server.quit()
         
-        app.logger.info(f"✅ Email enviado com sucesso para {destinatario_email}")
         return True
         
     except smtplib.SMTPAuthenticationError as e:
@@ -384,6 +387,7 @@ def get_db_connection():
     )
 
 def get_current_user():
+    pass
    
     if 'user_id' not in session:
         return None
@@ -420,11 +424,9 @@ def usar_codigo_desconto_reserva(user_id, codigo, premio_nome, pontos_gastos):
         cursor.close()
         conn.close()
         
-        print(f"✅ Código {codigo} usado com sucesso. {pontos_gastos} pontos descontados do usuário {user_id}")
         return True
         
     except Exception as e:
-        print(f"❌ Erro ao usar código de desconto: {e}")
         return False
 
 def criar_tabelas_resgates():
@@ -432,7 +434,6 @@ def criar_tabelas_resgates():
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        print("🔍 DEBUG: Criando tabela codigos_desconto...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS `codigos_desconto` (
               `id` int NOT NULL AUTO_INCREMENT,
@@ -452,7 +453,6 @@ def criar_tabelas_resgates():
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
         """)
         
-        print("🔍 DEBUG: Criando tabela pontos_gastos...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS `pontos_gastos` (
               `id` int NOT NULL AUTO_INCREMENT,
@@ -471,16 +471,14 @@ def criar_tabelas_resgates():
         cursor.close()
         conn.close()
         
-        print("✅ DEBUG: Tabelas de resgates criadas com sucesso")
-        app.logger.info("✅ Tabelas de resgates criadas com sucesso")
         return True
         
     except Exception as e:
-        print(f"❌ DEBUG: Erro ao criar tabelas de resgates: {e}")
         app.logger.error(f"❌ Erro ao criar tabelas de resgates: {e}")
         return False
 
 def calcular_pontos_usuario(user_id, cursor):
+    pass
    
     try:
         cursor.execute("""
@@ -519,12 +517,10 @@ def calcular_pontos_usuario(user_id, cursor):
         
         pontos_disponiveis = max(0, pontos_ganhos - pontos_gastos)
         
-        print(f"🔍 Debug pontos usuário {user_id}: {reservas_normais} reservas normais + {reservas_exclusivas} exclusivas + {avaliacoes} avaliações = {pontos_ganhos} ganhos - {pontos_gastos} gastos = {pontos_disponiveis} disponíveis")
         
         return pontos_disponiveis
         
     except Exception as e:
-        print(f"❌ Erro ao calcular pontos do usuário {user_id}: {e}")
         return 0
 
 def atualizar_estados_filmes_automatico():
@@ -546,7 +542,6 @@ def atualizar_estados_filmes_automatico():
         filmes_atualizados = cursor.rowcount
         if filmes_atualizados > 0:
             conn.commit()
-            app.logger.info(f"🎬 Sistema automatico: {filmes_atualizados} filmes atualizados para 'em_exibicao'")
         
         cursor.close()
         conn.close()
@@ -636,6 +631,7 @@ def get_user_avatar():
 @app.route('/')
 @app.route('/home')
 def home():
+    pass
 
     if request.args.get('reserva_concluida'):
         flash("🎉 Reserva concluída com sucesso! Obrigado por escolher o CineVibe.", "sucesso")
@@ -644,6 +640,7 @@ def home():
     cursor = conn.cursor(dictionary=True)
 
     try:
+        pass
      
         cursor.execute("""
             SELECT 
@@ -672,6 +669,7 @@ def home():
       
         for i, f in enumerate(filmes):
             if f.get('poster_url'):
+                pass
               
                 poster_url = f['poster_url'].replace('\\', '/').replace('"', '').strip()
                 
@@ -694,6 +692,7 @@ def home():
                 f['poster_url'] = poster_url
                 
             if f.get('poster_hover'):
+                pass
      
                 poster_hover = f['poster_hover'].replace('\\', '/').replace('"', '').strip()
                
@@ -709,6 +708,7 @@ def home():
         stats = {}
         
         try:
+            pass
       
             cursor.execute("SELECT COUNT(*) as total FROM filmes WHERE estado = 'em_exibicao'")
             result = cursor.fetchone()
@@ -760,10 +760,12 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    pass
  
     next_url = request.args.get('next') or request.form.get('next')
     
     if request.method == 'POST':
+        pass
 
         email = request.form.get('email', '').strip()
         senha = request.form.get('senha', '').strip()   
@@ -829,6 +831,7 @@ def login():
         
         reserva_params = request.form.get('reserva_params')
         if reserva_params:
+            pass
             
             return redirect(f"/reserva?{reserva_params}")
         
@@ -841,8 +844,10 @@ def login():
 
 @app.route('/auth/google')
 def auth_google():
+    pass
     
     if DEVELOPMENT_MODE:
+        pass
        
         return redirect(url_for('auth_google_callback', 
                               code='dev_code', 
@@ -865,9 +870,11 @@ def auth_google():
 
 @app.route('/auth/google/callback')
 def auth_google_callback():
+    pass
    
     try:
         if DEVELOPMENT_MODE:
+            pass
             
             user_data = {
                 'email': 'teste.google@gmail.com',
@@ -919,6 +926,7 @@ def auth_google_callback():
 @app.route('/auth/facebook')
 def auth_facebook():
     if DEVELOPMENT_MODE:
+        pass
       
         return redirect(url_for('auth_facebook_callback', 
                               code='dev_code', 
@@ -987,6 +995,7 @@ def auth_facebook_callback():
         return redirect(url_for('login'))
 
 def process_social_login(user_data, provider):
+    pass
     
     try:
         conn = get_db_connection()
@@ -1013,6 +1022,7 @@ def process_social_login(user_data, provider):
         user = cursor.fetchone()
         
         if user:
+            pass
             
             user_id = user['id']
             
@@ -1020,6 +1030,7 @@ def process_social_login(user_data, provider):
             cursor.execute("UPDATE usuarios SET ultimo_login = %s WHERE id = %s", (datetime.now(), user_id))
             conn.commit()
         else:
+            pass
             
             cursor.execute("SELECT id FROM avatars WHERE id > 0")
             avatars_disponiveis = cursor.fetchall()
@@ -1081,6 +1092,7 @@ def process_social_login(user_data, provider):
 
 @app.route('/redefinir-senha')
 def redefinir_senha():
+    pass
   
     try:
         token = request.args.get('token')
@@ -1101,6 +1113,7 @@ def redefinir_senha():
 
 @app.route('/api/redefinir-senha', methods=['POST'])
 def api_redefinir_senha():
+    pass
    
     try:
         data = request.get_json()
@@ -1165,7 +1178,6 @@ def registo():
             avatar_id = request.form.get("avatar", "").strip()
             avatar_upload = request.files.get("avatar_upload")
 
-            print(f"DEBUG REGISTO - Nome: {nome}, Email: {email}, Senha: {'***' if senha else 'VAZIO'}, Confirm: {'***' if confirm_password else 'VAZIO'}, Avatar ID: {avatar_id}")
      
             if not nome or not email or not senha:
                 cursor.close()
@@ -1216,31 +1228,31 @@ def registo():
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """, (nome, email, senha_hash, agora, agora, custom_avatar_path))
             elif avatar_id and avatar_id.isdigit():
+                pass
             
-                print(f"✅ DEBUG - Inserindo com avatar_id selecionado: {avatar_id}")
                 cursor.execute("""
                     INSERT INTO usuarios (nome, email, senha, criado_em, ultimo_login, avatar_id)
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """, (nome, email, senha_hash, agora, agora, int(avatar_id)))
             else:
+                pass
              
-                print(f"🎲 DEBUG - Nenhum avatar selecionado, escolhendo aleatório...")
                 cursor.execute("SELECT id FROM avatars WHERE id > 0 ORDER BY id")
                 avatars_disponiveis = cursor.fetchall()
                 
                 if avatars_disponiveis:
+                    pass
           
                     avatar_aleatorio = random.choice(avatars_disponiveis)
                     avatar_id_aleatorio = avatar_aleatorio['id']
-                    print(f"✅ DEBUG - Avatar aleatório selecionado: ID {avatar_id_aleatorio}")
                     
                     cursor.execute("""
                         INSERT INTO usuarios (nome, email, senha, criado_em, ultimo_login, avatar_id)
                         VALUES (%s, %s, %s, %s, %s, %s)
                     """, (nome, email, senha_hash, agora, agora, avatar_id_aleatorio))
                 else:
+                    pass
                 
-                    print("⚠️ DEBUG - Nenhum avatar encontrado na BD, criando avatar padrão...")
                     
            
                     cursor.execute("SELECT id FROM avatars WHERE id = 1")
@@ -1249,7 +1261,6 @@ def registo():
                             INSERT INTO avatars (id, nome, caminho, categoria) 
                             VALUES (1, 'Avatar Padrão', 'imgs/icons/user_icon34-removebg-preview.png', 'padrão')
                         """)
-                        print("✅ DEBUG - Avatar padrão criado na BD")
                     
                     cursor.execute("""
                         INSERT INTO usuarios (nome, email, senha, criado_em, ultimo_login, avatar_id)
@@ -1266,8 +1277,8 @@ def registo():
             
             if custom_avatar_path:
                 avatar_path = custom_avatar_path
-                print(f"DEBUG - Avatar customizado: {avatar_path}")
             else:
+                pass
                
                 cursor.execute("""
                     SELECT a.caminho 
@@ -1284,11 +1295,10 @@ def registo():
                         avatar_path = avatar_path[7:]
                     if avatar_path.startswith('/static/'):
                         avatar_path = avatar_path[8:]
-                    print(f"DEBUG - Avatar encontrado: {avatar_path}")
                 else:
+                    pass
             
                     avatar_path = 'imgs/icons/user_icon34-removebg-preview.png'
-                    print(f"DEBUG - Usando avatar padrão: {avatar_path}")
             
             cursor.close()
             conn.close()
@@ -1299,11 +1309,6 @@ def registo():
             session['user_email'] = email
             session['user_avatar'] = avatar_path
             
-            print(f"✅ DEBUG REGISTO - Sessão criada:")
-            print(f"   - user_id: {user_id}")
-            print(f"   - user_nome: {nome}")
-            print(f"   - user_email: {email}")
-            print(f"   - user_avatar: {avatar_path}")
 
             return redirect(url_for("home"))
             
@@ -1472,6 +1477,7 @@ def testar_avatares():
 
 @app.route('/test-email')
 def test_email():
+    pass
 
     if 'user_id' not in session:
         return jsonify({
@@ -1480,6 +1486,7 @@ def test_email():
         }), 401
     
     try:
+        pass
      
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -1534,7 +1541,6 @@ def test_email():
 @app.route('/teste-perfil-debug')
 def teste_perfil_debug():
     """Route de teste para debug do perfil"""
-    print("🔍 DEBUG: Route teste-perfil-debug chamado")
     
     if 'user_id' not in session:
         return "❌ Usuário não está logado"
@@ -1544,6 +1550,7 @@ def teste_perfil_debug():
 
 @app.route('/debug-produtos-resgatados')
 def debug_produtos_resgatados():
+    pass
   
     if 'user_id' not in session:
         return "Precisa estar logado"
@@ -1561,6 +1568,7 @@ def debug_produtos_resgatados():
         resultado += f"<p>Tabela pontos_gastos existe: {'SIM' if tabela_existe else 'NÃO'}</p>"
         
         if not tabela_existe:
+            pass
            
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS `pontos_gastos` (
@@ -1584,6 +1592,7 @@ def debug_produtos_resgatados():
         resultado += f"<p>Total de produtos para este usuário: {total}</p>"
         
         if total == 0:
+            pass
           
             produtos_teste = [
                 (user_id, 8, 'Pretzel', 100, 'TEST001'),
@@ -1649,6 +1658,7 @@ def debug_produtos_resgatados():
 
 @app.route('/criar-dados-teste-pontos-movimentos')
 def criar_dados_teste_pontos_movimentos():
+    pass
     
     if 'user_id' not in session:
         return "Precisa estar logado"
@@ -1695,6 +1705,7 @@ def criar_dados_teste_pontos_movimentos():
 
 @app.route('/teste-pontos-movimentos')
 def teste_pontos_movimentos():
+    pass
    
     if 'user_id' not in session:
         return "Precisa estar logado"
@@ -1762,6 +1773,7 @@ def teste_pontos_movimentos():
 
 @app.route('/criar-dados-teste-produtos')
 def criar_dados_teste_produtos():
+    pass
    
     if 'user_id' not in session:
         return "Precisa estar logado"
@@ -1821,6 +1833,7 @@ def criar_dados_teste_produtos():
 
 @app.route('/teste-produtos-resgatados')
 def teste_produtos_resgatados():
+    pass
     
     if 'user_id' not in session:
         return "Precisa estar logado"
@@ -1832,7 +1845,6 @@ def teste_produtos_resgatados():
         cursor = conn.cursor(dictionary=True)
         
      
-        print("🔍 Criando tabelas se não existirem...")
         
 
         cursor.execute("""
@@ -1854,7 +1866,7 @@ def teste_produtos_resgatados():
         total_existente = cursor.fetchone()['total']
         
         if total_existente == 0:
-            print(f"🔍 Inserindo produtos de exemplo para usuário {user_id}...")
+            pass
             
          
             produtos_exemplo = [
@@ -1872,7 +1884,6 @@ def teste_produtos_resgatados():
                 """, produto)
             
             conn.commit()
-            print(f"✅ {len(produtos_exemplo)} produtos inseridos com sucesso!")
         
         
         cursor.execute("""
@@ -1920,15 +1931,13 @@ def teste_produtos_resgatados():
 
 @app.route('/perfil')
 def perfil():
-    print("🔍 DEBUG: Entrando no route /perfil")
+    pass
     
     if 'user_id' not in session:
-        print("❌ DEBUG: Usuário não está logado")
         flash("Inicia sessão primeiro!", "erro")
         return redirect(url_for('login'))
 
     user_id = session['user_id']
-    print(f"✅ DEBUG: Usuário logado com ID: {user_id}")
 
     try:
         conn = get_db_connection()
@@ -1945,13 +1954,11 @@ def perfil():
         user = cursor.fetchone()
         
         if not user:
-            print("❌ DEBUG: Usuário não encontrado na base de dados")
             cursor.close()
             conn.close()
             flash("Utilizador não encontrado!", "erro")
             return redirect(url_for('home'))
 
-        print(f"✅ DEBUG: Usuário encontrado: {user['nome']} ({user['email']})")
 
        
         if user.get('email') == 'cinevibeadmn@gmail.com':
@@ -2093,9 +2100,6 @@ def perfil():
             'pontos_gastos': 0
         }
 
-        print(f"✅ DEBUG PERFIL: Pronto para renderizar template perfil.html")
-        print(f"✅ DEBUG PERFIL: Stats: {stats}")
-        print(f"✅ DEBUG PERFIL: Pontos: {pontos}")
 
         return render_template("perfil.html", 
                              user=user, 
@@ -2113,9 +2117,7 @@ def perfil():
                              is_admin=False)
 
     except Exception as e:
-        print(f"❌ DEBUG: Erro no route perfil: {str(e)}")
         import traceback
-        print(f"❌ DEBUG: Traceback: {traceback.format_exc()}")
         app.logger.error(f"Erro na função perfil: {str(e)}")
         flash("Erro ao carregar perfil. Tenta novamente.", "erro")
         return redirect(url_for('home'))
@@ -2168,7 +2170,6 @@ def recompensas():
    
     session['user_avatar'] = avatar
     
-    print(f"🔍 DEBUG RECOMPENSAS - Avatar final: {avatar}")
     
     
     pontos = calcular_pontos_usuario(session['user_id'], cursor)
@@ -2215,6 +2216,7 @@ def recompensas():
         if r_dict.get('img_url'):
             r_dict['imagem'] = r_dict['img_url'].replace('\\', '/').replace('"', '').strip()
         else:
+            pass
            
             r_dict['imagem'] = 'imgs/icons/wheel-removebg-preview.png'
         
@@ -2223,11 +2225,6 @@ def recompensas():
     cursor.close()
     conn.close()
     
-    print(f"🎬 DEBUG RECOMPENSAS - Renderizando template com:")
-    print(f"   - logged_in: True")
-    print(f"   - avatar: {avatar}")
-    print(f"   - pontos: {pontos}")
-    print(f"   - recompensas: {len(recompensas)} itens")
     
     return render_template('recompensas.html', logged_in=True, avatar=avatar, pontos=pontos, recompensas=recompensas)
 
@@ -2370,7 +2367,6 @@ def resgatar_recompensa():
             VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (codigo, user_id, premio_id, premio['nome'], tipo_desconto, valor_desconto, data_expiracao))
         
-        print(f"✅ Código {codigo} inserido na tabela codigos_desconto")
         
       
         cursor.execute("""
@@ -2379,13 +2375,12 @@ def resgatar_recompensa():
             VALUES (%s, %s, %s, %s, %s)
         """, (user_id, premio_id, premio['nome'], pontos_necessarios, codigo))
         
-        print(f"✅ Gasto de {pontos_necessarios} pontos registrado para usuário {user_id}")
         
         conn.commit()
-        print(f"✅ Transação commitada com sucesso")
         
         
         try:
+            pass
     
             msg = MIMEMultipart()
             msg['From'] = EMAIL_USER
@@ -2444,8 +2439,8 @@ def resgatar_recompensa():
 
             if EMAIL_PASSWORD in ['sua_senha_app', 'DESATIVADO_TEMPORARIAMENTE'] or not EMAIL_PASSWORD:
                 app.logger.warning("Email desativado temporariamente. Configure senha de app do Gmail para ativar.")
-                print(f"⚠️ Email não enviado - configuração desativada. Código: {codigo}")
             else:
+                pass
           
                 server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
                 if EMAIL_USE_TLS:
@@ -2453,10 +2448,8 @@ def resgatar_recompensa():
                 server.login(EMAIL_USER, EMAIL_PASSWORD)
                 server.send_message(msg)
                 server.quit()
-                print(f"✅ Email enviado para {usuario['email']} com código: {codigo}")
             
         except Exception as email_error:
-            print(f"❌ Erro ao enviar email: {email_error}")
             app.logger.error(f"Erro ao enviar email de código de desconto: {email_error}")
            
         
@@ -2711,6 +2704,7 @@ def exportar_relatorio(tipo):
     data_relatorio = datetime.now().strftime('%d/%m/%Y às %H:%M')
     
     if tipo == 'reservas':
+        pass
 
         cur.execute("""
             SELECT r.id, r.data_reserva, r.data_sessao,
@@ -2761,6 +2755,7 @@ def exportar_relatorio(tipo):
         filename = f'CineVibe_Reservas_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
     
     elif tipo == 'vendas':
+        pass
         
         cur.execute("""
             SELECT c.nome as cinema, c.localizacao,
@@ -2842,6 +2837,7 @@ def exportar_relatorio(tipo):
         filename = f'CineVibe_Vendas_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
     
     elif tipo == 'usuarios':
+        pass
         
         cur.execute("""
             SELECT u.id, u.nome, u.email, u.criado_em,
@@ -2900,6 +2896,7 @@ def exportar_relatorio(tipo):
         filename = f'CineVibe_Usuarios_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
     
     elif tipo == 'filmes':
+        pass
         
         cur.execute("""
             SELECT f.id, f.titulo, f.diretor, f.duracao, f.data_lancamento, f.estado,
@@ -3555,6 +3552,7 @@ def admin_adicionar_tipo_sessao():
 
 @app.route('/admin/tipos-sessao/<int:tipo_id>/editar', methods=['POST'])
 def admin_editar_tipo_sessao(tipo_id):
+    pass
     
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
@@ -3599,6 +3597,7 @@ def admin_editar_tipo_sessao(tipo_id):
 
 @app.route('/admin/tipos-sessao/<int:tipo_id>/remover', methods=['POST'])
 def admin_remover_tipo_sessao(tipo_id):
+    pass
   
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
@@ -3641,6 +3640,7 @@ def admin_remover_tipo_sessao(tipo_id):
 
 @app.route('/admin/horarios/disponiveis', methods=['GET'])
 def admin_get_horarios_disponiveis():
+    pass
 
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
@@ -3680,6 +3680,7 @@ def admin_get_horarios_disponiveis():
 
 @app.route('/admin/horarios/adicionar', methods=['POST'])
 def admin_adicionar_horario_geral():
+    pass
    
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
@@ -3767,6 +3768,7 @@ def admin_adicionar_horario_geral():
 
 @app.route('/admin/horarios/<int:horario_id>/editar', methods=['POST'])
 def admin_editar_horario(horario_id):
+    pass
     
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
@@ -4388,6 +4390,7 @@ def admin_get_salas_cinema(id_filme, cinema_id):
 
 @app.route('/admin/salas/buscar')
 def admin_buscar_sala_por_nome():
+    pass
  
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
@@ -4435,6 +4438,7 @@ def admin_buscar_sala_por_nome():
 
 @app.route('/admin/filmes/<int:id_filme>/cinema/<int:cinema_id>/tipo/<int:tipo_id>/horarios')
 def admin_get_horarios_tipo_sessao(id_filme, cinema_id, tipo_id):
+    pass
    
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
@@ -4516,7 +4520,6 @@ def admin_editar_filme(id_filme):
         rotten_tomatoes_url = data.get('rotten_tomatoes_url')
         imdb_url = data.get('imdb_url')
         
-        print(f"DEBUG: Estado recebido = {estado}")
         
         conn = get_db_connection()
         cur = conn.cursor()
@@ -4533,7 +4536,6 @@ def admin_editar_filme(id_filme):
         
         cur.execute("SELECT estado FROM filmes WHERE id = %s", (id_filme,))
         resultado = cur.fetchone()
-        print(f"DEBUG: Estado na BD após update = {resultado[0] if resultado else 'NULL'}")
         
         cur.close()
         conn.close()
@@ -4541,7 +4543,6 @@ def admin_editar_filme(id_filme):
         return jsonify({'success': True, 'message': 'Filme atualizado com sucesso!'})
         
     except Exception as e:
-        print(f"DEBUG: Erro ao atualizar filme: {str(e)}")
         return jsonify({'success': False, 'message': f'Erro ao atualizar filme: {str(e)}'}), 500
 
 @app.route('/admin/filmes/<int:id_filme>/avaliacoes')
@@ -4617,6 +4618,7 @@ def admin_filme_avaliacoes(id_filme):
 
 @app.route('/admin/avaliacoes/<int:avaliacao_id>/remover', methods=['POST'])
 def admin_remover_avaliacao(avaliacao_id):
+    pass
 
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
@@ -4718,7 +4720,6 @@ def admin_remover_cinema_filme(id_filme, cinema_id):
         cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s AND cinema_id = %s", (id_filme, cinema_id))
         conn.commit()
         
-        app.logger.info(f"✅ Cinema {cinema_id} removido do filme {id_filme} com sucesso (cascata completa)")
         
         return jsonify({
             'success': True, 
@@ -4805,6 +4806,7 @@ def admin_editar_papel_ator(id_filme):
 
 @app.route('/admin/filmes/<int:id_filme>/adicionar-genero', methods=['POST'])
 def admin_adicionar_genero_filme(id_filme):
+    pass
 
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
@@ -4904,10 +4906,9 @@ def admin_upload_poster(id_filme):
 
 @app.route('/admin/filmes/adicionar', methods=['POST'])
 def admin_adicionar_filme():
-    print("🎬 ADMIN_ADICIONAR_FILME CHAMADA")
+    pass
     
     if 'user_id' not in session:
-        print("❌ Usuário não autenticado")
         flash("Não autenticado", "erro")
         return redirect(url_for('admin_filmes'))
     
@@ -4915,15 +4916,12 @@ def admin_adicionar_filme():
     duracao = request.form.get('duracao', '120')
     sinopse = request.form.get('sinopse', '').strip()
     
-    print(f"📝 Dados recebidos: titulo='{titulo}', duracao={duracao}")
     
     if not titulo:
-        print("❌ Título vazio")
         flash('Título é obrigatório!', 'erro')
         return redirect(url_for('admin_filmes'))
     
     if not sinopse:
-        print("❌ Sinopse vazia")
         flash('Sinopse é obrigatória!', 'erro')
         return redirect(url_for('admin_filmes'))
     
@@ -4931,7 +4929,7 @@ def admin_adicionar_filme():
     if 'poster' in request.files:
         poster_file = request.files['poster']
         if poster_file and poster_file.filename:
-            print(f"📁 Upload de poster: {poster_file.filename}")
+            pass
             
             upload_dir = os.path.join('static', 'imgs', 'filmes')
             os.makedirs(upload_dir, exist_ok=True)
@@ -4947,10 +4945,8 @@ def admin_adicionar_filme():
             poster_file.save(poster_path)
             
             poster_url = f"imgs/filmes/{unique_filename}"
-            print(f"✅ Poster salvo: {poster_url}")
     
     if not poster_url:
-        print("❌ Poster não fornecido")
         flash('Imagem do poster é obrigatória!', 'erro')
         return redirect(url_for('admin_filmes'))
     
@@ -4958,7 +4954,7 @@ def admin_adicionar_filme():
     cursor = conn.cursor()
     
     try:
-        print("💾 Inserindo na base de dados...")
+        pass
         
         cursor.execute("""
             INSERT INTO filmes (titulo, diretor, data_lancamento, duracao, sinopse, poster_url, estado)
@@ -4966,19 +4962,15 @@ def admin_adicionar_filme():
         """, (titulo, 'A definir', '2024-01-01', int(duracao), sinopse, poster_url, 'em_exibicao'))
         
         id_filme = cursor.lastrowid
-        print(f"✅ Filme inserido com ID: {id_filme}")
         
         cursor.execute("INSERT INTO filme_generos (filme_id, genero_id) VALUES (%s, %s)", (id_filme, 1))
-        print("✅ Género associado")
         
         conn.commit()
-        print("✅ Transação commitada")
         
         flash(f'Filme "{titulo}" adicionado com sucesso!', 'sucesso')
         
     except Exception as e:
         conn.rollback()
-        print(f"❌ ERRO: {str(e)}")
         flash(f'Erro ao adicionar filme: {str(e)}', 'erro')
         
     finally:
@@ -5206,12 +5198,10 @@ def admin_remover_filme(id_filme):
         filme_removido = cur.rowcount
         
         if filme_removido == 0:
-            print(f"❌ PROBLEMA: Filme ID {id_filme} não foi removido")
             conn.rollback()
             flash("Erro: Filme não foi removido", "erro")
         else:
             conn.commit()
-            print(f"✅ SUCESSO: Filme '{titulo_filme}' removido!")
             flash(f"Filme '{titulo_filme}' removido com sucesso!", "sucesso")
         
     except Exception as e:
@@ -5345,6 +5335,7 @@ def admin_atualizar_sala_horario(id_filme):
 
 @app.route('/admin/generos')
 def admin_generos():
+    pass
   
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -5380,6 +5371,7 @@ def admin_generos():
 
 @app.route('/admin/generos/adicionar', methods=['POST'])
 def admin_adicionar_genero():
+    pass
   
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
@@ -5416,6 +5408,7 @@ def admin_adicionar_genero():
 
 @app.route('/admin/generos/<int:genero_id>/editar', methods=['POST'])
 def admin_editar_genero(genero_id):
+    pass
     
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
@@ -5451,6 +5444,7 @@ def admin_editar_genero(genero_id):
 
 @app.route('/admin/generos/<int:genero_id>/remover', methods=['POST'])
 def admin_remover_genero(genero_id):
+    pass
 
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
@@ -5487,6 +5481,7 @@ def admin_remover_genero(genero_id):
 
 @app.route('/admin/generos/<int:genero_id>/filmes')
 def admin_genero_filmes(genero_id):
+    pass
 
     if 'user_id' not in session:
         return redirect(url_for('login'))
@@ -5556,14 +5551,12 @@ def admin_cinemas():
         """)
         cinemas = cur.fetchall()
         
-        print(f"[DEBUG] Cinemas encontrados: {len(cinemas)}")
         
         for cinema in cinemas:
-            print(f"[DEBUG] Cinema: {cinema['nome']}, Imagem: {cinema.get('imagem')}")
+            pass
             
             if not cinema.get('imagem') or cinema.get('imagem') in [None, '', 'None', 'null']:
                 cinema['imagem'] = 'imgs/cinemas/default.jpg'
-                print(f"[DEBUG] Sem imagem - usando default")
             else:
                 imagem = str(cinema['imagem']).replace('\\', '/').replace('"', '').strip()
                 if not imagem.startswith(('http://', 'https://', 'imgs/')):
@@ -5573,14 +5566,12 @@ def admin_cinemas():
                         imagem = f"imgs/cinemas/{imagem}"
                 cinema['imagem'] = imagem
             
-            print(f"[DEBUG] Imagem final: {cinema['imagem']}")
         
         cur.close()
         conn.close()
         
         return render_template('admin_cinemas.html', user=get_current_user(), cinemas=cinemas)
     except Exception as e:
-        print(f"[ERRO] admin_cinemas: {str(e)}")
         import traceback
         traceback.print_exc()
         flash(f"Erro ao carregar cinemas: {str(e)}", "erro")
@@ -5588,38 +5579,27 @@ def admin_cinemas():
 
 @app.route('/admin/cinemas/adicionar', methods=['POST'])
 def admin_adicionar_cinema():
-    print("\n" + "="*50)
-    print("ROTA ADICIONAR CINEMA CHAMADA")
-    print("="*50)
+    pass
     
     if 'user_id' not in session:
-        print("ERRO: Usuário não autenticado")
         return redirect(url_for('login'))
     
     try:
-        print(f"Form data: {request.form}")
-        print(f"Files: {request.files}")
+        pass
         
         nome = request.form.get('nome', '').strip()
         localizacao = request.form.get('localizacao', '').strip()
         regiao = request.form.get('regiao', '').strip()
         email = request.form.get('email', '').strip()
         
-        print(f"Nome: {nome}")
-        print(f"Localização: {localizacao}")
-        print(f"Região: {regiao}")
-        print(f"Email: {email}")
         
         if not nome or not localizacao:
-            print("ERRO: Campos obrigatórios vazios")
             flash("Nome e localização são obrigatórios!", "erro")
             return redirect(url_for('admin_cinemas'))
         
         imagem = None
         if 'imagem' in request.files:
             file = request.files['imagem']
-            print(f"File: {file}")
-            print(f"Filename: {file.filename}")
             
             if file and file.filename:
                 from werkzeug.utils import secure_filename
@@ -5633,36 +5613,27 @@ def admin_adicionar_cinema():
                 
                 file.save(filepath)
                 imagem = f"imgs/cinemas/{filename}"
-                print(f"Imagem salva: {imagem}")
         
-        print("Conectando à base de dados...")
         conn = get_db_connection()
         cur = conn.cursor()
         
-        print("Executando INSERT...")
         cur.execute("""
             INSERT INTO cinemas (nome, localizacao, regiao, email, imagem) 
             VALUES (%s, %s, %s, %s, %s)
         """, (nome, localizacao, regiao, email, imagem))
         
-        print("Fazendo COMMIT...")
         conn.commit()
         
         cinema_id = cur.lastrowid
-        print(f"Cinema adicionado com ID: {cinema_id}")
         
         cur.close()
         conn.close()
         
-        print("="*50)
-        print("SUCESSO!")
-        print("="*50 + "\n")
         
         flash(f"Cinema '{nome}' adicionado com sucesso!", "sucesso")
         return redirect(url_for('admin_cinemas'))
         
     except Exception as e:
-        print(f"ERRO: {str(e)}")
         import traceback
         traceback.print_exc()
         flash(f"Erro ao adicionar cinema: {str(e)}", "erro")
@@ -5677,20 +5648,15 @@ def admin_editar_cinema(id_cinema):
     cur = conn.cursor(dictionary=True)
     
     if request.method == 'POST':
-        print(f"\n=== EDITAR CINEMA ID: {id_cinema} ===")
         nome = request.form.get('nome')
         localizacao = request.form.get('localizacao')
         regiao = request.form.get('regiao')
         email = request.form.get('email')
         imagem = request.form.get('imagem_atual')
         
-        print(f"Imagem atual: {imagem}")
-        print(f"Files in request: {request.files}")
         
         if 'imagem' in request.files:
             file = request.files['imagem']
-            print(f"File object: {file}")
-            print(f"File filename: {file.filename}")
             
             if file and file.filename:
                 from werkzeug.utils import secure_filename
@@ -5701,21 +5667,17 @@ def admin_editar_cinema(id_cinema):
                 filepath = os.path.join(upload_folder, filename)
                 file.save(filepath)
                 imagem = f"imgs/cinemas/{filename}"
-                print(f"Nova imagem salva: {imagem}")
             else:
-                print("File vazio ou sem filename")
+                pass
         else:
-            print("'imagem' não está em request.files")
+            pass
         
-        print(f"Imagem final para UPDATE: {imagem}")
         
         cur.execute("UPDATE cinemas SET nome=%s, localizacao=%s, regiao=%s, email=%s, imagem=%s WHERE id=%s",
                     (nome, localizacao, regiao, email, imagem, id_cinema))
-        print(f"Linhas afetadas: {cur.rowcount}")
         conn.commit()
         cur.close()
         conn.close()
-        print("=== FIM EDITAR CINEMA ===\n")
         flash("Cinema atualizado!", "sucesso")
         return redirect(url_for('admin_cinemas'))
     
@@ -5798,7 +5760,6 @@ def admin_usuarios():
                 temp_url = str(usuario['avatar_personalizado']).replace('\\', '/').replace('"', '').strip()
                 if temp_url and temp_url != 'None' and temp_url != '' and 'default.png' not in temp_url:
                     avatar_url = temp_url
-                    print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando avatar_personalizado = {avatar_url}")
             
             if (avatar_url == 'imgs/icons/user_icon34-removebg-preview.png' or 'default.png' in avatar_url) and usuario.get('avatar_id') and usuario['avatar_id']:
                 try:
@@ -5808,22 +5769,18 @@ def admin_usuarios():
                         temp_url = str(avatar_result['caminho']).replace('\\', '/').replace('"', '').strip()
                         if temp_url and temp_url != 'None' and temp_url != '':
                             avatar_url = temp_url
-                            print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando avatar da tabela avatars (id={usuario['avatar_id']}) = {avatar_url}")
                 except Exception as e:
-                    print(f"[DEBUG] Erro ao buscar avatar do usuário {usuario['id']}: {e}")
+                    pass
             
             if (avatar_url == 'imgs/icons/user_icon34-removebg-preview.png' or 'default.png' in avatar_url) and usuario.get('avatar') and usuario['avatar']:
                 temp_url = str(usuario['avatar']).replace('\\', '/').replace('"', '').strip()
                 if temp_url and temp_url != 'None' and temp_url != '' and 'default.png' not in temp_url:
                     avatar_url = temp_url
-                    print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando campo avatar = {avatar_url}")
             
             if not avatar_url or avatar_url == 'None' or avatar_url == '':
                 avatar_url = 'imgs/icons/user_icon34-removebg-preview.png'
-                print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): usando fallback padrão")
             
             usuario['avatar_url'] = avatar_url
-            print(f"[DEBUG] User {usuario['id']} ({usuario['nome']}): avatar_url final = {avatar_url}")
         
         cur.close()
         conn.close()
@@ -6400,6 +6357,7 @@ def debug_login_afonso():
 
 @app.route('/filmes')
 def filmes():
+    pass
     
     genero_filtro = request.args.get('genero', '').strip().lower()
     
@@ -6781,6 +6739,7 @@ def contactos():
 
 @app.route('/api/process-payment', methods=['POST'])
 def process_payment():
+    pass
    
     try:
         app.logger.info("🚀 INICIANDO process_payment")
@@ -6825,7 +6784,6 @@ def process_payment():
             import mysql.connector
             app.logger.info("📦 Importando mysql.connector...")
             conn = mysql.connector.connect(**db_config)
-            app.logger.info("✅ Conexão estabelecida")
             cursor = conn.cursor()
             app.logger.info("📋 Cursor criado")
             
@@ -6896,7 +6854,6 @@ def process_payment():
             ))
             
             reserva_id = cursor.lastrowid
-            app.logger.info(f"✅ RESERVA INSERIDA FORÇADAMENTE - ID: {reserva_id}")
             
         except Exception as e1:
             app.logger.error(f"Erro na inserção forçada: {str(e1)}")
@@ -6914,7 +6871,6 @@ def process_payment():
                 ))
                 
                 reserva_id = cursor.lastrowid
-                app.logger.info(f"✅ RESERVA INSERIDA (fallback) - ID: {reserva_id}")
                 
             except Exception as e2:
                 app.logger.error(f"Erro no fallback: {str(e2)}")
@@ -6922,7 +6878,6 @@ def process_payment():
         
         try:
             conn.commit()
-            app.logger.info("✅ COMMIT FORÇADO REALIZADO")
         except Exception as e:
             app.logger.warning(f"Erro no commit: {str(e)}")
         
@@ -6940,14 +6895,13 @@ def process_payment():
                             VALUES (1, %s, TRUE)
                             ON DUPLICATE KEY UPDATE ocupado = TRUE
                         """, (lugar,))
-                        app.logger.info(f"✅ Lugar {lugar} marcado")
                     except:
                         pass
         except:
             pass
         
         try:
-            app.logger.info("📧 Email desabilitado temporariamente para debug")
+            pass
             
         except Exception as e:
             app.logger.warning(f"❌ Erro no email: {str(e)}")
@@ -7041,7 +6995,6 @@ def confirmar_pagamento_sessao():
                 nome_cliente = session.get('nome', 'Cliente')
                 email_cliente = session.get('email', '')
                 
-            app.logger.info(f"👤 Utilizador logado: {nome_cliente} ({email_cliente})")
             
         else:
             nome_cliente = data.get('nome_cliente', '').strip()
@@ -7067,7 +7020,6 @@ def confirmar_pagamento_sessao():
             
             if existing_user:
                 user_id = existing_user['id']
-                app.logger.info(f"👤 Utilizador existente encontrado: {email_cliente}")
             else:
                 cursor.execute("""
                     INSERT INTO usuarios (nome, email, senha, tipo_usuario, criado_em)
@@ -7075,12 +7027,10 @@ def confirmar_pagamento_sessao():
                 """, (nome_cliente, email_cliente))
                 
                 user_id = cursor.lastrowid
-                app.logger.info(f"👤 Novo utilizador convidado criado: {nome_cliente} ({email_cliente})")
         
         if not user_id:
             return jsonify({'success': False, 'message': 'Erro ao identificar utilizador'}), 500
         
-        app.logger.info(f"💾 Inserindo reserva: sala={tipo_sala}, preço=€{total}, user_id={user_id}")
         
         cursor.execute("""
             INSERT INTO reservas_exclusivas 
@@ -7091,10 +7041,9 @@ def confirmar_pagamento_sessao():
         reserva_id = cursor.lastrowid
         conn.commit()
         
-        app.logger.info(f"✅ Reserva exclusiva criada com sucesso: ID {reserva_id}")
         
         try:
-            app.logger.info(f"📧 Enviando email de sessão exclusiva para: {email_cliente}")
+            pass
             
             dados_email = {
                 'reserva_id': reserva_id,
@@ -7114,7 +7063,7 @@ def confirmar_pagamento_sessao():
             )
             
             if resultado_email:
-                app.logger.info(f"✅ Email de sessão exclusiva enviado com SUCESSO")
+                pass
             else:
                 app.logger.warning(f"⚠️ Email de sessão exclusiva NÃO foi enviado")
         except Exception as email_error:
@@ -7141,6 +7090,7 @@ def confirmar_pagamento_sessao():
 
 @app.route('/confirmar_pagamento_reserva', methods=['POST'])
 def confirmar_pagamento_reserva():
+    pass
   
     try:
         data = request.get_json()
@@ -7203,7 +7153,6 @@ def confirmar_pagamento_reserva():
             if user_data:
                 nome_para_email = user_data['nome']
                 email_para_email = user_data['email']
-                app.logger.info(f"📧 Utilizador logado: {nome_para_email} ({email_para_email})")
         else:
             nome_cliente = nome
             email_cliente = email
@@ -7271,14 +7220,12 @@ def confirmar_pagamento_reserva():
         conn.close()
         
         try:
-            app.logger.info(f"📧 Tentando enviar email para: {email_para_email}")
-            app.logger.info(f"👤 Nome: {nome_para_email}")
             app.logger.info(f"📦 Dados do email: {dados_email}")
             
             resultado_email = enviar_email_confirmacao(email_para_email, nome_para_email, dados_email)
             
             if resultado_email:
-                app.logger.info(f"✅ Email enviado com SUCESSO para {email_para_email}")
+                pass
             else:
                 app.logger.warning(f"⚠️ Email NÃO foi enviado para {email_para_email}")
         except Exception as email_error:
@@ -7304,7 +7251,6 @@ def reserva():
     data_sessao = request.args.get('data')
 
     
-    app.logger.info(f"🔍 ROTA /reserva - Parâmetros recebidos:")
     app.logger.info(f"  id_horario_sessao: {id_horario_sessao}")
     app.logger.info(f"  id_cinema: {id_cinema}")
     app.logger.info(f"  tipo_id: {tipo_id}")
@@ -7374,7 +7320,6 @@ def reserva():
         cinema = cursor.fetchone() or {}
 
         
-        app.logger.info(f"🔍 BUSCA TIPO SESSÃO: SELECT * FROM tipos_sessao WHERE id = {tipo_id}")
         
         cursor.execute("SELECT id, nome, preco_bilhete FROM tipos_sessao WHERE id = %s", (tipo_id,))
         tipo_sessao = cursor.fetchone() or {}
@@ -7551,7 +7496,7 @@ def reserva():
 
 @app.route('/selecao_lugares', methods=['GET', 'POST'])
 def selecao_lugares():
-    app.logger.info(f"🎬 SELEÇÃO DE LUGARES - Método: {request.method}")
+    pass
     
     if request.method == 'POST':
         filme_id = request.form.get('filme_id')
@@ -7704,14 +7649,6 @@ def selecao_lugares():
         
         lugares_ocupados_set = set(lugares_ocupados_lista)
         
-        print(f"\n{'='*80}")
-        print(f"DEBUG LUGARES OCUPADOS - ROTA selecao_lugares")
-        print(f"{'='*80}")
-        print(f"id_horario_sessao: {id_horario_sessao}")
-        print(f"data_sessao: {data_sessao}")
-        print(f"Lugares ocupados encontrados: {len(lugares_ocupados_set)}")
-        print(f"Lugares: {sorted(lugares_ocupados_set)}")
-        print(f"{'='*80}\n")
         
         lugares = gerar_layout_sala(
             sala['filas'], 
@@ -7727,12 +7664,6 @@ def selecao_lugares():
                     if lugar.get('ocupado'):
                         lugares_ocupados_no_layout.append(lugar['nome'])
         
-        print(f"\n{'='*80}")
-        print(f"DEBUG LAYOUT GERADO")
-        print(f"{'='*80}")
-        print(f"Lugares com ocupado=True no layout: {len(lugares_ocupados_no_layout)}")
-        print(f"Lugares: {sorted(lugares_ocupados_no_layout)}")
-        print(f"{'='*80}\n")
         
         preco_bilhete = float(tipo_sessao.get('preco_bilhete', 8.50))
         
@@ -7837,6 +7768,7 @@ def gerar_layout_sala(filas, lugares_por_fila, lugares_ocupados, lugares_acessiv
 
 @app.route('/confirmar_reserva', methods=['POST'])
 def confirmar_reserva():
+    pass
 
     try:
         if request.is_json:
@@ -7874,7 +7806,6 @@ def confirmar_reserva():
             return redirect(request.referrer or url_for('home'))
         
         app.logger.info("=" * 80)
-        app.logger.info("🔍 DADOS RECEBIDOS:")
         app.logger.info(f"   id_horario_sessao (raw): '{id_horario_sessao}' (tipo: {type(id_horario_sessao)})")
         app.logger.info(f"   id_cinema (raw): '{id_cinema}' (tipo: {type(id_cinema)})")
         app.logger.info(f"   tipo_id (raw): '{tipo_id}' (tipo: {type(tipo_id)})")
@@ -7887,7 +7818,6 @@ def confirmar_reserva():
             if id_filme:
                 id_filme = int(id_filme)
                 
-            app.logger.info("🔍 APÓS CONVERSÃO:")
             app.logger.info(f"   id_horario_sessao (int): {id_horario_sessao}")
             app.logger.info(f"   id_cinema (int): {id_cinema}")
             app.logger.info(f"   tipo_id (int): {tipo_id}")
@@ -7907,7 +7837,6 @@ def confirmar_reserva():
         if not tipo_sessao:
             raise Exception(f"Tipo de sessão {tipo_id} não encontrado")
         
-        app.logger.info(f"✅ TIPO SESSÃO ENCONTRADO: {tipo_sessao['id']} - {tipo_sessao['nome']} - €{tipo_sessao['preco_bilhete']}")
         
         cursor.execute("SELECT id, nome FROM cinemas WHERE id = %s", (id_cinema,))
         cinema = cursor.fetchone()
@@ -7976,7 +7905,6 @@ def confirmar_reserva():
             
             cursor.execute("SELECT id_tipo_sessao FROM reservas WHERE id = %s", (reserva_id,))
             verificacao = cursor.fetchone()
-            app.logger.info(f"✅ VERIFICAÇÃO: Reserva {reserva_id} inserida com id_tipo_sessao = {verificacao['id_tipo_sessao']}")
             
             if verificacao['id_tipo_sessao'] != tipo_id:
                 app.logger.error(f"🚨 ERRO CRÍTICO!")
@@ -8052,7 +7980,7 @@ def confirmar_reserva():
 @app.route('/teste-email')
 def teste_email():
     try:
-        app.logger.info("🔍 Testando conexão SMTP...")
+        pass
         
         import smtplib
         server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
@@ -8060,7 +7988,6 @@ def teste_email():
         server.login(EMAIL_USER, EMAIL_PASSWORD)
         server.quit()
         
-        app.logger.info("✅ Conexão SMTP funcionando!")
         
         dados_teste = {
             'reserva_id': 12345,
@@ -8340,6 +8267,7 @@ def sessao_vintage():
 
 @app.route('/reserva_sessao_tematica')
 def reserva_sessao_tematica():
+    pass
 
     tipo_sessao = request.args.get('tipo')
     filme_id = request.args.get('filme_id')
@@ -8357,6 +8285,7 @@ def reserva_sessao_tematica():
 
 @app.route('/pagamento_sessao_tematica')
 def pagamento_sessao_tematica():
+    pass
 
     tipo_sessao = request.args.get('tipo')
     filme_id = request.args.get('filme_id')
@@ -8437,6 +8366,7 @@ def pagamento_sessao_tematica():
 
 @app.route('/api/processar-pagamento-sessao-tematica', methods=['POST'])
 def api_processar_pagamento_sessao_tematica():
+    pass
 
     try:
         data = request.get_json()
@@ -8533,6 +8463,7 @@ def api_processar_pagamento_sessao_tematica():
 
 @app.route('/sessao_romance')
 def sessao_romance():
+    pass
 
     
     filmes_romance = []
@@ -8610,11 +8541,12 @@ def sessao_premium():
 
 @app.route('/selecao_bar')
 def selecao_bar():
+    pass
 
     
     conn = None
     try:
-        app.logger.info("🔍 INÍCIO SELECAO_BAR")
+        pass
         
         filme_id = request.args.get('filme_id') or session.get('filme_id')
         cinema_id = request.args.get('cinema_id') or session.get('cinema_id')
@@ -8623,9 +8555,6 @@ def selecao_bar():
         data_sessao = request.args.get('data_sessao') or session.get('data_sessao')
         lugares = request.args.get('lugares') or ','.join(session.get('lugares_selecionados', []))
         
-        app.logger.info(f"🔍 id_tipo_sessao da URL: {request.args.get('id_tipo_sessao')}")
-        app.logger.info(f"🔍 id_tipo_sessao da sessão: {session.get('id_tipo_sessao')}")
-        app.logger.info(f"🔍 id_tipo_sessao FINAL: {id_tipo_sessao}")
         
         if not all([filme_id, cinema_id, id_horario_sessao, id_tipo_sessao]):
             flash("Dados da reserva incompletos", "erro")
@@ -8729,7 +8658,6 @@ def selecao_bar():
             lugares=lugares_selecionados
         )
         
-        app.logger.info(f"✅ Dados carregados: {filme['titulo']} - {tipo_sessao['nome']}")
         
         cursor.close()
         conn.close()
@@ -8766,6 +8694,7 @@ def selecao_bar():
 
 @app.route('/api/menu_produtos/<int:menu_id>')
 def api_menu_produtos(menu_id):
+    pass
 
     try:
         conn = get_db_connection()
@@ -8826,11 +8755,11 @@ def api_menu_produtos(menu_id):
 
 @app.route('/selecao_toppings')
 def selecao_toppings():
+    pass
 
     
     conn = None
     try:
-        app.logger.info("🔍 INÍCIO SELECAO_TOPPINGS")
         app.logger.info("=" * 60)
         
         filme_id = request.args.get('filme_id') or session.get('filme_id')
@@ -8855,7 +8784,6 @@ def selecao_toppings():
         import json
         try:
             produtos_bar = json.loads(produtos_bar_json)
-            app.logger.info(f"✅ Produtos parseados: {len(produtos_bar)} produtos")
         except Exception as e:
             app.logger.error(f"❌ Erro ao parsear produtos: {e}")
             produtos_bar = []
@@ -8917,7 +8845,6 @@ def selecao_toppings():
             quantidade = produto.get('quantidade', 1)
             tipo_produto_enviado = produto.get('tipo', 'bar')
             
-            app.logger.info(f"🔍 Verificando produto ID: {produto_id}, tipo: {tipo_produto_enviado}")
             
             if str(produto_id).startswith('topping_'):
                 app.logger.info(f"⏭️ Pulando topping: {produto_id}")
@@ -8926,7 +8853,6 @@ def selecao_toppings():
             produto_info = None
             
             if tipo_produto_enviado == 'menu':
-                app.logger.info(f"🔍 Buscando em menus...")
                 cursor.execute("""
                     SELECT id, nome as produto, preco_total as preco, 'menu' as categoria, imagem_url
                     FROM menus
@@ -8935,9 +8861,8 @@ def selecao_toppings():
                 produto_info = cursor.fetchone()
                 
                 if produto_info:
-                    app.logger.info(f"✅ Menu encontrado: {produto_info['produto']}")
+                    pass
             else:
-                app.logger.info(f"🔍 Buscando em bar...")
                 cursor.execute("""
                     SELECT id, produto, preco, categoria, imagem_url
                     FROM bar
@@ -8946,14 +8871,13 @@ def selecao_toppings():
                 produto_info = cursor.fetchone()
                 
                 if produto_info:
-                    app.logger.info(f"✅ Produto do bar encontrado: {produto_info['produto']}")
+                    pass
             
             if produto_info:
                 produto_info['quantidade'] = quantidade
                 produtos_detalhes.append(produto_info)
                 
                 tipo_produto = 'menu' if produto_info['categoria'] == 'menu' else 'bar'
-                app.logger.info(f"🔍 Tipo de produto confirmado: {tipo_produto}")
                 
                 if tipo_produto == 'menu':
                     cursor.execute("""
@@ -8969,7 +8893,6 @@ def selecao_toppings():
                     """, (produto_id,))
                 
                 result = cursor.fetchone()
-                app.logger.info(f"🔍 Toppings associados: {result['total'] if result else 0}")
                 
                 if result and result['total'] > 0:
                     produtos_com_toppings.append({
@@ -8977,7 +8900,6 @@ def selecao_toppings():
                         'tipo': tipo_produto,
                         'nome': produto_info['produto']
                     })
-                    app.logger.info(f"✅ Produto com toppings adicionado: {produto_info['produto']}")
             else:
                 app.logger.warning(f"⚠️ Produto ID {produto_id} não encontrado")
         
@@ -9066,6 +8988,7 @@ def selecao_toppings():
 
 @app.route('/bar')
 def bar():
+    pass
    
     
     try:
@@ -9130,6 +9053,7 @@ def bar():
                              avatar=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png'))
 @app.route('/resumo_reserva', methods=['GET', 'POST'])
 def resumo_reserva():
+    pass
 
     
     if request.method == 'POST':
@@ -9144,7 +9068,6 @@ def resumo_reserva():
         if telefone_cliente:
             session['telefone_cliente'] = telefone_cliente
         
-        app.logger.info(f"✅ Dados do cliente guardados na sessão: {nome_cliente}, {email_cliente}")
         
         return redirect(url_for('checkout'))
     
@@ -9159,7 +9082,6 @@ def resumo_reserva():
         produtos_bar = request.args.get('produtos_bar', '[]')
         toppings_json = request.args.get('toppings', '[]')
         
-        app.logger.info(f"🔍 RESUMO_RESERVA - Parâmetros:")
         app.logger.info(f"   filme_id={filme_id}, id_tipo_sessao={id_tipo_sessao}")
         app.logger.info(f"   lugares={lugares}")
         app.logger.info(f"   toppings_json={toppings_json}")
@@ -9236,7 +9158,6 @@ def resumo_reserva():
                 tipo_produto_enviado = produto.get('tipo', 'bar')
                 configs = produto.get('configs', [])
                 
-                app.logger.info(f"🔍 Buscando produto ID: {produto_id}, tipo: {tipo_produto_enviado}, quantidade: {quantidade_prod}")
                 
                 produto_info = None
                 
@@ -9245,7 +9166,7 @@ def resumo_reserva():
                     produto_info = cursor.fetchone()
                     
                     if produto_info:
-                        app.logger.info(f"✅ Menu encontrado: {produto_info['produto']}")
+                        pass
                         
                         for idx, config in enumerate(configs):
                             snack_id = config.get('snackId')
@@ -9292,13 +9213,11 @@ def resumo_reserva():
                                 'preco_total': preco_total_produto,
                                 'is_menu': True
                             })
-                            app.logger.info(f"✅ Menu detalhado adicionado: {detalhes_texto}")
                 else:
                     cursor.execute("SELECT produto, preco FROM bar WHERE id = %s", (produto_id,))
                     produto_info = cursor.fetchone()
                     
                     if produto_info:
-                        app.logger.info(f"✅ Produto do bar encontrado: {produto_info['produto']}")
                         preco_unitario = float(produto_info['preco'])
                         preco_total_produto = preco_unitario * quantidade_prod
                         total_bar += preco_total_produto
@@ -9310,7 +9229,6 @@ def resumo_reserva():
                             'preco_total': preco_total_produto,
                             'is_menu': False
                         })
-                        app.logger.info(f"✅ Produto adicionado ao resumo: {produto_info['produto']} x{quantidade_prod} = €{preco_total_produto}")
                 
                 if not produto_info:
                     app.logger.error(f"❌ Produto ID {produto_id} não encontrado!")
@@ -9330,7 +9248,6 @@ def resumo_reserva():
                     topping_id = topping.get('id')
                     quantidade_topping = int(topping.get('quantidade', 1))
                     
-                    app.logger.info(f"🔍 Buscando topping ID: {topping_id}, quantidade: {quantidade_topping}")
                     
                     cursor.execute("SELECT nome, preco FROM toppings WHERE id = %s", (topping_id,))
                     topping_info = cursor.fetchone()
@@ -9346,7 +9263,6 @@ def resumo_reserva():
                             'preco_unitario': preco_unitario,
                             'preco_total': preco_total_topping
                         })
-                        app.logger.info(f"✅ Topping adicionado ao resumo: {topping_info['nome']} x{quantidade_topping} = €{preco_total_topping}")
                     else:
                         app.logger.error(f"❌ Topping ID {topping_id} não encontrado!")
         except Exception as e:
@@ -9682,6 +9598,7 @@ def api_pesquisa():
 
 @app.route('/api/check_toppings')
 def api_check_toppings():
+    pass
 
     produto_id = request.args.get('produto_id')
     tipo = request.args.get('tipo', 'bar')
@@ -10437,6 +10354,7 @@ def admin_remover_produto(produto_id):
 
 @app.route('/admin/bar/menus/<int:menu_id>/dados')
 def admin_menu_dados(menu_id):
+    pass
    
     if 'user_id' not in session:
         return jsonify({'error': 'Não autenticado'}), 401
@@ -10445,7 +10363,6 @@ def admin_menu_dados(menu_id):
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         
-        print(f"[DEBUG] Buscando menu ID: {menu_id}")
         
         cursor.execute("""
             SELECT id, nome, descricao, preco_total, imagem_url
@@ -10454,7 +10371,6 @@ def admin_menu_dados(menu_id):
         """, (menu_id,))
         
         menu = cursor.fetchone()
-        print(f"[DEBUG] Menu encontrado: {menu}")
         
         if not menu:
             cursor.close()
@@ -10472,7 +10388,6 @@ def admin_menu_dados(menu_id):
         """, (menu_id,))
         
         produtos = cursor.fetchall()
-        print(f"[DEBUG] Produtos encontrados: {len(produtos)}")
         
         for produto in produtos:
             if produto['preco']:
@@ -10483,7 +10398,6 @@ def admin_menu_dados(menu_id):
         cursor.close()
         conn.close()
         
-        print(f"[DEBUG] Retornando menu: {menu}")
         return jsonify(menu)
         
     except Exception as e:
@@ -10521,11 +10435,7 @@ def admin_adicionar_menu():
             imagem_file.save(filepath)
             imagem_url = f"imgs/menus/{filename}"
             
-            print(f"[DEBUG] Imagem salva: {imagem_url}")
     
-    print(f"[DEBUG] Adicionando novo menu")
-    print(f"[DEBUG] Nome: {nome}")
-    print(f"[DEBUG] Produtos: {produtos_ids}")
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -10536,7 +10446,6 @@ def admin_adicionar_menu():
     """, (nome, descricao, preco_total, imagem_url))
     
     menu_id = cursor.lastrowid
-    print(f"[DEBUG] Menu criado com ID: {menu_id}")
     
     for produto_id in produtos_ids:
         if produto_id:
@@ -10579,9 +10488,8 @@ def admin_editar_menu(menu_id):
                 if os.path.exists(old_path):
                     try:
                         os.remove(old_path)
-                        print(f"[DEBUG] Imagem antiga removida: {old_path}")
                     except Exception as e:
-                        print(f"[DEBUG] Erro ao remover imagem antiga: {e}")
+                        pass
             
             ext = os.path.splitext(secure_filename(imagem_file.filename))[1]
             filename = f"menu_{uuid.uuid4().hex[:8]}{ext}"
@@ -10590,10 +10498,7 @@ def admin_editar_menu(menu_id):
             imagem_file.save(filepath)
             imagem_url = f"imgs/menus/{filename}"
             
-            print(f"[DEBUG] Nova imagem salva: {imagem_url}")
     
-    print(f"[DEBUG] Editando menu {menu_id}")
-    print(f"[DEBUG] Produtos recebidos: {produtos_ids}")
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -10742,9 +10647,7 @@ def admin_adicionar_topping():
             imagem_file.save(filepath)
             imagem_url = f"imgs/toppings/{filename}"
             
-            print(f"[DEBUG] Imagem do topping salva: {imagem_url}")
     
-    print(f"[DEBUG] Adicionando novo topping: {nome}")
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -10763,6 +10666,7 @@ def admin_adicionar_topping():
 
 @app.route('/admin/bar/toppings/<int:topping_id>/dados')
 def admin_topping_dados(topping_id):
+    pass
 
     if 'user_id' not in session:
         return jsonify({'error': 'Não autenticado'}), 401
@@ -10824,9 +10728,7 @@ def admin_editar_topping(topping_id):
             imagem_file.save(filepath)
             imagem_url = f"imgs/toppings/{filename}"
             
-            print(f"[DEBUG] Nova imagem salva: {imagem_url}")
     
-    print(f"[DEBUG] Editando topping {topping_id}")
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -11311,7 +11213,6 @@ def api_filmes_disponiveis():
         return jsonify(filmes)
         
     except Exception as e:
-        print(f"Erro ao buscar filmes disponíveis: {e}")
         filmes_padrao = [
             {'id': 1, 'titulo': 'Rambo III'},
             {'id': 2, 'titulo': 'Superman (2025)'},
@@ -11350,7 +11251,6 @@ def api_avatares():
         
         return jsonify({'success': True, 'categorias': categorias})
     except Exception as e:
-        print(f"Erro ao buscar avatares: {str(e)}")
         return jsonify({'success': False, 'message': str(e)})
     finally:
         cursor.close()
@@ -11358,6 +11258,7 @@ def api_avatares():
 
 @app.route('/api/remover-cinema-favorito', methods=['POST'])
 def api_remover_cinema_favorito():
+    pass
   
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
@@ -11393,6 +11294,7 @@ def api_remover_cinema_favorito():
 
 @app.route('/api/atualizar-nome', methods=['POST'])
 def api_atualizar_nome():
+    pass
  
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
@@ -11434,6 +11336,7 @@ def api_atualizar_nome():
 
 @app.route('/api/avatar-categorias')
 def api_avatar_categorias():
+    pass
   
     try:
         conn = get_db_connection()
@@ -11507,6 +11410,7 @@ def api_avatar_categorias():
 
 @app.route('/api/atualizar-avatar', methods=['POST'])
 def api_atualizar_avatar():
+    pass
   
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
@@ -11536,7 +11440,6 @@ def api_atualizar_avatar():
         return jsonify({'success': True, 'message': 'Avatar atualizado com sucesso'})
         
     except Exception as e:
-        print(f"Erro ao atualizar avatar: {str(e)}")
         return jsonify({'success': False, 'message': str(e)})
     finally:
         if 'cursor' in locals():
@@ -11587,6 +11490,7 @@ def api_alterar_senha():
 
 @app.route('/pagamento-exclusivo')
 def pagamento_exclusivo():
+    pass
 
     
     logged_in = 'user_id' in session
@@ -11598,6 +11502,7 @@ def pagamento_exclusivo():
 
 @app.route('/api/processar-pagamento-exclusivo', methods=['POST'])
 def api_processar_pagamento_exclusivo():
+    pass
   
     try:
         data = request.get_json()
@@ -11693,6 +11598,7 @@ def api_processar_pagamento_exclusivo():
         return jsonify({'success': False, 'message': f'Erro ao processar pagamento: {str(e)}'})
 
 def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, dados_reserva):
+    pass
   
    
     try:
@@ -11870,7 +11776,6 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
         server.sendmail(EMAIL_USER, destinatario_email, text)
         server.quit()
         
-        app.logger.info(f"✅ Email de confirmação exclusiva enviado com sucesso para {destinatario_email}")
         return True
         
     except Exception as e:
@@ -11879,6 +11784,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
 
 @app.route('/api/recuperar-senha', methods=['POST'])
 def api_recuperar_senha():
+    pass
    
     try:
         data = request.get_json()
@@ -11976,6 +11882,7 @@ def api_filmes():
 
 @app.route('/api/filmes/<genero>')
 def api_filmes_por_genero(genero):
+    pass
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -12218,7 +12125,6 @@ def processar_pagamento():
         id_horario_sessao = dados_reserva.get('id_horario_sessao')
         id_cinema = dados_reserva.get('id_cinema')
 
-        app.logger.info(f"🔍 CONFIRMAR_PAGAMENTO - Dados extraídos:")
         app.logger.info(f"  dados_reserva completos: {dados_reserva}")
         app.logger.info(f"  tipo_id extraído: {dados_reserva.get('tipo_id', 'NÃO ENCONTRADO')}")
         app.logger.info(f"  id_horario_sessao: {dados_reserva.get('id_horario_sessao', 'NÃO ENCONTRADO')}")
@@ -12252,7 +12158,7 @@ def processar_pagamento():
         app.logger.info(f"lugareses: {lugareses}")
         
         if tipo_reserva == 'sessao_exclusiva':
-            app.logger.info(f"🎬 Validando sessão exclusiva...")
+            pass
             
             campos_faltando = []
             
@@ -12272,11 +12178,6 @@ def processar_pagamento():
                 campos_faltando.append('email')
             
             app.logger.info(f"Verificação detalhada de campos:")
-            app.logger.info(f"- data_sessao: '{data_sessao}' (tipo: {type(data_sessao)}) ({'✅ OK' if data_sessao and data_sessao != '' else '❌ FALTA'})")
-            app.logger.info(f"- hora_sessao: '{hora_sessao}' (tipo: {type(hora_sessao)}) ({'✅ OK' if hora_sessao and hora_sessao != '' else '❌ FALTA'})")
-            app.logger.info(f"- num_pessoas: '{num_pessoas}' (tipo: {type(num_pessoas)}) ({'✅ OK' if num_pessoas and num_pessoas != 0 else '❌ FALTA'})")
-            app.logger.info(f"- nome: '{nome}' (tipo: {type(nome)}) ({'✅ OK' if nome and str(nome).strip() != '' else '❌ FALTA'})")
-            app.logger.info(f"- email: '{email}' (tipo: {type(email)}) ({'✅ OK' if email and str(email).strip() != '' else '❌ FALTA'})")
             
             if campos_faltando:
                 app.logger.error(f"❌ CAMPOS OBRIGATÓRIOS FALTANDO: {campos_faltando}")
@@ -12287,7 +12188,7 @@ def processar_pagamento():
                     'dados_recebidos': dados_reserva
                 }), 400
             else:
-                app.logger.info(f"✅ Todos os campos obrigatórios estão preenchidos para sessão exclusiva")
+                pass
         else:
             campos_obrigatorios = [id_horario_sessao, id_cinema, tipo_id, id_filme, nome, email, lugareses]
             app.logger.info(f"Validação reserva normal - campos: {campos_obrigatorios}")
@@ -12312,7 +12213,6 @@ def processar_pagamento():
             app.logger.info(f"Categoria: {categoria}")
             
             if id_usuario > 0:
-                app.logger.info(f"🔍 Buscando dados do usuário logado (ID: {id_usuario})")
                 cursor.execute("SELECT nome, email FROM usuarios WHERE id = %s", (id_usuario,))
                 user_data = cursor.fetchone()
                 
@@ -12320,7 +12220,6 @@ def processar_pagamento():
                     nome = user_data['nome'] or nome
                     email = user_data['email'] or email
                     telefone = ''
-                    app.logger.info(f"✅ Dados do usuário atualizados: nome='{nome}', email='{email}', telefone='{telefone}'")
                 else:
                     app.logger.warning(f"⚠️ Usuário ID {id_usuario} não encontrado na base de dados")
             
@@ -12347,7 +12246,6 @@ def processar_pagamento():
                     
                     reserva_id = cursor.lastrowid
                     reserva_ids.append(reserva_id)
-                    app.logger.info(f"✅ Sessão exclusiva reservada com ID: {reserva_id}")
                     
                 except Exception as e:
                     app.logger.error(f"Erro ao inserir sessão exclusiva: {str(e)}")
@@ -12383,7 +12281,6 @@ def processar_pagamento():
                         
                         reserva_id = cursor.lastrowid
                         reserva_ids.append(reserva_id)
-                        app.logger.info(f"✅ Tabela criada e sessão exclusiva reservada com ID: {reserva_id}")
                         
                     except Exception as e2:
                         app.logger.error(f"Erro ao criar tabela e inserir: {str(e2)}")
@@ -12430,7 +12327,6 @@ def processar_pagamento():
                         raise
             
             conn.commit()
-            app.logger.info(f"✅ Reservas confirmadas com IDs: {reserva_ids}")
             
             try:
                 from datetime import datetime
@@ -12468,7 +12364,6 @@ def processar_pagamento():
                     cinema = cursor.fetchone()
                     cursor.execute("SELECT nome FROM tipos_sessao WHERE id = %s", (tipo_id,))
                     tipo_sessao = cursor.fetchone()
-                    app.logger.info(f"🔍 CONSULTA TIPO_SESSAO:")
                     app.logger.info(f"  tipo_id usado na consulta: {tipo_id}")
                     app.logger.info(f"  resultado da consulta: {tipo_sessao}")
                     if tipo_sessao:
@@ -12494,7 +12389,7 @@ def processar_pagamento():
                 email_enviado = enviar_email_confirmacao(email, nome, dados_email)
                 
                 if email_enviado:
-                    app.logger.info(f"✅ Email de confirmação enviado para {email}")
+                    pass
                 else:
                     app.logger.warning(f"⚠️ Falha ao enviar email para {email}")
                     
@@ -12563,6 +12458,7 @@ def test_filme():
 
 @app.route('/test_logado')
 def test_logado():
+    pass
    
     from flask import send_from_directory
     return send_from_directory('.', 'test_usuario_logado.html')
@@ -12571,11 +12467,13 @@ def test_logado():
 
 @app.route('/debug/filmes')
 def debug_filmes():
+    pass
    
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
     try:
+        pass
        
         cursor.execute("SELECT COUNT(*) as total FROM filmes")
         total = cursor.fetchone()['total']
@@ -12603,11 +12501,13 @@ def debug_filmes():
 
 @app.route('/corrigir_trailer_supergirl')
 def corrigir_trailer_supergirl():
+    pass
    
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
     try:
+        pass
       
         novo_trailer = 'https://www.youtube.com/watch?v=Ox8ZLF6cGM0'
         
@@ -12690,11 +12590,11 @@ def salvar_dados_reserva_sessao(filme_id=None, cinema_id=None, id_tipo_sessao=No
  
     session['reserva_data'] = reserva_data
     
-    app.logger.info(f"✅ Dados salvos na sessão: {reserva_data}")
     return reserva_data
 
 @app.route('/debug_sessao')
 def debug_sessao():
+    pass
 
     return jsonify({
         'filme_id': session.get('filme_id'),
@@ -12710,8 +12610,10 @@ def debug_sessao():
 
 @app.route('/pagamento')
 def pagamento():
+    pass
     
     try:
+        pass
    
         reserva_data = session.get('reserva_data')
         if not reserva_data:
@@ -12799,7 +12701,6 @@ def pagamento():
             'preco_bilhete': preco_bilhete
         }
         
-        app.logger.info(f"✅ PAGAMENTO - Renderizando página. Total: €{total_geral:.2f}")
         
         return render_template('pagamento.html',
                              dados_pagamento=dados_pagamento,
@@ -12812,6 +12713,7 @@ def pagamento():
 
 @app.route('/checkout')
 def checkout():
+    pass
     
     conn = None
     try:
@@ -12822,7 +12724,6 @@ def checkout():
         data_sessao = request.args.get('data_sessao') or session.get('data_sessao')
         lugares = request.args.get('lugares') or ','.join(session.get('lugares_selecionados', []))
         
-        app.logger.info(f"✅ CHECKOUT - Parâmetros:")
         app.logger.info(f"   filme_id={filme_id}, id_tipo_sessao={id_tipo_sessao}")
         app.logger.info(f"   lugares={lugares}")
         
@@ -12906,7 +12807,6 @@ def checkout():
         }
         session['total'] = total_geral
         
-        app.logger.info(f"✅ CHECKOUT - Renderizando. Total: €{total_geral:.2f}")
         
         return render_template('checkout.html',
                              filme=filme,
@@ -12935,9 +12835,11 @@ def checkout():
 
 @app.route('/processar_checkout', methods=['POST'])
 def processar_checkout():
+    pass
     
     
     try:
+        pass
 
         data = request.get_json() if request.is_json else request.form
         
@@ -12961,6 +12863,7 @@ def processar_checkout():
         if isinstance(lugares_raw, list):
             lugares = ','.join(lugares_raw)
         elif isinstance(lugares_raw, str):
+            pass
             
             if lugares_raw.startswith('[') and lugares_raw.endswith(']'):
                 import json
@@ -12968,6 +12871,7 @@ def processar_checkout():
                     lugares_array = json.loads(lugares_raw)
                     lugares = ','.join(lugares_array)
                 except:
+                    pass
 
                     lugares = lugares_raw.replace('[', '').replace(']', '').replace('"', '').replace("'", '')
             else:   
@@ -13001,7 +12905,6 @@ def processar_checkout():
             
             if horario_valido:
                 id_horario_sessao = horario_valido['id']
-                app.logger.info(f"✅ Usando horário válido: {id_horario_sessao}")
             else:
                 return jsonify({'success': False, 'error': 'Nenhum horário disponível na base de dados'})
         
@@ -13009,6 +12912,7 @@ def processar_checkout():
         user_id = session.get('user_id')
         
         if user_id:
+            pass
        
             conn = get_db_connection()
             cursor = conn.cursor(dictionary=True)
@@ -13026,6 +12930,7 @@ def processar_checkout():
                 email_cliente = 'user@example.com'
                 telefone_cliente = ''
         else:
+            pass
            
             nome_cliente = session.get('nome_cliente', '').strip()
             email_cliente = session.get('email_cliente', '').strip()
@@ -13080,10 +12985,10 @@ def processar_checkout():
         cursor.close()
         conn.close()
         
-        app.logger.info(f"✅ Reserva criada: ID {reserva_id}")
         
        
         try:
+            pass
          
             conn_email = get_db_connection()
             cursor_email = conn_email.cursor(dictionary=True)
@@ -13111,6 +13016,7 @@ def processar_checkout():
             conn_email.close()
             
             if reserva_completa:
+                pass
            
                 dados_email = {
                     'reserva_id': reserva_id,
@@ -13131,7 +13037,7 @@ def processar_checkout():
                 )
                 
                 if email_enviado:
-                    app.logger.info(f"✅ Email enviado para {email_cliente}")
+                    pass
                 else:
                     app.logger.warning(f"⚠️ Email não foi enviado para {email_cliente}")
             else:
@@ -13166,9 +13072,11 @@ def processar_checkout():
 
 @app.route('/confirmacao_reserva/<int:reserva_id>')
 def confirmacao_reserva(reserva_id):
+    pass
     
     
     try:
+        pass
         
         if 'user_id' not in session:
             return redirect(url_for('login'))
@@ -13233,6 +13141,7 @@ def confirmacao_reserva(reserva_id):
 
 @app.route('/processar_pagamento_final', methods=['POST'])
 def processar_pagamento_final():
+    pass
 
     conn = None
     try:
@@ -13254,7 +13163,6 @@ def processar_pagamento_final():
         
 
         app.logger.info("="*80)
-        app.logger.info("🔍 PROCESSAR_PAGAMENTO_FINAL - DADOS DA SESSÃO:")
         app.logger.info(f"   id_tipo_sessao da sessão: {id_tipo_sessao}")
         app.logger.info(f"   id_horario_sessao: {id_horario_sessao}")
         app.logger.info("="*80)
@@ -13298,14 +13206,12 @@ def processar_pagamento_final():
         if not cinema_id:
             cinema_id = horario_info['id_cinema']
         
-        app.logger.info(f"✅ Tipo de sessão correto: {id_tipo_sessao} (do horarios_sessao ID {id_horario_sessao})")
         
       
         lugares_str = ','.join(map(str, lugares_selecionados))
         
      
         app.logger.info("="*80)
-        app.logger.info("🔍 DADOS PARA INSERIR NA BD:")
         app.logger.info(f"   id_horario_sessao: {id_horario_sessao}")
         app.logger.info(f"   data_sessao: {data_sessao}")
         app.logger.info(f"   id_filme: {filme_id}")
@@ -13377,7 +13283,7 @@ def processar_pagamento_final():
                 dados_email
             )
             if email_enviado:
-                app.logger.info(f"✅ Email enviado para {email_cliente}")
+                pass
             else:
                 app.logger.warning(f"⚠️ Email não foi enviado para {email_cliente}")
         except Exception as email_error:
@@ -13390,7 +13296,6 @@ def processar_pagamento_final():
         session.pop('lugares_selecionados', None)
         session.pop('total', None)
         
-        app.logger.info(f"✅ Reserva {reserva_id} criada com sucesso para {email_cliente}")
         
         return jsonify({
             'success': True,
@@ -13414,6 +13319,7 @@ def processar_pagamento_final():
 
 @app.route('/api/validar-codigo-desconto', methods=['POST'])
 def validar_codigo_desconto():
+    pass
     
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Utilizador não autenticado'})
@@ -13479,6 +13385,7 @@ def validar_codigo_desconto():
 
 @app.route('/api/aplicar-codigo-desconto', methods=['POST'])
 def aplicar_codigo_desconto():
+    pass
     
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Utilizador não autenticado'})
@@ -13520,11 +13427,13 @@ def aplicar_codigo_desconto():
             desconto_valor = min(valor_desconto_float, total_original_float)
             novo_total = max(0.0, total_original_float - desconto_valor)
         elif codigo_info['tipo_desconto'] == 'produto_gratis':
+            pass
  
             if 'bilhete' in codigo_info['premio_nome'].lower():
                 desconto_valor = total_original_float
                 novo_total = 0.0
             else:
+                pass
 
                 desconto_valor = min(valor_desconto_float, total_original_float)
                 novo_total = max(0.0, total_original_float - desconto_valor)
@@ -13546,7 +13455,6 @@ def aplicar_codigo_desconto():
         cursor_update.close()
         conn_update.close()
         
-        print(f"✅ Código {codigo} marcado como usado")
         
         return jsonify({
             'success': True,
@@ -13564,6 +13472,7 @@ def aplicar_codigo_desconto():
 
 @app.route('/api/finalizar-pagamento-com-desconto', methods=['POST'])
 def finalizar_pagamento_com_desconto():
+    pass
 
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Utilizador não autenticado'})
@@ -13606,6 +13515,7 @@ def finalizar_pagamento_com_desconto():
 
 @app.route('/debug/bar')
 def debug_bar():
+    pass
   
     try:
         conn = get_db_connection()
@@ -13634,6 +13544,7 @@ def debug_bar():
         return f"<h1>Erro Debug</h1><p>{str(e)}</p>"
 
 if __name__ == '__main__':
+    pass
  
     with app.app_context():
         criar_tabelas_resgates()

@@ -81,7 +81,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
             <style>
                 body {{ 
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                    background: linear-gradient(135deg,
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
                     margin: 0; 
                     padding: 20px; 
                     color: white;
@@ -89,14 +89,14 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                 .container {{ 
                     max-width: 600px; 
                     margin: 0 auto; 
-                    background: linear-gradient(135deg,
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
                     border-radius: 20px; 
                     overflow: hidden; 
                     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
                     border: 2px solid rgba(255, 214, 10, 0.3);
                 }}
                 .header {{ 
-                    background: linear-gradient(135deg,
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
                     padding: 40px 30px; 
                     text-align: center; 
                     position: relative;
@@ -112,7 +112,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                     opacity: 0.1;
                 }}
                 .header h1 {{ 
-                    color:
+                    color: #1a1a1a; 
                     margin: 0; 
                     font-size: 32px; 
                     font-weight: 900; 
@@ -129,7 +129,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                     background: rgba(0, 0, 0, 0.2);
                 }}
                 .content h2 {{ 
-                    color:
+                    color: #1a1a1a; 
                     margin-bottom: 25px; 
                     font-size: 24px;
                     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -145,8 +145,8 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                     margin: 40px 0; 
                 }}
                 .btn-recuperar {{ 
-                    background: linear-gradient(135deg,
-                    color:
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
+                    color: #1a1a1a; 
                     padding: 18px 40px; 
                     text-decoration: none; 
                     border-radius: 30px; 
@@ -159,7 +159,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                     letter-spacing: 1px;
                 }}
                 .btn-recuperar:hover {{
-                    background: linear-gradient(135deg,
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
                     transform: translateY(-2px);
                     box-shadow: 0 12px 25px rgba(255, 214, 10, 0.4);
                 }}
@@ -169,11 +169,11 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                     padding: 25px; 
                     border-radius: 15px; 
                     margin: 30px 0; 
-                    color:
+                    color: #1a1a1a; 
                     backdrop-filter: blur(10px);
                 }}
                 .warning strong {{
-                    color:
+                    color: #1a1a1a; 
                     font-size: 18px;
                 }}
                 .warning ul {{
@@ -192,7 +192,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                     word-break: break-all;
                     font-family: 'Courier New', monospace;
                     font-size: 14px;
-                    color:
+                    color: #1a1a1a; 
                     margin: 20px 0;
                 }}
                 .footer {{ 
@@ -209,7 +209,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
                 .security-badge {{
                     display: inline-block;
                     background: rgba(76, 175, 80, 0.2);
-                    color:
+                    color: #1a1a1a; 
                     padding: 8px 16px;
                     border-radius: 20px;
                     font-size: 12px;
@@ -320,7 +320,7 @@ def enviar_email_confirmacao(destinatario_email, destinatario_nome, dados_reserv
 
     
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = f'🎬 Confirmacao de Reserva CineVibe -
+        msg['Subject'] = f'🎬 Confirmacao de Reserva CineVibe - #{dados_reserva["reserva_id"]}'
         msg['From'] = f'CineVibe <{EMAIL_USER}>'
         msg['To'] = destinatario_email
 
@@ -400,7 +400,6 @@ def get_current_user():
         return None
 
 def usar_codigo_desconto_reserva(user_id, codigo, premio_nome, pontos_gastos):
-    """Função chamada quando um código de desconto é usado numa reserva"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -429,7 +428,6 @@ def usar_codigo_desconto_reserva(user_id, codigo, premio_nome, pontos_gastos):
         return False
 
 def criar_tabelas_resgates():
-    """Cria as tabelas necessárias para o sistema de resgates se não existirem"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -483,7 +481,7 @@ def criar_tabelas_resgates():
         return False
 
 def calcular_pontos_usuario(user_id, cursor):
-    """Calcula os pontos disponíveis do usuário (ganhos - gastos)"""
+   
     try:
         cursor.execute("""
             SELECT COUNT(*) as total
@@ -2077,16 +2075,16 @@ def perfil():
    
         if pontos < 500:
             nivel = "Iniciante"
-            nivel_cor = "linear-gradient(135deg,
+            nivel_cor = "linear-gradient(135deg, #FFD60A, #FFA500)"
         elif pontos < 1000:
             nivel = "Cinéfilo"
-            nivel_cor = "linear-gradient(135deg,
+            nivel_cor = "linear-gradient(135deg, #FFD60A, #FFA500)"
         elif pontos < 2000:
             nivel = "Expert"
-            nivel_cor = "linear-gradient(135deg,
+            nivel_cor = "linear-gradient(135deg, #FFD60A, #FFA500)"
         else:
             nivel = "Lenda"
-            nivel_cor = "linear-gradient(135deg,
+            nivel_cor = "linear-gradient(135deg, #FFD60A, #FFA500)"
 
         stats = {
             'filmes_vistos': total_filmes_vistos,
@@ -2396,16 +2394,16 @@ def resgatar_recompensa():
             
             corpo_email = f"""
             <html>
-            <body style="font-family: Arial, sans-serif; background-color:
-                <div style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg,
-                    <h1 style="color:
+            <body style="font-family: Arial, sans-serif; background-color: #f4f4f4;"
+                <div style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0d1117, #161b22); 
+                    <h1 style="color: #1a1a1a; 
                     
                     <p style="font-size: 18px; text-align: center; margin-bottom: 30px;">
                         Resgataste com sucesso a tua recompensa:
                     </p>
                     
                     <div style="background: rgba(255, 214, 10, 0.1); border: 2px solid
-                        <h2 style="color:
+                        <h2 style="color: #1a1a1a; 
                     </div>
                     
                     <p style="text-align: center; font-size: 16px; margin: 30px 0;">
@@ -2417,8 +2415,8 @@ def resgatar_recompensa():
                     </div>
                     
                     <div style="background: rgba(78, 168, 222, 0.1); border-left: 4px solid
-                        <h3 style="color:
-                        <ol style="color:
+                        <h3 style="color: #1a1a1a; 
+                        <ol style="color: #1a1a1a; 
                             <li>Faz a tua reserva normalmente</li>
                             <li>Na página de pagamento, introduz o código no campo "Código de Desconto"</li>
                             <li>Clica em "Aplicar" para ver o desconto</li>
@@ -2426,13 +2424,13 @@ def resgatar_recompensa():
                         </ol>
                     </div>
                     
-                    <p style="text-align: center; color:
+                    <p style="text-align: center; color: #1a1a1a; 
                         ⏰ Este código expira em 30 dias<br>
                         📧 Guarda este email para não perderes o código
                     </p>
                     
                     <div style="text-align: center; margin-top: 30px;">
-                        <a href="http://localhost:5000/filmes" style="background: linear-gradient(135deg,
+                        <a href="http://localhost:5000/filmes" style="background: linear-gradient(135deg, #0d1117, #161b22); 
                             Ver Filmes Disponíveis
                         </a>
                     </div>
@@ -3265,7 +3263,6 @@ def admin_filme_detalhe(id_filme):
 
 @app.route('/admin/filmes/<int:filme_id>/cinema/<int:cinema_id>/tipos-sessao-disponiveis')
 def admin_get_tipos_sessao_disponiveis(filme_id, cinema_id):
-    """Busca tipos de sessão que não estão visíveis para um cinema específico"""
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -3304,7 +3301,6 @@ def admin_get_tipos_sessao_disponiveis(filme_id, cinema_id):
 
 @app.route('/admin/adicionar-tipo-sessao-cinema', methods=['POST'])
 def admin_adicionar_tipo_sessao_cinema():
-    """Adiciona um tipo de sessão a um cinema (torna visível criando um horário dummy)"""
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -3375,7 +3371,6 @@ def admin_adicionar_tipo_sessao_cinema():
 
 @app.route('/admin/remover-tipo-sessao-cinema', methods=['POST'])
 def admin_remover_tipo_sessao_cinema():
-    """Remove um tipo de sessão de um cinema (remove reservas e horários associados)"""
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -3450,7 +3445,6 @@ def admin_remover_tipo_sessao_cinema():
 
 @app.route('/admin/filmes/<int:id_filme>/cinema/<int:cinema_id>/tipo/<int:tipo_id>/sala')
 def admin_get_sala_tipo_sessao(id_filme, cinema_id, tipo_id):
-    """Busca a sala configurada para um tipo de sessão específico"""
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -3561,7 +3555,7 @@ def admin_adicionar_tipo_sessao():
 
 @app.route('/admin/tipos-sessao/<int:tipo_id>/editar', methods=['POST'])
 def admin_editar_tipo_sessao(tipo_id):
-    """Edita um tipo de sessão existente"""
+    
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -3605,7 +3599,7 @@ def admin_editar_tipo_sessao(tipo_id):
 
 @app.route('/admin/tipos-sessao/<int:tipo_id>/remover', methods=['POST'])
 def admin_remover_tipo_sessao(tipo_id):
-    """Remove um tipo de sessão"""
+  
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -3647,7 +3641,7 @@ def admin_remover_tipo_sessao(tipo_id):
 
 @app.route('/admin/horarios/disponiveis', methods=['GET'])
 def admin_get_horarios_disponiveis():
-    """Busca todos os horários disponíveis na base de dados"""
+
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -3686,7 +3680,7 @@ def admin_get_horarios_disponiveis():
 
 @app.route('/admin/horarios/adicionar', methods=['POST'])
 def admin_adicionar_horario_geral():
-    """Adiciona um novo horário com associação completa"""
+   
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -3773,7 +3767,7 @@ def admin_adicionar_horario_geral():
 
 @app.route('/admin/horarios/<int:horario_id>/editar', methods=['POST'])
 def admin_editar_horario(horario_id):
-    """Edita um horário existente - NOVA IMPLEMENTAÇÃO para editar sessões específicas"""
+    
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -3850,7 +3844,6 @@ def admin_editar_horario(horario_id):
 
 @app.route('/admin/tipo-sessao/alterar-sala', methods=['POST'])
 def admin_alterar_sala_tipo_sessao():
-    """Altera a sala para todas as sessões de um tipo específico"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -3896,7 +3889,6 @@ def admin_alterar_sala_tipo_sessao():
 
 @app.route('/admin/horarios/<int:sessao_id>/editar-simples', methods=['POST'])
 def admin_editar_horario_simples(sessao_id):
-    """Edita apenas a hora de uma sessão específica"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -3988,7 +3980,6 @@ def admin_editar_horario_simples(sessao_id):
 
 @app.route('/admin/horarios/remover-multiplos-sessoes', methods=['POST'])
 def admin_remover_multiplos_sessoes():
-    """Remove múltiplas sessões de uma vez"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -4035,7 +4026,6 @@ def admin_remover_multiplos_sessoes():
 
 @app.route('/admin/horarios/<int:horario_id>/remover', methods=['POST'])
 def admin_remover_horario(horario_id):
-    """Remove um horário"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -4077,7 +4067,6 @@ def admin_remover_horario(horario_id):
 
 @app.route('/admin/salas/adicionar', methods=['POST'])
 def admin_adicionar_sala():
-    """Adiciona uma nova sala"""
     if 'user_id' not in session:
         flash('Não autorizado', 'erro')
         return redirect(url_for('login'))
@@ -4134,7 +4123,6 @@ def admin_adicionar_sala():
 
 @app.route('/admin/salas/<int:sala_id>/editar', methods=['POST'])
 def admin_editar_sala(sala_id):
-    """Edita uma sala existente"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -4184,7 +4172,6 @@ def admin_editar_sala(sala_id):
 
 @app.route('/admin/salas/<int:sala_id>/dados')
 def admin_get_dados_sala(sala_id):
-    """Busca dados de uma sala específica para edição"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -4227,7 +4214,6 @@ def admin_get_dados_sala(sala_id):
 
 @app.route('/admin/salas/<int:sala_id>/remover', methods=['POST'])
 def admin_remover_sala(sala_id):
-    """Remove uma sala"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -4266,7 +4252,6 @@ def admin_remover_sala(sala_id):
 
 @app.route('/admin/sessoes/adicionar', methods=['POST'])
 def admin_adicionar_sessao():
-    """Adiciona uma nova sessão (horarios_sessao)"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -4322,7 +4307,6 @@ def admin_adicionar_sessao():
 
 @app.route('/admin/sessoes/<int:sessao_id>/remover', methods=['POST'])
 def admin_remover_sessao(sessao_id):
-    """Remove uma sessão"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -4363,7 +4347,6 @@ def admin_remover_sessao(sessao_id):
 
 @app.route('/admin/filmes/<int:id_filme>/cinema/<int:cinema_id>/salas')
 def admin_get_salas_cinema(id_filme, cinema_id):
-    """Busca TODAS as salas disponíveis para um cinema específico"""
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -4405,7 +4388,7 @@ def admin_get_salas_cinema(id_filme, cinema_id):
 
 @app.route('/admin/salas/buscar')
 def admin_buscar_sala_por_nome():
-    """Busca dados de uma sala pelo nome e cinema"""
+ 
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -4452,7 +4435,7 @@ def admin_buscar_sala_por_nome():
 
 @app.route('/admin/filmes/<int:id_filme>/cinema/<int:cinema_id>/tipo/<int:tipo_id>/horarios')
 def admin_get_horarios_tipo_sessao(id_filme, cinema_id, tipo_id):
-    """Busca horários disponíveis para um tipo de sessão específico"""
+   
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -4563,7 +4546,6 @@ def admin_editar_filme(id_filme):
 
 @app.route('/admin/filmes/<int:id_filme>/avaliacoes')
 def admin_filme_avaliacoes(id_filme):
-    """Página para ver todas as avaliações de um filme"""
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
@@ -4635,7 +4617,7 @@ def admin_filme_avaliacoes(id_filme):
 
 @app.route('/admin/avaliacoes/<int:avaliacao_id>/remover', methods=['POST'])
 def admin_remover_avaliacao(avaliacao_id):
-    """Remove uma avaliação específica"""
+
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
     
@@ -4823,7 +4805,7 @@ def admin_editar_papel_ator(id_filme):
 
 @app.route('/admin/filmes/<int:id_filme>/adicionar-genero', methods=['POST'])
 def admin_adicionar_genero_filme(id_filme):
-    """Adicionar género ao filme"""
+
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
     
@@ -5363,7 +5345,7 @@ def admin_atualizar_sala_horario(id_filme):
 
 @app.route('/admin/generos')
 def admin_generos():
-    """Página de gestão de géneros"""
+  
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
@@ -5398,7 +5380,7 @@ def admin_generos():
 
 @app.route('/admin/generos/adicionar', methods=['POST'])
 def admin_adicionar_genero():
-    """Adicionar novo género"""
+  
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
     
@@ -5434,7 +5416,7 @@ def admin_adicionar_genero():
 
 @app.route('/admin/generos/<int:genero_id>/editar', methods=['POST'])
 def admin_editar_genero(genero_id):
-    """Editar género existente"""
+    
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
     
@@ -5469,7 +5451,7 @@ def admin_editar_genero(genero_id):
 
 @app.route('/admin/generos/<int:genero_id>/remover', methods=['POST'])
 def admin_remover_genero(genero_id):
-    """Remover género"""
+
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'}), 401
     
@@ -5505,7 +5487,7 @@ def admin_remover_genero(genero_id):
 
 @app.route('/admin/generos/<int:genero_id>/filmes')
 def admin_genero_filmes(genero_id):
-    """Ver filmes de um género específico"""
+
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
@@ -5909,7 +5891,6 @@ def admin_adicionar_usuario():
 
 @app.route('/admin/usuarios/<int:usuario_id>/dados')
 def admin_usuario_dados(usuario_id):
-    """API endpoint para obter dados do usuário para edição"""
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -5937,7 +5918,6 @@ def admin_usuario_dados(usuario_id):
 
 @app.route('/admin/usuarios/<int:usuario_id>/detalhes')
 def admin_usuario_detalhes(usuario_id):
-    """API endpoint para obter detalhes completos do usuário"""
     if 'user_id' not in session:
         return jsonify({'error': 'Não autorizado'}), 401
     
@@ -6019,7 +5999,6 @@ def admin_usuario_detalhes(usuario_id):
 
 @app.route('/admin/usuarios/remover/<int:usuario_id>', methods=['POST'])
 def admin_remover_usuario(usuario_id):
-    """Remover usuário (apenas se não for admin)"""
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
@@ -6154,7 +6133,6 @@ def admin_reservas():
 
 @app.route('/admin/reservas/cancelar/<int:reserva_id>', methods=['POST'])
 def admin_cancelar_reserva(reserva_id):
-    """Eliminar/cancelar uma reserva"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'})
     
@@ -6195,7 +6173,6 @@ def admin_cancelar_reserva(reserva_id):
 
 @app.route('/admin/reservas/confirmar/<int:reserva_id>', methods=['POST'])
 def admin_confirmar_reserva(reserva_id):
-    """Confirmar uma reserva pendente"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autenticado'})
     
@@ -6377,7 +6354,6 @@ def logout():
 
 @app.route('/debug_login_afonso')
 def debug_login_afonso():
-    """Rota de debug para forçar login do Afonso"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -6805,7 +6781,7 @@ def contactos():
 
 @app.route('/api/process-payment', methods=['POST'])
 def process_payment():
-    """Processar pagamento - VERSÃO SEM CONSTRAINTS"""
+   
     try:
         app.logger.info("🚀 INICIANDO process_payment")
         data = request.get_json()
@@ -7004,10 +6980,6 @@ def process_payment():
 
 @app.route('/confirmar_pagamento_sessao', methods=['POST'])
 def confirmar_pagamento_sessao():
-    """
-    Confirma pagamento de sessão exclusiva.
-    Permite reservas tanto para utilizadores logados quanto para convidados.
-    """
     try:
         data = request.get_json()
         app.logger.info(f"📦 Dados recebidos: {data}")
@@ -7169,10 +7141,7 @@ def confirmar_pagamento_sessao():
 
 @app.route('/confirmar_pagamento_reserva', methods=['POST'])
 def confirmar_pagamento_reserva():
-    """
-    Processa o pagamento e confirma a reserva de bilhetes.
-    Só depois do pagamento é que os dados são gravados na BD.
-    """
+  
     try:
         data = request.get_json()
         app.logger.info(f"📦 Dados recebidos para pagamento: {data}")
@@ -7868,10 +7837,7 @@ def gerar_layout_sala(filas, lugares_por_fila, lugares_ocupados, lugares_acessiv
 
 @app.route('/confirmar_reserva', methods=['POST'])
 def confirmar_reserva():
-    """
-    NOVA MECÂNICA DE RESERVA - ORDEM CORRIGIDA
-    Recebe dados do frontend e guarda na base de dados sem complicações
-    """
+
     try:
         if request.is_json:
             data = request.get_json()
@@ -8085,7 +8051,6 @@ def confirmar_reserva():
 
 @app.route('/teste-email')
 def teste_email():
-    """Rota para testar o envio de emails - REMOVER EM PRODUÇÃO"""
     try:
         app.logger.info("🔍 Testando conexão SMTP...")
         
@@ -8375,7 +8340,7 @@ def sessao_vintage():
 
 @app.route('/reserva_sessao_tematica')
 def reserva_sessao_tematica():
-    """Rota para reserva de sessões temáticas com o mesmo sistema da reserva normal"""
+
     tipo_sessao = request.args.get('tipo')
     filme_id = request.args.get('filme_id')
     data_sessao = request.args.get('data')
@@ -8392,7 +8357,7 @@ def reserva_sessao_tematica():
 
 @app.route('/pagamento_sessao_tematica')
 def pagamento_sessao_tematica():
-    """Página de pagamento para sessões temáticas"""
+
     tipo_sessao = request.args.get('tipo')
     filme_id = request.args.get('filme_id')
     data_sessao = request.args.get('data')
@@ -8472,7 +8437,7 @@ def pagamento_sessao_tematica():
 
 @app.route('/api/processar-pagamento-sessao-tematica', methods=['POST'])
 def api_processar_pagamento_sessao_tematica():
-    """API para processar pagamento de sessão temática"""
+
     try:
         data = request.get_json()
         app.logger.info(f"Dados recebidos para pagamento sessão temática: {data}")
@@ -8568,7 +8533,7 @@ def api_processar_pagamento_sessao_tematica():
 
 @app.route('/sessao_romance')
 def sessao_romance():
-    """Sessão Romance - Todos os filmes com género Romance"""
+
     
     filmes_romance = []
     
@@ -8645,7 +8610,7 @@ def sessao_premium():
 
 @app.route('/selecao_bar')
 def selecao_bar():
-    """Página específica de seleção do bar durante o processo de reserva"""
+
     
     conn = None
     try:
@@ -8801,7 +8766,7 @@ def selecao_bar():
 
 @app.route('/api/menu_produtos/<int:menu_id>')
 def api_menu_produtos(menu_id):
-    """API para buscar produtos disponíveis de um menu"""
+
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -8861,7 +8826,7 @@ def api_menu_produtos(menu_id):
 
 @app.route('/selecao_toppings')
 def selecao_toppings():
-    """Página de seleção de toppings após escolher produtos do bar"""
+
     
     conn = None
     try:
@@ -9101,7 +9066,7 @@ def selecao_toppings():
 
 @app.route('/bar')
 def bar():
-    """Página principal do bar com menus e toppings da base de dados"""
+   
     
     try:
         conn = get_db_connection()
@@ -9165,7 +9130,7 @@ def bar():
                              avatar=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png'))
 @app.route('/resumo_reserva', methods=['GET', 'POST'])
 def resumo_reserva():
-    """Página de resumo da reserva após seleção do bar"""
+
     
     if request.method == 'POST':
         nome_cliente = request.form.get('guest_name', '').strip()
@@ -9320,7 +9285,7 @@ def resumo_reserva():
                                 detalhes_texto += f" + Toppings: {', '.join(toppings_nomes)}"
                             
                             produtos_bar_detalhados.append({
-                                'nome': f"{produto_info['produto']} (
+                                'nome': f"{produto_info['produto']} (Menu)",
                                 'detalhes': detalhes_texto,
                                 'quantidade': 1,
                                 'preco_unitario': preco_unitario,
@@ -9717,7 +9682,7 @@ def api_pesquisa():
 
 @app.route('/api/check_toppings')
 def api_check_toppings():
-    """Verifica se um produto/menu tem toppings associados"""
+
     produto_id = request.args.get('produto_id')
     tipo = request.args.get('tipo', 'bar')
     
@@ -10472,7 +10437,7 @@ def admin_remover_produto(produto_id):
 
 @app.route('/admin/bar/menus/<int:menu_id>/dados')
 def admin_menu_dados(menu_id):
-    """Retorna os dados de um menu em JSON para edição"""
+   
     if 'user_id' not in session:
         return jsonify({'error': 'Não autenticado'}), 401
     
@@ -10798,7 +10763,7 @@ def admin_adicionar_topping():
 
 @app.route('/admin/bar/toppings/<int:topping_id>/dados')
 def admin_topping_dados(topping_id):
-    """Retorna os dados de um topping em JSON para edição"""
+
     if 'user_id' not in session:
         return jsonify({'error': 'Não autenticado'}), 401
     
@@ -11393,7 +11358,7 @@ def api_avatares():
 
 @app.route('/api/remover-cinema-favorito', methods=['POST'])
 def api_remover_cinema_favorito():
-    """API para remover cinema dos favoritos"""
+  
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
     
@@ -11428,7 +11393,7 @@ def api_remover_cinema_favorito():
 
 @app.route('/api/atualizar-nome', methods=['POST'])
 def api_atualizar_nome():
-    """API para atualizar o nome do usuário"""
+ 
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
     
@@ -11469,7 +11434,7 @@ def api_atualizar_nome():
 
 @app.route('/api/avatar-categorias')
 def api_avatar_categorias():
-    """API para carregar categorias de avatares para o modal"""
+  
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -11542,7 +11507,7 @@ def api_avatar_categorias():
 
 @app.route('/api/atualizar-avatar', methods=['POST'])
 def api_atualizar_avatar():
-    """API para atualizar o avatar do usuário"""
+  
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
     
@@ -11581,7 +11546,6 @@ def api_atualizar_avatar():
 
 @app.route('/api/alterar-senha', methods=['POST'])
 def api_alterar_senha():
-    """API para alterar a senha do usuário"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Usuário não autenticado'})
     
@@ -11623,7 +11587,7 @@ def api_alterar_senha():
 
 @app.route('/pagamento-exclusivo')
 def pagamento_exclusivo():
-    """Página de pagamento para sessões exclusivas"""
+
     
     logged_in = 'user_id' in session
     avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
@@ -11634,7 +11598,7 @@ def pagamento_exclusivo():
 
 @app.route('/api/processar-pagamento-exclusivo', methods=['POST'])
 def api_processar_pagamento_exclusivo():
-    """API para processar pagamento de sessão exclusiva"""
+  
     try:
         data = request.get_json()
         app.logger.info(f"Dados recebidos para pagamento exclusivo: {data}")
@@ -11729,9 +11693,8 @@ def api_processar_pagamento_exclusivo():
         return jsonify({'success': False, 'message': f'Erro ao processar pagamento: {str(e)}'})
 
 def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, dados_reserva):
-    """
-    Envia email de confirmação para reserva exclusiva
-    """
+  
+   
     try:
         app.logger.info(f"Enviando email de confirmação exclusiva para: {destinatario_email}")
         
@@ -11740,7 +11703,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
             return False
 
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = f'🎬 Confirmação de Reserva Exclusiva CineVibe -
+        msg['Subject'] = f'🎬 Confirmação de Reserva Exclusiva CineVibe - #{dados_reserva["reserva_id"]}'
         msg['From'] = f'CineVibe <{EMAIL_USER}>'
         msg['To'] = destinatario_email
 
@@ -11766,7 +11729,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
             <style>
                 body {{ 
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                    background: linear-gradient(135deg,
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
                     margin: 0; 
                     padding: 20px; 
                     color: white;
@@ -11774,19 +11737,19 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
                 .container {{ 
                     max-width: 600px; 
                     margin: 0 auto; 
-                    background: linear-gradient(135deg,
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
                     border-radius: 20px; 
                     overflow: hidden; 
                     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
                     border: 2px solid rgba(255, 214, 10, 0.3);
                 }}
                 .header {{ 
-                    background: linear-gradient(135deg,
+                    background: linear-gradient(135deg, #0d1117, #161b22); 
                     padding: 40px 30px; 
                     text-align: center; 
                 }}
                 .header h1 {{ 
-                    color:
+                    color: #1a1a1a; 
                     margin: 0; 
                     font-size: 28px; 
                     font-weight: 900; 
@@ -11795,7 +11758,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
                     padding: 40px 30px; 
                 }}
                 .content h2 {{ 
-                    color:
+                    color: #1a1a1a; 
                     margin-bottom: 25px; 
                     font-size: 24px;
                 }}
@@ -11818,7 +11781,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
                     font-weight: 600;
                 }}
                 .detail-value {{
-                    color:
+                    color: #1a1a1a; 
                     font-weight: 700;
                 }}
                 .total-row {{
@@ -11916,7 +11879,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
 
 @app.route('/api/recuperar-senha', methods=['POST'])
 def api_recuperar_senha():
-    """API para enviar instruções de recuperação de senha por email"""
+   
     try:
         data = request.get_json()
         email = data.get('email', '').strip().lower()
@@ -12013,7 +11976,7 @@ def api_filmes():
 
 @app.route('/api/filmes/<genero>')
 def api_filmes_por_genero(genero):
-    """API para buscar filmes por gênero específico"""
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     

@@ -314,14 +314,12 @@ a {
     padding: 15px 20px;
     margin-bottom: 20px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 5px 15px rgba(78, 168, 222, 0.2);
     transition: all 0.3s ease;
     margin-left: 58px;
 }
 
 .email-container:hover {
     border-color: #4EA8DE;
-    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.3);
     transform: translateY(-2px);
 }
 
@@ -545,7 +543,6 @@ a {
     margin-bottom: 8px;
     position: relative;
     z-index: 2;
-    text-shadow: 0 0 30px rgba(255, 214, 10, 0.5);
     line-height: 1;
 }
 
@@ -631,7 +628,6 @@ a {
     z-index: 2;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
     overflow: hidden;
     font-size: 0.85rem;
 }
@@ -653,7 +649,6 @@ a {
 
 .btn-recompensas:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(255, 214, 10, 0.4);
     background: linear-gradient(135deg, #FFB703, #FF9500, #FF8C00);
 }
 
@@ -701,38 +696,11 @@ a {
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     height: 330px;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);
-}
-
-.filme-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(78, 168, 222, 0.1));
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 1;
 }
 
 .filme-card:hover {
     transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(255, 214, 10, 0.2);
-}
-
-.filme-card:hover::before {
-    opacity: 1;
-}
-
-.filme-card[data-avaliado="true"]:hover {
-    box-shadow: 0 20px 40px rgba(78, 168, 222, 0.3);
-}
-
-.filme-card[data-avaliado="true"]:hover::before {
-    background: linear-gradient(135deg, rgba(78, 168, 222, 0.15), rgba(255, 214, 10, 0.1));
 }
 
 .avaliacao-badge {

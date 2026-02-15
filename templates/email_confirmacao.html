@@ -3,68 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="supported-color-schemes" content="dark">
     <title>Confirmação de Reserva | CineVibe</title>
     <style>
+        :root {
+            color-scheme: dark;
+            supported-color-schemes: dark;
+        }
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #0D1B2A;
-            color: white;
+            font-family: 'Arial', sans-serif !important;
+            background-color: #0D1B2A !important;
+            color: white !important;
             margin: 0;
             padding: 20px;
             line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
         }
         .email-container {
             max-width: 600px;
             margin: 0 auto;
-            background: linear-gradient(135deg, #1B263B, #0D1B2A);
+            background: linear-gradient(135deg, #1B263B, #0D1B2A) !important;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid #FFD60A;
+            border: 2px solid #FFD60A !important;
         }
         .header {
             text-align: center;
             margin-bottom: 30px;
-            border-bottom: 3px solid #FFD60A;
+            border-bottom: 3px solid #FFD60A !important;
             padding-bottom: 20px;
         }
         .logo {
-            color: #FFD60A;
+            color: #FFD60A !important;
             font-size: 32px;
             margin: 10px 0;
             font-weight: bold;
         }
         .subtitle {
-            color: #4EA8DE;
+            color: #4EA8DE !important;
             font-size: 20px;
             margin-bottom: 10px;
             font-weight: 600;
         }
         .success-message {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10B981;
+            background: rgba(16, 185, 129, 0.2) !important;
+            color: #10B981 !important;
             padding: 15px;
             border-radius: 10px;
             text-align: center;
             margin: 20px 0;
-            border: 2px solid #10B981;
+            border: 2px solid #10B981 !important;
             font-weight: bold;
             font-size: 18px;
         }
         .reserva-info {
-            background: rgba(78, 168, 222, 0.15);
-            border: 2px solid rgba(78, 168, 222, 0.4);
+            background: rgba(78, 168, 222, 0.15) !important;
+            border: 2px solid rgba(78, 168, 222, 0.4) !important;
             padding: 25px;
             border-radius: 15px;
             margin: 25px 0;
         }
         .section-title {
-            color: #FFD60A;
+            color: #FFD60A !important;
             font-size: 22px;
             font-weight: bold;
             margin-bottom: 20px;
             text-align: center;
-            border-bottom: 2px solid #FFD60A;
+            border-bottom: 2px solid #FFD60A !important;
             padding-bottom: 10px;
         }
         .info-row {
@@ -73,60 +81,60 @@
             align-items: center;
             margin: 15px 0;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
         }
         .info-row:last-child {
-            border-bottom: none;
+            border-bottom: none !important;
         }
         .info-label {
-            color: #B8C5D1;
+            color: #B8C5D1 !important;
             font-weight: bold;
             font-size: 16px;
         }
         .info-value {
-            color: #FFFFFF;
+            color: #FFFFFF !important;
             font-weight: 700;
             font-size: 16px;
             text-align: right;
         }
         .highlight-value {
-            color: #FFD60A;
+            color: #FFD60A !important;
             font-size: 18px;
         }
         .lugares-section {
-            background: rgba(255, 214, 10, 0.1);
-            border: 2px solid rgba(255, 214, 10, 0.4);
+            background: rgba(255, 214, 10, 0.1) !important;
+            border: 2px solid rgba(255, 214, 10, 0.4) !important;
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
             text-align: center;
         }
         .lugares-title {
-            color: #FFD60A;
+            color: #FFD60A !important;
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
         }
         .lugares-display {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.4) !important;
             border-radius: 8px;
             padding: 15px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', monospace !important;
             font-size: 20px;
             font-weight: bold;
-            color: #FFD60A;
+            color: #FFD60A !important;
             letter-spacing: 2px;
         }
         .total-section {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(78, 168, 222, 0.2));
-            border: 3px solid #FFD60A;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(78, 168, 222, 0.2)) !important;
+            border: 3px solid #FFD60A !important;
             border-radius: 15px;
             padding: 25px;
             margin: 25px 0;
             text-align: center;
         }
         .total-label {
-            color: #B8C5D1;
+            color: #B8C5D1 !important;
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 10px;
@@ -134,12 +142,12 @@
         .total-amount {
             font-size: 32px;
             font-weight: 900;
-            color: #FFD60A;
+            color: #FFD60A !important;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         .bar-section {
-            background: rgba(255, 107, 107, 0.15);
-            border: 2px solid rgba(255, 107, 107, 0.4);
+            background: rgba(255, 107, 107, 0.15) !important;
+            border: 2px solid rgba(255, 107, 107, 0.4) !important;
             border-radius: 15px;
             padding: 25px;
             margin: 25px 0;
@@ -149,56 +157,70 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
             font-size: 16px;
         }
         .bar-item:last-child {
-            border-bottom: none;
+            border-bottom: none !important;
         }
         .bar-item-name {
-            color: #FFFFFF;
+            color: #FFFFFF !important;
             font-weight: 600;
         }
         .bar-item-price {
-            color: #FFD60A;
+            color: #FFD60A !important;
             font-weight: 700;
         }
         .qr-section {
-            background: rgba(16, 185, 129, 0.15);
-            border: 2px solid #10B981;
+            background: rgba(16, 185, 129, 0.15) !important;
+            border: 2px solid #10B981 !important;
             border-radius: 15px;
             padding: 25px;
             margin: 25px 0;
             text-align: center;
         }
         .qr-title {
-            color: #10B981;
+            color: #10B981 !important;
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 15px;
         }
         .qr-code {
-            background: #FFFFFF;
-            color: #0D1B2A;
+            background: #FFFFFF !important;
+            color: #0D1B2A !important;
             padding: 15px 25px;
             border-radius: 10px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', monospace !important;
             font-size: 24px;
             font-weight: 900;
             letter-spacing: 3px;
             margin: 15px 0;
             display: inline-block;
-            border: 3px solid #10B981;
+            border: 3px solid #10B981 !important;
+        }
+        .qr-image-container {
+            background: white !important;
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+        .qr-image {
+            display: block;
+            width: 200px;
+            height: 200px;
+            max-width: 100%;
+            height: auto;
         }
         .instructions {
-            background: rgba(78, 168, 222, 0.15);
-            border-left: 5px solid #4EA8DE;
+            background: rgba(78, 168, 222, 0.15) !important;
+            border-left: 5px solid #4EA8DE !important;
             padding: 20px;
             margin: 25px 0;
             border-radius: 0 10px 10px 0;
         }
         .instructions h4 {
-            color: #4EA8DE;
+            color: #4EA8DE !important;
             margin-bottom: 15px;
             font-size: 18px;
         }
@@ -207,7 +229,7 @@
             padding: 0;
         }
         .instructions li {
-            color: #B8C5D1;
+            color: #B8C5D1 !important;
             margin: 10px 0;
             padding-left: 25px;
             position: relative;
@@ -217,7 +239,7 @@
             content: '✓';
             position: absolute;
             left: 0;
-            color: #10B981;
+            color: #10B981 !important;
             font-weight: bold;
             font-size: 18px;
         }
@@ -225,11 +247,11 @@
             text-align: center;
             margin-top: 30px;
             padding-top: 25px;
-            border-top: 2px solid rgba(255, 214, 10, 0.4);
-            color: #B8C5D1;
+            border-top: 2px solid rgba(255, 214, 10, 0.4) !important;
+            color: #B8C5D1 !important;
         }
         .footer-logo {
-            color: #FFD60A;
+            color: #FFD60A !important;
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 15px;
@@ -237,22 +259,133 @@
         .footer-text {
             font-size: 16px;
             margin-bottom: 15px;
+            color: #B8C5D1 !important;
         }
         .footer strong {
-            color: #FFD60A;
+            color: #FFD60A !important;
         }
         .contact-info {
             margin: 20px 0;
             padding: 15px;
-            background: rgba(78, 168, 222, 0.1);
+            background: rgba(78, 168, 222, 0.1) !important;
             border-radius: 10px;
             font-size: 14px;
+            color: #B8C5D1 !important;
         }
         .disclaimer {
             font-size: 12px;
-            color: #78909C;
+            color: #78909C !important;
             margin-top: 20px;
             font-style: italic;
+        }
+        
+        a {
+            color: #4EA8DE !important;
+            text-decoration: none;
+        }
+        
+        * {
+            -webkit-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .email-container {
+                padding: 15px;
+                border-radius: 10px;
+            }
+            .logo {
+                font-size: 24px;
+            }
+            .subtitle {
+                font-size: 16px;
+            }
+            .success-message {
+                font-size: 14px;
+                padding: 12px;
+            }
+            .section-title {
+                font-size: 18px;
+            }
+            .reserva-info {
+                padding: 15px;
+            }
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                padding: 10px 0;
+            }
+            .info-label {
+                font-size: 14px;
+                margin-bottom: 3px;
+            }
+            .info-value {
+                font-size: 14px;
+                text-align: left;
+                word-break: break-word;
+            }
+            .highlight-value {
+                font-size: 15px;
+            }
+            .lugares-display {
+                font-size: 16px;
+                padding: 12px;
+                letter-spacing: 1px;
+                word-break: break-word;
+            }
+            .total-label {
+                font-size: 16px;
+            }
+            .total-amount {
+                font-size: 24px;
+            }
+            .bar-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                font-size: 14px;
+            }
+            .bar-item-name,
+            .bar-item-price {
+                font-size: 14px;
+            }
+            .qr-code {
+                font-size: 18px;
+                padding: 12px 15px;
+                letter-spacing: 2px;
+                word-break: break-all;
+            }
+            .qr-image-container {
+                padding: 10px;
+            }
+            .qr-image {
+                width: 150px;
+                height: 150px;
+            }
+            .instructions {
+                padding: 15px;
+            }
+            .instructions h4 {
+                font-size: 16px;
+            }
+            .instructions li {
+                font-size: 13px;
+                padding-left: 20px;
+            }
+            .footer-logo {
+                font-size: 20px;
+            }
+            .footer-text {
+                font-size: 14px;
+            }
+            .contact-info {
+                font-size: 12px;
+                word-break: break-word;
+            }
         }
     </style>
 </head>
@@ -261,7 +394,7 @@
         
         <div class="header">
             <div class="logo">🎬 CineVibe</div>
-            <div class="subtitle">Confirmação de Reserva #{{ reserva_id }}</div>
+            <div class="subtitle">Confirmação de Reserva</div>
         </div>
 
         <div class="success-message">
@@ -339,18 +472,19 @@
         </div>
 
         <div class="qr-section">
-            <div class="qr-title"> Código da Reserva</div>
-            <div class="qr-code">#{{ reserva_id }}</div>
-            <div style="color: #B8C5D1; margin-top: 10px;">
-                Apresente este código na bilheteira ou use este email como comprovativo
+            <div class="qr-title">📱 QR Code da Reserva</div>
+            <div class="qr-image-container">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-{{ reserva_id }}" alt="QR Code da Reserva" class="qr-image">
+            </div>
+            <div style="color: #B8C5D1; margin-top: 5px; font-size: 14px;">
+                Apresente este QR Code na bilheteira ou use este email como comprovativo
             </div>
         </div>
 
         <div class="instructions">
-            <h4> Instruções Importantes:</h4>
+            <h4>📋 Instruções Importantes:</h4>
             <ul>
-                <li>Chegue ao cinema 30 minutos antes da sessão</li>
-                <li>Apresente este email ou o código #{{ reserva_id }} na bilheteira</li>
+                <li>Apresente o QR Code na bilheteira</li>
                 <li>Traga um documento de identificação válido</li>
                 <li>Os lugares ficam reservados até 15 minutos após o início da sessão</li>
                 {% if bar_items and bar_items|length > 0 %}

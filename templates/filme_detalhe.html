@@ -270,29 +270,37 @@
                         {% if filme.rotten_tomatoes_score %}
                         <div class="avaliacao-item">
                             <div class="info-label">
-                                <img src="{{ url_for('static', filename='imgs/icons/rotten-tomatoes.png') }}" alt="Rotten Tomatoes" class="rating-icon">
-                                
-                                {% set rt_score = filme.rotten_tomatoes_score|int %}
-                                {% if rt_score >= 75 %}
-                                    <span class="badge-quality fresh-badge">Fresh</span>
-                                {% elif rt_score >= 60 %}
-                                    <span class="badge-quality mid-badge">Fresh</span>
-                                {% else %}
-                                    <span class="badge-quality rotten-badge">Rotten</span>
-                                {% endif %}
+                                <img src="{{ url_for('static', filename='imgs/Rotten_Tomatoes.svg-removebg-preview.png') }}" alt="Rotten Tomatoes" class="rating-logo">
+                                <span class="rating-source-name">Rotten Tomatoes</span>
                             </div>
                             <div class="info-value">
+                                {% set rt_score = filme.rotten_tomatoes_score|int %}
                                 {% if filme.rotten_tomatoes_url %}
                                 <a href="{{ filme.rotten_tomatoes_url }}" target="_blank" rel="noopener" class="rating-link">
                                     <span class="rating-score {% if rt_score >= 75 %}fresh{% elif rt_score >= 60 %}mid{% else %}rotten{% endif %}">
                                         {{ filme.rotten_tomatoes_score }}%
                                     </span>
-                                    <span class="external-link-icon"></span>
+                                    {% if rt_score >= 75 %}
+                                        <span class="badge-quality fresh-badge">Fresh</span>
+                                    {% elif rt_score >= 60 %}
+                                        <span class="badge-quality mid-badge">Fresh</span>
+                                    {% else %}
+                                        <span class="badge-quality rotten-badge">Rotten</span>
+                                    {% endif %}
                                 </a>
                                 {% else %}
-                                <span class="rating-score {% if rt_score >= 75 %}fresh{% elif rt_score >= 60 %}mid{% else %}rotten{% endif %}">
-                                    {{ filme.rotten_tomatoes_score }}%
-                                </span>
+                                <div class="rating-display">
+                                    <span class="rating-score {% if rt_score >= 75 %}fresh{% elif rt_score >= 60 %}mid{% else %}rotten{% endif %}">
+                                        {{ filme.rotten_tomatoes_score }}%
+                                    </span>
+                                    {% if rt_score >= 75 %}
+                                        <span class="badge-quality fresh-badge">Fresh</span>
+                                    {% elif rt_score >= 60 %}
+                                        <span class="badge-quality mid-badge">Fresh</span>
+                                    {% else %}
+                                        <span class="badge-quality rotten-badge">Rotten</span>
+                                    {% endif %}
+                                </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -301,27 +309,37 @@
                         {% if filme.imdb_rating %}
                         <div class="avaliacao-item">
                             <div class="info-label">
-                                <img src="{{ url_for('static', filename='imgs/icons/imdb.png') }}" alt="IMDb" class="rating-icon">
-                                IMDb
-                                {% set imdb_score = filme.imdb_rating|float %}
-                                {% if imdb_score >= 8.0 %}
-                                    <span class="badge-quality imdb-excellent">Excelente</span>
-                                {% elif imdb_score >= 7.0 %}
-                                    <span class="badge-quality imdb-good">Bom</span>
-                                {% elif imdb_score >= 6.0 %}
-                                    <span class="badge-quality imdb-ok">OK</span>
-                                {% else %}
-                                    <span class="badge-quality imdb-low">Baixo</span>
-                                {% endif %}
+                                <img src="{{ url_for('static', filename='imgs/imbd-removebg-preview.png') }}" alt="IMDb" class="rating-logo">
+                                <span class="rating-source-name">IMDb</span>
                             </div>
                             <div class="info-value">
+                                {% set imdb_score = filme.imdb_rating|float %}
                                 {% if filme.imdb_url %}
                                 <a href="{{ filme.imdb_url }}" target="_blank" rel="noopener" class="rating-link">
                                     <span class="rating-score imdb-score">{{ "%.1f"|format(filme.imdb_rating) }}/10</span>
-                                    <span class="external-link-icon"></span>
+                                    {% if imdb_score >= 8.0 %}
+                                        <span class="badge-quality imdb-excellent">Excelente</span>
+                                    {% elif imdb_score >= 7.0 %}
+                                        <span class="badge-quality imdb-good">Bom</span>
+                                    {% elif imdb_score >= 6.0 %}
+                                        <span class="badge-quality imdb-ok">OK</span>
+                                    {% else %}
+                                        <span class="badge-quality imdb-low">Baixo</span>
+                                    {% endif %}
                                 </a>
                                 {% else %}
-                                <span class="rating-score imdb-score">{{ "%.1f"|format(filme.imdb_rating) }}/10</span>
+                                <div class="rating-display">
+                                    <span class="rating-score imdb-score">{{ "%.1f"|format(filme.imdb_rating) }}/10</span>
+                                    {% if imdb_score >= 8.0 %}
+                                        <span class="badge-quality imdb-excellent">Excelente</span>
+                                    {% elif imdb_score >= 7.0 %}
+                                        <span class="badge-quality imdb-good">Bom</span>
+                                    {% elif imdb_score >= 6.0 %}
+                                        <span class="badge-quality imdb-ok">OK</span>
+                                    {% else %}
+                                        <span class="badge-quality imdb-low">Baixo</span>
+                                    {% endif %}
+                                </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -460,9 +478,10 @@
                             <div class="modo-visualizacao">
                                 <div class="card-header-minha">
                                     <div class="usuario-info-minha">
-                                        <img src="{{ url_for('static', filename=avaliacao.usuario_avatar) }}" 
+                                        <img src="{{ url_for('static', filename=avaliacao.usuario_avatar if avaliacao.usuario_avatar else 'imgs/icons/user_icon34-removebg-preview.png') }}" 
                                              alt="Avatar de {{ avaliacao.usuario_nome }}" 
-                                             class="meu-avatar">
+                                             class="meu-avatar"
+                                             onerror="this.src='{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}'">
                                         <div class="minha-info">
                                             <span class="meu-nome">{{ avaliacao.usuario_nome }}</span>
                                             <div class="minha-rating">

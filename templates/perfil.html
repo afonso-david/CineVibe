@@ -452,11 +452,19 @@
                         <div class="pontos-label">PONTOS CINEVIBE</div>
                         <div class="pontos-progress">
                             <div class="progress-bar">
+                                {% if (pontos or 0) >= 5000 %}
+                                <div class="progress-fill" style="width: 100%;"></div>
+                                {% else %}
                                 <div class="progress-fill" style="width: {{ ((pontos or 0) % 1000) / 10 }}%;"></div>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="proximo-nivel">
+                            {% if (pontos or 0) >= 5000 %}
+                            🎉 <span class="pontos-restantes">Nível Máximo Atingido!</span>
+                            {% else %}
                             Próximo nível: <span class="pontos-restantes">{{ 1000 - ((pontos or 0) % 1000) }}</span> pontos
+                            {% endif %}
                         </div>
                         <button class="btn-recompensas">
                             <i class="fas fa-star"></i>

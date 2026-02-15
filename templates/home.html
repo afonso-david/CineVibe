@@ -525,7 +525,7 @@
 
         function playCurrentVideo() {
             const filme = filmes[currentIndex];
-            console.log('🎬 Iniciando trailer:', filme.titulo);
+            console.log(' Iniciando trailer:', filme.titulo);
             
             const heroBanner = document.querySelector('.hero-banner');
             
@@ -706,16 +706,16 @@
             }
         });
 
-        // Carousel de filmes - VERSÃO MELHORADA
+        
         const moviesContainer = document.getElementById('moviesContainer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
         if (moviesContainer && prevBtn && nextBtn) {
-            const cardWidth = 330; // 300px card + 30px gap
+            const cardWidth = 330; // 
             let currentScroll = 0;
             
-            // Calcular scroll máximo para evitar espaço vazio
+            
             function getMaxScroll() {
                 return Math.max(0, moviesContainer.scrollWidth - moviesContainer.clientWidth);
             }

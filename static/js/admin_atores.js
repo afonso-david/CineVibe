@@ -264,24 +264,31 @@ function fecharModal(modalId) {
 }
 
 function editarAtor(id) {
-    // Buscar dados do ator
     fetch(`/admin/atores/${id}/dados`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(ator => {
-            // Preencher o formulário de edição
-            document.getElementById('edit_nome').value = ator.nome || '';
-            document.getElementById('edit_nacionalidade').value = ator.nacionalidade || '';
-            document.getElementById('edit_foto_url').value = ator.foto_url || '';
+            if (ator.error) {
+                throw new Error(ator.error);
+            }
             
-            // Configurar o formulário para enviar para a rota correta
+            const nomeField = document.getElementById('edit_nome');
+            const nacionalidadeField = document.getElementById('edit_nacionalidade');
+            
+            if (nomeField) nomeField.value = ator.nome || '';
+            if (nacionalidadeField) nacionalidadeField.value = ator.nacionalidade || '';
+            
             document.getElementById('formEditarAtor').action = `/admin/atores/editar/${id}`;
             
-            // Abrir modal
             abrirModalEditarAtor();
         })
         .catch(error => {
             console.error('Erro ao carregar dados do ator:', error);
-            showNotification('Erro ao carregar dados do ator', 'error');
+            showNotification('Erro ao carregar dados do ator: ' + error.message, 'error');
         });
 }
 

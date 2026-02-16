@@ -3597,8 +3597,6 @@ def admin_editar_tipo_sessao(tipo_id):
 
 @app.route('/admin/tipos-sessao/<int:tipo_id>/remover', methods=['POST'])
 def admin_remover_tipo_sessao(tipo_id):
-    pass
-  
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
@@ -5124,9 +5122,11 @@ def admin_remover_horarios_multiplos_filme(id_filme):
 
 @app.route('/admin/filmes/<int:id_filme>/remover', methods=['POST'])
 def admin_remover_filme(id_filme):
+    print(f"🔍 DEBUG: Tentando remover filme ID: {id_filme}")
     app.logger.info(f"=== INÍCIO: Tentativa de remoção do filme ID: {id_filme} ===")
     
     if 'user_id' not in session:
+        print("❌ DEBUG: Usuário não autenticado")
         app.logger.warning("Tentativa de remoção sem autenticação")
         flash("Não autenticado", "erro")
         return redirect(url_for('admin_filmes'))
@@ -5135,77 +5135,117 @@ def admin_remover_filme(id_filme):
     cur = conn.cursor()
     
     try:
+        cur.execute("SET FOREIGN_KEY_CHECKS = 0")
+        
         cur.execute("SELECT is_admin, nome FROM usuarios WHERE id = %s", (session['user_id'],))
         user = cur.fetchone()
         
+        print(f"🔍 DEBUG: Usuário encontrado: {user}")
+        
         if not user:
+            print("❌ DEBUG: Usuário não encontrado na BD")
             app.logger.warning(f"Usuário ID {session['user_id']} não encontrado")
             flash("Usuário não encontrado", "erro")
             return redirect(url_for('admin_filmes'))
         
         if not user[0]:
+            print(f"❌ DEBUG: Usuário {user[1]} não é admin")
             app.logger.warning(f"Usuário {user[1]} (ID: {session['user_id']}) tentou remover filme sem ser admin")
             flash("Acesso negado - apenas administradores podem remover filmes", "erro")
             return redirect(url_for('admin_filmes'))
         
+        print(f"✅ DEBUG: Usuário {user[1]} é admin, prosseguindo...")
         app.logger.info(f"Usuário admin {user[1]} (ID: {session['user_id']}) removendo filme")
         
         cur.execute("SELECT titulo FROM filmes WHERE id = %s", (id_filme,))
         filme = cur.fetchone()
         
         if not filme:
+            print(f"❌ DEBUG: Filme ID {id_filme} não encontrado")
             app.logger.warning(f"Filme ID {id_filme} não encontrado")
             flash("Filme não encontrado", "erro")
             return redirect(url_for('admin_filmes'))
         
         titulo_filme = filme[0]
+        print(f"🎬 DEBUG: Removendo filme: '{titulo_filme}' (ID: {id_filme})")
         app.logger.info(f"Removendo filme: '{titulo_filme}' (ID: {id_filme})")
         
+        try:
+            cur.execute("DELETE FROM reservas WHERE id_filme = %s", (id_filme,))
+            reservas_removidas = cur.rowcount
+            print(f"✅ DEBUG: Removidas {reservas_removidas} reservas")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover reservas: {e}")
         
-        cur.execute("DELETE FROM reservas WHERE id_filme = %s", (id_filme,))
-        reservas_removidas = cur.rowcount
-        app.logger.info(f"Removidas {reservas_removidas} reservas")
+        try:
+            cur.execute("DELETE FROM avaliacoes_filmes WHERE filme_id = %s", (id_filme,))
+            avaliacoes_removidas = cur.rowcount
+            print(f"✅ DEBUG: Removidas {avaliacoes_removidas} avaliações")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover avaliações: {e}")
         
-        cur.execute("DELETE FROM horarios_sessao WHERE id_filme = %s", (id_filme,))
-        horarios_removidos = cur.rowcount
-        app.logger.info(f"Removidos {horarios_removidos} horários")
+        try:
+            cur.execute("DELETE FROM historico_filmes WHERE filme_id = %s", (id_filme,))
+            historico_removido = cur.rowcount
+            print(f"✅ DEBUG: Removidos {historico_removido} registos de histórico")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover histórico: {e}")
         
-        cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s", (id_filme,))
-        cinemas_removidos = cur.rowcount
-        app.logger.info(f"Removidas {cinemas_removidos} associações com cinemas")
+        try:
+            cur.execute("DELETE FROM reservas_salas WHERE filme_id = %s", (id_filme,))
+            reservas_salas_removidas = cur.rowcount
+            print(f"✅ DEBUG: Removidas {reservas_salas_removidas} reservas de salas")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover reservas_salas: {e}")
         
-        cur.execute("DELETE FROM filme_generos WHERE filme_id = %s", (id_filme,))
-        generos_removidos = cur.rowcount
-        app.logger.info(f"Removidas {generos_removidos} associações com géneros")
+        try:
+            cur.execute("DELETE FROM horarios_sessao WHERE id_filme = %s", (id_filme,))
+            horarios_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidos {horarios_removidos} horários")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover horários: {e}")
         
-        cur.execute("DELETE FROM filme_atores WHERE filme_id = %s", (id_filme,))
-        atores_removidos = cur.rowcount
-        app.logger.info(f"Removidas {atores_removidos} associações com atores")
+        try:
+            cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s", (id_filme,))
+            cinemas_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidas {cinemas_removidos} associações com cinemas")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover filmes_cinemas: {e}")
         
-        cur.execute("DELETE FROM avaliacoes_filmes WHERE filme_id = %s", (id_filme,))
-        avaliacoes_removidas = cur.rowcount
-        app.logger.info(f"Removidas {avaliacoes_removidas} avaliações")
+        try:
+            cur.execute("DELETE FROM filme_generos WHERE filme_id = %s", (id_filme,))
+            generos_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidas {generos_removidos} associações com géneros")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover filme_generos: {e}")
         
-        cur.execute("DELETE FROM historico_filmes WHERE filme_id = %s", (id_filme,))
-        historico_removido = cur.rowcount
-        app.logger.info(f"Removidos {historico_removido} registos de histórico")
+        try:
+            cur.execute("DELETE FROM filme_atores WHERE filme_id = %s", (id_filme,))
+            atores_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidas {atores_removidos} associações com atores")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover filme_atores: {e}")
         
-        cur.execute("DELETE FROM reservas_salas WHERE filme_id = %s", (id_filme,))
-        reservas_salas_removidas = cur.rowcount
-        app.logger.info(f"Removidas {reservas_salas_removidas} reservas de salas")
-        
+        print(f"🗑️ DEBUG: Removendo filme da tabela principal...")
         cur.execute("DELETE FROM filmes WHERE id = %s", (id_filme,))
         filme_removido = cur.rowcount
+        print(f"✅ DEBUG: Filme removido: {filme_removido} linha(s) afetada(s)")
         
         if filme_removido == 0:
+            print("❌ DEBUG: ERRO - Filme não foi removido!")
             conn.rollback()
             flash("Erro: Filme não foi removido", "erro")
         else:
+            print("✅ DEBUG: Commit das alterações...")
             conn.commit()
+            print(f"✅ DEBUG: Filme '{titulo_filme}' removido com sucesso!")
             flash(f"Filme '{titulo_filme}' removido com sucesso!", "sucesso")
+        
+        cur.execute("SET FOREIGN_KEY_CHECKS = 1")
         
     except Exception as e:
         conn.rollback()
+        print(f"❌ DEBUG: EXCEÇÃO ao remover filme: {str(e)}")
         app.logger.error(f"❌ ERRO ao remover filme {id_filme}: {str(e)}")
         app.logger.exception("Stack trace:")
         flash(f"Erro ao remover filme: {str(e)}", "erro")
@@ -5214,9 +5254,11 @@ def admin_remover_filme(id_filme):
         try:
             cur.close()
             conn.close()
+            print("🔍 DEBUG: Conexão fechada")
         except:
             pass
     
+    print(f"🔍 DEBUG: Redirecionando para admin_filmes")
     app.logger.info(f"=== FIM: Tentativa de remoção do filme ID: {id_filme} ===")
     return redirect(url_for('admin_filmes'))
 
@@ -5539,18 +5581,35 @@ def admin_cinemas():
         conn = get_db_connection()
         cur = conn.cursor(dictionary=True)
         
-        cur.execute("""
-            SELECT c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem,
-                   COUNT(DISTINCT s.id) as num_salas,
-                   COUNT(DISTINCT fc.filme_id) as num_filmes
-            FROM cinemas c
-            LEFT JOIN salas s ON c.id = s.id_cinema
-            LEFT JOIN filmes_cinemas fc ON c.id = fc.cinema_id
-            GROUP BY c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem
-            ORDER BY c.nome
-        """)
+        regiao_filtro = request.args.get('regiao', 'todas')
+        
+        if regiao_filtro and regiao_filtro != 'todas':
+            cur.execute("""
+                SELECT c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem,
+                       COUNT(DISTINCT s.id) as num_salas,
+                       COUNT(DISTINCT fc.filme_id) as num_filmes
+                FROM cinemas c
+                LEFT JOIN salas s ON c.id = s.id_cinema
+                LEFT JOIN filmes_cinemas fc ON c.id = fc.cinema_id
+                WHERE c.regiao = %s
+                GROUP BY c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem
+                ORDER BY c.nome
+            """, (regiao_filtro,))
+        else:
+            cur.execute("""
+                SELECT c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem,
+                       COUNT(DISTINCT s.id) as num_salas,
+                       COUNT(DISTINCT fc.filme_id) as num_filmes
+                FROM cinemas c
+                LEFT JOIN salas s ON c.id = s.id_cinema
+                LEFT JOIN filmes_cinemas fc ON c.id = fc.cinema_id
+                GROUP BY c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem
+                ORDER BY c.nome
+            """)
         cinemas = cur.fetchall()
         
+        cur.execute("SELECT DISTINCT regiao FROM cinemas ORDER BY regiao")
+        regioes = [r['regiao'] for r in cur.fetchall()]
         
         for cinema in cinemas:
             pass
@@ -5570,12 +5629,12 @@ def admin_cinemas():
         cur.close()
         conn.close()
         
-        return render_template('admin_cinemas.html', user=get_current_user(), cinemas=cinemas)
+        return render_template('admin_cinemas.html', user=get_current_user(), cinemas=cinemas, regioes=regioes, regiao_selecionada=regiao_filtro)
     except Exception as e:
         import traceback
         traceback.print_exc()
         flash(f"Erro ao carregar cinemas: {str(e)}", "erro")
-        return render_template('admin_cinemas.html', user=get_current_user(), cinemas=[])
+        return render_template('admin_cinemas.html', user=get_current_user(), cinemas=[], regioes=[], regiao_selecionada='todas')
 
 @app.route('/admin/cinemas/adicionar', methods=['POST'])
 def admin_adicionar_cinema():
@@ -5730,19 +5789,35 @@ def admin_usuarios():
         return redirect(url_for('home'))
     
     search = request.args.get('search', '')
+    status_filter = request.args.get('status', 'todos')
+    periodo_filter = request.args.get('periodo', 'todos')
     
     try:
         query = """
             SELECT u.id, u.nome, u.email, u.criado_em, u.ultimo_login, u.is_admin, 
                    u.avatar, u.avatar_personalizado, u.avatar_id
             FROM usuarios u
+            WHERE 1=1
         """
         
         params = []
+        
         if search:
-            query += " WHERE (u.nome LIKE %s OR u.email LIKE %s)"
+            query += " AND (u.nome LIKE %s OR u.email LIKE %s)"
             search_param = f"%{search}%"
             params.extend([search_param, search_param])
+        
+        if status_filter == 'admin':
+            query += " AND u.is_admin = 1"
+        elif status_filter == 'usuario':
+            query += " AND u.is_admin = 0"
+        
+        if periodo_filter == 'hoje':
+            query += " AND DATE(u.criado_em) = CURDATE()"
+        elif periodo_filter == 'semana':
+            query += " AND u.criado_em >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)"
+        elif periodo_filter == 'mes':
+            query += " AND u.criado_em >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)"
         
         query += " ORDER BY u.id DESC"
         
@@ -5780,12 +5855,20 @@ def admin_usuarios():
             if not avatar_url or avatar_url == 'None' or avatar_url == '':
                 avatar_url = 'imgs/icons/user_icon34-removebg-preview.png'
             
+            if not avatar_url.startswith('imgs/'):
+                avatar_url = 'imgs/icons/user_icon34-removebg-preview.png'
+            
             usuario['avatar_url'] = avatar_url
         
         cur.close()
         conn.close()
         
-        return render_template('admin_usuarios.html', user=get_current_user(), usuarios=usuarios, search=search)
+        return render_template('admin_usuarios.html', 
+                             user=get_current_user(), 
+                             usuarios=usuarios, 
+                             search=search,
+                             status_selecionado=status_filter,
+                             periodo_selecionado=periodo_filter)
         
     except Exception as e:
         cur.close()
@@ -5795,8 +5878,15 @@ def admin_usuarios():
 
 @app.route('/admin/adicionar_usuario', methods=['POST'])
 def admin_adicionar_usuario():
+    print("=" * 50)
+    print("DEBUG: Rota admin_adicionar_usuario chamada")
+    print("=" * 50)
+    
     if 'user_id' not in session:
+        print("DEBUG: Usuário não está na sessão")
         return redirect(url_for('login'))
+    
+    print(f"DEBUG: User ID na sessão: {session['user_id']}")
     
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
@@ -5804,46 +5894,90 @@ def admin_adicionar_usuario():
     cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
     user = cur.fetchone()
     
+    print(f"DEBUG: Usuário encontrado: {user}")
+    
     if not user or not user.get('is_admin'):
+        print("DEBUG: Usuário não é admin")
         flash("Acesso negado!", "erro")
         cur.close()
         conn.close()
         return redirect(url_for('home'))
     
+    print("DEBUG: Usuário é admin, continuando...")
+    
     try:
+        print("DEBUG: Dados do formulário:")
+        print(f"  - request.form: {dict(request.form)}")
+        
         nome = request.form.get('nome', '').strip()
         email = request.form.get('email', '').strip()
         senha = request.form.get('senha', '').strip()
         telefone = request.form.get('telefone', '').strip()
-        is_admin = request.form.get('is_admin') == 'on'
+        is_admin_value = request.form.get('is_admin')
+        is_admin = is_admin_value == '1'
+        
+        print(f"DEBUG: Valores extraídos:")
+        print(f"  - nome: '{nome}'")
+        print(f"  - email: '{email}'")
+        print(f"  - senha: '{senha}'")
+        print(f"  - telefone: '{telefone}'")
+        print(f"  - is_admin_value: '{is_admin_value}'")
+        print(f"  - is_admin: {is_admin}")
         
         if not nome or not email or not senha:
+            print("DEBUG: Campos obrigatórios vazios")
             flash("Nome, email e senha são obrigatórios!", "erro")
+            cur.close()
+            conn.close()
             return redirect(url_for('admin_usuarios'))
         
+        print("DEBUG: Verificando se email já existe...")
         cur.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
-        if cur.fetchone():
+        existing = cur.fetchone()
+        print(f"DEBUG: Email existente: {existing}")
+        
+        if existing:
+            print("DEBUG: Email já existe")
             flash("Email já está em uso!", "erro")
+            cur.close()
+            conn.close()
             return redirect(url_for('admin_usuarios'))
         
+        print("DEBUG: Gerando hash da senha...")
         senha_hash = generate_password_hash(senha)
+        print(f"DEBUG: Hash gerado: {senha_hash[:20]}...")
         
+        print("DEBUG: Executando INSERT...")
         cur.execute("""
             INSERT INTO usuarios (nome, email, senha, telefone, is_admin, data_criacao)
             VALUES (%s, %s, %s, %s, %s, NOW())
         """, (nome, email, senha_hash, telefone, is_admin))
         
+        print(f"DEBUG: INSERT executado, rowcount: {cur.rowcount}")
+        print(f"DEBUG: lastrowid: {cur.lastrowid}")
+        
+        print("DEBUG: Fazendo commit...")
         conn.commit()
+        print("DEBUG: Commit realizado com sucesso!")
+        
         flash(f"Usuário {nome} adicionado com sucesso!", "sucesso")
         
     except Exception as e:
         conn.rollback()
+        print(f"DEBUG: ERRO CAPTURADO: {str(e)}")
+        import traceback
+        print("DEBUG: Traceback completo:")
+        traceback.print_exc()
+        app.logger.error(f"Erro ao adicionar usuário: {str(e)}")
         flash(f"Erro ao adicionar usuário: {str(e)}", "erro")
     
     finally:
         cur.close()
         conn.close()
+        print("DEBUG: Conexão fechada")
     
+    print("DEBUG: Redirecionando para admin_usuarios")
+    print("=" * 50)
     return redirect(url_for('admin_usuarios'))
 
 @app.route('/admin/usuarios/<int:usuario_id>/dados')
@@ -6191,12 +6325,15 @@ def admin_reserva_detalhes(reserva_id):
                    u.nome as usuario_nome, u.email as usuario_email,
                    f.titulo as filme_titulo, f.duracao,
                    c.nome as cinema_nome, c.localizacao as cinema_localizacao,
-                   ts.nome as tipo_sessao
+                   ts.nome as tipo_sessao,
+                   h.hora as horario_sessao
             FROM reservas r
             LEFT JOIN usuarios u ON r.id_usuario = u.id
             LEFT JOIN filmes f ON r.id_filme = f.id
             LEFT JOIN cinemas c ON r.id_cinema = c.id
             LEFT JOIN tipos_sessao ts ON r.id_tipo_sessao = ts.id
+            LEFT JOIN horarios_sessao hs ON r.id_horario_sessao = hs.id
+            LEFT JOIN horarios h ON hs.id_horario = h.id
             WHERE r.id = %s
         """, (reserva_id,))
         
@@ -6211,6 +6348,8 @@ def admin_reserva_detalhes(reserva_id):
             reserva['data_sessao'] = reserva['data_sessao'].isoformat()
         if reserva.get('data_reserva'):
             reserva['data_reserva'] = reserva['data_reserva'].isoformat()
+        if reserva.get('horario_sessao'):
+            reserva['horario_sessao'] = str(reserva['horario_sessao'])
         
         cur.close()
         conn.close()
@@ -10184,6 +10323,61 @@ def admin_info_ator(ator_id):
         app.logger.error(f"Erro ao buscar informações do ator: {str(e)}")
         return jsonify({'success': False, 'message': 'Erro interno do servidor'})
 
+@app.route('/admin/atores/<int:ator_id>/dados')
+def admin_dados_ator(ator_id):
+    print(f"🔍 DEBUG: Buscando dados do ator ID: {ator_id}")
+    
+    if 'user_id' not in session:
+        print("❌ DEBUG: Usuário não autenticado")
+        return jsonify({'success': False, 'message': 'Não autenticado'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        print(f"🔍 DEBUG: Executando query para ator {ator_id}")
+        cursor.execute("""
+            SELECT a.id, a.nome, a.nacionalidade, a.foto_url,
+                   COUNT(DISTINCT fa.filme_id) as num_filmes
+            FROM atores a
+            LEFT JOIN filme_atores fa ON a.id = fa.ator_id
+            WHERE a.id = %s
+            GROUP BY a.id
+        """, (ator_id,))
+        
+        ator = cursor.fetchone()
+        print(f"🔍 DEBUG: Ator encontrado: {ator}")
+        
+        if ator:
+            print(f"🔍 DEBUG: Buscando filmes do ator {ator_id}")
+            cursor.execute("""
+                SELECT f.id, f.titulo, f.poster_url, fa.papel
+                FROM filmes f
+                JOIN filme_atores fa ON f.id = fa.filme_id
+                WHERE fa.ator_id = %s
+                ORDER BY f.data_lancamento DESC
+            """, (ator_id,))
+            
+            ator['filmes'] = cursor.fetchall()
+            print(f"✅ DEBUG: {len(ator['filmes'])} filmes encontrados")
+        
+        cursor.close()
+        conn.close()
+        
+        if ator:
+            print(f"✅ DEBUG: Retornando dados do ator")
+            return jsonify(ator)
+        else:
+            print(f"❌ DEBUG: Ator {ator_id} não encontrado")
+            return jsonify({'error': 'Ator não encontrado'}), 404
+        
+    except Exception as e:
+        print(f"❌ DEBUG: ERRO ao buscar dados do ator: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        app.logger.error(f"Erro ao buscar dados do ator: {str(e)}")
+        return jsonify({'error': f'Erro interno do servidor: {str(e)}'}), 500
+
 @app.route('/admin/bar')
 def admin_bar():
     if 'user_id' not in session:
@@ -10199,7 +10393,7 @@ def admin_bar():
         LEFT JOIN menu_produtos mp ON b.id = mp.produto_id
         LEFT JOIN menus m ON mp.menu_id = m.id
         GROUP BY b.id
-        ORDER BY b.id DESC
+        ORDER BY b.id ASC
     """)
     produtos = cursor.fetchall()
     
@@ -10991,19 +11185,74 @@ def admin_editar_avatar(avatar_id):
     flash('Avatar atualizado com sucesso!', 'success')
     return redirect(url_for('admin_avatares'))
 
+@app.route('/admin/avatares/<int:avatar_id>/dados')
+def admin_avatar_dados(avatar_id):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Não autenticado'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT id, nome, caminho, categoria_id FROM avatars WHERE id = %s", (avatar_id,))
+        avatar = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        
+        if avatar:
+            return jsonify(avatar)
+        else:
+            return jsonify({'error': 'Avatar não encontrado'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/admin/avatares/remover/<int:avatar_id>', methods=['POST'])
 def admin_remover_avatar(avatar_id):
+    print(f"🔍 DEBUG: Tentando remover avatar ID: {avatar_id}")
+    
     if 'user_id' not in session:
+        print("❌ DEBUG: Usuário não autenticado")
         return redirect(url_for('login'))
     
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM avatars WHERE id = %s", (avatar_id,))
-    conn.commit()
-    cursor.close()
-    conn.close()
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        cursor.execute("SELECT caminho FROM avatars WHERE id = %s", (avatar_id,))
+        avatar = cursor.fetchone()
+        
+        if not avatar:
+            print(f"❌ DEBUG: Avatar {avatar_id} não encontrado")
+            flash('Avatar não encontrado!', 'error')
+            return redirect(url_for('admin_avatares'))
+        
+        print(f"🔍 DEBUG: Avatar encontrado: {avatar}")
+        
+        cursor.execute("SELECT COUNT(*) as count FROM usuarios WHERE avatar_id = %s", (avatar_id,))
+        usuarios_usando = cursor.fetchone()['count']
+        
+        print(f"🔍 DEBUG: {usuarios_usando} usuários usando este avatar")
+        
+        if usuarios_usando > 0:
+            print(f"⚠️ DEBUG: Avatar em uso por {usuarios_usando} usuários, definindo avatar_id como NULL")
+            cursor.execute("UPDATE usuarios SET avatar_id = NULL WHERE avatar_id = %s", (avatar_id,))
+        
+        print(f"🗑️ DEBUG: Removendo avatar da tabela")
+        cursor.execute("DELETE FROM avatars WHERE id = %s", (avatar_id,))
+        
+        conn.commit()
+        print(f"✅ DEBUG: Avatar {avatar_id} removido com sucesso!")
+        
+        cursor.close()
+        conn.close()
+        
+        flash('Avatar removido com sucesso!', 'success')
+        
+    except Exception as e:
+        print(f"❌ DEBUG: ERRO ao remover avatar: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        flash(f'Erro ao remover avatar: {str(e)}', 'error')
     
-    flash('Avatar removido com sucesso!', 'success')
     return redirect(url_for('admin_avatares'))
 
 @app.route('/admin/avatares/categorias/adicionar', methods=['POST'])

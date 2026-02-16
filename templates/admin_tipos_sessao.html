@@ -253,7 +253,7 @@
                             <i class="fas fa-euro-sign"></i>
                             Preço (€) *
                         </label>
-                        <input type="number" id="preco" name="preco" step="0.01" min="0" required
+                        <input type="number" id="preco" name="preco_bilhete" step="0.01" min="0" required
                                placeholder="Ex: 8.50">
                     </div>
                 </div>
@@ -468,7 +468,23 @@
     // Remove Type
     function removerTipo(id, nome) {
         if (confirm(`Tem certeza que deseja remover o tipo "${nome}"? Esta ação não pode ser desfeita.`)) {
-            window.location.href = `/admin/tipos-sessao/remover/${id}`;
+            fetch(`/admin/tipos-sessao/${id}/remover`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
         }
     }
 
@@ -517,6 +533,31 @@
         if (e.key === 'Escape') {
             fecharModalAdicionarTipo();
         }
+    });
+
+    document.getElementById('formAdicionarTipo').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const action = this.action;
+        
+        fetch(action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                fecharModalAdicionarTipo();
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            alert('Erro ao processar requisição');
+            console.error('Erro:', error);
+        });
     });
     </script>
 </body>

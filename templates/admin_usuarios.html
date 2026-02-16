@@ -139,10 +139,6 @@
                             <span>{{ usuarios|selectattr('is_admin', 'equalto', 1)|list|length }} Admins</span>
                         </div>
                     </div>
-                    <button class="btn-primary" onclick="abrirModalAdicionarUsuario()">
-                        <i class="fas fa-plus"></i>
-                        Novo Usuário
-                    </button>
                 </div>
             </header>
 
@@ -155,16 +151,16 @@
                             <input type="text" placeholder="Pesquisar por nome, email..." id="searchInput" value="{{ search or '' }}">
                         </div>
                         <div class="filter-group">
-                            <select id="statusFilter" class="filter-select">
-                                <option value="">Todos os Status</option>
-                                <option value="admin">Administradores</option>
-                                <option value="user">Usuários</option>
+                            <select id="statusFilter" class="filter-select" onchange="aplicarFiltros()">
+                                <option value="todos" {% if status_selecionado == 'todos' %}selected{% endif %}>Todos os Status</option>
+                                <option value="admin" {% if status_selecionado == 'admin' %}selected{% endif %}>Administradores</option>
+                                <option value="usuario" {% if status_selecionado == 'usuario' %}selected{% endif %}>Usuários</option>
                             </select>
                             <div class="date-filters">
-                                <button class="date-btn active" data-date="all">Todos</button>
-                                <button class="date-btn" data-date="today">Hoje</button>
-                                <button class="date-btn" data-date="week">Esta Semana</button>
-                                <button class="date-btn" data-date="month">Este Mês</button>
+                                <button class="date-btn {% if periodo_selecionado == 'todos' %}active{% endif %}" data-date="todos" onclick="filtrarPorPeriodo('todos')">Todos</button>
+                                <button class="date-btn {% if periodo_selecionado == 'hoje' %}active{% endif %}" data-date="hoje" onclick="filtrarPorPeriodo('hoje')">Hoje</button>
+                                <button class="date-btn {% if periodo_selecionado == 'semana' %}active{% endif %}" data-date="semana" onclick="filtrarPorPeriodo('semana')">Esta Semana</button>
+                                <button class="date-btn {% if periodo_selecionado == 'mes' %}active{% endif %}" data-date="mes" onclick="filtrarPorPeriodo('mes')">Este Mês</button>
                             </div>
                             <button class="btn-filter" onclick="limparFiltros()">
                                 <i class="fas fa-filter-circle-xmark"></i>
@@ -305,51 +301,6 @@
         </main>
     </div>
 
-    <div id="modalAdicionarUsuario" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-plus"></i> Adicionar Novo Usuário</h2>
-                <button class="btn-close" onclick="fecharModal('modalAdicionarUsuario')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ url_for('admin_adicionar_usuario') }}" method="POST">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="nome_usuario">Nome Completo *</label>
-                            <input type="text" id="nome_usuario" name="nome" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email_usuario">Email *</label>
-                            <input type="email" id="email_usuario" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="senha_usuario">Senha *</label>
-                            <input type="password" id="senha_usuario" name="senha" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="is_admin_usuario">Tipo de Usuário</label>
-                            <select id="is_admin_usuario" name="is_admin">
-                                <option value="0">Usuário Normal</option>
-                                <option value="1">Administrador</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn-cancel" onclick="fecharModal('modalAdicionarUsuario')">
-                            Cancelar
-                        </button>
-                        <button type="submit" class="btn-confirm">
-                            <i class="fas fa-save"></i>
-                            Adicionar Usuário
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <div id="modalVerUsuario" class="modal-overlay" style="display: none;">
         <div class="modal-content large">
             <div class="modal-header">
@@ -373,5 +324,29 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/admin_usuarios.js') }}"></script>
+    <script>
+        function aplicarFiltros() {
+            const status = document.getElementById('statusFilter').value;
+            const periodo = document.querySelector('.date-btn.active')?.dataset.date || 'todos';
+            const search = document.getElementById('searchInput')?.value || '';
+            
+            let url = '{{ url_for("admin_usuarios") }}?';
+            if (status && status !== 'todos') url += `status=${status}&`;
+            if (periodo && periodo !== 'todos') url += `periodo=${periodo}&`;
+            if (search) url += `search=${encodeURIComponent(search)}`;
+            
+            window.location.href = url;
+        }
+
+        function filtrarPorPeriodo(periodo) {
+            document.querySelectorAll('.date-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            aplicarFiltros();
+        }
+
+        function limparFiltros() {
+            window.location.href = '{{ url_for("admin_usuarios") }}';
+        }
+    </script>
 </body>
 </html>

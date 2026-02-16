@@ -145,10 +145,10 @@
                             <input type="text" placeholder="Pesquisar cinemas..." id="searchInput" value="{{ search or '' }}">
                         </div>
                         <div class="filter-group">
-                            <select id="regiaoFilter" class="filter-select">
-                                <option value="">Todas as Regiões</option>
+                            <select id="regiaoFilter" class="filter-select" onchange="filtrarPorRegiao()">
+                                <option value="todas">Todas as Regiões</option>
                                 {% for regiao in regioes %}
-                                <option value="{{ regiao }}" {% if regiao_filter == regiao %}selected{% endif %}>{{ regiao }}</option>
+                                <option value="{{ regiao }}" {% if regiao_selecionada == regiao %}selected{% endif %}>{{ regiao }}</option>
                                 {% endfor %}
                             </select>
                             <button class="btn-filter" onclick="limparFiltros()">
@@ -472,5 +472,23 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/admin_cinemas.js') }}"></script>
+    <script>
+        function filtrarPorRegiao() {
+            const regiao = document.getElementById('regiaoFilter').value;
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+            window.location.href = `{{ url_for('admin_cinemas') }}?regiao=${regiao}`;
+        }
+
+        function limparFiltros() {
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+            window.location.href = '{{ url_for('admin_cinemas') }}';
+        }
+    </script>
 </body>
 </html>

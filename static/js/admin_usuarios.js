@@ -416,21 +416,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
-            const requiredFields = form.querySelectorAll('[required]');
-            let isValid = true;
+            console.log('Form submit interceptado:', form.id || 'sem id');
+            console.log('Action:', form.action);
+            console.log('Method:', form.method);
             
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.style.borderColor = '#ff4757';
-                    isValid = false;
-                } else {
-                    field.style.borderColor = 'rgba(255, 215, 0, 0.3)';
-                }
-            });
-            
-            if (!isValid) {
-                e.preventDefault();
-                alert('Por favor, preencha todos os campos obrigatórios.');
+            const formData = new FormData(form);
+            console.log('FormData:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`  ${key}: ${value}`);
             }
         });
     });

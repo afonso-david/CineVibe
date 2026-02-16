@@ -336,6 +336,7 @@
                                     <div class="detail-section">
                                         <h4><i class="fas fa-calendar"></i> Sessão</h4>
                                         <p><strong>Data:</strong> ${reserva.data_sessao ? new Date(reserva.data_sessao).toLocaleDateString('pt-PT') : 'N/A'}</p>
+                                        <p><strong>Horário:</strong> ${reserva.horario_sessao || 'N/A'}</p>
                                         <p><strong>Lugar:</strong> ${reserva.lugares || 'N/A'}</p>
                                         <p><strong>Tipo:</strong> ${reserva.tipo_sessao || 'Normal'}</p>
                                     </div>

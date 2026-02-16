@@ -196,7 +196,7 @@
                 </div>
 
                 <div class="tabs-container">
-                    <button class="tab-btn" onclick="mostrarTab('produtos')">
+                    <button class="tab-btn active" onclick="mostrarTab('produtos')">
                         <i class="fas fa-utensils"></i> Produtos
                     </button>
                     <button class="tab-btn" onclick="mostrarTab('menus')">
@@ -207,7 +207,7 @@
                     </button>
                 </div>
 
-                <div id="tab-produtos" class="tab-content">
+                <div id="tab-produtos" class="tab-content" style="display: block;">
                 
                 <div class="movies-grid" id="produtos-grid" style="display: none;">
                     {% for produto in produtos %}
@@ -220,9 +220,6 @@
                             {% endif %}
                             <div class="movie-overlay">
                                 <div class="movie-actions">
-                                    <button class="action-btn edit" onclick="editarProduto({{ produto.id }})" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
                                     <button class="action-btn delete" onclick="removerProduto({{ produto.id }})" title="Remover">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -296,9 +293,6 @@
                                     <td class="duration-cell">{{ produto.menus or 'Nenhum' }}</td>
                                     <td class="actions-cell">
                                         <div class="movie-actions-table">
-                                            <button class="action-btn-table edit" onclick="editarProduto({{ produto.id }})" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
                                             <button class="action-btn-table view" onclick="verProdutoDetalhes({{ produto.id }})" title="Ver Detalhes">
                                                 <i class="fas fa-eye"></i>
                                             </button>
@@ -903,5 +897,114 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/admin_bar.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarTab('produtos');
+            
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            if (tabButtons.length > 0) {
+                tabButtons[0].classList.add('active');
+            }
+
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    ordenarProdutos(this.value);
+                });
+                
+                setTimeout(() => {
+                    ordenarProdutos('id');
+                }, 100);
+            }
+        });
+        
+        function mostrarTab(tabName) {
+            const allTabs = document.querySelectorAll('.tab-content');
+            allTabs.forEach(tab => tab.style.display = 'none');
+            
+            const selectedTab = document.getElementById('tab-' + tabName);
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+            }
+            
+            const searchInput = document.getElementById('searchInput');
+            const tipoFilter = document.getElementById('tipoFilter');
+            const sortSelect = document.getElementById('sortSelect');
+            
+            if (searchInput && tipoFilter && sortSelect) {
+                const searchValue = searchInput.value;
+                const tipoValue = tipoFilter.value;
+                const sortValue = sortSelect.value;
+                
+                setTimeout(() => {
+                    if (typeof filtrarProdutos === 'function') {
+                        filtrarProdutos();
+                    }
+                }, 100);
+            }
+        }
+
+        function ordenarProdutos(criterio) {
+            const grid = document.getElementById('produtos-grid');
+            const table = document.querySelector('#produtos-table tbody');
+            
+            if (grid) {
+                const cards = Array.from(grid.querySelectorAll('.movie-card-pro'));
+                cards.sort((a, b) => {
+                    let valA, valB;
+                    
+                    if (criterio === 'id') {
+                        valA = parseInt(a.dataset.produtoId);
+                        valB = parseInt(b.dataset.produtoId);
+                    } else if (criterio === 'nome') {
+                        valA = a.querySelector('h3').textContent.toLowerCase();
+                        valB = b.querySelector('h3').textContent.toLowerCase();
+                    } else if (criterio === 'preco') {
+                        valA = parseFloat(a.dataset.preco);
+                        valB = parseFloat(b.dataset.preco);
+                    } else if (criterio === 'tipo') {
+                        valA = a.dataset.tipo.toLowerCase();
+                        valB = b.dataset.tipo.toLowerCase();
+                    }
+                    
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                });
+                
+                cards.forEach(card => grid.appendChild(card));
+            }
+            
+            if (table) {
+                const rows = Array.from(table.querySelectorAll('tr'));
+                rows.sort((a, b) => {
+                    let valA, valB;
+                    
+                    if (criterio === 'id') {
+                        valA = parseInt(a.dataset.produtoId);
+                        valB = parseInt(b.dataset.produtoId);
+                    } else if (criterio === 'nome') {
+                        valA = a.querySelector('.title-cell h4').textContent.toLowerCase();
+                        valB = b.querySelector('.title-cell h4').textContent.toLowerCase();
+                    } else if (criterio === 'preco') {
+                        valA = parseFloat(a.dataset.preco);
+                        valB = parseFloat(b.dataset.preco);
+                    } else if (criterio === 'tipo') {
+                        valA = a.dataset.tipo.toLowerCase();
+                        valB = b.dataset.tipo.toLowerCase();
+                    }
+                    
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                });
+                
+                rows.forEach(row => table.appendChild(row));
+            }
+        }
+    </script>
 </body>
 </html>

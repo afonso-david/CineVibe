@@ -83,9 +83,6 @@ function initializeFilters() {
         }, 300);
     });
 
-    // Filtro de região
-    regiaoFilter.addEventListener('change', filtrarCinemas);
-
     // Ordenação
     sortSelect.addEventListener('change', ordenarCinemas);
 }

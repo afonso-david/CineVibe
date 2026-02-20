@@ -59,32 +59,28 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-        <section class="hero-section">
-            <div class="hero-background">
-                <img src="{{ url_for('static', filename='imgs/temas/Romance/OIP (1).webp') }}" alt="">
-            </div>
+        <section class="hero-section" style="background-image: url('{{ url_for('static', filename='imgs/temas/Romance/500-days-of-summer-10-years-later-v0-ymfx3t1biza21.webp') }}');">
             <div class="hero-overlay"></div>
-            <div class="film-grain"></div>
             
             <div class="hero-content">
-                <div class="hero-text">
-                    <span class="hero-subtitle">💕 Experiência Romântica</span>
-                    <h1 class="hero-title">
-                        Sessão <span class="romance-text">Romance</span>
-                    </h1>
-                    <p class="hero-description">
-                        Para os apaixonados que procuram momentos únicos e experiências que farão o seu coração bater mais forte de emoção.
-                    </p>
-                    <div class="hero-buttons">
-                        <a href="{{ url_for('reserva_sessao_tematica', tipo='romance') }}" class="btn-primary large">Reservar Sessão</a>
-                        <a href="#experience" class="btn-secondary large">Saber Mais</a>
-                    </div>
+                <h1 class="hero-title">
+                    <span class="title-line">Sessão</span>
+                    <span class="title-line highlight">Romance</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Para os apaixonados que procuram momentos únicos e experiências 
+                    que farão o seu coração bater mais forte de emoção.
+                </p>
+                <div class="hero-cta">
+                    <a href="#filmes" class="cta-btn primary">
+                        <i class="fas fa-heart"></i>
+                        <span>Descobrir Filmes</span>
+                    </a>
+                    <a href="{{ url_for('reserva_sessao_tematica', tipo='romance') }}" class="cta-btn secondary">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Reservar Agora</span>
+                    </a>
                 </div>
-            </div>
-            
-            <div class="scroll-indicator">
-                <div class="scroll-arrow">↓</div>
-                <p>Descubra a experiência</p>
             </div>
         </section>
 
@@ -121,18 +117,17 @@
         </section>
 
         <section class="movies-section" id="filmes">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Filmes Românticos</h2>
-                    <p class="section-subtitle">Uma seleção dos filmes mais apaixonantes e emocionantes do cinema mundial</p>
-                </div>
+            <div class="section-header">
+                <h2 class="section-title">Filmes Românticos</h2>
+                <p class="section-subtitle">Uma seleção dos filmes mais apaixonantes e emocionantes do cinema mundial</p>
+            </div>
+            
+            <div class="movies-carousel">
+                <button class="carousel-btn prev" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
                 
-                <div class="movies-carousel">
-                    <button class="carousel-btn prev" id="prevBtn">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="movies-container" id="moviesContainer">
+                <div class="movies-container" id="moviesContainer">
                         {% if filmes_romance %}
                             {% for filme in filmes_romance %}
                             <article class="filme-card" 
@@ -184,7 +179,6 @@
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
-            </div>
         </section>
 
         <section class="bar-section" id="bar">

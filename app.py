@@ -8300,6 +8300,18 @@ def sessao_terror():
                         poster_url = f"imgs/filmes/{poster_url}"
                 
                 filme['poster_url'] = poster_url
+            
+            poster_hover = filme.get('poster_hover', '')
+            if poster_hover:
+                poster_hover = poster_hover.replace('\\', '/').replace('"', '').strip()
+                
+                if not poster_hover.startswith('imgs/filmes/'):
+                    if '/' not in poster_hover:
+                        poster_hover = f"imgs/filmes/{poster_hover}"
+                    elif not poster_hover.startswith('imgs/'):
+                        poster_hover = f"imgs/filmes/{poster_hover}"
+                
+                filme['poster_hover'] = poster_hover
         
         app.logger.info(f"Filmes de terror encontrados: {len(filmes_terror)}")
         
@@ -8384,6 +8396,18 @@ def sessao_vintage():
                         poster_url = f"imgs/filmes/{poster_url}"
                 
                 filme['poster_url'] = poster_url
+            
+            poster_hover = filme.get('poster_hover', '')
+            if poster_hover:
+                poster_hover = poster_hover.replace('\\', '/').replace('"', '').strip()
+                
+                if not poster_hover.startswith('imgs/filmes/'):
+                    if '/' not in poster_hover:
+                        poster_hover = f"imgs/filmes/{poster_hover}"
+                    elif not poster_hover.startswith('imgs/'):
+                        poster_hover = f"imgs/filmes/{poster_hover}"
+                
+                filme['poster_hover'] = poster_hover
         
         app.logger.info(f"Filmes vintage encontrados: {len(filmes_vintage)}")
         
@@ -8646,6 +8670,18 @@ def sessao_romance():
                         poster_url = f"imgs/filmes/{poster_url}"
                 
                 filme['poster_url'] = poster_url
+            
+            poster_hover = filme.get('poster_hover', '')
+            if poster_hover:
+                poster_hover = poster_hover.replace('\\', '/').replace('"', '').strip()
+                
+                if not poster_hover.startswith('imgs/filmes/'):
+                    if '/' not in poster_hover:
+                        poster_hover = f"imgs/filmes/{poster_hover}"
+                    elif not poster_hover.startswith('imgs/'):
+                        poster_hover = f"imgs/filmes/{poster_hover}"
+                
+                filme['poster_hover'] = poster_hover
         
         app.logger.info(f"Filmes de romance encontrados: {len(filmes_romance)}")
         if filmes_romance:

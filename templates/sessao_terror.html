@@ -60,16 +60,10 @@
     </nav>
         </nav>
 
-        <section class="hero-section" style="background-image: url('{{ url_for('static', filename='imgs/1731317621822-i.avif') }}');">
-            <div class="hero-background">
-                <div class="hero-overlay"></div>
-            </div>
+        <section class="hero-section" style="background-image: url('{{ url_for('static', filename='imgs/thumb-1920-543762.jpg') }}');">
+            <div class="hero-overlay"></div>
             
             <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-ghost"></i>
-                    <span>Experiência Assustadora</span>
-                </div>
                 <h1 class="hero-title">
                     <span class="title-line">Sessão</span>
                     <span class="title-line highlight">Terror</span>
@@ -124,18 +118,17 @@
         </section>
 
         <section class="movies-section" id="filmes">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Filmes de Terror</h2>
-                    <p class="section-subtitle">Uma seleção dos filmes mais assustadores e perturbadores do cinema mundial</p>
-                </div>
+            <div class="section-header">
+                <h2 class="section-title">Filmes de Terror</h2>
+                <p class="section-subtitle">Uma seleção dos filmes mais assustadores e perturbadores do cinema mundial</p>
+            </div>
+            
+            <div class="movies-carousel">
+                <button class="carousel-btn prev" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
                 
-                <div class="movies-carousel">
-                    <button class="carousel-btn prev" id="prevBtn">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="movies-container" id="moviesContainer">
+                <div class="movies-container" id="moviesContainer">
                         {% if filmes_terror %}
                             {% for filme in filmes_terror %}
                             <article class="filme-card" 
@@ -187,7 +180,6 @@
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
-            </div>
         </section>
 
         <section class="reactions-section" id="reservar">

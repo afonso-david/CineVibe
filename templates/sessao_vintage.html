@@ -63,7 +63,6 @@
             
             <div class="hero-content">
                 <div class="hero-text">
-                    <span class="hero-subtitle">Uma Viagem no Tempo</span>
                     <h1 class="hero-title">
                         Sessão <span class="vintage-text">Vintage</span>
                     </h1>
@@ -75,11 +74,6 @@
                         <a href="#experience" class="btn-secondary large">Saber Mais</a>
                     </div>
                 </div>
-            </div>
-            
-            <div class="scroll-indicator">
-                <div class="scroll-arrow">↓</div>
-                <p>Descubra a experiência</p>
             </div>
         </section>
 
@@ -174,16 +168,15 @@
         </section>
 
         <section class="movies-section" id="classics">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Filmes Vintage</h2>
-                    <p class="section-subtitle">Uma seleção dos maiores clássicos do cinema mundial, restaurados digitalmente para uma qualidade perfeita</p>
-                </div>
-                
-                <div class="movies-carousel">
-                    <button class="carousel-btn prev" id="prevBtn">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
+            <div class="section-header">
+                <h2 class="section-title">Filmes Vintage</h2>
+                <p class="section-subtitle">Uma seleção dos maiores clássicos do cinema mundial, restaurados digitalmente para uma qualidade perfeita</p>
+            </div>
+            
+            <div class="movies-carousel">
+                <button class="carousel-btn prev" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
                     
                     <div class="movies-container" id="moviesContainer">
                         {% if filmes_vintage %}
@@ -237,7 +230,6 @@
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
-            </div>
         </section>
 
         <section class="bar-section">
@@ -431,14 +423,14 @@
     </div>
 
     <script>
-        // Carousel functionality for movies
+        
         document.addEventListener('DOMContentLoaded', function() {
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
             const moviesContainer = document.getElementById('moviesContainer');
             
             if (prevBtn && nextBtn && moviesContainer) {
-                const scrollAmount = 360; // Width of one card + gap (320 + 40)
+                const scrollAmount = 360; 
                 
                 prevBtn.addEventListener('click', function() {
                     moviesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -448,7 +440,7 @@
                     moviesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                 });
                 
-                // Update button states based on scroll position
+                
                 function updateButtonStates() {
                     const maxScroll = moviesContainer.scrollWidth - moviesContainer.clientWidth;
                     prevBtn.style.opacity = moviesContainer.scrollLeft <= 0 ? '0.5' : '1';
@@ -456,11 +448,11 @@
                 }
 
                 moviesContainer.addEventListener('scroll', updateButtonStates);
-                updateButtonStates(); // Initial state
+                updateButtonStates(); 
             }
         });
 
-        // Smooth scrolling for anchor links
+        
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -474,7 +466,7 @@
             });
         });
 
-        // Header scroll effect
+        
         window.addEventListener('scroll', function() {
             const header = document.querySelector('.header');
             if (window.scrollY > 100) {
@@ -484,7 +476,7 @@
             }
         });
 
-        // User dropdown functionality
+        
         document.addEventListener('DOMContentLoaded', function() {
             const userIcon = document.querySelector('.user-icon');
             const userDropdown = document.querySelector('.user-dropdown');
@@ -501,7 +493,7 @@
             }
         });
 
-        // Movie card hover effects
+        
         document.querySelectorAll('.filme-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'translateY(-15px) scale(1.05)';
@@ -512,7 +504,7 @@
             });
         });
 
-        // Touch/swipe support for mobile
+        
         let startX = 0;
         let scrollLeft = 0;
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -532,229 +532,6 @@
         </div>
     </div>
 
-    <style>
-        .modal-reserva-exclusiva {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .modal-content-reserva {
-            background: linear-gradient(135deg, #1B263B, #2C3E50);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 214, 10, 0.3);
-        }
-        
-        .modal-header-reserva {
-            background: linear-gradient(135deg, #FFD60A, #FFA500);
-            color: #1a1a1a;
-            padding: 20px 30px;
-            border-radius: 18px 18px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header-reserva h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .btn-close-reserva {
-            background: none;
-            border: none;
-            color: #1a1a1a;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-close-reserva:hover {
-            background: rgba(26, 26, 26, 0.1);
-            transform: scale(1.1);
-        }
-        
-        .modal-body-reserva {
-            padding: 30px;
-            color: white;
-        }
-        
-        .sala-info {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 214, 10, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 214, 10, 0.3);
-        }
-        
-        .sala-info h3 {
-            color: #FFD60A;
-            margin: 0 0 10px 0;
-            font-size: 1.3rem;
-        }
-        
-        .sala-preco {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .preco-valor {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #FFD60A;
-        }
-        
-        .preco-periodo {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-        }
-        
-        .form-group-reserva {
-            margin-bottom: 20px;
-        }
-        
-        .form-group-reserva label {
-            display: block;
-            color: #FFD60A;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        .form-group-reserva select,
-        .form-group-reserva input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid rgba(255, 214, 10, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-        
-        .form-group-reserva select:focus,
-        .form-group-reserva input:focus {
-            outline: none;
-            border-color: #FFD60A;
-            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
-        }
-        
-        .form-group-reserva option {
-            background: #2C3E50;
-            color: white;
-        }
-        
-        #dadosCliente {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        #dadosCliente h4 {
-            color: #FFD60A;
-            margin: 0 0 20px 0;
-            font-size: 1.1rem;
-        }
-        
-        .resumo-pedido {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 214, 10, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 214, 10, 0.3);
-        }
-        
-        .resumo-pedido h4 {
-            color: #FFD60A;
-            margin: 0 0 15px 0;
-            font-size: 1.1rem;
-        }
-        
-        .resumo-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .resumo-item.total {
-            border-top: 1px solid rgba(255, 214, 10, 0.3);
-            padding-top: 10px;
-            margin-top: 10px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #FFD60A;
-        }
-        
-        .modal-footer-reserva {
-            padding: 20px 30px 30px;
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-        }
-        
-        .btn-cancelar-reserva {
-            background: rgba(244, 67, 54, 0.8);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-cancelar-reserva:hover {
-            background: rgba(244, 67, 54, 1);
-            transform: translateY(-2px);
-        }
-        
-        .btn-confirmar-reserva {
-            background: linear-gradient(135deg, #FFD60A, #FFA500);
-            color: #1a1a1a;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-confirmar-reserva:hover {
-            background: linear-gradient(135deg, #FFA500, #FF8C00);
-            transform: translateY(-2px);
-        }
-        
-        .btn-confirmar-reserva:disabled {
-            background: rgba(255, 214, 10, 0.5);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-    </style>
-
     <script>
         let tipoSalaAtual = '';
         let precoSalaAtual = 0;
@@ -765,24 +542,24 @@
             telefone: '{{ telefone|default("") }}'
         };
 
-        // Função para abrir modal de reserva
+        
         function openReservaModal(tipoSala, preco) {
             tipoSalaAtual = tipoSala;
             precoSalaAtual = preco;
             
-            // Se não estiver logado, mostrar Matrix modal
+            
             if (!loggedIn) {
                 showMatrixModal();
                 return;
             }
             
-            // Se estiver logado, abrir diretamente o modal de reserva
+            
             abrirModalReservaDirecto();
         }
         
-        // Função para abrir modal de reserva diretamente (quando logado)
+        
         function abrirModalReservaDirecto() {
-            // Configurar informações da sala
+            
             const salaNames = {
                 'intimista': 'Sala Intimista',
                 'vip': 'Sala Vip',
@@ -793,12 +570,12 @@
             document.getElementById('salaPreco').textContent = '€' + precoSalaAtual;
             document.getElementById('resumoSala').textContent = salaNames[tipoSalaAtual] || 'Sala Exclusiva';
             
-            // Configurar data mínima (hoje)
+            
             const hoje = new Date();
             const dataMinima = hoje.toISOString().split('T')[0];
             document.getElementById('dataSelect').min = dataMinima;
             
-            // Mostrar/ocultar dados do cliente baseado no login
+            
             const dadosCliente = document.getElementById('dadosCliente');
             if (!loggedIn) {
                 dadosCliente.style.display = 'block';
@@ -812,20 +589,20 @@
                 document.getElementById('telefoneCliente').required = false;
             }
             
-            // Carregar filmes disponíveis
+            
             carregarFilmes();
             
-            // Mostrar modal
+            
             document.getElementById('reservaExclusivaModal').style.display = 'flex';
         }
 
-        // Função para fechar modal
+        
         function fecharModalReserva() {
             document.getElementById('reservaExclusivaModal').style.display = 'none';
             limparFormulario();
         }
 
-        // Função para carregar filmes
+        
         function carregarFilmes() {
             fetch('/api/filmes_disponiveis')
                 .then(response => response.json())
@@ -848,21 +625,21 @@
                 });
         }
 
-        // Função para atualizar resumo
+        
         function atualizarResumo() {
             const filme = document.getElementById('filmeSelect');
             const data = document.getElementById('dataSelect').value;
             const hora = document.getElementById('horaSelect').value;
             const pessoas = document.getElementById('numPessoas').value;
             
-            // Atualizar filme
+            
             if (filme.value) {
                 document.getElementById('resumoFilme').textContent = filme.options[filme.selectedIndex].textContent;
             } else {
                 document.getElementById('resumoFilme').textContent = '-';
             }
             
-            // Atualizar data e hora
+            
             if (data && hora) {
                 const dataFormatada = new Date(data).toLocaleDateString('pt-PT');
                 document.getElementById('resumoDataHora').textContent = dataFormatada + ' às ' + hora;
@@ -870,18 +647,18 @@
                 document.getElementById('resumoDataHora').textContent = '-';
             }
             
-            // Atualizar pessoas
+            
             if (pessoas) {
                 document.getElementById('resumoPessoas').textContent = pessoas + (pessoas == 1 ? ' pessoa' : ' pessoas');
             } else {
                 document.getElementById('resumoPessoas').textContent = '-';
             }
             
-            // Atualizar total
+            
             document.getElementById('resumoTotal').textContent = '€' + precoSalaAtual;
         }
 
-        // Event listeners para atualizar resumo
+        
         document.addEventListener('DOMContentLoaded', function() {
             const campos = ['filmeSelect', 'dataSelect', 'horaSelect', 'numPessoas'];
             campos.forEach(campo => {
@@ -892,18 +669,18 @@
             });
         });
 
-        // Função para limpar formulário
+        
         function limparFormulario() {
             document.getElementById('formReservaExclusiva').reset();
             atualizarResumo();
         }
 
-        // Função para prosseguir para pagamento
+        
         function prosseguirPagamento() {
             const form = document.getElementById('formReservaExclusiva');
             const formData = new FormData(form);
             
-            // Validar campos obrigatórios
+            
             const filme = formData.get('filme');
             const data = formData.get('data');
             const hora = formData.get('hora');
@@ -914,7 +691,7 @@
                 return;
             }
             
-            // Validar dados do cliente se não logado
+            
             if (!loggedIn) {
                 const nome = formData.get('nome');
                 const email = formData.get('email');
@@ -926,7 +703,7 @@
                 }
             }
             
-            // Preparar dados da reserva
+            
             const dadosReserva = {
                 tipo_sala: tipoSalaAtual,
                 filme_id: filme,
@@ -940,38 +717,38 @@
                 telefone_cliente: loggedIn ? userData.telefone : formData.get('telefone')
             };
             
-            // Redirecionar para página de pagamento
+           
             sessionStorage.setItem('dadosReservaExclusiva', JSON.stringify(dadosReserva));
             window.location.href = '/pagamento-exclusivo';
         }
 
-        // Função para scroll suave
+       
         function scrollToSalas() {
             document.getElementById('salas').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Fechar modal com ESC
+     
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 fecharModalReserva();
             }
         });
 
-        // Função para contactar especialista
+      
         function contactExclusive() {
             window.location.href = '{{ url_for("contactos") }}';
         }
 
-        // Funções do Matrix Modal - EXATAMENTE IGUAL AO FILME_DETALHE
+      
         function showMatrixModal() {
             const modal = document.getElementById('matrixModal');
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             
-            // Iniciar o efeito Matrix Rain
+        
             startMatrixRain();
             
-            // Adicionar animação de entrada
+          
             setTimeout(() => {
                 modal.classList.add('show');
             }, 100);
@@ -988,7 +765,7 @@
             }, 300);
         }
 
-        // Efeito Matrix Rain - MELHORADO - IGUAL AO FILME_DETALHE
+        
         let matrixInterval;
         
         function startMatrixRain() {
@@ -1001,7 +778,7 @@
             const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
             const matrixArray = matrix.split("");
             
-            const fontSize = 14; // Aumentado de 10 para 14
+            const fontSize = 14; 
             const columns = canvas.width / fontSize;
             
             const drops = [];
@@ -1010,39 +787,39 @@
             }
             
             function draw() {
-                // Fundo mais transparente para letras mais visíveis
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; // Reduzido de 0.04 para 0.02
+               
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; 
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                // Cor verde mais intensa
-                ctx.fillStyle = '#00FF41'; // Verde mais brilhante
-                ctx.font = 'bold ' + fontSize + 'px "Courier New", monospace'; // Fonte bold e Courier New
+                
+                ctx.fillStyle = '#00FF41'; 
+                ctx.font = 'bold ' + fontSize + 'px "Courier New", monospace'; 
                 ctx.shadowColor = '#00FF41';
-                ctx.shadowBlur = 8; // Adicionar glow às letras
+                ctx.shadowBlur = 8; 
                 
                 for(let i = 0; i < drops.length; i++) {
                     const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
                     
-                    // Variação de intensidade para criar efeito de profundidade
-                    const alpha = Math.random() * 0.5 + 0.5; // Entre 0.5 e 1.0
+                    
+                    const alpha = Math.random() * 0.5 + 0.5; 
                     ctx.globalAlpha = alpha;
                     
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                     
-                    // Reset alpha
+                    
                     ctx.globalAlpha = 1.0;
                     
-                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.970) { // Mais letras (0.970 em vez de 0.975)
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.970) { 
                         drops[i] = 0;
                     }
                     drops[i]++;
                 }
                 
-                // Reset shadow
+                
                 ctx.shadowBlur = 0;
             }
             
-            matrixInterval = setInterval(draw, 30); // Mais rápido (30ms em vez de 35ms)
+            matrixInterval = setInterval(draw, 30); 
         }
         
         function stopMatrixRain() {
@@ -1054,17 +831,17 @@
         function continuarComoConvidado() {
             console.log('🎮 Continuar como convidado clicado (sessão exclusiva)');
             
-            // Fechar o modal primeiro
+            
             closeMatrixModal();
             
-            // Abrir o modal de reserva como convidado
+            
             setTimeout(() => {
                 abrirModalReservaDirecto();
             }, 500);
         }
         
         function fazerLogin() {
-            // Guardar dados da sessão no sessionStorage para usar após login
+            
             const dadosReserva = {
                 tipo_sala: tipoSalaAtual,
                 preco: precoSalaAtual
@@ -1073,7 +850,7 @@
             sessionStorage.setItem('dadosReservaExclusiva', JSON.stringify(dadosReserva));
             console.log('Dados da reserva guardados para após login:', dadosReserva);
             
-            // Redirecionar para login
+           
             window.location.href = '{{ url_for("login") }}';
         }
     </script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -195,15 +195,10 @@
 
     <script>
         let selectedMethod = null;
-
-        // Seleção de método de pagamento
         document.querySelectorAll('.payment-method').forEach(method => {
             method.addEventListener('click', function() {
-                // Remover seleção anterior
                 document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
                 document.querySelectorAll('input[name="payment_method"]').forEach(input => input.checked = false);
-                
-                // Selecionar método atual
                 this.classList.add('selected');
                 const radio = this.querySelector('input[type="radio"]');
                 radio.checked = true;
@@ -216,11 +211,7 @@
                 alert('Por favor, selecione um método de pagamento');
                 return;
             }
-
-            // Mostrar loading
             document.getElementById('loadingModal').style.display = 'flex';
-
-            // Processar pagamento
             fetch('/api/process-payment', {
                 method: 'POST',
                 headers: {
@@ -573,7 +564,6 @@
 </html> 
    <script>
         function continuarParaPagamento() {
-            // Validar formulário
             const nome = document.getElementById('nome').value.trim();
             const email = document.getElementById('email').value.trim();
             
@@ -588,26 +578,18 @@
                 document.getElementById('email').focus();
                 return;
             }
-            
-            // Validar formato do email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Por favor, digite um email válido.');
                 document.getElementById('email').focus();
                 return;
             }
-            
-            // Ocultar formulário e mostrar métodos de pagamento
             document.querySelector('.guest-form-section').style.display = 'none';
             document.getElementById('metodosSection').style.display = 'block';
-            
-            // Scroll suave para a seção de métodos de pagamento
             document.getElementById('metodosSection').scrollIntoView({ 
                 behavior: 'smooth' 
             });
         }
-        
-        // Variáveis globais para controle de desconto
         let codigoDescontoAtivo = null;
         let totalOriginalGlobal = {{ dados_pagamento.preco_total or 0 }};
         let novoTotalGlobal = {{ dados_pagamento.preco_total or 0 }};
@@ -619,20 +601,14 @@
                 alert('Por favor, selecione um método de pagamento.');
                 return;
             }
-            
-            // Preparar dados do pagamento
             const dadosPagamento = {
                 payment_method: metodoPagamento.value,
                 codigo: codigoDescontoAtivo
             };
-            
-            // Mostrar loading
             const botao = event.target;
             const textoOriginal = botao.innerHTML;
             botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             botao.disabled = true;
-            
-            // Fazer requisição para finalizar pagamento
             fetch('/api/finalizar-pagamento-com-desconto', {
                 method: 'POST',
                 headers: {
@@ -669,12 +645,8 @@
                 mostrarStatus('Por favor, introduza um código de desconto.', 'error');
                 return;
             }
-            
-            // Mostrar loading
             botaoAplicar.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             botaoAplicar.disabled = true;
-            
-            // Validar código
             fetch('/api/validar-codigo-desconto', {
                 method: 'POST',
                 headers: {
@@ -688,7 +660,6 @@
                 botaoAplicar.disabled = false;
                 
                 if (result.success) {
-                    // Aplicar desconto
                     aplicarDesconto(result);
                 } else {
                     mostrarStatus(result.message, 'error');
@@ -703,7 +674,6 @@
         }
         
         function aplicarDesconto(codigoInfo) {
-            // Calcular desconto
             fetch('/api/aplicar-codigo-desconto', {
                 method: 'POST',
                 headers: {
@@ -717,15 +687,10 @@
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    // Mostrar desconto aplicado
                     mostrarDescontoAplicado(result);
                     codigoDescontoAtivo = result.codigo;
                     novoTotalGlobal = result.novo_total;
-                    
-                    // Atualizar totais nos botões
                     atualizarTotaisBotoes(result.novo_total);
-                    
-                    // Ocultar formulário de código
                     document.querySelector('.codigo-desconto-form').style.display = 'none';
                 } else {
                     mostrarStatus(result.message, 'error');
@@ -746,28 +711,16 @@
             document.getElementById('novoTotal').textContent = `€${descontoInfo.novo_total.toFixed(2)}`;
             
             descontoDiv.style.display = 'block';
-            
-            // Scroll suave para mostrar o desconto
             descontoDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
         function removerDesconto() {
             codigoDescontoAtivo = null;
             novoTotalGlobal = totalOriginalGlobal;
-            
-            // Ocultar desconto aplicado
             document.getElementById('descontoAplicado').style.display = 'none';
-            
-            // Mostrar formulário de código novamente
             document.querySelector('.codigo-desconto-form').style.display = 'block';
-            
-            // Limpar campo de código
             document.getElementById('codigoDesconto').value = '';
-            
-            // Ocultar status
             document.getElementById('codigoStatus').style.display = 'none';
-            
-            // Atualizar totais nos botões
             atualizarTotaisBotoes(totalOriginalGlobal);
         }
         
@@ -776,8 +729,6 @@
             statusDiv.className = `codigo-status ${tipo}`;
             statusDiv.textContent = mensagem;
             statusDiv.style.display = 'block';
-            
-            // Auto-ocultar após 5 segundos se for sucesso
             if (tipo === 'success') {
                 setTimeout(() => {
                     statusDiv.style.display = 'none';
@@ -792,28 +743,19 @@
             if (total1) total1.textContent = `€${novoTotal.toFixed(2)}`;
             if (total2) total2.textContent = `€${novoTotal.toFixed(2)}`;
         }
-        
-        // Adicionar animações suaves aos radio buttons
         document.addEventListener('DOMContentLoaded', function() {
             const opcoesPagamento = document.querySelectorAll('.opcao-pagamento');
             
             opcoesPagamento.forEach(opcao => {
                 opcao.addEventListener('click', function() {
-                    // Remover seleção de todas as opções
                     opcoesPagamento.forEach(op => op.classList.remove('selected'));
-                    
-                    // Adicionar seleção à opção clicada
                     this.classList.add('selected');
-                    
-                    // Marcar o radio button
                     const radio = this.querySelector('input[type="radio"]');
                     if (radio) {
                         radio.checked = true;
                     }
                 });
             });
-            
-            // Event listeners para código de desconto
             const botaoAplicar = document.getElementById('aplicarCodigo');
             const inputCodigo = document.getElementById('codigoDesconto');
             const botaoRemover = document.getElementById('removerDesconto');
@@ -828,8 +770,6 @@
                         aplicarCodigoDesconto();
                     }
                 });
-                
-                // Converter para maiúsculas automaticamente
                 inputCodigo.addEventListener('input', function(e) {
                     e.target.value = e.target.value.toUpperCase();
                 });

@@ -1,6 +1,3 @@
-// Admin Atores JavaScript
-
-// Animação de entrada das linhas da tabela
 document.addEventListener('DOMContentLoaded', function() {
     const rows = document.querySelectorAll('.movies-table-pro tbody tr');
     rows.forEach((row, index) => {
@@ -12,32 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
             row.style.transform = 'translateY(0)';
         }, index * 50);
     });
-
-    // Inicializar controles de visualização
     initializeViewControls();
     initializeFilters();
 });
-
-// Controles de visualização (Grid/Table)
 function initializeViewControls() {
     const viewButtons = document.querySelectorAll('.view-btn');
     const gridView = document.getElementById('atores-grid');
     const tableView = document.getElementById('atores-table');
-
     viewButtons.forEach(btn => {
         btn.addEventListener('click', function() {
             const view = this.dataset.view;
-            
-            // Atualizar botões ativos
             viewButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
-            // Alternar visualizações
             if (view === 'grid') {
                 tableView.style.display = 'none';
                 gridView.style.display = 'grid';
-                
-                // Animar cards
                 const cards = gridView.querySelectorAll('.movie-card-pro');
                 cards.forEach((card, index) => {
                     card.style.opacity = '0';
@@ -51,8 +37,6 @@ function initializeViewControls() {
             } else {
                 gridView.style.display = 'none';
                 tableView.style.display = 'block';
-                
-                // Animar linhas da tabela
                 const rows = tableView.querySelectorAll('tbody tr');
                 rows.forEach((row, index) => {
                     row.style.opacity = '0';
@@ -67,14 +51,10 @@ function initializeViewControls() {
         });
     });
 }
-
-// Inicializar filtros
 function initializeFilters() {
     const searchInput = document.getElementById('searchInput');
     const nacionalidadeFilter = document.getElementById('nacionalidadeFilter');
     const sortSelect = document.getElementById('sortSelect');
-
-    // Pesquisa com debounce
     let searchTimeout;
     searchInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
@@ -82,31 +62,20 @@ function initializeFilters() {
             filtrarAtores();
         }, 300);
     });
-
-    // Filtro de nacionalidade
     nacionalidadeFilter.addEventListener('change', filtrarAtores);
-
-    // Ordenação
     sortSelect.addEventListener('change', ordenarAtores);
 }
-
 function filtrarAtores() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const nacionalidade = document.getElementById('nacionalidadeFilter').value;
-    
     const gridCards = document.querySelectorAll('#atores-grid .movie-card-pro');
     const tableRows = document.querySelectorAll('#atores-table tbody tr');
-    
     let visibleCount = 0;
-
-    // Filtrar cards do grid
     gridCards.forEach(card => {
         const nome = card.querySelector('h3').textContent.toLowerCase();
         const cardNacionalidade = card.dataset.nacionalidade;
-        
         const matchSearch = nome.includes(search);
         const matchNacionalidade = !nacionalidade || cardNacionalidade === nacionalidade;
-        
         if (matchSearch && matchNacionalidade) {
             card.style.display = 'block';
             visibleCount++;
@@ -114,36 +83,26 @@ function filtrarAtores() {
             card.style.display = 'none';
         }
     });
-
-    // Filtrar linhas da tabela
     tableRows.forEach(row => {
         const nome = row.querySelector('h4').textContent.toLowerCase();
         const rowNacionalidade = row.dataset.nacionalidade;
-        
         const matchSearch = nome.includes(search);
         const matchNacionalidade = !nacionalidade || rowNacionalidade === nacionalidade;
-        
         if (matchSearch && matchNacionalidade) {
             row.style.display = 'table-row';
         } else {
             row.style.display = 'none';
         }
     });
-
-    // Mostrar mensagem se não encontrar resultados
     updateEmptyState(visibleCount === 0 && (search.length > 0 || nacionalidade));
 }
-
 function ordenarAtores() {
     const sortBy = document.getElementById('sortSelect').value;
     const gridView = document.getElementById('atores-grid');
     const tableView = document.getElementById('atores-table');
-    
-    // Ordenar grid
     const gridCards = Array.from(gridView.querySelectorAll('.movie-card-pro'));
     gridCards.sort((a, b) => {
         let aVal, bVal;
-        
         switch(sortBy) {
             case 'id':
                 aVal = parseInt(a.dataset.atorId);
@@ -164,21 +123,16 @@ function ordenarAtores() {
             default:
                 return 0;
         }
-        
         if (typeof aVal === 'string') {
             return aVal.localeCompare(bVal);
         }
         return aVal - bVal;
     });
-    
     gridCards.forEach(card => gridView.appendChild(card));
-    
-    // Ordenar tabela
     const tableBody = tableView.querySelector('tbody');
     const tableRows = Array.from(tableBody.querySelectorAll('tr'));
     tableRows.sort((a, b) => {
         let aVal, bVal;
-        
         switch(sortBy) {
             case 'id':
                 aVal = parseInt(a.dataset.atorId);
@@ -199,57 +153,43 @@ function ordenarAtores() {
             default:
                 return 0;
         }
-        
         if (typeof aVal === 'string') {
             return aVal.localeCompare(bVal);
         }
         return aVal - bVal;
     });
-    
     tableRows.forEach(row => tableBody.appendChild(row));
 }
-
 function limparFiltros() {
     document.getElementById('searchInput').value = '';
     document.getElementById('nacionalidadeFilter').value = '';
     filtrarAtores();
 }
-
 function abrirModalAdicionarAtor() {
     const modal = document.getElementById('modalAdicionarAtor');
     modal.style.display = 'flex';
-    
-    // Animação de entrada
     const modalContent = modal.querySelector('.modal-content');
     modalContent.style.transform = 'translateY(50px) scale(0.9)';
     modalContent.style.opacity = '0';
-    
     setTimeout(() => {
         modalContent.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         modalContent.style.transform = 'translateY(0) scale(1)';
         modalContent.style.opacity = '1';
     }, 10);
-    
-    // Focar no primeiro campo
     setTimeout(() => {
         document.getElementById('nome').focus();
     }, 400);
 }
-
 function fecharModal(modalId) {
     const modal = document.getElementById(modalId);
     const modalContent = modal.querySelector('.modal-content');
-    
     modalContent.style.transform = 'translateY(30px) scale(0.95)';
     modalContent.style.opacity = '0';
-    
     setTimeout(() => {
         modal.style.display = 'none';
-        // Reset form
         const form = modal.querySelector('form');
         if (form) {
             form.reset();
-            // Resetar botões de submit
             const submitBtn = form.querySelector('.btn-confirm');
             if (submitBtn) {
                 submitBtn.disabled = false;
@@ -262,7 +202,6 @@ function fecharModal(modalId) {
         }
     }, 300);
 }
-
 function editarAtor(id) {
     fetch(`/admin/atores/${id}/dados`)
         .then(response => {
@@ -275,15 +214,11 @@ function editarAtor(id) {
             if (ator.error) {
                 throw new Error(ator.error);
             }
-            
             const nomeField = document.getElementById('edit_nome');
             const nacionalidadeField = document.getElementById('edit_nacionalidade');
-            
             if (nomeField) nomeField.value = ator.nome || '';
             if (nacionalidadeField) nacionalidadeField.value = ator.nacionalidade || '';
-            
             document.getElementById('formEditarAtor').action = `/admin/atores/editar/${id}`;
-            
             abrirModalEditarAtor();
         })
         .catch(error => {
@@ -291,44 +226,33 @@ function editarAtor(id) {
             showNotification('Erro ao carregar dados do ator: ' + error.message, 'error');
         });
 }
-
 function abrirModalEditarAtor() {
     const modal = document.getElementById('modalEditarAtor');
     modal.style.display = 'flex';
-    
-    // Animação de entrada
     const modalContent = modal.querySelector('.modal-content');
     modalContent.style.transform = 'translateY(50px) scale(0.9)';
     modalContent.style.opacity = '0';
-    
     setTimeout(() => {
         modalContent.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         modalContent.style.transform = 'translateY(0) scale(1)';
         modalContent.style.opacity = '1';
     }, 10);
-    
-    // Focar no primeiro campo
     setTimeout(() => {
         document.getElementById('edit_nome').focus();
     }, 400);
 }
-
 function removerAtor(id, nome) {
-    // Criar modal de confirmação personalizado
     const confirmModal = createConfirmModal(
         'Remover Ator',
         `Tem certeza que deseja remover o ator "${nome}"?`,
         'Esta ação não pode ser desfeita.',
         () => {
-            // Adicionar animação de saída
             const row = document.querySelector(`tr[data-ator-id="${id}"]`);
             if (row) {
                 row.style.transition = 'all 0.4s ease';
                 row.style.transform = 'scale(0.8) translateX(-20px)';
                 row.style.opacity = '0';
             }
-            
-            // Fazer requisição
             fetch(`/admin/atores/remover/${id}`, {
                 method: 'POST'
             })
@@ -339,7 +263,6 @@ function removerAtor(id, nome) {
                     }, 400);
                 } else {
                     showNotification('Erro ao remover ator', 'error');
-                    // Reverter animação
                     if (row) {
                         row.style.transform = '';
                         row.style.opacity = '1';
@@ -348,7 +271,6 @@ function removerAtor(id, nome) {
             })
             .catch(() => {
                 showNotification('Erro ao remover ator', 'error');
-                // Reverter animação
                 if (row) {
                     row.style.transform = '';
                     row.style.opacity = '1';
@@ -356,11 +278,8 @@ function removerAtor(id, nome) {
             });
         }
     );
-    
     document.body.appendChild(confirmModal);
 }
-
-// Pesquisa melhorada com debounce
 let searchTimeout;
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
@@ -368,16 +287,12 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput.addEventListener('input', function() {
             clearTimeout(searchTimeout);
             const search = this.value.toLowerCase();
-            
             searchTimeout = setTimeout(() => {
-                // Pesquisar na tabela
                 const rows = document.querySelectorAll('.movies-table-pro tbody tr');
                 let visibleTableCount = 0;
-                
                 rows.forEach(row => {
                     const nome = row.querySelector('h4').textContent.toLowerCase();
                     const nacionalidade = row.querySelector('.genre-tag').textContent.toLowerCase();
-                    
                     if (nome.includes(search) || nacionalidade.includes(search)) {
                         row.style.display = 'table-row';
                         row.style.animation = 'fadeIn 0.3s ease';
@@ -386,15 +301,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         row.style.display = 'none';
                     }
                 });
-                
-                // Pesquisar no grid
                 const cards = document.querySelectorAll('#atores-grid .movie-card-pro');
                 let visibleGridCount = 0;
-                
                 cards.forEach(card => {
                     const nome = card.querySelector('h3').textContent.toLowerCase();
                     const nacionalidade = card.querySelector('.genre').textContent.toLowerCase();
-                    
                     if (nome.includes(search) || nacionalidade.includes(search)) {
                         card.style.display = 'block';
                         visibleGridCount++;
@@ -402,8 +313,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         card.style.display = 'none';
                     }
                 });
-                
-                // Mostrar mensagem se não encontrar resultados
                 const activeView = document.querySelector('.view-btn.active').dataset.view;
                 const visibleCount = activeView === 'grid' ? visibleGridCount : visibleTableCount;
                 updateEmptyState(visibleCount === 0 && search.length > 0);
@@ -411,21 +320,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// Fechar modal ao clicar fora
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal-overlay')) {
         const modalContent = e.target.querySelector('.modal-content');
         modalContent.style.transform = 'translateY(30px) scale(0.95)';
         modalContent.style.opacity = '0';
-        
         setTimeout(() => {
             e.target.style.display = 'none';
         }, 300);
     }
 });
-
-// Funções utilitárias
 function createConfirmModal(title, message, subtitle, onConfirm) {
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
@@ -446,15 +350,12 @@ function createConfirmModal(title, message, subtitle, onConfirm) {
             </div>
         </div>
     `;
-    
     modal.querySelector('.btn-confirm').onclick = function() {
         onConfirm();
         modal.remove();
     };
-    
     return modal;
 }
-
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.style.cssText = `
@@ -469,7 +370,6 @@ function showNotification(message, type = 'info') {
         transform: translateX(400px);
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     `;
-    
     if (type === 'error') {
         notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
     } else if (type === 'success') {
@@ -477,23 +377,18 @@ function showNotification(message, type = 'info') {
     } else {
         notification.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
     }
-    
     notification.textContent = message;
     document.body.appendChild(notification);
-    
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
-    
     setTimeout(() => {
         notification.style.transform = 'translateX(400px)';
         setTimeout(() => notification.remove(), 400);
     }, 3000);
 }
-
 function updateEmptyState(show) {
     let emptyState = document.querySelector('.empty-state-filter');
-    
     if (show && !emptyState) {
         emptyState = document.createElement('div');
         emptyState.className = 'empty-state-filter';
@@ -502,7 +397,6 @@ function updateEmptyState(show) {
             <h3>Nenhum ator encontrado</h3>
             <p>Tente ajustar os filtros de pesquisa.</p>
         `;
-        
         const activeView = document.querySelector('.view-btn.active').dataset.view;
         if (activeView === 'grid') {
             document.getElementById('atores-grid').appendChild(emptyState);
@@ -513,43 +407,31 @@ function updateEmptyState(show) {
         emptyState.remove();
     }
 }
-
-// Validação do formulário de adicionar
 document.querySelector('#modalAdicionarAtor form').addEventListener('submit', function(e) {
     const nome = document.getElementById('nome').value.trim();
-    
     if (!nome) {
         e.preventDefault();
         showNotification('Por favor, preencha o nome do ator', 'error');
         document.getElementById('nome').focus();
         return;
     }
-    
-    // Mostrar loading no botão
     const submitBtn = this.querySelector('.btn-confirm');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adicionando...';
     submitBtn.disabled = true;
 });
-
-// Validação do formulário de editar
 document.querySelector('#formEditarAtor').addEventListener('submit', function(e) {
     const nome = document.getElementById('edit_nome').value.trim();
-    
     if (!nome) {
         e.preventDefault();
         showNotification('Por favor, preencha o nome do ator', 'error');
         document.getElementById('edit_nome').focus();
         return;
     }
-    
-    // Mostrar loading no botão
     const submitBtn = this.querySelector('.btn-confirm');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
     submitBtn.disabled = true;
-    
-    // Adicionar feedback visual na linha da tabela
     const atorId = this.action.split('/').pop();
     const row = document.querySelector(`tr[data-ator-id="${atorId}"]`);
     if (row) {

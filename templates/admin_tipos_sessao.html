@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Tipos de Sessão - CineVibe Admin</title>
@@ -448,13 +452,10 @@
     </style>
 
     <script>
-    // Search and Filter
     document.getElementById('searchInput').addEventListener('input', filtrarTipos);
 
     function filtrarTipos() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        
-        // Filter Table
         document.querySelectorAll('#tipos-table tbody tr').forEach(row => {
             const nome = row.querySelector('.title-cell h4').textContent.toLowerCase();
             const descricao = row.querySelector('.genre-cell .genre-tag').textContent.toLowerCase();
@@ -464,8 +465,6 @@
             row.style.display = matchSearch ? '' : 'none';
         });
     }
-
-    // Remove Type
     function removerTipo(id, nome) {
         if (confirm(`Tem certeza que deseja remover o tipo "${nome}"? Esta ação não pode ser desfeita.`)) {
             fetch(`/admin/tipos-sessao/${id}/remover`, {
@@ -487,8 +486,6 @@
             });
         }
     }
-
-    // Modal Functions
     function abrirModalAdicionarTipo() {
         document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> Adicionar Novo Tipo de Sessão';
         document.getElementById('formAdicionarTipo').action = '{{ url_for("admin_adicionar_tipo_sessao_alt") }}';
@@ -516,19 +513,13 @@
     function fecharModalAdicionarTipo() {
         document.getElementById('modalAdicionarTipo').style.display = 'none';
         document.body.style.overflow = 'auto';
-        
-        // Reset form
         document.getElementById('formAdicionarTipo').reset();
     }
-
-    // Close modal when clicking outside
     document.getElementById('modalAdicionarTipo').addEventListener('click', function(e) {
         if (e.target === this) {
             fecharModalAdicionarTipo();
         }
     });
-
-    // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             fecharModalAdicionarTipo();
@@ -559,6 +550,11 @@
             console.error('Erro:', error);
         });
     });
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
     </script>
 </body>
 </html>

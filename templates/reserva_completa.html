@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -473,7 +473,6 @@
     </div>
 
     <script>
-        // Dados da sessão (passados do backend)
         const dadosSessao = {
             filme_id: {{ filme.id }},
             cinema_id: {{ cinema.id }},
@@ -482,8 +481,6 @@
             data_sessao: '{{ data_sessao }}',
             preco_base: {{ tipo_sessao.preco or 8.50 }}
         };
-
-        // Estado da reserva
         let estadoReserva = {
             step: 1,
             quantidade: 1,
@@ -494,78 +491,51 @@
             totalProdutos: 0,
             totalGeral: 0
         };
-
-        // Dados da sala (vindos da base de dados)
         const dadosSala = {{ sala_layout|tojson }};
         const lugaresOcupados = {{ lugares_ocupados|tojson }};
-
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             inicializarReserva();
             gerarMapaSala();
             configurarEventListeners();
         });
-
-        // Função principal de inicialização
         function inicializarReserva() {
             atualizarProgressBar();
             atualizarResumoFixo();
         }
-
-        // Configurar event listeners
         function configurarEventListeners() {
-            // Quantidade de bilhetes
             document.querySelectorAll('.quantidade-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const quantidade = parseInt(this.dataset.quantidade);
                     selecionarQuantidade(quantidade);
                 });
             });
-
-            // Input customizado de quantidade
             document.getElementById('quantidadeCustom').addEventListener('input', function() {
                 const quantidade = parseInt(this.value) || 1;
                 selecionarQuantidade(quantidade);
             });
-
-            // Métodos de pagamento
             document.querySelectorAll('input[name="metodoPagamento"]').forEach(radio => {
                 radio.addEventListener('change', function() {
                     alterarMetodoPagamento(this.value);
                 });
             });
-
-            // Formatação de campos
             formatarCampoCartao();
         }
-
-        // Selecionar quantidade de bilhetes
         function selecionarQuantidade(quantidade) {
             estadoReserva.quantidade = quantidade;
-            
-            // Atualizar UI
             document.querySelectorAll('.quantidade-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
             document.querySelector(`[data-quantidade="${quantidade}"]`)?.classList.add('selected');
             document.getElementById('quantidadeCustom').value = quantidade;
             document.getElementById('quantidadeSelecionada').textContent = quantidade;
-            
-            // Habilitar botão
             document.getElementById('btnStep1').disabled = false;
-            
-            // Atualizar resumo
             atualizarResumoFixo();
         }
-
-        // Alterar quantidade com botões +/-
         function alterarQuantidade(delta) {
             const input = document.getElementById('quantidadeCustom');
             const novaQuantidade = Math.max(1, Math.min(20, parseInt(input.value) + delta));
             selecionarQuantidade(novaQuantidade);
         }
-
-        // Gerar mapa da sala
         function gerarMapaSala() {
             const mapaSala = document.getElementById('mapaSala');
             mapaSala.innerHTML = '';
@@ -573,8 +543,6 @@
             for (let fila = 1; fila <= dadosSala.filas; fila++) {
                 const filaDiv = document.createElement('div');
                 filaDiv.className = 'fila';
-                
-                // Letra da fila
                 const letraFila = document.createElement('div');
                 letraFila.className = 'letra-fila';
                 letraFila.textContent = String.fromCharCode(64 + fila); // A, B, C...
@@ -589,13 +557,9 @@
                     lugarDiv.dataset.fila = fila;
                     lugarDiv.dataset.numero = lugar;
                     lugarDiv.textContent = lugar;
-
-                    // Verificar se é VIP (últimas 2 filas)
                     if (fila >= dadosSala.filas - 1) {
                         lugarDiv.classList.add('vip');
                     }
-
-                    // Verificar se está ocupado
                     if (lugaresOcupados.includes(lugarId)) {
                         lugarDiv.classList.add('ocupado');
                     } else {
@@ -608,23 +572,17 @@
                 mapaSala.appendChild(filaDiv);
             }
         }
-
-        // Selecionar lugar na sala
         function selecionarLugar(lugarId, elemento) {
             if (elemento.classList.contains('ocupado')) return;
 
             if (elemento.classList.contains('selecionado')) {
-                // Desselecionar
                 elemento.classList.remove('selecionado');
                 estadoReserva.lugaresSelecionados = estadoReserva.lugaresSelecionados.filter(l => l.id !== lugarId);
             } else {
-                // Verificar se já atingiu o limite
                 if (estadoReserva.lugaresSelecionados.length >= estadoReserva.quantidade) {
                     alert(`Você pode selecionar apenas ${estadoReserva.quantidade} lugar(es).`);
                     return;
                 }
-
-                // Selecionar
                 elemento.classList.add('selecionado');
                 const isVip = elemento.classList.contains('vip');
                 estadoReserva.lugaresSelecionados.push({
@@ -635,15 +593,11 @@
                     preco: dadosSessao.preco_base + (isVip ? 3 : 0)
                 });
             }
-
-            // Verificar se pode avançar
             document.getElementById('btnStep2').disabled = 
                 estadoReserva.lugaresSelecionados.length !== estadoReserva.quantidade;
 
             atualizarResumoFixo();
         }
-
-        // Alterar produto do bar
         function alterarProduto(produtoId, delta) {
             if (!estadoReserva.produtos[produtoId]) {
                 estadoReserva.produtos[produtoId] = { quantidade: 0, preco: 0 };
@@ -655,56 +609,31 @@
             estadoReserva.produtos[produtoId].quantidade = Math.max(0, 
                 estadoReserva.produtos[produtoId].quantidade + delta);
             estadoReserva.produtos[produtoId].preco = preco;
-
-            // Atualizar UI
             document.getElementById(`qty-${produtoId}`).textContent = 
                 estadoReserva.produtos[produtoId].quantidade;
 
             atualizarResumoFixo();
         }
-
-        // Próximo step
         function proximoStep() {
             if (estadoReserva.step < 5) {
-                // Esconder step atual
                 document.getElementById(`step${estadoReserva.step}`).classList.remove('active');
-                
-                // Avançar step
                 estadoReserva.step++;
-                
-                // Mostrar próximo step
                 document.getElementById(`step${estadoReserva.step}`).classList.add('active');
-                
-                // Atualizar progress bar
                 atualizarProgressBar();
-                
-                // Atualizar resumo se for step 4
                 if (estadoReserva.step === 4) {
                     atualizarResumoCompleto();
                 }
             }
         }
-
-        // Step anterior
         function anteriorStep() {
             if (estadoReserva.step > 1) {
-                // Esconder step atual
                 document.getElementById(`step${estadoReserva.step}`).classList.remove('active');
-                
-                // Voltar step
                 estadoReserva.step--;
-                
-                // Mostrar step anterior
                 document.getElementById(`step${estadoReserva.step}`).classList.add('active');
-                
-                // Atualizar progress bar
                 atualizarProgressBar();
             }
         }
-
-        // Atualizar progress bar
         function atualizarProgressBar() {
-            // Atualizar steps
             document.querySelectorAll('.progress-step').forEach((step, index) => {
                 if (index + 1 <= estadoReserva.step) {
                     step.classList.add('active');
@@ -712,16 +641,11 @@
                     step.classList.remove('active');
                 }
             });
-
-            // Atualizar linha de progresso
             const progressFill = document.getElementById('progressFill');
             const percentage = ((estadoReserva.step - 1) / 4) * 100;
             progressFill.style.width = `${percentage}%`;
         }
-
-        // Atualizar resumo fixo
         function atualizarResumoFixo() {
-            // Calcular totais
             estadoReserva.totalBilhetes = estadoReserva.lugaresSelecionados.reduce((total, lugar) => 
                 total + lugar.preco, 0);
             
@@ -729,8 +653,6 @@
                 total + (produto.quantidade * produto.preco), 0);
             
             estadoReserva.totalGeral = estadoReserva.totalBilhetes + estadoReserva.totalProdutos;
-
-            // Atualizar UI
             document.getElementById('resumoBilhetes').textContent = estadoReserva.quantidade;
             document.getElementById('resumoLugaresTexto').textContent = 
                 estadoReserva.lugaresSelecionados.map(l => l.id).join(', ') || '-';
@@ -743,10 +665,7 @@
             
             document.getElementById('totalFixo').textContent = `€${estadoReserva.totalGeral.toFixed(2)}`;
         }
-
-        // Atualizar resumo completo (step 4)
         function atualizarResumoCompleto() {
-            // Lugares
             const resumoLugares = document.getElementById('resumoLugares');
             resumoLugares.innerHTML = estadoReserva.lugaresSelecionados.map(lugar => `
                 <div class="lugar-resumo">
@@ -754,8 +673,6 @@
                     <span>€${lugar.preco.toFixed(2)}</span>
                 </div>
             `).join('');
-
-            // Produtos
             const listaProdutos = document.getElementById('listaProdutos');
             const produtosComQuantidade = Object.entries(estadoReserva.produtos)
                 .filter(([_, produto]) => produto.quantidade > 0);
@@ -770,27 +687,17 @@
             } else {
                 document.getElementById('resumoProdutos').style.display = 'none';
             }
-
-            // Totais
             document.getElementById('subtotalBilhetes').textContent = `€${estadoReserva.totalBilhetes.toFixed(2)}`;
             document.getElementById('subtotalProdutos').textContent = `€${estadoReserva.totalProdutos.toFixed(2)}`;
             document.getElementById('totalFinal').textContent = `€${estadoReserva.totalGeral.toFixed(2)}`;
         }
-
-        // Alterar método de pagamento
         function alterarMetodoPagamento(metodo) {
             estadoReserva.metodoPagamento = metodo;
-            
-            // Esconder todos os forms
             document.querySelectorAll('.pagamento-form').forEach(form => {
                 form.classList.remove('active');
             });
-            
-            // Mostrar form selecionado
             document.getElementById(`form${metodo.charAt(0).toUpperCase() + metodo.slice(1)}`).classList.add('active');
         }
-
-        // Formatação do campo de cartão
         function formatarCampoCartao() {
             const numeroCartao = document.getElementById('numeroCartao');
             const validadeCartao = document.getElementById('validadeCartao');
@@ -809,18 +716,11 @@
                 this.value = value;
             });
         }
-
-        // Finalizar reserva
         function finalizarReserva() {
-            // Validar dados de pagamento
             if (!validarDadosPagamento()) {
                 return;
             }
-
-            // Mostrar loading
             document.getElementById('loadingModal').classList.add('visible');
-
-            // Preparar dados para envio
             const dadosReserva = {
                 ...dadosSessao,
                 lugares: estadoReserva.lugaresSelecionados,
@@ -828,8 +728,6 @@
                 metodoPagamento: estadoReserva.metodoPagamento,
                 total: estadoReserva.totalGeral
             };
-
-            // Enviar para o backend
             fetch('/confirmar_reserva', {
                 method: 'POST',
                 headers: {
@@ -853,8 +751,6 @@
                 console.error('Erro:', error);
             });
         }
-
-        // Validar dados de pagamento
         function validarDadosPagamento() {
             const metodo = estadoReserva.metodoPagamento;
             
@@ -890,8 +786,6 @@
             
             return true;
         }
-
-        // Funções dos modais
         function irParaHome() {
             window.location.href = '{{ url_for("home") }}';
         }

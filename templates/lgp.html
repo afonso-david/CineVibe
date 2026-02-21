@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -417,15 +417,11 @@
         </footer>
 
     <script>
-        // Remover FOUC - mostrar conteúdo apenas quando CSS estiver carregado
         document.addEventListener('DOMContentLoaded', function() {
-            // Aguardar um pequeno delay para garantir que todos os estilos foram aplicados
             setTimeout(function() {
                 document.body.classList.add('loaded');
             }, 100);
         });
-        
-        // Fallback caso DOMContentLoaded não funcione
         window.addEventListener('load', function() {
             document.body.classList.add('loaded');
         });
@@ -444,8 +440,6 @@
                 }
             });
         });
-
-        // Animate elements on scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -466,32 +460,21 @@
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
-
-        // Controlo do vídeo de fundo com tempo específico (15s-40s)
         document.addEventListener('DOMContentLoaded', function() {
             const heroVideo = document.getElementById('heroVideo');
             
             if (heroVideo) {
-                // Garantir que o vídeo está mudo
                 heroVideo.muted = true;
                 heroVideo.loop = false; // Desativar loop automático
-                
-                // Definir tempo inicial (15 segundos)
                 heroVideo.currentTime = 15;
-                
-                // Event listener para controlar o loop entre 15s-40s
                 heroVideo.addEventListener('timeupdate', function() {
                     if (heroVideo.currentTime >= 40) {
                         heroVideo.currentTime = 15; // Voltar aos 15 segundos
                     }
                 });
-                
-                // Event listener para quando o vídeo está pronto
                 heroVideo.addEventListener('loadeddata', function() {
                     heroVideo.currentTime = 15;
                 });
-                
-                // Tentar reproduzir o vídeo
                 const playPromise = heroVideo.play();
                 
                 if (playPromise !== undefined) {
@@ -500,12 +483,9 @@
                         heroVideo.currentTime = 15; // Garantir que começa aos 15s
                     }).catch(error => {
                         console.log('Erro ao reproduzir vídeo de fundo:', error);
-                        // Se falhar, esconder o vídeo
                         heroVideo.style.display = 'none';
                     });
                 }
-                
-                // Event listeners para quando o vídeo carrega
                 heroVideo.addEventListener('error', function() {
                     console.log('Erro ao carregar vídeo');
                     heroVideo.style.display = 'none';

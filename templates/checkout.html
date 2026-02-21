@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -392,8 +392,6 @@
 
     <script>
         let selectedPaymentMethod = null;
-
-        // Adicionar event listeners aos métodos de pagamento
         document.addEventListener('DOMContentLoaded', function() {
             const paymentMethods = document.querySelectorAll('.payment-method-item');
             
@@ -407,19 +405,11 @@
 
         function selectPaymentMethod(method, element) {
             selectedPaymentMethod = method;
-            
-            // Ocultar métodos de pagamento
             document.getElementById('payment-methods-container').style.display = 'none';
-            
-            // Mostrar container de formulários
             document.getElementById('payment-forms-container').style.display = 'block';
-            
-            // Ocultar todos os formulários
             document.querySelectorAll('.payment-form').forEach(form => {
                 form.style.display = 'none';
             });
-            
-            // Mostrar formulário específico
             let formId;
             switch(method) {
                 case 'mbway':
@@ -443,8 +433,6 @@
             
             if (formId) {
                 document.getElementById(formId).style.display = 'block';
-                
-                // Scroll suave para o formulário
                 document.getElementById('payment-forms-container').scrollIntoView({ 
                     behavior: 'smooth',
                     block: 'nearest'
@@ -453,16 +441,9 @@
         }
 
         function voltarMetodos() {
-            // Mostrar métodos de pagamento
             document.getElementById('payment-methods-container').style.display = 'grid';
-            
-            // Ocultar container de formulários
             document.getElementById('payment-forms-container').style.display = 'none';
-            
-            // Limpar seleção
             selectedPaymentMethod = null;
-            
-            // Scroll para os métodos
             document.getElementById('payment-methods-container').scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'nearest'
@@ -470,28 +451,19 @@
         }
 
         function prosseguirPagamento() {
-            // Verificar se um método de pagamento foi selecionado
             if (!selectedPaymentMethod) {
                 alert('Por favor, selecione um método de pagamento.');
                 return;
             }
-            
-            // Validar dados do método de pagamento selecionado
             if (!validatePaymentMethod()) {
                 return;
             }
-            
-            // Iniciar processo de pagamento
             iniciarProcessoPagamento();
         }
 
         function iniciarProcessoPagamento() {
-            // Mostrar modal de loading
             document.getElementById('loadingModal').style.display = 'flex';
-            
-            // Preparar dados completos da reserva
             const dados = {
-                // Dados da reserva (do backend/sessão)
                 filme_id: {{ filme.id if filme else 1 }},
                 cinema_id: {{ cinema.id if cinema else 1 }},
                 id_tipo_sessao: {{ tipo_sessao.id if tipo_sessao else 1 }},
@@ -499,13 +471,11 @@
                 data_sessao: '{{ data_sessao if data_sessao else "2025-01-20" }}',
                 lugares: {{ (",".join(lugares_selecionados) if lugares_selecionados else "A1,A2") | tojson }},
                 total_geral: {{ total_geral if total_geral else 17.0 }},
-                // Dados do pagamento
                 payment_method: selectedPaymentMethod,
                 payment_data: getPaymentData()
             };
             
             {% if not user_authenticated %}
-            // Dados do cliente convidado (da sessão Flask)
             const customerName = '{{ session.get("nome_cliente", "") }}';
             const customerEmail = '{{ session.get("email_cliente", "") }}';
             const customerPhone = '{{ session.get("telefone_cliente", "") }}';
@@ -515,8 +485,6 @@
                 customerEmail: customerEmail,
                 customerPhone: customerPhone
             });
-            
-            // Validar que os dados existem antes de enviar
             if (!customerName || !customerEmail || customerName.trim() === '' || customerEmail.trim() === '') {
                 console.error('❌ Dados do cliente não encontrados na sessão!');
                 document.getElementById('loadingModal').style.display = 'none';
@@ -524,8 +492,6 @@
                 window.location.href = '{{ url_for("resumo_reserva") }}';
                 return;
             }
-            
-            // Adicionar dados do cliente ao objeto
             dados.customer_name = customerName.trim();
             dados.customer_email = customerEmail.trim();
             dados.customer_phone = customerPhone ? customerPhone.trim() : '';
@@ -536,11 +502,7 @@
                 customer_phone: dados.customer_phone
             });
             {% endif %}
-            
-            // DEBUG: Mostrar dados que serão enviados
             console.log('📧 Dados completos a enviar:', dados);
-            
-            // Simular etapas do processo
             processarEtapas(dados);
         }
 
@@ -557,16 +519,10 @@
             
             function processarProximaEtapa() {
                 if (currentStep < steps.length) {
-                    // Ativar etapa atual
                     const stepElement = document.getElementById(steps[currentStep]);
                     stepElement.classList.add('active');
-                    
-                    // Atualizar mensagem
                     document.getElementById('loadingMessage').textContent = messages[currentStep];
-                    
-                    // Simular tempo de processamento
                     setTimeout(() => {
-                        // Completar etapa atual
                         stepElement.classList.remove('active');
                         stepElement.classList.add('completed');
                         
@@ -575,7 +531,6 @@
                         if (currentStep < steps.length) {
                             processarProximaEtapa();
                         } else {
-                            // Todas as etapas concluídas, processar pagamento final
                             finalizarPagamento(dados);
                         }
                     }, 1500); // 1.5 segundos por etapa
@@ -588,11 +543,8 @@
         }
 
         function finalizarPagamento(dados) {
-            // Atualizar interface para sucesso
             document.getElementById('loadingTitle').textContent = 'Pagamento Aprovado!';
             document.getElementById('loadingMessage').textContent = 'Redirecionando...';
-            
-            // Enviar dados para o servidor
             fetch('/processar_checkout', {
                 method: 'POST',
                 headers: {
@@ -603,12 +555,10 @@
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    // Mostrar sucesso por 2 segundos antes de redirecionar
                     setTimeout(() => {
                         window.location.href = result.redirect || '/';
                     }, 2000);
                 } else {
-                    // Erro no processamento
                     document.getElementById('loadingModal').style.display = 'none';
                     alert('Erro no processamento: ' + (result.error || 'Erro desconhecido'));
                 }
@@ -698,8 +648,6 @@
                     return {};
             }
         }
-
-        // Variáveis globais para controle de desconto
         let codigoDescontoAtivo = null;
         let totalOriginalGlobal = {{ total_geral if total_geral else 0 }};
         let novoTotalGlobal = {{ total_geral if total_geral else 0 }};
@@ -714,8 +662,6 @@
                 form.style.display = 'block';
                 icon.className = 'fas fa-minus';
                 text.textContent = 'Ocultar código';
-                
-                // Scroll suave e foco no input
                 setTimeout(() => {
                     form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     document.getElementById('codigoDesconto').focus();
@@ -736,12 +682,8 @@
                 mostrarStatus('Por favor, introduza um código de desconto.', 'error');
                 return;
             }
-            
-            // Mostrar loading
             botaoAplicar.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             botaoAplicar.disabled = true;
-            
-            // Validar código
             fetch('/api/validar-codigo-desconto', {
                 method: 'POST',
                 headers: {
@@ -755,7 +697,6 @@
                 botaoAplicar.disabled = false;
                 
                 if (result.success) {
-                    // Aplicar desconto
                     aplicarDesconto(result);
                 } else {
                     mostrarStatus(result.message, 'error');
@@ -770,7 +711,6 @@
         }
         
         function aplicarDesconto(codigoInfo) {
-            // Calcular desconto
             fetch('/api/aplicar-codigo-desconto', {
                 method: 'POST',
                 headers: {
@@ -784,18 +724,11 @@
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    // Mostrar desconto aplicado
                     mostrarDescontoAplicado(result);
                     codigoDescontoAtivo = result.codigo;
                     novoTotalGlobal = result.novo_total;
-                    
-                    // Atualizar total no botão de pagamento
                     atualizarTotalBotao(result.novo_total);
-                    
-                    // Ocultar formulário de código
                     document.getElementById('codigoDescontoForm').style.display = 'none';
-                    
-                    // Atualizar botão toggle
                     const btn = document.getElementById('toggleCodigo');
                     btn.style.display = 'none';
                 } else {
@@ -815,32 +748,20 @@
             document.getElementById('valorDesconto').textContent = `-€${descontoInfo.desconto_valor.toFixed(2)}`;
             
             descontoDiv.style.display = 'block';
-            
-            // Scroll suave para mostrar o desconto
             descontoDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
         function removerDesconto() {
             codigoDescontoAtivo = null;
             novoTotalGlobal = totalOriginalGlobal;
-            
-            // Ocultar desconto aplicado
             document.getElementById('descontoAplicado').style.display = 'none';
-            
-            // Mostrar botão toggle novamente
             const btn = document.getElementById('toggleCodigo');
             btn.style.display = 'flex';
             btn.querySelector('i').className = 'fas fa-plus';
             btn.querySelector('span').textContent = 'Adicionar código';
-            
-            // Limpar campo de código
             document.getElementById('codigoDesconto').value = '';
-            
-            // Ocultar status e formulário
             document.getElementById('codigoStatus').style.display = 'none';
             document.getElementById('codigoDescontoForm').style.display = 'none';
-            
-            // Atualizar total no botão
             atualizarTotalBotao(totalOriginalGlobal);
         }
         
@@ -849,8 +770,6 @@
             statusDiv.className = `codigo-status ${tipo}`;
             statusDiv.textContent = mensagem;
             statusDiv.style.display = 'block';
-            
-            // Auto-ocultar após 5 segundos se for sucesso
             if (tipo === 'success') {
                 setTimeout(() => {
                     statusDiv.style.display = 'none';
@@ -864,10 +783,7 @@
                 botaoPagamento.textContent = `€${novoTotal.toFixed(2)}`;
             }
         }
-
-        // Formatação automática dos campos
         document.addEventListener('DOMContentLoaded', function() {
-            // Formatação do número do cartão
             const cardNumberInput = document.getElementById('card-number');
             if (cardNumberInput) {
                 cardNumberInput.addEventListener('input', function(e) {
@@ -876,8 +792,6 @@
                     e.target.value = formattedValue;
                 });
             }
-
-            // Formatação da validade
             const cardExpiryInput = document.getElementById('card-expiry');
             if (cardExpiryInput) {
                 cardExpiryInput.addEventListener('input', function(e) {
@@ -888,8 +802,6 @@
                     e.target.value = value;
                 });
             }
-
-            // Formatação do Gift Card
             const giftCodeInput = document.getElementById('gift-code');
             if (giftCodeInput) {
                 giftCodeInput.addEventListener('input', function(e) {
@@ -898,8 +810,6 @@
                     e.target.value = formattedValue;
                 });
             }
-            
-            // Event listeners para código de desconto
             const toggleCodigo = document.getElementById('toggleCodigo');
             const botaoAplicar = document.getElementById('aplicarCodigo');
             const inputCodigo = document.getElementById('codigoDesconto');
@@ -919,8 +829,6 @@
                         aplicarCodigoDesconto();
                     }
                 });
-                
-                // Converter para maiúsculas automaticamente
                 inputCodigo.addEventListener('input', function(e) {
                     e.target.value = e.target.value.toUpperCase();
                 });

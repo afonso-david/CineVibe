@@ -1,0 +1,116 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0d1117, #161b22);
+    color: white;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container {
+    background: rgba(13, 17, 23, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    backdrop-filter: blur(10px);
+}
+h1 {
+    color: #FFD60A;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+}
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+input:focus {
+    outline: none;
+    border-color: #FFD60A;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
+}
+input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #FFD60A, #FFA500);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+button:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 214, 10, 0.4);
+}
+button:disabled {
+    background: rgba(255, 214, 10, 0.3);
+    cursor: not-allowed;
+    transform: none;
+}
+.message {
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 10px;
+    font-weight: 500;
+}
+.success { 
+    background: rgba(76, 175, 80, 0.2); 
+    color: #4CAF50; 
+    border: 1px solid rgba(76, 175, 80, 0.5);
+}
+.error { 
+    background: rgba(244, 67, 54, 0.2); 
+    color: #f44336; 
+    border: 1px solid rgba(244, 67, 54, 0.5);
+}
+.token-info {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 12px;
+    margin-bottom: 20px;
+    word-break: break-all;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.back-link {
+    margin-top: 20px;
+}
+.back-link a {
+    color: #FFD60A;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.back-link a:hover {
+    color: #FFA500;
+    text-decoration: underline;
+}

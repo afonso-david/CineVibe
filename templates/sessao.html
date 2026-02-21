@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -345,15 +345,12 @@
     </div>
 
     <script>
-        // Função para scroll suave para as opções
         function scrollToOptions() {
             document.getElementById('options').scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
         }
-
-        // Sistema de pesquisa
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.addEventListener('focus', () => {
@@ -364,8 +361,6 @@
                 searchInput.parentElement.classList.remove('focused');
             });
         }
-
-        // Smooth scroll para links internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -378,8 +373,6 @@
                 }
             });
         });
-
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎬 Sessão Só Para Ti carregada');
         });

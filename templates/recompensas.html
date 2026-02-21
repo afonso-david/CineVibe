@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -367,8 +367,6 @@
                 }
             });
         });
-
-        // Animate elements on scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -481,7 +479,6 @@
             modal.classList.remove('show');
             setTimeout(() => {
                 modal.remove();
-                // Reload page only after success modal is closed
                 if (modal.querySelector('.modal-content.success')) {
                     location.reload();
                 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -189,8 +189,6 @@
     function findBestSeats(quantity) {
         const allSeats = document.querySelectorAll('.seat.available');
         const seatsByRow = {};
-        
-        // Agrupar lugares por fileira
         allSeats.forEach(seat => {
             const row = seat.dataset.row;
             const position = parseInt(seat.dataset.position);
@@ -204,13 +202,9 @@
                 name: seat.dataset.seat
             });
         });
-        
-        // Ordenar lugares por posição em cada fileira
         Object.keys(seatsByRow).forEach(row => {
             seatsByRow[row].sort((a, b) => a.position - b.position);
         });
-        
-        // Encontrar TODOS os grupos consecutivos possíveis
         const allConsecutiveGroups = [];
         
         for (const row in seatsByRow) {
@@ -218,8 +212,6 @@
             
             for (let i = 0; i <= seats.length - quantity; i++) {
                 let consecutive = true;
-                
-                // Verificar se os lugares são consecutivos
                 for (let j = 1; j < quantity; j++) {
                     if (seats[i + j].position !== seats[i + j - 1].position + 1) {
                         consecutive = false;
@@ -228,7 +220,6 @@
                 }
                 
                 if (consecutive) {
-                    // Adicionar este grupo à lista de opções
                     const group = [];
                     for (let j = 0; j < quantity; j++) {
                         group.push(seats[i + j]);
@@ -237,20 +228,14 @@
                 }
             }
         }
-        
-        // Se encontrou grupos consecutivos, escolher um aleatoriamente
         if (allConsecutiveGroups.length > 0) {
             const randomIndex = Math.floor(Math.random() * allConsecutiveGroups.length);
             return allConsecutiveGroups[randomIndex];
         }
-        
-        // Se não encontrar lugares consecutivos, pegar aleatórios disponíveis
         const availableSeats = Array.from(allSeats).map(seat => ({
             element: seat,
             name: seat.dataset.seat
         }));
-        
-        // Embaralhar e pegar a quantidade necessária
         const shuffled = availableSeats.sort(() => Math.random() - 0.5);
         return shuffled.slice(0, Math.min(quantity, shuffled.length));
     }
@@ -272,23 +257,18 @@
 
     function toggleSeat(seatElement) {
         const seatName = seatElement.dataset.seat;
-        
-        // Não permitir clicar em lugares ocupados
         if (seatElement.classList.contains('occupied')) {
             return;
         }
         
         if (seatElement.classList.contains('selected')) {
-            // Desselecionar
             seatElement.classList.remove('selected');
             selectedSeats = selectedSeats.filter(seat => seat !== seatName);
         } else {
-            // Selecionar (se não exceder o limite)
             if (selectedSeats.length < maxSeats) {
                 seatElement.classList.add('selected');
                 selectedSeats.push(seatName);
             } else {
-                // Não mostrar alerta, apenas não permitir seleção
                 return;
             }
         }
@@ -299,8 +279,6 @@
     function updateSummary() {
         const selectedCount = selectedSeats.length;
         const totalPrice = selectedCount * pricePerSeat;
-        
-        // Atualizar display
         document.getElementById('selectedCount').textContent = selectedCount;
         document.getElementById('totalPrice').textContent = `€${totalPrice.toFixed(2)}`;
         
@@ -314,14 +292,11 @@
             document.getElementById('confirmBtn').disabled = true;
         }
     }
-
-    // Função para ajustar largura da linha divisória
     function adjustDividerWidth() {
         const dividers = document.querySelectorAll('.divider-line-horizontal');
         const seatRows = document.querySelectorAll('.seat-row');
         
         if (seatRows.length > 0 && dividers.length > 0) {
-            // Pegar a primeira fileira de lugares (não divisória)
             let firstSeatRow = null;
             for (let row of seatRows) {
                 if (row.querySelectorAll('.seat').length > 0) {
@@ -331,13 +306,10 @@
             }
             
             if (firstSeatRow) {
-                // Calcular largura baseada nos lugares visíveis
                 const seats = firstSeatRow.querySelectorAll('.seat');
                 if (seats.length > 0) {
                     const firstSeat = seats[0];
                     const lastSeat = seats[seats.length - 1];
-                    
-                    // Calcular largura do primeiro ao último lugar
                     const firstSeatRect = firstSeat.getBoundingClientRect();
                     const lastSeatRect = lastSeat.getBoundingClientRect();
                     const totalWidth = lastSeatRect.right - firstSeatRect.left;
@@ -349,17 +321,11 @@
             }
         }
     }
-
-    // Inicializar e fazer seleção automática
     document.addEventListener('DOMContentLoaded', function() {
         updateSummary();
-        // Aguardar um pouco para garantir que tudo foi carregado
         setTimeout(autoSelectSeats, 100);
-        // Ajustar largura da linha divisória
         setTimeout(adjustDividerWidth, 200);
     });
-    
-    // Reajustar ao redimensionar janela
     window.addEventListener('resize', function() {
         setTimeout(adjustDividerWidth, 100);
     });

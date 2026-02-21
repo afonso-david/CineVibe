@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -265,9 +265,7 @@
     </div>
 
     <script>
-        // Função para mostrar informações de acessibilidade
         function showAccessibilityInfo(sessaoId) {
-            // Implementar modal com informações detalhadas de acessibilidade
             const modal = document.createElement('div');
             modal.className = 'accessibility-modal';
             modal.innerHTML = `
@@ -305,8 +303,6 @@
             
             document.body.appendChild(modal);
             modal.style.display = 'flex';
-            
-            // Focus no modal para acessibilidade
             modal.querySelector('.modal-close').focus();
         }
 
@@ -321,15 +317,10 @@
             alert('Funcionalidade de solicitação de assistência a implementar. Entre em contacto através da linha de acessibilidade: +351 800 123 456');
             closeModal();
         }
-
-        // Melhorar navegação por teclado
         document.addEventListener('keydown', function(e) {
-            // Fechar modal com Escape
             if (e.key === 'Escape') {
                 closeModal();
             }
-            
-            // Navegação por teclado nos cards de razões
             if (e.key === 'Enter' || e.key === ' ') {
                 const focusedElement = document.activeElement;
                 if (focusedElement.classList.contains('reason-link')) {
@@ -338,8 +329,6 @@
                 }
             }
         });
-
-        // Anúncios para leitores de ecrã
         function announceToScreenReader(message) {
             const announcement = document.createElement('div');
             announcement.setAttribute('aria-live', 'polite');
@@ -352,13 +341,8 @@
                 document.body.removeChild(announcement);
             }, 1000);
         }
-
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Anunciar carregamento da página
             announceToScreenReader('Página CineAcessível carregada. Use Tab para navegar pelos recursos de acessibilidade.');
-            
-            // Melhorar foco nos elementos interativos
             const interactiveElements = document.querySelectorAll('a, button, input, select, textarea');
             interactiveElements.forEach(element => {
                 element.addEventListener('focus', function() {
@@ -372,13 +356,9 @@
                 });
             });
         });
-
-        // Suporte para modo de alto contraste
         if (window.matchMedia && window.matchMedia('(prefers-contrast: high)').matches) {
             document.body.classList.add('high-contrast');
         }
-
-        // Suporte para movimento reduzido
         if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             document.body.classList.add('reduced-motion');
         }

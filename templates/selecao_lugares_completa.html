@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -144,11 +144,9 @@
                     const seatName = this.dataset.seat;
                     
                     if (this.classList.contains('selected')) {
-                        // Deselecionar
                         this.classList.remove('selected');
                         selectedSeats = selectedSeats.filter(s => s !== seatName);
                     } else {
-                        // Selecionar (se não exceder o limite)
                         if (selectedSeats.length < requiredSeats) {
                             this.classList.add('selected');
                             selectedSeats.push(seatName);
@@ -163,23 +161,14 @@
             });
 
             function updateSelectedSeats() {
-                // Atualizar lista visual
                 if (selectedSeats.length === 0) {
                     selectedSeatsList.textContent = 'Nenhum lugar selecionado';
                 } else {
                     selectedSeatsList.textContent = selectedSeats.sort().join(', ');
                 }
-                
-                // Atualizar contador
                 selectedCount.textContent = selectedSeats.length;
-                
-                // Atualizar input hidden
                 selectedSeatsInput.value = selectedSeats.join(',');
-                
-                // Ativar/desativar botão
                 continueBtn.disabled = selectedSeats.length !== requiredSeats;
-                
-                // Atualizar texto do botão
                 if (selectedSeats.length === requiredSeats) {
                     continueBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Continuar para o Bar';
                 } else {

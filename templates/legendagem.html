@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -305,7 +305,6 @@
     </div>
 
     <script>
-        // Smooth scroll para links internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -318,8 +317,6 @@
                 }
             });
         });
-
-        // Animate elements on scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -340,8 +337,6 @@
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
-
-        // Sistema de pesquisa
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             let searchTimeout;
@@ -355,13 +350,10 @@
                 }
                 
                 searchTimeout = setTimeout(() => {
-                    // Simular resultados de pesquisa
                     console.log('Pesquisando por:', query);
                 }, 300);
             });
         }
-
-        // Dropdown do perfil
         const profileDropdown = document.querySelector('.user-profile-dropdown');
         if (profileDropdown) {
             profileDropdown.addEventListener('click', function(e) {

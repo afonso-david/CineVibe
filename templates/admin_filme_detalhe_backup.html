@@ -1,4 +1,4 @@
-{% extends "admin_base.html" %}
+﻿{% extends "admin_base.html" %}
 
 {% block title %}Editar Filme: {{ filme.titulo }} - CineVibe Admin{% endblock %}
 
@@ -471,8 +471,6 @@
 <script>
 let currentActorId = null;
 let currentCinemaId = null;
-
-// Salvar filme
 function salvarFilme() {
     const data = {
         titulo: document.getElementById('titulo').value,
@@ -506,8 +504,6 @@ function salvarFilme() {
         showNotification('Erro ao salvar: ' + error.message, 'error');
     });
 }
-
-// Upload de poster
 document.getElementById('posterInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
@@ -532,22 +528,16 @@ document.getElementById('posterInput').addEventListener('change', function(e) {
         });
     }
 });
-
-// Funções dos atores
 let searchTimeout;
 
 function openAddActorModal() {
     currentActorId = null;
     document.getElementById('actorModalTitle').textContent = 'Adicionar Ator';
-    
-    // Limpar campos
     document.getElementById('actorSearch').value = '';
     document.getElementById('actorRole').value = '';
     clearActorSelection();
     
     document.getElementById('actorModal').style.display = 'flex';
-    
-    // Focar no campo de pesquisa
     setTimeout(() => {
         document.getElementById('actorSearch').focus();
     }, 100);
@@ -556,11 +546,7 @@ function openAddActorModal() {
 function editActor(actorId, actorName, actorRole) {
     currentActorId = actorId;
     document.getElementById('actorModalTitle').textContent = 'Editar Ator';
-    
-    // Definir valores
     document.getElementById('actorRole').value = actorRole;
-    
-    // Simular seleção do ator
     document.getElementById('selectedActorId').value = actorId;
     document.getElementById('selectedActorName').textContent = actorName;
     document.getElementById('selectedActorPhoto').src = '/static/imgs/icons/user_icon34-removebg-preview.png';
@@ -572,8 +558,6 @@ function editActor(actorId, actorName, actorRole) {
 
 function closeActorModal() {
     document.getElementById('actorModal').style.display = 'none';
-    
-    // Limpar campos
     document.getElementById('actorSearch').value = '';
     document.getElementById('actorRole').value = '';
     clearActorSelection();
@@ -587,8 +571,6 @@ function searchActors() {
         hideSearchResults();
         return;
     }
-    
-    // Mostrar loading
     showSearchResults('<div class="search-loading">Pesquisando...</div>');
     
     fetch(`/admin/atores/pesquisar?q=${encodeURIComponent(query)}`)
@@ -631,8 +613,6 @@ function displayActorResults(actors) {
     });
     
     showSearchResults(html);
-    
-    // Adicionar event listeners aos resultados
     const resultItems = document.querySelectorAll('#actorSearchResults .search-result-item');
     resultItems.forEach(item => {
         item.addEventListener('click', function() {
@@ -650,20 +630,13 @@ function selectActor(actorId, actorName, nationality, photoUrl) {
     console.log('selectActor chamada:', { actorId, actorName, nationality, photoUrl });
     
     try {
-        // Armazenar dados do ator selecionado
         document.getElementById('selectedActorId').value = actorId;
         document.getElementById('selectedActorName').textContent = actorName;
         document.getElementById('selectedActorNationality').textContent = nationality || '';
         document.getElementById('selectedActorPhoto').src = photoUrl;
-        
-        // Mostrar card do ator selecionado
         document.getElementById('selectedActorInfo').style.display = 'block';
-        
-        // Limpar pesquisa
         document.getElementById('actorSearch').value = '';
         hideSearchResults();
-        
-        // Focar no campo papel
         setTimeout(() => {
             document.getElementById('actorRole').focus();
         }, 100);
@@ -754,8 +727,6 @@ function removeActor(actorId) {
         });
     }
 }
-
-// Event listeners para pesquisa
 document.addEventListener('DOMContentLoaded', function() {
     const actorSearch = document.getElementById('actorSearch');
     if (actorSearch) {
@@ -763,12 +734,8 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(searchActors, 300);
         });
-        
-        // Melhor handling do blur para não interferir com cliques
         actorSearch.addEventListener('blur', function() {
-            // Delay maior para permitir cliques nos resultados
             setTimeout(() => {
-                // Só esconder se não há elementos sendo clicados
                 if (!document.querySelector('#actorSearchResults:hover')) {
                     hideSearchResults();
                 }
@@ -782,19 +749,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// Funções dos cinemas
 function openAddCinemaModal() {
     const cinemaSelect = document.getElementById('cinemaSelect');
-    // Limpar seleções anteriores
     cinemaSelect.selectedIndex = -1;
-    // Remover todas as seleções
     Array.from(cinemaSelect.options).forEach(option => option.selected = false);
-    
-    // Atualizar estado inicial
     updateCinemaSelection();
-    
-    // Adicionar event listener para mudanças na seleção
     cinemaSelect.removeEventListener('change', updateCinemaSelection); // Remove listener anterior se existir
     cinemaSelect.addEventListener('change', updateCinemaSelection);
     
@@ -804,8 +763,6 @@ function openAddCinemaModal() {
 function closeCinemaModal() {
     document.getElementById('cinemaModal').style.display = 'none';
 }
-
-// Função para atualizar o contador e estado do botão
 function updateCinemaSelection() {
     const cinemaSelect = document.getElementById('cinemaSelect');
     const selectedOptions = Array.from(cinemaSelect.selectedOptions).filter(option => option.value !== '');
@@ -813,8 +770,6 @@ function updateCinemaSelection() {
     const addButton = document.getElementById('addCinemaBtn');
     
     const selectedCount = selectedOptions.length;
-    
-    // Atualizar informação
     if (selectedCount === 0) {
         infoElement.textContent = 'Nenhum cinema selecionado';
         infoElement.style.color = '#888';
@@ -825,8 +780,6 @@ function updateCinemaSelection() {
         infoElement.textContent = `${selectedCount} cinemas selecionados`;
         infoElement.style.color = '#28a745';
     }
-    
-    // Atualizar estado do botão
     addButton.disabled = selectedCount === 0;
     if (selectedCount === 0) {
         addButton.textContent = 'Adicionar';
@@ -836,8 +789,6 @@ function updateCinemaSelection() {
         addButton.textContent = `Adicionar ${selectedCount} Cinemas`;
     }
 }
-
-// Função para adicionar múltiplos cinemas
 function addCinemasToMovie() {
     const cinemaSelect = document.getElementById('cinemaSelect');
     const selectedOptions = Array.from(cinemaSelect.selectedOptions).filter(option => option.value !== '');
@@ -851,8 +802,6 @@ function addCinemasToMovie() {
     
     const formData = new FormData();
     formData.append('cinema_ids', JSON.stringify(cinemaIds));
-    
-    // Desabilitar botão durante o processo
     const addButton = document.getElementById('addCinemaBtn');
     const originalText = addButton.textContent;
     addButton.disabled = true;
@@ -869,8 +818,6 @@ function addCinemasToMovie() {
             const message = count === 1 ? 'Cinema adicionado!' : `${count} cinemas adicionados!`;
             showNotification(message, 'success');
             closeCinemaModal();
-            
-            // Em vez de recarregar a página, atualizar apenas a seção de cinemas
             setTimeout(() => location.reload(), 1000);
         } else {
             showNotification('Erro: ' + data.message, 'error');
@@ -880,15 +827,11 @@ function addCinemasToMovie() {
         showNotification('Erro: ' + error.message, 'error');
     })
     .finally(() => {
-        // Restaurar botão
         addButton.disabled = false;
         addButton.textContent = originalText;
     });
 }
-
-// Manter a função antiga para compatibilidade (caso seja usada em algum lugar)
 function addCinemaToMovie() {
-    // Redirecionar para a nova função
     addCinemasToMovie();
 }
 
@@ -912,8 +855,6 @@ function removeCinemaFromMovie(cinemaId) {
             console.log('Response data:', data);
             if (data.success) {
                 showNotification(data.message, 'success');
-                
-                // Procurar e remover o elemento do cinema
                 const cinemaElement = document.querySelector(`[data-cinema-id="${cinemaId}"]`);
                 console.log('Elemento encontrado:', cinemaElement);
                 
@@ -922,7 +863,6 @@ function removeCinemaFromMovie(cinemaId) {
                     console.log('Elemento removido com sucesso');
                 } else {
                     console.error('Elemento com data-cinema-id não encontrado:', cinemaId);
-                    // Fallback: recarregar a página
                     setTimeout(() => location.reload(), 1000);
                 }
             } else {
@@ -935,8 +875,6 @@ function removeCinemaFromMovie(cinemaId) {
         });
     }
 }
-
-// Funções dos géneros
 function openAddGeneroModal() {
     document.getElementById('generoSelect').value = '';
     document.getElementById('generoModal').style.display = 'flex';
@@ -988,13 +926,9 @@ function removeGeneroFromMovie(generoId, generoNome) {
         .then(data => {
             if (data.success) {
                 showNotification('Género removido com sucesso!', 'success');
-                
-                // Remover o elemento do género da interface
                 const generoElement = document.querySelector(`[data-genero-id="${generoId}"]`);
                 if (generoElement) {
                     generoElement.remove();
-                    
-                    // Verificar se não há mais géneros
                     if (document.querySelectorAll('.genero-tag').length === 0) {
                         setTimeout(() => location.reload(), 1000);
                     }
@@ -1010,47 +944,30 @@ function removeGeneroFromMovie(generoId, generoNome) {
         });
     }
 }
-
-// ===== GESTÃO DE SESSÕES COMO FILME_DETALHE =====
-
-// Mostrar horários para um tipo de sessão específico (copiado de filme_detalhe.html)
 function mostrarHorarios(cinemaId, tipoId, tipoNome) {
     const botaoClicado = event.target;
     const grupoSessao = document.getElementById(`sessao-${cinemaId}-${tipoId}`);
-    
-    // Verificar se o botão já está ativo (toggle)
     if (botaoClicado.classList.contains('active')) {
-        // Desativar botão e esconder horários
         botaoClicado.classList.remove('active');
         if (grupoSessao) {
             grupoSessao.classList.add('hidden');
         }
         return;
     }
-    
-    // Esconder todos os grupos de sessão deste cinema
     document.querySelectorAll(`[data-cinema="${cinemaId}"]`).forEach(grupo => {
         if (grupo.classList.contains('sessao-grupo')) {
             grupo.classList.add('hidden');
         }
     });
-    
-    // Remover active de todos os botões deste cinema
     document.querySelectorAll(`[data-cinema="${cinemaId}"].btn-sessao`).forEach(btn => {
         btn.classList.remove('active');
     });
-    
-    // Ativar botão selecionado
     botaoClicado.classList.add('active');
-    
-    // Mostrar grupo de sessão correspondente
     if (grupoSessao) {
         grupoSessao.classList.remove('hidden');
         carregarHorarios(cinemaId, tipoId);
     }
 }
-
-// Carregar horários para cinema e tipo de sessão específicos (copiado de filme_detalhe.html)
 function carregarHorarios(cinemaId, tipoId) {
     const container = document.getElementById(`horarios-${cinemaId}-${tipoId}`);
     const salasContainer = document.getElementById(`salas-${cinemaId}-${tipoId}`);
@@ -1059,14 +976,10 @@ function carregarHorarios(cinemaId, tipoId) {
         console.error(`Container horarios-${cinemaId}-${tipoId} não encontrado`);
         return;
     }
-    
-    // Mostrar loading
     container.innerHTML = '<div class="loading-horarios"><i class="fas fa-spinner fa-spin"></i> Carregando horários...</div>';
     if (salasContainer) {
         salasContainer.innerHTML = '';
     }
-    
-    // Buscar horários do servidor
     fetch(`/admin/filmes/{{ filme.id }}/cinema/${cinemaId}/tipo/${tipoId}/horarios`)
         .then(response => response.json())
         .then(data => {
@@ -1081,8 +994,6 @@ function carregarHorarios(cinemaId, tipoId) {
             container.innerHTML = '<p style="color: #e74c3c; text-align: center; padding: 20px;">Erro ao carregar horários.</p>';
         });
 }
-
-// Exibir horários na interface
 function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) {
     container.innerHTML = '';
     if (salasContainer) {
@@ -1093,8 +1004,6 @@ function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) 
         container.innerHTML = '<p style="color: #B8C5D1; text-align: center; padding: 20px;">Nenhum horário disponível para este tipo de sessão.</p>';
         return;
     }
-    
-    // Agrupar por horário
     const horariosPorHora = {};
     horarios.forEach(h => {
         const hora = h.hora;
@@ -1103,15 +1012,11 @@ function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) 
         }
         horariosPorHora[hora].push(h);
     });
-    
-    // Criar botões de horário
     Object.keys(horariosPorHora).sort().forEach(hora => {
         const horariosGrupo = horariosPorHora[hora];
         const horarioBtn = document.createElement('button');
         horarioBtn.className = 'hora-btn';
         horarioBtn.textContent = hora;
-        
-        // Adicionar botões de ação para admin
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'horario-actions';
         actionsDiv.innerHTML = `
@@ -1130,15 +1035,11 @@ function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) 
         
         container.appendChild(horarioContainer);
     });
-    
-    // Adicionar botão para adicionar novo horário
     const addButton = document.createElement('button');
     addButton.className = 'btn btn-sm btn-primary add-horario-btn';
     addButton.innerHTML = '<i class="fas fa-plus"></i> Adicionar Horário';
     addButton.onclick = () => adicionarHorarioTipo(cinemaId, tipoId);
     container.appendChild(addButton);
-    
-    // Mostrar informações das salas
     if (salasContainer) {
         const salasUnicas = [...new Set(horarios.map(h => h.nome_sala).filter(Boolean))];
         if (salasUnicas.length > 0) {
@@ -1151,14 +1052,10 @@ function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) 
         }
     }
 }
-
-// Função simples para gerir sessões
 function gerenciarSessoes(cinemaId, cinemaName) {
     console.log('=== DEBUG: gerenciarSessoes chamada ===');
     console.log('cinemaId:', cinemaId);
     console.log('cinemaName:', cinemaName);
-    
-    // Mostrar modal simples
     const modal = document.getElementById('modalGerirSessoes');
     const nomeSpan = document.getElementById('cinemaModalNomeSessoes');
     const listaTipos = document.getElementById('listaTiposSessao');
@@ -1181,8 +1078,6 @@ function gerenciarSessoes(cinemaId, cinemaName) {
     if (listaTipos) {
         listaTipos.innerHTML = '<p>Carregando tipos de sessão...</p>';
         console.log('Carregando tipos de sessão...');
-        
-        // Buscar tipos de sessão disponíveis da base de dados
         fetch('/admin/tipos-sessao/disponiveis')
             .then(response => {
                 console.log('Response status:', response.status);
@@ -1207,7 +1102,6 @@ function gerenciarSessoes(cinemaId, cinemaName) {
                     console.log('HTML dos tipos gerado:', html);
                 } else {
                     console.log('Usando fallback de tipos estáticos');
-                    // Fallback para lista estática se a API falhar
                     const tiposDisponiveis = [
                         { id: 1, nome: '2D' },
                         { id: 2, nome: '3D' },
@@ -1243,18 +1137,13 @@ function gerenciarSessoes(cinemaId, cinemaName) {
     modal.style.display = 'flex';
     console.log('Modal display definido para flex');
 }
-
-// Fechar modal de sessões
 function fecharModalSessoes() {
     const modal = document.getElementById('modalGerirSessoes');
     if (modal) {
         modal.style.display = 'none';
     }
 }
-
-// Adicionar horário a um tipo de sessão
 function adicionarHorarioTipo(cinemaId, tipoId) {
-    // Buscar horários disponíveis
     fetch('/admin/horarios/disponiveis')
         .then(response => response.json())
         .then(data => {
@@ -1269,8 +1158,6 @@ function adicionarHorarioTipo(cinemaId, tipoId) {
             showNotification('Erro ao carregar horários: ' + error.message, 'error');
         });
 }
-
-// Mostrar modal para adicionar horário
 function mostrarModalAdicionarHorario(cinemaId, tipoId, horariosDisponiveis) {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -1307,16 +1194,12 @@ function mostrarModalAdicionarHorario(cinemaId, tipoId, horariosDisponiveis) {
     document.body.appendChild(modal);
     modal.style.display = 'flex';
 }
-
-// Fechar modal de adicionar horário
 function fecharModalAdicionarHorario() {
     const modal = document.getElementById('modalAdicionarHorario');
     if (modal) {
         modal.remove();
     }
 }
-
-// Salvar novo horário
 function salvarNovoHorario(cinemaId, tipoId) {
     const horarioId = document.getElementById('horarioSelect').value;
     
@@ -1340,7 +1223,6 @@ function salvarNovoHorario(cinemaId, tipoId) {
         if (data.success) {
             showNotification('Horário adicionado com sucesso!', 'success');
             fecharModalAdicionarHorario();
-            // Recarregar horários para esta sessão
             carregarHorarios(cinemaId, tipoId);
         } else {
             showNotification('Erro: ' + data.message, 'error');
@@ -1350,10 +1232,7 @@ function salvarNovoHorario(cinemaId, tipoId) {
         showNotification('Erro: ' + error.message, 'error');
     });
 }
-
-// Editar horário
 function editarHorario(sessaoId, horaAtual) {
-    // Buscar horários disponíveis
     fetch('/admin/horarios/disponiveis')
         .then(response => response.json())
         .then(data => {
@@ -1368,8 +1247,6 @@ function editarHorario(sessaoId, horaAtual) {
             showNotification('Erro ao carregar horários: ' + error.message, 'error');
         });
 }
-
-// Mostrar modal para editar horário
 function mostrarModalEditarHorario(sessaoId, horaAtual, horariosDisponiveis) {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -1407,16 +1284,12 @@ function mostrarModalEditarHorario(sessaoId, horaAtual, horariosDisponiveis) {
     document.body.appendChild(modal);
     modal.style.display = 'flex';
 }
-
-// Fechar modal de editar horário
 function fecharModalEditarHorario() {
     const modal = document.getElementById('modalEditarHorario');
     if (modal) {
         modal.remove();
     }
 }
-
-// Salvar edição de horário
 function salvarEdicaoHorario(sessaoId) {
     const horarioId = document.getElementById('editHorarioSelect').value;
     
@@ -1437,7 +1310,6 @@ function salvarEdicaoHorario(sessaoId) {
         if (data.success) {
             showNotification('Horário atualizado com sucesso!', 'success');
             fecharModalEditarHorario();
-            // Recarregar a página para mostrar as mudanças
             setTimeout(() => location.reload(), 1000);
         } else {
             showNotification('Erro: ' + data.message, 'error');
@@ -1447,8 +1319,6 @@ function salvarEdicaoHorario(sessaoId) {
         showNotification('Erro: ' + error.message, 'error');
     });
 }
-
-// Remover horário
 function removerHorario(sessaoId) {
     if (confirm('Tem certeza que deseja remover este horário?\n\nATENÇÃO: Todas as reservas associadas a este horário serão removidas automaticamente.')) {
         fetch(`/admin/sessoes/${sessaoId}/remover`, {
@@ -1461,7 +1331,6 @@ function removerHorario(sessaoId) {
         .then(data => {
             if (data.success) {
                 showNotification('Horário removido com sucesso!', 'success');
-                // Recarregar a página para mostrar as mudanças
                 setTimeout(() => location.reload(), 1000);
             } else {
                 showNotification('Erro: ' + data.message, 'error');
@@ -1472,8 +1341,6 @@ function removerHorario(sessaoId) {
         });
     }
 }
-
-// Adicionar tipo de sessão (função simples)
 function adicionarTipoSessao(cinemaId, tipoId, tipoNome) {
     console.log('adicionarTipoSessao chamada:', { cinemaId, tipoId, tipoNome });
     
@@ -1527,14 +1394,9 @@ function showNotification(message, type) {
         }, 300);
     }, 3000);
 }
-
-// Função para ver todas as avaliações
 function verTodasAvaliacoes() {
-    // Redirecionar para uma página de avaliações ou abrir modal
     window.open(`/admin/filmes/{{ filme.id }}/avaliacoes`, '_blank');
 }
-
-// Função para remover avaliação
 function removerAvaliacao(avaliacaoId) {
     if (confirm('Tem certeza que deseja remover esta avaliação?')) {
         fetch(`/admin/avaliacoes/${avaliacaoId}/remover`, {
@@ -1547,7 +1409,6 @@ function removerAvaliacao(avaliacaoId) {
         .then(data => {
             if (data.success) {
                 showNotification('Avaliação removida com sucesso!', 'success');
-                // Recarregar a página para atualizar as avaliações
                 setTimeout(() => location.reload(), 1000);
             } else {
                 showNotification('Erro ao remover avaliação: ' + data.message, 'error');
@@ -1558,8 +1419,6 @@ function removerAvaliacao(avaliacaoId) {
         });
     }
 }
-
-// Fechar modais ao clicar fora
 window.onclick = function(event) {
     const actorModal = document.getElementById('actorModal');
     const cinemaModal = document.getElementById('cinemaModal');
@@ -1579,8 +1438,6 @@ window.onclick = function(event) {
         fecharModalAdicionarTipo();
     }
 }
-
-// Configuração inicial da página
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Admin Filme Detalhe carregado com sucesso!');
 });

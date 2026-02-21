@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -218,14 +218,12 @@
 
     <script>
         function voltarBar() {
-            // Voltar para a seleção do bar mantendo os dados
             const params = new URLSearchParams(window.location.search);
             window.location.href = `/bar?${params.toString()}`;
         }
 
         function continuarPagamento() {
             {% if not user_authenticated %}
-            // Validar formulário para utilizadores não logados
             const form = document.getElementById('guestDataForm');
             const nome = document.getElementById('guest_nome').value.trim();
             const email = document.getElementById('guest_email').value.trim();
@@ -234,16 +232,12 @@
                 alert('Por favor, preencha o nome e email para continuar.');
                 return;
             }
-            
-            // Validar email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Por favor, insira um email válido.');
                 return;
             }
             {% endif %}
-            
-            // Continuar para pagamento
             const params = new URLSearchParams(window.location.search);
             {% if not user_authenticated %}
             params.set('guest_nome', document.getElementById('guest_nome').value);

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -334,16 +334,11 @@
     </footer>
 
     <script>
-        // Smooth scrolling
         document.querySelector('.scroll-indicator').addEventListener('click', () => {
             document.getElementById('themes').scrollIntoView({
                 behavior: 'smooth'
             });
         });
-
-        // Parallax effect removed
-
-        // Theme card hover effects
         document.querySelectorAll('.theme-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'translateY(-15px) scale(1.02)';
@@ -353,18 +348,12 @@
                 card.style.transform = 'translateY(0) scale(1)';
             });
         });
-
-        // Floating particles animation
         document.querySelectorAll('.particle').forEach((particle, index) => {
             const delay = index * 0.5;
             particle.style.animationDelay = `${delay}s`;
-            
-            // Random position
             particle.style.left = Math.random() * 100 + '%';
             particle.style.top = Math.random() * 100 + '%';
         });
-
-        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -377,26 +366,18 @@
                 }
             });
         }, observerOptions);
-
-        // Observe theme cards
         document.querySelectorAll('.theme-card').forEach(card => {
             card.style.animation = 'fadeInUp 0.8s ease forwards paused';
             observer.observe(card);
         });
-
-        // Observe info cards
         document.querySelectorAll('.info-card').forEach((card, index) => {
             card.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s forwards paused`;
             observer.observe(card);
         });
-
-        // Theme selection tracking
         document.querySelectorAll('.theme-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const theme = e.target.closest('.theme-card').dataset.theme;
                 console.log(`Selected theme: ${theme}`);
-                
-                // Add click animation
                 btn.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     btn.style.transform = 'scale(1)';

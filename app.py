@@ -2547,7 +2547,7 @@ def admin_dashboard():
         LEFT JOIN reservas r ON f.id = r.id_filme
         GROUP BY f.id, f.titulo, f.poster_url
         ORDER BY total_reservas DESC
-        LIMIT 5
+        LIMIT 10
     """)
     top_filmes = cur.fetchall()
     
@@ -2623,16 +2623,27 @@ def admin_dashboard():
     
     try:
         cur.execute("""
-            SELECT rb.produto as nome, b.imagem_url,
-                   SUM(rb.quantidade) as total_vendas
-            FROM reservas_bar rb
-            LEFT JOIN bar b ON rb.produto = b.produto
-            GROUP BY rb.produto, b.imagem_url
+            SELECT b.produto as nome, b.imagem_url,
+                   COALESCE(SUM(rb.quantidade), 0) as total_vendas
+            FROM bar b
+            LEFT JOIN reservas_bar rb ON rb.produto_id = b.id
+            GROUP BY b.id, b.produto, b.imagem_url
+            HAVING total_vendas > 0
             ORDER BY total_vendas DESC
             LIMIT 5
         """)
         top_produtos_bar = cur.fetchall()
-    except:
+        
+        if not top_produtos_bar:
+            cur.execute("""
+                SELECT produto as nome, imagem_url, 0 as total_vendas
+                FROM bar
+                ORDER BY id
+                LIMIT 5
+            """)
+            top_produtos_bar = cur.fetchall()
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar top produtos bar: {str(e)}")
         top_produtos_bar = []
     
 
@@ -12606,6 +12617,76 @@ def processar_pagamento():
                         
                         reserva_id = cursor.lastrowid
                         reserva_ids.append(reserva_id)
+                        
+                        if produtos_bar:
+                            if isinstance(produtos_bar, dict):
+                                for produto_id_str, quantidade in produtos_bar.items():
+                                    if quantidade > 0:
+                                        try:
+                                            produto_id = int(produto_id_str)
+                                            cursor.execute("""
+                                                SELECT produto, preco FROM bar WHERE id = %s
+                                            """, (produto_id,))
+                                            produto_info = cursor.fetchone()
+                                            
+                                            if produto_info:
+                                                cursor.execute("""
+                                                    INSERT INTO reservas_bar (id_reserva, produto_id, produto, quantidade, preco_unitario)
+                                                    VALUES (%s, %s, %s, %s, %s)
+                                                """, (reserva_id, produto_id, produto_info['produto'], quantidade, produto_info['preco']))
+                                                app.logger.info(f"✅ Produto bar inserido: {produto_info['produto']} x{quantidade}")
+                                        except Exception as e:
+                                            app.logger.error(f"Erro ao inserir produto bar {produto_id_str}: {str(e)}")
+                            
+                            elif isinstance(produtos_bar, list):
+                                for produto in produtos_bar:
+                                    produto_id = produto.get('id')
+                                    quantidade = produto.get('quantidade', 1)
+                                    tipo_produto = produto.get('tipo', 'bar')
+                                    configs = produto.get('configs', [])
+                                    
+                                    if tipo_produto == 'menu':
+                                        cursor.execute("""
+                                            SELECT nome as produto, preco_total as preco FROM menus WHERE id = %s
+                                        """, (produto_id,))
+                                        menu_info = cursor.fetchone()
+                                        
+                                        if menu_info:
+                                            for config in configs:
+                                                snack_id = config.get('snackId')
+                                                bebida_id = config.get('bebidaId')
+                                                toppings_ids = config.get('toppings', [])
+                                                
+                                                preco_total = float(menu_info['preco'])
+                                                
+                                                for topping_id in toppings_ids:
+                                                    cursor.execute("SELECT preco FROM toppings WHERE id = %s", (topping_id,))
+                                                    topping_info = cursor.fetchone()
+                                                    if topping_info:
+                                                        preco_total += float(topping_info['preco'])
+                                                
+                                                cursor.execute("""
+                                                    INSERT INTO reservas_bar (id_reserva, produto_id, produto, quantidade, preco_unitario)
+                                                    VALUES (%s, %s, %s, %s, %s)
+                                                """, (reserva_id, produto_id, menu_info['produto'], 1, preco_total))
+                                                app.logger.info(f"✅ Menu inserido: {menu_info['produto']} - €{preco_total}")
+                                    
+                                    else:
+                                        if quantidade > 0:
+                                            try:
+                                                cursor.execute("""
+                                                    SELECT produto, preco FROM bar WHERE id = %s
+                                                """, (produto_id,))
+                                                produto_info = cursor.fetchone()
+                                                
+                                                if produto_info:
+                                                    cursor.execute("""
+                                                        INSERT INTO reservas_bar (id_reserva, produto_id, produto, quantidade, preco_unitario)
+                                                        VALUES (%s, %s, %s, %s, %s)
+                                                    """, (reserva_id, produto_id, produto_info['produto'], quantidade, produto_info['preco']))
+                                                    app.logger.info(f"✅ Produto bar inserido: {produto_info['produto']} x{quantidade}")
+                                            except Exception as e:
+                                                app.logger.error(f"Erro ao inserir produto bar {produto_id}: {str(e)}")
                         
                     except Exception as e:
                         app.logger.error(f"Erro ao inserir reserva para lugares {lugares}: {str(e)}")

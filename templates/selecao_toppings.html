@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -188,8 +188,6 @@
         
         let cart = {};
         let toppings = [];
-        
-        // Carregar toppings do elemento JSON
         try {
             const toppingsData = document.getElementById('toppings-data');
             if (toppingsData) {
@@ -225,25 +223,17 @@
             let itemsHtml = '';
             let hasItems = false;
             let totalToppings = 0;
-            
-            // Preparar toppings para o formulário
             const toppingsSelecionados = [];
             
             for (let toppingId in cart) {
                 if (cart[toppingId] > 0) {
                     hasItems = true;
                     totalToppings += cart[toppingId];
-                    
-                    // Remover prefixo 'topping_' do ID
                     const realId = toppingId.replace('topping_', '');
-                    
-                    // Adicionar ao array de toppings selecionados
                     toppingsSelecionados.push({
                         id: realId,
                         quantidade: cart[toppingId]
                     });
-                    
-                    // Encontrar topping
                     const topping = toppings.find(t => t.id == realId);
                     
                     if (topping) {
@@ -263,30 +253,22 @@
             if (cartItems) cartItems.innerHTML = itemsHtml;
             if (cartTotal) cartTotal.textContent = total.toFixed(2);
             if (cartSummary) cartSummary.style.display = hasItems ? 'block' : 'none';
-            
-            // Atualizar campo hidden do formulário inferior
             if (toppingsInput) {
                 toppingsInput.value = JSON.stringify(toppingsSelecionados);
                 console.log('Toppings selecionados:', toppingsInput.value);
             }
-            
-            // Sincronizar campo hidden do formulário superior
             if (topToppingsInput) {
                 topToppingsInput.value = JSON.stringify(toppingsSelecionados);
             }
-            
-            // Atualizar texto e ícone do botão superior
             if (topBtnText && topContinueBtn) {
                 if (hasItems) {
                     topBtnText.textContent = `Continuar com ${totalToppings} topping${totalToppings > 1 ? 's' : ''}`;
-                    // Trocar ícone para check
                     const icon = topContinueBtn.querySelector('i');
                     if (icon) {
                         icon.className = 'fas fa-check';
                     }
                 } else {
                     topBtnText.textContent = 'Continuar sem toppings';
-                    // Manter ícone de forward
                     const icon = topContinueBtn.querySelector('i');
                     if (icon) {
                         icon.className = 'fas fa-forward';

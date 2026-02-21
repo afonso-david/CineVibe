@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -770,21 +770,15 @@
     </div>
 
     <script>
-        // Verificar se o usuário está logado
         const isLoggedIn = {{ 'true' if logged_in else 'false' }};
         let salaSelecionada = null;
         let precoBaseSessao = {{ preco_base }};
-        
-        // Se não estiver logado, mostrar modal automaticamente
         if (!isLoggedIn) {
             setTimeout(() => {
                 mostrarModalLogin();
             }, 500);
         }
-
-        // Função para selecionar sala
         function selecionarSala(salaId, salaNome, salaCapacidade, precoAdicional) {
-            // Remover seleção anterior
             document.querySelectorAll('.sala-card').forEach(card => {
                 card.classList.remove('selected');
                 const btn = card.querySelector('.sala-select-btn');
@@ -792,43 +786,31 @@
                 btn.style.background = 'linear-gradient(135deg, #FFD60A, #FFA500)';
                 btn.style.color = '#0D1B2A';
             });
-            
-            // Selecionar nova sala
             const salaCard = document.querySelector(`[data-sala-id="${salaId}"]`);
             salaCard.classList.add('selected');
             const btn = salaCard.querySelector('.sala-select-btn');
             btn.textContent = 'Selecionada';
             btn.style.background = 'linear-gradient(135deg, #4EA8DE, #1E88E5)';
             btn.style.color = 'white';
-            
-            // Atualizar informações da reserva
             salaSelecionada = {
                 id: salaId,
                 nome: salaNome,
                 capacidade: salaCapacidade,
                 preco: precoAdicional
             };
-            
-            // Mostrar informações da sala selecionada
             document.getElementById('salaSelecionada').style.display = 'block';
             document.getElementById('nomeSala').textContent = salaNome;
             document.getElementById('capacidadeSala').textContent = salaCapacidade;
-            
-            // Atualizar preços
             document.getElementById('precoSala').style.display = 'flex';
             document.getElementById('nomeSalaPreco').textContent = `Sala ${salaNome}`;
             document.getElementById('valorSala').textContent = `€${precoAdicional.toFixed(2)}`;
             
             const precoTotal = precoBaseSessao + precoAdicional;
             document.getElementById('precoTotal').textContent = `€${precoTotal.toFixed(2)}`;
-            
-            // Atualizar botões de pagamento
             document.querySelectorAll('.amount').forEach(span => {
                 span.textContent = `€${precoTotal.toFixed(2)}`;
             });
         }
-
-        // Funções do modal (copiadas do filme_detalhe)
         function mostrarModalLogin() {
             const modalElement = document.getElementById('modalLogin');
             if (modalElement) {
@@ -844,7 +826,6 @@
         }
 
         function fazerLogin() {
-            // Salvar dados da reserva antes de redirecionar
             const urlParams = new URLSearchParams(window.location.search);
             const redirectUrl = window.location.pathname + window.location.search;
             window.location.href = "{{ url_for('login') }}?redirect=" + encodeURIComponent(redirectUrl);
@@ -852,17 +833,11 @@
 
         function continuarComoConvidado() {
             fecharModalLogin();
-            // O formulário de convidado já está visível na página
         }
-
-        // Seleção de método de pagamento
         document.querySelectorAll('.payment-method').forEach(method => {
             method.addEventListener('click', function() {
-                // Remover seleção anterior
                 document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
                 document.querySelectorAll('input[name="payment_method"], input[name="payment_method_guest"]').forEach(input => input.checked = false);
-                
-                // Selecionar atual
                 this.classList.add('selected');
                 const radio = this.querySelector('input[type="radio"]');
                 if (radio) {
@@ -870,8 +845,6 @@
                 }
             });
         });
-
-        // Continuar para pagamento (convidados)
         function continuarParaPagamento() {
             const nome = document.getElementById('nome').value;
             const email = document.getElementById('email').value;
@@ -885,19 +858,13 @@
                 alert('Por favor, selecione uma sala exclusiva.');
                 return;
             }
-            
-            // Mostrar seção de métodos de pagamento
             document.getElementById('metodosSection').style.display = 'block';
             document.querySelector('.guest-form-section').style.display = 'none';
         }
-
-        // Voltar para dados
         function voltarParaDados() {
             document.getElementById('metodosSection').style.display = 'none';
             document.querySelector('.guest-form-section').style.display = 'block';
         }
-
-        // Finalizar pagamento (usuários logados)
         function finalizarPagamento() {
             if (!salaSelecionada) {
                 alert('Por favor, selecione uma sala exclusiva.');
@@ -913,8 +880,6 @@
             
             processarPagamento(metodoPagamento.value);
         }
-
-        // Processar pagamento (convidados)
         function processarPagamentoConvidado() {
             const nome = document.getElementById('nome').value;
             const email = document.getElementById('email').value;
@@ -932,8 +897,6 @@
             
             processarPagamento(metodoPagamento.value, { nome, email });
         }
-
-        // Processar pagamento
         function processarPagamento(metodo, dadosConvidado = null) {
             document.getElementById('loadingModal').style.display = 'flex';
             
@@ -980,16 +943,12 @@
                 alert('Erro ao processar pagamento: ' + error.message);
             });
         }
-
-        // Fechar modal ao clicar fora
         document.addEventListener('click', function(e) {
             const modal = document.getElementById('modalLogin');
             if (e.target === modal) {
                 fecharModalLogin();
             }
         });
-
-        // Fechar modal com ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 fecharModalLogin();

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -9,32 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="Descubra os melhores filmes em exibição e os que estão para chegar no CineVibe. Experiência cinematográfica premium com qualidade superior.">
     <meta name="keywords" content="filmes, cinema, CineVibe, em exibição, brevemente, ação, comédia, drama, terror, romance">
-    
-    <style>
-        /* Esconder os radio buttons e manter apenas os botões */
-        .filtros input[type="radio"] {
-            display: none !important;
-        }
-        
-        /* Estilo para gênero selecionado */
-        .filtros input[type="radio"]:checked + label {
-            background-color: #FFD60A !important;
-            color: #0D1B2A !important;
-            font-weight: 600 !important;
-            transform: scale(1.05) !important;
-            box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4) !important;
-        }
-        
-        .filtros label {
-            transition: all 0.3s ease !important;
-            cursor: pointer !important;
-        }
-        
-        .filtros input[type="radio"]:checked + label:hover {
-            background-color: #FFD60A !important;
-            transform: scale(1.08) !important;
-        }
-    </style>
 </head>
 <body>
     
@@ -322,9 +296,9 @@
     </footer>
 
     <script>
-        // Alternar entre seções com animações suaves
+        
         function mostrarSecao(secao) {
-            // Remover classe active de todos os títulos e seções
+            
             document.querySelectorAll('.filmes-titulos h1').forEach(titulo => {
                 titulo.classList.remove('active');
                 titulo.setAttribute('aria-selected', 'false');
@@ -333,7 +307,7 @@
                 lista.classList.remove('active');
             });
 
-            // Adicionar classe active à seção selecionada
+            
             const tituloAtivo = document.getElementById(`titulo-${secao}`);
             const secaoAtiva = document.getElementById(secao);
             
@@ -341,13 +315,13 @@
             tituloAtivo.setAttribute('aria-selected', 'true');
             secaoAtiva.classList.add('active');
 
-            // Aplicar filtro na nova seção
+            
             setTimeout(() => {
                 aplicarFiltroInstantaneo();
             }, 100);
         }
 
-        // Sistema de filtros instantâneo
+        
         function aplicarFiltroInstantaneo() {
             const radioSelecionado = document.querySelector('.filtros input[type="radio"]:checked');
             const generoSelecionado = radioSelecionado ? radioSelecionado.value.toLowerCase() : '';
@@ -362,10 +336,10 @@
                 
                 let mostrar = false;
                 if (generoSelecionado === '' || generoSelecionado === 'todos') {
-                    // Mostrar todos os filmes
+                    
                     mostrar = true;
                 } else {
-                    // Verificar se o filme contém o gênero selecionado
+                    
                     mostrar = generosFilme.includes(generoSelecionado) || 
                              generosFilme.includes(normalizeGenre(generoSelecionado)) ||
                              normalizeGenre(generosFilme).includes(generoSelecionado);
@@ -376,7 +350,7 @@
                     filme.style.opacity = '0';
                     filme.style.transform = 'translateY(20px)';
                     
-                    // Animação escalonada
+                    
                     setTimeout(() => {
                         filme.style.transition = 'all 0.4s ease';
                         filme.style.opacity = '1';
@@ -392,7 +366,7 @@
             console.log(`Filtro aplicado: "${generoSelecionado}" - ${filmesVisiveis} filmes encontrados`);
         }
 
-        // Normalizar nomes de géneros para melhor matching
+        
         function normalizeGenre(genre) {
             const map = {
                 'acao': 'ação',
@@ -406,7 +380,7 @@
             return map[genre.toLowerCase()] || genre.toLowerCase();
         }
 
-        // Event listeners para os filtros - SISTEMA CUSTOMIZADO
+        
         document.querySelectorAll('.filtros label').forEach(label => {
             label.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -415,26 +389,26 @@
                 const isTodos = radio.id === 'todos';
                 
                 if (isTodos) {
-                    // "Todos" sempre ativa e desativa outros
+                    
                     document.querySelectorAll('.filtros input[type="radio"]').forEach(r => r.checked = false);
                     radio.checked = true;
                 } else {
-                    // Para outros gêneros: toggle on/off
+                    
                     if (radio.checked) {
-                        // Se já está selecionado, desmarcar e ativar "Todos"
+                        
                         radio.checked = false;
                         document.getElementById('todos').checked = true;
                     } else {
-                        // Se não está selecionado, desmarcar todos e selecionar este
+                        
                         document.querySelectorAll('.filtros input[type="radio"]').forEach(r => r.checked = false);
                         radio.checked = true;
                     }
                 }
                 
-                // Aplicar filtro instantaneamente
+                
                 aplicarFiltroInstantaneo();
                 
-                // Atualizar URL sem recarregar
+                
                 const radioSelecionado = document.querySelector('.filtros input[type="radio"]:checked');
                 const genero = radioSelecionado ? radioSelecionado.value : '';
                 const newUrl = genero === '' ? 
@@ -445,7 +419,7 @@
             });
         });
 
-        // Pesquisa avançada de filmes
+        
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const termo = e.target.value.toLowerCase().trim();
             const secaoAtiva = document.querySelector('.filmes-lista.active');
@@ -463,12 +437,12 @@
             });
         });
 
-        // Newsletter com validação
+        
         document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
             
-            // Simulação de sucesso
+            
             const button = this.querySelector('button');
             const originalText = button.textContent;
             
@@ -483,7 +457,7 @@
             }, 1500);
         });
 
-        // Animação elegante de entrada dos cards
+        
         function animarCards() {
             const cards = document.querySelectorAll('.filme-card[style*="block"], .filme-card:not([style*="none"])');
             cards.forEach((card, index) => {
@@ -500,7 +474,7 @@
             });
         }
 
-        // Navegação por teclado para títulos
+        
         document.querySelectorAll('.filmes-titulos h1').forEach(titulo => {
             titulo.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -510,9 +484,9 @@
             });
         });
 
-        // Inicialização quando a página carrega
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Aplicar filtro de género da URL se existir
+            
             {% if genero_filtro %}
             const generoRadio = document.querySelector('input[name="genero"][value="{{ genero_filtro }}"]');
             if (generoRadio) {
@@ -520,7 +494,7 @@
                 aplicarFiltroInstantaneo();
             }
             {% else %}
-            // Garantir que "Todos" está selecionado e todos os filmes visíveis
+            
             const todosRadio = document.getElementById('todos');
             if (todosRadio) {
                 todosRadio.checked = true;
@@ -528,7 +502,7 @@
             }
             {% endif %}
             
-            // Animar cards após carregamento
+            
             setTimeout(() => {
                 const cards = document.querySelectorAll('.filme-card');
                 cards.forEach((card, index) => {
@@ -542,7 +516,7 @@
                 });
             }, 200);
             
-            // Adicionar efeitos de hover suaves
+            
             document.querySelectorAll('.filme-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-10px) scale(1.02)';
@@ -554,7 +528,7 @@
             });
         });
 
-        // Performance: Lazy loading para imagens
+        
         if ('IntersectionObserver' in window) {
             const imageObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {

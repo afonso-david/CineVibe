@@ -1,4 +1,4 @@
-{% extends "admin_base.html" %}
+﻿{% extends "admin_base.html" %}
 
 {% block title %}Avaliações: {{ filme.titulo }} - CineVibe Admin{% endblock %}
 
@@ -359,9 +359,7 @@ function removerAvaliacaoCompleta(avaliacaoId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Mostrar notificação de sucesso
                 alert('Avaliação removida com sucesso!');
-                // Recarregar a página para atualizar as avaliações
                 location.reload();
             } else {
                 alert('Erro ao remover avaliação: ' + data.message);

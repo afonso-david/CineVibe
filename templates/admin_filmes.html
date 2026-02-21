@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Filmes - CineVibe Admin</title>
@@ -897,7 +901,6 @@
     </style>
 
     <script>
-    // View Toggle
     document.querySelectorAll('.view-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const view = this.dataset.view;
@@ -914,8 +917,6 @@
             }
         });
     });
-
-    // Search and Filter
     document.getElementById('searchInput').addEventListener('input', filtrarFilmes);
     document.getElementById('estadoFilter').addEventListener('change', filtrarFilmes);
     document.getElementById('generoFilter').addEventListener('change', filtrarFilmes);
@@ -924,8 +925,6 @@
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         const estadoFilter = document.getElementById('estadoFilter').value;
         const generoFilter = document.getElementById('generoFilter').value.toLowerCase();
-        
-        // Filter Grid
         document.querySelectorAll('#filmes-grid .movie-card-grid').forEach(card => {
             const titulo = card.querySelector('.movie-title-overlay').textContent.toLowerCase();
             const estado = card.dataset.estado;
@@ -937,8 +936,6 @@
             
             card.style.display = (matchSearch && matchEstado && matchGenero) ? 'block' : 'none';
         });
-        
-        // Filter Table
         document.querySelectorAll('#filmes-table tbody tr').forEach(row => {
             const titulo = row.querySelector('.title-cell h4').textContent.toLowerCase();
             const estado = row.dataset.estado;
@@ -958,16 +955,12 @@
         document.getElementById('generoFilter').value = '';
         filtrarFilmes();
     }
-
-    // Sort
     document.getElementById('sortSelect').addEventListener('change', function() {
         const sortBy = this.value;
         const currentUrl = new URL(window.location);
         currentUrl.searchParams.set('sort', sortBy);
         window.location.href = currentUrl.toString();
     });
-
-    // Reverse order button
     document.getElementById('reverseBtn').addEventListener('click', function() {
         const currentUrl = new URL(window.location);
         const currentOrder = currentUrl.searchParams.get('order') || 'desc';
@@ -975,16 +968,12 @@
         currentUrl.searchParams.set('order', newOrder);
         window.location.href = currentUrl.toString();
     });
-
-    // Manter seleção de ordenação e atualizar ícone
     document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const currentSort = urlParams.get('sort') || 'id';
         const currentOrder = urlParams.get('order') || 'desc';
         
         document.getElementById('sortSelect').value = currentSort;
-        
-        // Atualizar ícone do botão de inversão
         const reverseIcon = document.getElementById('reverseIcon');
         const reverseBtn = document.getElementById('reverseBtn');
         
@@ -996,8 +985,6 @@
             reverseBtn.title = 'Ordenação decrescente - Clique para crescente';
         }
     });
-
-    // Modal Functions
     function abrirModalAdicionarFilme() {
         document.getElementById('modalAdicionarFilme').style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -1006,13 +993,9 @@
     function fecharModalAdicionarFilme() {
         document.getElementById('modalAdicionarFilme').style.display = 'none';
         document.body.style.overflow = 'auto';
-        
-        // Reset form
         document.getElementById('formAdicionarFilme').reset();
         document.getElementById('posterPreview').style.display = 'none';
     }
-
-    // File Upload Preview
     document.getElementById('poster').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
@@ -1029,23 +1012,22 @@
         document.getElementById('poster').value = '';
         document.getElementById('posterPreview').style.display = 'none';
     }
-
-    // Close modal when clicking outside
     document.getElementById('modalAdicionarFilme').addEventListener('click', function(e) {
         if (e.target === this) {
             fecharModalAdicionarFilme();
         }
     });
-
-    // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             fecharModalAdicionarFilme();
         }
     });
-
-    // JavaScript carregado com sucesso
     console.log('JavaScript do admin_filmes carregado com sucesso');
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
     </script>
 </body>
 </html>

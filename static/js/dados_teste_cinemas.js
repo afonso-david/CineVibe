@@ -1,5 +1,3 @@
-
-// DADOS DE TESTE PARA CINEMAS E SESSÕES
 const DADOS_TESTE_CINEMAS = {
   "success": true,
   "cinemas": [
@@ -94,20 +92,15 @@ const DADOS_TESTE_CINEMAS = {
     }
   ]
 };
-
-// Função para usar dados de teste
 function carregarDadosTeste() {
     console.log('🧪 Carregando dados de teste...');
     cinemasData = DADOS_TESTE_CINEMAS.cinemas;
     renderizarCinemas();
     console.log('✅ Dados de teste carregados:', cinemasData.length, 'cinemas');
 }
-
-// Substituir função original temporariamente
 const carregarCinemasSessoesOriginal = carregarCinemasSessoes;
 carregarCinemasSessoes = function() {
     console.log('🔄 Tentando carregar dados reais...');
-    
     fetch(`/admin/filmes/${filmeId}/cinemas-sessoes`)
         .then(response => response.json())
         .then(data => {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -316,15 +316,12 @@
                 eyeIcon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>';
             }
         }
-
-        // Search functionality
         const searchInput = document.querySelector('.search-container input');
         const searchResults = document.getElementById('searchResults');
 
         searchInput.addEventListener('input', function() {
             const query = this.value.trim();
             if (query.length > 2) {
-                // Simulate search results
                 searchResults.innerHTML = `
                     <div class="search-results-section">
                         <div class="search-results-title">Filmes</div>
@@ -345,37 +342,26 @@
                 searchResults.classList.remove('show');
             }
         });
-
-        // Hide search results when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.search-container')) {
                 searchResults.classList.remove('show');
             }
         });
-        
-        // Verificar se há dados de reserva salvos quando a página carrega
         document.addEventListener('DOMContentLoaded', function() {
-            // Verificar se há dados de reserva salvos
             const dadosReserva = sessionStorage.getItem('dadosReserva');
             
             if (dadosReserva) {
                 try {
                     const dados = JSON.parse(dadosReserva);
-                    
-                    // Construir parâmetros de reserva
                     const params = new URLSearchParams({
                         horario: dados.horario,
                         cinema: dados.cinema,
                         tipo: dados.tipo,
                         data: dados.data
                     });
-                    
-                    // Adicionar os parâmetros ao formulário
                     document.getElementById('reservaParams').value = params.toString();
                     
                     console.log('Dados de reserva encontrados e adicionados ao formulário:', dados);
-                    
-                    // Mostrar mensagem informativa
                     const formContainer = document.querySelector('.form-container');
                     if (formContainer) {
                         const infoDiv = document.createElement('div');
@@ -390,11 +376,7 @@
                     sessionStorage.removeItem('dadosReserva');
                 }
             }
-            
-            // JavaScript de limpeza se necessário
             console.log('Página de login carregada');
-            
-            // Funcionalidade dos botões sociais
             const btnGoogle = document.querySelector('.btn-google');
             const btnFacebook = document.querySelector('.btn-facebook');
             
@@ -414,30 +396,22 @@
                 });
             }
         });
-
-        // Funções do Modal de Recuperação de Senha
         function abrirModalEsqueceuSenha(event) {
             event.preventDefault();
             console.log('Abrindo modal de recuperação de senha...');
             const modal = document.getElementById('esqueceuSenhaModal');
             modal.style.display = 'flex';
-            
-            // Limpar campo
             document.getElementById('emailRecuperacao').value = '';
         }
 
         function fecharModalEsqueceuSenha() {
             console.log('Fechando modal de recuperação de senha...');
             document.getElementById('esqueceuSenhaModal').style.display = 'none';
-            
-            // Limpar campo
             document.getElementById('emailRecuperacao').value = '';
         }
 
         function enviarRecuperacao() {
             const email = document.getElementById('emailRecuperacao').value.trim();
-            
-            // Validação
             if (!email) {
                 alert('Por favor, digite seu email.');
                 return;
@@ -447,13 +421,9 @@
                 alert('Por favor, digite um email válido.');
                 return;
             }
-            
-            // Desabilitar botão durante o envio
             const btnEnviar = document.querySelector('.btn-enviar-esqueceu');
             btnEnviar.disabled = true;
             btnEnviar.textContent = 'Enviando...';
-            
-            // Enviar dados para o servidor
             fetch('/api/recuperar-senha', {
                 method: 'POST',
                 headers: {
@@ -477,21 +447,16 @@
                 alert('Erro ao enviar instruções. Tente novamente.');
             })
             .finally(() => {
-                // Reabilitar botão
                 btnEnviar.disabled = false;
                 btnEnviar.textContent = 'Enviar Instruções';
             });
         }
-
-        // Fechar modal ao clicar fora
         document.addEventListener('click', function(e) {
             const modal = document.getElementById('esqueceuSenhaModal');
             if (e.target === modal) {
                 fecharModalEsqueceuSenha();
             }
         });
-
-        // Fechar modal com ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 fecharModalEsqueceuSenha();

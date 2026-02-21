@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Salas - CineVibe Admin</title>
@@ -596,19 +600,14 @@
     </div>
 
     <script>
-        // JavaScript para filtros e pesquisa
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const cinemaFilter = document.getElementById('cinemaFilter');
             const tipoFilter = document.getElementById('tipoFilter');
             const sortSelect = document.getElementById('sortSelect');
-
-            // Pesquisa
             if (searchInput) {
                 searchInput.addEventListener('input', applyFilters);
             }
-
-            // Filtros
             if (cinemaFilter) {
                 cinemaFilter.addEventListener('change', applyFilters);
             }
@@ -616,8 +615,6 @@
             if (tipoFilter) {
                 tipoFilter.addEventListener('change', applyFilters);
             }
-
-            // Ordenação
             if (sortSelect) {
                 sortSelect.addEventListener('change', sortSalas);
             }
@@ -678,42 +675,28 @@
             document.getElementById('tipoFilter').value = '';
             applyFilters();
         }
-
-        // Variável global para armazenar o ID da sala sendo editada
         let salaEditandoId = null;
-
-        // Função para abrir modal de adicionar sala
         function abrirModalAdicionarSala() {
             document.getElementById('adicionarSalaModal').style.display = 'flex';
         }
-
-        // Função para fechar modal de adicionar sala
         function fecharModalAdicionarSala() {
             document.getElementById('adicionarSalaModal').style.display = 'none';
             document.getElementById('formAdicionarSala').reset();
         }
-
-        // Função para editar sala
         function editarSala(salaId) {
             console.log('Editando sala:', salaId);
             salaEditandoId = salaId;
-            
-            // Buscar dados da sala
             fetch(`/admin/salas/${salaId}/dados`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         const sala = data.sala;
-                        
-                        // Preencher o formulário
                         document.getElementById('editNomeSala').value = sala.nome_sala || '';
                         document.getElementById('editCinema').value = sala.id_cinema || '';
                         document.getElementById('editCapacidade').value = sala.capacidade || '';
                         document.getElementById('editTipoSala').value = sala.tipo_sala || 'Normal';
                         document.getElementById('editFilas').value = sala.filas || 10;
                         document.getElementById('editLugaresPorFila').value = sala.lugares_por_fila || 20;
-                        
-                        // Abrir modal
                         document.getElementById('editarSalaModal').style.display = 'flex';
                     } else {
                         showNotification('Erro ao carregar dados da sala: ' + data.message, 'error');
@@ -724,14 +707,10 @@
                     showNotification('Erro ao carregar dados da sala', 'error');
                 });
         }
-
-        // Função para fechar modal de edição
         function fecharModalEditarSala() {
             document.getElementById('editarSalaModal').style.display = 'none';
             salaEditandoId = null;
         }
-
-        // Função para salvar edição da sala
         function salvarEdicaoSala() {
             if (!salaEditandoId) {
                 showNotification('Erro: ID da sala não encontrado', 'error');
@@ -767,8 +746,6 @@
                 showNotification('Erro ao salvar sala', 'error');
             });
         }
-
-        // Função para remover sala
         function removerSala(salaId, nomeSala) {
             if (confirm(`Tem certeza que deseja remover a sala "${nomeSala}"?`)) {
                 fetch(`/admin/salas/${salaId}/remover`, {
@@ -792,8 +769,6 @@
                 });
             }
         }
-
-        // Função para mostrar notificações
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
@@ -817,8 +792,6 @@
                 }, 300);
             }, 3000);
         }
-
-        // Fechar modal ao clicar fora
         window.onclick = function(event) {
             const modalEditar = document.getElementById('editarSalaModal');
             const modalAdicionar = document.getElementById('adicionarSalaModal');
@@ -830,6 +803,11 @@
                 fecharModalAdicionarSala();
             }
         }
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
     </script>
 </body>
 </html>

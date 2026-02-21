@@ -1,54 +1,34 @@
-// Admin Bar JavaScript - Following admin_filmes pattern
-
-// Global variables
 let currentView = 'table';
 let currentSort = 'id';
-
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeEventListeners();
     setupSearch();
     setupFilters();
     updateViewDisplay();
-    
-    // Restaurar aba ativa do localStorage
     const activeTab = localStorage.getItem('adminBarActiveTab') || 'produtos';
     mostrarTab(activeTab);
 });
-
-// Tab Management
 function mostrarTab(tabName) {
-    // Hide all tabs
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.style.display = 'none';
         tab.classList.remove('active');
     });
-    
-    // Remove active class from all tab buttons
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    
-    // Show selected tab
     const selectedTab = document.getElementById(`tab-${tabName}`);
     if (selectedTab) {
         selectedTab.style.display = 'block';
         selectedTab.classList.add('active');
     }
-    
-    // Add active class to clicked button
     if (typeof event !== 'undefined' && event && event.target) {
         event.target.classList.add('active');
     } else {
-        // Se não houver evento (chamada programática), encontrar o botão correto
         const btn = document.querySelector(`.tab-btn[onclick*="${tabName}"]`);
         if (btn) btn.classList.add('active');
     }
-    
-    // Atualizar botão de adicionar conforme a tab
     const btnAdicionar = document.getElementById('btnAdicionar');
     const btnTexto = document.getElementById('btnAdicionarTexto');
-    
     if (tabName === 'produtos') {
         btnAdicionar.onclick = abrirModalAdicionarProduto;
         btnTexto.textContent = 'Novo Produto';
@@ -59,22 +39,15 @@ function mostrarTab(tabName) {
         btnAdicionar.onclick = abrirModalAdicionarTopping;
         btnTexto.textContent = 'Novo Topping';
     }
-    
-    // Salvar aba ativa no localStorage
     localStorage.setItem('adminBarActiveTab', tabName);
 }
-
-// Initialize all event listeners
 function initializeEventListeners() {
-    // View toggle buttons
     document.querySelectorAll('.view-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const view = this.dataset.view;
             switchView(view);
         });
     });
-
-    // Price filter buttons
     document.querySelectorAll('.price-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.price-btn').forEach(b => b.classList.remove('active'));
@@ -82,14 +55,10 @@ function initializeEventListeners() {
             applyFilters();
         });
     });
-
-    // Type filter
     const typeFilter = document.getElementById('typeFilter');
     if (typeFilter) {
         typeFilter.addEventListener('change', applyFilters);
     }
-
-    // Sort select
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
@@ -98,76 +67,51 @@ function initializeEventListeners() {
         });
     }
 }
-
-// Switch between grid and table view
 function switchView(view) {
     currentView = view;
-    
-    // Update button states
     document.querySelectorAll('.view-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.dataset.view === view) {
             btn.classList.add('active');
         }
     });
-    
     updateViewDisplay();
 }
-
-// Update view display based on current view
 function updateViewDisplay() {
-    // Produtos
     const produtosGrid = document.getElementById('produtos-grid');
     const produtosTable = document.getElementById('produtos-table');
-    
-    // Menus
     const menusGrid = document.getElementById('menus-grid');
     const menusTable = document.getElementById('menus-table');
-    
-    // Toppings
     const toppingsGrid = document.getElementById('toppings-grid');
     const toppingsTable = document.getElementById('toppings-table');
-    
     if (currentView === 'grid') {
-        // Mostrar grids
         if (produtosGrid) produtosGrid.style.display = 'grid';
         if (menusGrid) menusGrid.style.display = 'grid';
         if (toppingsGrid) toppingsGrid.style.display = 'grid';
-        
-        // Esconder tabelas
         if (produtosTable) produtosTable.style.display = 'none';
         if (menusTable) menusTable.style.display = 'none';
         if (toppingsTable) toppingsTable.style.display = 'none';
     } else {
-        // Esconder grids
         if (produtosGrid) produtosGrid.style.display = 'none';
         if (menusGrid) menusGrid.style.display = 'none';
         if (toppingsGrid) toppingsGrid.style.display = 'none';
-        
-        // Mostrar tabelas
         if (produtosTable) produtosTable.style.display = 'block';
         if (menusTable) menusTable.style.display = 'block';
         if (toppingsTable) toppingsTable.style.display = 'block';
     }
 }
-
-// Sort products
 function sortProducts() {
     const containers = [
         { grid: document.querySelector('#produtos-grid'), table: document.querySelector('#produtos-table tbody'), attr: 'data-produto-id' },
         { grid: document.querySelector('#menus-grid'), table: document.querySelector('#menus-table tbody'), attr: 'data-menu-id' },
         { grid: document.querySelector('#toppings-grid'), table: document.querySelector('#toppings-table tbody'), attr: 'data-topping-id' }
     ];
-    
     containers.forEach(container => {
         [container.grid, container.table].forEach(element => {
             if (!element) return;
-            
             const items = Array.from(element.children);
-            
             items.sort((a, b) => {
                 let aValue, bValue;
-                
                 switch (currentSort) {
                     case 'nome':
                         const aTitle = a.querySelector('.movie-title-info h4, .movie-info h3, .topping-info h3, .menu-header h3');
@@ -175,62 +119,46 @@ function sortProducts() {
                         aValue = aTitle ? aTitle.textContent.toLowerCase() : '';
                         bValue = bTitle ? bTitle.textContent.toLowerCase() : '';
                         return aValue.localeCompare(bValue);
-                        
                     case 'preco':
                         aValue = parseFloat(a.dataset.preco) || 0;
                         bValue = parseFloat(b.dataset.preco) || 0;
                         return aValue - bValue;
-                        
                     case 'tipo':
                         aValue = a.dataset.tipo || '';
                         bValue = b.dataset.tipo || '';
                         return aValue.localeCompare(bValue);
-                        
-                    default: // id
+                    default: 
                         aValue = parseInt(a.getAttribute(container.attr)) || 0;
                         bValue = parseInt(b.getAttribute(container.attr)) || 0;
-                        return bValue - aValue; // Descending order for ID
+                        return bValue - aValue; 
                 }
             });
-            
-            // Reorder elements
             items.forEach(item => element.appendChild(item));
         });
     });
 }
-
-// Modal Management
 function abrirModalAdicionarProduto() {
     document.getElementById('modalAdicionarProduto').style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
-
 function fecharModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
     document.body.style.overflow = 'auto';
 }
-
-// Product Management
 async function editarProduto(produtoId) {
     try {
         const response = await fetch(`/admin/bar/produtos/${produtoId}/dados`);
         const produto = await response.json();
-        
         if (produto.error) {
             alert('Erro ao carregar dados do produto');
             return;
         }
-        
-        // Preencher formulário
         document.getElementById('edit_nome_produto').value = produto.nome || produto.produto || '';
         document.getElementById('edit_tipo_produto').value = produto.tipo || '';
         document.getElementById('edit_preco_produto').value = produto.preco || '';
-        
-        // Guardar imagem atual e mostrar preview
         const imagemAtualInput = document.getElementById('imagem_atual_produto');
         const previewEdit = document.getElementById('preview_edit_imagem_produto');
         const nomeEditImagem = document.getElementById('nome_edit_imagem_produto');
-        
         if (produto.imagem_url) {
             imagemAtualInput.value = produto.imagem_url;
             const imagemPath = produto.imagem_url.replace(/\\/g, '/').replace(/"/g, '');
@@ -243,117 +171,77 @@ async function editarProduto(produtoId) {
             previewEdit.classList.remove('active');
             nomeEditImagem.textContent = 'Nenhuma imagem selecionada';
         }
-        
-        // Configurar ação do formulário
         document.getElementById('formEditarProduto').action = `/admin/bar/produtos/editar/${produtoId}`;
-        
-        // Abrir modal
         document.getElementById('modalEditarProduto').style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        
     } catch (error) {
         console.error('Erro ao carregar produto:', error);
         alert('Erro ao carregar dados do produto');
     }
 }
-
 function removerProduto(produtoId) {
     if (confirm('Tem certeza que deseja remover este produto?')) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/admin/bar/produtos/remover/${produtoId}`;
-        
         document.body.appendChild(form);
         form.submit();
     }
 }
-
 function verProdutoDetalhes(produtoId) {
-    // Placeholder for product details view
     alert(`Ver detalhes do produto ${produtoId} - Funcionalidade em desenvolvimento`);
 }
-
-// Search Functionality
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
-    
     if (searchInput) {
         searchInput.addEventListener('input', function() {
             applyFilters();
         });
     }
 }
-
-// Filter Setup
 function setupFilters() {
-    // Already handled in initializeEventListeners
 }
-
-// Apply all filters
 function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const typeFilter = document.getElementById('typeFilter').value;
     const activePriceBtn = document.querySelector('.price-btn.active');
     const priceRange = activePriceBtn ? activePriceBtn.dataset.price : 'all';
-    
     filterProducts(searchTerm, typeFilter, priceRange);
 }
-
 function filterProducts(searchTerm, typeFilter, priceRange) {
     const produtos = document.querySelectorAll('[data-produto-id]');
-    
     produtos.forEach(produto => {
         const nome = produto.querySelector('.movie-title-info h4, .movie-info h3').textContent.toLowerCase();
         const tipo = produto.dataset.tipo || '';
         const preco = parseFloat(produto.dataset.preco) || 0;
-        
         let visible = true;
-        
-        // Search filter
         if (searchTerm && !nome.includes(searchTerm) && !tipo.toLowerCase().includes(searchTerm)) {
             visible = false;
         }
-        
-        // Type filter
         if (typeFilter && tipo !== typeFilter) {
             visible = false;
         }
-        
-        // Price filter
         if (priceRange !== 'all') {
             if (priceRange === '0-5' && (preco < 0 || preco > 5)) visible = false;
             if (priceRange === '5-10' && (preco < 5 || preco > 10)) visible = false;
             if (priceRange === '10+' && preco < 10) visible = false;
         }
-        
         produto.style.display = visible ? '' : 'none';
     });
 }
-
 function limparFiltros() {
-    // Clear search
     document.getElementById('searchInput').value = '';
-    
-    // Reset type filter
     document.getElementById('typeFilter').value = '';
-    
-    // Reset price filter
     document.querySelectorAll('.price-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector('.price-btn[data-price="all"]').classList.add('active');
-    
-    // Apply filters
     applyFilters();
 }
-
-// Close modal when clicking outside
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('modal-overlay')) {
         const modalId = event.target.id;
         fecharModal(modalId);
     }
 });
-
-// Close modal with Escape key
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         const openModal = document.querySelector('.modal-overlay[style*="flex"]');
@@ -362,15 +250,12 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
-
-// Form validation
 document.addEventListener('DOMContentLoaded', function() {
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
             const requiredFields = form.querySelectorAll('[required]');
             let isValid = true;
-            
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
                     field.style.borderColor = '#ff4757';
@@ -379,15 +264,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     field.style.borderColor = 'rgba(255, 215, 0, 0.3)';
                 }
             });
-            
             if (!isValid) {
                 e.preventDefault();
                 alert('Por favor, preencha todos os campos obrigatórios.');
             }
         });
     });
-    
-    // Validate price inputs
     const priceInputs = document.querySelectorAll('input[type="number"][step="0.01"]');
     priceInputs.forEach(input => {
         input.addEventListener('input', function() {
@@ -397,80 +279,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-
-// Menu Management Functions
 function abrirModalAdicionarMenu() {
-    // Limpar formulário
     document.getElementById('formAdicionarMenu').reset();
     document.getElementById('produtos-novo-menu-list').innerHTML = '<p class="no-produtos">Nenhum produto adicionado</p>';
-    
-    // Abrir modal
     document.getElementById('modalAdicionarMenu').style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
-
 function abrirSeletorProdutosNovoMenu() {
-    // Guardar contexto (novo menu)
     window.menuContext = 'novo';
     abrirSeletorProdutos();
 }
-
 async function editarMenu(menuId) {
     console.log('=== INICIANDO EDIÇÃO DO MENU ===');
     console.log('Menu ID:', menuId);
-    
-    // Definir contexto
     window.menuContext = 'editar';
-    
     try {
         const url = `/admin/bar/menus/${menuId}/dados`;
         console.log('URL da requisição:', url);
-        
         const response = await fetch(url);
         console.log('Response status:', response.status);
         console.log('Response ok:', response.ok);
-        
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Erro na resposta:', errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
         const menu = await response.json();
         console.log('Menu recebido:', menu);
-        
         if (menu.error) {
             console.error('Erro no menu:', menu.error);
             alert('Erro ao carregar dados do menu: ' + menu.error);
             return;
         }
-        
-        // Verificar se os elementos existem
         const nomeInput = document.getElementById('edit_nome_menu');
         const descricaoInput = document.getElementById('edit_descricao_menu');
         const precoInput = document.getElementById('edit_preco_menu');
-        
         console.log('Elementos encontrados:', {
             nome: !!nomeInput,
             descricao: !!descricaoInput,
             preco: !!precoInput
         });
-        
         if (!nomeInput || !descricaoInput || !precoInput) {
             throw new Error('Elementos do formulário não encontrados');
         }
-        
-        // Preencher formulário
         nomeInput.value = menu.nome || '';
         descricaoInput.value = menu.descricao || '';
         precoInput.value = menu.preco_total || '';
-        
-        // Carregar imagem atual
         const imagemAtualInput = document.getElementById('imagem_atual_menu');
         const previewEdit = document.getElementById('preview_edit_imagem_menu');
         const nomeEditImagem = document.getElementById('nome_edit_imagem_menu');
-        
         if (menu.imagem_url) {
             imagemAtualInput.value = menu.imagem_url;
             previewEdit.innerHTML = `<img src="/static/${menu.imagem_url}" alt="Imagem atual">`;
@@ -482,24 +339,18 @@ async function editarMenu(menuId) {
             previewEdit.classList.remove('active');
             nomeEditImagem.textContent = 'Nenhuma imagem selecionada';
         }
-        
         console.log('Formulário preenchido com:', {
             nome: nomeInput.value,
             descricao: descricaoInput.value,
             preco: precoInput.value,
             imagem: menu.imagem_url
         });
-        
-        // Carregar produtos do menu
         const produtosList = document.getElementById('produtos-menu-list');
-        
         if (!produtosList) {
             console.error('Lista de produtos não encontrada');
         } else {
             produtosList.innerHTML = '';
-            
             console.log('Produtos do menu:', menu.produtos);
-            
             if (menu.produtos && menu.produtos.length > 0) {
                 menu.produtos.forEach(produto => {
                     console.log('Adicionando produto:', produto);
@@ -520,8 +371,6 @@ async function editarMenu(menuId) {
                 produtosList.innerHTML = '<p class="no-produtos">Nenhum produto adicionado</p>';
             }
         }
-        
-        // Configurar ação do formulário
         const form = document.getElementById('formEditarMenu');
         if (form) {
             form.action = `/admin/bar/menus/editar/${menuId}`;
@@ -529,8 +378,6 @@ async function editarMenu(menuId) {
         } else {
             console.error('Formulário não encontrado');
         }
-        
-        // Abrir modal
         const modal = document.getElementById('modalEditarMenu');
         if (modal) {
             modal.style.display = 'flex';
@@ -539,9 +386,7 @@ async function editarMenu(menuId) {
         } else {
             console.error('Modal não encontrado');
         }
-        
         console.log('=== EDIÇÃO CONCLUÍDA COM SUCESSO ===');
-        
     } catch (error) {
         console.error('=== ERRO AO CARREGAR MENU ===');
         console.error('Erro:', error);
@@ -549,33 +394,23 @@ async function editarMenu(menuId) {
         alert('Erro ao carregar dados do menu: ' + error.message);
     }
 }
-
 function removerMenu(menuId) {
     if (confirm('Tem certeza que deseja remover este menu?')) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/admin/bar/menus/remover/${menuId}`;
-        
         document.body.appendChild(form);
         form.submit();
     }
 }
-
 function abrirSeletorProdutos() {
-    // Determinar qual lista de produtos usar
     const listId = window.menuContext === 'novo' ? 'produtos-novo-menu-list' : 'produtos-menu-list';
-    
-    // Abrir modal de seleção de produtos
     document.getElementById('modalSeletorProdutos').style.display = 'flex';
-    
-    // Marcar produtos já adicionados
     const produtosAdicionados = document.querySelectorAll(`#${listId} .produto-item`);
     const idsAdicionados = Array.from(produtosAdicionados).map(item => {
         const nome = item.querySelector('.produto-nome').textContent;
         return nome;
     });
-    
-    // Marcar produtos no seletor
     document.querySelectorAll('.produto-seletor-item').forEach(item => {
         const nome = item.dataset.produtoNome;
         if (idsAdicionados.includes(nome)) {
@@ -590,8 +425,6 @@ function abrirSeletorProdutos() {
             btn.disabled = false;
         }
     });
-    
-    // Setup search
     const searchInput = document.getElementById('searchProdutosSeletor');
     searchInput.value = '';
     searchInput.oninput = function() {
@@ -607,31 +440,21 @@ function abrirSeletorProdutos() {
         });
     };
 }
-
 function adicionarProdutoAoMenu(produtoId, produtoNome, produtoPreco) {
     console.log('Adicionando produto:', produtoId, produtoNome, produtoPreco);
-    
-    // Determinar qual lista usar
     const listId = window.menuContext === 'novo' ? 'produtos-novo-menu-list' : 'produtos-menu-list';
     const produtosList = document.getElementById(listId);
-    
-    // Verificar se já existe
     const existente = Array.from(produtosList.querySelectorAll('.produto-item')).find(item => {
         return item.querySelector('.produto-nome').textContent === produtoNome;
     });
-    
     if (existente) {
         alert('Este produto já está no menu!');
         return;
     }
-    
-    // Remover mensagem "nenhum produto"
     const noProdutos = produtosList.querySelector('.no-produtos');
     if (noProdutos) {
         noProdutos.remove();
     }
-    
-    // Criar elemento do produto
     const produtoItem = document.createElement('div');
     produtoItem.className = 'produto-item';
     produtoItem.dataset.produtoId = produtoId;
@@ -643,10 +466,7 @@ function adicionarProdutoAoMenu(produtoId, produtoNome, produtoPreco) {
         </button>
         <input type="hidden" name="produtos[]" value="${produtoId}">
     `;
-    
     produtosList.appendChild(produtoItem);
-    
-    // Marcar como adicionado no seletor
     const seletorItem = document.querySelector(`.produto-seletor-item[data-produto-id="${produtoId}"]`);
     if (seletorItem) {
         seletorItem.classList.add('adicionado');
@@ -654,29 +474,19 @@ function adicionarProdutoAoMenu(produtoId, produtoNome, produtoPreco) {
         btn.innerHTML = '<i class="fas fa-check"></i> Adicionado';
         btn.disabled = true;
     }
-    
     console.log('Produto adicionado com sucesso');
 }
-
 function removerProdutoDoMenuContext(produtoId, context) {
     console.log('Removendo produto:', produtoId, 'contexto:', context);
-    
-    // Determinar qual lista usar
     const listId = context === 'novo' ? 'produtos-novo-menu-list' : 'produtos-menu-list';
-    
-    // Remover visualmente
     const produtoItem = document.querySelector(`#${listId} .produto-item[data-produto-id="${produtoId}"]`);
     if (produtoItem) {
         produtoItem.remove();
     }
-    
-    // Verificar se não há mais produtos
     const produtosList = document.getElementById(listId);
     if (produtosList.children.length === 0) {
         produtosList.innerHTML = '<p class="no-produtos">Nenhum produto adicionado</p>';
     }
-    
-    // Desmarcar no seletor
     const seletorItem = document.querySelector(`.produto-seletor-item[data-produto-id="${produtoId}"]`);
     if (seletorItem) {
         seletorItem.classList.remove('adicionado');
@@ -684,25 +494,18 @@ function removerProdutoDoMenuContext(produtoId, context) {
         btn.innerHTML = '<i class="fas fa-plus"></i> Adicionar';
         btn.disabled = false;
     }
-    
     console.log('Produto removido com sucesso');
 }
-
 function removerProdutoDoMenu(produtoId) {
     removerProdutoDoMenuContext(produtoId, 'editar');
 }
-
-
-// Upload de Imagens - Preview
 document.addEventListener('DOMContentLoaded', function() {
-    // Preview para novo menu
     const imagemMenuInput = document.getElementById('imagem_menu');
     if (imagemMenuInput) {
         imagemMenuInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('nome_imagem_menu').textContent = file.name;
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('preview_imagem_menu');
@@ -713,15 +516,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Preview para editar menu
     const editImagemMenuInput = document.getElementById('edit_imagem_menu');
     if (editImagemMenuInput) {
         editImagemMenuInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('nome_edit_imagem_menu').textContent = file.name;
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('preview_edit_imagem_menu');
@@ -732,15 +532,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Preview para adicionar produto
     const imagemProdutoInput = document.getElementById('imagem_produto');
     if (imagemProdutoInput) {
         imagemProdutoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('nome_imagem_produto').textContent = file.name;
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('preview_imagem_produto');
@@ -751,15 +548,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // Preview para editar produto
     const editImagemProdutoInput = document.getElementById('edit_imagem_produto');
     if (editImagemProdutoInput) {
         editImagemProdutoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('nome_edit_imagem_produto').textContent = file.name;
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('preview_edit_imagem_produto');
@@ -771,23 +565,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// ===========================
-// TOPPINGS MANAGEMENT
-// ===========================
-
 function abrirModalAdicionarTopping() {
     document.getElementById('modalAdicionarTopping').style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    
-    // Limpar formulário
     document.getElementById('formAdicionarTopping').reset();
     document.getElementById('nome_imagem_topping').textContent = 'Nenhuma imagem selecionada';
     document.getElementById('preview_imagem_topping').innerHTML = '';
     document.getElementById('preview_imagem_topping').classList.remove('active');
 }
-
-// Preview de imagem para topping
 document.addEventListener('DOMContentLoaded', function() {
     const imagemToppingInput = document.getElementById('imagem_topping');
     if (imagemToppingInput) {
@@ -795,7 +580,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('nome_imagem_topping').textContent = file.name;
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('preview_imagem_topping');
@@ -807,11 +591,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
 function editarTopping(toppingId) {
     console.log('Editando topping:', toppingId);
-    
-    // Buscar dados do topping
     fetch(`/admin/bar/toppings/${toppingId}/dados`)
         .then(response => response.json())
         .then(data => {
@@ -819,16 +600,11 @@ function editarTopping(toppingId) {
                 alert('Erro ao carregar dados do topping: ' + data.error);
                 return;
             }
-            
             console.log('Dados do topping:', data);
-            
-            // Preencher formulário
             document.getElementById('edit_nome_topping').value = data.nome || '';
             document.getElementById('edit_descricao_topping').value = data.descricao || '';
             document.getElementById('edit_preco_topping').value = data.preco || '';
             document.getElementById('imagem_atual_topping').value = data.imagem_url || '';
-            
-            // Mostrar preview da imagem atual se existir
             const preview = document.getElementById('preview_edit_imagem_topping');
             if (data.imagem_url) {
                 const imagemPath = data.imagem_url.replace(/\\/g, '/').replace(/"/g, '');
@@ -840,12 +616,8 @@ function editarTopping(toppingId) {
                 preview.classList.remove('active');
                 document.getElementById('nome_edit_imagem_topping').textContent = 'Nenhuma imagem selecionada';
             }
-            
-            // Configurar ação do formulário
             const form = document.getElementById('formEditarTopping');
             form.action = `/admin/bar/toppings/editar/${toppingId}`;
-            
-            // Abrir modal
             document.getElementById('modalEditarTopping').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         })
@@ -854,7 +626,6 @@ function editarTopping(toppingId) {
             alert('Erro ao carregar dados do topping');
         });
 }
-
 function removerTopping(toppingId) {
     if (confirm('Tem certeza que deseja remover este topping?')) {
         const form = document.createElement('form');
@@ -864,8 +635,6 @@ function removerTopping(toppingId) {
         form.submit();
     }
 }
-
-// Preview de imagem para editar topping
 document.addEventListener('DOMContentLoaded', function() {
     const editImagemToppingInput = document.getElementById('edit_imagem_topping');
     if (editImagemToppingInput) {
@@ -873,7 +642,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const file = e.target.files[0];
             if (file) {
                 document.getElementById('nome_edit_imagem_topping').textContent = file.name;
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('preview_edit_imagem_topping');

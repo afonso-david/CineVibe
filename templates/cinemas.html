@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -240,7 +240,6 @@
     </footer>
 
     <script>
-        // Filtros de pesquisa
         document.getElementById('searchCinema').addEventListener('input', filterCinemas);
         document.getElementById('filterRegiao').addEventListener('change', filterCinemas);
 
@@ -263,10 +262,7 @@
                 }
             });
         }
-
-        // Toggle favorito
         function toggleFavorito(cinemaId, button) {
-            // Adicionar loading state
             const originalIcon = button.innerHTML;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             button.disabled = true;
@@ -281,8 +277,6 @@
             .then(data => {
                 if (data.success) {
                     button.classList.toggle('favorito');
-                    
-                    // Mostrar feedback visual
                     const message = data.message;
                     showNotification(message, 'success');
                 } else {
@@ -294,23 +288,17 @@
                 showNotification('Erro de conexão', 'error');
             })
             .finally(() => {
-                // Restaurar botão
                 button.innerHTML = originalIcon;
                 button.disabled = false;
             });
         }
-
-        // Função para mostrar notificações
         function showNotification(message, type) {
-            // Criar elemento de notificação
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.innerHTML = `
                 <i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'}"></i>
                 <span>${message}</span>
             `;
-            
-            // Adicionar estilos
             notification.style.cssText = `
                 position: fixed;
                 top: 20px;
@@ -330,13 +318,9 @@
             `;
             
             document.body.appendChild(notification);
-            
-            // Animar entrada
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
             }, 100);
-            
-            // Remover após 3 segundos
             setTimeout(() => {
                 notification.style.transform = 'translateX(100%)';
                 setTimeout(() => {
@@ -346,14 +330,9 @@
                 }, 300);
             }, 3000);
         }
-
-        // Ver detalhes do cinema
         function verDetalhes(cinemaId) {
-            // Implementar modal ou redirecionamento para detalhes
             alert('Funcionalidade em desenvolvimento');
         }
-
-        // Pesquisa global
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const searchTerm = this.value;

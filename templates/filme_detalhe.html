@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -769,12 +769,10 @@
     </div> 
    
     <script>
-        // Dados do filme e horários (passados do backend)
         const filmeId = {{ filme.id }};
         const horariosFilme = {{ horarios_filme|tojson }};
         const tiposSessao = {{ tipos_sessao|tojson }};
         
-        // Estado da aplicação
         let diaAtual = new Date();
         let diaSelecionado = null;
         let horarioSelecionado = null;
@@ -782,13 +780,10 @@
         let tipoSessaoAtual = null;
         let dataSelecionada = null;
 
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Gerar dias da semana
             gerarDias();
             selecionarDiaAtual();
             
-            // Newsletter
             document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const email = this.querySelector('input[type="email"]').value;
@@ -796,17 +791,14 @@
                 this.reset();
             });
             
-            // Verificar se deve abrir trailer automaticamente
             const urlParams = new URLSearchParams(window.location.search);
             const shouldAutoPlay = urlParams.get('trailer') === 'auto';
             const fromHome = urlParams.get('from') === 'home';
             
             if (shouldAutoPlay && '{{ filme.trailer_url }}') {
-                // Se veio da home page, mostrar mensagem e abrir trailer completo
                 if (fromHome) {
                     console.log('🎬 Abrindo TRAILER COMPLETO vindo da home page - SEM LIMITAÇÕES DE TEMPO');
                     
-                    // Mostrar notificação discreta
                     const notification = document.createElement('div');
                     notification.style.cssText = `
                         position: fixed;
@@ -822,27 +814,20 @@
                     `;
                     notification.textContent = '🎬 Trailer Completo';
                     document.body.appendChild(notification);
-                    
-                    // Remover notificação após 3 segundos
                     setTimeout(() => {
                         if (notification.parentNode) {
                             notification.parentNode.removeChild(notification);
                         }
                     }, 3000);
                 }
-                
-                // Aguardar um pouco para a página carregar completamente
                 setTimeout(() => {
                     abrirTrailer('{{ filme.trailer_url }}', '{{ filme.titulo }}');
-                    
-                    // Limpar parâmetros da URL para não reabrir se recarregar
                     const newUrl = window.location.pathname;
                     window.history.replaceState({}, document.title, newUrl);
                 }, 500);
             }
         });
 
-        // Gerar navegação de dias (próximos 7 dias)
         function gerarDias() {
             const container = document.getElementById('diasContainer');
             const hoje = new Date();
@@ -855,8 +840,6 @@
                 diaBtn.className = 'dia-btn';
                 diaBtn.dataset.data = data.toISOString().split('T')[0];
                 diaBtn.onclick = () => selecionarDia(data, diaBtn);
-                
-                // Mostrar "Hoje" para o dia atual, senão mostrar o dia da semana
                 const diaSemana = i === 0 ? 'Hoje' : data.toLocaleDateString('pt-PT', { weekday: 'long' });
                 const diaNumero = data.getDate();
                 const mes = data.toLocaleDateString('pt-PT', { month: 'short' });
@@ -870,7 +853,6 @@
             }
         }
 
-        // Selecionar dia atual por padrão
         function selecionarDiaAtual() {
             const hoje = new Date();
             const primeiroDia = document.querySelector('.dia-btn');
@@ -878,37 +860,24 @@
                 selecionarDia(hoje, primeiroDia);
             }
         }   
-     // Selecionar um dia específico
         function selecionarDia(data, botao) {
-            // Remover seleção anterior
             document.querySelectorAll('.dia-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Selecionar novo dia
             botao.classList.add('active');
             diaSelecionado = data;
             dataSelecionada = data.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-            
-            // Resetar seleções
             resetarSelecoes();
-            
-            // Atualizar horários disponíveis
             atualizarHorariosDisponiveis();
         }
 
-        // Mostrar horários para um tipo de sessão específico
         function mostrarHorarios(cinemaId, tipoId, tipoNome) {
-            const botaoClicado = event.target;
+            const botaoClicado = window.event ? window.event.target : (event ? event.target : null);
+            if (!botaoClicado) return;
             const grupoSessao = document.getElementById(`sessao-${cinemaId}-${tipoId}`);
-            
-            // Verificar se o botão já está ativo (toggle)
             if (botaoClicado.classList.contains('active')) {
-                // Desativar botão e esconder horários
                 botaoClicado.classList.remove('active');
                 if (grupoSessao) {
                     grupoSessao.classList.add('hidden');
                 }
-                
-                // Resetar estado
                 cinemaAtual = null;
                 tipoSessaoAtual = null;
                 horarioSelecionado = null;
@@ -916,23 +885,15 @@
                 
                 return;
             }
-            
-            // Esconder todos os grupos de sessão deste cinema
             document.querySelectorAll(`[data-cinema="${cinemaId}"]`).forEach(grupo => {
                 if (grupo.classList.contains('sessao-grupo')) {
                     grupo.classList.add('hidden');
                 }
             });
-            
-            // Remover active de todos os botões deste cinema
             document.querySelectorAll(`[data-cinema="${cinemaId}"].btn-sessao`).forEach(btn => {
                 btn.classList.remove('active');
             });
-            
-            // Ativar botão selecionado
             botaoClicado.classList.add('active');
-            
-            // Mostrar grupo de sessão correspondente
             if (grupoSessao) {
                 grupoSessao.classList.remove('hidden');
                 carregarHorarios(cinemaId, tipoId);
@@ -942,17 +903,12 @@
             tipoSessaoAtual = tipoId;
         }
 
-        // Carregar horários para cinema e tipo de sessão específicos
         function carregarHorarios(cinemaId, tipoId) {
             const container = document.getElementById(`horarios-${cinemaId}-${tipoId}`);
             const salasContainer = document.getElementById(`salas-${cinemaId}-${tipoId}`);
-            
-            // Filtrar horários para este cinema e tipo de sessão
             let horariosDisponiveis = horariosFilme.filter(h => 
                 h.id_cinema == cinemaId && h.id_tipo_sessao == tipoId
             );
-            
-            // Se o dia selecionado é hoje, filtrar horários que ainda não passaram
             const hoje = new Date();
             const diaSelecionadoStr = diaSelecionado.toISOString().split('T')[0];
             const hojeStr = hoje.toISOString().split('T')[0];
@@ -963,10 +919,7 @@
                 const minutoAtual = agora.getMinutes();
                 
                 horariosDisponiveis = horariosDisponiveis.filter(h => {
-                    // Extrair hora e minuto do horário (formato "HH:MM")
                     const [hora, minuto] = h.hora_str.split(':').map(Number);
-                    
-                    // Comparar com a hora atual
                     if (hora > horaAtual) {
                         return true; // Horário futuro
                     } else if (hora === horaAtual) {
@@ -987,8 +940,6 @@
                 container.innerHTML = `<p style="color: #B8C5D1; text-align: center; padding: 20px;">${mensagem}</p>`;
                 return;
             }
-            
-            // Agrupar por horário
             const horariosPorHora = {};
             horariosDisponiveis.forEach(h => {
                 if (!horariosPorHora[h.hora_str]) {
@@ -996,8 +947,6 @@
                 }
                 horariosPorHora[h.hora_str].push(h);
             });
-            
-            // Criar botões de horário
             Object.keys(horariosPorHora).sort().forEach(hora => {
                 const horarios = horariosPorHora[hora];
                 const horarioBtn = document.createElement('button');
@@ -1007,8 +956,6 @@
                 
                 container.appendChild(horarioBtn);
             });
-            
-            // Mostrar informações das salas
             const salasUnicas = [...new Set(horariosDisponiveis.map(h => h.nome_sala).filter(Boolean))];
             if (salasUnicas.length > 0) {
                 salasUnicas.forEach(sala => {
@@ -1019,23 +966,14 @@
                 });
             }
         }   
-     // Selecionar um horário específico
         function selecionarHorario(horario, botao) {
-            // Remover seleção anterior
             document.querySelectorAll('.hora-btn').forEach(btn => btn.classList.remove('selected'));
-            
-            // Selecionar novo horário
             botao.classList.add('selected');
             horarioSelecionado = horario;
-            
-            // Atualizar painel flutuante
             atualizarPainelCompra();
-            
-            // Mostrar painel flutuante
             mostrarPainelCompra();
         }
 
-        // Atualizar painel de compra flutuante
         function atualizarPainelCompra() {
             if (!horarioSelecionado || !diaSelecionado) return;
             
@@ -1062,39 +1000,30 @@
             btnComprar.disabled = false;
         }
 
-        // Mostrar painel de compra
         function mostrarPainelCompra() {
             const painel = document.getElementById('comprar-bilhete-flutuante');
             painel.classList.add('visible');
         }
 
-        // Esconder painel de compra
         function esconderPainelCompra() {
             const painel = document.getElementById('comprar-bilhete-flutuante');
             painel.classList.remove('visible');
         }
 
-        // Prosseguir com a compra
         function prosseguirCompra() {
             if (!horarioSelecionado || !diaSelecionado) {
                 alert('Por favor, selecione um horário primeiro.');
                 return;
             }
-            
-            // Verificar se o usuário está logado
             const isLoggedIn = {{ 'true' if logged_in else 'false' }};
             
             if (!isLoggedIn) {
-                // Mostrar modal de login
                 showMatrixModal();
                 return;
             }
-            
-            // Se logado, ir direto para reserva
             redirecionarParaReserva();
         }
         
-        // Redirecionar para página de reserva
         function redirecionarParaReserva() {
             const params = new URLSearchParams({
                 horario: horarioSelecionado.id,
@@ -1106,7 +1035,6 @@
             window.location.href = `{{ url_for('reserva') }}?${params.toString()}`;
         }
 
-        // Scroll suave para sessões
         function scrollToSessoes() {
             console.log('scrollToSessoes chamada');
             const sessoesElement = document.getElementById('sessoes');
@@ -1121,22 +1049,16 @@
             }
         }
 
-        // Função para mostrar o modal Matrix
         function showMatrixModal() {
             const modal = document.getElementById('matrixModal');
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            
-            // Iniciar o efeito Matrix Rain
             startMatrixRain();
-            
-            // Adicionar animação de entrada
             setTimeout(() => {
                 modal.classList.add('show');
             }, 100);
         }
 
-        // Função para fechar o modal Matrix
         function closeMatrixModal() {
             const modal = document.getElementById('matrixModal');
             modal.classList.remove('show');
@@ -1148,7 +1070,6 @@
             }, 300);
         }
 
-        // Efeito Matrix Rain - MELHORADO
         let matrixInterval;
         
         function startMatrixRain() {
@@ -1170,11 +1091,8 @@
             }
             
             function draw() {
-                // Fundo mais transparente para letras mais visíveis
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; // Reduzido de 0.04 para 0.02
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Cor verde mais intensa
                 ctx.fillStyle = '#00FF41'; // Verde mais brilhante
                 ctx.font = 'bold ' + fontSize + 'px "Courier New", monospace'; // Fonte bold e Courier New
                 ctx.shadowColor = '#00FF41';
@@ -1182,14 +1100,10 @@
                 
                 for(let i = 0; i < drops.length; i++) {
                     const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-                    
-                    // Variação de intensidade para criar efeito de profundidade
                     const alpha = Math.random() * 0.5 + 0.5; // Entre 0.5 e 1.0
                     ctx.globalAlpha = alpha;
                     
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    // Reset alpha
                     ctx.globalAlpha = 1.0;
                     
                     if(drops[i] * fontSize > canvas.height && Math.random() > 0.970) { // Mais letras (0.970 em vez de 0.975)
@@ -1197,8 +1111,6 @@
                     }
                     drops[i]++;
                 }
-                
-                // Reset shadow
                 ctx.shadowBlur = 0;
             }
             
@@ -1213,11 +1125,7 @@
 
         function continuarComoConvidado() {
             console.log('🎮 Continuar como convidado clicado');
-            
-            // Fechar o modal primeiro
             closeMatrixModal();
-            
-            // Verificar se temos os dados necessários da sessão
             if (cinemaAtual && tipoSessaoAtual && horarioSelecionado && diaSelecionado) {
                 console.log('🔗 Redirecionando para reserva com parâmetros...');
                 const params = new URLSearchParams({
@@ -1235,7 +1143,6 @@
         }
         
         function fazerLogin() {
-            // Guardar dados da sessão no sessionStorage para usar após login
             if (cinemaAtual && tipoSessaoAtual && horarioSelecionado && dataSelecionada) {
                 const dadosReserva = {
                     horario: horarioSelecionado.id,
@@ -1247,19 +1154,17 @@
                 sessionStorage.setItem('dadosReserva', JSON.stringify(dadosReserva));
                 console.log('Dados da reserva guardados para após login:', dadosReserva);
             }
-            
-            // Redirecionar para login
             window.location.href = '{{ url_for("login") }}';
         }    
-    // Filtrar cinemas por região
         function filtrarPorRegiao(regiao) {
-            // Atualizar botões
+            const botaoClicado = window.event ? window.event.target : (event ? event.target : null);
             document.querySelectorAll('.filtro-regiao-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            if (botaoClicado) {
+                botaoClicado.classList.add('active');
+            }
             
-            // Filtrar cinemas
             document.querySelectorAll('.cinema').forEach(cinema => {
                 if (regiao === 'todas' || cinema.dataset.regiao === regiao) {
                     cinema.style.display = 'block';
@@ -1269,28 +1174,19 @@
             });
         }
 
-        // Resetar todas as seleções
         function resetarSelecoes() {
             horarioSelecionado = null;
             cinemaAtual = null;
             tipoSessaoAtual = null;
-            
-            // Esconder painel de compra
             esconderPainelCompra();
-            
-            // Resetar botões
             document.querySelectorAll('.btn-sessao').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.hora-btn').forEach(btn => btn.classList.remove('selected'));
             document.querySelectorAll('.sessao-grupo').forEach(grupo => grupo.classList.add('hidden'));
         }
 
-        // Atualizar horários disponíveis baseado no dia selecionado
         function atualizarHorariosDisponiveis() {
-            // Esta função pode ser expandida para filtrar horários por data
-            // Por agora, todos os horários são mostrados
         }
 
-        // Pesquisa de filmes
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const termo = e.target.value.toLowerCase().trim();
             const resultsContainer = document.getElementById('searchResults');
@@ -1299,9 +1195,6 @@
                 resultsContainer.classList.remove('show');
                 return;
             }
-            
-            // Simulação de resultados de pesquisa
-            // Em produção, isto seria uma chamada AJAX
             const resultados = [
                 { tipo: 'filme', nome: 'Resultado de exemplo', meta: 'Ação, 2025' }
             ].filter(item => item.nome.toLowerCase().includes(termo));
@@ -1328,18 +1221,13 @@
             }
         });
 
-        // Fechar resultados de pesquisa ao clicar fora
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.search-container')) {
                 document.getElementById('searchResults').classList.remove('show');
             }
         });
 
-        // ===========================
-        // FUNCIONALIDADE DE TRAILER
-        // ===========================
         
-        // Abrir modal do trailer
         window.abrirTrailer = function(trailerUrl, titulo) {
             console.log('abrirTrailer chamada com:', trailerUrl, titulo);
             const modal = document.getElementById('modalTrailer');
@@ -1354,11 +1242,7 @@
             if (tituloElement) {
                 tituloElement.textContent = `Trailer - ${titulo}`;
             }
-            
-            // Limpar container
             container.innerHTML = '';
-            
-            // Verificar se é YouTube
             if (trailerUrl.includes('youtube.com') || trailerUrl.includes('youtu.be')) {
                 console.log('Trailer do YouTube detectado');
                 let videoId;
@@ -1379,16 +1263,12 @@
                 container.appendChild(iframe);
             } else {
                 console.log('Vídeo local detectado - TRAILER COMPLETO');
-                // Vídeo local - SEM LIMITAÇÕES DE TEMPO
                 const video = document.createElement('video');
                 video.src = trailerUrl;
                 video.controls = true;
                 video.autoplay = true;
                 video.style.width = '100%';
                 video.style.height = '100%';
-                
-                // IMPORTANTE: Não adicionar event listeners que pausem o vídeo
-                // Deixar o trailer tocar até o final naturalmente
                 video.addEventListener('loadeddata', () => {
                     console.log('🎬 Trailer carregado - Duração completa:', video.duration, 'segundos');
                 });
@@ -1396,10 +1276,7 @@
                 video.addEventListener('ended', () => {
                     console.log('🎬 Trailer terminou naturalmente');
                 });
-                
-                // Prevenir pausas automáticas
                 video.addEventListener('pause', (e) => {
-                    // Só permitir pausa se foi clicada pelo usuário nos controles
                     if (!e.isTrusted) {
                         console.log('🎬 Pausar trailer cancelado - deixando tocar completo');
                         video.play();
@@ -1414,19 +1291,15 @@
             console.log('Modal do trailer aberto - VERSÃO COMPLETA');
         };
         
-        // Fechar modal do trailer
         window.fecharTrailer = function() {
             const modal = document.getElementById('modalTrailer');
             const container = document.getElementById('trailerContainer');
-            
-            // Parar vídeo
             container.innerHTML = '';
             
             modal.classList.remove('visible');
             document.body.style.overflow = 'auto';
         };
         
-        // Fechar modal ao clicar fora
         document.addEventListener('click', function(e) {
             const modal = document.getElementById('matrixModal');
             if (e.target === modal) {
@@ -1434,7 +1307,6 @@
             }
         });
 
-        // Fechar modal com ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeMatrixModal();
@@ -1442,27 +1314,20 @@
             }
         });
 
-        // Funções de avaliação
         function editarAvaliacao() {
             console.log('Editar avaliação clicada');
             document.getElementById('modoVisualizacao').style.display = 'none';
             document.getElementById('modoEdicao').style.display = 'block';
-            
-            // Inicializar estrelas com o rating atual
             setTimeout(() => {
                 const rating = {{ user_avaliacao.rating if user_avaliacao else 0 }};
                 currentRatingInlineGlobal = rating;
                 updateStarsVisual(rating);
-                
-                // Atualizar campos
                 document.getElementById('ratingValueInline').value = rating;
                 if (rating === 0) {
                     document.getElementById('ratingTextInline').textContent = 'Nenhuma classificação';
                 } else {
                     document.getElementById('ratingTextInline').textContent = rating + ' de 5 estrelas';
                 }
-                
-                // Configurar contador de caracteres
                 const textarea = document.getElementById('comentarioInline');
                 if (textarea) {
                     textarea.addEventListener('input', updateCharCountInline);
@@ -1533,39 +1398,23 @@
             }
         }
 
-        // Variável global para controlar o rating atual
         let currentRatingInlineGlobal = {{ user_avaliacao.rating if user_avaliacao else 0 }};
 
-        // Função para selecionar estrela com suporte a meias estrelas
         function selecionarEstrelaInline(starValue) {
             console.log('Estrela clicada:', starValue, 'Rating atual:', currentRatingInlineGlobal);
             
-            // Lógica para estrelas inteiras apenas (1-5):
-            // - Se clicar numa estrela: seleciona até essa estrela (valor inteiro)
-            // - Se clicar na mesma estrela já selecionada: remove a avaliação
-            
             if (currentRatingInlineGlobal === starValue) {
-                // Se clicar na mesma estrela já selecionada, remover avaliação
                 currentRatingInlineGlobal = 0;
             } else {
-                // Selecionar até essa estrela (valor inteiro)
                 currentRatingInlineGlobal = starValue;
             }
-            
-            // Garantir que não fica negativo
             if (currentRatingInlineGlobal < 0) {
                 currentRatingInlineGlobal = 0;
             }
             
             console.log('Novo rating:', currentRatingInlineGlobal);
-            
-            // Atualizar visualmente as estrelas
             updateStarsVisual(currentRatingInlineGlobal);
-            
-            // Atualizar campos
             document.getElementById('ratingValueInline').value = currentRatingInlineGlobal;
-            
-            // Atualizar texto de feedback
             if (currentRatingInlineGlobal === 0) {
                 document.getElementById('ratingTextInline').textContent = 'Nenhuma classificação';
             } else {
@@ -1573,23 +1422,18 @@
             }
         }
 
-        // Função para atualizar o visual das estrelas (APENAS ESTRELAS INTEIRAS)
         function updateStarsVisual(rating) {
             console.log('Atualizando estrelas para rating:', rating);
             const stars = document.querySelectorAll('.star-inline');
             
             stars.forEach((star, index) => {
                 const starValue = parseInt(star.getAttribute('data-rating'));
-                
-                // Remover todas as classes
                 star.classList.remove('full-star', 'half-star');
                 
                 if (rating >= starValue) {
-                    // Estrela completa
                     star.classList.add('full-star');
                     console.log(`Estrela ${starValue}: completa`);
                 } else {
-                    // Estrela vazia
                     console.log(`Estrela ${starValue}: vazia`);
                 }
             });
@@ -1605,7 +1449,6 @@
 
         function abrirFormularioAvaliacao() {
             console.log('Abrir formulário de avaliação');
-            // Implementar formulário de avaliação para novos utilizadores
         }
     </script>
 </body>

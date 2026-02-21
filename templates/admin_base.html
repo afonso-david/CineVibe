@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Admin - CineVibe{% endblock %}</title>
+    
+    <link rel="preload" href="{{ url_for('static', filename='css/admin_dashboard.css') }}" as="style">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -75,17 +77,14 @@
                         <div class="user-avatar">
                             {% if user and (user.avatar_personalizado or user.avatar) %}
                                 <img src="{{ url_for('static', filename=user.avatar_personalizado if user.avatar_personalizado else user.avatar) }}" alt="Avatar" class="avatar-img">
-                                <div class="avatar-ring"></div>
-                                <div class="avatar-status"></div>
                             {% else %}
                                 <div class="avatar-placeholder">
                                     <i class="fas fa-user-shield"></i>
                                 </div>
-                                <div class="avatar-ring"></div>
-                                <div class="avatar-status"></div>
                             {% endif %}
+                            <div class="avatar-ring"></div>
+                            <div class="avatar-status"></div>
                         </div>
-                        
                         <div class="user-info">
                             <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
                             <div class="user-role">
@@ -97,7 +96,6 @@
                                 <span>Online</span>
                             </div>
                         </div>
-                        
                         <div class="user-actions">
                             <a href="{{ url_for('perfil') }}" class="action-btn profile-btn" title="Gerir Perfil">
                                 <i class="fas fa-user-cog"></i>
@@ -131,5 +129,9 @@
     </div>
 
     {% block scripts %}{% endblock %}
+    
+    <script>
+        document.documentElement.classList.add('loaded');
+    </script>
 </body>
 </html>

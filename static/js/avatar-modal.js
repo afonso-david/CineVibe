@@ -1,18 +1,13 @@
-// Sistema de Modal de Avatar
 console.log('Avatar modal JS carregado');
-
 let avatarSelecionado = null;
-
 function abrirModalAvatar() {
     console.log('Abrindo modal de avatar...');
     const modal = document.getElementById('avatarModal');
     if (modal) {
-        // Limpar imediatamente o conteúdo para evitar flash de cores
         const container = document.querySelector('.avatar-categories');
         if (container) {
             container.innerHTML = '';
         }
-        
         modal.style.display = 'flex';
         carregarAvatares();
         resetarSelecao();
@@ -20,7 +15,6 @@ function abrirModalAvatar() {
         console.error('Modal não encontrado!');
     }
 }
-
 function fecharModalAvatar() {
     const modal = document.getElementById('avatarModal');
     if (modal) {
@@ -28,21 +22,16 @@ function fecharModalAvatar() {
         resetarSelecao();
     }
 }
-
 function resetarSelecao() {
     avatarSelecionado = null;
     const preview = document.querySelector('.selected-avatar-preview');
     const btnConfirmar = document.querySelector('.btn-confirmar-avatar');
-    
     if (preview) preview.classList.remove('show');
     if (btnConfirmar) btnConfirmar.classList.remove('enabled');
-    
-    // Remover seleção visual de todos os avatares
     document.querySelectorAll('.avatar-option').forEach(option => {
         option.classList.remove('selected');
     });
 }
-
 function carregarAvatares() {
     console.log('Carregando avatares...');
     const container = document.querySelector('.avatar-categories');
@@ -50,7 +39,6 @@ function carregarAvatares() {
         console.error('Container de categorias não encontrado!');
         return;
     }
-    
     container.innerHTML = `
         <div class="upload-section">
             <h3><i class="fas fa-upload"></i> Carregar do Computador</h3>
@@ -63,7 +51,6 @@ function carregarAvatares() {
                 </button>
             </div>
         </div>
-        
         <div class="avatar-category">
             <div class="category-header">
                 <h3>SUPER-HERÓIS</h3>
@@ -106,48 +93,30 @@ function carregarAvatares() {
         </div>
     `;
 }
-
 function selecionarAvatar(caminhoAvatar, elemento) {
     console.log('Avatar selecionado:', caminhoAvatar);
-    
-    // Remover seleção anterior
     document.querySelectorAll('.avatar-option').forEach(option => {
         option.classList.remove('selected');
     });
-    
-    // Adicionar seleção ao elemento clicado
     elemento.classList.add('selected');
-    
-    // Guardar avatar selecionado
     avatarSelecionado = caminhoAvatar;
-    
-    // Mostrar preview
     mostrarPreview(caminhoAvatar, elemento.querySelector('img').alt);
-    
-    // Ativar botão confirmar
     const btnConfirmar = document.querySelector('.btn-confirmar-avatar');
     if (btnConfirmar) {
         btnConfirmar.classList.add('enabled');
     }
 }
-
 function handleFileUpload(event) {
     const file = event.target.files[0];
     if (file) {
-        // Validar tipo de ficheiro
         if (!file.type.startsWith('image/')) {
             return;
         }
-        
-        // Validar tamanho (máximo 5MB)
         if (file.size > 5 * 1024 * 1024) {
             return;
         }
-        
         const formData = new FormData();
         formData.append('avatar', file);
-        
-        // Upload da imagem
         fetch('/api/upload-avatar', {
             method: 'POST',
             body: formData
@@ -155,11 +124,8 @@ function handleFileUpload(event) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Selecionar o avatar carregado
                 avatarSelecionado = data.avatar_path;
                 mostrarPreview('static/' + data.avatar_path, 'Imagem Personalizada');
-                
-                // Ativar botão confirmar
                 const btnConfirmar = document.querySelector('.btn-confirmar-avatar');
                 if (btnConfirmar) {
                     btnConfirmar.classList.add('enabled');
@@ -171,42 +137,29 @@ function handleFileUpload(event) {
         });
     }
 }
-
 function mostrarPreview(caminhoAvatar, nomeAvatar) {
     const preview = document.querySelector('.selected-avatar-preview');
     if (preview) {
         const img = preview.querySelector('img');
         const span = preview.querySelector('span');
-        
         if (img) img.src = caminhoAvatar.startsWith('static/') ? caminhoAvatar : 'static/' + caminhoAvatar;
         if (span) span.textContent = nomeAvatar;
-        
         preview.classList.add('show');
     }
 }
-
 function confirmarAvatar() {
     if (!avatarSelecionado) return;
-    
     console.log('Confirmando avatar:', avatarSelecionado);
-    
-    // Atualizar avatar na página imediatamente
     const userAvatar = document.querySelector('.user-avatar');
     const userPic = document.querySelector('.user-pic');
-    
     const avatarUrl = avatarSelecionado.startsWith('static/') ? avatarSelecionado : 'static/' + avatarSelecionado;
-    
     if (userAvatar) {
         userAvatar.src = avatarUrl;
     }
     if (userPic) {
         userPic.src = avatarUrl;
     }
-    
-    // Fechar modal
     fecharModalAvatar();
-    
-    // Enviar para servidor
     fetch('/api/atualizar-avatar', {
         method: 'POST',
         headers: {
@@ -220,7 +173,6 @@ function confirmarAvatar() {
     .then(data => {
         if (data.success) {
             console.log('Avatar atualizado com sucesso!');
-            // Não mostrar mensagem de sucesso
         } else {
             console.error('Erro ao atualizar avatar:', data.message);
         }
@@ -229,29 +181,20 @@ function confirmarAvatar() {
         console.error('Erro:', error);
     });
 }
-
-// Inicializar quando DOM carregar
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM carregado - Avatar modal');
-    
-    // Event listeners para botões do modal
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('btn-confirmar-avatar') && e.target.classList.contains('enabled')) {
             confirmarAvatar();
         }
-        
         if (e.target.classList.contains('btn-cancelar-avatar')) {
             fecharModalAvatar();
         }
-        
-        // Fechar modal ao clicar fora
         const modal = document.getElementById('avatarModal');
         if (e.target === modal) {
             fecharModalAvatar();
         }
     });
-
-    // Fechar modal com ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             fecharModalAvatar();

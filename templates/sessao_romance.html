@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -396,7 +396,6 @@
     </div>
 
     <script>
-        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -409,18 +408,12 @@
                 }
             });
         });
-
-        // Floating hearts animation
         document.querySelectorAll('.heart').forEach((heart, index) => {
             const delay = index * 0.8;
             heart.style.animationDelay = `${delay}s`;
-            
-            // Random position
             heart.style.left = Math.random() * 100 + '%';
             heart.style.top = Math.random() * 100 + '%';
         });
-
-        // Carousel functionality
         const moviesContainer = document.getElementById('moviesContainer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
@@ -441,8 +434,6 @@
                     behavior: 'smooth'
                 });
             });
-
-            // Auto-scroll functionality (optional)
             let autoScrollInterval;
             
             function startAutoScroll() {
@@ -459,15 +450,9 @@
             function stopAutoScroll() {
                 clearInterval(autoScrollInterval);
             }
-
-            // Start auto-scroll
             startAutoScroll();
-
-            // Pause auto-scroll on hover
             moviesContainer.addEventListener('mouseenter', stopAutoScroll);
             moviesContainer.addEventListener('mouseleave', startAutoScroll);
-
-            // Update button states based on scroll position
             function updateButtonStates() {
                 const maxScroll = moviesContainer.scrollWidth - moviesContainer.clientWidth;
                 prevBtn.style.opacity = moviesContainer.scrollLeft <= 0 ? '0.5' : '1';
@@ -477,8 +462,6 @@
             moviesContainer.addEventListener('scroll', updateButtonStates);
             updateButtonStates(); // Initial state
         }
-
-        // Movie card hover effects
         document.querySelectorAll('.filme-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'translateY(-8px) scale(1.02)';
@@ -488,8 +471,6 @@
                 card.style.transform = 'translateY(0) scale(1)';
             });
         });
-
-        // Parallax effect
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const parallax = document.querySelector('.hero-background');
@@ -498,8 +479,6 @@
                 parallax.style.transform = `translateY(${speed}px)`;
             }
         });
-
-        // Romance effect on hover (optional)
         document.querySelectorAll('.pricing-card, .feature-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.boxShadow = '0 25px 60px rgba(255, 105, 180, 0.3)';
@@ -509,8 +488,6 @@
                 card.style.boxShadow = '';
             });
         });
-
-        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -523,14 +500,10 @@
                 }
             });
         }, observerOptions);
-
-        // Observe elements for animation
         document.querySelectorAll('.feature-card, .filme-card, .pricing-card').forEach((element, index) => {
             element.style.animation = `fadeInUp 0.8s ease ${index * 0.1}s forwards paused`;
             observer.observe(element);
         });
-
-        // Touch/swipe support for mobile
         let startX = 0;
         let scrollLeft = 0;
 

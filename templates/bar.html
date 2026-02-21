@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -258,62 +258,47 @@
     </div>
 
     <script>
-        // Carrinho de compras
         let carrinho = [];
         let totalCarrinho = 0;
 
         function verDetalhesMenu(menuId) {
-            // Implementar visualização de detalhes do menu
             console.log('Ver detalhes do menu:', menuId);
-            // Pode redirecionar para uma página de detalhes ou abrir um modal
             window.location.href = `/bar/menu/${menuId}`;
         }
 
         function filtrarCategoria(categoria) {
-            // Esta função foi removida pois não há mais produtos por categoria
             console.log('Filtros de categoria removidos - apenas menus disponíveis');
         }
 
         function adicionarAoCarrinho(produtoId, nome, preco) {
-            // Esta função foi removida pois não há mais produtos individuais
             console.log('Carrinho de produtos individuais removido - apenas menus disponíveis');
         }
 
         function removerDoCarrinho(produtoId) {
-            // Função removida - carrinho não disponível para menus
             console.log('Carrinho removido - apenas visualização de menus');
         }
 
         function alterarQuantidade(produtoId, novaQuantidade) {
-            // Função removida - carrinho não disponível para menus
             console.log('Carrinho removido - apenas visualização de menus');
         }
 
         function atualizarCarrinho() {
-            // Função removida - carrinho não disponível para menus
             console.log('Carrinho removido - apenas visualização de menus');
         }
 
         function mostrarCarrinho() {
-            // Função removida - carrinho não disponível para menus
             console.log('Carrinho removido - apenas visualização de menus');
         }
 
         function fecharCarrinho() {
-            // Função removida - carrinho não disponível para menus
             console.log('Carrinho removido - apenas visualização de menus');
         }
 
         function finalizarPedido() {
-            // Função removida - carrinho não disponível para menus
             console.log('Carrinho removido - apenas visualização de menus');
         }
-
-        // Pesquisa de menus
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
-            
-            // Pesquisar apenas em menus
             const menuCards = document.querySelectorAll('.menu-card');
             menuCards.forEach(card => {
                 const menuName = card.querySelector('.menu-name').textContent.toLowerCase();
@@ -327,8 +312,6 @@
                 }
             });
         });
-
-        // Scroll suave para seções
         document.querySelector('.hero-btn').addEventListener('click', function(e) {
             e.preventDefault();
             document.querySelector('#produtos').scrollIntoView({

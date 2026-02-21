@@ -1,85 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ cinema.nome }} - Filmes | CineVibe</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cinemas.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="Filmes disponíveis no {{ cinema.nome }} - CineVibe">
-    
-    <style>
-        /* Esconder os radio buttons e manter apenas os botões */
-        .filtros input[type="radio"] {
-            display: none !important;
-        }
-        
-        /* Estilo para gênero selecionado */
-        .filtros input[type="radio"]:checked + label {
-            background-color: #FFD60A !important;
-            color: #0D1B2A !important;
-            font-weight: 600 !important;
-            transform: scale(1.05) !important;
-            box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4) !important;
-        }
-        
-        .filtros label {
-            transition: all 0.3s ease !important;
-            cursor: pointer !important;
-        }
-        
-        .filtros input[type="radio"]:checked + label:hover {
-            background-color: #FFD60A !important;
-            transform: scale(1.08) !important;
-        }
-        
-        /* Header do cinema */
-        .cinema-header {
-            background: linear-gradient(135deg, #0D1B2A 0%, #1E2A3A 100%);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 214, 10, 0.2);
-            text-align: center;
-        }
-        
-        .cinema-header h1 {
-            color: #FFD60A;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .cinema-header .location {
-            color: #B8C5D1;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .cinema-header .films-count {
-            color: #4EA8DE;
-            font-weight: 600;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin-bottom: 1rem;
-            padding: 10px 20px;
-            background: rgba(255, 214, 10, 0.1);
-            color: #FFD60A;
-            text-decoration: none;
-            border-radius: 25px;
-            border: 1px solid #FFD60A;
-            transition: all 0.3s ease;
-        }
-        
-        .back-link:hover {
-            background: #FFD60A;
-            color: #0D1B2A;
-        }
-    </style>
 </head>
 <body>
     
@@ -297,12 +226,12 @@
     </footer>
 
     <script>
-        // Extrair géneros únicos dos filmes e criar filtros dinamicamente
+        
         document.addEventListener('DOMContentLoaded', function() {
             const filmes = document.querySelectorAll('.filme-card');
             const generos = new Set();
             
-            // Extrair géneros únicos
+            
             filmes.forEach(filme => {
                 const generosFilme = filme.dataset.genero;
                 if (generosFilme) {
@@ -314,7 +243,7 @@
                 }
             });
             
-            // Criar filtros dinamicamente
+            
             const filtrosContainer = document.querySelector('.filtros');
             Array.from(generos).sort().forEach((genero, index) => {
                 const generoId = genero.toLowerCase().replace(/[^a-z0-9]/g, '_');
@@ -333,7 +262,7 @@
                 filtrosContainer.appendChild(label);
             });
             
-            // Event listeners para os filtros
+            
             document.querySelectorAll('.filtros label').forEach(label => {
                 label.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -358,7 +287,7 @@
                 });
             });
             
-            // Pesquisa
+            
             document.getElementById('searchInput').addEventListener('input', function(e) {
                 const termo = e.target.value.toLowerCase().trim();
                 
@@ -374,7 +303,7 @@
                 });
             });
             
-            // Animação inicial dos cards
+            
             setTimeout(() => {
                 filmes.forEach((card, index) => {
                     card.style.opacity = '0';
@@ -423,7 +352,7 @@
             });
         }
         
-        // Newsletter
+        
         document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;

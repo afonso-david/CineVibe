@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Atores - CineVibe Admin</title>
@@ -8,279 +12,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_atores.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        /* Estilos para upload de arquivo */
-        .file-upload-container {
-            position: relative;
-        }
-        
-        .file-upload-preview {
-            margin-top: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .file-upload-preview img {
-            max-width: 150px;
-            max-height: 200px;
-            border-radius: 8px;
-            border: 2px solid rgba(255, 214, 10, 0.3);
-            object-fit: cover;
-        }
-        
-        .remove-preview {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .remove-preview:hover {
-            background: #c82333;
-            transform: scale(1.1);
-        }
-        
-        .form-help {
-            color: #888;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            display: block;
-        }
-        
-        input[type="file"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #333;
-            border-radius: 8px;
-            background: #0D1B2A;
-            color: #fff;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        input[type="file"]:focus {
-            outline: none;
-            border-color: #FFD60A;
-            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.1);
-        }
-        
-        input[type="file"]::-webkit-file-upload-button {
-            background: linear-gradient(135deg, #FFD60A, #FFC107);
-            color: #0D1B2A;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-right: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        input[type="file"]::-webkit-file-upload-button:hover {
-            background: linear-gradient(135deg, #FFC107, #FFB300);
-            transform: translateY(-1px);
-        }
-        
-        /* Melhorias nos modais */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-            padding: 2rem;
-            box-sizing: border-box;
-        }
-        
-        .modal-content {
-            background: #1a1a1a;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 2px solid rgba(255, 214, 10, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            margin: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid rgba(255, 214, 10, 0.2);
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(255, 214, 10, 0.05));
-        }
-        
-        .modal-header h2 {
-            margin: 0;
-            color: #FFD60A;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .btn-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .btn-close:hover {
-            background: rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-        }
-        
-        .modal-body {
-            padding: 2rem;
-        }
-        
-        .form-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 0;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #FFD60A;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #333;
-            border-radius: 8px;
-            background: #0D1B2A;
-            color: #fff;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-        
-        .form-group input[type="text"]:focus {
-            outline: none;
-            border-color: #FFD60A;
-            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.1);
-        }
-        
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            padding: 1.5rem 2rem;
-            border-top: 1px solid rgba(255, 214, 10, 0.2);
-            background: rgba(255, 214, 10, 0.05);
-            margin-top: 1rem;
-        }
-        
-        .btn-cancel {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-        
-        .btn-cancel:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-        }
-        
-        .btn-confirm {
-            background: linear-gradient(135deg, #FFD60A, #FFC107);
-            color: #0D1B2A;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-        
-        .btn-confirm:hover {
-            background: linear-gradient(135deg, #FFC107, #FFB300);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 214, 10, 0.4);
-        }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .modal-overlay {
-                padding: 1rem;
-            }
-            
-            .modal-header {
-                padding: 1rem 1.5rem;
-            }
-            
-            .modal-body {
-                padding: 1.5rem;
-            }
-            
-            .modal-actions {
-                padding: 1rem 1.5rem;
-                flex-direction: column;
-            }
-            
-            .btn-cancel,
-            .btn-confirm {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="admin-layout">
@@ -652,7 +383,7 @@
 
     <script src="{{ url_for('static', filename='js/admin_atores.js') }}"></script>
     <script>
-        // Função para preview de imagem
+        
         function previewImage(input, previewId) {
             const file = input.files[0];
             const preview = document.getElementById(previewId);
@@ -668,38 +399,38 @@
             }
         }
         
-        // Função para remover preview
+        
         function removePreview(inputId, previewId) {
             document.getElementById(inputId).value = '';
             document.getElementById(previewId).style.display = 'none';
         }
         
-        // Função para abrir modal de adicionar
+        
         function abrirModalAdicionarAtor() {
             document.getElementById('modalAdicionarAtor').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
         
-        // Função para fechar modal
+        
         function fecharModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
             document.body.style.overflow = 'auto';
             
-            // Reset form e preview
+            
             const modal = document.getElementById(modalId);
             const form = modal.querySelector('form');
             if (form) {
                 form.reset();
             }
             
-            // Esconder previews
+            
             const previews = modal.querySelectorAll('.file-upload-preview');
             previews.forEach(preview => {
                 preview.style.display = 'none';
             });
         }
         
-        // Fechar modal ao clicar fora
+        
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modal-overlay')) {
                 const modalId = e.target.id;
@@ -707,7 +438,7 @@
             }
         });
         
-        // Fechar modal com ESC
+        
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const modals = document.querySelectorAll('.modal-overlay[style*="flex"]');
@@ -715,6 +446,11 @@
                     fecharModal(modal.id);
                 });
             }
+        });
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
         });
     </script>
 </body>

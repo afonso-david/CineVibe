@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -334,45 +334,32 @@
 
         function prosseguirParaPagamento() {
             {% if not logged_in %}
-            // Validar dados do cliente para utilizadores não logados
             const form = document.getElementById('customerDataForm');
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
             }
-            
-            // Obter dados do formulário
             const customerName = document.getElementById('customer_name').value.trim();
             const customerEmail = document.getElementById('customer_email').value.trim();
             const customerPhone = document.getElementById('customer_phone').value.trim();
-            
-            // Validar campos
             if (!customerName || !customerEmail || !customerPhone) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
-            
-            // Validar email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(customerEmail)) {
                 alert('Por favor, insira um email válido.');
                 return;
             }
-            
-            // Validar telefone (9 dígitos)
             const phoneRegex = /^[0-9]{9}$/;
             if (!phoneRegex.test(customerPhone)) {
                 alert('Por favor, insira um número de telefone válido (9 dígitos).');
                 return;
             }
-            
-            // Salvar dados na sessionStorage para usar no checkout
             sessionStorage.setItem('customer_name', customerName);
             sessionStorage.setItem('customer_email', customerEmail);
             sessionStorage.setItem('customer_phone', customerPhone);
             {% endif %}
-            
-            // Redirecionar para a página de pagamento
             window.location.href = '{{ url_for("checkout") }}';
         }
     </script>

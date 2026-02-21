@@ -1,9 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineVibe - A Sua Experiência Cinematográfica</title>
+
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -494,8 +499,6 @@
 
     <script>
         console.log('🎬 CineVibe Homepage iniciada');
-
-        // Dados dos filmes com vídeos locais
         const filmes = [
             {
                 titulo: 'Superman (2025)',
@@ -527,14 +530,10 @@
         let mostrandoTrailer = true;
         let videoTimeout;
         let imageTimeout;
-
-        // Elementos do hero
         const videoPlayer = document.getElementById('videoPlayer');
         const imagem = document.getElementById('posterImage');
         const title = document.getElementById('filmeTitle');
         const genero = document.getElementById('filmeGenero');
-
-        // Sistema de Hero Banner com vídeos locais
         function updateHeroContent() {
             const filme = filmes[currentIndex];
             title.textContent = filme.titulo;
@@ -546,19 +545,11 @@
             console.log(' Iniciando trailer:', filme.titulo);
             
             const heroBanner = document.querySelector('.hero-banner');
-            
-            // Limpar timeouts
             clearTimeout(videoTimeout);
             clearTimeout(imageTimeout);
-            
-            // Mudar para estado de vídeo
             heroBanner.classList.remove('showing-image');
             heroBanner.classList.add('showing-video');
-            
-            // Configurar vídeo
             videoPlayer.src = filme.video;
-            
-            // Tempo inicial específico
             if (filme.titulo.includes('Superman')) {
                 videoPlayer.currentTime = 83;
             } else if (filme.titulo.includes('Black Phone')) {
@@ -568,16 +559,12 @@
             } else {
                 videoPlayer.currentTime = 0;
             }
-            
-            // Reproduzir vídeo
             videoPlayer.play().catch(error => {
                 console.error('Erro ao reproduzir vídeo:', error);
                 showCurrentImage();
             });
             
             mostrandoTrailer = true;
-            
-            // Duração do trailer
             if (!filme.titulo.includes('Rambo')) {
                 let duracao = filme.titulo.includes('Superman') || filme.titulo.includes('Black Phone') ? 17000 : 30000;
                 
@@ -595,21 +582,13 @@
             console.log('🖼️ Mostrando imagem:', filme.titulo);
             
             const heroBanner = document.querySelector('.hero-banner');
-            
-            // Limpar timeouts
             clearTimeout(videoTimeout);
             clearTimeout(imageTimeout);
-            
-            // Configurar imagem
             imagem.src = filme.imagem;
-            
-            // Mudar para estado de imagem
             heroBanner.classList.remove('showing-video');
             heroBanner.classList.add('showing-image');
             
             mostrandoTrailer = false;
-            
-            // Próximo filme em 10 segundos
             imageTimeout = setTimeout(() => {
                 nextMovie();
             }, 10000);
@@ -617,61 +596,43 @@
 
         function nextMovie() {
             console.log('Próximo filme');
-            
-            // Limpar timeouts
             clearTimeout(videoTimeout);
             clearTimeout(imageTimeout);
-            
-            // Próximo filme
             currentIndex = (currentIndex + 1) % filmes.length;
             updateHeroContent();
-            
-            // Iniciar próximo trailer
             playCurrentVideo();
         }
-
-        // Função para controlar manualmente o trailer
         function toggleTrailer() {
             if (mostrandoTrailer) {
-                // Pausar vídeo e mostrar imagem
                 videoPlayer.pause();
                 clearTimeout(videoTimeout);
                 showCurrentImage();
             } else {
-                // Voltar ao vídeo
                 clearTimeout(imageTimeout);
                 playCurrentVideo();
             }
         }
-
-        // Botões do hero
         document.getElementById('comprarBilhete').addEventListener('click', () => {
             window.location.href = '{{ url_for("filmes") }}';
         });
 
         document.getElementById('verDetalhes').addEventListener('click', () => {
             const filme = filmes[currentIndex];
-            // Se estiver mostrando trailer, ir para página com trailer completo
             if (mostrandoTrailer) {
                 window.location.href = `/filme/${filme.id}?trailer=auto&from=home`;
             } else {
-                // Se estiver mostrando imagem, ir normalmente
                 window.location.href = `/filme/${filme.id}`;
             }
         });
 
         document.getElementById('toggleTrailer').addEventListener('click', function() {
             toggleTrailer();
-            
-            // Atualizar texto do botão
             if (mostrandoTrailer) {
                 this.innerHTML = '<i class="fas fa-pause"></i> Pausar Trailer';
             } else {
                 this.innerHTML = '<i class="fas fa-play"></i> Ver Trailer';
             }
         });
-
-        // Event listeners para o vídeo
         videoPlayer.addEventListener('loadstart', () => {
             console.log('📥 Carregando vídeo...');
         });
@@ -682,7 +643,6 @@
 
         videoPlayer.addEventListener('error', (e) => {
             console.error('❌ Erro no vídeo:', e);
-            // Se houver erro, mostrar imagem
             showCurrentImage();
         });
 
@@ -690,12 +650,9 @@
             console.log('🏁 Vídeo terminou naturalmente');
             showCurrentImage();
         });
-
-        // Controlar tempo de fim específico para cada filme
         videoPlayer.addEventListener('timeupdate', () => {
             const currentFilme = filmes[currentIndex];
             if (currentFilme && currentFilme.titulo.includes('Rambo')) {
-                // Parar o trailer do Rambo aos 1:22 (82 segundos)
                 if (videoPlayer.currentTime >= 82) {
                     console.log('🎬 Trailer do Rambo terminado aos 1:22');
                     clearTimeout(videoTimeout); // Limpar timeout anterior
@@ -704,18 +661,12 @@
                 }
             }
         });
-
-        // Prevenir que o vídeo seja pausado pelo usuário (com exceções inteligentes)
         videoPlayer.addEventListener('pause', (e) => {
-            // Não interferir se o vídeo foi pausado intencionalmente pelo sistema
             if (mostrandoTrailer && !videoPlayer.ended && videoPlayer.currentTime > 0) {
                 const currentFilme = filmes[currentIndex];
-                // Não forçar play se é o Rambo e já passou do tempo limite
                 if (currentFilme && currentFilme.titulo.includes('Rambo') && videoPlayer.currentTime >= 82) {
                     return;
                 }
-                
-                // Continuar reproduzindo para outros casos
                 setTimeout(() => {
                     if (mostrandoTrailer && !videoPlayer.ended) {
                         videoPlayer.play().catch(console.error);
@@ -737,8 +688,6 @@
             function getMaxScroll() {
                 return Math.max(0, moviesContainer.scrollWidth - moviesContainer.clientWidth);
             }
-            
-            // Atualizar visibilidade dos botões
             function updateCarouselButtons() {
                 const maxScroll = getMaxScroll();
                 prevBtn.style.opacity = currentScroll <= 0 ? '0.5' : '1';
@@ -746,8 +695,6 @@
                 prevBtn.style.pointerEvents = currentScroll <= 0 ? 'none' : 'auto';
                 nextBtn.style.pointerEvents = currentScroll >= maxScroll ? 'none' : 'auto';
             }
-            
-            // Scroll suave para posição específica
             function scrollToPosition(position) {
                 const maxScroll = getMaxScroll();
                 currentScroll = Math.max(0, Math.min(position, maxScroll));
@@ -765,28 +712,18 @@
             nextBtn.addEventListener('click', () => {
                 scrollToPosition(currentScroll + cardWidth * 2);
             });
-            
-            // Atualizar posição atual quando o usuário faz scroll manual
             moviesContainer.addEventListener('scroll', function() {
                 currentScroll = this.scrollLeft;
                 updateCarouselButtons();
             });
-            
-            // Inicializar botões
             updateCarouselButtons();
-            
-            // Atualizar quando a janela redimensiona
             window.addEventListener('resize', updateCarouselButtons);
         }
-
-        // Função para reproduzir trailer
         function playTrailer(trailerUrl) {
             if (trailerUrl) {
                 window.open(trailerUrl, '_blank');
             }
         }
-
-        // Animação das estatísticas
         function animateStats() {
             const statNumbers = document.querySelectorAll('.stat-number');
             
@@ -821,8 +758,6 @@
             
             statNumbers.forEach(stat => observer.observe(stat));
         }
-
-        // Sistema de pesquisa
         const searchInput = document.getElementById('searchInput');
         const searchResults = document.getElementById('searchResults');
         let searchTimeout;
@@ -842,7 +777,6 @@
         });
 
         function performSearch(query) {
-            // Simular resultados de pesquisa
             const mockResults = [
                 { type: 'filme', name: 'Superman (2025)', url: '/filme/2' },
                 { type: 'cinema', name: 'CineVibe Lisboa', url: '/cinemas' },
@@ -866,15 +800,11 @@
                 searchResults.style.display = 'block';
             }
         }
-
-        // Fechar pesquisa ao clicar fora
         document.addEventListener('click', function(e) {
             if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                 searchResults.style.display = 'none';
             }
         });
-
-        // Dropdown do perfil
         const profileDropdown = document.querySelector('.user-profile-dropdown');
         if (profileDropdown) {
             profileDropdown.addEventListener('click', function(e) {
@@ -886,8 +816,6 @@
                 profileDropdown.classList.remove('active');
             });
         }
-
-        // Inicialização SIMPLES
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎬 CineVibe iniciada');
             
@@ -896,13 +824,9 @@
             
             updateHeroContent();
             animateStats();
-            
-            // Iniciar primeiro trailer
             setTimeout(() => {
                 playCurrentVideo();
             }, 1000);
-            
-            // Smooth scroll para links internos
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -937,6 +861,10 @@
             } else {
                 console.log('❌ Discover image não encontrada');
             }
+        });
+
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
         });
     </script>
 

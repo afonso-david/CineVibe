@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Reservas - CineVibe Admin</title>
@@ -440,12 +444,8 @@
             document.querySelector('.date-btn[data-date="all"]').classList.add('active');
             filtrarReservas();
         }
-
-        // Filtros
         document.getElementById('searchInput').addEventListener('input', filtrarReservas);
         document.getElementById('cinemaFilter').addEventListener('change', filtrarReservas);
-
-        // Filtros de data
         document.querySelectorAll('.date-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
@@ -500,8 +500,6 @@
                     row.style.display = 'none';
                 }
             });
-            
-            // Mostrar mensagem se não houver resultados
             mostrarMensagemSemResultados(visibleCount, dateFilter);
         }
 
@@ -527,8 +525,6 @@
                 tbody.appendChild(mensagem);
             }
         }
-
-        // Ordenação
         document.getElementById('sortSelect').addEventListener('change', function() {
             const sortBy = this.value;
             const tbody = document.querySelector('tbody');
@@ -570,15 +566,11 @@
             
             rows.forEach(row => tbody.appendChild(row));
         });
-
-        // Fechar modal ao clicar fora
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modal-overlay')) {
                 e.target.style.display = 'none';
             }
         });
-
-        // Fechar modal com ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const modals = document.querySelectorAll('.modal-overlay');
@@ -588,6 +580,11 @@
                     }
                 });
             }
+        });
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
         });
     </script>
 </body>

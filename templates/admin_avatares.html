@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Avatares - CineVibe Admin</title>
@@ -672,36 +676,23 @@
     </div>
 
     <script>
-        // Variáveis globais
         let currentView = 'table';
-
-        // JavaScript para filtros e pesquisa
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const categoriaFilter = document.getElementById('categoriaFilter');
             const sortSelect = document.getElementById('sortSelect');
-
-            // Inicializar controles de visualização
             initializeViewControls();
             updateViewDisplay();
-
-            // Pesquisa
             if (searchInput) {
                 searchInput.addEventListener('input', applyFilters);
             }
-
-            // Filtros
             if (categoriaFilter) {
                 categoriaFilter.addEventListener('change', applyFilters);
             }
-
-            // Ordenação
             if (sortSelect) {
                 sortSelect.addEventListener('change', sortAvatares);
             }
         });
-
-        // Controles de visualização
         function initializeViewControls() {
             document.querySelectorAll('.view-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -713,8 +704,6 @@
 
         function switchView(view) {
             currentView = view;
-            
-            // Atualizar botões
             document.querySelectorAll('.view-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.dataset.view === view) {
@@ -741,8 +730,6 @@
         function applyFilters() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const categoriaFilter = document.getElementById('categoriaFilter').value;
-            
-            // Filtrar tabela
             const rows = document.querySelectorAll('.movies-table-pro tbody tr');
             rows.forEach(row => {
                 const nome = row.querySelector('h4').textContent.toLowerCase();
@@ -757,8 +744,6 @@
                     row.style.display = 'none';
                 }
             });
-
-            // Filtrar grid
             const cards = document.querySelectorAll('.movies-grid .movie-card-pro');
             cards.forEach(card => {
                 const nome = card.querySelector('h3').textContent.toLowerCase();
@@ -777,8 +762,6 @@
 
         function sortAvatares() {
             const sortBy = document.getElementById('sortSelect').value;
-            
-            // Ordenar tabela
             const tableBody = document.querySelector('.movies-table-pro tbody');
             if (tableBody) {
                 const rows = Array.from(tableBody.querySelectorAll('tr'));
@@ -798,8 +781,6 @@
                 
                 rows.forEach(row => tableBody.appendChild(row));
             }
-
-            // Ordenar grid
             const gridContainer = document.getElementById('avatares-grid');
             if (gridContainer) {
                 const cards = Array.from(gridContainer.querySelectorAll('.movie-card-pro'));
@@ -826,8 +807,6 @@
             document.getElementById('categoriaFilter').value = '';
             applyFilters();
         }
-
-        // Funções do modal
         function abrirModalAdicionarAvatar() {
             document.getElementById('modalAdicionarAvatar').style.display = 'flex';
         }
@@ -880,7 +859,6 @@
 
         function fecharModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
-            // Limpar preview ao fechar
             const preview = document.getElementById('image-preview');
             const container = document.getElementById('preview-container');
             if (preview && container) {
@@ -888,8 +866,6 @@
                 container.style.display = 'none';
             }
         }
-
-        // Preview da imagem
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('avatar_file');
             const preview = document.getElementById('image-preview');
@@ -899,7 +875,6 @@
                 fileInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];
                     if (file) {
-                        // Verificar se é uma imagem
                         if (file.type.startsWith('image/')) {
                             const reader = new FileReader();
                             reader.onload = function(e) {
@@ -918,8 +893,6 @@
                 });
             }
         });
-
-        // Fechar modal ao clicar fora
         document.addEventListener('click', function(e) {
             const modals = document.querySelectorAll('.modal-overlay');
             modals.forEach(modal => {
@@ -927,6 +900,11 @@
                     modal.style.display = 'none';
                 }
             });
+        });
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
         });
     </script>
 </body>

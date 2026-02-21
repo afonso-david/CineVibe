@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -194,34 +194,22 @@
     </div>
 
     <script>
-    // Configuração de preços
     const TICKET_PRICE = {{ filme_sessao.preco }};
     const EXCLUSIVE_ROOM_PRICE = 100.00; // Preço base da sala exclusiva
     const MAX_CAPACITY = {{ sala.capacidade }}; // Capacidade máxima da sala
     let modalShown = false; // Flag para mostrar modal apenas uma vez
-    
-    // Função para fechar o modal
     function closeExclusiveModal() {
         document.getElementById('exclusiveRoomModal').style.display = 'none';
         modalShown = true; // Marca que o modal já foi mostrado
     }
-    
-    // Função para verificar se deve mostrar o modal
     function checkExclusiveRoomSuggestion(quantity) {
         const totalPrice = TICKET_PRICE * quantity;
-        
-        // Se o preço total for maior que o preço da sala exclusiva e o modal ainda não foi mostrado
         if (totalPrice > EXCLUSIVE_ROOM_PRICE && !modalShown) {
-            // Atualizar valores no modal
             document.getElementById('totalPrice').textContent = totalPrice.toFixed(2) + '€';
             document.getElementById('exclusivePrice').textContent = EXCLUSIVE_ROOM_PRICE.toFixed(2) + '€';
-            
-            // Mostrar modal
             document.getElementById('exclusiveRoomModal').style.display = 'flex';
         }
     }
-    
-    // JavaScript para funcionalidade
     document.addEventListener('DOMContentLoaded', function() {
         const quantityOptions = document.querySelectorAll('.quantity-option');
         const customQuantity = document.getElementById('customQuantity');
@@ -230,36 +218,21 @@
         const advanceBtn = document.getElementById('advanceBtn');
         const selectedQuantityInput = document.getElementById('selectedQuantity');
         let selectedQuantity = 1;
-        
-        // Seleciona automaticamente 1 bilhete no início
         quantityOptions[0].classList.add('selected');
         advanceBtn.disabled = false;
         updateButtonText();
-        
-        // Seleção de quantidade pré-definida
         quantityOptions.forEach(option => {
             option.addEventListener('click', function() {
-                // Remove seleção anterior
                 quantityOptions.forEach(opt => opt.classList.remove('selected'));
-                
-                // Adiciona seleção atual
                 this.classList.add('selected');
                 selectedQuantity = parseInt(this.dataset.quantity);
-                
-                // Atualiza input personalizado
                 customQuantity.value = selectedQuantity;
                 selectedQuantityInput.value = selectedQuantity;
-                
-                // Habilita botão avançar
                 advanceBtn.disabled = false;
                 updateButtonText();
-                
-                // Verificar se deve sugerir sala exclusiva
                 checkExclusiveRoomSuggestion(selectedQuantity);
             });
         });
-        
-        // Botões de quantidade personalizada
         decreaseBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -279,10 +252,7 @@
                 updateSelection();
             }
         });
-        
-        // Input personalizado
         customQuantity.addEventListener('input', function() {
-            // Validação
             let value = parseInt(this.value);
             if (isNaN(value) || value < 1) {
                 this.value = 1;
@@ -291,8 +261,6 @@
             }
             updateSelection();
         });
-        
-        // Teclas de atalho
         customQuantity.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowUp') {
                 e.preventDefault();
@@ -306,23 +274,15 @@
         function updateSelection() {
             selectedQuantity = parseInt(customQuantity.value);
             selectedQuantityInput.value = selectedQuantity;
-            
-            // Remove todas as seleções
             quantityOptions.forEach(opt => opt.classList.remove('selected'));
-            
-            // Seleciona opção correspondente se existir
             if (selectedQuantity <= 6) {
                 const matchingOption = document.querySelector(`[data-quantity="${selectedQuantity}"]`);
                 if (matchingOption) {
                     matchingOption.classList.add('selected');
                 }
             }
-            
-            // Habilita/desabilita botão avançar
             advanceBtn.disabled = selectedQuantity < 1;
             updateButtonText();
-            
-            // Verificar se deve sugerir sala exclusiva
             checkExclusiveRoomSuggestion(selectedQuantity);
         }
         
@@ -334,8 +294,6 @@
                 advanceBtn.innerHTML = `${icon} Selecionar ${selectedQuantity} Lugares`;
             }
         }
-        
-        // Efeito de loading no botão
         const form = advanceBtn.closest('form');
         form.addEventListener('submit', function() {
             advanceBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';

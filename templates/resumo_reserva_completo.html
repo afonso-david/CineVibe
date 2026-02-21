@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -344,26 +344,21 @@
 
     <script>
         function voltarParaBar() {
-            // Voltar para a página de seleção do bar mantendo os parâmetros
             const params = new URLSearchParams(window.location.search);
             const selecaoBarUrl = `/selecao_bar?${params.toString()}`;
             window.location.href = selecaoBarUrl;
         }
 
         function prosseguirParaPagamento() {
-            // Para utilizadores logados - ir direto para pagamento
             const params = new URLSearchParams(window.location.search);
             const checkoutUrl = `/checkout?${params.toString()}`;
             window.location.href = checkoutUrl;
         }
 
         function validarEProsseguir() {
-            // Para utilizadores não logados - validar dados primeiro
             const form = document.getElementById('guestForm');
             const nome = document.getElementById('guest_name').value.trim();
             const email = document.getElementById('guest_email').value.trim();
-            
-            // Validação básica
             if (!nome) {
                 alert('Por favor, introduza o seu nome.');
                 document.getElementById('guest_name').focus();
@@ -375,16 +370,12 @@
                 document.getElementById('guest_email').focus();
                 return;
             }
-            
-            // Validação de email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Por favor, introduza um email válido.');
                 document.getElementById('guest_email').focus();
                 return;
             }
-            
-            // Criar formulário e enviar via POST
             const formData = new FormData();
             formData.append('guest_name', nome);
             formData.append('guest_email', email);
@@ -393,8 +384,6 @@
             if (telefone) {
                 formData.append('guest_phone', telefone);
             }
-            
-            // Enviar via POST para guardar na sessão
             fetch('/resumo_reserva', {
                 method: 'POST',
                 body: formData
@@ -403,7 +392,6 @@
                 if (response.redirected) {
                     window.location.href = response.url;
                 } else {
-                    // Se não redirecionar automaticamente, ir para checkout
                     window.location.href = '/checkout';
                 }
             })
@@ -412,8 +400,6 @@
                 alert('Ocorreu um erro. Por favor, tente novamente.');
             });
         }
-
-        // Validação em tempo real
         document.addEventListener('DOMContentLoaded', function() {
             const emailInput = document.getElementById('guest_email');
             if (emailInput) {

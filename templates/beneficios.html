@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -216,10 +216,8 @@
     </footer>
 
     <script>
-        // Função para subscrever planos
         function subscribePlan(planType) {
             {% if logged_in %}
-                // Utilizador logado - processar subscrição
                 const planNames = {
                     'member': 'CineMember',
                     'premium': 'CinePremium'
@@ -231,7 +229,6 @@
                 };
                 
                 if (confirm(`Deseja subscrever o plano ${planNames[planType]} por €${planPrices[planType]}/mês?`)) {
-                    // Aqui seria implementada a lógica de pagamento
                     fetch('/subscribe_plan', {
                         method: 'POST',
                         headers: {
@@ -257,14 +254,11 @@
                     });
                 }
             {% else %}
-                // Utilizador não logado - redirecionar para login
                 if (confirm('Para subscrever um plano, precisa de fazer login. Deseja fazer login agora?')) {
                     window.location.href = '{{ url_for("login") }}?redirect=beneficios&plan=' + planType;
                 }
             {% endif %}
         }
-
-        // Animações de scroll
         function animateOnScroll() {
             const cards = document.querySelectorAll('.plan-card');
             const observer = new IntersectionObserver((entries) => {
@@ -285,27 +279,21 @@
                 observer.observe(card);
             });
         }
-
-        // Efeitos visuais nos cards
         function addCardEffects() {
             const cards = document.querySelectorAll('.plan-card');
             
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
-                    // Adicionar efeito de brilho
                     this.style.boxShadow = '0 25px 70px rgba(255, 214, 10, 0.3), 0 0 0 1px rgba(255, 214, 10, 0.5)';
                 });
                 
                 card.addEventListener('mouseleave', function() {
-                    // Remover efeito de brilho (exceto no recomendado)
                     if (!this.classList.contains('recommended')) {
                         this.style.boxShadow = '0 15px 45px rgba(0,0,0,0.4)';
                     }
                 });
             });
         }
-
-        // Comparação de planos
         function comparePlans() {
             const modal = document.createElement('div');
             modal.className = 'comparison-modal';
@@ -390,13 +378,9 @@
                 modal.remove();
             }
         }
-
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             animateOnScroll();
             addCardEffects();
-            
-            // Adicionar botão de comparação
             const pricingSection = document.querySelector('.pricing-section');
             const compareButton = document.createElement('button');
             compareButton.textContent = 'Comparar Todos os Planos';
@@ -428,8 +412,6 @@
             
             pricingSection.appendChild(compareButton);
         });
-
-        // Smooth scroll para âncoras
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();

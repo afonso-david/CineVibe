@@ -2389,29 +2389,29 @@ def resgatar_recompensa():
             
             corpo_email = f"""
             <html>
-            <body style="font-family: Arial, sans-serif; background-color: #f4f4f4;"
-                <div style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0d1117, #161b22); 
-                    <h1 style="color: #1a1a1a; 
+            <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+                    <h1 style="color: #FFD60A; text-align: center; margin-bottom: 20px;">🎁 Parabéns!</h1>
                     
-                    <p style="font-size: 18px; text-align: center; margin-bottom: 30px;">
+                    <p style="font-size: 18px; text-align: center; margin-bottom: 30px; color: #E0E1DD;">
                         Resgataste com sucesso a tua recompensa:
                     </p>
                     
-                    <div style="background: rgba(255, 214, 10, 0.1); border: 2px solid
-                        <h2 style="color: #1a1a1a; 
+                    <div style="background: #FFD60A; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 30px;">
+                        <h2 style="color: #0D1B2A; margin: 0;">{premio['nome']}</h2>
                     </div>
                     
-                    <p style="text-align: center; font-size: 16px; margin: 30px 0;">
+                    <p style="text-align: center; font-size: 16px; margin: 30px 0; color: #E0E1DD;">
                         O teu código de desconto é:
                     </p>
                     
-                    <div style="background:
+                    <div style="background: #0D1B2A; color: #FFD60A; font-size: 32px; font-weight: bold; text-align: center; padding: 20px; border-radius: 8px; letter-spacing: 3px; margin-bottom: 30px;">
                         {codigo}
                     </div>
                     
-                    <div style="background: rgba(78, 168, 222, 0.1); border-left: 4px solid
-                        <h3 style="color: #1a1a1a; 
-                        <ol style="color: #1a1a1a; 
+                    <div style="background: #415A77; border-left: 4px solid #FFD60A; padding: 20px; margin-bottom: 30px; border-radius: 5px;">
+                        <h3 style="color: #FFD60A; margin-top: 0;">Como usar:</h3>
+                        <ol style="color: #E0E1DD; line-height: 1.8;">
                             <li>Faz a tua reserva normalmente</li>
                             <li>Na página de pagamento, introduz o código no campo "Código de Desconto"</li>
                             <li>Clica em "Aplicar" para ver o desconto</li>
@@ -2419,13 +2419,13 @@ def resgatar_recompensa():
                         </ol>
                     </div>
                     
-                    <p style="text-align: center; color: #1a1a1a; 
+                    <p style="text-align: center; color: #778DA9; font-size: 14px; margin: 20px 0;">
                         ⏰ Este código expira em 30 dias<br>
                         📧 Guarda este email para não perderes o código
                     </p>
                     
                     <div style="text-align: center; margin-top: 30px;">
-                        <a href="http://localhost:5000/filmes" style="background: linear-gradient(135deg, #0d1117, #161b22); 
+                        <a href="http://localhost:5000/filmes" style="background: #FFD60A; color: #0D1B2A; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
                             Ver Filmes Disponíveis
                         </a>
                     </div>
@@ -12011,132 +12011,60 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-                body {{ 
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                    background: linear-gradient(135deg, #0d1117, #161b22); 
-                    margin: 0; 
-                    padding: 20px; 
-                    color: white;
-                }}
-                .container {{ 
-                    max-width: 600px; 
-                    margin: 0 auto; 
-                    background: linear-gradient(135deg, #0d1117, #161b22); 
-                    border-radius: 20px; 
-                    overflow: hidden; 
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-                    border: 2px solid rgba(255, 214, 10, 0.3);
-                }}
-                .header {{ 
-                    background: linear-gradient(135deg, #0d1117, #161b22); 
-                    padding: 40px 30px; 
-                    text-align: center; 
-                }}
-                .header h1 {{ 
-                    color: #1a1a1a; 
-                    margin: 0; 
-                    font-size: 28px; 
-                    font-weight: 900; 
-                }}
-                .content {{ 
-                    padding: 40px 30px; 
-                }}
-                .content h2 {{ 
-                    color: #1a1a1a; 
-                    margin-bottom: 25px; 
-                    font-size: 24px;
-                }}
-                .reserva-details {{
-                    background: rgba(255, 214, 10, 0.1);
-                    padding: 25px;
-                    border-radius: 15px;
-                    margin: 25px 0;
-                    border: 1px solid rgba(255, 214, 10, 0.3);
-                }}
-                .detail-row {{
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 12px;
-                    padding: 8px 0;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                }}
-                .detail-label {{
-                    color: rgba(255, 255, 255, 0.8);
-                    font-weight: 600;
-                }}
-                .detail-value {{
-                    color: #1a1a1a; 
-                    font-weight: 700;
-                }}
-                .total-row {{
-                    border-top: 2px solid rgba(255, 214, 10, 0.3);
-                    margin-top: 15px;
-                    padding-top: 15px;
-                    font-size: 1.2rem;
-                }}
-                .footer {{ 
-                    background: rgba(0, 0, 0, 0.4); 
-                    padding: 30px; 
-                    text-align: center; 
-                    color: rgba(255, 255, 255, 0.7); 
-                    font-size: 14px; 
-                }}
-            </style>
         </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>🎬 CineVibe Exclusivo</h1>
+        <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; margin: 0; padding: 20px;">
+            <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #FFD60A;">
+                <div style="background: linear-gradient(135deg, #0D1B2A, #1B263B); padding: 40px 30px; text-align: center; border-bottom: 3px solid #FFD60A;">
+                    <h1 style="color: #FFD60A; margin: 0; font-size: 28px; font-weight: 900;">🎬 CineVibe Exclusivo</h1>
                 </div>
-                <div class="content">
-                    <h2>Olá, {destinatario_nome}!</h2>
-                    <p>A sua reserva exclusiva foi confirmada com sucesso! Prepare-se para uma experiência cinematográfica única.</p>
+                <div style="padding: 40px 30px;">
+                    <h2 style="color: #FFD60A; margin-bottom: 25px; font-size: 24px;">Olá, {destinatario_nome}!</h2>
+                    <p style="color: #E0E1DD; font-size: 16px; line-height: 1.6;">A sua reserva exclusiva foi confirmada com sucesso! Prepare-se para uma experiência cinematográfica única.</p>
                     
-                    <div class="reserva-details">
-                        <div class="detail-row">
-                            <span class="detail-label">Reserva
-                            <span class="detail-value">{dados_reserva['reserva_id']}</span>
+                    <div style="background: rgba(255, 214, 10, 0.1); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255, 214, 10, 0.3);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                            <span style="color: #E0E1DD; font-weight: 600;">Reserva:</span>
+                            <span style="color: #FFD60A; font-weight: 700;">#{dados_reserva['reserva_id']}</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Sala:</span>
-                            <span class="detail-value">{nome_sala}</span>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                            <span style="color: #E0E1DD; font-weight: 600;">Sala:</span>
+                            <span style="color: #FFD60A; font-weight: 700;">{nome_sala}</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Filme:</span>
-                            <span class="detail-value">{dados_reserva['filme']}</span>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                            <span style="color: #E0E1DD; font-weight: 600;">Filme:</span>
+                            <span style="color: #FFD60A; font-weight: 700;">{dados_reserva['filme']}</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Data:</span>
-                            <span class="detail-value">{data_formatada}</span>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                            <span style="color: #E0E1DD; font-weight: 600;">Data:</span>
+                            <span style="color: #FFD60A; font-weight: 700;">{data_formatada}</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Horário:</span>
-                            <span class="detail-value">{dados_reserva['hora_sessao']}</span>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                            <span style="color: #E0E1DD; font-weight: 600;">Horário:</span>
+                            <span style="color: #FFD60A; font-weight: 700;">{dados_reserva['hora_sessao']}</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Pessoas:</span>
-                            <span class="detail-value">{dados_reserva['num_pessoas']}</span>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                            <span style="color: #E0E1DD; font-weight: 600;">Pessoas:</span>
+                            <span style="color: #FFD60A; font-weight: 700;">{dados_reserva['num_pessoas']}</span>
                         </div>
-                        <div class="detail-row total-row">
-                            <span class="detail-label">Total Pago:</span>
-                            <span class="detail-value">{dados_reserva['total']}</span>
+                        <div style="display: flex; justify-content: space-between; border-top: 2px solid rgba(255, 214, 10, 0.3); margin-top: 15px; padding-top: 15px; font-size: 1.2rem;">
+                            <span style="color: #E0E1DD; font-weight: 600;">Total Pago:</span>
+                            <span style="color: #FFD60A; font-weight: 700;">{dados_reserva['total']}</span>
                         </div>
                     </div>
                     
-                    <p><strong>Instruções importantes:</strong></p>
-                    <ul>
+                    <p style="color: #FFD60A; font-weight: bold; margin-top: 30px;">Instruções importantes:</p>
+                    <ul style="color: #E0E1DD; line-height: 1.8;">
                         <li>Chegue 30 minutos antes do horário da sessão</li>
                         <li>Traga um documento de identificação</li>
                         <li>A sala será preparada especialmente para o seu grupo</li>
                         <li>Serviços de bar e catering estão incluídos</li>
                     </ul>
                     
-                    <p>Para qualquer alteração ou dúvida, contacte-nos através do email info@cinevibe.pt ou telefone +351 800 123 456.</p>
+                    <p style="color: #E0E1DD; font-size: 14px; margin-top: 30px;">Para qualquer alteração ou dúvida, contacte-nos através do email info@cinevibe.pt ou telefone +351 800 123 456.</p>
                 </div>
-                <div class="footer">
-                    <p><strong>© 2024 CineVibe</strong> - Experiências Cinematográficas Exclusivas</p>
-                    <p>Este email foi enviado automaticamente. Não responda a esta mensagem.</p>
+                <div style="background: rgba(0, 0, 0, 0.4); padding: 30px; text-align: center; color: #778DA9; font-size: 14px;">
+                    <p style="margin: 5px 0;"><strong style="color: #FFD60A;">© 2024 CineVibe</strong> - Experiências Cinematográficas Exclusivas</p>
+                    <p style="margin: 5px 0;">Este email foi enviado automaticamente. Não responda a esta mensagem.</p>
                 </div>
             </div>
         </body>

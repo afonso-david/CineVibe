@@ -2103,6 +2103,30 @@ body.modal-open {
     cursor: not-allowed;
 }
 
+.btn-sem-toppings {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-sem-toppings:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-sem-toppings:active {
+    transform: translateY(0);
+}
+
 .modal-menu-content::-webkit-scrollbar {
     width: 8px;
 }

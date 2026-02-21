@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 15, 2026 at 07:30 PM
+-- Generation Time: Feb 21, 2026 at 05:24 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `atores` (
   `foto_url` varchar(255) DEFAULT NULL,
   `data_nascimento` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `atores`
@@ -139,7 +139,7 @@ INSERT INTO `atores` (`id`, `nome`, `nacionalidade`, `foto_url`, `data_nasciment
 (111, 'Erich von Stroheim', 'Austríaca-Americana', 'imgs/atores/52-removebg-preview.png', NULL),
 (112, 'Gloria Swanson', 'Americana', 'imgs/atores/51-removebg-preview.png', NULL),
 (113, 'William Holden', 'Americana', 'imgs/atores/50-removebg-preview.png', NULL),
-(119, 'Sylvester Stallone', 'Americana', 'imgs/atores/eab54114b6c7414c820898bbdf4d24b9.png', NULL);
+(120, 'Sylvester Stallone', 'Americana', 'imgs/atores/ca0060e23d1842e39911a8e155105461.png', NULL);
 
 -- --------------------------------------------------------
 
@@ -189,7 +189,9 @@ INSERT INTO `avaliacoes_filmes` (`id`, `usuario_id`, `filme_id`, `rating`, `come
 (44, 1, 31, 5.0, 'Perfeito', '2026-02-08 18:29:16'),
 (45, 14, 2, 1.0, 'Muito mau', '2026-02-10 22:06:56'),
 (48, 1, 42, 2.0, 'Não gostei', '2026-02-10 22:22:42'),
-(49, 1, 7, 3.0, 'Clássico', '2026-02-15 19:22:25');
+(49, 1, 7, 3.0, 'Clássico', '2026-02-15 19:22:25'),
+(50, 14, 10, 4.0, 'Assustador', '2026-02-15 19:35:08'),
+(51, 1, 9, 5.0, 'Muito bom', '2026-02-15 22:38:55');
 
 -- --------------------------------------------------------
 
@@ -205,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `avatars` (
   `categoria_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_avatar_categoria` (`categoria_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `avatars`
@@ -252,9 +254,9 @@ INSERT INTO `avatars` (`id`, `nome`, `caminho`, `categoria_id`) VALUES
 (41, 'Jim Carrey', 'imgs/profile/super-herois/୭ৎ-removebg-preview.png', NULL),
 (42, 'Mr. Bean', 'imgs/profile/80s/R-removebg-preview (6).png', NULL),
 (43, 'Ace Ventura', 'imgs/profile/terror/freddy-krueger-icon-5-removebg-preview.png', NULL),
-(44, 'The Mask', 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png', NULL),
+(44, 'The Mask', 'imgs/avatars/52622345-886d-4a3e-ac6f-d16c04d713e5.png', 14),
 (45, 'Eddie Murphy', 'imgs/profile/super-herois/Captura_de_ecrã_2025-11-10_163419-removebg-preview.png', NULL),
-(54, 'Mak', 'imgs/avatars/6a7f6582-6958-4167-a07c-73c3225a4eef.png', 14);
+(55, 'Woody', 'imgs/avatars/50d8da28-2224-4032-8b00-470f0a3cb7fa.png', 5);
 
 -- --------------------------------------------------------
 
@@ -267,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `avatar_categories` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `avatar_categories`
@@ -297,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `bar` (
   `descricao` text,
   `icone` varchar(50) DEFAULT 'fas fa-cookie-bite',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `bar`
@@ -379,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `cinemas` (
   `regiao` varchar(50) DEFAULT NULL,
   `imagem` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `cinemas`
@@ -400,8 +402,7 @@ INSERT INTO `cinemas` (`id`, `nome`, `localizacao`, `email`, `regiao`, `imagem`)
 (12, 'CineVibe Santarém', 'Santarém', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Santarem_v2.png'),
 (13, 'CineVibe Portimão', 'Portimão', NULL, 'Sul', 'imgs/cinemas/CineVibe_Portimao.png'),
 (14, 'CineVibe Funchal', 'Funchal', NULL, 'Madeira', 'imgs/cinemas/CineVibe_Funchal.png'),
-(15, 'CineVibe São Miguel', 'Rua da Cultura, Ponta Delgada', 'contacto@cineacores.pt', 'Açores', 'imgs\\cinemas\\cinevibe_sao_miguel.png\"'),
-(24, 'cinema', 'Fernão Ferro', 'cinema@gmail.com', 'Sul', 'imgs/cinemas/cinema_6bd25054.jpg');
+(15, 'CineVibe São Miguel', 'Rua da Cultura, Ponta Delgada', 'contacto@cineacores.pt', 'Açores', 'imgs\\cinemas\\cinevibe_sao_miguel.png\"');
 
 -- --------------------------------------------------------
 
@@ -418,7 +419,7 @@ CREATE TABLE IF NOT EXISTS `cinemas_favoritos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_user_cinema` (`usuario_id`,`cinema_id`),
   KEY `fk_favorito_cinema` (`cinema_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `cinemas_favoritos`
@@ -427,7 +428,9 @@ CREATE TABLE IF NOT EXISTS `cinemas_favoritos` (
 INSERT INTO `cinemas_favoritos` (`id`, `usuario_id`, `cinema_id`, `data_adicao`) VALUES
 (2, 1, 3, '2025-11-19 10:06:03'),
 (6, 1, 8, '2026-02-08 17:04:14'),
-(7, 1, 7, '2026-02-11 08:45:01');
+(7, 1, 7, '2026-02-11 08:45:01'),
+(9, 14, 8, '2026-02-15 22:27:45'),
+(10, 14, 7, '2026-02-15 22:27:46');
 
 -- --------------------------------------------------------
 
@@ -453,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `codigos_desconto` (
   UNIQUE KEY `codigo` (`codigo`),
   KEY `idx_codigo` (`codigo`),
   KEY `idx_usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `codigos_desconto`
@@ -485,7 +488,9 @@ INSERT INTO `codigos_desconto` (`id`, `codigo`, `usuario_id`, `premio_id`, `prem
 (23, '4YHCU76A', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-02-03 18:25:11', NULL, '2026-03-05 18:25:12'),
 (24, '6UB00E7X', 1, 5, 'Snickers', 0.00, 'valor_fixo', 3.00, 0, '2026-02-03 18:28:49', NULL, '2026-03-05 18:28:50'),
 (25, 'MISTDN29', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 1, '2026-02-03 18:32:04', '2026-02-03 18:36:09', '2026-03-05 18:32:05'),
-(26, 'Q3NGFS3T', 14, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 1, '2026-02-10 20:56:09', '2026-02-10 20:58:08', '2026-03-12 20:56:09');
+(26, 'Q3NGFS3T', 14, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 1, '2026-02-10 20:56:09', '2026-02-10 20:58:08', '2026-03-12 20:56:09'),
+(27, 'C4D84HBZ', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 1, '2026-02-15 19:48:43', '2026-02-15 19:50:39', '2026-03-17 19:48:44'),
+(28, 'NVB3M0B3', 1, 2, 'Pipocas doces/Salgadas', 0.00, 'valor_fixo', 4.00, 1, '2026-02-15 22:41:07', '2026-02-15 22:43:18', '2026-03-17 22:41:08');
 
 -- --------------------------------------------------------
 
@@ -514,7 +519,7 @@ CREATE TABLE IF NOT EXISTS `filmes` (
   `idade_recomendada` int DEFAULT NULL,
   `poster_hover` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filmes`
@@ -560,7 +565,7 @@ INSERT INTO `filmes` (`id`, `titulo`, `sinopse`, `diretor`, `idioma_original`, `
 (40, 'Casablanca', 'Durante a Segunda Guerra Mundial, o dono de um bar em Casablanca reencontra um grande amor do passado, levando a escolhas difíceis num clima de resistência e sacrifício.', 'Michael Curtiz', 'Inglês', 'Estados Unidos', '1950-11-25', 102, 'imgs/filmes/casablanca.jpg', 'imgs/filmes/casablanca-photo1.jpg', 'https://www.youtube.com/watch?v=MF7JH_54d8c', 'em_exibicao', 99, 'https://www.rottentomatoes.com/m/casablanca', 8.5, 'https://www.imdb.com/title/tt0034583/', 12, 'imgs/fef6c149f363ad038ad59e2dff2b7957.jpg'),
 (42, 'Materialists', 'Lucy (Dakota Johnson) é uma casamenteira de luxo em Nova Iorque que se envolve num triângulo amoroso entre o seu ex-namorado John (Chris Evans), que é ator e vive em dificuldades, e Harry (Pedro Pascal), um milionário atraente.', 'Celine Song', 'Inglês', 'Estados Unidos', '2025-06-13', 117, 'imgs/filmes/OIP (6).webp', 'imgs/filmes/9mMslH0Bn3agSQTrR6vQBvzUYHt.webp', 'https://www.youtube.com/watch?v=4A_kmjtsJ7c', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/materialists', 6.3, 'https://www.imdb.com/title/tt30253473/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_mater', 12, 'imgs/6bf9914c0531c3a6ed1ab8d1401cbc01.jpg'),
 (43, 'Super Mario Galaxy', 'O filme será uma sequência de The Super Mario Bros. Movie (2023) e adapta elementos do videojogo Super Mario Galaxy.', 'Aaron Horvath', NULL, NULL, '2026-03-02', 120, 'imgs/filmes/SupermariogalaxymovieBig59901.webp', NULL, 'https://www.youtube.com/watch?v=FdL2GorGdKc', 'brevemente', NULL, '', NULL, '', 0, NULL),
-(52, 'Avenger\'s Doomsday', 'Batalha', 'A definir', NULL, NULL, '2024-01-01', 200, 'imgs/filmes/9d782907_c9fddf292f2ee1cb115d953b9b484ead.jpg', NULL, '', 'brevemente', NULL, '', NULL, '', 12, NULL);
+(55, 'Avenger\'s Doomsday', 'gay', 'A definir', NULL, NULL, '2024-01-01', 300, 'imgs/filmes/e93a7cd7_doomsday.jpg', NULL, '', 'brevemente', NULL, '', NULL, '', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -576,7 +581,7 @@ CREATE TABLE IF NOT EXISTS `filmes_cinemas` (
   PRIMARY KEY (`id`),
   KEY `fk_filmes_cinemas_filme` (`filme_id`),
   KEY `fk_filmes_cinemas_cinema` (`cinema_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=234 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filmes_cinemas`
@@ -796,9 +801,7 @@ INSERT INTO `filmes_cinemas` (`id`, `filme_id`, `cinema_id`) VALUES
 (218, 23, 1),
 (223, 38, 5),
 (228, 31, 8),
-(230, 52, 1),
-(231, 52, 3),
-(232, 52, 12);
+(235, 55, 7);
 
 -- --------------------------------------------------------
 
@@ -815,7 +818,7 @@ CREATE TABLE IF NOT EXISTS `filme_atores` (
   PRIMARY KEY (`id`),
   KEY `fk_filme_atores_filme` (`filme_id`),
   KEY `fk_filme_atores_ator` (`ator_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=215 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filme_atores`
@@ -922,8 +925,8 @@ INSERT INTO `filme_atores` (`id`, `filme_id`, `ator_id`, `papel`) VALUES
 (183, 38, 91, 'Indiana Jones'),
 (184, 42, 63, 'Harry'),
 (189, 38, 92, 'Willie Scot'),
-(208, 52, 28, 'ze'),
-(209, 52, 21, 'zé');
+(212, 17, 120, 'Rocky Balboa'),
+(213, 1, 120, 'John Rambo');
 
 -- --------------------------------------------------------
 
@@ -939,7 +942,7 @@ CREATE TABLE IF NOT EXISTS `filme_generos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `filme_id` (`filme_id`,`genero_id`),
   KEY `fk_filme_generos_genero` (`genero_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filme_generos`
@@ -1064,9 +1067,7 @@ INSERT INTO `filme_generos` (`id`, `filme_id`, `genero_id`) VALUES
 (116, 43, 6),
 (117, 43, 7),
 (114, 43, 8),
-(132, 52, 1),
-(133, 52, 2),
-(138, 52, 3);
+(142, 55, 1);
 
 -- --------------------------------------------------------
 
@@ -1115,7 +1116,7 @@ CREATE TABLE IF NOT EXISTS `horarios` (
   `id` int NOT NULL AUTO_INCREMENT,
   `hora` time NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `horarios`
@@ -1152,7 +1153,8 @@ INSERT INTO `horarios` (`id`, `hora`) VALUES
 (28, '23:30:00'),
 (29, '23:12:00'),
 (30, '16:12:00'),
-(31, '12:12:00');
+(31, '12:12:00'),
+(32, '14:17:00');
 
 -- --------------------------------------------------------
 
@@ -1173,7 +1175,7 @@ CREATE TABLE IF NOT EXISTS `horarios_sessao` (
   KEY `fk_horario_cinema` (`id_cinema`),
   KEY `fk_horario_tipo_sessao` (`id_tipo_sessao`),
   KEY `fk_horario_horario` (`id_horario`)
-) ENGINE=InnoDB AUTO_INCREMENT=37031 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37036 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `horarios_sessao`
@@ -7174,10 +7176,7 @@ INSERT INTO `horarios_sessao` (`id`, `id_filme`, `id_cinema`, `id_tipo_sessao`, 
 (37014, 38, 6, 4, 1, 48),
 (37015, 2, 8, 4, 1, 64),
 (37021, 32, 14, 5, 5, 225),
-(37023, 52, 1, 4, 4, 8),
-(37024, 52, 1, 5, 1, 121),
-(37025, 52, 1, 5, 6, 121),
-(37026, 52, 1, 5, 31, 121);
+(37035, 55, 7, 4, 1, 56);
 
 -- --------------------------------------------------------
 
@@ -10257,7 +10256,7 @@ CREATE TABLE IF NOT EXISTS `menus` (
   `preco_total` decimal(10,2) DEFAULT NULL,
   `imagem_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `menus`
@@ -10284,7 +10283,7 @@ CREATE TABLE IF NOT EXISTS `menu_produtos` (
   PRIMARY KEY (`id`),
   KEY `fk_menu_produtos_menu` (`menu_id`),
   KEY `fk_menu_produtos_produto` (`produto_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `menu_produtos`
@@ -10306,11 +10305,6 @@ INSERT INTO `menu_produtos` (`id`, `menu_id`, `produto_id`) VALUES
 (66, 3, 21),
 (67, 3, 1),
 (68, 3, 17),
-(69, 1, 1),
-(70, 1, 13),
-(71, 1, 14),
-(72, 1, 16),
-(73, 1, 17),
 (74, 4, 4),
 (75, 4, 7),
 (76, 4, 8),
@@ -10319,7 +10313,12 @@ INSERT INTO `menu_produtos` (`id`, `menu_id`, `produto_id`) VALUES
 (79, 4, 16),
 (80, 4, 13),
 (81, 4, 14),
-(82, 4, 16);
+(82, 4, 16),
+(83, 1, 1),
+(84, 1, 14),
+(85, 1, 16),
+(86, 1, 17),
+(87, 1, 13);
 
 -- --------------------------------------------------------
 
@@ -10339,7 +10338,7 @@ CREATE TABLE IF NOT EXISTS `pontos_gastos` (
   PRIMARY KEY (`id`),
   KEY `idx_usuario_gastos` (`usuario_id`),
   KEY `idx_codigo_gastos` (`codigo_desconto`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `pontos_gastos`
@@ -10361,7 +10360,9 @@ INSERT INTO `pontos_gastos` (`id`, `usuario_id`, `premio_id`, `premio_nome`, `po
 (13, 1, 1, 'Coca Cola pequena', 200, 'GJV5CEAZ', '2026-02-03 17:16:26'),
 (14, 1, 1, 'Coca Cola pequena', 200, '4YHCU76A', '2026-02-03 18:25:11'),
 (15, 1, 8, 'Pretzel', 100, 'MISTDN29', '2026-02-03 18:32:04'),
-(16, 14, 8, 'Pretzel', 100, 'Q3NGFS3T', '2026-02-10 20:56:09');
+(16, 14, 8, 'Pretzel', 100, 'Q3NGFS3T', '2026-02-10 20:56:09'),
+(17, 1, 1, 'Coca Cola pequena', 200, 'C4D84HBZ', '2026-02-15 19:48:43'),
+(18, 1, 2, 'Pipocas doces/Salgadas', 300, 'NVB3M0B3', '2026-02-15 22:41:07');
 
 -- --------------------------------------------------------
 
@@ -10452,7 +10453,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   KEY `tipo_sessao_id` (`id_tipo_sessao`),
   KEY `idx_data_sessao` (`data_sessao`),
   KEY `fk_reserva_horario_sessao` (`id_horario_sessao`)
-) ENGINE=InnoDB AUTO_INCREMENT=750 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=766 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas`
@@ -10770,7 +10771,24 @@ INSERT INTO `reservas` (`id`, `id_horario_sessao`, `data_sessao`, `id_filme`, `i
 (746, 851, '2026-02-11', 6, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-11 08:44:35', 'confirmada', 47.40, 'applepay', 'H10,H11,H12,H13,H14,H9'),
 (747, 33945, '2026-02-15', 28, 7, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 19:23:38', 'confirmada', 23.70, 'applepay', 'N19,N20,N21'),
 (748, 5991, '2026-02-15', 18, 8, 2, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-02-15 19:25:49', 'confirmada', 7.90, 'applepay', 'K22'),
-(749, 538, '2026-02-15', 6, 1, 8, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-02-15 19:29:38', 'confirmada', 7.90, 'applepay', 'C18');
+(749, 538, '2026-02-15', 6, 1, 8, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-02-15 19:29:38', 'confirmada', 7.90, 'applepay', 'C18'),
+(750, 3848, '2026-02-15', 12, 8, 8, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-02-15 19:37:56', 'confirmada', 7.90, 'applepay', 'B23'),
+(751, 3561, '2026-02-15', 9, 8, 7, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-02-15 19:44:59', 'confirmada', 7.90, 'applepay', 'M5'),
+(752, 851, '2026-02-16', 6, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 19:47:50', 'confirmada', 23.70, 'applepay', 'H13,H14,H15'),
+(753, 344, '2026-02-15', 3, 8, 7, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 19:49:35', 'confirmada', 7.90, 'applepay', 'L20'),
+(754, 344, '2026-02-15', 3, 8, 7, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 19:50:50', 'confirmada', 31.60, 'applepay', 'N3,N4,N5,N6'),
+(755, 344, '2026-02-15', 3, 8, 7, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 19:51:44', 'confirmada', 31.60, 'applepay', 'J19,J20,J21,J22'),
+(756, 344, '2026-02-15', 3, 8, 7, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 19:55:03', 'confirmada', 31.60, 'applepay', 'I10,I11,I12,I13'),
+(757, 6432, '2026-02-15', 1, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 19:55:41', 'confirmada', 7.90, 'applepay', 'F6'),
+(758, 6432, '2026-02-15', 1, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 20:03:09', 'confirmada', 31.60, 'applepay', 'J20,J21,J22,J23'),
+(759, 773, '2026-02-16', 5, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 22:25:18', 'confirmada', 23.70, 'mastercard', 'J16,N11,N17'),
+(760, 243, '2026-02-16', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 22:43:34', 'confirmada', 7.90, 'applepay', 'E9'),
+(761, 36971, '2026-02-20', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-20 16:00:12', 'confirmada', 505.60, 'applepay', 'A1,A17,A18,A19,A2,A20,A21,A22,A23,A24,A3,A4,A6,A8,A9,B5,B6,B7,C15,C16,C17,C23,C24,C25,D1,D23,D24,E1,E2,K11,K12,K13,K14,K15,K16,K19,K20,K21,K22,K23,K24,K25,L1,M25,N1,N10,N11,N12,N13,N14,N15,N17,N2,N20,N21,N22,N23,N3,N4,N5,N6,N7,N8,N9'),
+(762, 36971, '2026-02-21', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-21 12:49:46', 'confirmada', 47.40, 'applepay', 'A18,A19,A20,A21,A22,A23'),
+(763, 36971, '2026-02-21', 2, 8, 5, 13, 'Amnin', 'cinevibeadmn@gmail.com', '', '2026-02-21 13:16:45', 'confirmada', 39.50, 'applepay', 'F16,F17,F18,F19,F20'),
+(764, 36971, '2026-02-21', 2, 8, 5, 13, 'Amnin', 'cinevibeadmn@gmail.com', '', '2026-02-21 13:17:28', 'confirmada', 39.50, 'applepay', 'H1,H2,H3,H4,H5');
+INSERT INTO `reservas` (`id`, `id_horario_sessao`, `data_sessao`, `id_filme`, `id_cinema`, `id_tipo_sessao`, `id_usuario`, `nome_cliente`, `email_cliente`, `telefone_cliente`, `data_reserva`, `status`, `total`, `metodo_pagamento`, `lugares`) VALUES
+(765, 36971, '2026-02-21', 2, 8, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-21 13:32:06', 'confirmada', 39.50, 'applepay', 'J10,J11,J7,J8,J9');
 
 -- --------------------------------------------------------
 
@@ -10782,12 +10800,22 @@ DROP TABLE IF EXISTS `reservas_bar`;
 CREATE TABLE IF NOT EXISTS `reservas_bar` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_reserva` int NOT NULL,
+  `produto_id` int DEFAULT NULL,
+  `menu_id` int DEFAULT NULL,
+  `snack_id` int DEFAULT NULL,
+  `bebida_id` int DEFAULT NULL,
+  `topping_id` int DEFAULT NULL,
   `produto` varchar(255) NOT NULL,
   `quantidade` int NOT NULL,
   `preco_unitario` decimal(10,2) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_reserva` (`id_reserva`)
+  KEY `id_reserva` (`id_reserva`),
+  KEY `produto_id` (`produto_id`),
+  KEY `menu_id` (`menu_id`),
+  KEY `snack_id` (`snack_id`),
+  KEY `bebida_id` (`bebida_id`),
+  KEY `topping_id` (`topping_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -10822,7 +10850,7 @@ CREATE TABLE IF NOT EXISTS `reservas_exclusivas` (
   PRIMARY KEY (`id`),
   KEY `filme_id` (`filme_id`),
   KEY `usuario_id` (`usuario_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas_exclusivas`
@@ -10854,7 +10882,9 @@ INSERT INTO `reservas_exclusivas` (`id`, `tipo_sala`, `filme_id`, `data_sessao`,
 (24, 'intimista', 24, '2026-01-31', '16:30:00', 7, 150.00, NULL, 'Afonso David', 'afonso2008david@gmail.com', '963315105', '2026-01-28 13:52:48', 'confirmada'),
 (25, 'intimista', 4, '2026-01-31', '16:30:00', 7, 150.00, NULL, 'Afonso', 'afonso2008david@gmail.com', '963315105', '2026-01-30 10:16:16', 'confirmada'),
 (26, 'premium', 52, '2026-02-06', '14:00:00', 7, 200.00, NULL, 'Afonso', 'afonso2008david@gmail.com', '963315105', '2026-01-30 12:13:17', 'confirmada'),
-(27, 'premium', 28, '2026-02-16', '16:30:00', 4, 200.00, NULL, 'Afonso David', 'afonso2008david@gmail.com', '963315105', '2026-02-09 13:48:23', 'confirmada');
+(27, 'premium', 28, '2026-02-16', '16:30:00', 4, 200.00, NULL, 'Afonso David', 'afonso2008david@gmail.com', '963315105', '2026-02-09 13:48:23', 'confirmada'),
+(28, 'premium', 23, '2026-02-25', '16:30:00', 8, 200.00, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-02-15 22:33:45', 'confirmada'),
+(29, 'intimista', 24, '2026-02-26', '16:30:00', 9, 150.00, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-02-15 22:34:54', 'confirmada');
 
 -- --------------------------------------------------------
 
@@ -10874,7 +10904,7 @@ CREATE TABLE IF NOT EXISTS `salas` (
   `lugares_acessiveis` json DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_sala_cinema` (`id_cinema`)
-) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=243 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `salas`
@@ -11096,7 +11126,7 @@ CREATE TABLE IF NOT EXISTS `tipos_sessao` (
   `preco_bilhete` decimal(5,2) NOT NULL DEFAULT '0.00' COMMENT 'Preço final do bilhete deste tipo de sessão',
   `preco` decimal(10,2) DEFAULT '8.50',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tipos_sessao`
@@ -11111,7 +11141,7 @@ INSERT INTO `tipos_sessao` (`id`, `nome`, `descricao`, `preco_bilhete`, `preco`)
 (7, 'CC', 'Sessões com legendas para surdos e ensurdecidos (Closed Caption).', 7.90, 8.50),
 (8, 'Audiodescrição', 'Sessões com narração descritiva para pessoas com deficiência visual.', 7.90, 8.50),
 (9, 'Exclusiva', 'Sessões particulares ', 0.00, 8.50),
-(12, 'Temática', 'Sessões perssonalizaveis', 0.00, 8.50);
+(24, 'Temática', 'Sessões perssonalizaveis', 50.00, 50.00);
 
 -- --------------------------------------------------------
 
@@ -11128,7 +11158,7 @@ CREATE TABLE IF NOT EXISTS `toppings` (
   `imagem_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `toppings`
@@ -11229,10 +11259,10 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo_usuario`, `criado_em`, `ultimo_login`, `avatar`, `avatar_id`, `is_admin`, `biografia`, `filme_favorito_id`, `avatar_personalizado`) VALUES
-(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$Nz8lAcWZN7CrtJur$a24de8fe6c15d0c2cbf41a0f7f606005c8e740eecd78aed727a062d6a689d29abf361b6f925392ce705aded7548a1b7b7d36eeb0c664e184f74587f442075289', 'normal', '2025-11-03 20:23:37', '2026-02-15 19:30:12', NULL, 4, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
-(11, 'Duarte', 'duartemariation@gmail.com', 'scrypt:32768:8:1$h5SKV2XnqVI4TCjn$3fbcc143a0ffdeff34037e6aaa861b2900517e152fa955de0336cefe00efb812b9d4989e720e9707c056974358a403d42ce410e4895ffccbacff862cf79381b4', 'normal', '2025-11-04 00:08:34', '2026-02-10 22:45:40', NULL, 13, 0, NULL, NULL, 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png'),
-(13, 'Amnin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-02-15 16:32:20', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
-(14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', 'scrypt:32768:8:1$b4qBlQCA6n19uNbC$c7a2c12ef1d6cb85bb483fb6aefba5a914a0380cb986b34161e76e1cca549dee28e65a4bb70a0133bfa29a7d345b8ce6c70c92be2ea3fb7b55374fb52a2a0872', 'normal', '2025-11-17 21:28:06', '2026-02-15 19:25:03', 'imgs/icons/user_icon34-removebg-preview.png', 29, 0, NULL, NULL, NULL),
+(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$dLn2o2vK5MDfud6p$27e4a3b5db4bf80e69160f82376be8f428f02f308b3a23dbc1bd2e32f8d71e66c21dc9711dad89d294f6fd785f733b95185dd0efc7c4fcd9313b9d384c4b92fd', 'normal', '2025-11-03 20:23:37', '2026-02-21 13:31:23', NULL, 4, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
+(11, 'Duarte', 'duartemariation@gmail.com', 'scrypt:32768:8:1$h5SKV2XnqVI4TCjn$3fbcc143a0ffdeff34037e6aaa861b2900517e152fa955de0336cefe00efb812b9d4989e720e9707c056974358a403d42ce410e4895ffccbacff862cf79381b4', 'normal', '2025-11-04 00:08:34', '2026-02-15 20:33:19', NULL, 13, 0, NULL, NULL, 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png'),
+(13, 'Amnin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-02-21 17:22:16', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
+(14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', 'scrypt:32768:8:1$b4qBlQCA6n19uNbC$c7a2c12ef1d6cb85bb483fb6aefba5a914a0380cb986b34161e76e1cca549dee28e65a4bb70a0133bfa29a7d345b8ce6c70c92be2ea3fb7b55374fb52a2a0872', 'normal', '2025-11-17 21:28:06', '2026-02-16 00:29:24', NULL, 29, 0, NULL, NULL, NULL),
 (15, 'André Almeida', 'andrea@gmail.com', 'scrypt:32768:8:1$vxnypx0d0A7g9NkJ$3d5776f833f4b231d7fb77320d5e249ecbce83f48fd00a08d9562ecfbac2de6ebaa51c7f31795256d612d6c8f53328b2158f721dd17cbaf3d13d29bc9f5202e9', 'normal', '2025-11-19 08:50:33', '2025-11-20 08:52:11', 'imgs/icons/user_icon34-removebg-preview.png', 5, 0, NULL, NULL, NULL),
 (21, 'Marta Silva', 'martasilva@gmail.com', 'scrypt:32768:8:1$UGh7InYCqj6X6I6G$bab6d731f06982739b6097ed2e43a5c4b97babbf6cd68ca3bebfc998d5e1d276b636c25767830d09d7e6c61b0ba62fc2b3070a9574d1d04422459f9c85710559', 'normal', '2025-11-20 09:25:15', '2025-11-22 11:39:11', 'imgs/icons/user_icon34-removebg-preview.png', 21, 0, NULL, NULL, NULL),
 (22, 'António Domingos', 'domingos27@gmail.com', 'scrypt:32768:8:1$9D8ErdPBgaI1n6aZ$6a44888d26aa6c577ab05d0211de9920558669ef6b4157264eb0436ca6d7b09a5fbd3613ed58ba41de4c72153fadacb9fe9ac74d47fb1cacb1d4fc02a9bf2f43', 'normal', '2025-11-20 09:27:20', '2025-11-20 09:27:20', 'imgs/icons/user_icon34-removebg-preview.png', 16, 0, NULL, NULL, NULL),

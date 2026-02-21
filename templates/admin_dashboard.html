@@ -237,6 +237,8 @@
                 <tr>
                     <th>Sala</th>
                     <th>Cinema</th>
+                    <th>Filme</th>
+                    <th>Data/Hora</th>
                     <th>Capacidade</th>
                     <th>Reservas</th>
                     <th>Taxa de Ocupação</th>
@@ -247,8 +249,10 @@
                 <tr>
                     <td><strong>{{ sala.nome_sala }}</strong></td>
                     <td>{{ sala.cinema_nome }}</td>
+                    <td>{{ sala.filme_titulo }}</td>
+                    <td>{{ sala.data_sessao }} {{ sala.horario }}</td>
                     <td>{{ sala.capacidade }}</td>
-                    <td>{{ sala.total_reservas }}</td>
+                    <td>{{ sala.total_lugares_reservados }}</td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="flex: 1; height: 8px; background: #1B263B; border-radius: 4px; overflow: hidden;">

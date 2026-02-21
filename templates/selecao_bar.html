@@ -315,6 +315,38 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalPipocasToppings" class="modal-menu" style="display: none;">
+            <div class="modal-menu-content">
+                <div class="modal-menu-header">
+                    <h3><i class="fas fa-candy-cane"></i> Adicione Toppings às Pipocas</h3>
+                    <button class="modal-close" onclick="fecharModalPipocas()">&times;</button>
+                </div>
+                
+                <div class="modal-menu-body">
+                    <div class="menu-config-info">
+                        <p>Personalize as suas pipocas com toppings deliciosos! <strong>(Opcional)</strong></p>
+                    </div>
+
+                    <div class="menu-section">
+                        <h4><i class="fas fa-candy-cane"></i> Escolha os Toppings</h4>
+                        <div class="menu-produtos-grid" id="modalToppingsPipocas">
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-menu-footer">
+                    <button class="btn-cancelar" onclick="fecharModalPipocas()">Cancelar</button>
+                    <button class="btn-sem-toppings" onclick="confirmarPipocasSemToppings()">
+                        <i class="fas fa-forward"></i> Sem Toppings
+                    </button>
+                    <button class="btn-confirmar" onclick="confirmarPipocasConfig()">
+                        <i class="fas fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="application/json" id="produtos-data">

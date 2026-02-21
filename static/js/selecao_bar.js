@@ -31,14 +31,29 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 function changeQuantity(productId, change, tipo = null) {
     console.log('changeQuantity:', productId, change, tipo);
     productId = String(productId);
+    
     if (!tipo) {
+        const snackEncontrado = products.snacks && products.snacks.find(p => String(p.id) === productId);
+        const bebidaEncontrada = products.bebidas && products.bebidas.find(p => String(p.id) === productId);
         const menuEncontrado = products.menus && products.menus.find(p => String(p.id) === productId);
-        tipo = menuEncontrado ? 'menu' : 'bar';
+        
+        if (snackEncontrado || bebidaEncontrada) {
+            tipo = 'bar';
+        } else if (menuEncontrado) {
+            tipo = 'menu';
+        } else {
+            tipo = 'bar';
+        }
+        
+        console.log(`🔍 Tipo determinado para ID ${productId}: ${tipo}`);
     }
+    
     if (tipo === 'menu' && change > 0) {
+        console.log('📦 Abrindo modal de menu para ID:', productId);
         abrirModalMenu(productId);
         return;
     }
+    
     if (tipo === 'menu' && change < 0) {
         const cartKey = `${tipo}_${productId}`;
         if (cart[cartKey] && cart[cartKey].quantidade > 0) {
@@ -59,6 +74,33 @@ function changeQuantity(productId, change, tipo = null) {
         updateCartSummary();
         return;
     }
+    
+    if ((productId === '1' || productId === '17') && change > 0 && tipo === 'bar') {
+        console.log('🍿 Detectadas pipocas, abrindo modal de toppings');
+        abrirModalPipocas(productId);
+        return;
+    }
+    
+    if ((productId === '1' || productId === '17') && change < 0 && tipo === 'bar') {
+        console.log('🍿 Removendo pipocas');
+        const cartKey = `bar_${productId}`;
+        if (cart[cartKey] && cart[cartKey].quantidade > 0) {
+            cart[cartKey].quantidade--;
+            if (cart[cartKey].configs && cart[cartKey].configs.length > 0) {
+                cart[cartKey].configs.pop();
+            }
+            if (cart[cartKey].quantidade === 0) {
+                delete cart[cartKey];
+            }
+        }
+        const qtyElement = document.getElementById(productId + '-qty');
+        if (qtyElement) {
+            qtyElement.textContent = cart[cartKey] ? cart[cartKey].quantidade : 0;
+        }
+        updateCartSummary();
+        return;
+    }
+    
     const cartKey = `${tipo}_${productId}`;
     if (!cart[cartKey]) cart[cartKey] = { id: productId, tipo: tipo, quantidade: 0 };
     cart[cartKey].quantidade += change;
@@ -261,8 +303,187 @@ function fecharModalMenu() {
     });
     document.getElementById('btnConfirmarMenu').disabled = true;
 }
+let pipocasConfigAtual = null;
+async function abrirModalPipocas(pipocasId) {
+    console.log('🍿 Abrindo modal de toppings para pipocas:', pipocasId);
+    
+    pipocasConfigAtual = {
+        pipocasId: pipocasId,
+        toppings: []
+    };
+    
+    console.log('📦 pipocasConfigAtual inicializado:', pipocasConfigAtual);
+    
+    try {
+        console.log('📡 Fazendo requisição para /api/toppings...');
+        const response = await fetch(`/api/toppings`);
+        console.log('📡 Resposta recebida:', response.status);
+        const data = await response.json();
+        console.log('📦 Dados recebidos:', data);
+        
+        if (!data.success) {
+            console.error('❌ Erro na resposta:', data);
+            alert('Erro ao carregar toppings');
+            return;
+        }
+        console.log('📦 Toppings disponíveis:', data.toppings);
+        const toppingsContainer = document.getElementById('modalToppingsPipocas');
+        console.log('📦 Container de toppings:', toppingsContainer);
+        
+        if (!toppingsContainer) {
+            console.error('❌ Container modalToppingsPipocas não encontrado!');
+            return;
+        }
+        
+        toppingsContainer.innerHTML = '';
+        data.toppings.forEach(topping => {
+            const card = criarCardToppingPipocas(topping);
+            toppingsContainer.appendChild(card);
+        });
+        const modal = document.getElementById('modalPipocasToppings');
+        console.log('📦 Modal encontrado:', modal);
+        
+        if (!modal) {
+            console.error('❌ Modal modalPipocasToppings não encontrado!');
+            return;
+        }
+        
+        modal.style.display = 'flex';
+        document.body.classList.add('modal-open');
+        console.log('✅ Modal aberto com sucesso');
+        console.log('📦 Estado final pipocasConfigAtual:', pipocasConfigAtual);
+    } catch (error) {
+        console.error('❌ Erro ao abrir modal de pipocas:', error);
+        alert('Erro ao carregar toppings: ' + error.message);
+    }
+}
+function criarCardToppingPipocas(topping) {
+    const card = document.createElement('div');
+    card.className = 'menu-produto-card topping-card';
+    card.dataset.toppingId = topping.id;
+    if (topping.imagem_url) {
+        const img = document.createElement('img');
+        let imagemUrl = topping.imagem_url.replace(/\\/g, '/').replace(/"/g, '').trim();
+        if (!imagemUrl.startsWith('http') && !imagemUrl.startsWith('/static/')) {
+            if (imagemUrl.startsWith('imgs/')) {
+                imagemUrl = `/static/${imagemUrl}`;
+            } else if (!imagemUrl.startsWith('/')) {
+                imagemUrl = `/static/imgs/toppings/${imagemUrl}`;
+            } else {
+                imagemUrl = `/static${imagemUrl}`;
+            }
+        }
+        img.src = imagemUrl;
+        img.alt = topping.nome;
+        img.style.width = '80px';
+        img.style.height = '80px';
+        img.style.objectFit = 'contain';
+        img.onerror = function() {
+            console.warn('Imagem não carregou:', imagemUrl);
+            this.style.display = 'none';
+            const icon = document.createElement('div');
+            icon.className = 'menu-produto-icon';
+            icon.innerHTML = '<i class="fas fa-candy-cane"></i>';
+            this.parentNode.insertBefore(icon, this);
+        };
+        card.appendChild(img);
+    } else {
+        const icon = document.createElement('div');
+        icon.className = 'menu-produto-icon';
+        icon.innerHTML = '<i class="fas fa-candy-cane"></i>';
+        card.appendChild(icon);
+    }
+    const nome = document.createElement('h5');
+    nome.textContent = topping.nome;
+    card.appendChild(nome);
+    const preco = document.createElement('p');
+    preco.style.color = '#FFD700';
+    preco.style.fontSize = '0.85rem';
+    preco.style.marginTop = '0.25rem';
+    preco.textContent = `+€${parseFloat(topping.preco).toFixed(2)}`;
+    card.appendChild(preco);
+    card.addEventListener('click', function() {
+        toggleToppingPipocas(topping.id);
+    });
+    return card;
+}
+function toggleToppingPipocas(toppingId) {
+    const card = document.querySelector(`#modalToppingsPipocas [data-topping-id="${toppingId}"]`);
+    if (pipocasConfigAtual.toppings.includes(toppingId)) {
+        pipocasConfigAtual.toppings = pipocasConfigAtual.toppings.filter(id => id !== toppingId);
+        card.classList.remove('selected');
+    } else {
+        pipocasConfigAtual.toppings.push(toppingId);
+        card.classList.add('selected');
+    }
+    console.log('Toppings selecionados para pipocas:', pipocasConfigAtual.toppings);
+}
+function confirmarPipocasConfig() {
+    try {
+        console.log('✅ Pipocas confirmadas:', pipocasConfigAtual);
+        
+        if (!pipocasConfigAtual) {
+            console.error('❌ pipocasConfigAtual é null!');
+            return;
+        }
+        
+        const cartKey = `bar_${pipocasConfigAtual.pipocasId}`;
+        if (!cart[cartKey]) {
+            cart[cartKey] = { id: pipocasConfigAtual.pipocasId, tipo: 'pipocas', quantidade: 0, configs: [] };
+        }
+        cart[cartKey].quantidade++;
+        cart[cartKey].configs.push({
+            toppings: [...pipocasConfigAtual.toppings]
+        });
+        
+        console.log('📊 Carrinho atualizado:', cart);
+        console.log('📊 Chave do carrinho:', cartKey);
+        console.log('📊 Quantidade de pipocas:', cart[cartKey].quantidade);
+        
+        const elementId = pipocasConfigAtual.pipocasId + '-qty';
+        console.log('📊 Procurando elemento na seção de snacks com ID:', elementId);
+        
+        const snacksSection = document.getElementById('snacks');
+        if (snacksSection) {
+            const qtyElement = snacksSection.querySelector(`[id="${elementId}"]`);
+            if (qtyElement) {
+                qtyElement.textContent = cart[cartKey].quantidade;
+                console.log('✅ Elemento de snacks atualizado para quantidade:', cart[cartKey].quantidade);
+            } else {
+                console.error('❌ Elemento não encontrado na seção de snacks:', elementId);
+            }
+        } else {
+            console.error('❌ Seção de snacks não encontrada');
+        }
+        
+        console.log('📊 Chamando updateCartSummary...');
+        updateCartSummary();
+        
+        console.log('📊 Chamando fecharModalPipocas...');
+        fecharModalPipocas();
+        
+        console.log('✅ Processo completo!');
+    } catch (error) {
+        console.error('❌ Erro em confirmarPipocasConfig:', error);
+        alert('Erro ao confirmar pipocas: ' + error.message);
+    }
+}
+function confirmarPipocasSemToppings() {
+    console.log('✅ Pipocas confirmadas SEM toppings');
+    pipocasConfigAtual.toppings = [];
+    confirmarPipocasConfig();
+}
+function fecharModalPipocas() {
+    document.getElementById('modalPipocasToppings').style.display = 'none';
+    document.body.classList.remove('modal-open');
+    pipocasConfigAtual = null;
+    document.querySelectorAll('#modalToppingsPipocas .menu-produto-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+}
 function updateCartSummary() {
     console.log('📊 Atualizando resumo do carrinho');
+    console.log('📊 Carrinho completo:', cart);
     const cartItems = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
     const cartSummary = document.getElementById('cartSummary');
@@ -274,6 +495,7 @@ function updateCartSummary() {
     const produtosSelecionados = [];
     for (let cartKey in cart) {
         const item = cart[cartKey];
+        console.log(`📦 Processando item do carrinho: ${cartKey}`, item);
         if (item.quantidade > 0) {
             hasItems = true;
             const produtoData = {
@@ -281,7 +503,7 @@ function updateCartSummary() {
                 quantidade: item.quantidade,
                 tipo: item.tipo
             };
-            if (item.tipo === 'menu' && item.configs) {
+            if ((item.tipo === 'menu' || item.tipo === 'pipocas') && item.configs) {
                 produtoData.configs = item.configs;
             }
             produtosSelecionados.push(produtoData);
@@ -292,17 +514,54 @@ function updateCartSummary() {
                 product = products.snacks?.find(p => String(p.id) === String(item.id)) ||
                          products.bebidas?.find(p => String(p.id) === String(item.id));
             }
+            console.log(`🔍 Produto encontrado para ID ${item.id}:`, product);
             if (product) {
                 const nomeProduto = product.produto || product.nome || 'Produto';
-                const preco = product.preco || product.preco_total || 0;
-                const subtotal = preco * item.quantidade;
-                total += subtotal;
-                itemsHtml += `
-                    <div class="cart-item">
-                        <span>${nomeProduto} x${item.quantidade}</span>
-                        <span>€${subtotal.toFixed(2)}</span>
-                    </div>
-                `;
+                const preco = parseFloat(product.preco || product.preco_total || 0);
+                
+                if (item.tipo === 'pipocas' && item.configs) {
+                    console.log('🍿 Processando toppings das pipocas:', item.configs);
+                    for (let i = 0; i < item.configs.length; i++) {
+                        const config = item.configs[i];
+                        let subtotalItem = preco;
+                        let toppingsText = '';
+                        const toppingsNomes = [];
+                        
+                        if (config.toppings && config.toppings.length > 0) {
+                            for (let toppingId of config.toppings) {
+                                const topping = products.toppings?.find(t => String(t.id) === String(toppingId));
+                                if (topping) {
+                                    console.log(`✅ Topping encontrado: ${topping.nome} - €${topping.preco}`);
+                                    subtotalItem += parseFloat(topping.preco);
+                                    toppingsNomes.push(topping.nome);
+                                }
+                            }
+                        }
+                        
+                        if (toppingsNomes.length > 0) {
+                            toppingsText = ` <span style="color: #FFD700; font-size: 0.85rem;">(+ ${toppingsNomes.join(', ')})</span>`;
+                        }
+                        
+                        total += subtotalItem;
+                        itemsHtml += `
+                            <div class="cart-item">
+                                <span>${nomeProduto}${toppingsText}</span>
+                                <span>€${subtotalItem.toFixed(2)}</span>
+                            </div>
+                        `;
+                    }
+                } else {
+                    let subtotal = preco * item.quantidade;
+                    total += subtotal;
+                    itemsHtml += `
+                        <div class="cart-item">
+                            <span>${nomeProduto} x${item.quantidade}</span>
+                            <span>€${subtotal.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+            } else {
+                console.error(`❌ Produto não encontrado para ID ${item.id}`);
             }
         }
     }
@@ -334,4 +593,9 @@ window.fecharModalMenu = fecharModalMenu;
 window.confirmarMenuConfig = confirmarMenuConfig;
 window.selecionarProdutoModal = selecionarProdutoModal;
 window.toggleToppingModal = toggleToppingModal;
+window.abrirModalPipocas = abrirModalPipocas;
+window.fecharModalPipocas = fecharModalPipocas;
+window.confirmarPipocasConfig = confirmarPipocasConfig;
+window.confirmarPipocasSemToppings = confirmarPipocasSemToppings;
+window.toggleToppingPipocas = toggleToppingPipocas;
 console.log('✅ JavaScript carregado');

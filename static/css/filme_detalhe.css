@@ -43,6 +43,67 @@ a {
   -webkit-backface-visibility: hidden;
 }
 
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu span {
+  width: 100%;
+  height: 3px;
+  background: #FFD60A;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.hamburger-menu.active span:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
 .logo {
   width: 150px;
   height: auto;
@@ -1391,46 +1452,170 @@ a {
 }
 
 @media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  .hamburger-menu {
+    display: flex;
+  }
+  
+  .mobile-menu-overlay {
+    display: block;
+  }
+  
+  .top-nav {
+    padding: 15px 20px;
+    height: auto;
+  }
+  
+  .logo {
+    width: 120px;
+    margin-top: 10px;
+  }
+  
+  .nav-center {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1B263B 0%, #0D1B2A 100%);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 80px 0 20px 0;
+    gap: 0;
+    z-index: 999;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .nav-center.mobile-active {
+    left: 0;
+  }
+  
+  .nav-center a {
+    width: 100%;
+    padding: 18px 30px;
+    font-size: 16px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 214, 10, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .nav-center a:first-child {
+    margin-left: 0;
+  }
+  
+  .nav-center a::after {
+    display: none;
+  }
+  
+  .nav-center a:hover,
+  .nav-center a.active {
+    background: rgba(255, 214, 10, 0.1);
+    padding-left: 40px;
+    color: #FFD60A;
+  }
+  
+  .nav-right {
+    gap: 10px;
+  }
+  
+  .search-container input {
+    width: 200px;
+    font-size: 14px;
+    padding: 5px 15px 5px 35px;
+    margin-top: 10px;
+  }
+  
+  .search_icon {
+    width: 25px;
+    height: 25px;
+    left: 8px;
+  }
+  
+  .user-icon img {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+  }
+
   .banner {
     height: auto;
-    min-height: 500px;
+    min-height: 400px;
+    overflow: hidden;
   }
 
   .banner-content {
     flex-direction: column;
     text-align: center;
-    padding: 40px 20px;
-    gap: 30px;
+    padding: 30px 15px;
+    gap: 20px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .poster-wrapper img {
-    width: 180px;
-    height: 270px;
+    width: 150px;
+    height: 225px;
   }
 
   .filme-info {
     max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 10px;
   }
 
   .filme-info h1 {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+    line-height: 1.2;
+    word-wrap: break-word;
   }
 
   .filme-info p {
-    font-size: 1rem;
+    font-size: 0.9rem;
     max-width: 100%;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+  
+  .filme-meta {
+    font-size: 0.85rem;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .filme-meta span {
+    padding: 4px 10px;
+    font-size: 0.8rem;
   }
 
   .conteudo-principal {
-    padding: 40px 20px;
+    padding: 30px 15px;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .sessoes {
-    padding: 40px 20px 80px 20px;
+    padding: 30px 15px 60px 15px;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .informacoes-direita {
     width: 100%;
+    box-sizing: border-box;
+    padding: 20px 15px;
   }
 
   .info-grid {
@@ -1456,29 +1641,192 @@ a {
     width: 70px;
     height: 70px;
   }
+  
+  .sinopse-completa h2,
+  .elenco h2,
+  .informacoes-direita h2 {
+    font-size: 1.3rem;
+  }
+  
+  .sessoes h2 {
+    font-size: 1.6rem;
+  }
+  
+  .avaliacoes-section h2 {
+    font-size: 1.6rem;
+  }
+  
+  .sessoes-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .filtros-regiao {
+    position: static;
+    min-width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+    gap: 8px;
+  }
+  
+  .filtro-regiao-btn {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: auto;
+  }
+  
+  .cinemas-lista {
+    width: 100%;
+    gap: 20px;
+  }
+  
+  .cinema {
+    padding: 20px 15px;
+  }
+  
+  .nome-cinema {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .botoes-sessao {
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    flex-wrap: nowrap;
+  }
+  
+  .btn-sessao {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    min-width: 70px;
+  }
+  
+  .horarios-wrapper {
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    flex-wrap: nowrap;
+  }
+  
+  .hora-btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    min-width: 80px;
+  }
+  
+  .salas-wrapper {
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    flex-wrap: nowrap;
+  }
+  
+  .sala-info {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  
+  .nav-dias {
+    padding: 20px 15px 25px 15px;
+    margin: 20px 0;
+  }
+  
+  .nav-dias-titulo {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  .dias-container {
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding: 10px 0 20px 0;
+  }
+  
+  .minha-avaliacao-card {
+    padding: 20px 15px;
+  }
+  
+  .form-actions-inline {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .btn-cancelar-inline,
+  .btn-submeter-inline,
+  .btn-remover-inline {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    flex: 1 1 auto;
+    min-width: 100px;
+  }
+  
+  .comentario-section-inline textarea {
+    font-size: 0.9rem;
+    padding: 10px;
+    min-height: 80px;
+  }
+  
+  .rating-section-inline {
+    margin-bottom: 15px;
+  }
+  
+  .stars-inline {
+    gap: 8px;
+  }
+  
+  .star-inline {
+    font-size: 1.5rem !important;
+  }
 }
 
 @media (max-width: 520px) {
   .banner {
     height: auto;
-    min-height: 450px;
+    min-height: 350px;
   }
 
   .banner-content {
-    padding: 30px 20px;
+    padding: 25px 15px;
   }
 
   .poster-wrapper img {
-    width: 160px;
-    height: 240px;
+    width: 130px;
+    height: 195px;
   }
 
   .filme-info h1 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    line-height: 1.2;
   }
 
   .filme-info p {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+  
+  .filme-meta {
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+  
+  .filme-meta span {
+    padding: 3px 8px;
+    font-size: 0.75rem;
   }
 
   .btn-bilhete {
@@ -1880,6 +2228,362 @@ a {
 }
 
 @media (max-width: 480px) {
+    * {
+        box-sizing: border-box;
+    }
+    
+    .hamburger-menu {
+        width: 26px;
+        height: 20px;
+    }
+    
+    .hamburger-menu span {
+        height: 2.5px;
+    }
+    
+    .hamburger-menu.active span:nth-child(1) {
+        transform: translateY(8.75px) rotate(45deg);
+    }
+    
+    .hamburger-menu.active span:nth-child(3) {
+        transform: translateY(-8.75px) rotate(-45deg);
+    }
+    
+    .top-nav {
+        padding: 10px 15px;
+    }
+    
+    .logo {
+        width: 100px;
+        margin-top: 10px;
+    }
+    
+    .search-container input {
+        width: 150px;
+        font-size: 12px;
+        padding: 4px 12px 4px 30px;
+        margin-top: 10px;
+    }
+    
+    .search_icon {
+        width: 20px;
+        height: 20px;
+        left: 8px;
+    }
+    
+    .user-icon img {
+        width: 25px;
+        height: 25px;
+        margin-top: 10px;
+    }
+    
+    .nav-center {
+        width: 260px;
+        padding: 70px 0 20px 0;
+    }
+    
+    .nav-center a {
+        padding: 16px 25px;
+        font-size: 15px;
+    }
+    
+    .nav-center a:hover,
+    .nav-center a.active {
+        padding-left: 35px;
+    }
+    
+    .banner {
+        min-height: 300px;
+        overflow: hidden;
+    }
+    
+    .banner-content {
+        padding: 20px 12px;
+        gap: 15px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .poster-wrapper img {
+        width: 110px;
+        height: 165px;
+    }
+    
+    .filme-info h1 {
+        font-size: 1.3rem;
+        line-height: 1.2;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .filme-info p {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .filme-meta {
+        font-size: 0.7rem;
+        gap: 5px;
+    }
+    
+    .filme-meta span {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+    }
+    
+    .conteudo-principal {
+        padding: 25px 12px;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    
+    .sessoes {
+        padding: 25px 12px 50px 12px;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    
+    .btn-bilhete {
+        padding: 12px 25px;
+        font-size: 0.85rem;
+    }
+    
+    .btn-trailer {
+        padding: 12px 25px;
+        font-size: 0.85rem;
+    }
+    
+    .action-buttons {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .info-item {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+    
+    .info-item i {
+        font-size: 1rem;
+    }
+    
+    .atores {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .ator img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .ator h4 {
+        font-size: 0.85rem;
+    }
+    
+    .ator p {
+        font-size: 0.75rem;
+    }
+    
+    .sinopse-completa h2,
+    .elenco h2,
+    .informacoes-direita h2 {
+        font-size: 1.1rem;
+    }
+    
+    .sessoes h2 {
+        font-size: 1.3rem;
+    }
+    
+    .avaliacoes-section h2 {
+        font-size: 1.3rem;
+    }
+    
+    .sinopse-completa p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+    
+    .dia-btn {
+        padding: 10px 12px;
+        min-width: 70px;
+    }
+    
+    .dia-semana {
+        font-size: 0.85rem;
+    }
+    
+    .dia-numero {
+        font-size: 0.75rem;
+    }
+    
+    .avaliacao-card {
+        padding: 12px;
+    }
+    
+    .usuario-info {
+        gap: 8px;
+    }
+    
+    .usuario-avatar {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .usuario-nome {
+        font-size: 0.85rem;
+    }
+    
+    .avaliacao-data {
+        font-size: 0.7rem;
+    }
+    
+    .avaliacao-texto {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    .modal-content {
+        width: 92%;
+        padding: 40px 20px 30px 20px;
+        margin-top: 30px;
+    }
+    
+    .modal-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+        top: -30px;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.3rem;
+    }
+    
+    .modal-content p {
+        font-size: 0.85rem;
+    }
+    
+    .filtros-regiao {
+        gap: 6px;
+        padding-bottom: 8px;
+    }
+    
+    .filtro-regiao-btn {
+        padding: 8px 14px;
+        font-size: 0.75rem;
+        min-width: auto;
+    }
+    
+    .cinema {
+        padding: 15px 12px;
+    }
+    
+    .nome-cinema {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .botoes-sessao {
+        gap: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .btn-sessao {
+        padding: 7px 12px;
+        font-size: 0.75rem;
+        min-width: 60px;
+    }
+    
+    .horarios-wrapper {
+        gap: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .hora-btn {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+        min-width: 70px;
+    }
+    
+    .salas-wrapper {
+        gap: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .sala-info {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+    
+    .nav-dias {
+        padding: 15px 12px 20px 12px;
+        margin: 15px 0;
+    }
+    
+    .nav-dias-titulo {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .dias-container {
+        gap: 6px;
+        justify-content: flex-start;
+        padding: 10px 0 20px 0;
+    }
+    
+    .minha-avaliacao-card {
+        padding: 15px 12px;
+    }
+    
+    .form-actions-inline {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+    
+    .btn-cancelar-inline,
+    .btn-submeter-inline,
+    .btn-remover-inline {
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .comentario-section-inline textarea {
+        font-size: 0.85rem;
+        padding: 8px;
+        min-height: 70px;
+    }
+    
+    .rating-section-inline label,
+    .comentario-section-inline label {
+        font-size: 0.85rem;
+    }
+    
+    .stars-inline {
+        gap: 6px;
+    }
+    
+    .star-inline {
+        font-size: 1.3rem !important;
+    }
+    
+    .rating-feedback-inline {
+        font-size: 0.8rem;
+    }
+    
+    .char-counter-inline {
+        font-size: 0.75rem;
+    }
+
     .choice-image-background {
         height: 400px;
     }
@@ -2620,6 +3324,29 @@ a {
     grid-template-columns: 1fr;
     gap: 40px;
     padding: 0 20px;
+  }
+  
+  .footer-section {
+    text-align: center;
+  }
+  
+  .footer-section h4::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .footer-logo {
+    justify-content: center;
+  }
+  
+  .footer-social {
+    justify-content: center;
   }
   
   .newsletter-section {

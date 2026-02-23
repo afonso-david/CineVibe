@@ -13,6 +13,11 @@
         <header>
         <div class="top-nav">
             <div class="nav-left">
+                <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
             </div>
             <div class="nav-right">
@@ -35,16 +40,18 @@
         </div>
     </header>
 
-    <nav class="nav-center">
+    <nav class="nav-center" id="navMenu">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
-        <a href="{{ url_for('cine_acessivel') }}" class="active">CineAcessível</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
         <a href="{{ url_for('bar') }}">Bar</a>
         <a href="{{ url_for('beneficios') }}">Benefícios</a>
         <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
+    
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
     <main>
         <section class="login-section">
@@ -364,5 +371,6 @@
             }
         });
     </script>
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 </body>
 </html>

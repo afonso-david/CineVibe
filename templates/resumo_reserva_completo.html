@@ -401,8 +401,13 @@
             });
         }
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 DEBUG - user_authenticated:', {{ 'true' if user_authenticated else 'false' }});
+            console.log('🔍 DEBUG - user_name:', '{{ user_name }}');
+            console.log('🔍 DEBUG - user_email:', '{{ user_email }}');
+            
             const emailInput = document.getElementById('guest_email');
             if (emailInput) {
+                console.log('✅ Formulário de convidado encontrado!');
                 emailInput.addEventListener('blur', function() {
                     const email = this.value.trim();
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -415,6 +420,8 @@
                         this.style.boxShadow = '';
                     }
                 });
+            } else {
+                console.log('❌ Formulário de convidado NÃO encontrado - usuário está logado');
             }
         });
     </script>

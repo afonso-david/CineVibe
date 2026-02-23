@@ -119,7 +119,7 @@
                                     </svg>
                                     Telefone
                                 </label>
-                                <input type="tel" id="telefone" name="telefone" placeholder="912 345 678">
+                                <input type="tel" id="telefone" name="telefone" placeholder="912 345 678" maxlength="9" pattern="[0-9]{9}" title="Insira um número de telefone válido com 9 dígitos">
                             </div>
 
                             <div class="form-group">
@@ -293,6 +293,22 @@
     </footer>
 
     <script>
+        const telefoneInput = document.getElementById('telefone');
+        if (telefoneInput) {
+            telefoneInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value.length > 9) {
+                    this.value = this.value.slice(0, 9);
+                }
+            });
+            
+            telefoneInput.addEventListener('keypress', function(e) {
+                if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab') {
+                    e.preventDefault();
+                }
+            });
+        }
+
         function togglePassword(fieldId) {
             const passwordInput = document.getElementById(fieldId);
             const eyeIcon = fieldId === 'password' ? document.getElementById('eyeIcon') : document.getElementById('eyeIcon2');

@@ -26,6 +26,11 @@
         <header>
         <div class="top-nav">
             <div class="nav-left">
+                <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
             </div>
             <div class="nav-right">
@@ -48,7 +53,7 @@
         </div>
     </header>
 
-    <nav class="nav-center">
+    <nav class="nav-center" id="navMenu">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
@@ -58,6 +63,8 @@
         <a href="{{ url_for('sessao') }}" class="active">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
+    
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
         <section class="hero-section" style="background-image: url('{{ url_for('static', filename='imgs/temas/Romance/500-days-of-summer-10-years-later-v0-ymfx3t1biza21.webp') }}');">
             <div class="hero-overlay"></div>
@@ -471,14 +478,7 @@
                 card.style.transform = 'translateY(0) scale(1)';
             });
         });
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('.hero-background');
-            if (parallax) {
-                const speed = scrolled * 0.3;
-                parallax.style.transform = `translateY(${speed}px)`;
-            }
-        });
+
         document.querySelectorAll('.pricing-card, .feature-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.boxShadow = '0 25px 60px rgba(255, 105, 180, 0.3)';
@@ -521,5 +521,6 @@
             });
         }
     </script>
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 </body>
 </html>

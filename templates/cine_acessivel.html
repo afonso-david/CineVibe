@@ -16,6 +16,11 @@
         <header>
             <div class="top-nav">
                 <div class="nav-left">
+                    <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                     <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
                 </div>
                 <div class="nav-right">
@@ -38,7 +43,7 @@
             </div>
         </header>
 
-        <nav class="nav-center" role="navigation" aria-label="Navegação principal">
+        <nav class="nav-center" id="navMenu" role="navigation" aria-label="Navegação principal">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
             <a href="{{ url_for('cinemas') }}">Cinemas</a>
@@ -48,6 +53,8 @@
             <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
+        
+        <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
         <main id="main-content">
             
@@ -633,5 +640,6 @@
         }
 
     </style>
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 </body>
 </html>

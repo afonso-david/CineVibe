@@ -150,15 +150,23 @@ a {
 
 .hero-section {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #2C1810;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .hero-overlay {
@@ -368,6 +376,10 @@ a {
 }
 
 @media (max-width: 768px) {
+  .hero-title {
+    font-size: 4rem;
+  }
+  
   .hero-buttons {
     flex-direction: column;
     align-items: center;
@@ -379,12 +391,8 @@ a {
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 0 1rem;
-  }
-  
-  .hero-content {
-    padding: 0 1rem;
+  .hero-title {
+    font-size: 3rem;
   }
 }
 
@@ -1484,73 +1492,49 @@ a {
 
 @media (max-width: 768px) {
     .movies-carousel {
-        padding: 0 20px;
-    }
-    
-    .movies-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-        overflow-x: visible;
-        padding: 20px 0;
+        padding: 0 40px;
     }
     
     .filme-card {
-        min-width: auto;
-        max-width: none;
-        width: 100%;
-        height: 320px;
-        margin: 0;
-    }
-    
-    .movie-rank {
-        display: none;
+        min-width: 280px;
+        max-width: 280px;
+        height: 420px;
     }
     
     .carousel-btn {
-        display: none;
-    }
-    
-    .filme-info .titulo {
+        width: 45px;
+        height: 45px;
         font-size: 1.1rem;
     }
     
+    .filme-info .titulo {
+        font-size: 1.2rem;
+    }
+    
     .filme-info .genero {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 480px) {
     .movies-carousel {
-        padding: 0 15px;
-    }
-    
-    .movies-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-        overflow-x: visible;
-        padding: 20px 0;
+        padding: 0 20px;
     }
     
     .filme-card {
-        min-width: auto;
-        max-width: none;
-        width: 100%;
-        height: 280px;
-        margin: 0;
-    }
-    
-    .movie-rank {
-        display: none;
+        min-width: 240px;
+        max-width: 240px;
+        height: 360px;
     }
     
     .carousel-btn {
-        display: none;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
     }
     
     .filme-overlay {
-        padding: 12px 10px;
+        padding: 15px 12px;
     }
     
     .filme-info .titulo {
@@ -1559,12 +1543,12 @@ a {
     }
     
     .filme-info .genero {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         margin-bottom: 5px;
     }
     
     .filme-info .duracao {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         margin-bottom: 8px;
     }
 }
@@ -1904,77 +1888,33 @@ a {
 @media (max-width: 968px) {
   .tickets-showcase {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    max-width: 100%;
-    width: 100%;
+    gap: 3rem;
+    max-width: 800px;
   }
   
   .ticket-item img {
-    max-width: 100%;
+    max-width: 380px;
   }
 }
 
 @media (max-width: 768px) {
   .atmosphere-section {
-    padding: 4rem 0;
-  }
-  
-  .atmosphere-section .section-title {
-    font-size: 2.5rem;
-  }
-  
-  .atmosphere-description {
-    font-size: 1.1rem;
-    margin-bottom: 3rem;
-  }
-  
-  .tickets-showcase {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    width: 100%;
-    max-width: 100%;
-    margin-top: 2rem;
+    padding: 6rem 0;
   }
   
   .ticket-item img {
-    max-width: 100%;
-  }
-  
-  .ticket-item:nth-child(1) img,
-  .ticket-item:nth-child(2) img,
-  .ticket-item:nth-child(3) img {
-    transform: rotate(0deg);
-  }
-  
-  .ticket-item:hover {
-    transform: translateY(-10px) scale(1.03);
+    max-width: 350px;
   }
 }
 
 @media (max-width: 480px) {
-  .atmosphere-section {
-    padding: 3rem 0;
-  }
-  
-  .atmosphere-section .section-title {
-    font-size: 2rem;
-  }
-  
-  .atmosphere-description {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-    padding: 0 10px;
-  }
-  
   .tickets-showcase {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    width: 100%;
-    max-width: 100%;
+    gap: 2.5rem;
   }
   
   .ticket-item img {
-    max-width: 100%;
+    max-width: 400px;
   }
 }
 
@@ -2247,89 +2187,27 @@ a {
   }
   
   .hero-section {
-    height: 100vh;
-    min-height: 600px;
-    margin-top: 0;
-  }
-  
-  .hero-background {
-    height: 100%;
-  }
-  
-  .hero-background img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-  
-  .hero-content {
-    padding: 20px;
-    bottom: 80px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-  }
-  
-  .hero-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    height: 70vh;
+    min-height: 500px;
   }
   
   .hero-title {
     font-size: 2.5rem;
-    margin-bottom: 15px;
-    text-align: center;
-    width: 100%;
   }
   
   .hero-description {
     font-size: 1rem;
-    margin-bottom: 25px;
-    text-align: center;
-    width: 100%;
   }
   
   .hero-buttons {
     flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin: 0;
-    padding-left: 30px;
+    gap: 15px;
   }
   
   .btn-primary,
   .btn-secondary {
-    width: calc(100% - 30px);
-    max-width: 370px;
-    padding: 14px 20px;
-    font-size: 0.95rem;
+    width: 100%;
     justify-content: center;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    margin: 0;
-  }
-  
-  .btn-primary.large,
-  .btn-secondary.large {
-    width: calc(100% - 30px);
-    max-width: 370px;
-    padding: 14px 20px;
-    font-size: 0.95rem;
-    margin: 0;
   }
   
   .features-grid {
@@ -2471,72 +2349,15 @@ a {
   }
   
   .hero-section {
-    height: 100vh;
-    min-height: 550px;
-  }
-  
-  .hero-content {
-    padding: 15px;
-    bottom: 60px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-  }
-  
-  .hero-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    height: 60vh;
+    min-height: 450px;
   }
   
   .hero-title {
     font-size: 2rem;
-    text-align: center;
-    width: 100%;
   }
   
   .hero-description {
     font-size: 0.9rem;
-    margin-bottom: 20px;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .hero-buttons {
-    gap: 10px;
-    width: 100%;
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin: 0;
-    padding-left: 25px;
-  }
-  
-  .btn-primary,
-  .btn-secondary {
-    padding: 12px 18px;
-    font-size: 0.9rem;
-    width: calc(100% - 25px);
-    max-width: 325px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-  }
-  
-  .btn-primary.large,
-  .btn-secondary.large {
-    padding: 12px 18px;
-    font-size: 0.9rem;
-    margin: 0;
   }
 }

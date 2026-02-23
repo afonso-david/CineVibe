@@ -195,13 +195,15 @@
 
     <script>
     const TICKET_PRICE = {{ filme_sessao.preco }};
-    const EXCLUSIVE_ROOM_PRICE = 100.00; // Preço base da sala exclusiva
-    const MAX_CAPACITY = {{ sala.capacidade }}; // Capacidade máxima da sala
-    let modalShown = false; // Flag para mostrar modal apenas uma vez
+    const EXCLUSIVE_ROOM_PRICE = 100.00;
+    const MAX_CAPACITY = {{ sala.capacidade }};
+    let modalShown = false;
+    
     function closeExclusiveModal() {
         document.getElementById('exclusiveRoomModal').style.display = 'none';
-        modalShown = true; // Marca que o modal já foi mostrado
+        modalShown = true;
     }
+    
     function checkExclusiveRoomSuggestion(quantity) {
         const totalPrice = TICKET_PRICE * quantity;
         if (totalPrice > EXCLUSIVE_ROOM_PRICE && !modalShown) {
@@ -210,6 +212,7 @@
             document.getElementById('exclusiveRoomModal').style.display = 'flex';
         }
     }
+    
     document.addEventListener('DOMContentLoaded', function() {
         const quantityOptions = document.querySelectorAll('.quantity-option');
         const customQuantity = document.getElementById('customQuantity');

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CineVibe - A Sua Experiência Cinematográfica{% endblock %}</title>
+
+    <style>
+        body { opacity: 0; transition: opacity 0.3s ease-in; }
+        body.loaded { opacity: 1; }
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-global.css') }}">
+    {% block extra_css %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+
+    <meta name="description" content="{% block description %}CineVibe - A melhor experiência cinematográfica com filmes em estreia, salas premium e serviços exclusivos.{% endblock %}">
+    <meta name="keywords" content="cinema, filmes, estreias, bilhetes, CineVibe, sessões exclusivas">
+    <meta property="og:title" content="{% block og_title %}CineVibe - A Sua Experiência Cinematográfica{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Descubra os melhores filmes em salas de cinema premium com tecnologia de ponta.{% endblock %}">
+    <meta property="og:image" content="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="search-container">
+                        <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                        <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                    </div>
+                    <div class="user-icon">
+                        {% if logged_in %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-center" id="navMenu">
+            <a href="{{ url_for('home') }}" {% if request.endpoint == 'home' %}class="active"{% endif %}>Home</a>
+            <a href="{{ url_for('filmes') }}" {% if request.endpoint == 'filmes' %}class="active"{% endif %}>Filmes</a>
+            <a href="{{ url_for('cinemas') }}" {% if request.endpoint == 'cinemas' %}class="active"{% endif %}>Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}" {% if request.endpoint == 'cine_acessivel' %}class="active"{% endif %}>CineAcessível</a>
+            <a href="{{ url_for('bar') }}" {% if request.endpoint == 'bar' %}class="active"{% endif %}>Bar</a>
+            <a href="{{ url_for('beneficios') }}" {% if request.endpoint == 'beneficios' %}class="active"{% endif %}>Benefícios</a>
+            <a href="{{ url_for('sessao') }}" {% if request.endpoint == 'sessao' %}class="active"{% endif %}>Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}" {% if request.endpoint == 'contactos' %}class="active"{% endif %}>Contactos</a>
+        </nav>
+        
+        <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        {% block footer %}
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-container">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
+                            <h3>CineVibe</h3>
+                        </div>
+                        <p class="footer-description">
+                            A sua experiência cinematográfica premium. Descubra os melhores filmes em salas de última geração com tecnologia de ponta e conforto incomparável.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#" aria-label="Facebook"><img src="{{ url_for('static', filename='imgs/icons/facebook.png') }}" alt="Facebook"></a>
+                            <a href="#" aria-label="Instagram"><img src="{{ url_for('static', filename='imgs/icons/instagram.png') }}" alt="Instagram"></a>
+                            <a href="#" aria-label="Twitter"><img src="{{ url_for('static', filename='imgs/icons/twitter.png') }}" alt="Twitter"></a>
+                            <a href="#" aria-label="YouTube"><img src="{{ url_for('static', filename='imgs/icons/youtube.png') }}" alt="YouTube"></a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Links Rápidos</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('filmes') }}">Filmes em Cartaz</a></li>
+                            <li><a href="{{ url_for('cinemas') }}">Os Nossos Cinemas</a></li>
+                            <li><a href="{{ url_for('bar') }}">Menu do Bar</a></li>
+                            <li><a href="{{ url_for('beneficios') }}">Programa de Benefícios</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Experiências</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('sessao') }}">Sessões Exclusivas</a></li>
+                            <li><a href="{{ url_for('cine_acessivel') }}">CineAcessível</a></li>
+                            <li><a href="{{ url_for('premios') }}">Prémios e Recompensas</a></li>
+                            <li><a href="{{ url_for('sessoes_tematicas') }}">Sessões Temáticas</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Suporte</h4>
+                        <ul class="footer-links">
+                            <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Ajuda</a></li>
+                            <li><a href="#">Carreiras</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e ofertas exclusivas</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="O seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <i class="fas fa-phone contact-icon"></i>
+                                <span>+351 123 456 789</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope contact-icon"></i>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-container">
+                    <div class="footer-bottom-content">
+                        <div class="footer-legal">
+                            <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                            <div class="legal-links">
+                                <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                                <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                                <a href="{{ url_for('cookies') }}">Política de Cookies</a>
+                            </div>
+                        </div>
+                        <div class="footer-certifications">
+                            <div class="cert-logos">
+                                <span class="cert-text">Pagamentos Seguros</span>
+                                <span class="cert-text">SSL Certificado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        {% endblock %}
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+
+    <script>
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

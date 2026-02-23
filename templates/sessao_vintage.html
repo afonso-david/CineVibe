@@ -17,6 +17,11 @@
         <header>
         <div class="top-nav">
             <div class="nav-left">
+                <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
             </div>
             <div class="nav-right">
@@ -39,7 +44,7 @@
         </div>
     </header>
 
-    <nav class="nav-center">
+    <nav class="nav-center" id="navMenu">
         <a href="{{ url_for('home') }}"class="active">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
@@ -49,15 +54,10 @@
         <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
+    
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
-                </div>
-            </div>
-        </header>
-
-        <section class="hero-section">
-            <div class="hero-background">
-                <img src="{{ url_for('static', filename='imgs/A1PRNm5wKtwlhPmPvmRk2MEXwwG.jpg') }}" alt="">
-            </div>
+        <section class="hero-section" style="background-image: url('{{ url_for('static', filename='imgs/A1PRNm5wKtwlhPmPvmRk2MEXwwG.jpg') }}');">
             <div class="hero-overlay"></div>
             <div class="film-grain"></div>
             
@@ -522,5 +522,6 @@
             });
         }
     </script>
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 </body>
 </html>

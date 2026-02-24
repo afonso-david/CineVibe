@@ -1792,6 +1792,39 @@ a {
   .star-inline {
     font-size: 1.5rem !important;
   }
+  
+  #comprar-bilhete-flutuante {
+    width: 100%;
+    padding: 15px 15px;
+    max-width: 100%;
+  }
+  
+  .conteudo-bilhete {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  #info-bilhete {
+    padding-right: 0;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  
+  #info-bilhete strong {
+    font-size: 1.1rem;
+  }
+  
+  .detalhe-sessao {
+    font-size: 0.85rem;
+  }
+  
+  #btn-comprar {
+    padding: 14px 30px;
+    font-size: 0.95rem;
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 520px) {
@@ -2582,6 +2615,32 @@ a {
     
     .char-counter-inline {
         font-size: 0.75rem;
+    }
+    
+    #comprar-bilhete-flutuante {
+        padding: 12px 12px;
+    }
+    
+    .conteudo-bilhete {
+        gap: 10px;
+    }
+    
+    #info-bilhete {
+        font-size: 0.85rem;
+    }
+    
+    #info-bilhete strong {
+        font-size: 1rem;
+    }
+    
+    .detalhe-sessao {
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
+    
+    #btn-comprar {
+        padding: 12px 25px;
+        font-size: 0.85rem;
     }
 
     .choice-image-background {

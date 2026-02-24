@@ -824,28 +824,119 @@
 }
 
 @media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    
     .seat-selection {
-        padding: 1rem;
+        padding: 0.8rem 0.5rem;
+        overflow-x: hidden;
     }
     
     .seat-selection h3 {
         font-size: 1.5rem;
     }
     
+    .cinema-screen {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+    }
+    
+    .screen-text {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.8rem;
+    }
+    
+    .seat-grid {
+        padding: 0.5rem 0.2rem;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        display: block;
+    }
+    
+    .seat-grid::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    .seat-grid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+    }
+    
+    .seat-grid::-webkit-scrollbar-thumb {
+        background: rgba(255, 214, 10, 0.3);
+        border-radius: 3px;
+    }
+    
+    .seat-grid::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 214, 10, 0.5);
+    }
+    
+    .cinema-entrances {
+        height: 70px;
+        margin-top: 1rem;
+    }
+    
+    .entrance {
+        padding: 0.6rem 0.8rem;
+        gap: 0.3rem;
+    }
+    
+    .entrance-left {
+        left: 5%;
+    }
+    
+    .entrance-right {
+        right: 5%;
+    }
+    
+    .entrance img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .entrance span {
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+    }
+    
     .seat {
         width: 18px;
         height: 18px;
-        font-size: 0.4rem;
+        font-size: 0.35rem;
+        margin: 1px;
     }
     
     .seat.occupied::before {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
     }
     
     .seat.accessible::before {
-        font-size: 0.4rem;
         width: 14px;
         height: 14px;
+    }
+    
+    .seat-row {
+        gap: 0.15rem;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+    }
+    
+    .seat-spacer {
+        width: 18px;
+        height: 18px;
+        margin: 1px;
+    }
+    
+    .vertical-divider {
+        margin: 0 0.2rem;
+    }
+    
+    .vertical-line {
+        width: 1px;
+        height: 18px;
     }
     
     .seat-row {
@@ -917,20 +1008,115 @@
 }
 
 @media (max-width: 480px) {
+    .seat-selection {
+        padding: 0.5rem 0.3rem;
+    }
+    
+    .cinema-screen {
+        margin-bottom: 0.8rem;
+        padding: 0.4rem;
+    }
+    
+    .screen-text {
+        font-size: 0.6rem;
+        padding: 0.25rem 0.6rem;
+    }
+    
+    .seat-grid {
+        padding: 0.3rem 0.1rem;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        display: block;
+    }
+    
+    .seat-grid::-webkit-scrollbar {
+        height: 5px;
+    }
+    
+    .seat-grid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 3px;
+    }
+    
+    .seat-grid::-webkit-scrollbar-thumb {
+        background: rgba(255, 214, 10, 0.3);
+        border-radius: 3px;
+    }
+    
+    .cinema-entrances {
+        height: 60px;
+        margin-top: 0.8rem;
+    }
+    
+    .entrance {
+        padding: 0.5rem 0.6rem;
+        gap: 0.2rem;
+    }
+    
+    .entrance-left {
+        left: 3%;
+    }
+    
+    .entrance-right {
+        right: 3%;
+    }
+    
+    .entrance img {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .entrance span {
+        font-size: 0.6rem;
+        letter-spacing: 0.8px;
+    }
+    
     .seat {
         width: 16px;
         height: 16px;
-        font-size: 0.3rem;
+        font-size: 0.28rem;
+        margin: 0.5px;
     }
     
     .seat.occupied::before {
-        font-size: 0.4rem;
+        font-size: 0.35rem;
     }
     
     .seat.accessible::before {
-        font-size: 0.3rem;
         width: 12px;
         height: 12px;
+    }
+    
+    .seat-row {
+        gap: 0.12rem;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+    }
+    
+    .seat-spacer {
+        width: 16px;
+        height: 16px;
+        margin: 0.5px;
+    }
+    
+    .vertical-divider {
+        margin: 0 0.15rem;
+    }
+    
+    .vertical-line {
+        width: 0.8px;
+        height: 16px;
+    }
+    
+    .seat-divider {
+        margin: 0.3rem 0;
+        padding: 0 0.3rem;
+    }
+    
+    .divider-line {
+        width: 95%;
+        height: 1px;
     }
     
     .seat-row {

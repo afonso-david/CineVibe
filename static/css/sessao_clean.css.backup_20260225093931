@@ -221,8 +221,6 @@ main {
     font-weight: 700;
     line-height: 1.1;
     margin-bottom: 2rem;
-    text-decoration: none;
-    border: none;
 }
 
 .title-line {
@@ -238,9 +236,6 @@ main {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-decoration: none;
-    border: none;
-    box-shadow: none;
 }
 
 .hero-subtitle {
@@ -759,7 +754,7 @@ main {
     }
     
     .hero-content {
-        padding: 2rem 2rem;
+        padding: 2rem 1.5rem;
         max-width: 90%;
     }
     
@@ -784,18 +779,13 @@ main {
         align-items: center;
         gap: 1rem;
         width: 100%;
-        padding: 0;
     }
     
     .btn-primary,
     .btn-secondary {
-        width: calc(100% - 2rem);
-        max-width: 100%;
+        width: 100%;
+        max-width: 400px;
         justify-content: center;
-        padding: 12px 20px;
-        font-size: 0.95rem;
-        box-sizing: border-box;
-        margin: 0 1rem;
     }
     
     .card-content {
@@ -841,7 +831,7 @@ main {
     }
     
     .hero-content {
-        padding: 1.5rem 1.5rem;
+        padding: 1.5rem 1rem;
         max-width: 95%;
     }
     
@@ -870,20 +860,14 @@ main {
     .hero-buttons {
         width: 100%;
         gap: 0.8rem;
-        padding: 0;
-        flex-direction: column;
-        align-items: center;
     }
     
     .btn-primary,
     .btn-secondary {
-        width: calc(100% - 1rem);
-        max-width: 100%;
-        padding: 12px 16px;
-        font-size: 0.85rem;
-        box-sizing: border-box;
-        justify-content: center;
-        margin: 0 0.5rem;
+        width: 100%;
+        max-width: 350px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
     
     .stat-number {
@@ -1109,71 +1093,6 @@ main {
     transform: translateX(0);
   }
   
-  .options-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding: 0 1rem;
-  }
-  
-  .option-card {
-    max-width: 100%;
-  }
-  
-  .card-title {
-    font-size: 1.8rem;
-  }
-  
-  .card-description {
-    font-size: 1rem;
-  }
-  
-  .card-footer {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .price {
-    font-size: 2rem;
-  }
-  
-  .card-btn {
-    padding: 14px 24px;
-    font-size: 0.9rem;
-  }
-  
-  .cta-btn {
-    width: 100%;
-    max-width: 400px;
-    justify-content: center;
-  }
-  
-  .newsletter-section {
-    text-align: center;
-    grid-column: span 1;
-    padding: 25px;
-    margin-top: 10px;
-  }
-  
-  .footer-bottom-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-  }
-  
-  .legal-links {
-    justify-content: center;
-    gap: 15px;
-  }
-  
-  .footer-certifications {
-    justify-content: center;
-  }
-  
-  .footer-bottom-container {
-    padding: 0 20px;
-  }
-}
   .newsletter-section {
     text-align: center;
     grid-column: span 1;
@@ -1262,11 +1181,65 @@ main {
     padding-left: 35px;
   }
   
-  .hero-section {
-    height: 100vh;
-    min-height: 550px;
+  .hamburger-menu.active span:nth-child(1) {
+    transform: translateY(8.75px) rotate(45deg);
   }
-
+  
+  .hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-8.75px) rotate(-45deg);
+  }
+  
+  .nav-center {
+    width: 260px;
+    padding: 70px 0 20px 0;
+  }
+  
+  .nav-center a {
+    padding: 16px 25px;
+    font-size: 15px;
+  }
+  
+  .nav-center a:hover,
+  .nav-center a.active {
+    padding-left: 35px;
+  }
+  
+  .top-nav {
+    padding: 10px 15px;
+  }
+  
+  .logo {
+    width: 100px;
+  }
+  
+  .search-container input {
+    width: 150px;
+    font-size: 12px;
+    padding: 6px 30px 6px 10px;
+  }
+  
+  .search_icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .user-icon img {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .hero-section {
+    height: 60vh;
+    min-height: 450px;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
   
   .stat-number {
     font-size: 2rem;
@@ -1299,44 +1272,5 @@ main {
   .cta-subtitle {
     font-size: 0.9rem;
   }
-  
-  .card-footer {
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: flex-start;
-  }
-  
-  .price {
-    font-size: 1.8rem;
-  }
-  
-  .card-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 12px 20px;
-    font-size: 0.85rem;
-  }
-  
-  .cta-btn {
-    width: 100%;
-    max-width: 350px;
-    padding: 14px 24px;
-    font-size: 0.95rem;
-  }
-  
-  .container {
-    padding: 0 1rem;
-  }
-  
-  .options-grid {
-    gap: 2rem;
-  }
-  
-  .card-content {
-    padding: 1.2rem;
-  }
-  
-  .card-image {
-    height: 200px;
-  }
 }
+

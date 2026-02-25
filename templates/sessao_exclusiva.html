@@ -63,7 +63,6 @@
             
             <section class="hero-section">
                 <div class="hero-background" style="background-image: url('{{ url_for("static", filename="imgs/filmes/taxi-driver-filmi.jpg") }}');"></div>
-                <div class="hero-overlay"></div>
                 <div class="hero-content">
                     <h1 class="hero-title">Sessões Exclusivas</h1>
                     <p class="hero-subtitle">Experiências Cinematográficas de Luxo</p>
@@ -188,10 +187,10 @@
                                         <button class="btn-reservar" onclick="openReservaModal('{{ sala.nome.lower() }}', {{ sala.preco }})">
                                             {% if sala.nome.lower() == 'intimista' %}
                                                 <i class="fas fa-calendar-check"></i>
-                                                Reservar Agora
+                                                Reservar Sala
                                             {% elif sala.nome.lower() == 'vip' %}
                                                 <i class="fas fa-heart"></i>
-                                                Reservar Experiência
+                                                Reservar Sala
                                             {% elif sala.nome.lower() == 'premium' %}
                                                 <i class="fas fa-key"></i>
                                                 Reservar Sala
@@ -594,11 +593,13 @@
             
             
             document.getElementById('reservaExclusivaModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
         
         function fecharModalReserva() {
             document.getElementById('reservaExclusivaModal').style.display = 'none';
+            document.body.style.overflow = '';
             limparFormulario();
         }
 
@@ -757,7 +758,7 @@
         function closeMatrixModal() {
             const modal = document.getElementById('matrixModal');
             modal.classList.remove('show');
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = '';
             
             setTimeout(() => {
                 modal.style.display = 'none';

@@ -297,10 +297,7 @@ a {
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-}
-.sala-card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(255, 214, 10, 0.4);
+    height: auto;
 }
 .sala-card.featured {
     border: 2px solid var(--primary-gold);
@@ -315,10 +312,6 @@ a {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-.sala-card:hover .sala-image img {
-    transform: scale(1.05);
 }
 .sala-badge {
     position: absolute;
@@ -350,16 +343,21 @@ a {
     display: none;
 }
 .sala-content {
-    padding: 2.5rem;
+    padding: 0;
     display: flex;
     flex-direction: column;
     flex: 1;
+    box-sizing: border-box;
 }
 
 .sala-info {
     flex: 1;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem 2rem;
+    box-sizing: border-box;
 }
 .sala-title {
     font-family: 'Playfair Display', serif;
@@ -375,9 +373,15 @@ a {
     font-size: 0.95rem;
     line-height: 1.6;
     font-weight: 400;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
 }
 .sala-features {
-    margin-bottom: auto;
+    flex: 1;
     margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -390,16 +394,10 @@ a {
     color: rgba(255, 255, 255, 0.8);
     padding: 0.8rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.3s ease;
 }
 
 .feature:last-child {
     border-bottom: none;
-}
-
-.feature:hover {
-    color: #FFD60A;
-    padding-left: 10px;
 }
 .feature-icon {
     width: 20px;
@@ -419,8 +417,8 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1.5rem;
-    margin-top: 2rem;
+    padding: 1.5rem 2rem 1rem 2rem;
+    margin-top: auto;
     border-top: 2px solid rgba(255, 214, 10, 0.2);
 }
 

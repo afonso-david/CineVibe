@@ -185,19 +185,8 @@
                                             <div class="price-period">por sessão</div>
                                         </div>
                                         <button class="btn-reservar" onclick="openReservaModal('{{ sala.nome.lower() }}', {{ sala.preco }})">
-                                            {% if sala.nome.lower() == 'intimista' %}
-                                                <i class="fas fa-calendar-check"></i>
-                                                Reservar Sala
-                                            {% elif sala.nome.lower() == 'vip' %}
-                                                <i class="fas fa-heart"></i>
-                                                Reservar Sala
-                                            {% elif sala.nome.lower() == 'premium' %}
-                                                <i class="fas fa-key"></i>
-                                                Reservar Sala
-                                            {% else %}
-                                                <i class="fas fa-calendar-check"></i>
-                                                Reservar
-                                            {% endif %}
+                                            <i class="fas fa-calendar-check"></i>
+                                            Reservar Agora
                                         </button>
                                     </div>
                                 </div>

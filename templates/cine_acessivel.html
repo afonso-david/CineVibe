@@ -11,8 +11,6 @@
 <body>
     <div class="page-wrapper">
         
-        <a href="#main-content" class="skip-link">Saltar para o conteúdo principal</a>
-
         <header>
             <div class="top-nav">
                 <div class="nav-left">
@@ -25,17 +23,17 @@
                 </div>
                 <div class="nav-right">
                     <div class="search-container">
-                        <input type="text" placeholder="Procurar..." id="searchInput" aria-label="Campo de pesquisa">
-                        <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="" class="search_icon" role="presentation">
+                        <input type="text" placeholder="Procurar Menus..." id="searchInput">
+                        <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
                     </div>
                     <div class="user-icon">
                         {% if logged_in %}
-                            <a href="{{ url_for('perfil') }}" aria-label="Ir para o perfil">
-                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil do utilizador">
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
                             </a>
                         {% else %}
-                            <a href="{{ url_for('login') }}" aria-label="Fazer login">
-                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Ícone de login">
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
                             </a>
                         {% endif %}
                     </div>
@@ -43,11 +41,11 @@
             </div>
         </header>
 
-        <nav class="nav-center" id="navMenu" role="navigation" aria-label="Navegação principal">
+        <nav class="nav-center" id="navMenu">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('filmes') }}">Filmes</a>
             <a href="{{ url_for('cinemas') }}">Cinemas</a>
-            <a href="{{ url_for('cine_acessivel') }}" class="active" aria-current="page">CineAcessível</a>
+            <a href="{{ url_for('cine_acessivel') }}"class = "active">CineAcessível</a>
             <a href="{{ url_for('bar') }}">Bar</a>
             <a href="{{ url_for('beneficios') }}">Benefícios</a>
             <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>

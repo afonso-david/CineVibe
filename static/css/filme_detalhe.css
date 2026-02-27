@@ -1166,7 +1166,6 @@ a {
   background: linear-gradient(135deg, #FFD60A, #FFB703);
   color: #0D1B2A;
   border-color: #FFD60A;
-  box-shadow: 0 6px 20px rgba(255, 214, 10, 0.4);
   transform: translateY(-2px);
 }
 
@@ -1201,13 +1200,11 @@ a {
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(78, 168, 222, 0.3);
 }
 
 .hora-btn:hover {
   background: linear-gradient(135deg, #3B91C0, #2A7AA8);
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(78, 168, 222, 0.5);
   border-color: rgba(78, 168, 222, 0.5);
 }
 
@@ -1215,7 +1212,6 @@ a {
   background: linear-gradient(135deg, #FFD60A, #FFB703);
   border-color: #FFD60A;
   color: #0D1B2A;
-  box-shadow: 0 8px 25px rgba(255, 214, 10, 0.5);
   transform: translateY(-3px);
 }
 
@@ -2049,20 +2045,17 @@ a {
   margin-left: auto;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 8px 20px rgba(255, 214, 10, 0.4);
   white-space: nowrap;
 }
 
 #btn-comprar:hover {
   background: linear-gradient(135deg, #FFB703, #FF9500);
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(255, 214, 10, 0.5);
 }
 
 .hora-btn.selected {
     background-color: #FFD60A; 
     color: #0D1B2A;
-    box-shadow: 0 0 10px rgba(255, 214, 10, 0.8);
     transform: scale(1.05);
 }
 

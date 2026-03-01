@@ -1,5 +1,4 @@
 
-
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -20,7 +19,6 @@ a {
   justify-content: space-between;
   padding: 20px 25px;
   background: linear-gradient(to right, #0D1B2A, #1B263B);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   height: 55px;
   will-change: transform;
   backface-visibility: hidden;
@@ -103,8 +101,11 @@ a {
   display: flex;
   gap: 20px;
   background-color: #1E2A3A;
-  padding: 12px 25px;
+  padding: 12px 25px !important;
   align-items: center;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -115,8 +116,8 @@ a {
   color: #fff;
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  padding: 5px 15px;
+  font-size: 16px !important;
+  padding: 5px 15px !important;
   border-radius: 4px;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -151,6 +152,10 @@ a {
   color: #4EA8DE;
 }
 
+.nav-center a:focus {
+  outline: none !important;
+  border: none !important;
+}
 .nav-right {
   display: flex;
   align-items: center;

@@ -1,6 +1,6 @@
-Ôªø{% extends "admin_base.html" %}
+{% extends "admin_base.html" %}
 
-{% block title %}Avalia√ß√µes: {{ filme.titulo }} - CineVibe Admin{% endblock %}
+{% block title %}AvaliaÁıes: {{ filme.titulo }} - CineVibe Admin{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_filme_detalhe.css') }}">
@@ -256,8 +256,8 @@
                 <img src="{{ url_for('static', filename=filme.poster_url) }}" alt="{{ filme.titulo }}" class="filme-poster-mini">
             {% endif %}
             <div class="filme-info">
-                <h1>Avalia√ß√µes: {{ filme.titulo }}</h1>
-                <p>Gest√£o de avalia√ß√µes dos utilizadores</p>
+                <h1>AvaliaÁıes: {{ filme.titulo }}</h1>
+                <p>Gest„o de avaliaÁıes dos utilizadores</p>
             </div>
         </div>
         <button onclick="window.close()" class="btn btn-secondary">
@@ -268,23 +268,23 @@
     <div class="stats-resumo">
         <div class="stat-card">
             <span class="stat-number">{{ "%.1f"|format(stats.rating_medio or 0) }}</span>
-            <div class="stat-label">Rating M√©dio</div>
+            <div class="stat-label">Rating MÈdio</div>
         </div>
         <div class="stat-card">
             <span class="stat-number">{{ stats.total_avaliacoes or 0 }}</span>
-            <div class="stat-label">Total de Avalia√ß√µes</div>
+            <div class="stat-label">Total de AvaliaÁıes</div>
         </div>
     </div>
 
     {% if stats.total_avaliacoes > 0 %}
     <div class="rating-breakdown">
-        <h3><i class="fas fa-chart-bar"></i> Distribui√ß√£o de Ratings</h3>
+        <h3><i class="fas fa-chart-bar"></i> DistribuiÁ„o de Ratings</h3>
         
         {% for rating in [5, 4, 3, 2, 1] %}
         {% set count = stats['rating_' + rating|string] or 0 %}
         {% set percentage = (count / stats.total_avaliacoes * 100) if stats.total_avaliacoes > 0 else 0 %}
         <div class="rating-bar">
-            <div class="rating-label">{{ rating }} ‚≠ê</div>
+            <div class="rating-label">{{ rating }} ?</div>
             <div class="bar-container">
                 <div class="bar-fill" style="width: {{ percentage }}%"></div>
             </div>
@@ -310,7 +310,7 @@
                     <div class="usuario-detalhes-full">
                         <h4>{{ avaliacao.usuario_nome }}</h4>
                         <div class="usuario-email">{{ avaliacao.email }}</div>
-                        <div class="data-avaliacao-full">{{ avaliacao.data_avaliacao.strftime('%d/%m/%Y √†s %H:%M') }}</div>
+                        <div class="data-avaliacao-full">{{ avaliacao.data_avaliacao.strftime('%d/%m/%Y ‡s %H:%M') }}</div>
                     </div>
                 </div>
                 <div class="rating-stars-full">
@@ -320,7 +320,7 @@
                     <span class="rating-numero-full">{{ avaliacao.rating }}/5</span>
                 </div>
                 <div class="avaliacao-actions-full">
-                    <button onclick="removerAvaliacaoCompleta({{ avaliacao.id }})" class="btn-remove-avaliacao-full" title="Remover avalia√ß√£o">
+                    <button onclick="removerAvaliacaoCompleta({{ avaliacao.id }})" class="btn-remove-avaliacao-full" title="Remover avaliaÁ„o">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -329,7 +329,7 @@
                 {% if avaliacao.comentario %}
                     <p>{{ avaliacao.comentario }}</p>
                 {% else %}
-                    <p class="sem-comentario">Sem coment√°rio</p>
+                    <p class="sem-comentario">Sem coment·rio</p>
                 {% endif %}
             </div>
         </div>
@@ -340,16 +340,16 @@
         <div class="empty-icon">
             <i class="fas fa-star-half-alt"></i>
         </div>
-        <h4>Nenhuma avalia√ß√£o encontrada</h4>
-        <p>Este filme ainda n√£o recebeu avalia√ß√µes dos utilizadores.</p>
+        <h4>Nenhuma avaliaÁ„o encontrada</h4>
+        <p>Este filme ainda n„o recebeu avaliaÁıes dos utilizadores.</p>
     </div>
     {% endif %}
 </div>
 
 <script>
-// Fun√ß√£o para remover avalia√ß√£o na p√°gina completa
+// FunÁ„o para remover avaliaÁ„o na p·gina completa
 function removerAvaliacaoCompleta(avaliacaoId) {
-    if (confirm('Tem certeza que deseja remover esta avalia√ß√£o?')) {
+    if (confirm('Tem certeza que deseja remover esta avaliaÁ„o?')) {
         fetch(`/admin/avaliacoes/${avaliacaoId}/remover`, {
             method: 'POST',
             headers: {
@@ -359,14 +359,14 @@ function removerAvaliacaoCompleta(avaliacaoId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Avalia√ß√£o removida com sucesso!');
+                alert('AvaliaÁ„o removida com sucesso!');
                 location.reload();
             } else {
-                alert('Erro ao remover avalia√ß√£o: ' + data.message);
+                alert('Erro ao remover avaliaÁ„o: ' + data.message);
             }
         })
         .catch(error => {
-            alert('Erro ao remover avalia√ß√£o: ' + error.message);
+            alert('Erro ao remover avaliaÁ„o: ' + error.message);
         });
     }
 }

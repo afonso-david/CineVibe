@@ -19,7 +19,6 @@ a {
   justify-content: space-between;
   padding: 20px 25px;
   background: linear-gradient(to right, #0D1B2A, #1B263B);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   height: 55px;
   will-change: transform;
   backface-visibility: hidden;
@@ -102,8 +101,11 @@ a {
   display: flex;
   gap: 20px;
   background-color: #1E2A3A;
-  padding: 12px 25px;
+  padding: 12px 25px !important;
   align-items: center;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -114,8 +116,8 @@ a {
   color: #fff;
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  padding: 5px 15px;
+  font-size: 16px !important;
+  padding: 5px 15px !important;
   border-radius: 4px;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -150,6 +152,10 @@ a {
   color: #4EA8DE;
 }
 
+.nav-center a:focus {
+  outline: none !important;
+  border: none !important;
+}
 .nav-right {
   display: flex;
   align-items: center;
@@ -269,7 +275,6 @@ a {
     font-family: 'Montserrat', sans-serif;
     line-height: 1.1;
     position: relative;
-    text-shadow: 0 4px 20px rgba(255, 214, 10, 0.3);
 }
 
 .discover-text h2::after {
@@ -300,7 +305,6 @@ a {
     margin-bottom: 60px;
     opacity: 0.95;
     font-weight: 400;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .cinema-stats {
@@ -360,7 +364,6 @@ a {
     font-family: 'Montserrat', sans-serif;
     margin-bottom: 12px;
     line-height: 1;
-    text-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
     animation: countUp 2s ease-out;
 }
 
@@ -442,17 +445,11 @@ a {
     overflow: hidden;
     transform: rotate(2deg);
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 
-        0 25px 60px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(255, 214, 10, 0.1);
     border: 3px solid rgba(255, 214, 10, 0.2);
 }
 
 .image-frame:hover {
     transform: rotate(0deg) scale(1.08) translateY(-10px);
-    box-shadow: 
-        0 35px 80px rgba(0, 0, 0, 0.6),
-        0 0 60px rgba(255, 214, 10, 0.2);
 }
 
 .image-frame img {
@@ -764,7 +761,6 @@ a {
 .movie-card:hover {
     transform: translateY(-10px);
     border-color: #FFD60A;
-    box-shadow: 0 15px 40px rgba(255, 214, 10, 0.2);
 }
 
 .movie-poster {
@@ -1061,7 +1057,6 @@ a {
   margin: 0;
   font-size: 2rem;
   color: #FFD60A;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .footer-description {
@@ -1112,7 +1107,6 @@ a {
 
 .footer-social a:hover {
   transform: translateY(-4px) scale(1.15);
-  box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
 }
@@ -1180,7 +1174,6 @@ a {
   border: 1px solid rgba(255, 214, 10, 0.2);
   position: relative;
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .newsletter-section::before {
@@ -1213,7 +1206,6 @@ a {
   gap: 0;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1270,7 +1262,6 @@ a {
 .newsletter-input-group button:hover {
     background: linear-gradient(135deg, #FFB703, #FF9500);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
 }
 
 .footer-contact {
@@ -1588,14 +1579,12 @@ a {
     font-size: 4rem;
     font-weight: 900;
     margin: 0 0 15px 0;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
     font-family: 'Montserrat', sans-serif;
 }
 
 .hero-info p {
     font-size: 1.4rem;
     margin: 0 0 20px 0;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
     opacity: 0.9;
 }
 
@@ -1700,7 +1689,6 @@ a {
     color: #4EA8DE;
     margin-bottom: 15px;
     font-family: 'Montserrat', sans-serif;
-    text-shadow: 0 2px 10px rgba(78, 168, 222, 0.2);
 }
 
 .experiences-section .section-header p {
@@ -1881,7 +1869,6 @@ a {
     height: 8px;
     background: #FFD60A;
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .section-description-elegant {
@@ -1915,9 +1902,6 @@ a {
     border: 2px solid rgba(255, 214, 10, 0.2);
     position: relative;
     backdrop-filter: blur(20px);
-    box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     min-height: 550px;
     display: flex;
     flex-direction: column;
@@ -1945,9 +1929,6 @@ a {
 
 .nav-card-premium:hover {
     transform: translateY(-20px) scale(1.02);
-    box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 214, 10, 0.5);
 }
 
@@ -2029,13 +2010,11 @@ a {
     font-size: 1.2rem;
     font-weight: 600;
     z-index: 3;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     transition: all 0.4s ease;
 }
 
 .nav-card-premium:hover .floating-icon {
     transform: scale(1.1) rotate(10deg);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
 }
 
 .nav-card-content-premium {
@@ -2077,7 +2056,6 @@ a {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .nav-card-content-premium p {
@@ -2161,7 +2139,6 @@ a {
 .nav-card:hover .nav-card-arrow {
     transform: translateX(15px);
     color: #FFD60A;
-    text-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
 }
 
 .nav-card:hover .nav-card-arrow::before {
@@ -2170,15 +2147,10 @@ a {
 
 @keyframes cardPulse {
     0%, 100% {
-        box-shadow: 
-            0 10px 30px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transform: scale(1);
     }
     50% {
-        box-shadow: 
-            0 15px 35px rgba(0, 0, 0, 0.35),
-            0 0 20px rgba(255, 214, 10, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        transform: scale(1.01);
     }
 }
 
@@ -2629,7 +2601,6 @@ a {
         z-index: 999;
         transition: left 0.3s ease;
         overflow-y: auto;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
     }
     
     .nav-center.mobile-active {

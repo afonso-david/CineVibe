@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineAcessível | CineVibe</title>
+    <style>
+        .banner { visibility: hidden; }
+        .banner.loaded { visibility: visible; }
+    </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/acessivel.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
@@ -57,7 +61,7 @@
         <main id="main-content">
             
             <section class="banner" role="banner">
-                <img src="{{ url_for('static', filename='imgs/cineacessivel.png') }}" alt="Imagem representativa do CineAcessível - cinema inclusivo para todos">
+                <img src="{{ url_for('static', filename='imgs/cineacessivel.png') }}" alt="">
                 <div class="banner-content">
                     <h1>CineAcessível</h1>
                     <p>O cinema é para todos. Descubra as nossas soluções de acessibilidade que tornam a experiência cinematográfica inclusiva e acessível a pessoas com diferentes necessidades.</p>
@@ -347,6 +351,7 @@
             }, 1000);
         }
         document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.banner').classList.add('loaded');
             announceToScreenReader('Página CineAcessível carregada. Use Tab para navegar pelos recursos de acessibilidade.');
             const interactiveElements = document.querySelectorAll('a, button, input, select, textarea');
             interactiveElements.forEach(element => {

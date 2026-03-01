@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Admin - CineVibe{% endblock %}</title>
     
+    <style>
+        html { visibility: hidden; background: #0D1B2A; }
+        html.loaded { visibility: visible; }
+    </style>
+    
     <link rel="preload" href="{{ url_for('static', filename='css/admin_dashboard.css') }}" as="style">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     {% block extra_css %}{% endblock %}
+    
+    <script>
+        document.documentElement.className = 'loaded';
+    </script>
 </head>
 <body>
     <div class="admin-layout">
@@ -21,7 +30,7 @@
                     <i class="fas fa-chart-bar"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ url_for('admin_filmes') }}" class="nav-item {% if request.endpoint == 'admin_filmes' %}active{% endif %}">
+                <a href="{{ url_for('admin_filmes') }}" class="nav-item {% if request.endpoint == 'admin_filmes' or request.endpoint == 'admin_filme_detalhe' %}active{% endif %}">
                     <i class="fas fa-film"></i>
                     <span>Filmes</span>
                 </a>
@@ -129,9 +138,5 @@
     </div>
 
     {% block scripts %}{% endblock %}
-    
-    <script>
-        document.documentElement.classList.add('loaded');
-    </script>
 </body>
 </html>

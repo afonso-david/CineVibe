@@ -36,8 +36,11 @@ a {
   display: flex;
   gap: 20px;
   background-color: #1E2A3A;
-  padding: 12px 25px;
+  padding: 12px 25px !important;
   align-items: center;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -47,8 +50,8 @@ a {
   color: #fff;
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  padding: 5px 15px;
+  font-size: 16px !important;
+  padding: 5px 15px !important;
   border-radius: 4px;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -78,6 +81,12 @@ v-center a:hover::after,
 .nav-center a.active {
   color: #4EA8DE;
 }
+
+.nav-center a:focus {
+  outline: none !important;
+  border: none !important;
+}
+
 .nav-right {
   display: flex;
   align-items: center;
@@ -884,21 +893,26 @@ v-center a:hover::after,
 }
 @media (max-width: 480px) {
   .filmes-titulos {
-    flex-direction: column;
-    gap: 20px;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 10px;
     margin: 20px 0;
     text-align: center;
   }
   .filmes-titulos h1 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
   .filtros {
-    padding: 15px 20px;
-    gap: 10px;
+    padding: 10px 15px;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   .filtros label {
-    padding: 10px 15px;
-    font-size: 12px;
+    padding: 6px 10px;
+    font-size: 10px;
+    border-radius: 15px;
+    flex: 0 0 auto;
   }
   .filmes-lista {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

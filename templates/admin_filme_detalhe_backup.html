@@ -1,4 +1,4 @@
-Ôªø{% extends "admin_base.html" %}
+{% extends "admin_base.html" %}
 
 {% block title %}Editar Filme: {{ filme.titulo }} - CineVibe Admin{% endblock %}
 
@@ -13,7 +13,7 @@
     <div class="page-header">
         <div class="header-left">
             <h1><i class="fas fa-film"></i> {{ filme.titulo }}</h1>
-            <p class="subtitle">Edi√ß√£o de Filme</p>
+            <p class="subtitle">EdiÁ„o de Filme</p>
         </div>
         <div class="header-actions">
             <button onclick="window.history.back()" class="btn btn-secondary">
@@ -48,7 +48,7 @@
             <div class="filme-info">
                 <div class="info-grid">
                     <div class="info-group">
-                        <label>T√≠tulo</label>
+                        <label>TÌtulo</label>
                         <input type="text" id="titulo" value="{{ filme.titulo }}" class="form-input">
                     </div>
                     
@@ -58,12 +58,12 @@
                     </div>
                     
                     <div class="info-group">
-                        <label>Dura√ß√£o (min)</label>
+                        <label>DuraÁ„o (min)</label>
                         <input type="number" id="duracao" value="{{ filme.duracao or '' }}" class="form-input">
                     </div>
                     
                     <div class="info-group">
-                        <label>Data de Lan√ßamento</label>
+                        <label>Data de LanÁamento</label>
                         <input type="date" id="data_lancamento" value="{{ filme.data_lancamento or '' }}" class="form-input">
                     </div>
                     
@@ -84,7 +84,7 @@
                     <div class="info-group">
                         <label>Estado</label>
                         <select id="estado" class="form-select">
-                            <option value="em_exibicao" {% if filme.estado == 'em_exibicao' %}selected{% endif %}>Em Exibi√ß√£o</option>
+                            <option value="em_exibicao" {% if filme.estado == 'em_exibicao' %}selected{% endif %}>Em ExibiÁ„o</option>
                             <option value="brevemente" {% if filme.estado == 'brevemente' %}selected{% endif %}>Em Breve</option>
                             <option value="fora_cartaz" {% if filme.estado == 'fora_cartaz' %}selected{% endif %}>Fora de Cartaz</option>
                         </select>
@@ -96,14 +96,14 @@
                     </div>
 
                     <div class="info-group full-width">
-                        <label>G√©neros</label>
+                        <label>GÈneros</label>
                         <div class="generos-section">
                             {% if generos_filme %}
                             <div class="generos-grid">
                                 {% for genero in generos_filme %}
                                 <div class="genero-tag" data-genero-id="{{ genero.id }}">
                                     <span class="genero-nome">{{ genero.nome }}</span>
-                                    <button onclick="removeGeneroFromMovie({{ genero.id }}, {{ genero.nome|tojson }})" class="btn-remove-genero" title="Remover g√©nero">
+                                    <button onclick="removeGeneroFromMovie({{ genero.id }}, {{ genero.nome|tojson }})" class="btn-remove-genero" title="Remover gÈnero">
                                         <i class="fas fa-times"></i>
                                     </button>
                                 </div>
@@ -111,11 +111,11 @@
                             </div>
                             {% else %}
                             <div class="no-generos">
-                                <span class="no-generos-text">Nenhum g√©nero associado</span>
+                                <span class="no-generos-text">Nenhum gÈnero associado</span>
                             </div>
                             {% endif %}
                             <button onclick="openAddGeneroModal()" class="btn-add-genero">
-                                <i class="fas fa-plus"></i> Adicionar G√©nero
+                                <i class="fas fa-plus"></i> Adicionar GÈnero
                             </button>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
 
         <div class="section">
             <h3><i class="fas fa-align-left"></i> Sinopse</h3>
-            <textarea id="sinopse" class="form-textarea" rows="4" placeholder="Descri√ß√£o do filme...">{{ filme.sinopse or '' }}</textarea>
+            <textarea id="sinopse" class="form-textarea" rows="4" placeholder="DescriÁ„o do filme...">{{ filme.sinopse or '' }}</textarea>
         </div>
 
         <div class="section">
@@ -148,7 +148,7 @@
                     {% endif %}
                     <div class="ator-info">
                         <h4>{{ ator.nome }}</h4>
-                        <p>{{ ator.papel or 'Papel n√£o definido' }}</p>
+                        <p>{{ ator.papel or 'Papel n„o definido' }}</p>
                     </div>
                     <div class="ator-actions">
                         <button onclick="editActor({{ ator.id }}, {{ ator.nome|tojson }}, {{ (ator.papel or '')|tojson }})" class="btn-edit">
@@ -165,7 +165,7 @@
 
         <div class="section">
             <div class="section-header">
-                <h3><i class="fas fa-building"></i> Cinemas em Exibi√ß√£o</h3>
+                <h3><i class="fas fa-building"></i> Cinemas em ExibiÁ„o</h3>
                 <button onclick="openAddCinemaModal()" class="btn btn-secondary">
                     <i class="fas fa-plus"></i> Adicionar Cinema
                 </button>
@@ -190,7 +190,7 @@
 
                     <div class="sessoes-container">
                         <div class="sessoes-header">
-                            <p><strong>Tipos de Sess√£o:</strong></p>
+                            <p><strong>Tipos de Sess„o:</strong></p>
                             <button onclick="gerenciarSessoes({{ cinema.id }}, {{ cinema.nome|tojson }})" class="btn btn-secondary btn-sm">
                                 <i class="fas fa-plus"></i> Adicionar Tipo
                             </button>
@@ -207,7 +207,7 @@
                                 </button>
                                 {% endfor %}
                             {% else %}
-                                <p class="no-tipos-sessao">Nenhum tipo de sess√£o dispon√≠vel para este cinema.</p>
+                                <p class="no-tipos-sessao">Nenhum tipo de sess„o disponÌvel para este cinema.</p>
                             {% endif %}
                         </div>
 
@@ -238,7 +238,7 @@
                     <i class="fas fa-building"></i>
                 </div>
                 <h4>Nenhum cinema associado</h4>
-                <p>Este filme ainda n√£o est√° sendo exibido em nenhum cinema. Clique em "Adicionar Cinema" para associar cinemas a este filme.</p>
+                <p>Este filme ainda n„o est· sendo exibido em nenhum cinema. Clique em "Adicionar Cinema" para associar cinemas a este filme.</p>
                 <button onclick="openAddCinemaModal()" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Adicionar Primeiro Cinema
                 </button>
@@ -248,20 +248,20 @@
 
         <div class="section">
             <div class="section-header">
-                <h3><i class="fas fa-star"></i> Avalia√ß√µes</h3>
+                <h3><i class="fas fa-star"></i> AvaliaÁıes</h3>
                 <div class="avaliacoes-stats">
                     <span class="rating-medio">
                         <i class="fas fa-star"></i> 
                         <span id="rating-medio">{{ "%.1f"|format(filme.rating_medio or 0) }}</span>
                     </span>
                     <span class="total-avaliacoes">
-                        ({{ filme.total_avaliacoes or 0 }} avalia√ß√µes)
+                        ({{ filme.total_avaliacoes or 0 }} avaliaÁıes)
                     </span>
                 </div>
             </div>
 
             <div class="avaliacoes-externas">
-                <h4><i class="fas fa-external-link-alt"></i> Links de Avalia√ß√µes Externas</h4>
+                <h4><i class="fas fa-external-link-alt"></i> Links de AvaliaÁıes Externas</h4>
                 <div class="external-ratings-grid">
                     <div class="info-group">
                         <label>
@@ -306,7 +306,7 @@
                             <span class="rating-numero">{{ avaliacao.rating }}/5</span>
                         </div>
                         <div class="avaliacao-actions">
-                            <button onclick="removerAvaliacao({{ avaliacao.id }})" class="btn-remove-avaliacao" title="Remover avalia√ß√£o">
+                            <button onclick="removerAvaliacao({{ avaliacao.id }})" class="btn-remove-avaliacao" title="Remover avaliaÁ„o">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -323,7 +323,7 @@
             {% if filme.total_avaliacoes > 5 %}
             <div class="ver-mais-avaliacoes">
                 <button onclick="verTodasAvaliacoes()" class="btn btn-secondary">
-                    <i class="fas fa-eye"></i> Ver todas as {{ filme.total_avaliacoes }} avalia√ß√µes
+                    <i class="fas fa-eye"></i> Ver todas as {{ filme.total_avaliacoes }} avaliaÁıes
                 </button>
             </div>
             {% endif %}
@@ -333,8 +333,8 @@
                 <div class="empty-icon">
                     <i class="fas fa-star-half-alt"></i>
                 </div>
-                <h4>Nenhuma avalia√ß√£o ainda</h4>
-                <p>Este filme ainda n√£o recebeu avalia√ß√µes dos utilizadores.</p>
+                <h4>Nenhuma avaliaÁ„o ainda</h4>
+                <p>Este filme ainda n„o recebeu avaliaÁıes dos utilizadores.</p>
             </div>
             {% endif %}
         </div>
@@ -374,7 +374,7 @@
             </div>
             <div class="form-group">
                 <label>Papel no Filme</label>
-                <input type="text" id="actorRole" class="form-input" placeholder="Ex: Protagonista, Vil√£o...">
+                <input type="text" id="actorRole" class="form-input" placeholder="Ex: Protagonista, Vil„o...">
             </div>
         </div>
         <div class="modal-footer">
@@ -402,7 +402,7 @@
                     {% endfor %}
                 </select>
                 <div style="margin-top: 8px; color: #888; font-size: 0.85rem;">
-                    <i class="fas fa-info-circle"></i> Mantenha Ctrl pressionado para selecionar m√∫ltiplos cinemas
+                    <i class="fas fa-info-circle"></i> Mantenha Ctrl pressionado para selecionar m˙ltiplos cinemas
                 </div>
                 <div id="selectedCinemasInfo" style="margin-top: 8px; font-size: 0.9rem; font-weight: 500;">
                     Nenhum cinema selecionado
@@ -419,7 +419,7 @@
 <div id="modalGerirSessoes" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Gerir Sess√µes</h3>
+            <h3>Gerir Sessıes</h3>
             <button onclick="fecharModalSessoes()" class="modal-close">
                 <i class="fas fa-times"></i>
             </button>
@@ -430,7 +430,7 @@
             </div>
             
             <div class="sessoes-disponiveis">
-                <h4>Tipos de Sess√£o Dispon√≠veis:</h4>
+                <h4>Tipos de Sess„o DisponÌveis:</h4>
                 <div id="listaTiposSessao">
                     
                 </div>
@@ -445,16 +445,16 @@
 <div id="generoModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Adicionar G√™nero</h3>
+            <h3>Adicionar GÍnero</h3>
             <button onclick="closeGeneroModal()" class="modal-close">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label>G√™nero</label>
+                <label>GÍnero</label>
                 <select id="generoSelect" class="form-select">
-                    <option value="">Selecionar g√™nero</option>
+                    <option value="">Selecionar gÍnero</option>
                     {% for genero in todos_generos %}
                         <option value="{{ genero.id }}">{{ genero.nome }}</option>
                     {% endfor %}
@@ -838,8 +838,8 @@ function addCinemaToMovie() {
 function removeCinemaFromMovie(cinemaId) {
     console.log('removeCinemaFromMovie chamada com cinemaId:', cinemaId);
     
-    if (confirm('Tem certeza que deseja remover este cinema do filme?\n\nATEN√á√ÉO: Todas as sess√µes e reservas associadas a este cinema ser√£o removidas automaticamente.')) {
-        console.log('Enviando requisi√ß√£o para remover cinema...');
+    if (confirm('Tem certeza que deseja remover este cinema do filme?\n\nATEN«√O: Todas as sessıes e reservas associadas a este cinema ser„o removidas automaticamente.')) {
+        console.log('Enviando requisiÁ„o para remover cinema...');
         
         fetch(`/admin/filmes/{{ filme.id }}/remover-cinema/${cinemaId}`, {
             method: 'POST',
@@ -862,7 +862,7 @@ function removeCinemaFromMovie(cinemaId) {
                     cinemaElement.remove();
                     console.log('Elemento removido com sucesso');
                 } else {
-                    console.error('Elemento com data-cinema-id n√£o encontrado:', cinemaId);
+                    console.error('Elemento com data-cinema-id n„o encontrado:', cinemaId);
                     setTimeout(() => location.reload(), 1000);
                 }
             } else {
@@ -870,7 +870,7 @@ function removeCinemaFromMovie(cinemaId) {
             }
         })
         .catch(error => {
-            console.error('Erro na requisi√ß√£o:', error);
+            console.error('Erro na requisiÁ„o:', error);
             showNotification('Erro: ' + error.message, 'error');
         });
     }
@@ -888,7 +888,7 @@ function addGeneroToMovie() {
     const generoId = document.getElementById('generoSelect').value;
     
     if (!generoId) {
-        showNotification('Selecione um g√©nero', 'error');
+        showNotification('Selecione um gÈnero', 'error');
         return;
     }
     
@@ -902,7 +902,7 @@ function addGeneroToMovie() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification('G√©nero adicionado!', 'success');
+            showNotification('GÈnero adicionado!', 'success');
             closeGeneroModal();
             setTimeout(() => location.reload(), 1000);
         } else {
@@ -915,7 +915,7 @@ function addGeneroToMovie() {
 }
 
 function removeGeneroFromMovie(generoId, generoNome) {
-    if (confirm(`Tem certeza que deseja remover o g√©nero "${generoNome}" do filme?`)) {
+    if (confirm(`Tem certeza que deseja remover o gÈnero "${generoNome}" do filme?`)) {
         fetch(`/admin/filmes/{{ filme.id }}/remover-genero/${generoId}`, {
             method: 'POST',
             headers: {
@@ -925,7 +925,7 @@ function removeGeneroFromMovie(generoId, generoNome) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showNotification('G√©nero removido com sucesso!', 'success');
+                showNotification('GÈnero removido com sucesso!', 'success');
                 const generoElement = document.querySelector(`[data-genero-id="${generoId}"]`);
                 if (generoElement) {
                     generoElement.remove();
@@ -973,10 +973,10 @@ function carregarHorarios(cinemaId, tipoId) {
     const salasContainer = document.getElementById(`salas-${cinemaId}-${tipoId}`);
     
     if (!container) {
-        console.error(`Container horarios-${cinemaId}-${tipoId} n√£o encontrado`);
+        console.error(`Container horarios-${cinemaId}-${tipoId} n„o encontrado`);
         return;
     }
-    container.innerHTML = '<div class="loading-horarios"><i class="fas fa-spinner fa-spin"></i> Carregando hor√°rios...</div>';
+    container.innerHTML = '<div class="loading-horarios"><i class="fas fa-spinner fa-spin"></i> Carregando hor·rios...</div>';
     if (salasContainer) {
         salasContainer.innerHTML = '';
     }
@@ -986,12 +986,12 @@ function carregarHorarios(cinemaId, tipoId) {
             if (data.success && data.horarios) {
                 displayHorarios(data.horarios, container, salasContainer, cinemaId, tipoId);
             } else {
-                container.innerHTML = '<p style="color: #B8C5D1; text-align: center; padding: 20px;">Nenhum hor√°rio dispon√≠vel para este tipo de sess√£o.</p>';
+                container.innerHTML = '<p style="color: #B8C5D1; text-align: center; padding: 20px;">Nenhum hor·rio disponÌvel para este tipo de sess„o.</p>';
             }
         })
         .catch(error => {
-            console.error('Erro ao carregar hor√°rios:', error);
-            container.innerHTML = '<p style="color: #e74c3c; text-align: center; padding: 20px;">Erro ao carregar hor√°rios.</p>';
+            console.error('Erro ao carregar hor·rios:', error);
+            container.innerHTML = '<p style="color: #e74c3c; text-align: center; padding: 20px;">Erro ao carregar hor·rios.</p>';
         });
 }
 function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) {
@@ -1001,7 +1001,7 @@ function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) 
     }
     
     if (horarios.length === 0) {
-        container.innerHTML = '<p style="color: #B8C5D1; text-align: center; padding: 20px;">Nenhum hor√°rio dispon√≠vel para este tipo de sess√£o.</p>';
+        container.innerHTML = '<p style="color: #B8C5D1; text-align: center; padding: 20px;">Nenhum hor·rio disponÌvel para este tipo de sess„o.</p>';
         return;
     }
     const horariosPorHora = {};
@@ -1020,10 +1020,10 @@ function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) 
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'horario-actions';
         actionsDiv.innerHTML = `
-            <button onclick="editarHorario(${horariosGrupo[0].sessao_id}, '${hora}')" class="btn-edit-horario" title="Editar hor√°rio">
+            <button onclick="editarHorario(${horariosGrupo[0].sessao_id}, '${hora}')" class="btn-edit-horario" title="Editar hor·rio">
                 <i class="fas fa-edit"></i>
             </button>
-            <button onclick="removerHorario(${horariosGrupo[0].sessao_id})" class="btn-remove-horario" title="Remover hor√°rio">
+            <button onclick="removerHorario(${horariosGrupo[0].sessao_id})" class="btn-remove-horario" title="Remover hor·rio">
                 <i class="fas fa-trash"></i>
             </button>
         `;
@@ -1037,7 +1037,7 @@ function displayHorarios(horarios, container, salasContainer, cinemaId, tipoId) 
     });
     const addButton = document.createElement('button');
     addButton.className = 'btn btn-sm btn-primary add-horario-btn';
-    addButton.innerHTML = '<i class="fas fa-plus"></i> Adicionar Hor√°rio';
+    addButton.innerHTML = '<i class="fas fa-plus"></i> Adicionar Hor·rio';
     addButton.onclick = () => adicionarHorarioTipo(cinemaId, tipoId);
     container.appendChild(addButton);
     if (salasContainer) {
@@ -1065,8 +1065,8 @@ function gerenciarSessoes(cinemaId, cinemaName) {
     console.log('listaTipos encontrado:', listaTipos);
     
     if (!modal) {
-        console.error('Modal modalGerirSessoes n√£o encontrado');
-        alert('ERRO: Modal n√£o encontrado!');
+        console.error('Modal modalGerirSessoes n„o encontrado');
+        alert('ERRO: Modal n„o encontrado!');
         return;
     }
     
@@ -1076,8 +1076,8 @@ function gerenciarSessoes(cinemaId, cinemaName) {
     }
     
     if (listaTipos) {
-        listaTipos.innerHTML = '<p>Carregando tipos de sess√£o...</p>';
-        console.log('Carregando tipos de sess√£o...');
+        listaTipos.innerHTML = '<p>Carregando tipos de sess„o...</p>';
+        console.log('Carregando tipos de sess„o...');
         fetch('/admin/tipos-sessao/disponiveis')
             .then(response => {
                 console.log('Response status:', response.status);
@@ -1101,7 +1101,7 @@ function gerenciarSessoes(cinemaId, cinemaName) {
                     listaTipos.innerHTML = html;
                     console.log('HTML dos tipos gerado:', html);
                 } else {
-                    console.log('Usando fallback de tipos est√°ticos');
+                    console.log('Usando fallback de tipos est·ticos');
                     const tiposDisponiveis = [
                         { id: 1, nome: '2D' },
                         { id: 2, nome: '3D' },
@@ -1128,8 +1128,8 @@ function gerenciarSessoes(cinemaId, cinemaName) {
                 }
             })
             .catch(error => {
-                console.error('Erro ao buscar tipos de sess√£o:', error);
-                listaTipos.innerHTML = '<p style="color: #e74c3c;">Erro ao carregar tipos de sess√£o</p>';
+                console.error('Erro ao buscar tipos de sess„o:', error);
+                listaTipos.innerHTML = '<p style="color: #e74c3c;">Erro ao carregar tipos de sess„o</p>';
             });
     }
     
@@ -1150,12 +1150,12 @@ function adicionarHorarioTipo(cinemaId, tipoId) {
             if (data.success && data.horarios) {
                 mostrarModalAdicionarHorario(cinemaId, tipoId, data.horarios);
             } else {
-                showNotification('Erro ao carregar hor√°rios dispon√≠veis', 'error');
+                showNotification('Erro ao carregar hor·rios disponÌveis', 'error');
             }
         })
         .catch(error => {
-            console.error('Erro ao buscar hor√°rios:', error);
-            showNotification('Erro ao carregar hor√°rios: ' + error.message, 'error');
+            console.error('Erro ao buscar hor·rios:', error);
+            showNotification('Erro ao carregar hor·rios: ' + error.message, 'error');
         });
 }
 function mostrarModalAdicionarHorario(cinemaId, tipoId, horariosDisponiveis) {
@@ -1163,7 +1163,7 @@ function mostrarModalAdicionarHorario(cinemaId, tipoId, horariosDisponiveis) {
     modal.className = 'modal';
     modal.id = 'modalAdicionarHorario';
     
-    let optionsHtml = '<option value="">Selecionar hor√°rio</option>';
+    let optionsHtml = '<option value="">Selecionar hor·rio</option>';
     horariosDisponiveis.forEach(horario => {
         optionsHtml += `<option value="${horario.id}">${horario.hora}</option>`;
     });
@@ -1171,14 +1171,14 @@ function mostrarModalAdicionarHorario(cinemaId, tipoId, horariosDisponiveis) {
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Adicionar Hor√°rio</h3>
+                <h3>Adicionar Hor·rio</h3>
                 <button onclick="fecharModalAdicionarHorario()" class="modal-close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Hor√°rio</label>
+                    <label>Hor·rio</label>
                     <select id="horarioSelect" class="form-select">
                         ${optionsHtml}
                     </select>
@@ -1204,7 +1204,7 @@ function salvarNovoHorario(cinemaId, tipoId) {
     const horarioId = document.getElementById('horarioSelect').value;
     
     if (!horarioId) {
-        showNotification('Selecione um hor√°rio', 'error');
+        showNotification('Selecione um hor·rio', 'error');
         return;
     }
     
@@ -1221,7 +1221,7 @@ function salvarNovoHorario(cinemaId, tipoId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification('Hor√°rio adicionado com sucesso!', 'success');
+            showNotification('Hor·rio adicionado com sucesso!', 'success');
             fecharModalAdicionarHorario();
             carregarHorarios(cinemaId, tipoId);
         } else {
@@ -1239,12 +1239,12 @@ function editarHorario(sessaoId, horaAtual) {
             if (data.success && data.horarios) {
                 mostrarModalEditarHorario(sessaoId, horaAtual, data.horarios);
             } else {
-                showNotification('Erro ao carregar hor√°rios dispon√≠veis', 'error');
+                showNotification('Erro ao carregar hor·rios disponÌveis', 'error');
             }
         })
         .catch(error => {
-            console.error('Erro ao buscar hor√°rios:', error);
-            showNotification('Erro ao carregar hor√°rios: ' + error.message, 'error');
+            console.error('Erro ao buscar hor·rios:', error);
+            showNotification('Erro ao carregar hor·rios: ' + error.message, 'error');
         });
 }
 function mostrarModalEditarHorario(sessaoId, horaAtual, horariosDisponiveis) {
@@ -1261,14 +1261,14 @@ function mostrarModalEditarHorario(sessaoId, horaAtual, horariosDisponiveis) {
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Editar Hor√°rio</h3>
+                <h3>Editar Hor·rio</h3>
                 <button onclick="fecharModalEditarHorario()" class="modal-close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Hor√°rio</label>
+                    <label>Hor·rio</label>
                     <select id="editHorarioSelect" class="form-select">
                         ${optionsHtml}
                     </select>
@@ -1294,7 +1294,7 @@ function salvarEdicaoHorario(sessaoId) {
     const horarioId = document.getElementById('editHorarioSelect').value;
     
     if (!horarioId) {
-        showNotification('Selecione um hor√°rio', 'error');
+        showNotification('Selecione um hor·rio', 'error');
         return;
     }
     
@@ -1308,7 +1308,7 @@ function salvarEdicaoHorario(sessaoId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification('Hor√°rio atualizado com sucesso!', 'success');
+            showNotification('Hor·rio atualizado com sucesso!', 'success');
             fecharModalEditarHorario();
             setTimeout(() => location.reload(), 1000);
         } else {
@@ -1320,7 +1320,7 @@ function salvarEdicaoHorario(sessaoId) {
     });
 }
 function removerHorario(sessaoId) {
-    if (confirm('Tem certeza que deseja remover este hor√°rio?\n\nATEN√á√ÉO: Todas as reservas associadas a este hor√°rio ser√£o removidas automaticamente.')) {
+    if (confirm('Tem certeza que deseja remover este hor·rio?\n\nATEN«√O: Todas as reservas associadas a este hor·rio ser„o removidas automaticamente.')) {
         fetch(`/admin/sessoes/${sessaoId}/remover`, {
             method: 'POST',
             headers: {
@@ -1330,7 +1330,7 @@ function removerHorario(sessaoId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showNotification('Hor√°rio removido com sucesso!', 'success');
+                showNotification('Hor·rio removido com sucesso!', 'success');
                 setTimeout(() => location.reload(), 1000);
             } else {
                 showNotification('Erro: ' + data.message, 'error');
@@ -1344,7 +1344,7 @@ function removerHorario(sessaoId) {
 function adicionarTipoSessao(cinemaId, tipoId, tipoNome) {
     console.log('adicionarTipoSessao chamada:', { cinemaId, tipoId, tipoNome });
     
-    if (confirm(`Adicionar sess√µes do tipo "${tipoNome}" a este cinema?`)) {
+    if (confirm(`Adicionar sessıes do tipo "${tipoNome}" a este cinema?`)) {
         const formData = new FormData();
         formData.append('filme_id', {{ filme.id }});
         formData.append('cinema_id', cinemaId);
@@ -1357,7 +1357,7 @@ function adicionarTipoSessao(cinemaId, tipoId, tipoNome) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showNotification(`Tipo de sess√£o "${tipoNome}" adicionado com sucesso!`, 'success');
+                showNotification(`Tipo de sess„o "${tipoNome}" adicionado com sucesso!`, 'success');
                 setTimeout(() => {
                     fecharModalSessoes();
                     location.reload();
@@ -1367,12 +1367,12 @@ function adicionarTipoSessao(cinemaId, tipoId, tipoNome) {
             }
         })
         .catch(error => {
-            console.error('Erro ao adicionar tipo de sess√£o:', error);
-            showNotification('Erro de conex√£o: ' + error.message, 'error');
+            console.error('Erro ao adicionar tipo de sess„o:', error);
+            showNotification('Erro de conex„o: ' + error.message, 'error');
         });
     }
 }
-// Notifica√ß√µes
+// NotificaÁıes
 function showNotification(message, type) {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
@@ -1398,7 +1398,7 @@ function verTodasAvaliacoes() {
     window.open(`/admin/filmes/{{ filme.id }}/avaliacoes`, '_blank');
 }
 function removerAvaliacao(avaliacaoId) {
-    if (confirm('Tem certeza que deseja remover esta avalia√ß√£o?')) {
+    if (confirm('Tem certeza que deseja remover esta avaliaÁ„o?')) {
         fetch(`/admin/avaliacoes/${avaliacaoId}/remover`, {
             method: 'POST',
             headers: {
@@ -1408,14 +1408,14 @@ function removerAvaliacao(avaliacaoId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showNotification('Avalia√ß√£o removida com sucesso!', 'success');
+                showNotification('AvaliaÁ„o removida com sucesso!', 'success');
                 setTimeout(() => location.reload(), 1000);
             } else {
-                showNotification('Erro ao remover avalia√ß√£o: ' + data.message, 'error');
+                showNotification('Erro ao remover avaliaÁ„o: ' + data.message, 'error');
             }
         })
         .catch(error => {
-            showNotification('Erro ao remover avalia√ß√£o: ' + error.message, 'error');
+            showNotification('Erro ao remover avaliaÁ„o: ' + error.message, 'error');
         });
     }
 }

@@ -50,11 +50,21 @@
 
     <main role="main">
         
-        <div class="cinema-header">
+        <div class="cinema-hero">
             <a href="{{ url_for('cinemas') }}" class="back-link">← Voltar aos Cinemas</a>
-            <h1>{{ cinema.nome }}</h1>
-            <p class="location">{{ cinema.localizacao }}, {{ cinema.regiao }}</p>
-            <p class="films-count">{{ filmes|length }} filmes disponíveis</p>
+            
+            {% if cinema.imagem %}
+            <div class="cinema-hero-background">
+                <img src="{{ url_for('static', filename=cinema.imagem) }}" alt="{{ cinema.nome }}">
+                <div class="cinema-hero-overlay"></div>
+            </div>
+            {% endif %}
+            
+            <div class="cinema-hero-content">
+                <h1>{{ cinema.nome }}</h1>
+                <p class="location">{{ cinema.localizacao }}, {{ cinema.regiao }}</p>
+                <p class="films-count">{{ filmes|length }} filmes disponíveis</p>
+            </div>
         </div>
 
         <section class="filmes-titulos" role="tablist" aria-label="Filmes do cinema">
@@ -65,13 +75,14 @@
             
             <input type="radio" id="todos" name="genero" value="" checked>
             <label for="todos">Todos</label>
+            
         </section>
 
         <div class="filmes-grid">
             <div class="filmes-lista active">
                 {% for filme in filmes %}
                 <article class="filme-card" 
-                         data-genero="{{ filme.genero_nome|lower if filme.genero_nome else '' }}"
+                         data-genero="{{ filme.generos|lower if filme.generos else '' }}"
                          data-titulo="{{ filme.titulo|lower }}"
                          role="article"
                          aria-label="Filme: {{ filme.titulo }}">
@@ -92,7 +103,7 @@
                         <div class="filme-overlay">
                             <div class="filme-info">
                                 <h3 class="titulo">{{ filme.titulo }}</h3>
-                                <p class="genero">{{ filme.genero_nome or 'Género não especificado' }}</p>
+                                <p class="genero">{{ filme.generos or 'Género não especificado' }}</p>
                                 <p class="duracao">⏱️ {{ filme.duracao }}min</p>
                             </div>
                         </div>
@@ -112,30 +123,26 @@
         </div>
     </main>
 
-    <footer class="footer" role="contentinfo">
+    <footer class="footer">
         <div class="footer-main">
             <div class="footer-container">
-                
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
                         <h3>CineVibe</h3>
                     </div>
                     <p class="footer-description">
-                        A sua experiência cinematográfica completa no {{ cinema.nome }}. Descubra os melhores filmes em exibição com qualidade premium.
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
                     </p>
                     <div class="footer-social">
-                        <a href="#" aria-label="Seguir no Facebook">
-                            <img src="{{ url_for('static', filename='imgs/icons/facebook.png') }}" alt="Facebook">
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
                         </a>
-                        <a href="#" aria-label="Seguir no Instagram">
-                            <img src="{{ url_for('static', filename='imgs/icons/instagram.png') }}" alt="Instagram">
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
                         </a>
-                        <a href="#" aria-label="Seguir no Twitter">
-                            <img src="{{ url_for('static', filename='imgs/icons/twitter.png') }}" alt="Twitter">
-                        </a>
-                        <a href="#" aria-label="Canal no YouTube">
-                            <img src="{{ url_for('static', filename='imgs/icons/youtube.png') }}" alt="YouTube">
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
                         </a>
                     </div>
                 </div>
@@ -146,53 +153,47 @@
                         <li><a href="{{ url_for('home') }}">Início</a></li>
                         <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
                         <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
-                        <li><a href="{{ url_for('bar') }}">Bar & Snacks</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
                         <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h4>{{ cinema.nome }}</h4>
+                    <h4>Conta</h4>
                     <ul class="footer-links">
-                        <li>{{ cinema.localizacao }}</li>
-                        <li>{{ cinema.regiao }}</li>
-                        <li>{{ filmes|length }} filmes disponíveis</li>
-                        <li><a href="{{ url_for('cinemas') }}">Ver outros cinemas</a></li>
+                        <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                        <li><a href="{{ url_for('registo') }}">Registar</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Serviços Premium</h4>
-                    <ul class="footer-links">
-                        <li><a href="{{ url_for('sessao_exclusiva') }}">Sessões Exclusivas</a></li>
-                        <li><a href="{{ url_for('cine_acessivel') }}">Cinema Acessível</a></li>
-                        <li><a href="{{ url_for('beneficios') }}">Benefícios VIP</a></li>
-                        <li><a href="#">Reservas Online</a></li>
-                        <li><a href="#">App Mobile</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section newsletter-section">
-                    <h4>Newsletter Exclusiva</h4>
-                    <p>Seja o primeiro a saber sobre estreias e promoções especiais no {{ cinema.nome }}.</p>
-                    <form class="newsletter-form" aria-label="Subscrever newsletter">
-                        <div class="newsletter-input-group">
-                            <input type="email" placeholder="O seu melhor email" required aria-label="Email para newsletter">
-                            <button type="submit">Subscrever</button>
-                        </div>
-                    </form>
-                    <div class="footer-contact">
-                        <div class="contact-item">
-                            <span class="contact-icon">📧</span>
-                            <span>{{ cinema.nome|lower|replace(' ', '') }}@cinevibe.pt</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">📞</span>
-                            <span>+351 123 456 789</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">📍</span>
-                            <span>{{ cinema.localizacao }}, {{ cinema.regiao }}</span>
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -203,21 +204,17 @@
             <div class="footer-bottom-container">
                 <div class="footer-bottom-content">
                     <div class="footer-legal">
-                        <p>&copy; 2025 CineVibe. Todos os direitos reservados. {{ cinema.nome }} - Experiência cinematográfica premium.</p>
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
                         <div class="legal-links">
-                            <a href="#">Política de Privacidade</a>
-                            <a href="#">Termos e Condições</a>
-                            <a href="#">Política de Cookies</a>
-                            <a href="#">Acessibilidade</a>
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
                         </div>
                     </div>
                     <div class="footer-certifications">
-                        <span>Certificado por:</span>
                         <div class="cert-logos">
-                            <span class="cert-text">🔒 SSL</span>
-                            <span class="cert-text">🛡️ RGPD</span>
-                            <span class="cert-text">🎬 Cinema PT</span>
-                            <span class="cert-text">⭐ Premium</span>
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
                         </div>
                     </div>
                 </div>
@@ -226,6 +223,28 @@
     </footer>
 
     <script>
+        
+        function mostrarSecao(secao) {
+            document.querySelectorAll('.filmes-lista').forEach(lista => {
+                lista.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.filmes-titulos h1').forEach(titulo => {
+                titulo.classList.remove('active');
+                titulo.setAttribute('aria-selected', 'false');
+            });
+            
+            const secaoElement = document.getElementById(secao);
+            if (secaoElement) {
+                secaoElement.classList.add('active');
+            }
+            
+            const tituloElement = document.getElementById('titulo-' + secao);
+            if (tituloElement) {
+                tituloElement.classList.add('active');
+                tituloElement.setAttribute('aria-selected', 'true');
+            }
+        }
         
         document.addEventListener('DOMContentLoaded', function() {
             const filmes = document.querySelectorAll('.filme-card');
@@ -352,24 +371,6 @@
             });
         }
         
-        
-        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            
-            const button = this.querySelector('button');
-            const originalText = button.textContent;
-            
-            button.textContent = 'Subscrevendo...';
-            button.disabled = true;
-            
-            setTimeout(() => {
-                alert(`🎉 Obrigado por se inscrever!\n📧 Email: ${email}\n\nReceberá novidades sobre o {{ cinema.nome }}!`);
-                this.reset();
-                button.textContent = originalText;
-                button.disabled = false;
-            }, 1500);
-        });
     </script>
 </body>
 </html>

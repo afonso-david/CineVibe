@@ -3,6 +3,19 @@
 {% block title %}Editar Filme: {{ filme.titulo }} - CineVibe Admin{% endblock %}
 
 {% block extra_css %}
+<style>
+    .main-content { padding-top: 0 !important; }
+    .sidebar { 
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100vh !important;
+        padding: 0 !important;
+    }
+    .sidebar-nav { 
+        padding: 20px 0 !important;
+    }
+</style>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_filme_detalhe.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 {% endblock %}

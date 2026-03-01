@@ -54,8 +54,11 @@ a {
   display: flex;
   gap: 20px;
   background-color: #1E2A3A;
-  padding: 12px 25px;
+  padding: 12px 25px !important;
   align-items: center;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -65,8 +68,8 @@ a {
   color: #fff;
   font-family: "Nunito Sans", sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  padding: 5px 15px;
+  font-size: 16px !important;
+  padding: 5px 15px !important;
   border-radius: 4px;
   transition: all 0.3s ease;
   text-decoration: none;

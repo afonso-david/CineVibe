@@ -5321,7 +5321,6 @@ a {
 
 .btn-editar-minha:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(78, 168, 222, 0.4);
 }
 
 .meu-comentario {
@@ -5650,6 +5649,8 @@ a {
 
 .comentario-section-inline textarea {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 214, 10, 0.2);
     border-radius: 10px;
@@ -5716,7 +5717,6 @@ a {
 
 .btn-submeter-inline:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.4);
 }
 
 .btn-remover-inline {
@@ -5735,7 +5735,6 @@ a {
 
 .btn-remover-inline:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
 }
 
 #modalTrailer {

@@ -518,7 +518,6 @@ a {
 }
 .footer-social a:hover {
   transform: translateY(-4px) scale(1.15);
-  box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
 }

@@ -146,12 +146,10 @@
 .btn-primary {
     background: linear-gradient(135deg, #FFD60A, #FFA500);
     color: #0d1b2a;
-    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
 .btn-secondary {
@@ -498,13 +496,11 @@
     font-weight: 700;
     text-decoration: none;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
     font-family: 'Montserrat', sans-serif;
 }
 
 .cta-legendagem-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(255, 214, 10, 0.4);
     background: linear-gradient(135deg, #FFB703, #FFD60A);
 }
 
@@ -945,7 +941,6 @@
     font-weight: 700;
     font-size: 1.1rem;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -967,7 +962,6 @@
 
 .btn-examples:hover {
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(255, 214, 10, 0.4);
 }
 
 .benefits-grid {
@@ -1402,7 +1396,6 @@
 
 .footer-social a:hover {
   transform: translateY(-4px) scale(1.15);
-  box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
 }

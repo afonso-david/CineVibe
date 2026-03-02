@@ -589,7 +589,6 @@ a {
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
   position: relative;
   overflow: hidden;
   margin-top: 10px;
@@ -613,7 +612,6 @@ a {
 .btn-login:hover {
   background: linear-gradient(135deg, #FFB703, #FF9500);
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(255, 214, 10, 0.4);
 }
 
 .btn-login:active {
@@ -1076,7 +1074,6 @@ a {
 
 .footer-social a:hover {
   transform: translateY(-4px) scale(1.15);
-  box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
 }

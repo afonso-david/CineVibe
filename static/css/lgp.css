@@ -146,7 +146,6 @@
 
 .footer-social a:hover {
   transform: translateY(-4px) scale(1.15);
-  box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
 }
@@ -599,7 +598,6 @@ nav.nav-center + .main-content .hero-banner {
 .hero-banner .btn-primary {
     background: linear-gradient(135deg, #FFD60A, #FFA500) !important;
     color: #0D1B2A !important;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.6);
     text-shadow: none;
     padding: 1rem 2rem;
     border-radius: 8px;
@@ -613,7 +611,6 @@ nav.nav-center + .main-content .hero-banner {
 
 .hero-banner .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 35px rgba(255, 214, 10, 0.8);
 }
 
 .hero-banner .btn-secondary {
@@ -622,7 +619,6 @@ nav.nav-center + .main-content .hero-banner {
     color: #FFFFFF !important;
     backdrop-filter: blur(15px);
     text-shadow: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     padding: 1rem 2rem;
     border-radius: 8px;
     text-decoration: none;
@@ -636,7 +632,6 @@ nav.nav-center + .main-content .hero-banner {
     border-color: #FFD60A !important;
     color: #FFD60A !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
 .hero-features {

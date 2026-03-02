@@ -742,7 +742,6 @@ a {
 .footer-social a:hover {
     background: linear-gradient(135deg, #FFD60A, #4EA8DE);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(255, 214, 10, 0.3);
 }
 
 .footer-social a img {

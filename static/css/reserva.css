@@ -18,7 +18,6 @@ a {
   justify-content: space-between;
   padding: 20px 25px;
   background: linear-gradient(to right, #0D1B2A, #1B263B);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   height: 55px;
   will-change: transform;
   backface-visibility: hidden;
@@ -42,6 +41,9 @@ a {
   background-color: #1E2A3A;
   padding: 12px 25px;
   align-items: center;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -162,7 +164,6 @@ main {
     backdrop-filter: blur(15px);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(78, 168, 222, 0.1) inset;
 }
 
 .movie-info-card::before {
@@ -203,7 +204,6 @@ main {
     border-radius: 12px;
     border: 3px solid rgba(78, 168, 222, 0.5);
     transition: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(78, 168, 222, 0.2);
     position: relative;
 }
 
@@ -223,7 +223,6 @@ main {
     margin-bottom: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    text-shadow: 0 2px 8px rgba(78, 168, 222, 0.3);
     position: relative;
     display: inline-block;
 }
@@ -269,7 +268,6 @@ main {
     padding: 0.4rem 1rem;
     border-radius: 8px;
     border: 1px solid rgba(78, 168, 222, 0.3);
-    box-shadow: 0 2px 8px rgba(78, 168, 222, 0.2);
 }
 
 .session-time {
@@ -291,8 +289,8 @@ main {
     border-radius: 10px;
     display: inline-block;
     border: 2px solid rgba(255, 214, 10, 0.3);
-    box-shadow: 0 4px 12px rgba(255, 214, 10, 0.2);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: none !important;
+    text-shadow: none !important;
 }
 
 .ticket-selection {
@@ -335,7 +333,6 @@ main {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
 }
 
@@ -354,7 +351,6 @@ main {
         rgba(27, 38, 59, 0.8) 100%);
     border-color: rgba(78, 168, 222, 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.3);
 }
 
 .quantity-number {
@@ -390,7 +386,6 @@ main {
 .quantity-option.selected {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8));
     border-color: rgba(78, 168, 222, 0.6);
-    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.3);
 }
 
 .quantity-number {
@@ -436,7 +431,6 @@ main {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -446,11 +440,10 @@ main {
     background: linear-gradient(135deg, #3B91C0, #2E7A9B);
     color: white;
     transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(78, 168, 222, 0.4);
 }
 
 .quantity-input {
-    background: rgba(27, 38, 59, 0.8);
+    background: rgba(13, 27, 42, 0.95);
     border: 2px solid rgba(78, 168, 222, 0.4);
     color: #4EA8DE;
     padding: 0.8rem;
@@ -467,8 +460,7 @@ main {
 .quantity-input:focus {
     outline: none;
     border-color: #4EA8DE;
-    
-    background: rgba(27, 38, 59, 0.8);
+    background: rgba(13, 27, 42, 0.95);
 }
 
 .advance-btn {
@@ -490,7 +482,6 @@ main {
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -500,7 +491,6 @@ main {
     color: white;
     border-color: rgba(78, 168, 222, 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5);
 }
 
 .advance-btn:disabled {
@@ -509,7 +499,6 @@ main {
     border-color: rgba(102, 102, 102, 0.3);
     cursor: not-allowed;
     transform: none;
-    box-shadow: none;
 }
 
 @media (max-width: 768px) {
@@ -538,7 +527,6 @@ main {
     font-size: 2.5rem;
     font-weight: 700;
     text-align: center;
-    text-shadow: 0 3px 10px rgba(255, 214, 10, 0.4);
     margin: 0;
     position: relative;
     z-index: 1;
@@ -554,13 +542,11 @@ main {
     margin-bottom: 2rem;
     border: 2px solid rgba(255, 214, 10, 0.2);
     backdrop-filter: blur(15px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
 }
 
 .filme-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     border-color: rgba(255, 214, 10, 0.4);
 }
 
@@ -568,7 +554,6 @@ main {
     position: relative;
     overflow: hidden;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .poster-container img {
@@ -609,7 +594,6 @@ main {
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 15px;
-    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.3);
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -618,7 +602,6 @@ main {
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 10px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .filme-info strong {
@@ -635,13 +618,11 @@ main {
     margin-bottom: 2rem;
     backdrop-filter: blur(15px);
     border: 2px solid rgba(78, 168, 222, 0.2);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
 }
 
 .sessao-detalhes:hover {
     transform: translateY(-3px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     border-color: rgba(78, 168, 222, 0.4);
 }
 
@@ -651,7 +632,6 @@ main {
     font-weight: 700;
     margin-bottom: 20px;
     text-align: center;
-    text-shadow: 0 2px 8px rgba(78, 168, 222, 0.3);
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -670,13 +650,11 @@ main {
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 214, 10, 0.2);
     transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .info-item:hover {
     transform: translateY(-3px);
     background: rgba(27, 38, 59, 0.6);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 214, 10, 0.4);
 }
 
@@ -712,7 +690,6 @@ main {
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
     position: relative;
     overflow: hidden;
     cursor: pointer;
@@ -745,7 +722,6 @@ main {
     color: white;
     border-color: rgba(78, 168, 222, 0.5);
     transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(78, 168, 222, 0.4);
 }
 
 .btn-premium:active {
@@ -768,7 +744,6 @@ main {
     gap: 10px;
     backdrop-filter: blur(10px);
     font-family: 'Montserrat', sans-serif;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-voltar:hover {
@@ -776,7 +751,6 @@ main {
         rgba(78, 168, 222, 0.3) 0%, 
         rgba(255, 214, 10, 0.2) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.3);
     color: #FFD60A;
     border-color: rgba(255, 214, 10, 0.5);
 }
@@ -856,7 +830,6 @@ main {
     margin-bottom: 30px;
     backdrop-filter: blur(15px);
     border: 2px solid rgba(78, 168, 222, 0.3);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     animation: none;
 }
 
@@ -910,7 +883,6 @@ main {
         rgba(27, 38, 59, 0.8) 100%);
     border-color: rgba(78, 168, 222, 0.6);
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(78, 168, 222, 0.4);
 }
 
 .quantity-number {
@@ -967,12 +939,10 @@ main {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
 }
 
 .quantity-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     animation: none;
 }
 
@@ -981,7 +951,7 @@ main {
 }
 
 .quantity-input {
-    background: rgba(27, 38, 59, 0.6);
+    background: rgba(13, 27, 42, 0.95);
     border: 2px solid rgba(255, 214, 10, 0.3);
     border-radius: 10px;
     padding: 15px;
@@ -997,7 +967,6 @@ main {
 .quantity-input:focus {
     outline: none;
     border-color: #FFD60A;
-    box-shadow: 0 0 20px rgba(255, 214, 10, 0.4);
 }
 
 .navigation-buttons {
@@ -1069,7 +1038,6 @@ main {
 
 .ticket-selection:hover {
     transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .quantity-option:nth-child(1) { animation-delay: 0.1s; }
@@ -1087,7 +1055,6 @@ main {
 
 .btn-premium:disabled:hover {
     transform: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 /
 * Quantidade personalizada - MELHORADO */
@@ -1175,7 +1142,6 @@ main {
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -1197,7 +1163,6 @@ main {
 
 .continue-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
 }
 
 .continue-btn:active {
@@ -1320,7 +1285,6 @@ body::before {
 .ticket-selection {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.5), rgba(13, 27, 42, 0.7)) !important;
     border: 1px solid rgba(78, 168, 222, 0.3) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 .ticket-selection h3 {
@@ -1330,7 +1294,6 @@ body::before {
 .quantity-option {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.6), rgba(13, 27, 42, 0.8)) !important;
     border: 2px solid rgba(78, 168, 222, 0.3) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .quantity-option:hover {
@@ -1342,7 +1305,6 @@ body::before {
 .quantity-option.selected {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.25), rgba(27, 38, 59, 0.8)) !important;
     border-color: rgba(78, 168, 222, 0.6) !important;
-    box-shadow: 0 8px 20px rgba(78, 168, 222, 0.3) !important;
 }
 
 .quantity-number {
@@ -1376,7 +1338,6 @@ body::before {
 .custom-quantity {
     background: rgba(27, 38, 59, 0.4) !important;
     border: 2px solid rgba(78, 168, 222, 0.3) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 }
 
 .custom-quantity h4 {
@@ -1390,7 +1351,6 @@ body::before {
 .quantity-btn {
     background: linear-gradient(135deg, #4EA8DE, #3B91C0) !important;
     color: white !important;
-    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.3) !important;
 }
 
 .quantity-btn:hover {
@@ -1399,6 +1359,7 @@ body::before {
 }
 
 .quantity-input {
+    background: rgba(13, 27, 42, 0.95) !important;
     color: #4EA8DE !important;
     border-color: rgba(78, 168, 222, 0.4) !important;
 }
@@ -1407,14 +1368,12 @@ body::before {
     background: linear-gradient(135deg, #4EA8DE, #3B91C0) !important;
     color: white !important;
     border: 2px solid rgba(78, 168, 222, 0.4) !important;
-    box-shadow: 0 6px 20px rgba(78, 168, 222, 0.3) !important;
 }
 
 .continue-btn:hover, .advance-btn:hover, [class*="btn-"]:hover {
     background: linear-gradient(135deg, #3B91C0, #2E7A9B) !important;
     color: white !important;
     border-color: rgba(78, 168, 222, 0.6) !important;
-    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5) !important;
 }
 
 .quantity-option,
@@ -1516,7 +1475,6 @@ body::before {
     max-width: 600px;
     width: 100%;
     border: 2px solid rgba(255, 214, 10, 0.4);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 214, 10, 0.2) inset;
     position: relative;
     overflow: hidden;
 }
@@ -1542,7 +1500,6 @@ body::before {
     color: #FFD60A;
     margin-bottom: 1rem;
     display: block;
-    text-shadow: 0 0 20px rgba(255, 214, 10, 0.5);
 }
 
 .modal-header h2 {
@@ -1551,7 +1508,6 @@ body::before {
     font-weight: 700;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    text-shadow: 0 2px 8px rgba(255, 214, 10, 0.3);
 }
 
 .modal-body {
@@ -1651,14 +1607,12 @@ body::before {
     background: linear-gradient(135deg, #FFD60A 0%, #4EA8DE 100%);
     color: #0D1B2A;
     border-color: rgba(255, 214, 10, 0.4);
-    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.3);
 }
 
 .modal-btn-primary:hover {
     background: linear-gradient(135deg, #4EA8DE 0%, #FFD60A 100%);
     color: white;
     border-color: rgba(78, 168, 222, 0.6);
-    box-shadow: 0 10px 30px rgba(78, 168, 222, 0.5);
     transform: translateY(-2px);
 }
 
@@ -1666,14 +1620,12 @@ body::before {
     background: linear-gradient(135deg, rgba(27, 38, 59, 0.8), rgba(13, 27, 42, 0.8));
     color: #E8EEF2;
     border-color: rgba(78, 168, 222, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .modal-btn-secondary:hover {
     background: linear-gradient(135deg, rgba(78, 168, 222, 0.3), rgba(27, 38, 59, 0.9));
     color: #FFD60A;
     border-color: rgba(255, 214, 10, 0.5);
-    box-shadow: 0 8px 25px rgba(78, 168, 222, 0.3);
     transform: translateY(-2px);
 }
 

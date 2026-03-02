@@ -41,12 +41,15 @@ a {
   display: flex;
   gap: 20px;
   background-color: #1E2A3A;
-  padding: 12px 25px;
+  padding: 12px 25px !important;
   align-items: center;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   pointer-events: auto;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
 }
 
 .nav-center a {
@@ -315,7 +318,6 @@ a {
 
 .btn-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
 .about-section {
@@ -533,7 +535,6 @@ a {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
 .btn-secondary:hover {
@@ -1148,7 +1149,6 @@ a {
 
 .footer-social a:hover {
   transform: translateY(-4px) scale(1.15);
-  box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
 }

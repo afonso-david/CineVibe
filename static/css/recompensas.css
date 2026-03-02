@@ -102,12 +102,15 @@ a {
   display: flex;
   gap: 20px;
   background-color: #1E2A3A;
-  padding: 12px 25px;
+  padding: 12px 25px !important;
   align-items: center;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   pointer-events: auto;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
 }
 
 .nav-center a {
@@ -598,7 +601,6 @@ a {
   background: linear-gradient(135deg, #FFD60A 0%, #FFA500 100%);
   border-radius: 50%;
   border: 3px solid #0D1B2A;
-  box-shadow: 0 0 20px rgba(255, 214, 10, 0.9);
 }
 
 .levels-container {
@@ -658,11 +660,6 @@ a {
   width: 75px;
   height: 75px;
   filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.4));
-  transition: transform 0.3s ease;
-}
-
-.level-item:hover .level-icon {
-  transform: scale(1.1) rotate(5deg);
 }
 
 .perk-icon {
@@ -753,12 +750,6 @@ a {
   margin-right: 8px !important;
   flex-shrink: 0 !important;
   filter: brightness(0) invert(1) !important;
-}
-
-.level-perks span:hover {
-  background: linear-gradient(135deg, rgba(255, 214, 10, 0.35), rgba(255, 165, 0, 0.3));
-  border-color: rgba(255, 214, 10, 0.7);
-  transform: translateY(-3px);
 }
 
 .level-item.achieved .level-perks span {
@@ -1159,15 +1150,7 @@ a {
   padding: 40px 30px;
   text-align: center;
   border: 1px solid rgba(255, 214, 10, 0.15);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-}
-
-.ganhar-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  border-color: rgba(255, 214, 10, 0.4);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
 }
 
 .ganhar-icon {
@@ -1180,13 +1163,7 @@ a {
 .earn-icon {
   width: 70px;
   height: 70px;
-  transition: all 0.4s ease;
-  filter: brightness(0) saturate(100%) invert(85%) sepia(100%) saturate(1000%) hue-rotate(15deg) brightness(100%) contrast(100%);
-}
-
-.ganhar-card:hover .earn-icon {
-  transform: scale(1.1) translateY(-5px);
-  filter: brightness(0) saturate(100%) invert(85%) sepia(100%) saturate(1200%) hue-rotate(15deg) brightness(110%) contrast(110%);
+  filter: brightness(0) saturate(100%) invert(85%) sepia(100%) saturate(2000%) hue-rotate(0deg) brightness(1.2) contrast(1.1);
 }
 
 .ganhar-card h3 {
@@ -1197,11 +1174,6 @@ a {
   font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: color 0.3s ease;
-}
-
-.ganhar-card:hover h3 {
-  color: #FFD60A;
 }
 
 .pontos-ganhos {
@@ -1211,11 +1183,6 @@ a {
   color: #FFD60A;
   margin: 20px 0;
   line-height: 1;
-  transition: all 0.3s ease;
-}
-
-.ganhar-card:hover .pontos-ganhos {
-  transform: scale(1.1);
 }
 
 .ganhar-card p:last-child {
@@ -1224,12 +1191,6 @@ a {
   line-height: 1.5;
   margin: 0;
   opacity: 0.9;
-  transition: all 0.3s ease;
-}
-
-.ganhar-card:hover p:last-child {
-  color: #4EA8DE;
-  opacity: 1;
 }
 
 @media (max-width: 1200px) {
@@ -1406,7 +1367,6 @@ a {
 
 .footer-social a:hover {
   transform: translateY(-4px) scale(1.15);
-  box-shadow: 0 10px 30px rgba(255, 214, 10, 0.4);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
 }

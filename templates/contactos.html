@@ -55,11 +55,24 @@
                 <p>Entre em contacto connosco. Estamos aqui para ajudar com qualquer questão sobre a sua experiência cinematográfica.</p>
             </div>
 
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
             <div class="contactos-container">
                 
                 <div class="contacto-form-section">
                     <h2><i class="fas fa-envelope"></i> Envie-nos uma Mensagem</h2>
                     <form method="POST">
+                        {% if not logged_in %}
                         <div class="form-group">
                             <label for="nome">Nome Completo</label>
                             <input type="text" id="nome" name="nome" placeholder="O seu nome completo" required>
@@ -68,6 +81,7 @@
                             <label for="email">Email</label>
                             <input type="email" id="email" name="email" placeholder="O seu email" required>
                         </div>
+                        {% endif %}
                         <div class="form-group">
                             <label for="assunto">Assunto</label>
                             <select id="assunto" name="assunto" required>
@@ -95,7 +109,7 @@
                     <h2><i class="fas fa-info-circle"></i> Informações de Contacto</h2>
                     
                     <div class="info-card">
-                        <div class="info-icon">📞</div>
+                        <div class="info-icon"><i class="fas fa-phone"></i></div>
                         <div class="info-content">
                             <h3>Telefone</h3>
                             <p>+351 800 123 456</p>
@@ -104,7 +118,7 @@
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-icon">✉️</div>
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
                         <div class="info-content">
                             <h3>Email</h3>
                             <p>info@cinevibe.pt</p>
@@ -113,7 +127,7 @@
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-icon">📍</div>
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div class="info-content">
                             <h3>Sede Principal</h3>
                             <p>Rua do Cinema, 123<br>1000-000 Lisboa, Portugal</p>
@@ -122,7 +136,7 @@
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-icon">🕒</div>
+                        <div class="info-icon"><i class="fas fa-clock"></i></div>
                         <div class="info-content">
                             <h3>Horário de Atendimento</h3>
                             <p>Segunda a Domingo: 10:00 - 24:00</p>
@@ -131,13 +145,13 @@
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-icon">🌐</div>
+                        <div class="info-icon"><i class="fas fa-globe"></i></div>
                         <div class="info-content">
                             <h3>Redes Sociais</h3>
                             <div class="social-links">
-                                <a href="#" class="social-link">Facebook</a>
-                                <a href="#" class="social-link">Instagram</a>
-                                <a href="#" class="social-link">Twitter</a>
+                                <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TikTok</a>
+                                <a href="#" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="#" class="social-link"><i class="fab fa-x-twitter"></i> X</a>
                             </div>
                             <div class="info-detail">Siga-nos para novidades</div>
                         </div>
@@ -146,10 +160,99 @@
                     <div class="faq-link">
                         <h3>Perguntas Frequentes</h3>
                         <p>Encontre respostas rápidas para as questões mais comuns.</p>
-                        <a href="#">Ver FAQ</a>
+                        <a href="#faq">Ver FAQ</a>
                     </div>
                 </div>
             </div>
+
+            <section class="faq-section" id="faq">
+                <div class="faq-container">
+                    <h2 class="faq-title">Perguntas Frequentes</h2>
+                    <p class="faq-subtitle">Encontre respostas para as questões mais comuns sobre o CineVibe</p>
+                    
+                    <div class="faq-grid">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-ticket-alt"></i>
+                                <h3>Como posso comprar bilhetes?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Pode comprar bilhetes diretamente no nosso site, selecionando o filme, sessão e lugares desejados. Também pode adquirir bilhetes nas bilheteiras dos nossos cinemas.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-undo"></i>
+                                <h3>Posso cancelar ou alterar a minha reserva?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Sim, pode cancelar ou alterar a sua reserva até 2 horas antes do início da sessão através da sua área de perfil ou contactando o nosso suporte.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-credit-card"></i>
+                                <h3>Quais os métodos de pagamento aceites?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Aceitamos Multibanco, MB WAY, Cartão de Crédito/Débito (Visa, Mastercard) e PayPal. Todos os pagamentos são processados de forma segura.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-wheelchair"></i>
+                                <h3>Os cinemas são acessíveis?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Sim, todos os nossos cinemas são totalmente acessíveis com rampas, elevadores e lugares reservados para pessoas com mobilidade reduzida. Também oferecemos sessões com audiodescrição e legendagem.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-utensils"></i>
+                                <h3>Posso levar comida de fora?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Não é permitido trazer comida ou bebidas de fora. Temos um bar completo com pipocas, bebidas, snacks e menus especiais para tornar a sua experiência ainda melhor.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-child"></i>
+                                <h3>Há descontos para crianças e idosos?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Sim, oferecemos descontos para crianças até 12 anos e idosos com mais de 65 anos. Também temos promoções especiais às quartas-feiras e no nosso programa de fidelidade.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-star"></i>
+                                <h3>O que são as Sessões Temáticas?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>As Sessões Temáticas são experiências únicas com decoração especial, efeitos especiais e ambiente personalizado. Temos sessões Vintage, Romance e Terror com características exclusivas.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-gift"></i>
+                                <h3>Como funciona o programa de fidelidade?</h3>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Ao criar uma conta, acumula pontos em cada compra que podem ser trocados por bilhetes grátis, descontos no bar e acesso a pré-estreias exclusivas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <footer class="footer">
@@ -277,10 +380,6 @@
             if (!e.target.closest('.search-container')) {
                 document.getElementById('searchResults').classList.remove('show');
             }
-        });
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Mensagem enviada com sucesso! Entraremos em contacto em breve.');
         });
     </script>
 </body>

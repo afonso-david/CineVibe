@@ -6903,10 +6903,120 @@ def acessibilidade():
 def legendagem():
     return render_template('legendagem.html')
 
-@app.route('/contactos')
+@app.route('/contactos', methods=['GET', 'POST'])
 def contactos():
     logged_in = 'user_id' in session
     avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
+    
+    if request.method == 'POST':
+        assunto = request.form.get('assunto')
+        mensagem = request.form.get('mensagem')
+        
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor(dictionary=True)
+            
+            if logged_in:
+                cur.execute("SELECT nome, email FROM usuarios WHERE id = %s", (session['user_id'],))
+                user_data = cur.fetchone()
+                
+                if not user_data:
+                    flash('Erro: Utilizador não encontrado.', 'error')
+                    cur.close()
+                    conn.close()
+                    return redirect(url_for('contactos'))
+                
+                nome = user_data['nome']
+                email = user_data['email']
+                app.logger.info(f"Utilizador logado: {nome} ({email})")
+            else:
+                nome = request.form.get('nome')
+                email = request.form.get('email')
+                app.logger.info(f"Utilizador não logado: {nome} ({email})")
+            
+            app.logger.info(f"Tentando enviar email de contacto de {nome} ({email})")
+            
+            cur.execute("SELECT email FROM usuarios WHERE is_admin = TRUE LIMIT 1")
+            admin = cur.fetchone()
+            
+            cur.close()
+            conn.close()
+            
+            if not admin:
+                app.logger.error("Administrador não encontrado na base de dados")
+                flash('Erro ao enviar mensagem. Administrador não encontrado.', 'error')
+                return redirect(url_for('contactos'))
+            
+            admin_email = admin['email']
+            app.logger.info(f"Email do admin encontrado: {admin_email}")
+            
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = f'[CineVibe Contacto] {assunto}'
+            msg['From'] = f'{nome} via CineVibe <{EMAIL_USER}>'
+            msg['To'] = admin_email
+            msg['Reply-To'] = email
+            
+            html_content = f'''
+            <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+                        <h2 style="color: #FFD60A; border-bottom: 2px solid #FFD60A; padding-bottom: 10px;">
+                            Nova Mensagem de Contacto - CineVibe
+                        </h2>
+                        
+                        <div style="background-color: white; padding: 20px; border-radius: 5px; margin-top: 20px;">
+                            <p><strong>Nome:</strong> {nome}</p>
+                            <p><strong>Email:</strong> {email}</p>
+                            <p><strong>Assunto:</strong> {assunto}</p>
+                            {'<p><strong>Tipo:</strong> Utilizador Registado</p>' if logged_in else '<p><strong>Tipo:</strong> Visitante</p>'}
+                            
+                            <div style="margin-top: 20px; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #FFD60A;">
+                                <p><strong>Mensagem:</strong></p>
+                                <p>{mensagem}</p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px;">
+                            <p style="margin: 0; font-size: 12px; color: #666;">
+                                Esta mensagem foi enviada através do formulário de contacto do CineVibe.
+                                <br>Pode responder diretamente a este email para contactar o remetente.
+                            </p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+            '''
+            
+            html_part = MIMEText(html_content, 'html')
+            msg.attach(html_part)
+            
+            app.logger.info("Tentando enviar email via SMTP...")
+            server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+            if EMAIL_USE_TLS:
+                server.starttls()
+            server.login(EMAIL_USER, EMAIL_PASSWORD)
+            
+            text = msg.as_string()
+            server.sendmail(EMAIL_USER, admin_email, text)
+            server.quit()
+            
+            app.logger.info("Email enviado com sucesso!")
+            flash('Mensagem enviada com sucesso! Entraremos em contacto em breve.', 'success')
+            
+        except smtplib.SMTPAuthenticationError as e:
+            app.logger.error(f'Erro de autenticação SMTP: {str(e)}')
+            flash('Erro ao enviar mensagem. Problema de autenticação.', 'error')
+        except smtplib.SMTPException as e:
+            app.logger.error(f'Erro SMTP: {str(e)}')
+            flash('Erro ao enviar mensagem. Por favor, tente novamente mais tarde.', 'error')
+        except Exception as e:
+            app.logger.error(f'Erro ao enviar email de contacto: {str(e)}')
+            import traceback
+            app.logger.error(f'Traceback: {traceback.format_exc()}')
+            flash('Erro ao enviar mensagem. Por favor, tente novamente mais tarde.', 'error')
+        
+        return redirect(url_for('contactos'))
+    
     return render_template('contactos.html', logged_in=logged_in, avatar=avatar)
 
 
@@ -8467,18 +8577,67 @@ def reserva_sessao_tematica():
     pass
 
     tipo_sessao = request.args.get('tipo')
-    filme_id = request.args.get('filme_id')
-    data_sessao = request.args.get('data')
-    hora_sessao = request.args.get('hora')
     
     if not tipo_sessao:
         return "Tipo de sessão não especificado", 400
     
-    return redirect(url_for('pagamento_sessao_tematica', 
-                           tipo=tipo_sessao, 
-                           filme_id=filme_id,
-                           data=data_sessao,
-                           hora=hora_sessao))
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        cursor.execute("SELECT id, titulo, duracao FROM filmes ORDER BY titulo")
+        filmes = cursor.fetchall()
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar filmes: {e}")
+        filmes = []
+    finally:
+        cursor.close()
+        conn.close()
+    
+    precos_base = {
+        'vintage': 35.00,
+        'romance': 85.00,
+        'terror': 45.00
+    }
+    
+    preco_base = precos_base.get(tipo_sessao, 35.00)
+    
+    from datetime import datetime, timedelta
+    data_minima = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
+    
+    logged_in = 'user_id' in session
+    avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
+    
+    return render_template('reserva_sessao_tematica.html',
+                         tipo_sessao=tipo_sessao,
+                         filmes=filmes,
+                         preco_base=preco_base,
+                         data_minima=data_minima,
+                         logged_in=logged_in,
+                         avatar=avatar)
+
+@app.route('/processar_reserva_tematica', methods=['POST'])
+def processar_reserva_tematica():
+    pass
+
+    tipo_sessao = request.form.get('tipo_sessao')
+    data_sessao = request.form.get('data_sessao')
+    hora_sessao = request.form.get('hora_sessao')
+    num_pessoas = request.form.get('num_pessoas')
+    filme_id = request.form.get('filme_id')
+    
+    if not all([tipo_sessao, data_sessao, hora_sessao, num_pessoas]):
+        return "Dados incompletos", 400
+    
+    session['reserva_tematica_temp'] = {
+        'tipo_sessao': tipo_sessao,
+        'data_sessao': data_sessao,
+        'hora_sessao': hora_sessao,
+        'num_pessoas': int(num_pessoas),
+        'filme_id': filme_id if filme_id else None
+    }
+    
+    return redirect(url_for('pagamento_sessao_tematica'))
 
 @app.route('/pagamento_sessao_tematica')
 def pagamento_sessao_tematica():

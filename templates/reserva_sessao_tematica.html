@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Sessão {{ tipo_sessao|title }} - CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+    <style>
+        .reserva-main {
+            padding: 3rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .reserva-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .reserva-header h1 {
+            color: #FFD60A;
+            font-size: 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .reserva-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        .reserva-container {
+            background: linear-gradient(135deg, rgba(27, 38, 59, 0.95), rgba(13, 27, 42, 0.98));
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid rgba(78, 168, 222, 0.3);
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(78, 168, 222, 0.2);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .form-section h2 {
+            color: #4EA8DE;
+            font-size: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(13, 27, 42, 0.8);
+            border: 2px solid rgba(78, 168, 222, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4EA8DE;
+            background: rgba(13, 27, 42, 0.95);
+        }
+
+        .form-group small {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .preco-resumo {
+            background: rgba(78, 168, 222, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(78, 168, 222, 0.3);
+        }
+
+        .preco-info,
+        .preco-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .preco-total {
+            border-top: 2px solid rgba(78, 168, 222, 0.3);
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+
+        .preco-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .preco-total .preco-label {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .preco-valor {
+            color: #FFD60A;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .preco-total .preco-valor {
+            font-size: 1.5rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4EA8DE, #3B91C0);
+            color: white;
+            border: 2px solid rgba(78, 168, 222, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3B91C0, #2E7A9B);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, rgba(27, 38, 59, 0.8), rgba(13, 27, 42, 0.8));
+            color: #E8EEF2;
+            border: 2px solid rgba(78, 168, 222, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, rgba(78, 168, 222, 0.3), rgba(255, 214, 10, 0.2));
+            color: #FFD60A;
+            border-color: rgba(255, 214, 10, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .reserva-main {
+                padding: 2rem 1rem;
+            }
+
+            .reserva-container {
+                padding: 1.5rem;
+            }
+
+            .reserva-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </div>
+                <div class="nav-right">
+                    <div class="user-icon">
+                        {% if logged_in %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-center">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('filmes') }}">Filmes</a>
+            <a href="{{ url_for('cinemas') }}">Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+            <a href="{{ url_for('bar') }}">Bar</a>
+            <a href="{{ url_for('beneficios') }}">Benefícios</a>
+            <a href="{{ url_for('sessao') }}" class="active">Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}">Contactos</a>
+        </nav>
+
+        <main class="reserva-main">
+            <div class="reserva-header">
+                <h1>Reservar Sessão {{ tipo_sessao|title }}</h1>
+                <p>Configure a sua experiência cinematográfica personalizada</p>
+            </div>
+
+            <div class="reserva-container">
+                <form method="POST" action="{{ url_for('processar_reserva_tematica') }}" class="reserva-form">
+                    <input type="hidden" name="tipo_sessao" value="{{ tipo_sessao }}">
+                    
+                    <div class="form-section">
+                        <h2><i class="fas fa-calendar-alt"></i> Data e Hora</h2>
+                        
+                        <div class="form-group">
+                            <label for="data_sessao">Data da Sessão</label>
+                            <input type="date" id="data_sessao" name="data_sessao" required min="{{ data_minima }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hora_sessao">Hora da Sessão</label>
+                            <select id="hora_sessao" name="hora_sessao" required>
+                                <option value="">Selecione uma hora</option>
+                                <option value="14:00">14:00</option>
+                                <option value="16:30">16:30</option>
+                                <option value="19:00">19:00</option>
+                                <option value="21:30">21:30</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2><i class="fas fa-users"></i> Número de Pessoas</h2>
+                        
+                        <div class="form-group">
+                            <label for="num_pessoas">Quantas pessoas?</label>
+                            <input type="number" id="num_pessoas" name="num_pessoas" min="1" max="50" value="2" required>
+                            <small>Máximo 50 pessoas por sessão</small>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2><i class="fas fa-film"></i> Filme (Opcional)</h2>
+                        
+                        <div class="form-group">
+                            <label for="filme_id">Escolha um filme ou deixe em branco para escolher depois</label>
+                            <select id="filme_id" name="filme_id">
+                                <option value="">Escolher depois</option>
+                                {% for filme in filmes %}
+                                <option value="{{ filme.id }}">{{ filme.titulo }} ({{ filme.duracao }}min)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="preco-resumo">
+                        <div class="preco-info">
+                            <span class="preco-label">Preço base por pessoa:</span>
+                            <span class="preco-valor">€{{ "%.2f"|format(preco_base) }}</span>
+                        </div>
+                        <div class="preco-total">
+                            <span class="preco-label">Total estimado:</span>
+                            <span class="preco-valor" id="preco-total">€{{ "%.2f"|format(preco_base * 2) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{{ url_for('sessoes_tematicas') }}" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-arrow-right"></i> Continuar para Pagamento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-bottom">
+                <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const precoBase = parseFloat('{{ preco_base }}');
+        const numPessoasInput = document.getElementById('num_pessoas');
+        const precoTotalElement = document.getElementById('preco-total');
+
+        numPessoasInput.addEventListener('input', function() {
+            const numPessoas = parseInt(this.value) || 2;
+            const total = precoBase * numPessoas;
+            precoTotalElement.textContent = '€' + total.toFixed(2);
+        });
+
+        const dataInput = document.getElementById('data_sessao');
+        dataInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedDate < today) {
+                alert('Por favor, selecione uma data futura.');
+                this.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -31,7 +31,21 @@ a {
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10000 !important;
 }
+
+.logo-link {
+  display: inline-block !important;
+  line-height: 0;
+  pointer-events: auto !important;
+  z-index: 10000 !important;
+  position: relative !important;
+  cursor: pointer !important;
+}
+
 .nav-center {
   display: flex;
   gap: 20px;
@@ -1160,6 +1174,8 @@ v-center a:hover::after,
   display: flex;
   align-items: center;
   gap: 15px;
+  position: relative;
+  z-index: 1000;
 }
 
 .hamburger-menu {

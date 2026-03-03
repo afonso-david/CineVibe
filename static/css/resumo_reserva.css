@@ -534,17 +534,18 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #FFD60A 0%, #F39C12 100%);
+    background: linear-gradient(135deg, #FFD60A 0%, #FFC107 100%);
     color: #0D1B2A;
     flex-wrap: wrap;
 }
 
 .btn-primary:hover {
+    background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
     transform: translateY(-2px);
 }
 
 .btn-primary .amount {
-    background: rgba(13, 27, 42, 0.2);
+    background: rgba(13, 27, 42, 0.15);
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
     font-weight: 700;

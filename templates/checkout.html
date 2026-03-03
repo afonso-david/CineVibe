@@ -56,36 +56,6 @@
     <main class="checkout-main">
         <div class="container">
             
-            <div class="progress-bar">
-                <div class="progress-step completed">
-                    <div class="step-circle">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <span>Lugares</span>
-                </div>
-                <div class="progress-line completed"></div>
-                <div class="progress-step completed">
-                    <div class="step-circle">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <span>Bar</span>
-                </div>
-                <div class="progress-line completed"></div>
-                <div class="progress-step active">
-                    <div class="step-circle">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <span>Checkout</span>
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-step">
-                    <div class="step-circle">
-                        <i class="fas fa-credit-card"></i>
-                    </div>
-                    <span>Pagamento</span>
-                </div>
-            </div>
-            
             <h1><i class="fas fa-shopping-cart"></i> Finalizar Reserva</h1>
             
             <div class="checkout-container">
@@ -250,13 +220,6 @@
                             </div>
 
                             <div id="payment-forms-container" style="display: none;">
-                                
-                                <div class="back-to-methods">
-                                    <button type="button" class="btn-back" onclick="voltarMetodos()">
-                                        <i class="fas fa-arrow-left"></i>
-                                        Escolher outro método
-                                    </button>
-                                </div>
 
                                 <div id="mbway-form" class="payment-form" style="display: none;">
                                     <h4><img src="{{ url_for('static', filename='imgs/pagamento/Quais_sao_as_vantagens_de_aderir_ao_MBway-removebg-preview (1).png') }}" alt="MB WAY" class="form-icon"> MB WAY</h4>
@@ -404,6 +367,12 @@
         });
 
         function selectPaymentMethod(method, element) {
+            // Se clicar no método já selecionado, fecha o formulário
+            if (selectedPaymentMethod === method) {
+                voltarMetodos();
+                return;
+            }
+            
             selectedPaymentMethod = method;
             document.getElementById('payment-methods-container').style.display = 'none';
             document.getElementById('payment-forms-container').style.display = 'block';
@@ -533,7 +502,7 @@
                         } else {
                             finalizarPagamento(dados);
                         }
-                    }, 1500); // 1.5 segundos por etapa
+                    }, 800); // 0.8 segundos por etapa
                 } else {
                     finalizarPagamento(dados);
                 }
@@ -557,7 +526,7 @@
                 if (result.success) {
                     setTimeout(() => {
                         window.location.href = result.redirect || '/';
-                    }, 2000);
+                    }, 1200);
                 } else {
                     document.getElementById('loadingModal').style.display = 'none';
                     alert('Erro no processamento: ' + (result.error || 'Erro desconhecido'));

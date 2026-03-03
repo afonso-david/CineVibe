@@ -98,10 +98,10 @@
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <img src="{{ url_for('static', filename='imgs/temas/Romance/iusa_600x600.105477302_lkpl.webp') }}" alt="Ambiente Romântico">
+                            <img src="{{ url_for('static', filename='imgs/temas/Romance/before-sunrise.webp') }}" alt="Ambiente Romântico">
                         </div>
                         <h3>Decoração Romântica</h3>
-                        <p>Pétalas de rosa, velas aromáticas e<br>iluminação suave criam o ambiente<br>perfeito</p>
+                        <p>Filmes clássicos e modernos que<br>celebram o amor em todas as suas<br>formas</p>
                     </div>
                     
                     <div class="feature-card">
@@ -114,10 +114,46 @@
                     
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <img src="{{ url_for('static', filename='imgs/temas/Romance/Download_premium_vector_of_Music_note_app_icon__neon_glow_design_vector_by_Wan_about_music_icon_neon__neon_music__music__music_note_neon__and_icone_neon_6738307-removebg-preview.png') }}" alt="Lugares Especiais">
+                            <img src="{{ url_for('static', filename='imgs/temas/Romance/55b7c42dfeac49b39faf2e6592500a0e.jpg') }}" alt="Lugares Especiais">
                         </div>
                         <h3>Música ambiente</h3>
                         <p>Melodias suaves antes do filme para criar a<br>atmosfera ideal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="couple-seat-section">
+            <div class="container">
+                <div class="couple-seat-content">
+                    <div class="couple-seat-image">
+                        <img src="{{ url_for('static', filename='imgs/temas/Romance/theater-loveseats-removebg-preview.png') }}" alt="Lugar de Casal" loading="lazy">
+                    </div>
+                    <div class="couple-seat-text">
+                        <h2 class="section-title">Lugares de Casal</h2>
+                        <p class="couple-seat-description">
+                            Desfrute de uma experiência única nos nossos lugares de casal especialmente 
+                            desenhados para proporcionar máximo conforto e intimidade. Poltronas duplas 
+                            sem divisão central, perfeitas para partilhar momentos especiais.
+                        </p>
+                        <div class="couple-seat-features">
+                            <div class="seat-feature">
+                                <i class="fas fa-heart"></i>
+                                <span>Sem divisória central</span>
+                            </div>
+                            <div class="seat-feature">
+                                <i class="fas fa-couch"></i>
+                                <span>Extra confortáveis</span>
+                            </div>
+                            <div class="seat-feature">
+                                <i class="fas fa-star"></i>
+                                <span>Localização premium</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('reserva_sessao_tematica', tipo='romance') }}" class="btn-primary large">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Reservar Lugar de Casal</span>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -605,7 +605,6 @@ main {
     border-color: var(--romance-red);
     color: white;
     animation: none !important;
-    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
 }
 
 .terror-badge {

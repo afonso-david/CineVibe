@@ -1269,47 +1269,36 @@ def registo():
             
             conn.commit()
             
-         
             user_id = cursor.lastrowid
             
-          
             avatar_path = 'imgs/icons/user_icon34-removebg-preview.png'
             
             if custom_avatar_path:
                 avatar_path = custom_avatar_path
             else:
-                pass
-               
                 cursor.execute("""
                     SELECT a.caminho 
                     FROM usuarios u 
-                    JOIN avatars a ON u.avatar_id = a.id 
+                    LEFT JOIN avatars a ON u.avatar_id = a.id 
                     WHERE u.id = %s
                 """, (user_id,))
                 result = cursor.fetchone()
                 
-                if result and result['caminho']:
+                if result and result.get('caminho'):
                     avatar_path = result['caminho'].replace('\\', '/').replace('"', '').strip()
-                 
                     if avatar_path.startswith('static/'):
                         avatar_path = avatar_path[7:]
                     if avatar_path.startswith('/static/'):
                         avatar_path = avatar_path[8:]
-                else:
-                    pass
-            
-                    avatar_path = 'imgs/icons/user_icon34-removebg-preview.png'
             
             cursor.close()
             conn.close()
-            
             
             session['user_id'] = user_id
             session['user_nome'] = nome
             session['user_email'] = email
             session['user_avatar'] = avatar_path
             
-
             return redirect(url_for("home"))
             
         except Exception as e:
@@ -6723,19 +6712,38 @@ def filme_detalhe(id_filme):
         app.logger.info(f"Horários após processamento: {len(horarios_filme)}")
 
         filtro_regiao = request.args.get('regiao', '').lower().strip()
-        query = """
-            SELECT c.id, c.nome, c.regiao
-            FROM filmes_cinemas fc
-            JOIN cinemas c ON fc.cinema_id = c.id
-            WHERE fc.filme_id = %s
-        """
-        params = [id_filme]
+        user_id = session.get('user_id')
+        
+        app.logger.info(f"Buscando cinemas para filme {id_filme}, user_id: {user_id}")
+        
+        if user_id:
+            query = """
+                SELECT c.id, c.nome, c.regiao
+                FROM filmes_cinemas fc
+                JOIN cinemas c ON fc.cinema_id = c.id
+                WHERE fc.filme_id = %s
+            """
+            params = [id_filme]
+        else:
+            query = """
+                SELECT c.id, c.nome, c.regiao
+                FROM filmes_cinemas fc
+                JOIN cinemas c ON fc.cinema_id = c.id
+                WHERE fc.filme_id = %s
+            """
+            params = [id_filme]
+            
         if filtro_regiao:
             query += " AND LOWER(TRIM(c.regiao)) = %s"
             params.append(filtro_regiao)
-        query += " ORDER BY c.regiao, c.nome"
+        query += " ORDER BY c.id"
+        
+        app.logger.info(f"Query: {query}")
+        app.logger.info(f"Params: {params}")
+        
         cursor.execute(query, params)
         filme_cinemas = cursor.fetchall()
+        
 
         cursor.execute("SELECT DISTINCT regiao FROM cinemas ORDER BY regiao")
         regioes = [r['regiao'] for r in cursor.fetchall()]
@@ -9730,7 +9738,6 @@ def cinema_filmes(id_cinema):
             LEFT JOIN filme_generos fg ON f.id = fg.filme_id
             LEFT JOIN generos g ON fg.genero_id = g.id
             WHERE hs.id_cinema = %s
-            AND f.data_lancamento <= CURDATE()
             GROUP BY f.id
             ORDER BY f.titulo
         """, (id_cinema,))

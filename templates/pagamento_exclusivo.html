@@ -4,762 +4,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento Exclusivo | CineVibe</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
-    
-    <style>
-        .pagamento-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
-            min-height: calc(100vh - 200px);
-        }
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
+    <link rel="icon" type="image/x-icon" href="
+    .resumo-exclusivo h3 {
+        color: #FFD60A;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+    .resumo-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+    }
+    .resumo-item:last-child {
+        border-bottom: none;
+    }
+    .resumo-label {
+        color: #ccc;
+    }
+    .resumo-value {
+        color: #fff;
+        font-weight: 600;
+    }
+    .total-final {
+        font-size: 1.5rem;
+        color: #FFD60A;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #FFD60A;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-crown"></i> Pagamento Sessão Exclusiva</h1>
+            <p>Finalize o pagamento da sua experiência exclusiva</p>
+        </div>
         
-        .pagamento-main {
-            background: linear-gradient(135deg, #1B263B, #2C3E50);
-            border-radius: 20px;
-            padding: 40px;
-            border: 2px solid rgba(255, 214, 10, 0.3);
-        }
-        
-        .pagamento-sidebar {
-            background: linear-gradient(135deg, #2C3E50, #34495E);
-            border-radius: 20px;
-            padding: 30px;
-            border: 2px solid rgba(255, 214, 10, 0.2);
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-        
-        .page-title {
-            color: #FFD60A;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .page-subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 1.1rem;
-        }
-        
-        .form-section {
-            margin-bottom: 40px;
-        }
-        
-        .section-title {
-            color: #FFD60A;
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid rgba(255, 214, 10, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #FFD60A;
-            box-shadow: 0 0 0 3px rgba(255, 214, 10, 0.2);
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        .payment-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .payment-method {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 214, 10, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-        }
-        
-        .payment-method:hover {
-            border-color: #FFD60A;
-            background: rgba(255, 214, 10, 0.1);
-        }
-        
-        .payment-method.selected {
-            border-color: #FFD60A;
-            background: rgba(255, 214, 10, 0.2);
-        }
-        
-        .payment-method i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #FFD60A;
-        }
-        
-        .payment-method img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            margin-bottom: 10px;
-        }
-        
-        .payment-method span {
-            display: block;
-            font-weight: 600;
-        }
-        
-        .payment-info {
-            background: rgba(78, 168, 222, 0.1);
-            border: 1px solid rgba(78, 168, 222, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 15px;
-            color: #4EA8DE;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .paypal-info {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0, 48, 135, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(0, 48, 135, 0.3);
-        }
-        
-        .paypal-info i {
-            font-size: 3rem;
-            color: #003087;
-            margin-bottom: 15px;
-        }
-        
-        .applepay-info {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .applepay-info i {
-            font-size: 3rem;
-            color: #ffffff;
-            margin-bottom: 15px;
-        }
-        
-        .apple-pay-button {
-            background: #000;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-            width: 100%;
-        }
-        
-        .gift-info {
-            background: rgba(76, 175, 80, 0.1);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 15px;
-            color: #4CAF50;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .resumo-reserva {
-            background: rgba(255, 214, 10, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(255, 214, 10, 0.3);
-        }
-        
-        .resumo-title {
-            color: #FFD60A;
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .resumo-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 8px 0;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .resumo-item.total {
-            border-top: 2px solid rgba(255, 214, 10, 0.3);
-            margin-top: 15px;
-            padding-top: 15px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #FFD60A;
-        }
-        
-        .btn-finalizar {
-            width: 100%;
-            background: linear-gradient(135deg, #FFD60A, #FFA500);
-            color: #1a1a1a;
-            border: none;
-            padding: 18px;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 30px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .btn-finalizar:hover {
-            background: linear-gradient(135deg, #FFA500, #FF8C00);
-            transform: translateY(-2px);
+        <div class="checkout-container">
             
-        }
-        
-        .btn-finalizar:disabled {
-            background: rgba(255, 214, 10, 0.5);
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .security-info {
-            background: rgba(76, 175, 80, 0.1);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            color: #4CAF50;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        .loading-content {
-            background: linear-gradient(135deg, #1B263B, #2C3E50);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            border: 2px solid rgba(255, 214, 10, 0.3);
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 214, 10, 0.3);
-            border-top: 4px solid #FFD60A;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 768px) {
-            .pagamento-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 20px 10px;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .payment-methods {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="page-wrapper">
-        
-        <header>
-            <div class="top-nav">
-                <div class="nav-left">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
-                </div>
-                <div class="nav-right">
-                    <div class="user-icon">
-                        {% if logged_in %}
-                            <a href="{{ url_for('perfil') }}">
-                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
-                            </a>
-                        {% else %}
-                            <a href="{{ url_for('login') }}">
-                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
-                            </a>
-                        {% endif %}
+            <div class="resumo-section">
+                <div class="resumo-exclusivo">
+                    <h3><i class="fas fa-ticket-alt"></i> Resumo da Reserva</h3>
+                    <div id="resumoConteudo">
+                        <p style="color: #ccc; text-align: center;">Carregando dados...</p>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <nav class="nav-center">
-            <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('filmes') }}">Filmes</a>
-            <a href="{{ url_for('cinemas') }}">Cinemas</a>
-            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
-            <a href="{{ url_for('bar') }}">Bar</a>
-            <a href="{{ url_for('beneficios') }}">Benefícios</a>
-            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
-            <a href="{{ url_for('contactos') }}">Contactos</a>
-        </nav>
-
-        <main>
-            <div class="pagamento-container">
-                
-                <div class="pagamento-main">
-                    <h1 class="page-title">Finalizar Reserva</h1>
-                    <p class="page-subtitle">Complete o pagamento da sua experiência exclusiva</p>
-                    
-                    <form id="formPagamento">
-                        
-                        <div class="form-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-credit-card"></i>
-                                Método de Pagamento
-                            </h3>
-                            <div class="payment-methods">
-                                <div class="payment-method" data-method="mbway">
-                                    <img src="{{ url_for('static', filename='imgs/pagamento/Quais_sao_as_vantagens_de_aderir_ao_MBway-removebg-preview (1).png') }}" alt="MB WAY" style="width: 120px; height: 60px; object-fit: contain;">
-                                    <span>MB WAY</span>
-                                </div>
-                                <div class="payment-method" data-method="paypal">
-                                    <img src="{{ url_for('static', filename='imgs/pagamento/paypal-removebg-preview.png') }}" alt="PayPal" style="width: 120px; height: 60px; object-fit: contain;">
-                                    <span>PayPal</span>
-                                </div>
-                                <div class="payment-method" data-method="mastercard">
-                                    <img src="{{ url_for('static', filename='imgs/pagamento/mastercard.png') }}" alt="Mastercard" style="width: 120px; height: 60px; object-fit: contain;">
-                                    <span>Mastercard</span>
-                                </div>
-                                <div class="payment-method" data-method="visa">
-                                    <img src="{{ url_for('static', filename='imgs/pagamento/visa.png') }}" alt="Visa" style="width: 120px; height: 60px; object-fit: contain;">
-                                    <span>Visa</span>
-                                </div>
-                                <div class="payment-method" data-method="applepay">
-                                    <img src="{{ url_for('static', filename='imgs/pagamento/apple-removebg-preview.png') }}" alt="Apple Pay" style="width: 120px; height: 60px; object-fit: contain;">
-                                    <span>Apple Pay</span>
-                                </div>
-                                <div class="payment-method" data-method="giftcard">
-                                    <i class="fas fa-gift"></i>
-                                    <span>Gift Cards</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section" id="dadosCartao" style="display: none;">
-                            <h3 class="section-title">
-                                <i class="fas fa-lock"></i>
-                                Dados do Cartão
-                            </h3>
-                            <div class="form-group">
-                                <label for="numeroCartao">Número do Cartão</label>
-                                <input type="text" id="numeroCartao" placeholder="1234 5678 9012 3456" maxlength="19">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="validadeCartao">Validade</label>
-                                    <input type="text" id="validadeCartao" placeholder="MM/AA" maxlength="5">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cvvCartao">CVV</label>
-                                    <input type="text" id="cvvCartao" placeholder="123" maxlength="3">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nomeCartao">Nome no Cartão</label>
-                                <input type="text" id="nomeCartao" placeholder="Nome como aparece no cartão">
-                            </div>
-                        </div>
-
-                        <div class="form-section" id="dadosMbway" style="display: none;">
-                            <h3 class="section-title">
-                                <i class="fas fa-mobile-alt"></i>
-                                MB WAY
-                            </h3>
-                            <div class="form-group">
-                                <label for="telemovelMbway">Número de Telemóvel</label>
-                                <input type="tel" id="telemovelMbway" placeholder="9XX XXX XXX" maxlength="9">
-                            </div>
-                            <div class="payment-info">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Receberá uma notificação no seu telemóvel para confirmar o pagamento</span>
-                            </div>
-                        </div>
-
-                        <div class="form-section" id="dadosPaypal" style="display: none;">
-                            <h3 class="section-title">
-                                <i class="fab fa-paypal"></i>
-                                PayPal
-                            </h3>
-                            <div class="paypal-info">
-                                <i class="fab fa-paypal"></i>
-                                <p>Será redirecionado para o PayPal para completar o pagamento de forma segura.</p>
-                            </div>
-                        </div>
-
-                        <div class="form-section" id="dadosApplepay" style="display: none;">
-                            <h3 class="section-title">
-                                <i class="fab fa-apple"></i>
-                                Apple Pay
-                            </h3>
-                            <div class="applepay-info">
-                                <i class="fab fa-apple"></i>
-                                <p>Use Touch ID ou Face ID para pagar de forma rápida e segura.</p>
-                                <button class="apple-pay-button">
-                                    <i class="fab fa-apple"></i>
-                                    Pagar com Apple Pay
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-section" id="dadosGiftcard" style="display: none;">
-                            <h3 class="section-title">
-                                <i class="fas fa-gift"></i>
-                                Gift Card
-                            </h3>
-                            <div class="form-group">
-                                <label for="giftCode">Código do Gift Card</label>
-                                <input type="text" id="giftCode" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
-                            </div>
-                            <div class="form-group">
-                                <label for="giftPin">PIN (se aplicável)</label>
-                                <input type="password" id="giftPin" placeholder="****" maxlength="4">
-                            </div>
-                            <div class="gift-info">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Introduza o código de 16 dígitos do seu Gift Card</span>
-                            </div>
-                        </div>
-
-                        <div class="security-info">
-                            <i class="fas fa-shield-alt"></i>
-                            Os seus dados estão protegidos com encriptação SSL de 256 bits
-                        </div>
-                    </form>
+            <div class="pagamento-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-credit-card"></i> Método de Pagamento</h2>
                 </div>
 
-                <div class="pagamento-sidebar">
-                    <div class="resumo-reserva">
-                        <h3 class="resumo-title">Resumo da Reserva</h3>
-                        <div class="resumo-item">
-                            <span>Sala:</span>
-                            <span id="resumoSala">-</span>
-                        </div>
-                        <div class="resumo-item">
-                            <span>Filme:</span>
-                            <span id="resumoFilme">-</span>
-                        </div>
-                        <div class="resumo-item">
-                            <span>Data:</span>
-                            <span id="resumoData">-</span>
-                        </div>
-                        <div class="resumo-item">
-                            <span>Horário:</span>
-                            <span id="resumoHora">-</span>
-                        </div>
-                        <div class="resumo-item">
-                            <span>Pessoas:</span>
-                            <span id="resumoPessoas">-</span>
-                        </div>
-                        <div class="resumo-item total">
-                            <span>Total:</span>
-                            <span id="resumoTotal">€0</span>
-                        </div>
+                <div class="payment-methods-grid">
+                    <div class="payment-method" data-method="mbway">
+                        <img src="{{ url_for('static', filename='imgs/pagamento/Quais_sao_as_vantagens_de_aderir_ao_MBway-removebg-preview (1).png') }}" alt="MB WAY">
+                        <span>MB WAY</span>
                     </div>
-                    
-                    <button class="btn-finalizar" onclick="finalizarPagamento()" disabled>
-                        <i class="fas fa-lock"></i>
-                        Finalizar Pagamento
-                    </button>
+                    <div class="payment-method" data-method="paypal">
+                        <img src="{{ url_for('static', filename='imgs/pagamento/paypal-removebg-preview.png') }}" alt="PayPal">
+                        <span>PayPal</span>
+                    </div>
+                    <div class="payment-method" data-method="mastercard">
+                        <img src="{{ url_for('static', filename='imgs/pagamento/mastercard.png') }}" alt="Mastercard">
+                        <span>Mastercard</span>
+                    </div>
+                    <div class="payment-method" data-method="visa">
+                        <img src="{{ url_for('static', filename='imgs/pagamento/visa.png') }}" alt="Visa">
+                        <span>Visa</span>
+                    </div>
+                    <div class="payment-method" data-method="applepay">
+                        <img src="{{ url_for('static', filename='imgs/pagamento/apple-removebg-preview.png') }}" alt="Apple Pay">
+                        <span>Apple Pay</span>
+                    </div>
                 </div>
-            </div>
-        </main>
-    </div>
 
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <h3 style="color: #FFD60A; margin: 0;">Processando Pagamento...</h3>
-            <p style="color: rgba(255, 255, 255, 0.8); margin: 10px 0 0 0;">Por favor, aguarde</p>
+                <div class="payment-forms">
+                    <div id="form-mbway" class="payment-form" style="display: none;">
+                        <h3><i class="fas fa-mobile-alt"></i> MB WAY</h3>
+                        <input type="tel" placeholder="Número de telemóvel" id="telemovel-mbway" maxlength="9">
+                    </div>
+
+                    <div id="form-card" class="payment-form" style="display: none;">
+                        <h3><i class="fas fa-credit-card"></i> Cartão de Crédito/Débito</h3>
+                        <input type="text" placeholder="Número do cartão" id="numero-cartao" maxlength="19">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <input type="text" placeholder="MM/AA" id="validade-cartao" maxlength="5">
+                            <input type="text" placeholder="CVV" id="cvv-cartao" maxlength="3">
+                        </div>
+                        <input type="text" placeholder="Nome no cartão" id="nome-cartao">
+                    </div>
+                </div>
+
+                <button class="btn-finalizar" onclick="finalizarPagamento()">
+                    <i class="fas fa-lock"></i>
+                    Finalizar Pagamento
+                </button>
+            </div>
         </div>
     </div>
+</main>
 
-    <script>
-        let dadosReserva = null;
-        let metodoSelecionado = null;
-        document.addEventListener('DOMContentLoaded', function() {
-            const dados = sessionStorage.getItem('dadosReservaExclusiva');
-            if (!dados) {
-                alert('Dados da reserva não encontrados. Redirecionando...');
-                window.location.href = '/sessao_exclusiva';
-                return;
-            }
+<div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="text-align: center; color: #FFD60A;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 20px;"></i>
+        <p style="font-size: 1.2rem;">Processando pagamento...</p>
+    </div>
+</div>
 
-            dadosReserva = JSON.parse(dados);
-            preencherResumo();
-            configurarEventListeners();
-        });
+<script>
+let dadosReserva = {};
+let metodoSelecionado = null;
 
-        function preencherResumo() {
-            if (!dadosReserva) return;
+document.addEventListener('DOMContentLoaded', function() {
+    carregarDadosReserva();
+    configurarMetodosPagamento();
+});
 
-            const tiposSala = {
-                'intimista': 'Sala Intimista',
-                'vip': 'Sala Vip',
-                'premium': 'Sala Premium'
-            };
+function carregarDadosReserva() {
+    const dados = sessionStorage.getItem('dadosReservaExclusiva');
+    if (dados) {
+        dadosReserva = JSON.parse(dados);
+        exibirResumo();
+    } else {
+        document.getElementById('resumoConteudo').innerHTML = '<p style="color: #ff6b6b;">Nenhuma reserva encontrada. <a href="/sessoes-tematicas" style="color: #FFD60A;">Voltar</a></p>';
+    }
+}
 
-            document.getElementById('resumoSala').textContent = tiposSala[dadosReserva.tipo_sala] || 'Sala Exclusiva';
-            document.getElementById('resumoFilme').textContent = dadosReserva.filme_nome;
+function exibirResumo() {
+    const html = `
+        <div class="resumo-item">
+            <span class="resumo-label">Sala:</span>
+            <span class="resumo-value">${dadosReserva.tipo_sala || 'N/A'}</span>
+        </div>
+        <div class="resumo-item">
+            <span class="resumo-label">Filme:</span>
+            <span class="resumo-value">${dadosReserva.filme_nome || 'N/A'}</span>
+        </div>
+        <div class="resumo-item">
+            <span class="resumo-label">Data:</span>
+            <span class="resumo-value">${dadosReserva.data_sessao || 'N/A'}</span>
+        </div>
+        <div class="resumo-item">
+            <span class="resumo-label">Horário:</span>
+            <span class="resumo-value">${dadosReserva.hora_sessao || 'N/A'}</span>
+        </div>
+        <div class="resumo-item">
+            <span class="resumo-label">Pessoas:</span>
+            <span class="resumo-value">${dadosReserva.num_pessoas || 0}</span>
+        </div>
+        <div class="resumo-item total-final">
+            <span class="resumo-label">Total:</span>
+            <span class="resumo-value">€${dadosReserva.total || '0.00'}</span>
+        </div>
+    `;
+    document.getElementById('resumoConteudo').innerHTML = html;
+}
+
+function configurarMetodosPagamento() {
+    document.querySelectorAll('.payment-method').forEach(method => {
+        method.addEventListener('click', function() {
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            this.classList.add('selected');
+            metodoSelecionado = this.dataset.method;
             
-            const dataFormatada = new Date(dadosReserva.data_sessao).toLocaleDateString('pt-PT');
-            document.getElementById('resumoData').textContent = dataFormatada;
-            document.getElementById('resumoHora').textContent = dadosReserva.hora_sessao;
-            document.getElementById('resumoPessoas').textContent = dadosReserva.num_pessoas + (dadosReserva.num_pessoas == 1 ? ' pessoa' : ' pessoas');
-            document.getElementById('resumoTotal').textContent = '€' + dadosReserva.total;
-        }
-
-        function configurarEventListeners() {
-            document.querySelectorAll('.payment-method').forEach(method => {
-                method.addEventListener('click', function() {
-                    selecionarMetodoPagamento(this.dataset.method);
-                });
-            });
-            document.getElementById('numeroCartao').addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
-                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
-                e.target.value = formattedValue;
-            });
-            document.getElementById('validadeCartao').addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length >= 2) {
-                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
-                }
-                e.target.value = value;
-            });
-            document.getElementById('cvvCartao').addEventListener('input', function(e) {
-                e.target.value = e.target.value.replace(/[^0-9]/g, '');
-            });
-            document.getElementById('giftCode').addEventListener('input', function(e) {
-                let value = e.target.value.replace(/[^A-Z0-9]/g, '');
-                let formattedValue = value.match(/.{1,4}/g)?.join('-') || value;
-                e.target.value = formattedValue;
-            });
-            document.getElementById('telemovelMbway').addEventListener('input', function(e) {
-                e.target.value = e.target.value.replace(/[^0-9]/g, '');
-            });
-        }
-
-        function selecionarMetodoPagamento(metodo) {
-            metodoSelecionado = metodo;
-            document.querySelectorAll('.payment-method').forEach(method => {
-                method.classList.remove('selected');
-            });
-            document.querySelector(`[data-method="${metodo}"]`).classList.add('selected');
-            document.getElementById('dadosCartao').style.display = 'none';
-            document.getElementById('dadosMbway').style.display = 'none';
-            document.getElementById('dadosPaypal').style.display = 'none';
-            document.getElementById('dadosApplepay').style.display = 'none';
-            document.getElementById('dadosGiftcard').style.display = 'none';
-            switch(metodo) {
-                case 'mastercard':
-                case 'visa':
-                    document.getElementById('dadosCartao').style.display = 'block';
-                    break;
-                case 'mbway':
-                    document.getElementById('dadosMbway').style.display = 'block';
-                    break;
-                case 'paypal':
-                    document.getElementById('dadosPaypal').style.display = 'block';
-                    break;
-                case 'applepay':
-                    document.getElementById('dadosApplepay').style.display = 'block';
-                    break;
-                case 'giftcard':
-                    document.getElementById('dadosGiftcard').style.display = 'block';
-                    break;
-            }
-            document.querySelector('.btn-finalizar').disabled = false;
-        }
-
-        function validarFormulario() {
-            if (!metodoSelecionado) {
-                alert('Por favor, selecione um método de pagamento.');
-                return false;
-            }
-
-            if (metodoSelecionado === 'mastercard' || metodoSelecionado === 'visa') {
-                const numero = document.getElementById('numeroCartao').value.replace(/\s/g, '');
-                const validade = document.getElementById('validadeCartao').value;
-                const cvv = document.getElementById('cvvCartao').value;
-                const nome = document.getElementById('nomeCartao').value;
-
-                if (!numero || numero.length < 16) {
-                    alert('Por favor, insira um número de cartão válido.');
-                    return false;
-                }
-                if (!validade || validade.length < 5) {
-                    alert('Por favor, insira a validade do cartão.');
-                    return false;
-                }
-                if (!cvv || cvv.length < 3) {
-                    alert('Por favor, insira o CVV do cartão.');
-                    return false;
-                }
-                if (!nome.trim()) {
-                    alert('Por favor, insira o nome no cartão.');
-                    return false;
-                }
-            }
-
+            document.querySelectorAll('.payment-form').forEach(form => form.style.display = 'none');
+            
             if (metodoSelecionado === 'mbway') {
-                const telemovel = document.getElementById('telemovelMbway').value;
-                if (!telemovel.trim() || telemovel.length !== 9) {
-                    alert('Por favor, insira um número de telemóvel válido (9 dígitos).');
-                    return false;
-                }
+                document.getElementById('form-mbway').style.display = 'block';
+            } else if (metodoSelecionado === 'mastercard' || metodoSelecionado === 'visa') {
+                document.getElementById('form-card').style.display = 'block';
             }
+        });
+    });
+}
 
-            if (metodoSelecionado === 'giftcard') {
-                const giftCode = document.getElementById('giftCode').value.trim();
-                if (!giftCode || giftCode.length < 16) {
-                    alert('Por favor, introduza um código de Gift Card válido.');
-                    return false;
-                }
-            }
-
-            return true;
+function finalizarPagamento() {
+    if (!metodoSelecionado) {
+        alert('Por favor, selecione um método de pagamento');
+        return;
+    }
+    
+    document.getElementById('loadingOverlay').style.display = 'flex';
+    
+    const dadosPagamento = {
+        ...dadosReserva,
+        metodo_pagamento: metodoSelecionado
+    };
+    
+    fetch('/api/processar-pagamento-exclusivo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dadosPagamento)
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('loadingOverlay').style.display = 'none';
+        
+        if (data.success) {
+            sessionStorage.removeItem('dadosReservaExclusiva');
+            alert('Pagamento processado com sucesso! Reserva confirmada.');
+            window.location.href = '/home';
+        } else {
+            alert(data.message || 'Erro ao processar pagamento. Tente novamente.');
         }
-
-        function finalizarPagamento() {
-            if (!validarFormulario()) return;
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            const dadosPagamento = {
-                ...dadosReserva,
-                metodo_pagamento: metodoSelecionado
-            };
-            if (metodoSelecionado === 'mastercard' || metodoSelecionado === 'visa') {
-                dadosPagamento.dados_cartao = {
-                    numero: document.getElementById('numeroCartao').value.replace(/\s/g, ''),
-                    validade: document.getElementById('validadeCartao').value,
-                    cvv: document.getElementById('cvvCartao').value,
-                    nome: document.getElementById('nomeCartao').value,
-                    tipo: metodoSelecionado
-                };
-            }
-            if (metodoSelecionado === 'mbway') {
-                dadosPagamento.telemovel_mbway = document.getElementById('telemovelMbway').value;
-            }
-            if (metodoSelecionado === 'giftcard') {
-                dadosPagamento.dados_giftcard = {
-                    codigo: document.getElementById('giftCode').value,
-                    pin: document.getElementById('giftPin').value
-                };
-            }
-            fetch('/api/processar-pagamento-exclusivo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dadosPagamento)
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                
-                if (data.success) {
-                    sessionStorage.removeItem('dadosReservaExclusiva');
-                    alert('Pagamento processado com sucesso! Reserva confirmada.');
-                    window.location.href = '/home?reserva_concluida=1';
-                } else {
-                    alert(data.message || 'Erro ao processar pagamento. Tente novamente.');
-                }
-            })
-            .catch(error => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                console.error('Erro:', error);
-                alert('Erro ao processar pagamento. Tente novamente.');
-            });
-        }
-    </script>
-</body>
-</html>
-
+    })
+    .catch(error => {
+        document.getElementById('loadingOverlay').style.display = 'none';
+        console.error('Erro:', error);
+        alert('Erro ao processar pagamento. Tente novamente.');
+    });
+}
+</script>
+{% endblock %}

@@ -45,13 +45,13 @@
     </header>
 
     <nav class="nav-center" id="navMenu">
-        <a href="{{ url_for('home') }}"class="active">Home</a>
+        <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
         <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
         <a href="{{ url_for('bar') }}">Bar</a>
         <a href="{{ url_for('beneficios') }}">Benefícios</a>
-        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('sessao') }}"class="active">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
     
@@ -100,7 +100,7 @@
                     
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <img src="{{ url_for('static', filename='imgs/temas/NOSTAL~1/DOWNLO~1.PNG') }}" alt="Música Vintage">
+                            <img src="{{ url_for('static', filename='imgs/temas/Nostalgia/musica.png') }}" alt="Música Vintage">
                         </div>
                         <h3>Banda Sonora</h3>
                         <p>Música ambiente dos anos 40-60 antes do filme, transportando-o para a época dourada do cinema.</p>

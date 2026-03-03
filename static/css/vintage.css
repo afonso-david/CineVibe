@@ -259,6 +259,8 @@ a {
   display: flex;
   gap: 1.5rem;
   justify-content: center;
+  background: transparent !important;
+  padding: 0 !important;
 }
 
 .btn-primary {

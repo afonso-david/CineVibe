@@ -8379,7 +8379,9 @@ def sessao_exclusiva():
 
 @app.route('/sessao_tematica')
 def sessao_tematica():
-    return render_template('sessoes_tematicas.html')
+    logged_in = 'user_id' in session
+    avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
+    return render_template('sessoes_tematicas.html', logged_in=logged_in, avatar=avatar)
 
 @app.route('/sessao_terror')
 def sessao_terror():
@@ -8581,11 +8583,31 @@ def reserva_sessao_tematica():
     if not tipo_sessao:
         return "Tipo de sessão não especificado", 400
     
+    logged_in = 'user_id' in session
+    
+    generos_map = {
+        'vintage': 12,
+        'romance': 13,
+        'terror': 5
+    }
+    
+    genero_id = generos_map.get(tipo_sessao)
+    
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
     try:
-        cursor.execute("SELECT id, titulo, duracao FROM filmes ORDER BY titulo")
+        if genero_id:
+            cursor.execute("""
+                SELECT DISTINCT f.id, f.titulo, f.duracao 
+                FROM filmes f
+                INNER JOIN filme_generos fg ON f.id = fg.filme_id
+                WHERE fg.genero_id = %s
+                ORDER BY f.titulo
+            """, (genero_id,))
+        else:
+            cursor.execute("SELECT id, titulo, duracao FROM filmes ORDER BY titulo")
+        
         filmes = cursor.fetchall()
     except Exception as e:
         app.logger.error(f"Erro ao buscar filmes: {e}")
@@ -8594,24 +8616,14 @@ def reserva_sessao_tematica():
         cursor.close()
         conn.close()
     
-    precos_base = {
-        'vintage': 35.00,
-        'romance': 85.00,
-        'terror': 45.00
-    }
-    
-    preco_base = precos_base.get(tipo_sessao, 35.00)
-    
     from datetime import datetime, timedelta
     data_minima = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
     
-    logged_in = 'user_id' in session
     avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
     
     return render_template('reserva_sessao_tematica.html',
                          tipo_sessao=tipo_sessao,
                          filmes=filmes,
-                         preco_base=preco_base,
                          data_minima=data_minima,
                          logged_in=logged_in,
                          avatar=avatar)
@@ -8621,80 +8633,15 @@ def processar_reserva_tematica():
     pass
 
     tipo_sessao = request.form.get('tipo_sessao')
+    filme_id = request.form.get('filme_id')
     data_sessao = request.form.get('data_sessao')
     hora_sessao = request.form.get('hora_sessao')
     num_pessoas = request.form.get('num_pessoas')
-    filme_id = request.form.get('filme_id')
+    nome_cliente = request.form.get('nome_cliente')
+    email_cliente = request.form.get('email_cliente')
     
     if not all([tipo_sessao, data_sessao, hora_sessao, num_pessoas]):
         return "Dados incompletos", 400
-    
-    session['reserva_tematica_temp'] = {
-        'tipo_sessao': tipo_sessao,
-        'data_sessao': data_sessao,
-        'hora_sessao': hora_sessao,
-        'num_pessoas': int(num_pessoas),
-        'filme_id': filme_id if filme_id else None
-    }
-    
-    return redirect(url_for('pagamento_sessao_tematica'))
-
-@app.route('/pagamento_sessao_tematica')
-def pagamento_sessao_tematica():
-    pass
-
-    tipo_sessao = request.args.get('tipo')
-    filme_id = request.args.get('filme_id')
-    data_sessao = request.args.get('data')
-    hora_sessao = request.args.get('hora')
-    
-    if not tipo_sessao and 'reserva_tematica_temp' in session:
-        dados_temp = session['reserva_tematica_temp']
-        tipo_sessao = dados_temp.get('tipo_sessao')
-        filme_id = dados_temp.get('filme_id')
-        data_sessao = dados_temp.get('data_sessao')
-        hora_sessao = dados_temp.get('hora_sessao')
-    
-    if not tipo_sessao:
-        return "Dados da reserva não encontrados", 400
-    
-    salas_exclusivas = []
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    
-    try:
-        cursor.execute("SELECT id, nome, descricao, capacidade FROM salas_exclusivas ORDER BY nome")
-        salas_raw = cursor.fetchall()
-        
-        precos_salas = {
-            'intimista': 120.00,
-            'vip': 200.00,
-            'premium': 150.00
-        }
-        
-        for sala in salas_raw:
-            sala['preco'] = precos_salas.get(sala['nome'].lower(), 100.00)
-            salas_exclusivas.append(sala)
-            
-    except Exception as e:
-        app.logger.error(f"Erro ao buscar salas exclusivas: {e}")
-        salas_exclusivas = []
-    finally:
-        cursor.close()
-        conn.close()
-    
-    filme = None
-    if filme_id and filme_id != '0':
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        try:
-            cursor.execute("SELECT * FROM filmes WHERE id = %s", (filme_id,))
-            filme = cursor.fetchone()
-        except Exception as e:
-            app.logger.error(f"Erro ao buscar filme: {e}")
-        finally:
-            cursor.close()
-            conn.close()
     
     precos_base = {
         'vintage': 35.00,
@@ -8703,40 +8650,94 @@ def pagamento_sessao_tematica():
     }
     
     preco_base = precos_base.get(tipo_sessao, 35.00)
+    preco_total = preco_base * int(num_pessoas)
+    
+    filme_nome = 'Sem filme selecionado'
+    if filme_id:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        try:
+            cursor.execute("SELECT titulo FROM filmes WHERE id = %s", (filme_id,))
+            filme = cursor.fetchone()
+            if filme:
+                filme_nome = filme['titulo']
+        except Exception as e:
+            app.logger.error(f"Erro ao buscar filme: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    
+    reserva_temp = {
+        'tipo_sessao': tipo_sessao,
+        'filme_id': filme_id if filme_id else None,
+        'filme_nome': filme_nome,
+        'data_sessao': data_sessao,
+        'hora_sessao': hora_sessao,
+        'num_pessoas': int(num_pessoas),
+        'preco_total': preco_total
+    }
+    
+    if nome_cliente and email_cliente:
+        reserva_temp['nome_cliente'] = nome_cliente
+        reserva_temp['email_cliente'] = email_cliente
+    
+    session['reserva_tematica_temp'] = reserva_temp
+    
+    return redirect(url_for('pagamento_tematica'))
+
+@app.route('/pagamento_tematica')
+def pagamento_tematica():
+    pass
+
+    if 'reserva_tematica_temp' not in session:
+        return redirect(url_for('sessao_tematica'))
     
     logged_in = 'user_id' in session
     avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
     
-    if 'reserva_tematica_temp' in session:
-        del session['reserva_tematica_temp']
+    reserva = session['reserva_tematica_temp']
     
-    return render_template('pagamento_sessao_tematica.html',
-                         tipo_sessao=tipo_sessao,
-                         filme=filme,
-                         data_sessao=data_sessao,
-                         hora_sessao=hora_sessao,
-                         preco_base=preco_base,
-                         salas_exclusivas=salas_exclusivas,
+    return render_template('pagamento_tematica.html',
                          logged_in=logged_in,
-                         avatar=avatar)
+                         avatar=avatar,
+                         reserva=reserva)
 
-@app.route('/api/processar-pagamento-sessao-tematica', methods=['POST'])
-def api_processar_pagamento_sessao_tematica():
+@app.route('/api/processar-pagamento-tematica', methods=['POST'])
+def api_processar_pagamento_tematica():
     pass
 
     try:
         data = request.get_json()
         app.logger.info(f"Dados recebidos para pagamento sessão temática: {data}")
         
-        required_fields = ['tipo_sessao', 'preco_total', 'metodo_pagamento', 'sala_id', 'sala_nome']
+        required_fields = ['tipo_sessao', 'preco_total', 'metodo_pagamento']
         
         for field in required_fields:
             if not data.get(field):
                 app.logger.error(f"Campo obrigatório ausente: {field}")
                 return jsonify({'success': False, 'message': f'Campo {field} é obrigatório'})
         
+        usuario_id = session.get('user_id')
+        reserva_temp = session.get('reserva_tematica_temp', {})
+        
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+        
+        if usuario_id:
+            cursor.execute("SELECT nome, email FROM usuarios WHERE id = %s", (usuario_id,))
+            usuario = cursor.fetchone()
+            
+            if not usuario:
+                return jsonify({'success': False, 'message': 'Usuário não encontrado'})
+            
+            nome_cliente = usuario['nome']
+            email_cliente = usuario['email']
+        else:
+            nome_cliente = reserva_temp.get('nome_cliente', data.get('nome_cliente', ''))
+            email_cliente = reserva_temp.get('email_cliente', data.get('email_cliente', ''))
+            
+            if not nome_cliente or not email_cliente:
+                return jsonify({'success': False, 'message': 'Nome e email são obrigatórios para convidados'})
         
         filme_id = data.get('filme_id')
         if filme_id and filme_id != '0':
@@ -8747,65 +8748,58 @@ def api_processar_pagamento_sessao_tematica():
         else:
             filme_id = None
         
-        user_id = session.get('user_id') if 'user_id' in session else None
-        
-        if not user_id:
-            nome_cliente = data.get('nome_cliente', '')
-            email_cliente = data.get('email_cliente', '')
-            telefone_cliente = data.get('telefone_cliente', '')
-        else:
-            nome_cliente = session.get('user_name', '')
-            email_cliente = session.get('user_email', '')
-            telefone_cliente = ''
-        
-        app.logger.info(f"Inserindo reserva sessão temática - Tipo: {data['tipo_sessao']}, Sala: {data['sala_nome']}, Filme: {data.get('filme_nome', 'N/A')}")
-        
         cursor.execute("""
-            INSERT INTO reservas_exclusivas 
-            (tipo_sala, filme_id, data_sessao, hora_sessao, num_pessoas, 
-             preco_total, usuario_id, nome_cliente, email_cliente, telefone_cliente, status)
+            INSERT INTO reservas_tematicas 
+            (usuario_id, nome_cliente, email_cliente, tipo_sessao, filme_id, data_sessao, hora_sessao, num_pessoas, preco_total, metodo_pagamento, status)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'confirmada')
         """, (
-            data['sala_nome'].lower(),
-            filme_id,
-            data.get('data_sessao', ''),
-            data.get('hora_sessao', ''),
-            data.get('sala_capacidade', 1),
-            float(data['preco_total']),
-            user_id,
+            usuario_id,
             nome_cliente,
             email_cliente,
-            telefone_cliente
+            data['tipo_sessao'],
+            filme_id,
+            data.get('data_sessao'),
+            data.get('hora_sessao'),
+            data.get('num_pessoas', 1),
+            data['preco_total'],
+            data['metodo_pagamento']
         ))
         
         reserva_id = cursor.lastrowid
         conn.commit()
+        cursor.close()
+        conn.close()
         
         app.logger.info(f"Reserva sessão temática criada com sucesso - ID: {reserva_id}")
         
-        if email_cliente:
-            try:
-                dados_reserva = {
-                    'id': reserva_id,
-                    'tipo_sessao': data['tipo_sessao'],
-                    'sala_nome': data['sala_nome'],
-                    'filme_nome': data.get('filme_nome', 'Experiência Temática'),
-                    'data_sessao': data.get('data_sessao', ''),
-                    'hora_sessao': data.get('hora_sessao', ''),
-                    'preco_total': data['preco_total'],
-                    'metodo_pagamento': data['metodo_pagamento']
-                }
-                
-                enviar_email_confirmacao_exclusiva(email_cliente, nome_cliente, dados_reserva)
-                app.logger.info(f"Email de confirmação enviado para {email_cliente}")
-            except Exception as e:
-                app.logger.error(f"Erro ao enviar email de confirmação: {e}")
-        
-        return jsonify({
+        response = jsonify({
             'success': True, 
             'message': 'Reserva criada com sucesso!',
             'reserva_id': reserva_id
         })
+        
+        @response.call_on_close
+        def enviar_email_async():
+            try:
+                dados_email = {
+                    'reserva_id': reserva_id,
+                    'tipo_sala': data['tipo_sessao'],
+                    'filme': data.get('filme_nome', 'Experiência Temática'),
+                    'data_sessao': data.get('data_sessao', ''),
+                    'hora_sessao': data.get('hora_sessao', ''),
+                    'num_pessoas': data.get('num_pessoas', 1),
+                    'total': f"€{data['preco_total']}",
+                    'nome_cliente': nome_cliente,
+                    'email_cliente': email_cliente
+                }
+                
+                app.logger.info(f"Enviando email para {email_cliente}")
+                enviar_email_confirmacao_tematica(email_cliente, nome_cliente, dados_email)
+                app.logger.info(f"Email enviado com sucesso")
+            except Exception as e:
+                app.logger.error(f"Erro ao enviar email: {str(e)}")
+        
+        return response
         
     except Exception as e:
         app.logger.error(f"Erro ao processar pagamento sessão temática: {e}")
@@ -12253,6 +12247,121 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
         
     except Exception as e:
         app.logger.error(f"❌ Erro ao enviar email de confirmação exclusiva: {str(e)}")
+        return False
+
+def enviar_email_confirmacao_tematica(destinatario_email, destinatario_nome, dados_reserva):
+    pass
+  
+   
+    try:
+        app.logger.info(f"Enviando email de confirmação temática para: {destinatario_email}")
+        
+        if EMAIL_PASSWORD in ['sua_senha_app_aqui', 'DESATIVADO_TEMPORARIAMENTE'] or not EMAIL_PASSWORD:
+            app.logger.warning("Email desativado temporariamente. Configure senha de app do Gmail para ativar.")
+            return False
+
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = f'🎬 Confirmação de Reserva Temática CineVibe - #{dados_reserva["reserva_id"]}'
+        msg['From'] = f'CineVibe <{EMAIL_USER}>'
+        msg['To'] = destinatario_email
+
+        tipos_sessao = {
+            'vintage': 'Sessão Vintage',
+            'romance': 'Sessão Romance',
+            'terror': 'Sessão Terror'
+        }
+        
+        nome_sessao = tipos_sessao.get(dados_reserva['tipo_sala'], 'Sessão Temática')
+        
+        try:
+            data_formatada = datetime.strptime(dados_reserva['data_sessao'], '%Y-%m-%d').strftime('%d/%m/%Y')
+        except:
+            data_formatada = dados_reserva['data_sessao']
+        
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; margin: 0; padding: 20px;">
+            <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #FFD60A;">
+                <div style="background: linear-gradient(135deg, #0D1B2A, #1B263B); padding: 40px 30px; text-align: center; border-bottom: 3px solid #FFD60A;">
+                    <h1 style="color: #FFD60A; margin: 0; font-size: 28px; font-weight: 900;">🎬 CineVibe Temático</h1>
+                </div>
+                <div style="padding: 40px 30px;">
+                    <h2 style="color: #FFD60A; margin-bottom: 25px; font-size: 24px;">Olá, {destinatario_nome}!</h2>
+                    <p style="color: #E0E1DD; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">A sua reserva temática foi confirmada com sucesso! Prepare-se para uma experiência cinematográfica única.</p>
+                    
+                    <div style="background: rgba(255, 214, 10, 0.1); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255, 214, 10, 0.3);">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="color: #E0E1DD; font-weight: 600; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Reserva:</td>
+                                <td style="color: #FFD60A; font-weight: 700; text-align: right; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">#{dados_reserva['reserva_id']}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #E0E1DD; font-weight: 600; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Sessão:</td>
+                                <td style="color: #FFD60A; font-weight: 700; text-align: right; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">{nome_sessao}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #E0E1DD; font-weight: 600; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Filme:</td>
+                                <td style="color: #FFD60A; font-weight: 700; text-align: right; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">{dados_reserva['filme']}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #E0E1DD; font-weight: 600; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Data:</td>
+                                <td style="color: #FFD60A; font-weight: 700; text-align: right; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">{data_formatada}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #E0E1DD; font-weight: 600; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Horário:</td>
+                                <td style="color: #FFD60A; font-weight: 700; text-align: right; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">{dados_reserva['hora_sessao']}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #E0E1DD; font-weight: 600; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Pessoas:</td>
+                                <td style="color: #FFD60A; font-weight: 700; text-align: right; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">{dados_reserva['num_pessoas']}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #E0E1DD; font-weight: 600; padding: 20px 0 0 0; border-top: 2px solid rgba(255, 214, 10, 0.3); font-size: 1.2rem;">Total Pago:</td>
+                                <td style="color: #FFD60A; font-weight: 700; text-align: right; padding: 20px 0 0 0; border-top: 2px solid rgba(255, 214, 10, 0.3); font-size: 1.2rem;">{dados_reserva['total']}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p style="color: #FFD60A; font-weight: bold; margin-top: 30px; margin-bottom: 15px;">Instruções importantes:</p>
+                    <ul style="color: #E0E1DD; line-height: 1.8; margin: 0; padding-left: 20px;">
+                        <li style="margin-bottom: 8px;">Chegue 30 minutos antes do horário da sessão</li>
+                        <li style="margin-bottom: 8px;">Traga um documento de identificação</li>
+                        <li style="margin-bottom: 8px;">A sala será preparada especialmente para o seu grupo</li>
+                        <li style="margin-bottom: 8px;">Serviços de bar e catering estão incluídos</li>
+                    </ul>
+                    
+                    <p style="color: #E0E1DD; font-size: 14px; margin-top: 30px; line-height: 1.6;">Para qualquer alteração ou dúvida, contacte-nos através do email info@cinevibe.pt ou telefone +351 800 123 456.</p>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.4); padding: 30px; text-align: center; color: #778DA9; font-size: 14px;">
+                    <p style="margin: 5px 0;"><strong style="color: #FFD60A;">© 2024 CineVibe</strong> - Experiências Cinematográficas Temáticas</p>
+                    <p style="margin: 5px 0;">Este email foi enviado automaticamente. Não responda a esta mensagem.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        html_part = MIMEText(html_content, 'html', 'utf-8')
+        msg.attach(html_part)
+
+        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+        if EMAIL_USE_TLS:
+            server.starttls()
+        server.login(EMAIL_USER, EMAIL_PASSWORD)
+        
+        text = msg.as_string()
+        server.sendmail(EMAIL_USER, destinatario_email, text)
+        server.quit()
+        
+        return True
+        
+    except Exception as e:
+        app.logger.error(f"❌ Erro ao enviar email de confirmação temática: {str(e)}")
         return False
 
 @app.route('/api/recuperar-senha', methods=['POST'])

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento - Sessão {{ tipo_sessao.title() }} | CineVibe</title>
+    <title>Checkout - Sessão {{ tipo_sessao.title() }} | CineVibe</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,372 +11,59 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment_clean.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
     
     <style>
-        /* Estilos do Modal (copiados do filme_detalhe) */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                135deg,
-                rgba(13, 27, 42, 0.95) 0%,
-                rgba(27, 38, 59, 0.9) 50%,
-                rgba(13, 27, 42, 0.95) 100%
-            );
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 2000;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .modal-overlay.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .choice-modal-content {
-            background: linear-gradient(
-                145deg,
-                rgba(27, 38, 59, 0.15) 0%,
-                rgba(13, 27, 42, 0.25) 100%
-            );
-            border-radius: 30px;
-            padding: 0;
-            max-width: 700px;
-            width: 85%;
-            max-height: 85vh;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 
-                0 40px 120px rgba(0, 0, 0, 0.8),
-                0 0 0 1px rgba(255, 214, 10, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border: 3px solid;
-            border-image: linear-gradient(135deg, 
-                rgba(255, 214, 10, 0.6) 0%,
-                rgba(78, 168, 222, 0.4) 50%,
-                rgba(255, 214, 10, 0.6) 100%
-            ) 1;
-            animation: modalEntrance 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(20px);
-        }
-
-        @keyframes modalEntrance {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(50px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .choice-close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            color: white;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        .choice-close-btn:hover {
-            background: rgba(255, 0, 0, 0.8);
-            border-color: rgba(255, 255, 255, 0.8);
-            transform: scale(1.15) rotate(90deg);
-            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
-        }
-
-        .choice-image-background {
-            position: relative;
-            width: 100%;
-            height: 550px;
-            overflow: hidden;
-            border-radius: 25px;
-            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.3);
-        }
-
-        .choice-full-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 40%;
-            display: block;
-        }
-
-        .choice-pill {
-            position: absolute;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 10;
-            padding: 20px 40px;
-            border-radius: 60px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            text-align: center;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            border: 4px solid;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(0) scale(1);
-            opacity: 1;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .choice-left {
-            left: 8%;
-            top: 62%;
-        }
-
-        .choice-right {
-            right: 8%;
-            top: 62%;
-        }
-
-        .red-pill {
-            background: linear-gradient(135deg, #FF4444, #CC0000);
-            border-color: rgba(255, 68, 68, 0.8);
-        }
-
-        .red-pill:hover {
-            background: linear-gradient(135deg, #FF6666, #FF0000);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(255, 68, 68, 0.4);
-        }
-
-        .blue-pill {
-            background: linear-gradient(135deg, #4EA8DE, #1E88E5);
-            border-color: rgba(78, 168, 222, 0.8);
-        }
-
-        .blue-pill:hover {
-            background: linear-gradient(135deg, #64B5F6, #2196F3);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(78, 168, 222, 0.4);
-        }
-
-        /* Modal de Loading */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 3000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #1B263B, #2C3E50);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
+        .sala-option {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             border: 2px solid rgba(255, 214, 10, 0.3);
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(255, 214, 10, 0.3);
-            border-top: 4px solid #FFD60A;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-content h3 {
-            color: #FFD60A;
-            margin-bottom: 10px;
-        }
-
-        .loading-content p {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* Seleção de Salas */
-        .sala-selection-section {
-            margin-bottom: 40px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
-            border: 1px solid rgba(255, 214, 10, 0.2);
-        }
-
-        .sala-selection-section h2 {
-            color: #FFD60A;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .salas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .sala-card {
-            background: linear-gradient(135deg, #1B263B, #2C3E50);
-            border-radius: 15px;
-            padding: 25px;
-            border: 2px solid rgba(255, 214, 10, 0.2);
-            transition: all 0.3s ease;
+            padding: 20px;
             cursor: pointer;
-        }
-
-        .sala-card:hover {
-            border-color: rgba(255, 214, 10, 0.6);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 214, 10, 0.2);
-        }
-
-        .sala-card.selected {
-            border-color: #FFD60A;
-            background: linear-gradient(135deg, #2C3E50, #34495E);
-            box-shadow: 0 0 20px rgba(255, 214, 10, 0.3);
-        }
-
-        .sala-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            transition: all 0.3s ease;
             margin-bottom: 15px;
         }
 
-        .sala-header h3 {
+        .sala-option:hover {
+            border-color: rgba(255, 214, 10, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.2);
+        }
+
+        .sala-option.selected {
+            border-color: #FFD60A;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(255, 214, 10, 0.1));
+            box-shadow: 0 0 30px rgba(255, 214, 10, 0.3);
+        }
+
+        .sala-info h4 {
             color: #FFD60A;
-            font-size: 1.3rem;
-            margin: 0;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
         }
 
-        .sala-capacity {
+        .sala-info p {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .sala-description {
-            margin-bottom: 20px;
-        }
-
-        .sala-description p {
-            color: rgba(255, 255, 255, 0.7);
             font-size: 0.95rem;
-            line-height: 1.5;
-            margin: 0;
+            margin-bottom: 15px;
         }
 
-        .sala-price {
+        .sala-details {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+            margin-top: 10px;
         }
 
-        .price-label {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
-        .price-value {
-            color: #FFD60A;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .sala-select-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #FFD60A, #FFA500);
-            color: #0D1B2A;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .sala-select-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
-        }
-
-        .sala-card.selected .sala-select-btn {
-            background: linear-gradient(135deg, #4EA8DE, #1E88E5);
-            color: white;
-        }
-
-        .sala-selecionada {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255, 214, 10, 0.1);
-            border-radius: 10px;
-            border-left: 4px solid #FFD60A;
-        }
-
-        .session-room, .session-capacity {
+        .sala-details span {
             color: rgba(255, 255, 255, 0.9);
-            margin: 5px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .salas-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .sala-card {
-                padding: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .choice-pill {
-                font-size: 0.9rem;
-                padding: 12px 25px;
-            }
+        .sala-price {
+            color: #FFD60A;
+            font-size: 1.1rem;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -418,508 +105,142 @@
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
 
-    <main class="main-content">
-        <div class="payment-container">
+    <main class="checkout-main">
+        <div class="container">
+            <h1><i class="fas fa-crown"></i> Pagamento Sessão {{ tipo_sessao.title() }}</h1>
             
-            <div class="booking-summary">
-                <div class="summary-header">
-                    <h2><i class="fas fa-ticket-alt"></i> Resumo da Reserva</h2>
-                </div>
+            <div class="checkout-container">
                 
-                <div class="summary-content">
-                    <div class="session-info">
-                        <h3>Sessão {{ tipo_sessao.title() }}</h3>
-                        {% if filme %}
-                            <p class="movie-title">{{ filme.titulo }}</p>
-                        {% else %}
-                            <p class="movie-title">Experiência Temática Completa</p>
-                        {% endif %}
-                        
-                        {% if data_sessao %}
-                            <p class="session-date"><i class="fas fa-calendar"></i> {{ data_sessao }}</p>
-                        {% endif %}
-                        
-                        {% if hora_sessao %}
-                            <p class="session-time"><i class="fas fa-clock"></i> {{ hora_sessao }}</p>
-                        {% endif %}
-                        
-                        <div class="sala-selecionada" id="salaSelecionada" style="display: none;">
-                            <p class="session-room"><i class="fas fa-door-open"></i> <span id="nomeSala">-</span></p>
-                            <p class="session-capacity"><i class="fas fa-users"></i> Capacidade: <span id="capacidadeSala">-</span> pessoas</p>
-                        </div>
-                    </div>
-                    
-                    <div class="price-breakdown">
-                        <div class="price-item">
-                            <span>Sessão {{ tipo_sessao.title() }}</span>
-                            <span>€{{ "%.2f"|format(preco_base) }}</span>
-                        </div>
-                        <div class="price-item" id="precoSala" style="display: none;">
-                            <span id="nomeSalaPreco">Sala</span>
-                            <span id="valorSala">€0.00</span>
-                        </div>
-                        <div class="price-total">
-                            <span>Total</span>
-                            <span id="precoTotal">€{{ "%.2f"|format(preco_base) }}</span>
+                <div class="resumo-section">
+                    <div class="resumo-exclusivo">
+                        <h3><i class="fas fa-ticket-alt"></i> Resumo da Reserva</h3>
+                        <div id="resumoConteudo">
+                            <div class="resumo-item">
+                                <span class="resumo-label">Tipo de Sessão:</span>
+                                <span class="resumo-value">{{ tipo_sessao.title() }}</span>
+                            </div>
+                            {% if filme %}
+                            <div class="resumo-item">
+                                <span class="resumo-label">Filme:</span>
+                                <span class="resumo-value">{{ filme.titulo }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="resumo-item">
+                                <span class="resumo-label">Data:</span>
+                                <span class="resumo-value">{{ data_sessao }}</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Hora:</span>
+                                <span class="resumo-value">{{ hora_sessao }}</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Pessoas:</span>
+                                <span class="resumo-value">{{ num_pessoas }} pessoa{{ 's' if num_pessoas > 1 else '' }}</span>
+                            </div>
+                            <div class="resumo-item total-final">
+                                <span class="resumo-label">Total:</span>
+                                <span class="resumo-value">€{{ "%.2f"|format(preco_base) }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="payment-section">
-                <div class="payment-header">
-                    <h2><i class="fas fa-credit-card"></i> Finalizar Reserva</h2>
-                </div>
-
-                <div class="sala-selection-section">
-                    <h2><i class="fas fa-door-open"></i> Escolha a Sala Exclusiva</h2>
-                    <div class="salas-grid">
-                        {% for sala in salas_exclusivas %}
-                        <div class="sala-card" data-sala-id="{{ sala.id }}" data-sala-nome="{{ sala.nome }}" data-sala-capacidade="{{ sala.capacidade }}" data-sala-preco="{{ sala.preco }}">
-                            <div class="sala-header">
-                                <h3>{{ sala.nome }}</h3>
-                                <div class="sala-capacity">
-                                    <i class="fas fa-users"></i>
-                                    {{ sala.capacidade }} pessoas
-                                </div>
-                            </div>
-                            <div class="sala-description">
-                                <p>{{ sala.descricao }}</p>
-                            </div>
-                            <div class="sala-price">
-                                <span class="price-label">Preço adicional:</span>
-                                <span class="price-value">€{{ "%.2f"|format(sala.preco) }}</span>
-                            </div>
-                            <button class="sala-select-btn" onclick="selecionarSala({{ sala.id }}, '{{ sala.nome }}', {{ sala.capacidade }}, {{ sala.preco }})">
-                                Selecionar
-                            </button>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="checkout-section">
-                    {% if logged_in %}
+                <div class="pagamento-section">
                     
-                    <div class="user-info-section">
-                        <h2>👤 Dados do Cliente</h2>
-                        <div class="user-info">
-                            <p><strong>Nome:</strong> {{ session.get('user_name', 'N/A') }}</p>
-                            <p><strong>Email:</strong> {{ session.get('user_email', 'N/A') }}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="metodos-pagamento">
-                        <h2>💳 Método de Pagamento</h2>
-                        <div class="payment-methods">
-                            
-                            <div class="payment-method" data-method="card">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <img src="{{ url_for('static', filename='imgs/payment/visa.png') }}" alt="Visa" style="width: 40px;">
-                                        <img src="{{ url_for('static', filename='imgs/payment/mastercard.png') }}" alt="Mastercard" style="width: 40px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>Cartão de Crédito/Débito</h3>
-                                        <p>Visa, Mastercard</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method" value="card" id="card">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="paypal">
-                                <div class="method-header">
-                                    <div class="method-icon paypal">
-                                        <img src="{{ url_for('static', filename='imgs/payment/paypal.png') }}" alt="PayPal" style="width: 60px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>PayPal</h3>
-                                        <p>Pagamento seguro com a sua conta PayPal</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method" value="paypal" id="paypal">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="mbway">
-                                <div class="method-header">
-                                    <div class="method-icon mbway">
-                                        <img src="{{ url_for('static', filename='imgs/payment/mbway.png') }}" alt="MB WAY" style="width: 50px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>MB WAY</h3>
-                                        <p>Pagamento rápido com o seu telemóvel</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method" value="mbway" id="mbway">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="applepay">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <img src="{{ url_for('static', filename='imgs/payment/apple.png') }}" alt="Apple Pay" style="width: 50px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>Apple Pay</h3>
-                                        <p>Pagamento rápido e seguro</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method" value="applepay" id="applepay">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="googlepay">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <img src="{{ url_for('static', filename='imgs/payment/google.png') }}" alt="Google Pay" style="width: 50px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>Google Pay</h3>
-                                        <p>Pagamento rápido e seguro</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method" value="googlepay" id="googlepay">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="action-buttons">
-                            <button type="button" class="btn-secondary" onclick="history.back()">
-                                <i class="fas fa-arrow-left"></i>
-                                Voltar
-                            </button>
-                            <button type="button" class="btn-primary" id="finalizarPagamento" onclick="finalizarPagamento()">
-                                <i class="fas fa-lock"></i>
-                                Finalizar Pagamento
-                                <span class="amount">€{{ "%.2f"|format(preco_base) }}</span>
-                            </button>
-                        </div>
-                    </div>
-                    {% else %}
-                    
-                    <div class="guest-form-section">
-                        <h2>👤 Dados do Cliente</h2>
-                        <form id="guestForm" class="guest-form">
-                            <div class="form-group">
-                                <label for="nome">Nome Completo *</label>
-                                <input type="text" id="nome" name="nome" required 
-                                       placeholder="Digite o seu nome completo">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email">Email *</label>
-                                <input type="email" id="email" name="email" required 
-                                       placeholder="Digite o seu email">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="telefone">Telemóvel (opcional)</label>
-                                <input type="tel" id="telefone" name="telefone" 
-                                       placeholder="Digite o seu número de telemóvel">
-                            </div>
-                            
-                            <div class="info-notice">
-                                <i class="fas fa-info-circle"></i>
-                                <span>A confirmação da reserva será enviada para o email indicado.</span>
-                            </div>
-                            
-                            <button type="button" class="btn-primary btn-large" onclick="continuarParaPagamento()">
-                                <i class="fas fa-arrow-right"></i>
-                                Continuar
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="metodos-pagamento" id="metodosSection" style="display: none;">
-                        <h2>💳 Método de Pagamento</h2>
-                        <div class="payment-methods">
-                            
-                            <div class="payment-method" data-method="card">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <img src="{{ url_for('static', filename='imgs/payment/visa.png') }}" alt="Visa" style="width: 40px;">
-                                        <img src="{{ url_for('static', filename='imgs/payment/mastercard.png') }}" alt="Mastercard" style="width: 40px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>Cartão de Crédito/Débito</h3>
-                                        <p>Visa, Mastercard</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method_guest" value="card" id="card_guest">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="paypal">
-                                <div class="method-header">
-                                    <div class="method-icon paypal">
-                                        <img src="{{ url_for('static', filename='imgs/payment/paypal.png') }}" alt="PayPal" style="width: 60px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>PayPal</h3>
-                                        <p>Pagamento seguro com a sua conta PayPal</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method_guest" value="paypal" id="paypal_guest">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="mbway">
-                                <div class="method-header">
-                                    <div class="method-icon mbway">
-                                        <img src="{{ url_for('static', filename='imgs/payment/mbway.png') }}" alt="MB WAY" style="width: 50px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>MB WAY</h3>
-                                        <p>Pagamento rápido com o seu telemóvel</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method_guest" value="mbway" id="mbway_guest">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="applepay">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <img src="{{ url_for('static', filename='imgs/payment/apple.png') }}" alt="Apple Pay" style="width: 50px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>Apple Pay</h3>
-                                        <p>Pagamento rápido e seguro</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method_guest" value="applepay" id="applepay_guest">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="payment-method" data-method="googlepay">
-                                <div class="method-header">
-                                    <div class="method-icon">
-                                        <img src="{{ url_for('static', filename='imgs/payment/google.png') }}" alt="Google Pay" style="width: 50px;">
-                                    </div>
-                                    <div class="method-info">
-                                        <h3>Google Pay</h3>
-                                        <p>Pagamento rápido e seguro</p>
-                                    </div>
-                                    <div class="method-radio">
-                                        <input type="radio" name="payment_method_guest" value="googlepay" id="googlepay_guest">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="dados-section">
+                        <h2><i class="fas fa-credit-card"></i> Método de Pagamento</h2>
                         
-                        <div class="action-buttons">
-                            <button type="button" class="btn-secondary" onclick="voltarParaDados()">
-                                <i class="fas fa-arrow-left"></i>
-                                Voltar
-                            </button>
-                            <button class="btn-primary" onclick="processarPagamentoConvidado()">
-                                <i class="fas fa-credit-card"></i>
-                                Confirmar Pagamento
-                                <span class="amount">€{{ "%.2f"|format(preco_base) }}</span>
-                            </button>
+                        <div class="payment-methods-grid">
+                            <div class="payment-method-item" data-method="mbway">
+                                <img src="{{ url_for('static', filename='imgs/pagamento/Quais_sao_as_vantagens_de_aderir_ao_MBway-removebg-preview (1).png') }}" alt="MB WAY">
+                                <span>MB WAY</span>
+                            </div>
+                            <div class="payment-method-item" data-method="paypal">
+                                <img src="{{ url_for('static', filename='imgs/pagamento/paypal-removebg-preview.png') }}" alt="PayPal">
+                                <span>PayPal</span>
+                            </div>
+                            <div class="payment-method-item" data-method="mastercard">
+                                <img src="{{ url_for('static', filename='imgs/pagamento/mastercard.png') }}" alt="Mastercard">
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-method-item" data-method="visa">
+                                <img src="{{ url_for('static', filename='imgs/pagamento/visa.png') }}" alt="Visa">
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-method-item" data-method="applepay">
+                                <img src="{{ url_for('static', filename='imgs/pagamento/apple-removebg-preview.png') }}" alt="Apple Pay">
+                                <span>Apple Pay</span>
+                            </div>
+                            <div class="payment-method-item" data-method="googlepay">
+                                <img src="{{ url_for('static', filename='imgs/pagamento/google-removebg-preview.png') }}" alt="Google Pay">
+                                <span>Google Pay</span>
+                            </div>
                         </div>
+
+                        <button class="btn-finalizar" onclick="finalizarReserva()" style="margin-top: 2rem;">
+                            <i class="fas fa-lock"></i>
+                            Finalizar Pagamento
+                        </button>
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
     </main>
 
-    <div class="modal-overlay" id="modalLogin">
-        <div class="choice-modal-content">
-            <button class="choice-close-btn" onclick="fecharModalLogin()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            
-            <div class="choice-image-background">
-                <img src="{{ url_for('static', filename='imgs/273b7b060e96f9828f8c73db76c00b31.jpg') }}" alt="Escolha sua opção" class="choice-full-image">
-
-                <div class="choice-pill choice-left red-pill" onclick="fazerLogin()">
-                    INICIAR SESSÃO
-                </div>
-
-                <div class="choice-pill choice-right blue-pill" onclick="continuarComoConvidado()">
-                    CONVIDADO
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="loadingModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="loading-content">
-                <div class="loading-spinner"></div>
-                <h3>Processando Pagamento</h3>
-                <p>Por favor, aguarde...</p>
-            </div>
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="text-align: center; color: #FFD60A;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 20px;"></i>
+            <p style="font-size: 1.2rem;">Processando pagamento...</p>
         </div>
     </div>
 
     <script>
-        const isLoggedIn = {{ 'true' if logged_in else 'false' }};
-        let salaSelecionada = null;
-        let precoBaseSessao = {{ preco_base }};
-        if (!isLoggedIn) {
-            setTimeout(() => {
-                mostrarModalLogin();
-            }, 500);
-        }
-        function selecionarSala(salaId, salaNome, salaCapacidade, precoAdicional) {
-            document.querySelectorAll('.sala-card').forEach(card => {
-                card.classList.remove('selected');
-                const btn = card.querySelector('.sala-select-btn');
-                btn.textContent = 'Selecionar';
-                btn.style.background = 'linear-gradient(135deg, #FFD60A, #FFA500)';
-                btn.style.color = '#0D1B2A';
-            });
-            const salaCard = document.querySelector(`[data-sala-id="${salaId}"]`);
-            salaCard.classList.add('selected');
-            const btn = salaCard.querySelector('.sala-select-btn');
-            btn.textContent = 'Selecionada';
-            btn.style.background = 'linear-gradient(135deg, #4EA8DE, #1E88E5)';
-            btn.style.color = 'white';
-            salaSelecionada = {
-                id: salaId,
-                nome: salaNome,
-                capacidade: salaCapacidade,
-                preco: precoAdicional
-            };
-            document.getElementById('salaSelecionada').style.display = 'block';
-            document.getElementById('nomeSala').textContent = salaNome;
-            document.getElementById('capacidadeSala').textContent = salaCapacidade;
-            document.getElementById('precoSala').style.display = 'flex';
-            document.getElementById('nomeSalaPreco').textContent = `Sala ${salaNome}`;
-            document.getElementById('valorSala').textContent = `€${precoAdicional.toFixed(2)}`;
-            
-            const precoTotal = precoBaseSessao + precoAdicional;
-            document.getElementById('precoTotal').textContent = `€${precoTotal.toFixed(2)}`;
-            document.querySelectorAll('.amount').forEach(span => {
-                span.textContent = `€${precoTotal.toFixed(2)}`;
-            });
-        }
-        function mostrarModalLogin() {
-            const modalElement = document.getElementById('modalLogin');
-            if (modalElement) {
-                modalElement.classList.add('visible');
-            }
-        }
+        const precoBase = parseFloat('{{ preco_base }}');
+        const tipoSessao = '{{ tipo_sessao }}';
+        const numPessoas = {{ num_pessoas }};
+        const dataSessao = '{{ data_sessao }}';
+        const horaSessao = '{{ hora_sessao }}';
+        const filmeId = '{{ filme.id if filme else 0 }}';
+        const filmeNome = '{{ filme.titulo if filme else "Experiência Temática" }}';
+        
+        const salaPadrao = {
+            id: '{{ salas_exclusivas[0].id if salas_exclusivas else 1 }}',
+            nome: '{{ salas_exclusivas[0].nome if salas_exclusivas else "Premium" }}',
+            capacidade: '{{ salas_exclusivas[0].capacidade if salas_exclusivas else 20 }}'
+        };
+        
+        let metodoPagamento = null;
 
-        function fecharModalLogin() {
-            const modalElement = document.getElementById('modalLogin');
-            if (modalElement) {
-                modalElement.classList.remove('visible');
-            }
-        }
-
-        function fazerLogin() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirectUrl = window.location.pathname + window.location.search;
-            window.location.href = "{{ url_for('login') }}?redirect=" + encodeURIComponent(redirectUrl);
-        }
-
-        function continuarComoConvidado() {
-            fecharModalLogin();
-        }
-        document.querySelectorAll('.payment-method').forEach(method => {
+        document.querySelectorAll('.payment-method-item').forEach(method => {
             method.addEventListener('click', function() {
-                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-                document.querySelectorAll('input[name="payment_method"], input[name="payment_method_guest"]').forEach(input => input.checked = false);
+                document.querySelectorAll('.payment-method-item').forEach(m => m.classList.remove('selected'));
                 this.classList.add('selected');
-                const radio = this.querySelector('input[type="radio"]');
-                if (radio) {
-                    radio.checked = true;
-                }
+                metodoPagamento = this.dataset.method;
             });
         });
-        function continuarParaPagamento() {
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            
-            if (!nome || !email) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-            
-            if (!salaSelecionada) {
-                alert('Por favor, selecione uma sala exclusiva.');
-                return;
-            }
-            document.getElementById('metodosSection').style.display = 'block';
-            document.querySelector('.guest-form-section').style.display = 'none';
-        }
-        function voltarParaDados() {
-            document.getElementById('metodosSection').style.display = 'none';
-            document.querySelector('.guest-form-section').style.display = 'block';
-        }
-        function finalizarPagamento() {
-            if (!salaSelecionada) {
-                alert('Por favor, selecione uma sala exclusiva.');
-                return;
-            }
-            
-            const metodoPagamento = document.querySelector('input[name="payment_method"]:checked');
-            
+
+        function finalizarReserva() {
             if (!metodoPagamento) {
                 alert('Por favor, selecione um método de pagamento.');
                 return;
             }
-            
-            processarPagamento(metodoPagamento.value);
-        }
-        function processarPagamentoConvidado() {
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const metodoPagamento = document.querySelector('input[name="payment_method_guest"]:checked');
-            
-            if (!salaSelecionada) {
-                alert('Por favor, selecione uma sala exclusiva.');
-                return;
-            }
-            
-            if (!metodoPagamento) {
-                alert('Por favor, selecione um método de pagamento.');
-                return;
-            }
-            
-            processarPagamento(metodoPagamento.value, { nome, email });
-        }
-        function processarPagamento(metodo, dadosConvidado = null) {
-            document.getElementById('loadingModal').style.display = 'flex';
-            
-            const precoTotal = precoBaseSessao + (salaSelecionada ? salaSelecionada.preco : 0);
-            
+
+            document.getElementById('loadingOverlay').style.display = 'flex';
+
             const dados = {
-                tipo_sessao: '{{ tipo_sessao }}',
-                filme_id: '{{ filme.id if filme else 0 }}',
-                filme_nome: '{{ filme.titulo if filme else "Experiência Temática" }}',
-                data_sessao: '{{ data_sessao or "" }}',
-                hora_sessao: '{{ hora_sessao or "" }}',
-                preco_total: precoTotal,
-                metodo_pagamento: metodo,
-                sala_id: salaSelecionada.id,
-                sala_nome: salaSelecionada.nome,
-                sala_capacidade: salaSelecionada.capacidade
+                tipo_sessao: tipoSessao,
+                filme_id: filmeId,
+                filme_nome: filmeNome,
+                data_sessao: dataSessao,
+                hora_sessao: horaSessao,
+                num_pessoas: numPessoas,
+                preco_total: precoBase,
+                metodo_pagamento: metodoPagamento,
+                sala_id: salaPadrao.id,
+                sala_nome: salaPadrao.nome,
+                sala_capacidade: salaPadrao.capacidade
             };
-            
-            if (dadosConvidado) {
-                dados.nome_cliente = dadosConvidado.nome;
-                dados.email_cliente = dadosConvidado.email;
-            }
-            
+
             fetch('/api/processar-pagamento-sessao-tematica', {
                 method: 'POST',
                 headers: {
@@ -929,7 +250,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('loadingModal').style.display = 'none';
+                document.getElementById('loadingOverlay').style.display = 'none';
                 
                 if (data.success) {
                     alert('Pagamento processado com sucesso!');
@@ -939,21 +260,10 @@
                 }
             })
             .catch(error => {
-                document.getElementById('loadingModal').style.display = 'none';
+                document.getElementById('loadingOverlay').style.display = 'none';
                 alert('Erro ao processar pagamento: ' + error.message);
             });
         }
-        document.addEventListener('click', function(e) {
-            const modal = document.getElementById('modalLogin');
-            if (e.target === modal) {
-                fecharModalLogin();
-            }
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                fecharModalLogin();
-            }
-        });
     </script>
 </body>
 </html>

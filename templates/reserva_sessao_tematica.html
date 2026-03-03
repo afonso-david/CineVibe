@@ -3,206 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservar Sessão {{ tipo_sessao|title }} - CineVibe</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/reserva.css') }}">
+    <title>Reservar Sessão Temática | CineVibe</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+
     <style>
-        .reserva-main {
-            padding: 3rem 2rem;
-            max-width: 900px;
-            margin: 0 auto;
+        .reserva-container {
+            max-width: 800px;
+            margin: 60px auto 120px auto;
+            padding: 40px;
+            background: linear-gradient(135deg, #1B263B, #2C3E50);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            min-height: calc(100vh - 300px);
         }
 
-        .reserva-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .reserva-header h1 {
+        .page-title {
             color: #FFD60A;
             font-size: 2.5rem;
-            font-family: 'Montserrat', sans-serif;
-            margin-bottom: 0.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
-        .reserva-header p {
-            color: rgba(255, 255, 255, 0.7);
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-bottom: 40px;
             font-size: 1.1rem;
         }
 
-        .reserva-container {
-            background: linear-gradient(135deg, rgba(27, 38, 59, 0.95), rgba(13, 27, 42, 0.98));
-            border-radius: 20px;
-            padding: 2.5rem;
-            border: 2px solid rgba(78, 168, 222, 0.3);
-        }
-
-        .form-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(78, 168, 222, 0.2);
-        }
-
-        .form-section:last-of-type {
-            border-bottom: none;
-        }
-
-        .form-section h2 {
-            color: #4EA8DE;
-            font-size: 1.5rem;
-            font-family: 'Montserrat', sans-serif;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
             color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
 
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 0.8rem 1rem;
-            background: rgba(13, 27, 42, 0.8);
-            border: 2px solid rgba(78, 168, 222, 0.3);
+            padding: 15px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
             border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 1rem;
+            font-size: 16px;
             transition: all 0.3s ease;
+            box-sizing: border-box;
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #4EA8DE;
-            background: rgba(13, 27, 42, 0.95);
+            border-color: #FFD60A;
         }
 
-        .form-group small {
-            display: block;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.85rem;
-            margin-top: 0.3rem;
-        }
-
-        .preco-resumo {
-            background: rgba(78, 168, 222, 0.1);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(78, 168, 222, 0.3);
-        }
-
-        .preco-info,
-        .preco-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-        }
-
-        .preco-total {
-            border-top: 2px solid rgba(78, 168, 222, 0.3);
-            margin-top: 1rem;
-            padding-top: 1rem;
-        }
-
-        .preco-label {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1rem;
-        }
-
-        .preco-total .preco-label {
-            font-weight: 700;
-            font-size: 1.2rem;
+        .form-group select option {
+            background: #1B263B;
             color: white;
         }
 
-        .preco-valor {
-            color: #FFD60A;
-            font-size: 1.3rem;
-            font-weight: 700;
-            font-family: 'Montserrat', sans-serif;
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
-        .preco-total .preco-valor {
-            font-size: 1.5rem;
-        }
-
-        .form-actions {
+        .btn-container {
             display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
+            gap: 15px;
+            margin-top: 40px;
         }
 
         .btn-primary,
         .btn-secondary {
             flex: 1;
-            padding: 1rem 2rem;
-            border-radius: 25px;
+            padding: 18px;
+            border-radius: 15px;
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            font-family: 'Montserrat', sans-serif;
-            text-decoration: none;
-            border: none;
+            gap: 10px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4EA8DE, #3B91C0);
-            color: white;
-            border: 2px solid rgba(78, 168, 222, 0.4);
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            color: #1a1a1a;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #3B91C0, #2E7A9B);
+            background: linear-gradient(135deg, #FFA500, #FF8C00);
             transform: translateY(-2px);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, rgba(27, 38, 59, 0.8), rgba(13, 27, 42, 0.8));
-            color: #E8EEF2;
-            border: 2px solid rgba(78, 168, 222, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 214, 10, 0.3);
         }
 
         .btn-secondary:hover {
-            background: linear-gradient(135deg, rgba(78, 168, 222, 0.3), rgba(255, 214, 10, 0.2));
-            color: #FFD60A;
-            border-color: rgba(255, 214, 10, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #FFD60A;
+        }
+
+        .info-box {
+            background: rgba(78, 168, 222, 0.1);
+            border: 1px solid rgba(78, 168, 222, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            color: #4EA8DE;
+            font-size: 0.95rem;
+        }
+
+        .info-box i {
+            margin-right: 8px;
         }
 
         @media (max-width: 768px) {
-            .reserva-main {
-                padding: 2rem 1rem;
-            }
-
             .reserva-container {
-                padding: 1.5rem;
+                margin: 20px;
+                padding: 25px;
             }
 
-            .reserva-header h1 {
-                font-size: 2rem;
+            .form-row {
+                grid-template-columns: 1fr;
             }
 
-            .form-actions {
+            .btn-container {
                 flex-direction: column;
             }
         }
@@ -210,10 +159,11 @@
 </head>
 <body>
     <div class="page-wrapper">
+
         <header>
             <div class="top-nav">
                 <div class="nav-left">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">       
                 </div>
                 <div class="nav-right">
                     <div class="user-icon">
@@ -223,7 +173,7 @@
                             </a>
                         {% else %}
                             <a href="{{ url_for('login') }}">
-                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">  
                             </a>
                         {% endif %}
                     </div>
@@ -238,116 +188,173 @@
             <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
             <a href="{{ url_for('bar') }}">Bar</a>
             <a href="{{ url_for('beneficios') }}">Benefícios</a>
-            <a href="{{ url_for('sessao') }}" class="active">Sessão Só Para Ti</a>
+            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
 
-        <main class="reserva-main">
-            <div class="reserva-header">
-                <h1>Reservar Sessão {{ tipo_sessao|title }}</h1>
-                <p>Configure a sua experiência cinematográfica personalizada</p>
-            </div>
-
+        <main>
             <div class="reserva-container">
-                <form method="POST" action="{{ url_for('processar_reserva_tematica') }}" class="reserva-form">
+                <h1 class="page-title">Reservar Sessão {{ tipo_sessao|title }}</h1>
+                <p class="page-subtitle">Preencha os dados para sua experiência temática</p>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    {% if tipo_sessao == 'vintage' %}
+                        Sessão Vintage - €35 por pessoa. Reviva os clássicos do cinema!
+                    {% elif tipo_sessao == 'romance' %}
+                        Sessão Romance - €85 por pessoa. Experiência romântica completa com lugares para casais!
+                    {% elif tipo_sessao == 'terror' %}
+                        Sessão Terror - €45 por pessoa. Prepare-se para uma experiência assustadora!
+                    {% endif %}
+                </div>
+
+                <form id="formReserva" method="POST" action="{{ url_for('processar_reserva_tematica') }}">
                     <input type="hidden" name="tipo_sessao" value="{{ tipo_sessao }}">
-                    
-                    <div class="form-section">
-                        <h2><i class="fas fa-calendar-alt"></i> Data e Hora</h2>
-                        
+
+                    {% if not logged_in %}
+                    <div class="form-group">
+                        <label for="nome_cliente">
+                            <i class="fas fa-user"></i> Nome Completo
+                        </label>
+                        <input type="text" name="nome_cliente" id="nome_cliente" placeholder="Seu nome completo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email_cliente">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input type="email" name="email_cliente" id="email_cliente" placeholder="seu@email.com" required>
+                    </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="filme_id">
+                            <i class="fas fa-film"></i> Filme (Opcional)
+                        </label>
+                        <select name="filme_id" id="filme_id" style="overflow-y: auto; max-height: none;">
+                            <option value="">Sem preferência de filme</option>
+                            {% for filme in filmes %}
+                                <option value="{{ filme.id }}">{{ filme.titulo }} ({{ filme.duracao }} min)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="data_sessao">Data da Sessão</label>
-                            <input type="date" id="data_sessao" name="data_sessao" required min="{{ data_minima }}">
+                            <label for="data_sessao">
+                                <i class="fas fa-calendar"></i> Data
+                            </label>
+                            <input type="date" name="data_sessao" id="data_sessao" min="{{ data_minima }}" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="hora_sessao">Hora da Sessão</label>
-                            <select id="hora_sessao" name="hora_sessao" required>
-                                <option value="">Selecione uma hora</option>
+                            <label for="hora_sessao">
+                                <i class="fas fa-clock"></i> Horário
+                            </label>
+                            <select name="hora_sessao" id="hora_sessao" required>
+                                <option value="">Selecione um horário...</option>
                                 <option value="14:00">14:00</option>
                                 <option value="16:30">16:30</option>
                                 <option value="19:00">19:00</option>
                                 <option value="21:30">21:30</option>
+                                <option value="00:00">00:00 (Sessão Madrugada)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-section">
-                        <h2><i class="fas fa-users"></i> Número de Pessoas</h2>
-                        
-                        <div class="form-group">
-                            <label for="num_pessoas">Quantas pessoas?</label>
-                            <input type="number" id="num_pessoas" name="num_pessoas" min="1" max="50" value="2" required>
-                            <small>Máximo 50 pessoas por sessão</small>
-                        </div>
+                    <div class="form-group">
+                        <label for="num_pessoas">
+                            <i class="fas fa-users"></i> Número de Pessoas
+                        </label>
+                        <input type="number" name="num_pessoas" id="num_pessoas" min="1" max="20" value="1" required>
                     </div>
 
-                    <div class="form-section">
-                        <h2><i class="fas fa-film"></i> Filme (Opcional)</h2>
-                        
-                        <div class="form-group">
-                            <label for="filme_id">Escolha um filme ou deixe em branco para escolher depois</label>
-                            <select id="filme_id" name="filme_id">
-                                <option value="">Escolher depois</option>
-                                {% for filme in filmes %}
-                                <option value="{{ filme.id }}">{{ filme.titulo }} ({{ filme.duracao }}min)</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="preco-resumo">
-                        <div class="preco-info">
-                            <span class="preco-label">Preço base por pessoa:</span>
-                            <span class="preco-valor">€{{ "%.2f"|format(preco_base) }}</span>
-                        </div>
-                        <div class="preco-total">
-                            <span class="preco-label">Total estimado:</span>
-                            <span class="preco-valor" id="preco-total">€{{ "%.2f"|format(preco_base * 2) }}</span>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <a href="{{ url_for('sessoes_tematicas') }}" class="btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Voltar
+                    <div class="btn-container">
+                        <a href="{{ url_for('sessao_tematica') }}" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
                         </a>
                         <button type="submit" class="btn-primary">
-                            <i class="fas fa-arrow-right"></i> Continuar para Pagamento
+                            <i class="fas fa-arrow-right"></i>
+                            Continuar para Pagamento
                         </button>
                     </div>
                 </form>
             </div>
         </main>
-
-        <footer class="footer">
-            <div class="footer-bottom">
-                <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
-            </div>
-        </footer>
     </div>
 
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h2 style="color: #FFD60A; margin-bottom: 20px;">Iniciar Sessão Necessária</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 30px;">
+                Para fazer uma reserva, precisa de iniciar sessão ou criar uma conta.
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <a href="{{ url_for('login') }}" style="padding: 12px 30px; background: linear-gradient(135deg, #FFD60A, #FFA500); color: #1a1a1a; border-radius: 10px; text-decoration: none; font-weight: 600;">
+                    Iniciar Sessão
+                </a>
+                <button onclick="fecharModal()" style="padding: 12px 30px; background: rgba(255, 255, 255, 0.1); color: white; border: 2px solid rgba(255, 214, 10, 0.3); border-radius: 10px; cursor: pointer; font-weight: 600;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1B263B, #2C3E50);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #FFD60A;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #FFA500;
+        }
+    </style>
+
     <script>
-        const precoBase = parseFloat('{{ preco_base }}');
-        const numPessoasInput = document.getElementById('num_pessoas');
-        const precoTotalElement = document.getElementById('preco-total');
+        const loggedIn = {{ 'true' if logged_in else 'false' }};
 
-        numPessoasInput.addEventListener('input', function() {
-            const numPessoas = parseInt(this.value) || 2;
-            const total = precoBase * numPessoas;
-            precoTotalElement.textContent = '€' + total.toFixed(2);
-        });
+        function fecharModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
 
-        const dataInput = document.getElementById('data_sessao');
-        dataInput.addEventListener('change', function() {
-            const selectedDate = new Date(this.value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            if (selectedDate < today) {
-                alert('Por favor, selecione uma data futura.');
-                this.value = '';
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                fecharModal();
             }
-        });
+        }
     </script>
 </body>
 </html>

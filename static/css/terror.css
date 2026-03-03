@@ -182,6 +182,8 @@ a {
     justify-content: center;
     gap: 2rem;
     flex-wrap: wrap;
+    background: transparent !important;
+    padding: 0 !important;
 }
 
 .cta-btn {

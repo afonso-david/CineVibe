@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento Exclusivo | CineVibe</title>
+    <title>Pagamento Sessão Temática | CineVibe</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -273,7 +273,6 @@
         .btn-finalizar:hover {
             background: linear-gradient(135deg, #FFA500, #FF8C00);
             transform: translateY(-2px);
-
         }
 
         .btn-finalizar:disabled {
@@ -386,7 +385,7 @@
 
                 <div class="pagamento-main">
                     <h1 class="page-title">Finalizar Reserva</h1>
-                    <p class="page-subtitle">Complete o pagamento da sua experiência exclusiva</p>
+                    <p class="page-subtitle">Complete o pagamento da sua sessão temática</p>
 
                     <form id="formPagamento">
 
@@ -519,8 +518,8 @@
                     <div class="resumo-reserva">
                         <h3 class="resumo-title">Resumo da Reserva</h3>
                         <div class="resumo-item">
-                            <span>Sala:</span>
-                            <span id="resumoSala">-</span>
+                            <span>Tipo de Sessão:</span>
+                            <span id="resumoTipo">-</span>
                         </div>
                         <div class="resumo-item">
                             <span>Filme:</span>
@@ -562,17 +561,16 @@
     </div>
 
     <script>
-        let dadosReserva = null;
+        let dadosReserva = {{ reserva | tojson }};
         let metodoSelecionado = null;
+        
         document.addEventListener('DOMContentLoaded', function() {
-            const dados = sessionStorage.getItem('dadosReservaExclusiva');
-            if (!dados) {
+            if (!dadosReserva) {
                 alert('Dados da reserva não encontrados. Redirecionando...');
-                window.location.href = '/sessao_exclusiva';
+                window.location.href = '/sessao_tematica';
                 return;
             }
 
-            dadosReserva = JSON.parse(dados);
             preencherResumo();
             configurarEventListeners();
         });
@@ -580,20 +578,20 @@
         function preencherResumo() {
             if (!dadosReserva) return;
 
-            const tiposSala = {
-                'intimista': 'Sala Intimista',
-                'vip': 'Sala Vip',
-                'premium': 'Sala Premium'
+            const tiposSessao = {
+                'vintage': 'Sessão Vintage',
+                'romance': 'Sessão Romance',
+                'terror': 'Sessão Terror'
             };
 
-            document.getElementById('resumoSala').textContent = tiposSala[dadosReserva.tipo_sala] || 'Sala Exclusiva';
-            document.getElementById('resumoFilme').textContent = dadosReserva.filme_nome;
+            document.getElementById('resumoTipo').textContent = tiposSessao[dadosReserva.tipo_sessao] || dadosReserva.tipo_sessao;
+            document.getElementById('resumoFilme').textContent = dadosReserva.filme_nome || 'Sem filme selecionado';
 
             const dataFormatada = new Date(dadosReserva.data_sessao).toLocaleDateString('pt-PT');
             document.getElementById('resumoData').textContent = dataFormatada;
             document.getElementById('resumoHora').textContent = dadosReserva.hora_sessao;
             document.getElementById('resumoPessoas').textContent = dadosReserva.num_pessoas + (dadosReserva.num_pessoas == 1 ? ' pessoa' : ' pessoas');
-            document.getElementById('resumoTotal').textContent = '€' + dadosReserva.total;
+            document.getElementById('resumoTotal').textContent = '€' + dadosReserva.preco_total;
         }
 
         function configurarEventListeners() {
@@ -733,7 +731,7 @@
                     pin: document.getElementById('giftPin').value
                 };
             }
-            fetch('/api/processar-pagamento-exclusivo', {
+            fetch('/api/processar-pagamento-tematica', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -745,7 +743,6 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
 
                 if (data.success) {
-                    sessionStorage.removeItem('dadosReservaExclusiva');
                     alert('Pagamento processado com sucesso! Reserva confirmada.');
                     window.location.href = '/home?reserva_concluida=1';
                 } else {

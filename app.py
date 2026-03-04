@@ -10171,10 +10171,74 @@ def pesquisa():
     cursor.close()
     conn.close()
     
+    paginas_especiais = []
+    query_lower = query.lower()
+    
+    def normalize_text(text):
+        replacements = {
+            'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a',
+            'é': 'e', 'ê': 'e',
+            'í': 'i',
+            'ó': 'o', 'ô': 'o', 'õ': 'o',
+            'ú': 'u',
+            'ç': 'c'
+        }
+        for old, new in replacements.items():
+            text = text.replace(old, new)
+        return text
+    
+    query_normalized = normalize_text(query_lower)
+    
+    paginas_acessibilidade = [
+        {
+            'titulo': 'Audiodescrição',
+            'descricao': 'Serviço de audiodescrição para pessoas com deficiência visual',
+            'url': 'audiodescricao',
+            'icone': 'fas fa-audio-description',
+            'keywords': ['audiodescricao', 'audiodescrição', 'audio', 'cego', 'deficiente visual', 'acessibilidade', 'visual']
+        },
+        {
+            'titulo': 'Legendagem',
+            'descricao': 'Legendas para pessoas com deficiência auditiva',
+            'url': 'legendagem',
+            'icone': 'fas fa-closed-captioning',
+            'keywords': ['legenda', 'legendagem', 'surdo', 'deficiente auditivo', 'acessibilidade', 'auditiva']
+        },
+        {
+            'titulo': 'Língua Gestual Portuguesa',
+            'descricao': 'Interpretação em Língua Gestual Portuguesa',
+            'url': 'lgp',
+            'icone': 'fas fa-hands',
+            'keywords': ['lgp', 'lingua gestual', 'língua gestual', 'gestual', 'surdo', 'acessibilidade', 'interprete']
+        },
+        {
+            'titulo': 'Acessibilidade',
+            'descricao': 'Informações sobre acessibilidade física nas salas de cinema',
+            'url': 'acessibilidade',
+            'icone': 'fas fa-wheelchair',
+            'keywords': ['acessibilidade', 'cadeira rodas', 'mobilidade', 'rampa', 'elevador', 'deficiencia motora', 'deficiência motora', 'fisica']
+        },
+        {
+            'titulo': 'CineAcessível',
+            'descricao': 'Todas as opções de acessibilidade do CineVibe',
+            'url': 'cine_acessivel',
+            'icone': 'fas fa-universal-access',
+            'keywords': ['acessivel', 'acessível', 'cineacessivel', 'cine acessivel', 'inclusao', 'inclusão', 'deficiencia', 'deficiência']
+        }
+    ]
+    
+    for pagina in paginas_acessibilidade:
+        for keyword in pagina['keywords']:
+            keyword_normalized = normalize_text(keyword.lower())
+            if keyword_normalized in query_normalized or query_normalized in keyword_normalized:
+                if pagina not in paginas_especiais:
+                    paginas_especiais.append(pagina)
+                break
+    
     logged_in = 'user_id' in session
     avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
     
-    total_resultados = len(filmes) + len(cinemas) + len(menus) + len(produtos)
+    total_resultados = len(filmes) + len(cinemas) + len(menus) + len(produtos) + len(paginas_especiais)
     
     return render_template('pesquisa.html', 
                          query=query,
@@ -10182,6 +10246,7 @@ def pesquisa():
                          cinemas=cinemas,
                          menus=menus,
                          produtos=produtos,
+                         paginas_especiais=paginas_especiais,
                          total_resultados=total_resultados,
                          logged_in=logged_in,
                          avatar=avatar)

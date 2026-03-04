@@ -155,7 +155,29 @@
             </div>
             {% endif %}
 
-            {% if not filmes and not cinemas and not menus and not produtos and query %}
+            {% if paginas_especiais %}
+            <div class="pesquisa-section">
+                <h2 class="pesquisa-section-title"><i class="fas fa-universal-access"></i> Acessibilidade</h2>
+                <div class="pesquisa-acessibilidade-grid">
+                    {% for pagina in paginas_especiais %}
+                    <a href="{{ url_for(pagina.url) }}" class="acessibilidade-card">
+                        <div class="acessibilidade-icon">
+                            <i class="{{ pagina.icone }}"></i>
+                        </div>
+                        <div class="acessibilidade-content">
+                            <h3>{{ pagina.titulo }}</h3>
+                            <p>{{ pagina.descricao }}</p>
+                        </div>
+                        <div class="acessibilidade-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if not filmes and not cinemas and not menus and not produtos and not paginas_especiais and query %}
             <div class="pesquisa-no-results">
                 <i class="fas fa-search" style="font-size: 4rem; color: #FFD60A; margin-bottom: 1rem;"></i>
                 <p>Nenhum resultado encontrado para "{{ query }}"</p>

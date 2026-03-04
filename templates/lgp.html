@@ -428,6 +428,32 @@
     </script>
 
     <script>
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+            }, 200);
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                if (query) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -465,11 +491,11 @@
             
             if (heroVideo) {
                 heroVideo.muted = true;
-                heroVideo.loop = false; // Desativar loop automático
+                heroVideo.loop = false;
                 heroVideo.currentTime = 15;
                 heroVideo.addEventListener('timeupdate', function() {
                     if (heroVideo.currentTime >= 40) {
-                        heroVideo.currentTime = 15; // Voltar aos 15 segundos
+                        heroVideo.currentTime = 15;
                     }
                 });
                 heroVideo.addEventListener('loadeddata', function() {
@@ -480,7 +506,7 @@
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
                         console.log('Vídeo de fundo LGP iniciado com sucesso (15s-40s)');
-                        heroVideo.currentTime = 15; // Garantir que começa aos 15s
+                        heroVideo.currentTime = 15;
                     }).catch(error => {
                         console.log('Erro ao reproduzir vídeo de fundo:', error);
                         heroVideo.style.display = 'none';

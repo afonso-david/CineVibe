@@ -305,6 +305,32 @@
     </div>
 
     <script>
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+            }, 200);
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                if (query) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -337,19 +363,19 @@
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            let searchTimeout;
+        const searchInput2 = document.getElementById('searchInput');
+        if (searchInput2) {
+            let searchTimeout2;
 
-            searchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
+            searchInput2.addEventListener('input', function() {
+                clearTimeout(searchTimeout2);
                 const query = this.value.trim();
                 
                 if (query.length < 2) {
                     return;
                 }
                 
-                searchTimeout = setTimeout(() => {
+                searchTimeout2 = setTimeout(() => {
                     console.log('Pesquisando por:', query);
                 }, 300);
             });

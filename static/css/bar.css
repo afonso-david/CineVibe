@@ -288,7 +288,7 @@ main {
 .menus-section,
 .produtos-section {
     padding: 5rem 0;
-    background: linear-gradient(135deg, #0F1419 0%, #1B263B 50%, #2C3E50 100%);
+    background-color: #0D1B2A;
 }
 
 .section-title {
@@ -1432,7 +1432,7 @@ main {
 
 .produtos-section {
     padding: 4rem 0;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-color: #0D1B2A;
 }
 
 .section-title {
@@ -2494,7 +2494,7 @@ main {
 
 .produtos-section {
     padding: 80px 0;
-    background: linear-gradient(135deg, #1B263B 0%, #2C3E50 100%);
+    background-color: #0D1B2A;
 }
 
 .category-filters {

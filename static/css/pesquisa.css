@@ -194,13 +194,6 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.pesquisa-cinema-card:hover {
-  transform: translateY(-5px);
-  border-color: #FFD60A;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .cinema-image {
@@ -252,7 +245,6 @@
 
 .pesquisa-cinema-card .cinema-link:hover {
   background: linear-gradient(135deg, #FFA500, #FF8C00);
-  transform: translateX(5px);
 }
 
 .pesquisa-menus-grid {
@@ -330,6 +322,73 @@
   font-weight: 700;
 }
 
+.pesquisa-acessibilidade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.acessibilidade-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(27, 38, 59, 0.5);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.acessibilidade-card:hover {
+  background: rgba(27, 38, 59, 0.8);
+  border-color: rgba(255, 214, 10, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.acessibilidade-icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FFD60A, #FFA500);
+  border-radius: 12px;
+  font-size: 1.8rem;
+  color: #0D1B2A;
+}
+
+.acessibilidade-content {
+  flex: 1;
+}
+
+.acessibilidade-content h3 {
+  color: #FFD60A;
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.acessibilidade-content p {
+  color: #B8C5D1;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.acessibilidade-arrow {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  color: #FFD60A;
+  transition: transform 0.3s ease;
+}
+
+.acessibilidade-card:hover .acessibilidade-arrow {
+  transform: translateX(5px);
+}
+
 @media (max-width: 768px) {
   .pesquisa-container {
     padding: 20px;
@@ -341,5 +400,9 @@
   
   .pesquisa-menus-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  .pesquisa-acessibilidade-grid {
+    grid-template-columns: 1fr;
   }
 }

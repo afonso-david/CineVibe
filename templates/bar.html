@@ -304,8 +304,21 @@
         function finalizarPedido() {
             console.log('Carrinho removido - apenas visualização de menus');
         }
-        document.getElementById('searchInput').addEventListener('input', function(e) {
+        
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+        let isLocalSearch = true;
+
+        searchInput.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
             const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm.length < 2) {
+                const menuCards = document.querySelectorAll('.menu-card');
+                menuCards.forEach(card => card.style.display = 'block');
+                return;
+            }
+            
             const menuCards = document.querySelectorAll('.menu-card');
             menuCards.forEach(card => {
                 const menuName = card.querySelector('.menu-name').textContent.toLowerCase();
@@ -318,7 +331,24 @@
                     card.style.display = 'none';
                 }
             });
+            
+            searchTimeout = setTimeout(() => {
+                if (!isLocalSearch) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(searchTerm)}`;
+                }
+            }, 2000);
         });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                if (query) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+
         document.querySelector('.hero-btn').addEventListener('click', function(e) {
             e.preventDefault();
             document.querySelector('#produtos').scrollIntoView({

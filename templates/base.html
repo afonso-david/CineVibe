@@ -177,8 +177,25 @@
             document.body.classList.add('loaded');
         });
 
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+            }, 200);
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
                 const query = this.value.trim();
                 if (query) {
                     window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;

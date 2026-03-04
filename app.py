@@ -9977,7 +9977,7 @@ def api_pesquisa():
     query = request.args.get('q', '').strip()
     
     if not query or len(query) < 2:
-        return jsonify({'filmes': [], 'cinemas': [], 'produtos': []})
+        return jsonify({'filmes': [], 'cinemas': [], 'menus': [], 'produtos': []})
     
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -9994,17 +9994,20 @@ def api_pesquisa():
         f['poster_url'] = _normalize_img_path(f.get('poster_url'))
     
     cursor.execute("""
-        SELECT id, nome, localizacao, regiao
+        SELECT id, nome, localizacao, regiao, imagem as imagem_url
         FROM cinemas
         WHERE nome LIKE %s OR localizacao LIKE %s
         LIMIT 5
     """, (f'%{query}%', f'%{query}%'))
     cinemas = cursor.fetchall()
     
+    for c in cinemas:
+        c['imagem_url'] = _normalize_img_path(c.get('imagem_url'))
+    
     menus = []
     try:
         cursor.execute("""
-            SELECT id, nome, descricao, total as preco, imagem_url
+            SELECT id, nome, descricao, preco_total as preco, imagem_url
             FROM menus
             WHERE nome LIKE %s OR descricao LIKE %s
             LIMIT 5
@@ -10016,13 +10019,29 @@ def api_pesquisa():
         app.logger.info(f"Erro ao buscar menus: {e}")
         menus = []
     
+    produtos = []
+    try:
+        cursor.execute("""
+            SELECT id, nome, descricao, preco, imagem_url, categoria
+            FROM produtos_bar
+            WHERE nome LIKE %s OR descricao LIKE %s OR categoria LIKE %s
+            LIMIT 5
+        """, (f'%{query}%', f'%{query}%', f'%{query}%'))
+        produtos = cursor.fetchall()
+        for p in produtos:
+            p['imagem_url'] = _normalize_img_path(p.get('imagem_url'))
+    except Exception as e:
+        app.logger.info(f"Erro ao buscar produtos: {e}")
+        produtos = []
+    
     cursor.close()
     conn.close()
     
     return jsonify({
         'filmes': filmes,
         'cinemas': cinemas,
-        'menus': menus
+        'menus': menus,
+        'produtos': produtos
     })
 
 @app.route('/api/check_toppings')
@@ -10097,7 +10116,7 @@ def pesquisa():
     cursor = conn.cursor(dictionary=True)
     
     cursor.execute("""
-        SELECT id, titulo, poster_url, poster_hover, duracao
+        SELECT id, titulo, poster_url, poster_hover, duracao, sinopse
         FROM filmes
         WHERE titulo LIKE %s OR sinopse LIKE %s
         LIMIT 20
@@ -10106,19 +10125,23 @@ def pesquisa():
     
     for f in filmes:
         f['poster_url'] = _normalize_img_path(f.get('poster_url'))
+        f['poster_hover'] = _normalize_img_path(f.get('poster_hover'))
     
     cursor.execute("""
-        SELECT id, nome, localizacao, regiao
+        SELECT id, nome, localizacao, regiao, imagem as imagem_url
         FROM cinemas
         WHERE nome LIKE %s OR localizacao LIKE %s OR regiao LIKE %s
         LIMIT 10
     """, (f'%{query}%', f'%{query}%', f'%{query}%'))
     cinemas = cursor.fetchall()
     
+    for c in cinemas:
+        c['imagem_url'] = _normalize_img_path(c.get('imagem_url'))
+    
     menus = []
     try:
         cursor.execute("""
-            SELECT id, nome, descricao, total as preco, imagem_url
+            SELECT id, nome, descricao, preco_total as preco, imagem_url
             FROM menus
             WHERE nome LIKE %s OR descricao LIKE %s
             LIMIT 10
@@ -10130,14 +10153,38 @@ def pesquisa():
         app.logger.info(f"Erro ao buscar menus: {e}")
         menus = []
     
+    produtos = []
+    try:
+        cursor.execute("""
+            SELECT id, nome, descricao, preco, imagem_url, categoria
+            FROM produtos_bar
+            WHERE nome LIKE %s OR descricao LIKE %s OR categoria LIKE %s
+            LIMIT 10
+        """, (f'%{query}%', f'%{query}%', f'%{query}%'))
+        produtos = cursor.fetchall()
+        for p in produtos:
+            p['imagem_url'] = _normalize_img_path(p.get('imagem_url'))
+    except Exception as e:
+        app.logger.info(f"Erro ao buscar produtos: {e}")
+        produtos = []
+    
     cursor.close()
     conn.close()
+    
+    logged_in = 'user_id' in session
+    avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
+    
+    total_resultados = len(filmes) + len(cinemas) + len(menus) + len(produtos)
     
     return render_template('pesquisa.html', 
                          query=query,
                          filmes=filmes,
                          cinemas=cinemas,
-                         menus=menus)
+                         menus=menus,
+                         produtos=produtos,
+                         total_resultados=total_resultados,
+                         logged_in=logged_in,
+                         avatar=avatar)
 
 @app.route('/avaliar_filme', methods=['POST'])
 def avaliar_filme():

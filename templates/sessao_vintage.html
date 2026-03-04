@@ -851,6 +851,34 @@
                 clearInterval(matrixInterval);
             }
         }
+
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                
+                if (query.length < 2) {
+                    return;
+                }
+                
+                searchTimeout = setTimeout(() => {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                }, 200);
+            });
+
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(searchTimeout);
+                    const query = this.value.trim();
+                    if (query) {
+                        window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

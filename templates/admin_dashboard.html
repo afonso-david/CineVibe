@@ -15,7 +15,7 @@
 <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
     
     <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 12px; color: white;">
-        <div style="display: flex; justify-content: space-between; align-items: start;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Hoje</p>
                 <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_hoje) }}</h2>
@@ -28,7 +28,7 @@
     </div>
 
     <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 12px; color: white;">
-        <div style="display: flex; justify-content: space-between; align-items: start;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Semanal</p>
                 <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_semana) }}</h2>
@@ -49,7 +49,7 @@
     </div>
 
     <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 1.5rem; border-radius: 12px; color: white;">
-        <div style="display: flex; justify-content: space-between; align-items: start;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Mensal</p>
                 <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_mes) }}</h2>
@@ -62,7 +62,7 @@
     </div>
 
     <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 1.5rem; border-radius: 12px; color: white;">
-        <div style="display: flex; justify-content: space-between; align-items: start;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Total</p>
                 <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_total) }}</h2>
@@ -76,7 +76,7 @@
 </div>
 
 <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-    <div class="stat-card">
+    <div class="stat-card" style="display: flex; align-items: center; gap: 1.5rem; padding: 2rem;">
         <div class="stat-icon"><i class="fas fa-film"></i></div>
         <div class="stat-info">
             <h3>{{ total_filmes }}</h3>
@@ -84,7 +84,7 @@
         </div>
     </div>
     
-    <div class="stat-card">
+    <div class="stat-card" style="display: flex; align-items: center; gap: 1.5rem; padding: 2rem;">
         <div class="stat-icon"><i class="fas fa-building"></i></div>
         <div class="stat-info">
             <h3>{{ total_cinemas }}</h3>
@@ -92,7 +92,7 @@
         </div>
     </div>
     
-    <div class="stat-card">
+    <div class="stat-card" style="display: flex; align-items: center; gap: 1.5rem; padding: 2rem;">
         <div class="stat-icon"><i class="fas fa-users"></i></div>
         <div class="stat-info">
             <h3>{{ total_usuarios }}</h3>
@@ -100,7 +100,7 @@
         </div>
     </div>
     
-    <div class="stat-card">
+    <div class="stat-card" style="display: flex; align-items: center; gap: 1.5rem; padding: 2rem;">
         <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
         <div class="stat-info">
             <h3>{{ novos_usuarios_semana }}</h3>

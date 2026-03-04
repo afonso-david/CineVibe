@@ -512,17 +512,25 @@
     }
 
     .action-btn-grid:hover {
-        background: rgba(255, 255, 255, 0.3);
         transform: scale(1.1);
     }
 
+    .action-btn-grid.edit {
+        background: #FFD700;
+        color: #1a1a2e;
+    }
+
+    .action-btn-grid.edit:hover {
+        background: #FFA500;
+    }
+
     .action-btn-grid.delete {
-        background: rgba(220, 53, 69, 0.9);
+        background: #ff4757;
         color: white;
     }
 
     .action-btn-grid.delete:hover {
-        background: #dc3545;
+        background: #ff3838;
     }
 
     /* Table View Styles */
@@ -548,6 +556,17 @@
     .genre-tag, .actors-text {
         color: #ccc;
         font-size: 0.9rem;
+    }
+
+    .genre-tag {
+        display: inline-block;
+        white-space: normal;
+        line-height: 1.6;
+        word-wrap: break-word;
+    }
+
+    .genre-cell {
+        max-width: 200px;
     }
 
     .duration-badge, .rating-badge {
@@ -577,6 +596,14 @@
         border-radius: 20px;
         font-size: 0.85rem;
         font-weight: 600;
+        display: inline-block;
+        white-space: nowrap;
+        text-align: center;
+        min-width: 100px;
+    }
+
+    .state-cell {
+        text-align: center;
     }
 
     .state-badge.em-exibicao {
@@ -861,30 +888,32 @@
     }
 
     .action-btn-table:hover {
-        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-2px);
     }
 
     .action-btn-table.edit {
-        background: rgba(59, 130, 246, 0.2);
-        color: #3b82f6;
+        background: rgba(255, 215, 0, 0.2);
+        color: #FFD700;
+        border-color: rgba(255, 215, 0, 0.3);
     }
 
     .action-btn-table.edit:hover {
-        background: rgba(59, 130, 246, 0.3);
-        color: #3b82f6;
+        background: #FFD700;
+        color: #1a1a2e;
+        border-color: #FFD700;
     }
 
     .action-btn-table.delete {
-        background: rgba(239, 68, 68, 0.2);
-        border-color: rgba(239, 68, 68, 0.3);
-        color: #ef4444;
+        background: rgba(255, 71, 87, 0.2);
+        color: #ff4757;
+        border-color: rgba(255, 71, 87, 0.3);
     }
 
     .action-btn-table.delete:hover {
-        background: rgba(239, 68, 68, 0.3);
-        color: #ef4444;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        background: #ff4757;
+        color: #ffffff;
+        border-color: #ff4757;
+        box-shadow: none;
     }
 
     /* Formulários inline para botões de remoção */

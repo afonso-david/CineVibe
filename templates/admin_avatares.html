@@ -414,17 +414,19 @@
                     {% for avatar in avatares %}
                     <div class="movie-card-pro" data-avatar-id="{{ avatar.id }}" data-categoria="{{ avatar.categoria_nome or '' }}">
                         <div class="movie-poster">
-                            <img src="{{ url_for('static', filename=avatar.caminho) }}" 
-                                 alt="{{ avatar.nome }}"
-                                 onerror="this.src='{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}'">
-                            <div class="movie-overlay">
-                                <div class="movie-actions">
-                                    <button class="action-btn edit" onclick="editarAvatar({{ avatar.id }})" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" onclick="removerAvatar({{ avatar.id }}, '{{ avatar.nome }}')" title="Remover">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                            <div class="image-wrapper">
+                                <img src="{{ url_for('static', filename=avatar.caminho) }}" 
+                                     alt="{{ avatar.nome }}"
+                                     onerror="this.src='{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}'">
+                                <div class="movie-overlay">
+                                    <div class="movie-actions">
+                                        <button class="action-btn edit" onclick="editarAvatar({{ avatar.id }})" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn delete" onclick="removerAvatar({{ avatar.id }}, '{{ avatar.nome }}')" title="Remover">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

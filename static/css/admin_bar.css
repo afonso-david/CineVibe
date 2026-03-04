@@ -283,7 +283,7 @@
 
 .movie-card-pro:hover {
     transform: translateY(-8px);
-    border-color: #FFD700;
+    box-shadow: none;
 }
 
 .movie-poster {
@@ -871,7 +871,7 @@
 
 .menu-card:hover {
     transform: translateY(-4px);
-    border-color: #FFD700;
+    box-shadow: none;
 }
 
 .menu-image {
@@ -879,6 +879,7 @@
     height: 180px;
     overflow: hidden;
     background: #0f0f23;
+    position: relative;
 }
 
 .menu-image img {
@@ -890,6 +891,29 @@
 
 .menu-card:hover .menu-image img {
     transform: scale(1.05);
+}
+
+.menu-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-image:hover .menu-overlay {
+    opacity: 1;
+}
+
+.menu-actions-hover {
+    display: flex;
+    gap: 12px;
 }
 
 .menu-header {
@@ -1456,7 +1480,7 @@
 
 .topping-card:hover {
     transform: translateY(-4px);
-    border-color: #FFD700;
+    box-shadow: none;
 }
 
 .topping-image {
@@ -1468,6 +1492,7 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
+    position: relative;
 }
 
 .topping-image img {
@@ -1479,6 +1504,29 @@
 
 .topping-card:hover .topping-image img {
     transform: scale(1.05);
+}
+
+.topping-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.topping-image:hover .topping-overlay {
+    opacity: 1;
+}
+
+.topping-actions-hover {
+    display: flex;
+    gap: 12px;
 }
 
 .topping-info {

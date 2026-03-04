@@ -56,6 +56,11 @@
     gap: 10px;
 }
 
+.movie-card-pro .movie-actions-grid {
+    display: flex;
+    gap: 10px;
+}
+
 .movie-card-pro .action-btn {
     background: rgba(255, 255, 255, 0.2);
     border: none;
@@ -71,17 +76,51 @@
     backdrop-filter: blur(10px);
 }
 
+.movie-card-pro .action-btn-grid {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
 .movie-card-pro .action-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
 }
 
-.movie-card-pro .action-btn.edit:hover {
-    background: rgba(59, 130, 246, 0.8);
+.movie-card-pro .action-btn-grid:hover {
+    transform: scale(1.1);
 }
 
-.movie-card-pro .action-btn.delete:hover {
-    background: rgba(239, 68, 68, 0.8);
+.movie-card-pro .action-btn.edit,
+.movie-card-pro .action-btn-grid.edit {
+    background: #FFD700;
+    color: #1a1a2e;
+}
+
+.movie-card-pro .action-btn.edit:hover,
+.movie-card-pro .action-btn-grid.edit:hover {
+    background: #FFA500;
+    box-shadow: none;
+}
+
+.movie-card-pro .action-btn.delete,
+.movie-card-pro .action-btn-grid.delete {
+    background: #ff4757;
+    color: #ffffff;
+}
+
+.movie-card-pro .action-btn.delete:hover,
+.movie-card-pro .action-btn-grid.delete:hover {
+    background: #ff3838;
+    box-shadow: none;
 }
 
 .movie-card-pro .movie-info {

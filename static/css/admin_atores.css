@@ -15,18 +15,23 @@
 }
 .movie-card-pro:hover {
     transform: translateY(-5px);
-    border-color: rgba(96, 165, 250, 0.5);
+    border-color: rgba(55, 65, 81, 0.5);
 }
 .movie-card-pro .movie-poster {
     position: relative;
     width: 100%;
     height: 300px;
-    overflow: hidden;
+    overflow: visible;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+.movie-card-pro .movie-poster .image-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
 }
 .movie-card-pro .movie-poster img {
     width: 200px;
@@ -36,26 +41,25 @@
     transition: transform 0.3s ease;
     border: 4px solid rgba(255, 215, 0, 0.3);
 }
-.movie-card-pro:hover .movie-poster img {
+.movie-card-pro .movie-poster .image-wrapper:hover img {
     transform: scale(1.1);
     border-color: rgba(255, 215, 0, 0.6);
 }
 .movie-card-pro .movie-overlay {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    background: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    background: transparent;
     opacity: 0;
     transition: opacity 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    backdrop-filter: blur(5px);
 }
-.movie-card-pro:hover .movie-overlay {
+.movie-card-pro .movie-poster .image-wrapper:hover .movie-overlay {
     opacity: 1;
 }
 .movie-card-pro .movie-actions {
@@ -77,14 +81,21 @@
     backdrop-filter: blur(10px);
 }
 .movie-card-pro .action-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
 }
+.movie-card-pro .action-btn.edit {
+    background: #FFD700;
+    color: #1a1a2e;
+}
 .movie-card-pro .action-btn.edit:hover {
-    background: rgba(59, 130, 246, 0.8);
+    background: #FFA500;
+}
+.movie-card-pro .action-btn.delete {
+    background: #ff4757;
+    color: #ffffff;
 }
 .movie-card-pro .action-btn.delete:hover {
-    background: rgba(239, 68, 68, 0.8);
+    background: #ff3838;
 }
 .movie-card-pro .movie-info {
     padding: 20px;

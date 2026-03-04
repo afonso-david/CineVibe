@@ -220,6 +220,9 @@
                             {% endif %}
                             <div class="movie-overlay">
                                 <div class="movie-actions">
+                                    <button class="action-btn edit" onclick="editarProduto({{ produto.id }})" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                                     <button class="action-btn delete" onclick="removerProduto({{ produto.id }})" title="Remover">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -317,6 +320,16 @@
                             {% if menu.imagem_url %}
                             <div class="menu-image">
                                 <img src="{{ url_for('static', filename=menu.imagem_url) }}" alt="{{ menu.nome }}" onerror="this.src='/static/imgs/menus/default.svg'">
+                                <div class="menu-overlay">
+                                    <div class="menu-actions-hover">
+                                        <button class="action-btn edit" onclick="editarMenu({{ menu.id }})" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn delete" onclick="removerMenu({{ menu.id }})" title="Remover">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             {% endif %}
                             <div class="menu-header">
@@ -337,14 +350,6 @@
                                         <li>Nenhum produto</li>
                                     {% endif %}
                                 </ul>
-                            </div>
-                            <div class="menu-actions">
-                                <button class="btn-edit" onclick="editarMenu({{ menu.id }})">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn-delete" onclick="removerMenu({{ menu.id }})">
-                                    <i class="fas fa-trash"></i> Remover
-                                </button>
                             </div>
                         </div>
                         {% endfor %}
@@ -433,20 +438,22 @@
                             {% if topping.imagem_url %}
                             <div class="topping-image">
                                 <img src="{{ url_for('static', filename=topping.imagem_url.replace('\\', '/').replace('\"', '')) }}" alt="{{ topping.nome }}" onerror="this.src='/static/imgs/produtos/default.svg'">
+                                <div class="topping-overlay">
+                                    <div class="topping-actions-hover">
+                                        <button class="action-btn edit" onclick="editarTopping({{ topping.id }})" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="action-btn delete" onclick="removerTopping({{ topping.id }})" title="Remover">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             {% endif %}
                             <div class="topping-info">
                                 <h3>{{ topping.nome }}</h3>
                                 <p class="topping-description">{{ topping.descricao or 'Sem descrição' }}</p>
                                 <span class="topping-price">€{{ "%.2f"|format(topping.preco) }}</span>
-                            </div>
-                            <div class="topping-actions">
-                                <button class="btn-edit" onclick="editarTopping({{ topping.id }})">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn-delete" onclick="removerTopping({{ topping.id }})">
-                                    <i class="fas fa-trash"></i> Remover
-                                </button>
                             </div>
                         </div>
                         {% endfor %}

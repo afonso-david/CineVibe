@@ -2568,14 +2568,26 @@ def admin_dashboard():
     cur.execute("""
         SELECT TIME_FORMAT(h.hora, '%H:%i') as horario, 
                COUNT(r.id) as total_reservas
-        FROM horarios_sessao hs
+        FROM reservas r
+        JOIN horarios_sessao hs ON r.id_horario_sessao = hs.id
         JOIN horarios h ON hs.id_horario = h.id
-        LEFT JOIN reservas r ON hs.id = r.id_horario_sessao
-        GROUP BY h.hora
-        ORDER BY total_reservas DESC
+        GROUP BY h.id, h.hora
+        HAVING total_reservas > 0
+        ORDER BY total_reservas DESC, h.hora
         LIMIT 5
     """)
     horarios_populares = cur.fetchall()
+    
+    if not horarios_populares:
+        cur.execute("""
+            SELECT TIME_FORMAT(hora, '%H:%i') as horario, 
+                   0 as total_reservas
+            FROM horarios
+            WHERE hora BETWEEN '14:00:00' AND '23:00:00'
+            ORDER BY hora
+            LIMIT 5
+        """)
+        horarios_populares = cur.fetchall()
     
     cur.execute("""
         SELECT ts.nome, COUNT(r.id) as total_reservas,

@@ -185,11 +185,11 @@
                         <div class="movie-poster">
                             <img src="{{ url_for('static', filename=cinema.imagem if cinema.imagem else 'imgs/cinemas/default.jpg') }}" alt="{{ cinema.nome }}" onerror="this.src='{{ url_for('static', filename='imgs/cinemas/default.jpg') }}'">>
                             <div class="movie-overlay">
-                                <div class="movie-actions">
-                                    <button class="action-btn edit" onclick="editarCinema({{ cinema.id }})" title="Editar">
+                                <div class="movie-actions-grid">
+                                    <button class="action-btn-grid edit" onclick="editarCinema({{ cinema.id }})" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="action-btn delete" onclick="removerCinema({{ cinema.id }}, '{{ cinema.nome }}')" title="Remover">
+                                    <button class="action-btn-grid delete" onclick="removerCinema({{ cinema.id }}, '{{ cinema.nome }}')" title="Remover">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>

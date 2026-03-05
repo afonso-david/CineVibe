@@ -4726,42 +4726,45 @@ def admin_auto_agendar_filme(id_filme):
                 for tipo_sessao in tipos_sessao:
                     tipo_nome = tipo_sessao['nome'].upper()
                     
-                    salas_filtradas = []
+                    sala_escolhida = None
                     if tipo_nome == 'IMAX':
                         salas_filtradas = [s for s in salas if 'IMAX' in s['nome_sala'].upper()]
+                        if salas_filtradas:
+                            sala_escolhida = salas_filtradas[0]
                     elif tipo_nome == '4DX':
                         salas_filtradas = [s for s in salas if '4DX' in s['nome_sala'].upper()]
+                        if salas_filtradas:
+                            sala_escolhida = salas_filtradas[0]
                     else:
                         salas_filtradas = [s for s in salas if 'IMAX' not in s['nome_sala'].upper() and '4DX' not in s['nome_sala'].upper()]
+                        if salas_filtradas:
+                            sala_escolhida = salas_filtradas[0]
                     
-                    if not salas_filtradas:
+                    if not sala_escolhida:
                         continue
                     
                     horarios_adicionados_tipo = 0
-                    tentativas = 0
-                    max_tentativas = len(horarios_disponiveis) * len(salas_filtradas) * 2
                     
                     horarios_livres = []
                     for horario in horarios_disponiveis:
-                        for sala in salas_filtradas:
-                            tem_conflito = any(
-                                s[0] == sala['id'] and s[1] == horario['id'] and s[2] == tipo_sessao['id']
-                                for s in sessoes_existentes
-                            )
-                            if not tem_conflito:
-                                horarios_livres.append((sala, horario))
+                        tem_conflito = any(
+                            s[0] == sala_escolhida['id'] and s[1] == horario['id'] and s[2] == tipo_sessao['id']
+                            for s in sessoes_existentes
+                        )
+                        if not tem_conflito:
+                            horarios_livres.append(horario)
                     
                     import random
                     random.shuffle(horarios_livres)
                     
-                    for sala, horario in horarios_livres:
+                    for horario in horarios_livres:
                         if horarios_adicionados_tipo >= MAX_HORARIOS_POR_TIPO:
                             break
                         
-                        chave_filme = (sala['id'], horario['id'], tipo_sessao['id'], id_filme)
+                        chave_filme = (sala_escolhida['id'], horario['id'], tipo_sessao['id'], id_filme)
                         
                         if chave_filme not in sessoes_existentes:
-                            sessoes_para_inserir.append((id_filme, cinema['id'], tipo_sessao['id'], horario['id'], sala['id']))
+                            sessoes_para_inserir.append((id_filme, cinema['id'], tipo_sessao['id'], horario['id'], sala_escolhida['id']))
                             sessoes_existentes.add(chave_filme)
                             horarios_adicionados_tipo += 1
                 
@@ -6904,11 +6907,13 @@ def filme_detalhe(id_filme):
         tipos_sessao = cursor.fetchall()
 
         cursor.execute("""
-            SELECT hs.id, hs.id_cinema, hs.id_tipo_sessao, hs.id_sala, h.hora, s.nome_sala
+            SELECT DISTINCT hs.id_cinema, hs.id_tipo_sessao, hs.id_sala, h.hora, s.nome_sala,
+                   MIN(hs.id) as id
             FROM horarios_sessao hs
             JOIN horarios h ON hs.id_horario = h.id
             LEFT JOIN salas s ON hs.id_sala = s.id
             WHERE hs.id_filme = %s
+            GROUP BY hs.id_cinema, hs.id_tipo_sessao, hs.id_sala, h.hora, s.nome_sala
             ORDER BY h.hora
         """, (id_filme,))
         
@@ -6942,11 +6947,13 @@ def filme_detalhe(id_filme):
             conn.commit()
             
             cursor.execute("""
-                SELECT hs.id, hs.id_cinema, hs.id_tipo_sessao, hs.id_sala, h.hora, s.nome_sala
+                SELECT DISTINCT hs.id_cinema, hs.id_tipo_sessao, hs.id_sala, h.hora, s.nome_sala,
+                       MIN(hs.id) as id
                 FROM horarios_sessao hs
                 JOIN horarios h ON hs.id_horario = h.id
                 LEFT JOIN salas s ON hs.id_sala = s.id
                 WHERE hs.id_filme = %s
+                GROUP BY hs.id_cinema, hs.id_tipo_sessao, hs.id_sala, h.hora, s.nome_sala
                 ORDER BY h.hora
             """, (id_filme,))
             horarios_filme = cursor.fetchall()
@@ -7085,18 +7092,6 @@ def filme_detalhe(id_filme):
     for ator in elenco:
         if ator.get('foto_url'):
             ator['foto_url'] = ator['foto_url'].replace('\\', '/').replace('"', '').strip()
-
-    horarios_unicos = []
-    horarios_vistos = set()
-    
-    for h in horarios_filme:
-        chave = (h['id_cinema'], h['id_tipo_sessao'], h['id_sala'], str(h['hora']))
-        
-        if chave not in horarios_vistos:
-            horarios_vistos.add(chave)
-            horarios_unicos.append(h)
-    
-    horarios_filme = horarios_unicos
     
     horarios_limpos = []
     for h in horarios_filme:

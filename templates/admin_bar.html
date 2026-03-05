@@ -296,8 +296,8 @@
                                     <td class="duration-cell">{{ produto.menus or 'Nenhum' }}</td>
                                     <td class="actions-cell">
                                         <div class="movie-actions-table">
-                                            <button class="action-btn-table view" onclick="verProdutoDetalhes({{ produto.id }})" title="Ver Detalhes">
-                                                <i class="fas fa-eye"></i>
+                                            <button class="action-btn-table edit" onclick="editarProduto({{ produto.id }})" title="Editar">
+                                                <i class="fas fa-edit"></i>
                                             </button>
                                             <button class="action-btn-table delete" onclick="removerProduto({{ produto.id }})" title="Remover">
                                                 <i class="fas fa-trash"></i>

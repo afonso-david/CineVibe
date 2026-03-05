@@ -109,6 +109,89 @@
     </div>
 </div>
 
+<!-- Seção de Alertas e Notificações -->
+<div class="content-section" style="margin-bottom: 2rem; background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 71, 87, 0.05) 100%); border: 1px solid rgba(255, 71, 87, 0.3);">
+    <div class="section-header">
+        <h2><i class="fas fa-exclamation-triangle"></i> Alertas e Notificações</h2>
+    </div>
+    <div style="padding: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            
+            <!-- Sessões com Baixa Ocupação -->
+            <div style="background: #1B263B; border-radius: 8px; padding: 1rem; border-left: 4px solid #ffc107;">
+                <h3 style="color: #ffc107; font-size: 1rem; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-chair"></i> Sessões com Baixa Ocupação
+                </h3>
+                {% if sessoes_baixa_ocupacao %}
+                    {% for sessao in sessoes_baixa_ocupacao %}
+                    <div style="padding: 0.75rem; background: rgba(255, 193, 7, 0.1); border-radius: 6px; margin-bottom: 0.5rem;">
+                        <div style="color: #FFD60A; font-weight: 600; font-size: 0.9rem;">{{ sessao.filme_titulo }}</div>
+                        <div style="color: #8892B0; font-size: 0.85rem; margin-top: 0.25rem;">
+                            {{ sessao.cinema_nome }} - {{ sessao.nome_sala }}<br>
+                            {{ sessao.data_sessao }} às {{ sessao.horario }}<br>
+                            <span style="color: #ffc107;">{{ sessao.taxa_ocupacao }}% ocupado</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #8892B0; font-size: 0.9rem; margin: 0;">Nenhuma sessão com baixa ocupação nos próximos 3 dias.</p>
+                {% endif %}
+            </div>
+
+            <!-- Filmes Sem Reservas -->
+            <div style="background: #1B263B; border-radius: 8px; padding: 1rem; border-left: 4px solid #f5576c;">
+                <h3 style="color: #f5576c; font-size: 1rem; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-film"></i> Filmes Sem Reservas
+                </h3>
+                {% if filmes_sem_reservas %}
+                    {% for filme in filmes_sem_reservas %}
+                    <div style="padding: 0.75rem; background: rgba(245, 87, 108, 0.1); border-radius: 6px; margin-bottom: 0.5rem; display: flex; gap: 0.75rem; align-items: center;">
+                        <div style="width: 40px; height: 60px; border-radius: 4px; overflow: hidden; flex-shrink: 0;">
+                            {% if filme.poster_url %}
+                            <img src="{{ url_for('static', filename=filme.poster_url) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                            <div style="width: 100%; height: 100%; background: #0D1B2A; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="color: #FFD60A; font-size: 1rem;"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="color: #ffffff; font-weight: 600; font-size: 0.9rem;">{{ filme.titulo }}</div>
+                            <div style="color: #8892B0; font-size: 0.85rem; margin-top: 0.25rem;">
+                                {{ filme.total_sessoes }} sessões disponíveis<br>
+                                <span style="color: #f5576c;">0 reservas</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #8892B0; font-size: 0.9rem; margin: 0;">Todos os filmes em exibição têm reservas!</p>
+                {% endif %}
+            </div>
+
+            <!-- Usuários Sem Reservas -->
+            <div style="background: #1B263B; border-radius: 8px; padding: 1rem; border-left: 4px solid #4EA8DE;">
+                <h3 style="color: #4EA8DE; font-size: 1rem; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-user-clock"></i> Novos Usuários Sem Reservas
+                </h3>
+                {% if usuarios_sem_reservas %}
+                    {% for usuario in usuarios_sem_reservas %}
+                    <div style="padding: 0.75rem; background: rgba(78, 168, 222, 0.1); border-radius: 6px; margin-bottom: 0.5rem;">
+                        <div style="color: #ffffff; font-weight: 600; font-size: 0.9rem;">{{ usuario.nome }}</div>
+                        <div style="color: #8892B0; font-size: 0.85rem; margin-top: 0.25rem;">
+                            {{ usuario.email }}<br>
+                            Cadastrado há {{ usuario.dias_cadastrado }} dias
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #8892B0; font-size: 0.9rem; margin: 0;">Todos os novos usuários já fizeram reservas!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
     
     <div class="content-section">

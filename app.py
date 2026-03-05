@@ -2674,6 +2674,71 @@ def admin_dashboard():
     """)
     ocupacao_salas = cur.fetchall()
     
+    cur.execute("""
+        SELECT 
+            s.nome_sala,
+            c.nome as cinema_nome,
+            f.titulo as filme_titulo,
+            DATE_FORMAT(datas.data_sessao, '%d/%m/%Y') as data_sessao,
+            TIME_FORMAT(h.hora, '%H:%i') as horario,
+            s.capacidade,
+            COALESCE(SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1), 0) as total_lugares_reservados,
+            ROUND(
+                (COALESCE(SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1), 0) / s.capacidade * 100),
+                1
+            ) as taxa_ocupacao
+        FROM horarios_sessao hs
+        JOIN salas s ON hs.id_sala = s.id
+        JOIN cinemas c ON s.id_cinema = c.id
+        JOIN horarios h ON hs.id_horario = h.id
+        JOIN filmes f ON hs.id_filme = f.id
+        CROSS JOIN (
+            SELECT CURDATE() as data_sessao
+            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 2 DAY)
+        ) datas
+        LEFT JOIN reservas r ON r.id_horario_sessao = hs.id AND r.data_sessao = datas.data_sessao
+        WHERE f.estado = 'em_exibicao' AND datas.data_sessao >= CURDATE()
+        GROUP BY hs.id, s.nome_sala, c.nome, f.titulo, datas.data_sessao, h.hora, s.capacidade
+        HAVING taxa_ocupacao < 30
+        ORDER BY datas.data_sessao ASC, h.hora ASC
+        LIMIT 5
+    """)
+    sessoes_baixa_ocupacao = cur.fetchall()
+    
+    cur.execute("""
+        SELECT 
+            f.titulo,
+            f.poster_url,
+            COUNT(DISTINCT hs.id) as total_sessoes,
+            COALESCE(COUNT(DISTINCT r.id), 0) as total_reservas
+        FROM filmes f
+        JOIN horarios_sessao hs ON hs.id_filme = f.id
+        LEFT JOIN reservas r ON r.id_filme = f.id 
+            AND r.data_sessao BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()
+        WHERE f.estado = 'em_exibicao'
+        GROUP BY f.id, f.titulo, f.poster_url
+        HAVING total_reservas = 0 AND total_sessoes > 0
+        ORDER BY total_sessoes DESC
+        LIMIT 3
+    """)
+    filmes_sem_reservas = cur.fetchall()
+    
+    cur.execute("""
+        SELECT 
+            u.nome,
+            u.email,
+            DATE_FORMAT(u.criado_em, '%d/%m/%Y') as data_cadastro,
+            DATEDIFF(CURDATE(), u.criado_em) as dias_cadastrado
+        FROM usuarios u
+        LEFT JOIN reservas r ON r.id_usuario = u.id
+        WHERE u.criado_em >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+        AND r.id IS NULL
+        GROUP BY u.id
+        LIMIT 5
+    """)
+    usuarios_sem_reservas = cur.fetchall()
+    
     cur.close()
     conn.close()
     
@@ -2697,7 +2762,10 @@ def admin_dashboard():
         ultimas_reservas=ultimas_reservas,
         novos_usuarios_semana=novos_usuarios_semana,
         top_produtos_bar=top_produtos_bar,
-        ocupacao_salas=ocupacao_salas
+        ocupacao_salas=ocupacao_salas,
+        sessoes_baixa_ocupacao=sessoes_baixa_ocupacao,
+        filmes_sem_reservas=filmes_sem_reservas,
+        usuarios_sem_reservas=usuarios_sem_reservas
     )
 
 
@@ -4566,6 +4634,183 @@ def admin_editar_filme(id_filme):
     except Exception as e:
         return jsonify({'success': False, 'message': f'Erro ao atualizar filme: {str(e)}'}), 500
 
+@app.route('/admin/filmes/<int:id_filme>/auto-agendar', methods=['POST'])
+def admin_auto_agendar_filme(id_filme):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Não autenticado'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(dictionary=True, buffered=True)
+        
+        cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
+        user = cur.fetchone()
+        
+        if not user or not user.get('is_admin'):
+            return jsonify({'success': False, 'message': 'Acesso negado'}), 403
+        
+        cur.execute("SELECT id, titulo, duracao FROM filmes WHERE id = %s", (id_filme,))
+        filme = cur.fetchone()
+        
+        if not filme:
+            return jsonify({'success': False, 'message': 'Filme não encontrado'}), 404
+        
+        duracao_filme = filme['duracao'] or 120
+        
+        cur.execute("SELECT id, nome FROM cinemas")
+        cinemas = cur.fetchall()
+        
+        if not cinemas:
+            return jsonify({'success': False, 'message': 'Nenhum cinema disponível'}), 400
+        
+        cur.execute("SELECT id, hora FROM horarios ORDER BY hora")
+        horarios = cur.fetchall()
+        
+        if not horarios:
+            return jsonify({'success': False, 'message': 'Nenhum horário configurado'}), 400
+        
+        cur.execute("""
+            SELECT id, nome 
+            FROM tipos_sessao 
+            WHERE id NOT IN (9, 24)
+            ORDER BY id
+        """)
+        tipos_sessao = cur.fetchall()
+        
+        if not tipos_sessao:
+            return jsonify({'success': False, 'message': 'Nenhum tipo de sessão configurado'}), 400
+        
+        print(f"Iniciando auto-agendamento: {len(cinemas)} cinemas, {len(tipos_sessao)} tipos de sessão, {len(horarios)} horários")
+        
+        sessoes_criadas = 0
+        cinemas_adicionados = 0
+        sessoes_para_inserir = []
+        
+        MAX_HORARIOS_POR_TIPO = 3
+        
+        print(f"Distribuição inteligente: máximo {MAX_HORARIOS_POR_TIPO} horários por tipo de sessão por cinema")
+        
+        for cinema in cinemas:
+            try:
+                cur.execute("""
+                    SELECT 1 FROM filmes_cinemas 
+                    WHERE filme_id = %s AND cinema_id = %s
+                """, (id_filme, cinema['id']))
+                
+                if not cur.fetchone():
+                    cur.execute("""
+                        INSERT INTO filmes_cinemas (filme_id, cinema_id) 
+                        VALUES (%s, %s)
+                    """, (id_filme, cinema['id']))
+                    cinemas_adicionados += 1
+                
+                cur.execute("""
+                    SELECT id, nome_sala, capacidade 
+                    FROM salas 
+                    WHERE id_cinema = %s
+                    ORDER BY nome_sala
+                """, (cinema['id'],))
+                salas = cur.fetchall()
+                
+                cur.execute("""
+                    SELECT id_sala, id_horario, id_tipo_sessao, id_filme
+                    FROM horarios_sessao
+                    WHERE id_cinema = %s
+                """, (cinema['id'],))
+                sessoes_existentes = set()
+                for row in cur.fetchall():
+                    sessoes_existentes.add((row['id_sala'], row['id_horario'], row['id_tipo_sessao'], row['id_filme']))
+                
+                horarios_disponiveis = list(horarios)
+                
+                for tipo_sessao in tipos_sessao:
+                    tipo_nome = tipo_sessao['nome'].upper()
+                    
+                    salas_filtradas = []
+                    if tipo_nome == 'IMAX':
+                        salas_filtradas = [s for s in salas if 'IMAX' in s['nome_sala'].upper()]
+                    elif tipo_nome == '4DX':
+                        salas_filtradas = [s for s in salas if '4DX' in s['nome_sala'].upper()]
+                    else:
+                        salas_filtradas = [s for s in salas if 'IMAX' not in s['nome_sala'].upper() and '4DX' not in s['nome_sala'].upper()]
+                    
+                    if not salas_filtradas:
+                        continue
+                    
+                    horarios_adicionados_tipo = 0
+                    tentativas = 0
+                    max_tentativas = len(horarios_disponiveis) * len(salas_filtradas) * 2
+                    
+                    horarios_livres = []
+                    for horario in horarios_disponiveis:
+                        for sala in salas_filtradas:
+                            tem_conflito = any(
+                                s[0] == sala['id'] and s[1] == horario['id'] and s[2] == tipo_sessao['id']
+                                for s in sessoes_existentes
+                            )
+                            if not tem_conflito:
+                                horarios_livres.append((sala, horario))
+                    
+                    import random
+                    random.shuffle(horarios_livres)
+                    
+                    for sala, horario in horarios_livres:
+                        if horarios_adicionados_tipo >= MAX_HORARIOS_POR_TIPO:
+                            break
+                        
+                        chave_filme = (sala['id'], horario['id'], tipo_sessao['id'], id_filme)
+                        
+                        if chave_filme not in sessoes_existentes:
+                            sessoes_para_inserir.append((id_filme, cinema['id'], tipo_sessao['id'], horario['id'], sala['id']))
+                            sessoes_existentes.add(chave_filme)
+                            horarios_adicionados_tipo += 1
+                
+                if len(sessoes_para_inserir) >= 500:
+                    cur.executemany("""
+                        INSERT INTO horarios_sessao (id_filme, id_cinema, id_tipo_sessao, id_horario, id_sala)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, sessoes_para_inserir)
+                    sessoes_criadas += len(sessoes_para_inserir)
+                    print(f"Inseridas {sessoes_criadas} sessões até agora...")
+                    sessoes_para_inserir = []
+                    conn.commit()
+            
+            except Exception as cinema_error:
+                print(f"Erro ao processar cinema {cinema['nome']}: {cinema_error}")
+                continue
+        
+        if sessoes_para_inserir:
+            cur.executemany("""
+                INSERT INTO horarios_sessao (id_filme, id_cinema, id_tipo_sessao, id_horario, id_sala)
+                VALUES (%s, %s, %s, %s, %s)
+            """, sessoes_para_inserir)
+            sessoes_criadas += len(sessoes_para_inserir)
+            print(f"Inserção final: {len(sessoes_para_inserir)} sessões")
+        
+        conn.commit()
+        
+        print(f"Auto-agendamento concluído: {cinemas_adicionados} cinemas, {sessoes_criadas} sessões")
+        
+        mensagem = f"Agendamento concluído! {cinemas_adicionados} cinemas adicionados, {sessoes_criadas} sessões criadas."
+        return jsonify({'success': True, 'message': mensagem})
+        
+    except Exception as e:
+        error_msg = str(e) if str(e) else type(e).__name__
+        print(f"ERRO CRÍTICO no auto-agendamento: {error_msg}")
+        import traceback
+        traceback.print_exc()
+        try:
+            conn.rollback()
+        except:
+            pass
+        return jsonify({'success': False, 'message': f'Erro ao agendar: {error_msg}'}), 500
+    finally:
+        try:
+            cur.close()
+            conn.close()
+        except:
+            pass
+
 @app.route('/admin/filmes/<int:id_filme>/avaliacoes')
 def admin_filme_avaliacoes(id_filme):
     if 'user_id' not in session:
@@ -4754,6 +4999,59 @@ def admin_remover_cinema_filme(id_filme, cinema_id):
     finally:
         cur.close()
         conn.close()
+
+@app.route('/admin/filmes/<int:id_filme>/remover-todos-cinemas', methods=['POST'])
+def admin_remover_todos_cinemas_filme(id_filme):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Não autenticado'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(buffered=True)
+        
+        cur.execute("SELECT is_admin FROM usuarios WHERE id = %s", (session['user_id'],))
+        user = cur.fetchone()
+        
+        if not user or not user[0]:
+            return jsonify({'success': False, 'message': 'Acesso negado'}), 403
+        
+        cur.execute("SELECT titulo FROM filmes WHERE id = %s", (id_filme,))
+        filme = cur.fetchone()
+        
+        if not filme:
+            return jsonify({'success': False, 'message': 'Filme não encontrado'}), 404
+        
+        print(f"Removendo todos os cinemas do filme: {filme[0]}")
+        
+        cur.execute("DELETE FROM reservas WHERE id_filme = %s", (id_filme,))
+        reservas_removidas = cur.rowcount
+        print(f"Removidas {reservas_removidas} reservas")
+        
+        cur.execute("DELETE FROM horarios_sessao WHERE id_filme = %s", (id_filme,))
+        horarios_removidos = cur.rowcount
+        print(f"Removidos {horarios_removidos} horários")
+        
+        cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s", (id_filme,))
+        cinemas_removidos = cur.rowcount
+        print(f"Removidas {cinemas_removidos} associações com cinemas")
+        
+        conn.commit()
+        
+        mensagem = f"Todos os cinemas removidos! {cinemas_removidos} cinemas, {horarios_removidos} horários e {reservas_removidas} reservas foram removidos."
+        return jsonify({'success': True, 'message': mensagem})
+        
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro ao remover todos os cinemas: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'Erro: {str(e)}'}), 500
+    finally:
+        try:
+            cur.close()
+            conn.close()
+        except:
+            pass
 
 @app.route('/admin/filmes/<int:id_filme>/adicionar-ator', methods=['POST'])
 def admin_adicionar_ator_filme(id_filme):
@@ -4980,7 +5278,7 @@ def admin_adicionar_filme():
         cursor.execute("""
             INSERT INTO filmes (titulo, diretor, data_lancamento, duracao, sinopse, poster_url, estado)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (titulo, 'A definir', '2024-01-01', int(duracao), sinopse, poster_url, 'em_exibicao'))
+        """, (titulo, 'A definir', '2024-01-01', int(duracao), sinopse, poster_url, 'brevemente'))
         
         id_filme = cursor.lastrowid
         
@@ -5155,11 +5453,9 @@ def admin_remover_filme(id_filme):
         return redirect(url_for('admin_filmes'))
     
     conn = get_db_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(buffered=True)
     
     try:
-        cur.execute("SET FOREIGN_KEY_CHECKS = 0")
-        
         cur.execute("SELECT is_admin, nome FROM usuarios WHERE id = %s", (session['user_id'],))
         user = cur.fetchone()
         
@@ -5193,76 +5489,43 @@ def admin_remover_filme(id_filme):
         print(f"🎬 DEBUG: Removendo filme: '{titulo_filme}' (ID: {id_filme})")
         app.logger.info(f"Removendo filme: '{titulo_filme}' (ID: {id_filme})")
         
-        try:
-            cur.execute("DELETE FROM reservas WHERE id_filme = %s", (id_filme,))
-            reservas_removidas = cur.rowcount
-            print(f"✅ DEBUG: Removidas {reservas_removidas} reservas")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover reservas: {e}")
+        cur.execute("SET FOREIGN_KEY_CHECKS = 0")
         
-        try:
-            cur.execute("DELETE FROM avaliacoes_filmes WHERE filme_id = %s", (id_filme,))
-            avaliacoes_removidas = cur.rowcount
-            print(f"✅ DEBUG: Removidas {avaliacoes_removidas} avaliações")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover avaliações: {e}")
+        print("🗑️ Removendo dados relacionados em batch...")
         
-        try:
-            cur.execute("DELETE FROM historico_filmes WHERE filme_id = %s", (id_filme,))
-            historico_removido = cur.rowcount
-            print(f"✅ DEBUG: Removidos {historico_removido} registos de histórico")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover histórico: {e}")
+        cur.execute("DELETE FROM reservas WHERE id_filme = %s", (id_filme,))
+        print(f"✅ Removidas {cur.rowcount} reservas")
         
-        try:
-            cur.execute("DELETE FROM reservas_salas WHERE filme_id = %s", (id_filme,))
-            reservas_salas_removidas = cur.rowcount
-            print(f"✅ DEBUG: Removidas {reservas_salas_removidas} reservas de salas")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover reservas_salas: {e}")
+        cur.execute("DELETE FROM avaliacoes_filmes WHERE filme_id = %s", (id_filme,))
+        print(f"✅ Removidas {cur.rowcount} avaliações")
         
-        try:
-            cur.execute("DELETE FROM horarios_sessao WHERE id_filme = %s", (id_filme,))
-            horarios_removidos = cur.rowcount
-            print(f"✅ DEBUG: Removidos {horarios_removidos} horários")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover horários: {e}")
+        cur.execute("DELETE FROM historico_filmes WHERE filme_id = %s", (id_filme,))
+        print(f"✅ Removidos {cur.rowcount} históricos")
         
-        try:
-            cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s", (id_filme,))
-            cinemas_removidos = cur.rowcount
-            print(f"✅ DEBUG: Removidas {cinemas_removidos} associações com cinemas")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover filmes_cinemas: {e}")
+        cur.execute("DELETE FROM reservas_salas WHERE filme_id = %s", (id_filme,))
+        print(f"✅ Removidas {cur.rowcount} reservas de salas")
         
-        try:
-            cur.execute("DELETE FROM filme_generos WHERE filme_id = %s", (id_filme,))
-            generos_removidos = cur.rowcount
-            print(f"✅ DEBUG: Removidas {generos_removidos} associações com géneros")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover filme_generos: {e}")
+        cur.execute("DELETE FROM horarios_sessao WHERE id_filme = %s", (id_filme,))
+        horarios_removidos = cur.rowcount
+        print(f"✅ Removidos {horarios_removidos} horários de sessão")
         
-        try:
-            cur.execute("DELETE FROM filme_atores WHERE filme_id = %s", (id_filme,))
-            atores_removidos = cur.rowcount
-            print(f"✅ DEBUG: Removidas {atores_removidos} associações com atores")
-        except Exception as e:
-            print(f"⚠️ Erro ao remover filme_atores: {e}")
+        cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s", (id_filme,))
+        print(f"✅ Removidas {cur.rowcount} associações com cinemas")
         
-        print(f"🗑️ DEBUG: Removendo filme da tabela principal...")
+        cur.execute("DELETE FROM filme_generos WHERE filme_id = %s", (id_filme,))
+        print(f"✅ Removidas {cur.rowcount} associações com géneros")
+        
+        cur.execute("DELETE FROM filme_atores WHERE filme_id = %s", (id_filme,))
+        print(f"✅ Removidas {cur.rowcount} associações com atores")
+        
         cur.execute("DELETE FROM filmes WHERE id = %s", (id_filme,))
-        filme_removido = cur.rowcount
-        print(f"✅ DEBUG: Filme removido: {filme_removido} linha(s) afetada(s)")
+        print(f"✅ Filme removido da tabela principal")
         
-        if filme_removido == 0:
-            print("❌ DEBUG: ERRO - Filme não foi removido!")
-            conn.rollback()
-            flash("Erro: Filme não foi removido", "erro")
-        else:
-            print("✅ DEBUG: Commit das alterações...")
-            conn.commit()
-            print(f"✅ DEBUG: Filme '{titulo_filme}' removido com sucesso!")
-            flash(f"Filme '{titulo_filme}' removido com sucesso!", "sucesso")
+        cur.execute("SET FOREIGN_KEY_CHECKS = 1")
+        
+        conn.commit()
+        print(f"✅ DEBUG: Filme '{titulo_filme}' removido com sucesso!")
+        flash(f"Filme '{titulo_filme}' removido com sucesso!", "sucesso")
         
         cur.execute("SET FOREIGN_KEY_CHECKS = 1")
         

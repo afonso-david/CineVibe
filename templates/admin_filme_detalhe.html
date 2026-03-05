@@ -29,6 +29,9 @@
             <p class="subtitle">Edição de Filme</p>
         </div>
         <div class="header-actions">
+            <button onclick="autoAgendarFilme()" class="btn btn-success" style="background: linear-gradient(135deg, #28a745, #20c997); margin-right: 10px;">
+                <i class="fas fa-magic"></i> Auto-Agendar
+            </button>
             <button onclick="window.history.back()" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Voltar
             </button>
@@ -179,9 +182,14 @@
         <div class="section">
             <div class="section-header">
                 <h3><i class="fas fa-building"></i> Cinemas em Exibição</h3>
-                <button onclick="openAddCinemaModal()" class="btn btn-secondary">
-                    <i class="fas fa-plus"></i> Adicionar Cinema
-                </button>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="openAddCinemaModal()" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i> Adicionar Cinema
+                    </button>
+                    <button onclick="removerTodosCinemas()" class="btn btn-danger" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+                        <i class="fas fa-trash-alt"></i> Remover Todos
+                    </button>
+                </div>
             </div>
             
             {% if filme_cinemas %}
@@ -525,6 +533,39 @@ function salvarFilme() {
         showNotification('Erro ao salvar: ' + error.message, 'error');
     });
 }
+
+function autoAgendarFilme() {
+    if (!confirm('Deseja agendar automaticamente este filme em todos os cinemas disponíveis?\n\nIsso irá:\n- Adicionar o filme a todos os cinemas\n- Criar sessões em salas disponíveis\n- Distribuir horários sem conflitos')) {
+        return;
+    }
+    
+    const loadingMsg = showNotification('Agendando filme...', 'info');
+    
+    fetch(`/admin/filmes/{{ filme.id }}/auto-agendar`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+            showNotification(data.message, 'success');
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            showNotification('Erro: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        showNotification('Erro ao agendar: ' + error.message, 'error');
+    });
+}
+
 document.getElementById('posterInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
@@ -687,6 +728,7 @@ function removeCinemaFromMovie(cinemaId) {
             if (data.success) {
                 showNotification('Cinema removido com sucesso!', 'success');
                 const cinemaElement = document.querySelector(`[data-cinema-id="${cinemaId}"]`);
+
                 console.log('Elemento encontrado:', cinemaElement);
                 
                 if (cinemaElement) {
@@ -706,6 +748,32 @@ function removeCinemaFromMovie(cinemaId) {
         });
     }
 }
+
+function removerTodosCinemas() {
+    if (confirm('⚠️ ATENÇÃO CRÍTICA!\n\nIsso irá remover TODOS os cinemas deste filme e TODAS as sessões, horários e reservas associadas.\n\nEsta ação NÃO pode ser desfeita!\n\nTem ABSOLUTA certeza que deseja continuar?')) {
+        showNotification('Removendo todos os cinemas...', 'info');
+        
+        fetch(`/admin/filmes/{{ filme.id }}/remover-todos-cinemas`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'success');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showNotification('Erro: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Erro ao remover cinemas: ' + error.message, 'error');
+        });
+    }
+}
+
 function openAddGeneroModal() {
     document.getElementById('generoSelect').value = '';
     document.getElementById('generoModal').style.display = 'flex';

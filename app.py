@@ -2656,24 +2656,20 @@ def admin_dashboard():
             TIME_FORMAT(h.hora, '%H:%i') as horario,
             DATE_FORMAT(r.data_sessao, '%d/%m/%Y') as data_sessao,
             s.capacidade,
-            COALESCE(
-                LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1,
-                0
-            ) as total_lugares_reservados,
-            ROUND((
-                COALESCE(
-                    LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1,
-                    0
-                ) / s.capacidade * 100
-            ), 1) as taxa_ocupacao
+            SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1) as total_lugares_reservados,
+            ROUND(
+                (SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1) / s.capacidade * 100),
+                1
+            ) as taxa_ocupacao
         FROM reservas r
         JOIN horarios_sessao hs ON r.id_horario_sessao = hs.id
         JOIN salas s ON hs.id_sala = s.id
         JOIN cinemas c ON s.id_cinema = c.id
         JOIN horarios h ON hs.id_horario = h.id
         JOIN filmes f ON r.id_filme = f.id
-        WHERE r.data_sessao >= CURDATE()
-        ORDER BY taxa_ocupacao DESC, r.data_sessao ASC
+        WHERE r.data_sessao >= CURDATE() - INTERVAL 7 DAY
+        GROUP BY s.id, s.nome_sala, c.nome, f.titulo, h.hora, r.data_sessao, s.capacidade
+        ORDER BY taxa_ocupacao DESC, r.data_sessao DESC
         LIMIT 10
     """)
     ocupacao_salas = cur.fetchall()

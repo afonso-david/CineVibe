@@ -5456,9 +5456,11 @@ def admin_remover_filme(id_filme):
         return redirect(url_for('admin_filmes'))
     
     conn = get_db_connection()
-    cur = conn.cursor(buffered=True)
+    cur = conn.cursor()
     
     try:
+        cur.execute("SET FOREIGN_KEY_CHECKS = 0")
+        
         cur.execute("SELECT is_admin, nome FROM usuarios WHERE id = %s", (session['user_id'],))
         user = cur.fetchone()
         
@@ -5492,43 +5494,76 @@ def admin_remover_filme(id_filme):
         print(f"🎬 DEBUG: Removendo filme: '{titulo_filme}' (ID: {id_filme})")
         app.logger.info(f"Removendo filme: '{titulo_filme}' (ID: {id_filme})")
         
-        cur.execute("SET FOREIGN_KEY_CHECKS = 0")
+        try:
+            cur.execute("DELETE FROM reservas WHERE id_filme = %s", (id_filme,))
+            reservas_removidas = cur.rowcount
+            print(f"✅ DEBUG: Removidas {reservas_removidas} reservas")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover reservas: {e}")
         
-        print("🗑️ Removendo dados relacionados em batch...")
+        try:
+            cur.execute("DELETE FROM avaliacoes_filmes WHERE filme_id = %s", (id_filme,))
+            avaliacoes_removidas = cur.rowcount
+            print(f"✅ DEBUG: Removidas {avaliacoes_removidas} avaliações")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover avaliações: {e}")
         
-        cur.execute("DELETE FROM reservas WHERE id_filme = %s", (id_filme,))
-        print(f"✅ Removidas {cur.rowcount} reservas")
+        try:
+            cur.execute("DELETE FROM historico_filmes WHERE filme_id = %s", (id_filme,))
+            historico_removido = cur.rowcount
+            print(f"✅ DEBUG: Removidos {historico_removido} registos de histórico")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover histórico: {e}")
         
-        cur.execute("DELETE FROM avaliacoes_filmes WHERE filme_id = %s", (id_filme,))
-        print(f"✅ Removidas {cur.rowcount} avaliações")
+        try:
+            cur.execute("DELETE FROM reservas_salas WHERE filme_id = %s", (id_filme,))
+            reservas_salas_removidas = cur.rowcount
+            print(f"✅ DEBUG: Removidas {reservas_salas_removidas} reservas de salas")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover reservas_salas: {e}")
         
-        cur.execute("DELETE FROM historico_filmes WHERE filme_id = %s", (id_filme,))
-        print(f"✅ Removidos {cur.rowcount} históricos")
+        try:
+            cur.execute("DELETE FROM horarios_sessao WHERE id_filme = %s", (id_filme,))
+            horarios_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidos {horarios_removidos} horários")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover horários: {e}")
         
-        cur.execute("DELETE FROM reservas_salas WHERE filme_id = %s", (id_filme,))
-        print(f"✅ Removidas {cur.rowcount} reservas de salas")
+        try:
+            cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s", (id_filme,))
+            cinemas_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidas {cinemas_removidos} associações com cinemas")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover filmes_cinemas: {e}")
         
-        cur.execute("DELETE FROM horarios_sessao WHERE id_filme = %s", (id_filme,))
-        horarios_removidos = cur.rowcount
-        print(f"✅ Removidos {horarios_removidos} horários de sessão")
+        try:
+            cur.execute("DELETE FROM filme_generos WHERE filme_id = %s", (id_filme,))
+            generos_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidas {generos_removidos} associações com géneros")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover filme_generos: {e}")
         
-        cur.execute("DELETE FROM filmes_cinemas WHERE filme_id = %s", (id_filme,))
-        print(f"✅ Removidas {cur.rowcount} associações com cinemas")
+        try:
+            cur.execute("DELETE FROM filme_atores WHERE filme_id = %s", (id_filme,))
+            atores_removidos = cur.rowcount
+            print(f"✅ DEBUG: Removidas {atores_removidos} associações com atores")
+        except Exception as e:
+            print(f"⚠️ Erro ao remover filme_atores: {e}")
         
-        cur.execute("DELETE FROM filme_generos WHERE filme_id = %s", (id_filme,))
-        print(f"✅ Removidas {cur.rowcount} associações com géneros")
-        
-        cur.execute("DELETE FROM filme_atores WHERE filme_id = %s", (id_filme,))
-        print(f"✅ Removidas {cur.rowcount} associações com atores")
-        
+        print(f"🗑️ DEBUG: Removendo filme da tabela principal...")
         cur.execute("DELETE FROM filmes WHERE id = %s", (id_filme,))
-        print(f"✅ Filme removido da tabela principal")
+        filme_removido = cur.rowcount
+        print(f"✅ DEBUG: Filme removido: {filme_removido} linha(s) afetada(s)")
         
-        cur.execute("SET FOREIGN_KEY_CHECKS = 1")
-        
-        conn.commit()
-        print(f"✅ DEBUG: Filme '{titulo_filme}' removido com sucesso!")
-        flash(f"Filme '{titulo_filme}' removido com sucesso!", "sucesso")
+        if filme_removido == 0:
+            print("❌ DEBUG: ERRO - Filme não foi removido!")
+            conn.rollback()
+            flash("Erro: Filme não foi removido", "erro")
+        else:
+            print("✅ DEBUG: Commit das alterações...")
+            conn.commit()
+            print(f"✅ DEBUG: Filme '{titulo_filme}' removido com sucesso!")
+            flash(f"Filme '{titulo_filme}' removido com sucesso!", "sucesso")
         
         cur.execute("SET FOREIGN_KEY_CHECKS = 1")
         

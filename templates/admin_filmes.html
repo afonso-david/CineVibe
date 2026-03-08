@@ -205,7 +205,7 @@
                                     <button class="action-btn-grid edit" onclick="window.location.href='{{ url_for('admin_filme_detalhe', id_filme=filme.id) }}'" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <form method="POST" action="{{ url_for('admin_remover_filme', id_filme=filme.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover o filme \'{{ filme.titulo }}\'? Esta ação não pode ser desfeita.')">
+                                    <form method="POST" action="{{ url_for('admin_remover_filme', id_filme=filme.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover o filme &quot;{{ filme.titulo|e }}&quot;? Esta ação não pode ser desfeita.')">
                                         <button type="submit" class="action-btn-grid delete" title="Remover">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -317,7 +317,7 @@
                                             <button class="action-btn-table edit" onclick="window.location.href='{{ url_for('admin_filme_detalhe', id_filme=filme.id) }}'" title="Editar">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <form method="POST" action="{{ url_for('admin_remover_filme', id_filme=filme.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover o filme \'{{ filme.titulo }}\'? Esta ação não pode ser desfeita.')">
+                                            <form method="POST" action="{{ url_for('admin_remover_filme', id_filme=filme.id) }}" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja remover o filme &quot;{{ filme.titulo|e }}&quot;? Esta ação não pode ser desfeita.')">
                                                 <button type="submit" class="action-btn-table delete" title="Remover">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
@@ -824,7 +824,6 @@
     .btn-primary:hover {
         background: linear-gradient(135deg, #FFC107, #FFB300);
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
     }
 
     /* Reverse Button Styles */

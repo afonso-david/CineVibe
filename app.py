@@ -19,7 +19,7 @@ app.logger.setLevel(logging.INFO)
 app.secret_key = "troca_isto_por_uma_chave_secreta_e_complexa"
 
 
-DEVELOPMENT_MODE = True  
+DEVELOPMENT_MODE = False  
 
 if DEVELOPMENT_MODE:
     pass
@@ -31,8 +31,8 @@ if DEVELOPMENT_MODE:
 else:
     pass
  
-    GOOGLE_CLIENT_ID = "your-google-client-id.googleusercontent.com"
-    GOOGLE_CLIENT_SECRET = "your-google-client-secret"
+    GOOGLE_CLIENT_ID = "569393113816-7rlbqt2ora3gb1hof0sq2omiao1j9bvr.apps.googleusercontent.com"
+    GOOGLE_CLIENT_SECRET = "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"
     FACEBOOK_APP_ID = "your-facebook-app-id"
     FACEBOOK_APP_SECRET = "your-facebook-app-secret"
 
@@ -846,6 +846,10 @@ def login():
 def auth_google():
     pass
     
+    # Verificar se vem da página de registo
+    from_register = request.args.get('register') == 'true'
+    session['google_register_mode'] = from_register
+    
     if DEVELOPMENT_MODE:
         pass
        
@@ -882,6 +886,14 @@ def auth_google_callback():
                 'id': 'google_dev_123',
                 'picture': 'https://via.placeholder.com/150'
             }
+            
+            # Se está em modo registo, redireciona para o formulário
+            if session.get('google_register_mode'):
+                session['google_email'] = user_data['email']
+                session['google_name'] = user_data['name']
+                session.pop('google_register_mode', None)
+                return redirect(url_for('registo', from_google='true'))
+            
             return process_social_login(user_data, 'google')
         
         
@@ -915,6 +927,14 @@ def auth_google_callback():
             headers={'Authorization': f"Bearer {token_json['access_token']}"}
         )
         user_data = user_response.json()
+        
+        # Se está em modo registo, redireciona para o formulário com email pré-preenchido
+        if session.get('google_register_mode'):
+            session['google_email'] = user_data.get('email')
+            session['google_name'] = user_data.get('name')
+            session.pop('google_register_mode', None)
+            flash("Email obtido do Google! Complete o registo abaixo.", "sucesso")
+            return redirect(url_for('registo', from_google='true'))
         
         return process_social_login(user_data, 'google')
         
@@ -1013,7 +1033,10 @@ def process_social_login(user_data, provider):
             social_id = user_data.get('id')
             avatar_url = user_data.get('picture', {}).get('data', {}).get('url') if user_data.get('picture') else None
         
+        app.logger.info(f"Tentando login social - Provider: {provider}, Email: {email}, Nome: {nome}")
+        
         if not email:
+            app.logger.error("Email não fornecido pelo provedor social")
             flash("Não foi possível obter o email da conta social", "erro")
             return redirect(url_for('login'))
         
@@ -1025,12 +1048,15 @@ def process_social_login(user_data, provider):
             pass
             
             user_id = user['id']
+            app.logger.info(f"Utilizador existente encontrado - ID: {user_id}")
             
             
             cursor.execute("UPDATE usuarios SET ultimo_login = %s WHERE id = %s", (datetime.now(), user_id))
             conn.commit()
         else:
             pass
+            
+            app.logger.info(f"Criando novo utilizador - Email: {email}")
             
             cursor.execute("SELECT id FROM avatars WHERE id > 0")
             avatars_disponiveis = cursor.fetchall()
@@ -1048,6 +1074,7 @@ def process_social_login(user_data, provider):
             
             conn.commit()
             user_id = cursor.lastrowid
+            app.logger.info(f"Novo utilizador criado - ID: {user_id}")
         
         
         cursor.execute("""
@@ -1080,14 +1107,18 @@ def process_social_login(user_data, provider):
         session['user_email'] = email
         session['user_avatar'] = avatar_path
         
+        app.logger.info(f"Login social bem-sucedido - User ID: {user_id}, redirecionando para home")
+        
        
         session.pop('oauth_state', None)
         
+        flash(f"Bem-vindo, {nome}!", "sucesso")
         return redirect(url_for('home'))
         
     except Exception as e:
         app.logger.error(f"Erro no processo de login social: {str(e)}")
-        flash("Erro no login social", "erro")
+        app.logger.exception("Stack trace completo:")
+        flash(f"Erro no login social: {str(e)}", "erro")
         return redirect(url_for('login'))
 
 @app.route('/redefinir-senha')
@@ -1159,6 +1190,11 @@ def api_redefinir_senha():
 
 @app.route('/registo', methods=["GET", "POST"])
 def registo():
+    # Se for GET e não tiver parâmetro from_google, limpar sessão do Google
+    if request.method == "GET" and not request.args.get('from_google'):
+        session.pop('google_email', None)
+        session.pop('google_name', None)
+    
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -1298,6 +1334,10 @@ def registo():
             session['user_nome'] = nome
             session['user_email'] = email
             session['user_avatar'] = avatar_path
+            
+            # Limpar variáveis de sessão do Google se existirem
+            session.pop('google_email', None)
+            session.pop('google_name', None)
             
             return redirect(url_for("home"))
             

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seleção de Toppings | CineVibe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/selecao_lugares.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filme_detalhe.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/selecao_bar.css') }}">
@@ -16,7 +17,9 @@
         <header>
             <div class="top-nav">
                 <div class="nav-left">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                    <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                    </a>
                 </div>
                 <div class="nav-right">
                     <div class="user-icon">

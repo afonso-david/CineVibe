@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineVibe - A Sua Experiência Cinematográfica</title>
 
+    <link rel="preload" href="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -31,7 +32,9 @@
                     <span></span>
                     <span></span>
                 </button>
-                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </a>
             </div>
             <div class="nav-right">
                 <div class="search-container">

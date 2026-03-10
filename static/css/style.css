@@ -101,6 +101,16 @@ a {
   pointer-events: auto !important;
   position: relative;
   z-index: 10000 !important;
+  opacity: 1;
+  transition: none;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  min-height: 50px;
+  background-color: transparent;
+}
+
+img.logo {
+  content-visibility: auto;
 }
 
 .logo-link {
@@ -110,17 +120,19 @@ a {
   z-index: 10000 !important;
   position: relative !important;
   cursor: pointer !important;
+  min-height: 50px;
+  min-width: 150px;
 }
 
 .nav-center {
-  display: flex;
-  gap: 20px;
-  background-color: #1E2A3A;
+  display: flex !important;
+  gap: 20px !important;
+  background-color: #1E2A3A !important;
   padding: 12px 25px !important;
-  align-items: center;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
+  align-items: center !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -128,17 +140,17 @@ a {
 }
 
 .nav-center a {
-  color: #fff;
-  font-family: "Nunito Sans", sans-serif;
-  font-weight: 400;
+  color: #fff !important;
+  font-family: "Nunito Sans", sans-serif !important;
+  font-weight: 400 !important;
   font-size: 16px !important;
   padding: 5px 15px !important;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  position: relative;
-  pointer-events: auto;
-  cursor: pointer;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  position: relative !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
 .nav-center a:first-child {

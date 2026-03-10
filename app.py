@@ -18,6 +18,18 @@ app.logger.setLevel(logging.INFO)
 
 app.secret_key = "troca_isto_por_uma_chave_secreta_e_complexa"
 
+# Adicionar headers de cache para recursos estáticos (especialmente a logo)
+@app.after_request
+def add_cache_headers(response):
+    # Cachear imagens da logo por 1 ano
+    if 'logo8 sem fundo.png' in request.path or 'Logo/' in request.path:
+        response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+        response.headers['Expires'] = 'Thu, 31 Dec 2037 23:55:55 GMT'
+    # Cachear outros recursos estáticos por 1 hora
+    elif request.path.startswith('/static/'):
+        response.headers['Cache-Control'] = 'public, max-age=3600'
+    return response
+
 
 DEVELOPMENT_MODE = False  
 

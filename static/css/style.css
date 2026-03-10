@@ -89,9 +89,10 @@ a {
 }
 
 .logo {
-  width: 150px;
-  height: auto;
-  margin-top: 20px;
+  width: 150px !important;
+  height: auto !important;
+  margin-top: 20px !important;
+  margin-bottom: 0 !important;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -107,6 +108,7 @@ a {
   image-rendering: crisp-edges;
   min-height: 50px;
   background-color: transparent;
+  display: block !important;
 }
 
 img.logo {

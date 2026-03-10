@@ -1,53 +1,12 @@
-﻿<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contactos | CineVibe</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/contactos.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="page-wrapper">
-        
-        <header>
-            <div class="top-nav">
-                <div class="nav-left">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
-                </div>
-                <div class="nav-right">
-                    <div class="search-container">
-                        <input type="text" placeholder="Procurar Filmes..." id="searchInput">
-                        <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
-                        <div class="search-results" id="searchResults"></div>
-                    </div>
-                    <div class="user-icon">
-                        {% if logged_in %}
-                            <a href="{{ url_for('perfil') }}">
-                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
-                            </a>
-                        {% else %}
-                            <a href="{{ url_for('login') }}">
-                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </header>
+﻿{% extends 'base.html' %}
 
-        <nav class="nav-center">
-            <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('filmes') }}">Filmes</a>
-            <a href="{{ url_for('cinemas') }}">Cinemas</a>
-            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
-            <a href="{{ url_for('bar') }}">Bar</a>
-            <a href="{{ url_for('beneficios') }}">Benefícios</a>
-            <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
-            <a href="{{ url_for('contactos') }}" class="active">Contactos</a>
-        </nav>
+{% block title %}Contactos | CineVibe{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contactos.css') }}">
+{% endblock %}
+
+{% block content %}
         <main class="contactos-main">
             
             <div class="contactos-hero">
@@ -254,105 +213,9 @@
                 </div>
             </section>
         </main>
+{% endblock %}
 
-        <footer class="footer">
-            <div class="footer-main">
-                <div class="footer-container">
-                    
-                    <div class="footer-section">
-                        <div class="footer-logo">
-                            <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
-                            <h3>CineVibe</h3>
-                        </div>
-                        <p class="footer-description">
-                            A sua experiência cinematográfica premium. Tecnologia de ponta, conforto excepcional e os melhores filmes numa rede de cinemas moderna e acessível.
-                        </p>
-                        <div class="footer-social">
-                            <a href="#" aria-label="TikTok"><img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="TikTok"></a>
-                            <a href="#" aria-label="Instagram"><img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram"></a>
-                            <a href="#" aria-label="Twitter"><img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X"></a>
-                        </div>
-                    </div>
-
-                    <div class="footer-section">
-                        <h4>Links Rápidos</h4>
-                        <ul class="footer-links">
-                            <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
-                            <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
-                            <li><a href="{{ url_for('bar') }}">Bar</a></li>
-                            <li><a href="{{ url_for('beneficios') }}">Benefícios</a></li>
-                            <li><a href="{{ url_for('sessao') }}">Sessões Especiais</a></li>
-                            <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-section">
-                        <h4>Experiências</h4>
-                        <ul class="footer-links">
-                            <li><a href="{{ url_for('cine_acessivel') }}">CineAcessível</a></li>
-                            <li><a href="{{ url_for('sessao_exclusiva') }}">Sessões VIP</a></li>
-                            <li><a href="{{ url_for('recompensas') }}">Programa Fidelidade</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-section">
-                        <h4>Suporte</h4>
-                        <ul class="footer-links">
-                            <li><a href="#">Centro de Ajuda</a></li>
-                            <li><a href="#">Política de Privacidade</a></li>
-                            <li><a href="#">Termos e Condições</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-section newsletter-section">
-                        <h4>Newsletter</h4>
-                        <p>Receba as últimas novidades, promoções exclusivas e estreias em primeira mão.</p>
-                        <form class="newsletter-form" action="#" method="POST">
-                            <div class="newsletter-input-group">
-                                <input type="email" placeholder="O seu email..." required>
-                                <button type="submit">Subscrever</button>
-                            </div>
-                        </form>
-                        <div class="footer-contact">
-                            <div class="contact-item">
-                                <span class="contact-icon">📞</span>
-                                <span>+351 800 123 456</span>
-                            </div>
-                            <div class="contact-item">
-                                <span class="contact-icon">✉️</span>
-                                <span>info@cinevibe.pt</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <div class="footer-bottom-container">
-                    <div class="footer-bottom-content">
-                        <div class="footer-legal">
-                            <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
-                            <div class="legal-links">
-                                <a href="#">Privacidade</a>
-                                <a href="#">Termos</a>
-                                <a href="#">Cookies</a>
-                                <a href="#">Acessibilidade</a>
-                            </div>
-                        </div>
-                        <div class="footer-certifications">
-                            <span class="cert-text">Certificado ISO 9001</span>
-                            <div class="cert-logos">
-                                <img src="{{ url_for('static', filename='imgs/certifications/iso.png') }}" alt="ISO 9001" onerror="this.style.display='none'">
-                                <img src="{{ url_for('static', filename='imgs/certifications/accessibility.png') }}" alt="Acessibilidade" onerror="this.style.display='none'">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
-
+{% block extra_js %}
     <script>
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const termo = e.target.value.toLowerCase().trim();
@@ -382,5 +245,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

@@ -1,3 +1,4 @@
+/* Cinemas Page Styles - Updated */
 html {
   overflow-y: scroll;
 }
@@ -11,6 +12,62 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+/* Navbar Styles - Matching base template */
+.nav-center {
+  display: flex;
+  gap: 20px;
+  background-color: #1E2A3A;
+  padding: 12px 25px;
+  align-items: center;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
+}
+
+.nav-center a {
+  color: #fff;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px !important;
+  padding: 5px 15px !important;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.nav-center a:first-child {
+  margin-left: 20px;
+}
+
+.nav-center a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+  transition: all 0.4s ease;
+  transform: translateX(-50%);
+}
+
+.nav-center a:hover::after,
+.nav-center a.active::after {
+  width: 80%;
+}
+
+.nav-center a:hover,
+.nav-center a.active {
+  color: #4EA8DE;
+}
+
+.nav-center a:focus {
+  outline: none !important;
+  border: none !important;
+}
+
 .top-nav {
   display: flex;
   align-items: center;
@@ -25,57 +82,6 @@ a {
   height: auto;
   margin-top: 20px;
 }
-.nav-center {
-  display: flex;
-  gap: 20px;
-  background-color: #1E2A3A;
-  padding: 12px 25px !important;
-  align-items: center;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
-}
-.nav-center a {
-  color: #fff;
-  font-family: "Nunito Sans", sans-serif;
-  font-weight: 400;
-  font-size: 16px !important;
-  padding: 5px 15px !important;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-.nav-center a:first-child {
-  margin-left: 20px;
-}
-.nav-center a {
-  position: relative;
-}
-.nav-center a::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #FFD60A, #4EA8DE);
-  transition: all 0.4s ease;
-  transform: translateX(-50%);
-}
-.nav-center a:hover::after,
-.nav-center a.active::after {
-  width: 80%;
-}
-.nav-center a:hover,
-.nav-center a.active {
-  color: #4EA8DE;
-}
-
-.nav-center a:focus {
-  outline: none !important;
-  border: none !important;
-}
-
 .nav-right {
   display: flex;
   align-items: center;

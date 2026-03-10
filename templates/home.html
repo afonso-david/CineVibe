@@ -682,8 +682,10 @@
         const nextBtn = document.getElementById('nextBtn');
 
         if (moviesContainer && prevBtn && nextBtn) {
-            const cardWidth = 330; // 
+            const cardWidth = 330; 
             let currentScroll = 0;
+            let autoScrollInterval;
+            let isUserInteracting = false;
             
             
             function getMaxScroll() {
@@ -706,19 +708,77 @@
                 updateCarouselButtons();
             }
 
+            // Auto-scroll function
+            function autoScroll() {
+                const maxScroll = getMaxScroll();
+                
+                if (currentScroll >= maxScroll) {
+                    // Volta ao início quando chega ao fim
+                    scrollToPosition(0);
+                } else {
+                    // Avança um card
+                    scrollToPosition(currentScroll + cardWidth);
+                }
+            }
+
+            // Inicia o auto-scroll
+            function startAutoScroll() {
+                stopAutoScroll();
+                autoScrollInterval = setInterval(autoScroll, 3000); // Muda a cada 3 segundos
+            }
+
+            // Para o auto-scroll
+            function stopAutoScroll() {
+                if (autoScrollInterval) {
+                    clearInterval(autoScrollInterval);
+                    autoScrollInterval = null;
+                }
+            }
+
+            // Para o auto-scroll quando o usuário interage
+            function handleUserInteraction() {
+                isUserInteracting = true;
+                stopAutoScroll();
+                
+                // Retoma o auto-scroll após 5 segundos sem interação
+                setTimeout(() => {
+                    isUserInteracting = false;
+                    startAutoScroll();
+                }, 5000);
+            }
+
             prevBtn.addEventListener('click', () => {
+                handleUserInteraction();
                 scrollToPosition(currentScroll - cardWidth * 2);
             });
 
             nextBtn.addEventListener('click', () => {
+                handleUserInteraction();
                 scrollToPosition(currentScroll + cardWidth * 2);
             });
+            
             moviesContainer.addEventListener('scroll', function() {
                 currentScroll = this.scrollLeft;
                 updateCarouselButtons();
             });
+
+            // Para o auto-scroll quando o usuário faz scroll manual
+            moviesContainer.addEventListener('mousedown', handleUserInteraction);
+            moviesContainer.addEventListener('touchstart', handleUserInteraction);
+
+            // Para o auto-scroll quando o mouse está sobre o carrossel
+            moviesContainer.addEventListener('mouseenter', stopAutoScroll);
+            moviesContainer.addEventListener('mouseleave', () => {
+                if (!isUserInteracting) {
+                    startAutoScroll();
+                }
+            });
+            
             updateCarouselButtons();
             window.addEventListener('resize', updateCarouselButtons);
+            
+            // Inicia o auto-scroll após 2 segundos
+            setTimeout(startAutoScroll, 2000);
         }
         function playTrailer(trailerUrl) {
             if (trailerUrl) {

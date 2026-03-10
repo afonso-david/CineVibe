@@ -5,18 +5,6 @@
     position: relative;
 }
 
-.featured-movies::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23FFD60A" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23FFD60A" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.3;
-    pointer-events: none;
-}
-
 .featured-movies .section-header {
     text-align: center;
     margin-bottom: 60px;
@@ -111,7 +99,6 @@
     border-radius: 20px;
     font-weight: 900;
     font-size: 0.9rem;
-    box-shadow: 0 4px 12px rgba(255, 214, 10, 0.4);
 }
 
 .poster-container {
@@ -303,13 +290,11 @@
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
 .carousel-btn:hover {
     background: linear-gradient(135deg, #FFB703 0%, #FFD60A 100%);
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 12px 30px rgba(255, 214, 10, 0.5);
 }
 
 .carousel-btn.prev {

@@ -50,7 +50,7 @@
         </nav>
 
         <main style="padding: 2rem 0; background: #0D1B2A; min-height: 100vh;">
-            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
 
                 <div class="movie-info-card">
                     <div class="movie-info-content">
@@ -88,7 +88,9 @@
                 <div class="seat-selection">
                     <h3>Selecione {{ quantidade }} lugar{{ 'es' if quantidade > 1 else '' }}</h3>
 
-                    <div class="cinema-screen"></div>
+                    <div class="cinema-screen">
+                        <img src="{{ url_for('static', filename='imgs/tela2.jpg') }}" alt="Ecrã de Cinema">
+                    </div>
 
                     <div class="seat-map">
                         {% for fileira in lugares %}

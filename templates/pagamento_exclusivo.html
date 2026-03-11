@@ -564,17 +564,16 @@
     </div>
 
     <script>
-        let dadosReserva = null;
+        let dadosReserva = {{ reserva | tojson }};
         let metodoSelecionado = null;
+        
         document.addEventListener('DOMContentLoaded', function() {
-            const dados = sessionStorage.getItem('dadosReservaExclusiva');
-            if (!dados) {
+            if (!dadosReserva) {
                 alert('Dados da reserva não encontrados. Redirecionando...');
                 window.location.href = '/sessao_exclusiva';
                 return;
             }
 
-            dadosReserva = JSON.parse(dados);
             preencherResumo();
             configurarEventListeners();
         });
@@ -582,20 +581,14 @@
         function preencherResumo() {
             if (!dadosReserva) return;
 
-            const tiposSala = {
-                'intimista': 'Sala Intimista',
-                'vip': 'Sala Vip',
-                'premium': 'Sala Premium'
-            };
-
-            document.getElementById('resumoSala').textContent = tiposSala[dadosReserva.tipo_sala] || 'Sala Exclusiva';
+            document.getElementById('resumoSala').textContent = 'Sessão Exclusiva';
             document.getElementById('resumoFilme').textContent = dadosReserva.filme_nome;
 
             const dataFormatada = new Date(dadosReserva.data_sessao).toLocaleDateString('pt-PT');
             document.getElementById('resumoData').textContent = dataFormatada;
             document.getElementById('resumoHora').textContent = dadosReserva.hora_sessao;
             document.getElementById('resumoPessoas').textContent = dadosReserva.num_pessoas + (dadosReserva.num_pessoas == 1 ? ' pessoa' : ' pessoas');
-            document.getElementById('resumoTotal').textContent = '€' + dadosReserva.total;
+            document.getElementById('resumoTotal').textContent = '€' + dadosReserva.preco_total;
         }
 
         function configurarEventListeners() {
@@ -714,7 +707,12 @@
             if (!validarFormulario()) return;
             document.getElementById('loadingOverlay').style.display = 'flex';
             const dadosPagamento = {
-                ...dadosReserva,
+                filme_id: dadosReserva.filme_id,
+                filme_nome: dadosReserva.filme_nome,
+                data_sessao: dadosReserva.data_sessao,
+                hora_sessao: dadosReserva.hora_sessao,
+                num_pessoas: dadosReserva.num_pessoas,
+                preco_total: dadosReserva.preco_total,
                 metodo_pagamento: metodoSelecionado
             };
             if (metodoSelecionado === 'mastercard' || metodoSelecionado === 'visa') {
@@ -747,7 +745,6 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
 
                 if (data.success) {
-                    sessionStorage.removeItem('dadosReservaExclusiva');
                     alert('Pagamento processado com sucesso! Reserva confirmada.');
                     window.location.href = '/home?reserva_concluida=1';
                 } else {

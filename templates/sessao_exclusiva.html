@@ -186,7 +186,7 @@
                                             <div class="price-value">€{{ "%.0f"|format(sala.preco) }}</div>
                                             <div class="price-period">por sessão</div>
                                         </div>
-                                        <button class="btn-reservar" onclick="openReservaModal('{{ sala.nome.lower() }}', {{ sala.preco }})">
+                                        <button class="btn-reservar" onclick="window.location.href='{{ url_for('reservar_sessao_exclusiva') }}'">
                                             <i class="fas fa-calendar-check"></i>
                                             Reservar Agora
                                         </button>
@@ -390,7 +390,7 @@
             </div>
             
             <div class="pill-container">
-                <button class="pill blue-pill" onclick="continuarComoConvidado()">
+                <button class="pill blue-pill" onclick="window.location.href='{{ url_for('reservar_sessao_exclusiva') }}'">
                     <div class="pill-content">
                         <span class="pill-text">CONVIDADO</span>
                         <div class="pill-icon">💊</div>
@@ -409,341 +409,13 @@
         <canvas id="matrixRain" class="matrix-rain"></canvas>
     </div>
 
-    <div id="reservaExclusivaModal" class="modal-reserva-exclusiva" style="display: none;">
-        <div class="modal-content-reserva">
-            <div class="modal-header-reserva">
-                <h2>Reservar Experiência Exclusiva</h2>
-                <button class="btn-close-reserva" onclick="fecharModalReserva()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            
-            <div class="modal-body-reserva">
-                <form id="formReservaExclusiva">
-                    
-                    <div class="sala-info">
-                        <h3 id="salaNome">Sala VIP Premium</h3>
-                        <div class="sala-preco">
-                            <span class="preco-valor" id="salaPreco">€800</span>
-                            <span class="preco-periodo">por sessão</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group-reserva">
-                        <label for="filmeSelect">Escolha o Filme</label>
-                        <select id="filmeSelect" name="filme" required>
-                            <option value="">Selecione um filme...</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group-reserva">
-                        <label for="dataSelect">Data da Sessão</label>
-                        <input type="date" id="dataSelect" name="data" required min="">
-                    </div>
-
-                    <div class="form-group-reserva">
-                        <label for="horaSelect">Hora da Sessão</label>
-                        <select id="horaSelect" name="hora" required>
-                            <option value="">Selecione um horário...</option>
-                            <option value="14:00">14:00</option>
-                            <option value="16:30">16:30</option>
-                            <option value="19:00">19:00</option>
-                            <option value="21:30">21:30</option>
-                            <option value="00:00">00:00 (Sessão Madrugada)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group-reserva">
-                        <label for="numPessoas">Número de Pessoas</label>
-                        <select id="numPessoas" name="pessoas" required>
-                            <option value="">Quantas pessoas?</option>
-                            <option value="1">1 pessoa</option>
-                            <option value="2">2 pessoas</option>
-                            <option value="3">3 pessoas</option>
-                            <option value="4">4 pessoas</option>
-                            <option value="5">5 pessoas</option>
-                            <option value="6">6 pessoas</option>
-                            <option value="7">7 pessoas</option>
-                            <option value="8">8 pessoas</option>
-                            <option value="9">9 pessoas</option>
-                            <option value="10">10 pessoas</option>
-                        </select>
-                    </div>
-
-                    <div id="dadosCliente" style="display: none;">
-                        <h4>Dados de Contacto</h4>
-                        <div class="form-group-reserva">
-                            <label for="nomeCliente">Nome Completo</label>
-                            <input type="text" id="nomeCliente" name="nome" placeholder="O seu nome completo">
-                        </div>
-                        <div class="form-group-reserva">
-                            <label for="emailCliente">Email</label>
-                            <input type="email" id="emailCliente" name="email" placeholder="O seu email">
-                        </div>
-                        <div class="form-group-reserva">
-                            <label for="telefoneCliente">Telefone</label>
-                            <input type="tel" id="telefoneCliente" name="telefone" placeholder="O seu telefone">
-                        </div>
-                    </div>
-
-                    <div class="resumo-pedido">
-                        <h4>Resumo do Pedido</h4>
-                        <div class="resumo-item">
-                            <span>Sala:</span>
-                            <span id="resumoSala">-</span>
-                        </div>
-                        <div class="resumo-item">
-                            <span>Filme:</span>
-                            <span id="resumoFilme">-</span>
-                        </div>
-                        <div class="resumo-item">
-                            <span>Data e Hora:</span>
-                            <span id="resumoDataHora">-</span>
-                        </div>
-                        <div class="resumo-item">
-                            <span>Pessoas:</span>
-                            <span id="resumoPessoas">-</span>
-                        </div>
-                        <div class="resumo-item total">
-                            <span>Total:</span>
-                            <span id="resumoTotal">€0</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="modal-footer-reserva">
-                <button class="btn-cancelar-reserva" onclick="fecharModalReserva()">Cancelar</button>
-                <button class="btn-confirmar-reserva" onclick="prosseguirPagamento()">Prosseguir para Pagamento</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        let tipoSalaAtual = '';
-        let precoSalaAtual = 0;
-        let loggedIn = {{ 'true' if logged_in else 'false' }};
-        let userData = {
-            nome: '{{ nome|default("") }}',
-            email: '{{ email|default("") }}',
-            telefone: '{{ telefone|default("") }}'
-        };
-
-        
-        function openReservaModal(tipoSala, preco) {
-            tipoSalaAtual = tipoSala;
-            precoSalaAtual = preco;
-            
-            
-            if (!loggedIn) {
-                showMatrixModal();
-                return;
-            }
-            
-            
-            abrirModalReservaDirecto();
-        }
-        
-        
-        function abrirModalReservaDirecto() {
-            
-            const salaNames = {
-                'intimista': 'Sala Intimista',
-                'vip': 'Sala Vip',
-                'premium': 'Sala Premium'
-            };
-            
-            document.getElementById('salaNome').textContent = salaNames[tipoSalaAtual] || 'Sala Exclusiva';
-            document.getElementById('salaPreco').textContent = '€' + precoSalaAtual;
-            document.getElementById('resumoSala').textContent = salaNames[tipoSalaAtual] || 'Sala Exclusiva';
-            
-            
-            const hoje = new Date();
-            const dataMinima = hoje.toISOString().split('T')[0];
-            document.getElementById('dataSelect').min = dataMinima;
-            
-            
-            const dadosCliente = document.getElementById('dadosCliente');
-            if (!loggedIn) {
-                dadosCliente.style.display = 'block';
-                document.getElementById('nomeCliente').required = true;
-                document.getElementById('emailCliente').required = true;
-                document.getElementById('telefoneCliente').required = true;
-            } else {
-                dadosCliente.style.display = 'none';
-                document.getElementById('nomeCliente').required = false;
-                document.getElementById('emailCliente').required = false;
-                document.getElementById('telefoneCliente').required = false;
-            }
-            
-            
-            carregarFilmes();
-            
-            
-            document.getElementById('reservaExclusivaModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        
-        function fecharModalReserva() {
-            document.getElementById('reservaExclusivaModal').style.display = 'none';
-            document.body.style.overflow = '';
-            limparFormulario();
-        }
-
-        
-        function carregarFilmes() {
-            fetch('/api/filmes_disponiveis')
-                .then(response => response.json())
-                .then(data => {
-                    const select = document.getElementById('filmeSelect');
-                    select.innerHTML = '<option value="">Selecione um filme...</option>';
-                    
-                    if (data && Array.isArray(data)) {
-                        data.forEach(filme => {
-                            const option = document.createElement('option');
-                            option.value = filme.id;
-                            option.textContent = filme.titulo;
-                            option.dataset.nome = filme.titulo;
-                            select.appendChild(option);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar filmes:', error);
-                });
-        }
-
-        
-        function atualizarResumo() {
-            const filme = document.getElementById('filmeSelect');
-            const data = document.getElementById('dataSelect').value;
-            const hora = document.getElementById('horaSelect').value;
-            const pessoas = document.getElementById('numPessoas').value;
-            
-            
-            if (filme.value) {
-                document.getElementById('resumoFilme').textContent = filme.options[filme.selectedIndex].textContent;
-            } else {
-                document.getElementById('resumoFilme').textContent = '-';
-            }
-            
-            
-            if (data && hora) {
-                const dataFormatada = new Date(data).toLocaleDateString('pt-PT');
-                document.getElementById('resumoDataHora').textContent = dataFormatada + ' às ' + hora;
-            } else {
-                document.getElementById('resumoDataHora').textContent = '-';
-            }
-            
-            
-            if (pessoas) {
-                document.getElementById('resumoPessoas').textContent = pessoas + (pessoas == 1 ? ' pessoa' : ' pessoas');
-            } else {
-                document.getElementById('resumoPessoas').textContent = '-';
-            }
-            
-            
-            document.getElementById('resumoTotal').textContent = '€' + precoSalaAtual;
-        }
-
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const campos = ['filmeSelect', 'dataSelect', 'horaSelect', 'numPessoas'];
-            campos.forEach(campo => {
-                const elemento = document.getElementById(campo);
-                if (elemento) {
-                    elemento.addEventListener('change', atualizarResumo);
-                }
-            });
-        });
-
-        
-        function limparFormulario() {
-            document.getElementById('formReservaExclusiva').reset();
-            atualizarResumo();
-        }
-
-        
-        function prosseguirPagamento() {
-            const form = document.getElementById('formReservaExclusiva');
-            const formData = new FormData(form);
-            
-            
-            const filme = formData.get('filme');
-            const data = formData.get('data');
-            const hora = formData.get('hora');
-            const pessoas = formData.get('pessoas');
-            
-            if (!filme || !data || !hora || !pessoas) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-            
-            
-            if (!loggedIn) {
-                const nome = formData.get('nome');
-                const email = formData.get('email');
-                const telefone = formData.get('telefone');
-                
-                if (!nome || !email || !telefone) {
-                    alert('Por favor, preencha todos os seus dados de contacto.');
-                    return;
-                }
-            }
-            
-            
-            const dadosReserva = {
-                tipo_sala: tipoSalaAtual,
-                filme_id: filme,
-                filme_nome: document.getElementById('filmeSelect').options[document.getElementById('filmeSelect').selectedIndex].textContent,
-                data_sessao: data,
-                hora_sessao: hora,
-                num_pessoas: parseInt(pessoas),
-                total: precoSalaAtual,
-                nome_cliente: loggedIn ? userData.nome : formData.get('nome'),
-                email_cliente: loggedIn ? userData.email : formData.get('email'),
-                telefone_cliente: loggedIn ? userData.telefone : formData.get('telefone')
-            };
-            
-           
-            sessionStorage.setItem('dadosReservaExclusiva', JSON.stringify(dadosReserva));
-            window.location.href = '/pagamento-exclusivo';
-        }
-
-       
         function scrollToSalas() {
             document.getElementById('salas').scrollIntoView({ behavior: 'smooth' });
         }
 
-     
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                fecharModalReserva();
-            }
-        });
-
-      
         function contactExclusive() {
             window.location.href = '{{ url_for("contactos") }}';
-        }
-
-      
-        function showMatrixModal() {
-            const modal = document.getElementById('matrixModal');
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            
-        
-            startMatrixRain();
-            
-          
-            setTimeout(() => {
-                modal.classList.add('show');
-            }, 100);
         }
 
         function closeMatrixModal() {
@@ -757,7 +429,6 @@
             }, 300);
         }
 
-        
         let matrixInterval;
         
         function startMatrixRain() {
@@ -779,10 +450,8 @@
             }
             
             function draw() {
-               
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; 
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
                 
                 ctx.fillStyle = '#00FF41'; 
                 ctx.font = 'bold ' + fontSize + 'px "Courier New", monospace'; 
@@ -792,12 +461,10 @@
                 for(let i = 0; i < drops.length; i++) {
                     const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
                     
-                    
                     const alpha = Math.random() * 0.5 + 0.5; 
                     ctx.globalAlpha = alpha;
                     
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
                     
                     ctx.globalAlpha = 1.0;
                     
@@ -806,7 +473,6 @@
                     }
                     drops[i]++;
                 }
-                
                 
                 ctx.shadowBlur = 0;
             }
@@ -818,32 +484,6 @@
             if (matrixInterval) {
                 clearInterval(matrixInterval);
             }
-        }
-
-        function continuarComoConvidado() {
-            console.log('🎮 Continuar como convidado clicado (sessão exclusiva)');
-            
-            
-            closeMatrixModal();
-            
-            
-            setTimeout(() => {
-                abrirModalReservaDirecto();
-            }, 500);
-        }
-        
-        function fazerLogin() {
-            
-            const dadosReserva = {
-                tipo_sala: tipoSalaAtual,
-                preco: precoSalaAtual
-            };
-            
-            sessionStorage.setItem('dadosReservaExclusiva', JSON.stringify(dadosReserva));
-            console.log('Dados da reserva guardados para após login:', dadosReserva);
-            
-           
-            window.location.href = '{{ url_for("login") }}';
         }
     </script>
 </body>

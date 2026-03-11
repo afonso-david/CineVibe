@@ -1052,6 +1052,14 @@
         window.addEventListener('load', function() {
             document.body.classList.add('loaded');
         });
+        
+        // Forçar refresh quando voltar da página de detalhes
+        window.addEventListener('pageshow', function(event) {
+            // Se a página foi carregada do cache (back/forward)
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                location.reload();
+            }
+        });
     </script>
 </body>
 </html>

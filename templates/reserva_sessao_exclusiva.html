@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Sessão Exclusiva | CineVibe</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+
+    <style>
+        .reserva-container {
+            max-width: 800px;
+            margin: 60px auto 120px auto;
+            padding: 40px;
+            background: linear-gradient(135deg, #1B263B, #2C3E50);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            min-height: calc(100vh - 300px);
+        }
+
+        .page-title {
+            color: #FFD60A;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #FFD60A;
+        }
+
+        .form-group select option {
+            background: #1B263B;
+            color: white;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            flex: 1;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #FFA500, #FF8C00);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #FFD60A;
+        }
+
+        .info-box {
+            background: rgba(78, 168, 222, 0.1);
+            border: 1px solid rgba(78, 168, 222, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            color: #4EA8DE;
+            font-size: 0.95rem;
+        }
+
+        .info-box i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .reserva-container {
+                margin: 20px;
+                padding: 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+
+        <header>
+            <div class="top-nav">
+                <div class="nav-left">
+                    <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">       
+                    </a>
+                </div>
+                <div class="nav-right">
+                    <div class="user-icon">
+                        {% if logged_in %}
+                            <a href="{{ url_for('perfil') }}">
+                                <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}">
+                                <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">  
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-center">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('filmes') }}">Filmes</a>
+            <a href="{{ url_for('cinemas') }}">Cinemas</a>
+            <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+            <a href="{{ url_for('bar') }}">Bar</a>
+            <a href="{{ url_for('beneficios') }}">Benefícios</a>
+            <a href="{{ url_for('sessao') }}" class="active">Sessão Só Para Ti</a>
+            <a href="{{ url_for('contactos') }}">Contactos</a>
+        </nav>
+
+        <main>
+            <div class="reserva-container">
+                <h1 class="page-title">Reservar Sessão Exclusiva</h1>
+                <p class="page-subtitle">Preencha os dados para sua experiência cinematográfica privada</p>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    Sessão Exclusiva - Cinema privado só para você e seus convidados. Escolha o filme, o horário e desfrute de uma experiência única!
+                </div>
+
+                <form id="formReserva" method="POST" action="{{ url_for('processar_reserva_exclusiva') }}">
+                    {% if not logged_in %}
+                    <div class="form-group">
+                        <label for="nome_cliente">
+                            <i class="fas fa-user"></i> Nome Completo
+                        </label>
+                        <input type="text" name="nome_cliente" id="nome_cliente" placeholder="Seu nome completo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email_cliente">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input type="email" name="email_cliente" id="email_cliente" placeholder="seu@email.com" required>
+                    </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="filme_id">
+                            <i class="fas fa-film"></i> Filme
+                        </label>
+                        <select name="filme_id" id="filme_id" style="overflow-y: auto; max-height: none;" required>
+                            <option value="">Selecione um filme...</option>
+                            {% for filme in filmes %}
+                                <option value="{{ filme.id }}">{{ filme.titulo }} ({{ filme.duracao }} min)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="data_sessao">
+                                <i class="fas fa-calendar"></i> Data
+                            </label>
+                            <input type="date" name="data_sessao" id="data_sessao" min="{{ data_minima }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hora_sessao">
+                                <i class="fas fa-clock"></i> Horário
+                            </label>
+                            <select name="hora_sessao" id="hora_sessao" required>
+                                <option value="">Selecione um horário...</option>
+                                <option value="10:00">10:00 (Matinê)</option>
+                                <option value="14:00">14:00</option>
+                                <option value="16:30">16:30</option>
+                                <option value="19:00">19:00</option>
+                                <option value="21:30">21:30</option>
+                                <option value="00:00">00:00 (Sessão Madrugada)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="num_pessoas">
+                            <i class="fas fa-users"></i> Número de Pessoas
+                        </label>
+                        <input type="number" name="num_pessoas" id="num_pessoas" min="1" max="50" value="1" required>
+                    </div>
+
+                    <div class="btn-container">
+                        <a href="{{ url_for('sessao_exclusiva') }}" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </a>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-arrow-right"></i>
+                            Continuar para Pagamento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h2 style="color: #FFD60A; margin-bottom: 20px;">Iniciar Sessão Necessária</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 30px;">
+                Para fazer uma reserva, precisa de iniciar sessão ou criar uma conta.
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <a href="{{ url_for('login') }}" style="padding: 12px 30px; background: linear-gradient(135deg, #FFD60A, #FFA500); color: #1a1a1a; border-radius: 10px; text-decoration: none; font-weight: 600;">
+                    Iniciar Sessão
+                </a>
+                <button onclick="fecharModal()" style="padding: 12px 30px; background: rgba(255, 255, 255, 0.1); color: white; border: 2px solid rgba(255, 214, 10, 0.3); border-radius: 10px; cursor: pointer; font-weight: 600;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1B263B, #2C3E50);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #FFD60A;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #FFA500;
+        }
+    </style>
+
+    <script>
+        const loggedIn = {{ 'true' if logged_in else 'false' }};
+
+        function fecharModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                fecharModal();
+            }
+        }
+    </script>
+</body>
+</html>

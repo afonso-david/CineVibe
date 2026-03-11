@@ -446,28 +446,157 @@
 <div id="generoModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Adicionar Género</h3>
+            <h3>Adicionar Géneros</h3>
             <button onclick="closeGeneroModal()" class="modal-close">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label>Género</label>
-                <select id="generoSelect" class="form-select">
-                    <option value="">Selecionar género</option>
+                <label>Selecione os géneros que deseja adicionar</label>
+                <div class="generos-checkbox-list" id="generosCheckboxList">
                     {% for genero in todos_generos %}
-                        <option value="{{ genero.id }}">{{ genero.nome }}</option>
+                    {% if genero.id not in generos_filme_ids %}
+                    <label class="genero-checkbox-item">
+                        <input type="checkbox" 
+                               name="generos[]" 
+                               value="{{ genero.id }}">
+                        <span class="checkbox-custom"></span>
+                        <span class="genero-label">{{ genero.nome }}</span>
+                    </label>
+                    {% endif %}
                     {% endfor %}
-                </select>
+                </div>
+                {% if generos_filme|length > 0 %}
+                <div class="generos-ja-adicionados">
+                    <h4>Géneros já adicionados:</h4>
+                    <div class="generos-adicionados-list">
+                        {% for genero in generos_filme %}
+                        <span class="genero-adicionado-badge">{{ genero.nome }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
         <div class="modal-footer">
             <button onclick="closeGeneroModal()" class="btn btn-secondary">Cancelar</button>
-            <button onclick="addGeneroToMovie()" class="btn btn-primary">Adicionar</button>
+            <button onclick="addGenerosToMovie()" class="btn btn-primary">Adicionar Selecionados</button>
         </div>
     </div>
 </div>
+
+<style>
+.generos-checkbox-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 214, 10, 0.3);
+    border-radius: 8px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.genero-checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.genero-checkbox-item:hover {
+    background: rgba(255, 214, 10, 0.1);
+}
+
+.genero-checkbox-item input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 214, 10, 0.5);
+    border-radius: 4px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.genero-checkbox-item input[type="checkbox"]:checked + .checkbox-custom {
+    background: #FFD60A;
+    border-color: #FFD60A;
+}
+
+.genero-checkbox-item input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    color: #1a1a1a;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.genero-label {
+    color: white;
+    font-size: 15px;
+    flex: 1;
+}
+
+.generos-ja-adicionados {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 214, 10, 0.3);
+}
+
+.generos-ja-adicionados h4 {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.generos-adicionados-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.genero-adicionado-badge {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.generos-checkbox-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.generos-checkbox-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.generos-checkbox-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 214, 10, 0.5);
+    border-radius: 4px;
+}
+
+.generos-checkbox-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 214, 10, 0.7);
+}
+</style>
 
 <div id="tipoSessaoModal" class="modal">
     <div class="modal-content">
@@ -596,6 +725,7 @@ function openAddActorModal() {
     document.getElementById('actorSelect').value = '';
     document.getElementById('actorRole').value = '';
     document.getElementById('actorModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 function editActor(actorId, actorName, actorRole) {
@@ -604,10 +734,12 @@ function editActor(actorId, actorName, actorRole) {
     document.getElementById('actorSelect').value = actorId;
     document.getElementById('actorRole').value = actorRole;
     document.getElementById('actorModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 function closeActorModal() {
     document.getElementById('actorModal').style.display = 'none';
+    document.body.style.overflow = '';
 }
 
 function saveActor() {
@@ -671,10 +803,12 @@ function removeActor(actorId) {
 function openAddCinemaModal() {
     document.getElementById('cinemaSelect').value = '';
     document.getElementById('cinemaModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 function closeCinemaModal() {
     document.getElementById('cinemaModal').style.display = 'none';
+    document.body.style.overflow = '';
 }
 
 function addCinemaToMovie() {
@@ -775,42 +909,66 @@ function removerTodosCinemas() {
 }
 
 function openAddGeneroModal() {
-    document.getElementById('generoSelect').value = '';
     document.getElementById('generoModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 function closeGeneroModal() {
     document.getElementById('generoModal').style.display = 'none';
+    document.body.style.overflow = '';
 }
 
-function addGeneroToMovie() {
-    const generoId = document.getElementById('generoSelect').value;
+function addGenerosToMovie() {
+    const checkboxes = document.querySelectorAll('#generosCheckboxList input[type="checkbox"]:checked');
+    const generoIds = Array.from(checkboxes).map(cb => cb.value);
     
-    if (!generoId) {
-        showNotification('Selecione um género', 'error');
+    if (generoIds.length === 0) {
+        showNotification('Selecione pelo menos um género', 'error');
         return;
     }
     
-    const formData = new FormData();
-    formData.append('genero_id', generoId);
+    // Adicionar géneros um por um
+    let addedCount = 0;
+    let errorCount = 0;
     
-    fetch(`/admin/filmes/{{ filme.id }}/adicionar-genero`, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Género adicionado!', 'success');
-            closeGeneroModal();
-            setTimeout(() => location.reload(), 1000);
-        } else {
-            showNotification('Erro: ' + data.message, 'error');
+    const addNextGenero = (index) => {
+        if (index >= generoIds.length) {
+            // Todos processados
+            if (addedCount > 0) {
+                showNotification(`${addedCount} género(s) adicionado(s) com sucesso!`, 'success');
+                closeGeneroModal();
+                setTimeout(() => location.reload(), 1000);
+            } else if (errorCount > 0) {
+                showNotification('Erro ao adicionar géneros', 'error');
+                document.body.style.overflow = ''; // Restaurar scroll em caso de erro
+            }
+            return;
         }
-    })
-    .catch(error => {
-        showNotification('Erro: ' + error.message, 'error');
-    });
+        
+        const formData = new FormData();
+        formData.append('genero_id', generoIds[index]);
+        
+        fetch(`/admin/filmes/{{ filme.id }}/adicionar-genero`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                addedCount++;
+            } else {
+                errorCount++;
+            }
+            // Processar próximo
+            addNextGenero(index + 1);
+        })
+        .catch(error => {
+            errorCount++;
+            addNextGenero(index + 1);
+        });
+    };
+    
+    addNextGenero(0);
 }
 
 function removeGeneroFromMovie(generoId, generoNome) {
@@ -825,15 +983,7 @@ function removeGeneroFromMovie(generoId, generoNome) {
         .then(data => {
             if (data.success) {
                 showNotification('Género removido com sucesso!', 'success');
-                const generoElement = document.querySelector(`[data-genero-id="${generoId}"]`);
-                if (generoElement) {
-                    generoElement.remove();
-                    if (document.querySelectorAll('.genero-tag').length === 0) {
-                        setTimeout(() => location.reload(), 1000);
-                    }
-                } else {
-                    setTimeout(() => location.reload(), 1000);
-                }
+                setTimeout(() => location.reload(), 1000);
             } else {
                 showNotification('Erro: ' + data.message, 'error');
             }
@@ -852,6 +1002,7 @@ function adicionarTipoSessao(cinemaId) {
     document.getElementById('tipoSessaoSelect').innerHTML = '<option value="">Carregando tipos disponíveis...</option>';
     document.getElementById('salaTipoSessaoSelect').innerHTML = '<option value="">Carregando salas...</option>';
     document.getElementById('tipoSessaoModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
     fetch(`/admin/filmes/{{ filme.id }}/cinema/${cinemaId}/tipos-sessao-disponiveis`)
         .then(response => response.json())
         .then(data => {
@@ -906,6 +1057,7 @@ function adicionarTipoSessao(cinemaId) {
 
 function closeTipoSessaoModal() {
     document.getElementById('tipoSessaoModal').style.display = 'none';
+    document.body.style.overflow = '';
     cinemaParaTipoSessao = null;
 }
 

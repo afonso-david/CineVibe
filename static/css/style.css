@@ -176,9 +176,12 @@ img.logo {
   width: 80%;
 }
 
-.nav-center a:hover,
-.nav-center a.active {
+.nav-center a:hover {
   color: #4EA8DE;
+}
+
+.nav-center a.active {
+  color: #fff;
 }
 
 .nav-center a:focus {

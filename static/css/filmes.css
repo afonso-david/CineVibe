@@ -86,14 +86,19 @@ a {
   background: linear-gradient(90deg, #FFD60A, #4EA8DE);
   transition: all 0.4s ease;
   transform: translateX(-50%);
-}.na
-v-center a:hover::after,
+}
+
+.nav-center a:hover::after,
 .nav-center a.active::after {
   width: 80%;
 }
-.nav-center a:hover,
-.nav-center a.active {
+
+.nav-center a:hover {
   color: #4EA8DE;
+}
+
+.nav-center a.active {
+  color: #fff;
 }
 
 .nav-center a:focus {

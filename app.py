@@ -1511,84 +1511,112 @@ def avatars_categoria(categoria):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route("/testar-avatares")
-def testar_avatares():
-    return render_template('testar_avatares.html')
+# ============================================================================
+# TEST/DEBUG ROUTES - COMMENTED OUT FOR PRODUCTION
+# These routes were used during development for testing and debugging
+# 
+# Commented routes include:
+# - /testar-avatares
+# - /test-email (line ~1519)
+# - /teste-perfil-debug
+# - /debug-produtos-resgatados
+# - /criar-dados-teste-pontos-movimentos
+# - /teste-pontos-movimentos
+# - /criar-dados-teste-produtos
+# - /teste-produtos-resgatados
+# - /debug_login_afonso (line ~6827)
+# - /teste-email (line ~8616)
+# - /debug/cinemas (line ~13132)
+# - /teste_pagamento
+# - /test_api_filmes
+# - /test_pagamento
+# - /debug_pagamento
+# - /test_filme
+# - /test_logado
+# - /debug/filmes
+# - /debug_sessao
+# - /debug/bar
+# ============================================================================
+
+# @app.route("/testar-avatares")
+# def testar_avatares():
+#     return render_template('testar_avatares.html')
 
 
-@app.route('/test-email')
-def test_email():
-    pass
+# @app.route('/test-email')
+# def test_email():
+#     pass
+# 
+#     if 'user_id' not in session:
+#         return jsonify({
+#             'success': False,
+#             'message': 'É necessário fazer login para testar o email'
+#         }), 401
+#     
+#     try:
+#         pass
+#      
+#         conn = get_db_connection()
+#         cursor = conn.cursor(dictionary=True)
+#         cursor.execute("SELECT nome, email FROM usuarios WHERE id = %s", (session['user_id'],))
+#         user = cursor.fetchone()
+#         cursor.close()
+#         conn.close()
+#         
+#         if not user:
+#             return jsonify({
+#                 'success': False,
+#                 'message': 'Utilizador não encontrado'
+#             }), 404
+#         
+#      
+#         dados_reserva = {
+#             'reserva_id': 99999,
+#             'filme': 'Filme de Teste - Aventura Épica',
+#             'cinema': 'CineVibe Lisboa - Centro',
+#             'tipo_sessao': '2D Legendado',
+#             'horario': '25/12/2024 às 20:00',
+#             'quantidade': '2 bilhetes'
+#         }
+#         
+#      
+#         sucesso = enviar_email_confirmacao(
+#             user['email'],
+#             user['nome'],
+#             dados_reserva
+#         )
+#         
+#         if sucesso:
+#             return jsonify({
+#                 'success': True,
+#                 'message': f'✅ Email de teste enviado com sucesso para {user["email"]}! Verifique a sua caixa de entrada.'
+#             })
+#         else:
+#             return jsonify({
+#                 'success': False,
+#                 'message': '❌ Falha ao enviar email. Verifique as configurações no email_config.py e os logs do servidor.'
+#             }), 500
+#             
+#     except Exception as e:
+#         app.logger.error(f"Erro no teste de email: {str(e)}")
+#         return jsonify({
+#             'success': False,
+#             'message': f'Erro: {str(e)}'
+#         }), 500
+# 
+# 
+# 
+# @app.route('/teste-perfil-debug')
+# def teste_perfil_debug():
+#     """Route de teste para debug do perfil"""
+#     
+#     if 'user_id' not in session:
+#         return "❌ Usuário não está logado"
+#     
+#     user_id = session['user_id']
+#     return f"✅ Usuário logado com ID: {user_id}. Route de teste funcionando!"
 
-    if 'user_id' not in session:
-        return jsonify({
-            'success': False,
-            'message': 'É necessário fazer login para testar o email'
-        }), 401
-    
-    try:
-        pass
-     
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT nome, email FROM usuarios WHERE id = %s", (session['user_id'],))
-        user = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        
-        if not user:
-            return jsonify({
-                'success': False,
-                'message': 'Utilizador não encontrado'
-            }), 404
-        
-     
-        dados_reserva = {
-            'reserva_id': 99999,
-            'filme': 'Filme de Teste - Aventura Épica',
-            'cinema': 'CineVibe Lisboa - Centro',
-            'tipo_sessao': '2D Legendado',
-            'horario': '25/12/2024 às 20:00',
-            'quantidade': '2 bilhetes'
-        }
-        
-     
-        sucesso = enviar_email_confirmacao(
-            user['email'],
-            user['nome'],
-            dados_reserva
-        )
-        
-        if sucesso:
-            return jsonify({
-                'success': True,
-                'message': f'✅ Email de teste enviado com sucesso para {user["email"]}! Verifique a sua caixa de entrada.'
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': '❌ Falha ao enviar email. Verifique as configurações no email_config.py e os logs do servidor.'
-            }), 500
-            
-    except Exception as e:
-        app.logger.error(f"Erro no teste de email: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': f'Erro: {str(e)}'
-        }), 500
-
-
-
-@app.route('/teste-perfil-debug')
-def teste_perfil_debug():
-    """Route de teste para debug do perfil"""
-    
-    if 'user_id' not in session:
-        return "❌ Usuário não está logado"
-    
-    user_id = session['user_id']
-    return f"✅ Usuário logado com ID: {user_id}. Route de teste funcionando!"
-
+# TEST ROUTE - Comment out for production
 @app.route('/debug-produtos-resgatados')
 def debug_produtos_resgatados():
     pass
@@ -1697,6 +1725,7 @@ def debug_produtos_resgatados():
     except Exception as e:
         return f"Erro: {str(e)}"
 
+# TEST ROUTE - Comment out for production
 @app.route('/criar-dados-teste-pontos-movimentos')
 def criar_dados_teste_pontos_movimentos():
     pass
@@ -1744,6 +1773,7 @@ def criar_dados_teste_pontos_movimentos():
     except Exception as e:
         return f"❌ Erro: {str(e)}"
 
+# TEST ROUTE - Comment out for production
 @app.route('/teste-pontos-movimentos')
 def teste_pontos_movimentos():
     pass
@@ -1812,6 +1842,7 @@ def teste_pontos_movimentos():
     except Exception as e:
         return f"Erro: {str(e)}"
 
+# TEST ROUTE - Comment out for production
 @app.route('/criar-dados-teste-produtos')
 def criar_dados_teste_produtos():
     pass
@@ -1872,6 +1903,7 @@ def criar_dados_teste_produtos():
     except Exception as e:
         return f"❌ Erro: {str(e)}"
 
+# TEST ROUTE - Comment out for production
 @app.route('/teste-produtos-resgatados')
 def teste_produtos_resgatados():
     pass
@@ -6824,6 +6856,7 @@ def logout():
     flash("Sessão terminada.", "success")
     return redirect(url_for('home'))
 
+# TEST ROUTE - Comment out for production
 @app.route('/debug_login_afonso')
 def debug_login_afonso():
     try:
@@ -8613,6 +8646,7 @@ def confirmar_reserva():
             flash(f"Erro na reserva: {e}", "error")
             return redirect(request.referrer or url_for('home'))
 
+# TEST ROUTE - Comment out for production  
 @app.route('/teste-email')
 def teste_email():
     try:
@@ -13129,6 +13163,7 @@ def atualizar_nome():
         cursor.close()
         conn.close()
 
+# TEST ROUTE - Comment out for production
 @app.route('/debug/cinemas')
 def debug_cinemas():
     conn = get_db_connection()
@@ -13554,6 +13589,7 @@ def processar_pagamento():
         app.logger.exception("Erro ao processar pagamento:")
         return jsonify({'success': False, 'message': f'Erro interno: {str(e)}'}), 500
 
+# TEST ROUTE - Comment out for production
 @app.route('/teste_pagamento', methods=['POST'])
 def teste_pagamento():
     """Rota de teste para debug dos dados de pagamento"""
@@ -13571,30 +13607,35 @@ def teste_pagamento():
         app.logger.error(f"Erro no teste: {str(e)}")
         return jsonify({'success': False, 'message': str(e)}), 500
 
+# TEST ROUTE - Comment out for production
 @app.route('/test_api_filmes')
 def test_api_filmes():
     """Página de teste para as APIs de filmes"""
     from flask import send_from_directory
     return send_from_directory('.', 'test_api_filmes.html')
 
+# TEST ROUTE - Comment out for production
 @app.route('/test_pagamento')
 def test_pagamento():
     """Página de teste para pagamento de sessões exclusivas"""
     from flask import send_from_directory
     return send_from_directory('.', 'test_pagamento_simples.html')
 
+# TEST ROUTE - Comment out for production
 @app.route('/debug_pagamento')
 def debug_pagamento():
     """Página de debug para pagamento de sessões exclusivas"""
     from flask import send_from_directory
     return send_from_directory('.', 'debug_pagamento.html')
 
+# TEST ROUTE - Comment out for production
 @app.route('/test_filme')
 def test_filme():
     """Página de teste para reservas de filmes"""
     from flask import send_from_directory
     return send_from_directory('.', 'test_reserva_normal.html')
 
+# TEST ROUTE - Comment out for production
 @app.route('/test_logado')
 def test_logado():
     pass
@@ -13604,6 +13645,7 @@ def test_logado():
 
 
 
+# TEST ROUTE - Comment out for production
 @app.route('/debug/filmes')
 def debug_filmes():
     pass
@@ -13731,6 +13773,7 @@ def salvar_dados_reserva_sessao(filme_id=None, cinema_id=None, id_tipo_sessao=No
     
     return reserva_data
 
+# TEST ROUTE - Comment out for production
 @app.route('/debug_sessao')
 def debug_sessao():
     pass
@@ -14755,6 +14798,7 @@ def finalizar_pagamento_com_desconto():
     except Exception as e:
         return jsonify({'success': False, 'message': f'Erro interno: {str(e)}'})
 
+# TEST ROUTE - Comment out for production
 @app.route('/debug/bar')
 def debug_bar():
     pass

@@ -222,12 +222,10 @@ a {
     height: 100%;
     object-fit: cover;
     filter: brightness(50%); 
-    transition: transform 0.6s ease, filter 0.3s ease;
-    will-change: transform;
+    transition: filter 0.3s ease;
 }
 
 .banner img:hover {
-    transform: scale(1.04);
     filter: brightness(60%);
 }
 
@@ -276,19 +274,36 @@ a {
     display: block;
     text-decoration: none;
     color: inherit;
-    border-radius: 20px;
     transition: transform 0.3s ease;
 }
 
 .reason-link:focus {
-    outline: 3px solid #4EA8DE;
-    outline-offset: 3px;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.reason-link:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.reason-link:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.reason-link:active .reason {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+    transform: none !important;
+}
+
+.reason-link:focus .reason {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 .reason {
     background: rgba(255, 255, 255, 0.05); 
     padding: 30px 25px;
-    border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 25px;
@@ -304,8 +319,8 @@ a {
 .reason-link:hover .reason,
 .reason-link:focus .reason {
     transform: scale(1.02); 
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-    background: rgba(255, 255, 255, 0.1); 
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 .reason-icon {

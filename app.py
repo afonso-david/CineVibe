@@ -12043,6 +12043,78 @@ def admin_remover_sala_alt(sala_id):
     flash('Sala removida com sucesso!', 'success')
     return redirect(url_for('admin_salas'))
 
+@app.route('/admin/salas/preview-global', methods=['GET'])
+def admin_preview_global():
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Não autorizado'}), 401
+    
+    nome_sala = request.args.get('nome_sala', '')
+    
+    if not nome_sala:
+        return jsonify({'success': False, 'salas': []})
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT s.id, s.nome_sala, s.capacidade, s.filas, s.lugares_por_fila,
+                   s.tipo_sala, c.nome as cinema_nome,
+                   GROUP_CONCAT(DISTINCT ts.nome SEPARATOR ', ') as tipos_sessao
+            FROM salas s
+            INNER JOIN cinemas c ON s.id_cinema = c.id
+            LEFT JOIN horarios_sessao hs ON s.id = hs.id_sala
+            LEFT JOIN tipos_sessao ts ON hs.id_tipo_sessao = ts.id
+            WHERE s.nome_sala = %s
+            GROUP BY s.id
+            ORDER BY c.nome
+        """, (nome_sala,))
+        
+        rows = cursor.fetchall()
+        columns = [description[0] for description in cursor.description]
+        salas = [dict(zip(columns, row)) for row in rows]
+        
+        cursor.close()
+        conn.close()
+        
+        return jsonify({'success': True, 'salas': salas})
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar preview global: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+@app.route('/admin/salas/editar-global', methods=['POST'])
+def admin_editar_global():
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Não autorizado'}), 401
+    
+    nome_sala = request.form.get('nome_sala', '')
+    capacidade = request.form.get('capacidade', '')
+    filas = request.form.get('filas', '')
+    lugares_por_fila = request.form.get('lugares_por_fila', '')
+    
+    if not all([nome_sala, capacidade, filas, lugares_por_fila]):
+        return jsonify({'success': False, 'message': 'Campos obrigatórios faltando'}), 400
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            UPDATE salas
+            SET capacidade = %s, filas = %s, lugares_por_fila = %s
+            WHERE nome_sala = %s
+        """, (capacidade, filas, lugares_por_fila, nome_sala))
+        
+        count = cursor.rowcount
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return jsonify({'success': True, 'count': count, 'message': f'{count} sala(s) atualizada(s)'})
+    except Exception as e:
+        app.logger.error(f"Erro ao editar salas globalmente: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)}), 500
+
 @app.route('/admin/avatares')
 def admin_avatares():
     if 'user_id' not in session:

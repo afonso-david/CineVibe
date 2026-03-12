@@ -352,6 +352,10 @@
                     </div>
                 </div>
                 <div class="top-bar-right">
+                    <button class="btn-primary" onclick="abrirModalEditarGlobal()" style="margin-right: 10px; background: linear-gradient(135deg, #4EA8DE, #3B91C0); box-shadow: none;">
+                        <i class="fas fa-globe"></i>
+                        Editar Global
+                    </button>
                     <button class="btn-primary" onclick="abrirModalAdicionarSala()">
                         <i class="fas fa-plus"></i>
                         Adicionar Sala
@@ -595,6 +599,69 @@
         </div>
     </div>
 
+    <div id="editarGlobalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Salas Globalmente</h3>
+                <button onclick="fecharModalEditarGlobal()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="background: rgba(78, 168, 222, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid #4EA8DE;">
+                    <p style="color: #4EA8DE; margin: 0; font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i>
+                        Esta ação irá atualizar todas as salas com o mesmo nome em todos os cinemas.
+                    </p>
+                </div>
+                <form id="formEditarGlobal">
+                    <div class="form-group">
+                        <label>Selecionar Sala *</label>
+                        <select id="globalNomeSala" class="form-select" required onchange="atualizarPreviewGlobal()">
+                            <option value="">Escolha uma sala</option>
+                            <option value="Sala 1">Sala 1</option>
+                            <option value="Sala 2">Sala 2</option>
+                            <option value="Sala 3">Sala 3</option>
+                            <option value="Sala 4">Sala 4</option>
+                            <option value="Sala 5">Sala 5</option>
+                            <option value="Sala 6">Sala 6</option>
+                            <option value="Sala 7">Sala 7</option>
+                            <option value="Sala 8">Sala 8</option>
+                            <option value="Sala 9">Sala 9</option>
+                            <option value="Sala 10">Sala 10</option>
+                        </select>
+                    </div>
+                    <div id="previewSalasAfetadas" style="display: none; background: rgba(255, 214, 10, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid #FFD60A;">
+                        <p style="color: #FFD60A; margin: 0 0 10px 0; font-weight: 600;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Salas que serão atualizadas:
+                        </p>
+                        <div id="listaSalasAfetadas" style="color: #E8EEF2; font-size: 0.85rem; max-height: 150px; overflow-y: auto;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nova Capacidade *</label>
+                        <input type="number" id="globalCapacidade" class="form-input" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Novas Filas *</label>
+                        <input type="number" id="globalFilas" class="form-input" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Novos Lugares por Fila *</label>
+                        <input type="number" id="globalLugaresPorFila" class="form-input" min="1" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="fecharModalEditarGlobal()" class="btn btn-secondary">Cancelar</button>
+                <button onclick="salvarEdicaoGlobal()" class="btn btn-primary" style="box-shadow: none;">
+                    <i class="fas fa-globe"></i>
+                    Atualizar Todas
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
@@ -674,9 +741,11 @@
         let salaEditandoId = null;
         function abrirModalAdicionarSala() {
             document.getElementById('adicionarSalaModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
         function fecharModalAdicionarSala() {
             document.getElementById('adicionarSalaModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
             document.getElementById('formAdicionarSala').reset();
         }
         function editarSala(salaId) {
@@ -694,6 +763,7 @@
                         document.getElementById('editFilas').value = sala.filas || 10;
                         document.getElementById('editLugaresPorFila').value = sala.lugares_por_fila || 20;
                         document.getElementById('editarSalaModal').style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
                     } else {
                         showNotification('Erro ao carregar dados da sala: ' + data.message, 'error');
                     }
@@ -705,6 +775,7 @@
         }
         function fecharModalEditarSala() {
             document.getElementById('editarSalaModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
             salaEditandoId = null;
         }
         function salvarEdicaoSala() {
@@ -788,15 +859,116 @@
                 }, 300);
             }, 3000);
         }
+        function abrirModalEditarGlobal() {
+            document.getElementById('editarGlobalModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModalEditarGlobal() {
+            document.getElementById('editarGlobalModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('formEditarGlobal').reset();
+            document.getElementById('previewSalasAfetadas').style.display = 'none';
+        }
+
+        function atualizarPreviewGlobal() {
+            const nomeSala = document.getElementById('globalNomeSala').value;
+            const previewDiv = document.getElementById('previewSalasAfetadas');
+            const listaDiv = document.getElementById('listaSalasAfetadas');
+            
+            if (!nomeSala) {
+                previewDiv.style.display = 'none';
+                return;
+            }
+
+            fetch(`/admin/salas/preview-global?nome_sala=${encodeURIComponent(nomeSala)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.salas.length > 0) {
+                        listaDiv.innerHTML = data.salas.map(sala => 
+                            `<div style="padding: 8px 0; border-bottom: 1px solid rgba(255, 214, 10, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                                    <div style="flex: 1;">
+                                        <strong>${sala.cinema_nome}</strong> - ${sala.nome_sala}
+                                    </div>
+                                    <div style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end;">
+                                        ${sala.tipos_sessao ? sala.tipos_sessao.split(', ').map(tipo => 
+                                            `<span style="background: rgba(78, 168, 222, 0.3); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; color: #4EA8DE; white-space: nowrap;">
+                                                ${tipo}
+                                            </span>`
+                                        ).join('') : '<span style="color: #888; font-size: 0.75rem;">Sem sessões</span>'}
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: #B8C5D1; margin-top: 3px;">
+                                    Capacidade: ${sala.capacidade} | Filas: ${sala.filas} | Lugares/Fila: ${sala.lugares_por_fila}
+                                </div>
+                            </div>`
+                        ).join('');
+                        previewDiv.style.display = 'block';
+                    } else {
+                        previewDiv.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar preview:', error);
+                    previewDiv.style.display = 'none';
+                });
+        }
+
+        function salvarEdicaoGlobal() {
+            const nomeSala = document.getElementById('globalNomeSala').value;
+            const capacidade = document.getElementById('globalCapacidade').value;
+            const filas = document.getElementById('globalFilas').value;
+            const lugaresPorFila = document.getElementById('globalLugaresPorFila').value;
+
+            if (!nomeSala || !capacidade || !filas || !lugaresPorFila) {
+                showNotification('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+
+            if (!confirm(`Tem certeza que deseja atualizar TODAS as salas "${nomeSala}" em todos os cinemas?`)) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('nome_sala', nomeSala);
+            formData.append('capacidade', capacidade);
+            formData.append('filas', filas);
+            formData.append('lugares_por_fila', lugaresPorFila);
+
+            fetch('/admin/salas/editar-global', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(`${data.count} sala(s) atualizada(s) com sucesso!`, 'success');
+                    fecharModalEditarGlobal();
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification('Erro ao atualizar salas: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao salvar edição global:', error);
+                showNotification('Erro ao atualizar salas', 'error');
+            });
+        }
+
         window.onclick = function(event) {
             const modalEditar = document.getElementById('editarSalaModal');
             const modalAdicionar = document.getElementById('adicionarSalaModal');
+            const modalGlobal = document.getElementById('editarGlobalModal');
             
             if (event.target === modalEditar) {
                 fecharModalEditarSala();
             }
             if (event.target === modalAdicionar) {
                 fecharModalAdicionarSala();
+            }
+            if (event.target === modalGlobal) {
+                fecharModalEditarGlobal();
             }
         }
     </script>

@@ -104,6 +104,10 @@
                                 <div class="seat-row">
                                     {% for lugar in fileira.lugares %}
                                     
+                                    {% if loop.index0 == (fileira.lugares|length // 2) %}
+                                        <div class="divider-line-vertical"></div>
+                                    {% endif %}
+                                    
                                     <div class="seat {{ 'occupied' if lugar.ocupado else ('accessible' if lugar.acessivel else 'available') }}" 
                                          data-seat="{{ lugar.nome }}"
                                          data-row="{{ fileira.letra }}"
@@ -145,6 +149,9 @@
                             <div class="legend-seat legend-occupied"></div>
                             <span>Ocupado</span>
                         </div>
+                        <button class="btn-360" onclick="abrirVisao360()">
+                            <i class="fas fa-cube"></i> Ver Sala 360º
+                        </button>
                     </div>
 
                     <div class="selection-summary">
@@ -185,6 +192,21 @@
 
             </div>
         </main>
+
+        <!-- Modal 360º -->
+        <div id="modal360" class="modal-360">
+            <div class="modal-360-content">
+                <button class="close-360" onclick="fecharVisao360()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="viewer-360-container">
+                    <img id="imagem360" src="{{ url_for('static', filename='imgs/sala 360.webp') }}" alt="Visualização 360º da Sala" class="imagem-360">
+                    <div class="controles-360">
+                        <p>Arraste para rotacionar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -319,7 +341,7 @@
                     const lastSeat = seats[seats.length - 1];
                     const firstSeatRect = firstSeat.getBoundingClientRect();
                     const lastSeatRect = lastSeat.getBoundingClientRect();
-                    const totalWidth = lastSeatRect.right - firstSeatRect.left;
+                    const totalWidth = (lastSeatRect.right - firstSeatRect.left) * 1.1;
                     
                     dividers.forEach(divider => {
                         divider.style.width = `${totalWidth}px`;
@@ -337,5 +359,71 @@
         setTimeout(adjustDividerWidth, 100);
     });
     </script>
-</body>
-</html>
+
+    <script>
+    // Visualização 360º
+    let rotacao360 = 0;
+    let isDragging360 = false;
+    let startX360 = 0;
+
+    function abrirVisao360() {
+        document.getElementById('modal360').classList.add('ativo');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharVisao360() {
+        document.getElementById('modal360').classList.remove('ativo');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const imagem360 = document.getElementById('imagem360');
+        const modal360 = document.getElementById('modal360');
+
+        imagem360.addEventListener('mousedown', (e) => {
+            isDragging360 = true;
+            startX360 = e.clientX;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging360) return;
+            
+            const deltaX = e.clientX - startX360;
+            rotacao360 += deltaX * 0.5;
+            
+            imagem360.style.transform = `translateX(${rotacao360}px)`;
+            startX360 = e.clientX;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging360 = false;
+        });
+
+        // Touch support para mobile
+        imagem360.addEventListener('touchstart', (e) => {
+            isDragging360 = true;
+            startX360 = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging360) return;
+            
+            const deltaX = e.touches[0].clientX - startX360;
+            rotacao360 += deltaX * 0.5;
+            
+            imagem360.style.transform = `translateX(${rotacao360}px)`;
+            startX360 = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', () => {
+            isDragging360 = false;
+        });
+
+        // Fechar modal ao clicar fora
+        modal360.addEventListener('click', (e) => {
+            if (e.target === modal360) {
+                fecharVisao360();
+            }
+        });
+    });
+    </script>

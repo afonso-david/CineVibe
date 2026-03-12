@@ -200,7 +200,7 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <div class="viewer-360-container">
-                    <img id="imagem360" src="{{ url_for('static', filename='imgs/sala 360.webp') }}" alt="Visualização 360º da Sala" class="imagem-360">
+                    <img id="imagem360" src="{{ url_for('static', filename='imgs/ChatGPT Image Mar 12, 2026, 11_02_16 AM.png') }}" alt="Visualização 360º da Sala" class="imagem-360">
                     <div class="controles-360">
                         <p>Arraste para rotacionar</p>
                     </div>
@@ -362,13 +362,17 @@
 
     <script>
     // Visualização 360º
-    let rotacao360 = 0;
+    let posX360 = 0;
+    let posY360 = 0;
     let isDragging360 = false;
     let startX360 = 0;
+    let startY360 = 0;
 
     function abrirVisao360() {
         document.getElementById('modal360').classList.add('ativo');
         document.body.style.overflow = 'hidden';
+        posX360 = 0;
+        posY360 = 0;
     }
 
     function fecharVisao360() {
@@ -379,20 +383,33 @@
     document.addEventListener('DOMContentLoaded', function() {
         const imagem360 = document.getElementById('imagem360');
         const modal360 = document.getElementById('modal360');
+        const container360 = document.querySelector('.viewer-360-container');
 
         imagem360.addEventListener('mousedown', (e) => {
             isDragging360 = true;
             startX360 = e.clientX;
+            startY360 = e.clientY;
         });
 
         document.addEventListener('mousemove', (e) => {
             if (!isDragging360) return;
             
             const deltaX = e.clientX - startX360;
-            rotacao360 += deltaX * 0.5;
+            const deltaY = e.clientY - startY360;
             
-            imagem360.style.transform = `translateX(${rotacao360}px)`;
+            posX360 -= deltaX * 1.5;
+            posY360 -= deltaY * 1.5;
+            
+            // Limita o movimento para não sair muito dos limites
+            const maxX = imagem360.offsetWidth - container360.offsetWidth;
+            const maxY = imagem360.offsetHeight - container360.offsetHeight;
+            
+            posX360 = Math.max(-maxX, Math.min(0, posX360));
+            posY360 = Math.max(-maxY, Math.min(0, posY360));
+            
+            imagem360.style.transform = `translate(${posX360}px, ${posY360}px)`;
             startX360 = e.clientX;
+            startY360 = e.clientY;
         });
 
         document.addEventListener('mouseup', () => {
@@ -403,16 +420,28 @@
         imagem360.addEventListener('touchstart', (e) => {
             isDragging360 = true;
             startX360 = e.touches[0].clientX;
+            startY360 = e.touches[0].clientY;
         });
 
         document.addEventListener('touchmove', (e) => {
             if (!isDragging360) return;
             
             const deltaX = e.touches[0].clientX - startX360;
-            rotacao360 += deltaX * 0.5;
+            const deltaY = e.touches[0].clientY - startY360;
             
-            imagem360.style.transform = `translateX(${rotacao360}px)`;
+            posX360 -= deltaX * 1.5;
+            posY360 -= deltaY * 1.5;
+            
+            // Limita o movimento para não sair muito dos limites
+            const maxX = imagem360.offsetWidth - container360.offsetWidth;
+            const maxY = imagem360.offsetHeight - container360.offsetHeight;
+            
+            posX360 = Math.max(-maxX, Math.min(0, posX360));
+            posY360 = Math.max(-maxY, Math.min(0, posY360));
+            
+            imagem360.style.transform = `translate(${posX360}px, ${posY360}px)`;
             startX360 = e.touches[0].clientX;
+            startY360 = e.touches[0].clientY;
         });
 
         document.addEventListener('touchend', () => {

@@ -107,10 +107,10 @@
     position: relative;
     transform: perspective(800px) rotateX(-15deg);
     transform-style: preserve-3d;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 60px rgba(255, 214, 10, 0.3);
+    box-shadow: 0 10px 40px rgba(248, 248, 248, 0.8), 0 0 60px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     overflow: hidden;
-    border: 3px solid #FFD60A;
+   
 }
 
 .cinema-screen img {
@@ -503,12 +503,10 @@
 }
 
 .seat.selected {
-    background: linear-gradient(135deg, #FFD60A, #F4C430);
-    border: 3px solid #FFD60A;
-    color: #0D1B2A;
-    transform: scale(1.15);
-    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.6), 0 0 30px rgba(255, 214, 10, 0.3);
-    position: relative;
+    background: #FFD60A;
+    border: 3px solid #0C112B;
+    box-shadow: 0 0 8px #50E6FF, 0 0 16px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.2);
+    transform: scale(1.1);
 }
 
 .seat.selected::before {
@@ -523,6 +521,14 @@
     text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
     z-index: 1;
 }
+
+.seat.selected:hover {
+    background: #FFD60A;
+    border: 3px solid #0C112B;
+    box-shadow: 0 0 8px #50E6FF, 0 0 16px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.2);
+    transform: scale(1.1);
+}
+
 
 .seat.occupied {
     background: #03050F;

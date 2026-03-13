@@ -32,8 +32,8 @@ a {
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, #4EA8DE 30%, #FFD60A 70%, transparent);
+    height: 0;
+    background: none;
 }
 
 .movie-info-card::after {

@@ -168,6 +168,7 @@ function limparFiltros() {
 function abrirModalAdicionarAtor() {
     const modal = document.getElementById('modalAdicionarAtor');
     modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
     const modalContent = modal.querySelector('.modal-content');
     modalContent.style.transform = 'translateY(50px) scale(0.9)';
     modalContent.style.opacity = '0';
@@ -187,6 +188,7 @@ function fecharModal(modalId) {
     modalContent.style.opacity = '0';
     setTimeout(() => {
         modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
         const form = modal.querySelector('form');
         if (form) {
             form.reset();
@@ -229,6 +231,7 @@ function editarAtor(id) {
 function abrirModalEditarAtor() {
     const modal = document.getElementById('modalEditarAtor');
     modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
     const modalContent = modal.querySelector('.modal-content');
     modalContent.style.transform = 'translateY(50px) scale(0.9)';
     modalContent.style.opacity = '0';
@@ -327,6 +330,7 @@ document.addEventListener('click', function(e) {
         modalContent.style.opacity = '0';
         setTimeout(() => {
             e.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }, 300);
     }
 });

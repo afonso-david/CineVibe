@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registo | CineVibe</title>
+    <link rel="preload" href="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" as="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/logo-preload.js') }}"></script>
 </head>
 <body>
     <div class="page-wrapper">
@@ -20,7 +23,9 @@
                     <span></span>
                     <span></span>
                 </button>
-                <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
+                </a>
             </div>
             <div class="nav-right">
                 <div class="search-container">
@@ -75,7 +80,7 @@
                         </div>
 
                         <form method="POST" class="login-form" autocomplete="off">
-                            <!-- Campos hidden para confundir o autocomplete do browser -->
+                      
                             <input type="text" name="fake_username" style="position: absolute; top: -9999px; left: -9999px;" tabindex="-1" autocomplete="off">
                             <input type="password" name="fake_password" style="position: absolute; top: -9999px; left: -9999px;" tabindex="-1" autocomplete="new-password">
                             
@@ -280,20 +285,19 @@
     </footer>
 
     <script>
-        // Converter campos de texto para password após carregamento (evita autocomplete)
+        
         document.addEventListener('DOMContentLoaded', function() {
             const passwordField = document.getElementById('password');
             const confirmField = document.getElementById('confirm_password');
             
-            // Mostrar campos e converter para password
+            
             setTimeout(function() {
                 passwordField.style.display = 'block';
                 confirmField.style.display = 'block';
                 passwordField.type = 'password';
                 confirmField.type = 'password';
             }, 100);
-            
-            // Prevenir autocomplete ao focar
+        
             passwordField.addEventListener('focus', function() {
                 this.setAttribute('autocomplete', 'new-password');
             });
@@ -319,7 +323,7 @@
             });
         }
 
-        // Preencher email do Google apenas se existir na sessão
+        // 
         {% if session.get('google_email') %}
         document.addEventListener('DOMContentLoaded', function() {
             const emailInput = document.getElementById('email');

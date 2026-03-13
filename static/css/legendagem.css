@@ -746,6 +746,53 @@
     opacity: 0.9;
 }
 
+.testimonials-section {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 6rem 2rem;
+    margin-bottom: 6rem;
+    border-radius: 20px;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    border-color: #FFD60A;
+}
+
+.testimonial-content p {
+    color: #E2E8F0;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.author-info h4 {
+    color: #FFD60A;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.author-info span {
+    color: #4EA8DE;
+    font-size: 0.9rem;
+}
+
 .examples-section {
     margin-bottom: 6rem;
     padding: 6rem 0;
@@ -1001,38 +1048,6 @@
     line-height: 1.6;
 }
 
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.testimonial-card {
-    background: rgba(13, 27, 42, 0.8);
-    padding: 2.5rem 2rem;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 214, 10, 0.2);
-}
-
-.testimonial-content p {
-    color: #E2E8F0;
-    font-style: italic;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-}
-
-.testimonial-author h4 {
-    color: #FFD60A;
-    font-size: 1.1rem;
-    margin-bottom: 0.3rem;
-}
-
-.testimonial-author span {
-    color: #B8C5D1;
-    font-size: 0.9rem;
-}
-
 .cta-section {
     background: linear-gradient(135deg, #FFD60A 0%, #FFB703 100%);
     color: #000;
@@ -1102,24 +1117,36 @@
     font-weight: 700;
 }
 
+.faq-section {
+    margin-bottom: 6rem;
+}
+
 .faq-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .faq-item {
-    background: rgba(13, 27, 42, 0.8);
-    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
-    border: 1px solid rgba(255, 214, 10, 0.2);
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: #4EA8DE;
+    transform: translateY(-2px);
 }
 
 .faq-item h3 {
     color: #FFD60A;
     font-size: 1.2rem;
     margin-bottom: 1rem;
-    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
 }
 
 .faq-item p {

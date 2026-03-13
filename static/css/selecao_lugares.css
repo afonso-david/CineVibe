@@ -5,7 +5,6 @@
     justify-content: space-between;
     padding: 20px 25px;
     background: linear-gradient(to right, #0D1B2A, #1B263B);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     height: 55px;
     will-change: transform;
     backface-visibility: hidden;
@@ -80,7 +79,7 @@
 .seat-selection {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.03));
     border-radius: 20px;
-    padding: 2rem 0.5rem;
+    padding: 2rem 2rem;
     margin-bottom: 2rem;
     border: 1px solid rgba(255, 214, 10, 0.2);
     backdrop-filter: blur(10px);
@@ -118,13 +117,14 @@
     max-width: 850px;
     height: 420px;
     margin: 2rem auto 3rem;
+    margin-left: auto;
     position: relative;
     transform: perspective(800px) rotateX(-15deg);
     transform-style: preserve-3d;
     box-shadow: 0 10px 40px rgba(248, 248, 248, 0.8), 0 0 60px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     overflow: hidden;
-   
+    margin-left: 260px;
 }
 
 .cinema-screen img {
@@ -440,8 +440,8 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, #4EA8DE 30%, #FFD60A 70%, transparent);
+    height: 0;
+    background: none;
 }
 
 .movie-info-card::after {

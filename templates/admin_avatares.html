@@ -236,6 +236,10 @@
             border-color: rgba(239, 68, 68, 0.5);
             transform: scale(1.05);
         }
+
+        body.modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -807,6 +811,7 @@
         }
         function abrirModalAdicionarAvatar() {
             document.getElementById('modalAdicionarAvatar').style.display = 'flex';
+            document.body.classList.add('modal-open');
         }
 
         function editarAvatar(avatarId) {
@@ -824,6 +829,7 @@
                     document.getElementById('formEditarAvatar').action = `/admin/avatares/editar/${avatarId}`;
                     
                     document.getElementById('modalEditarAvatar').style.display = 'flex';
+                    document.body.classList.add('modal-open');
                 })
                 .catch(error => {
                     console.error('Erro:', error);
@@ -833,6 +839,7 @@
 
         function abrirModalGerirCategorias() {
             document.getElementById('modalGerirCategorias').style.display = 'flex';
+            document.body.classList.add('modal-open');
         }
 
         function removerAvatar(avatarId, nomeAvatar) {
@@ -857,6 +864,7 @@
 
         function fecharModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
+            document.body.classList.remove('modal-open');
             const preview = document.getElementById('image-preview');
             const container = document.getElementById('preview-container');
             if (preview && container) {
@@ -896,6 +904,7 @@
             modals.forEach(modal => {
                 if (e.target === modal) {
                     modal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
                 }
             });
         });

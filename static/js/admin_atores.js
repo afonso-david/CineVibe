@@ -333,6 +333,7 @@ document.addEventListener('click', function(e) {
 function createConfirmModal(title, message, subtitle, onConfirm) {
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
+    modal.style.display = 'flex';
     modal.innerHTML = `
         <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
@@ -343,17 +344,23 @@ function createConfirmModal(title, message, subtitle, onConfirm) {
                 <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">${subtitle}</p>
             </div>
             <div class="modal-actions">
-                <button class="btn-cancel" onclick="this.closest('.modal-overlay').remove()">Cancelar</button>
-                <button class="btn-confirm" style="background: linear-gradient(135deg, #ef4444, #dc2626);" onclick="confirmAction()">
+                <button class="btn-cancel">Cancelar</button>
+                <button class="btn-confirm" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
                     <i class="fas fa-trash"></i> Remover
                 </button>
             </div>
         </div>
     `;
+    
+    modal.querySelector('.btn-cancel').onclick = function() {
+        modal.remove();
+    };
+    
     modal.querySelector('.btn-confirm').onclick = function() {
         onConfirm();
         modal.remove();
     };
+    
     return modal;
 }
 function showNotification(message, type = 'info') {

@@ -2786,7 +2786,7 @@ def admin_dashboard():
         GROUP BY hs.id, s.nome_sala, c.nome, f.titulo, datas.data_sessao, h.hora, s.capacidade
         HAVING taxa_ocupacao < 30
         ORDER BY datas.data_sessao ASC, h.hora ASC
-        LIMIT 5
+        LIMIT 10
     """)
     sessoes_baixa_ocupacao = cur.fetchall()
     
@@ -2804,7 +2804,7 @@ def admin_dashboard():
         GROUP BY f.id, f.titulo, f.poster_url
         HAVING total_reservas = 0 AND total_sessoes > 0
         ORDER BY total_sessoes DESC
-        LIMIT 3
+        LIMIT 10
     """)
     filmes_sem_reservas = cur.fetchall()
     
@@ -2816,10 +2816,9 @@ def admin_dashboard():
             DATEDIFF(CURDATE(), u.criado_em) as dias_cadastrado
         FROM usuarios u
         LEFT JOIN reservas r ON r.id_usuario = u.id
-        WHERE u.criado_em >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-        AND r.id IS NULL
+        WHERE r.id IS NULL
         GROUP BY u.id
-        LIMIT 5
+        LIMIT 10
     """)
     usuarios_sem_reservas = cur.fetchall()
     

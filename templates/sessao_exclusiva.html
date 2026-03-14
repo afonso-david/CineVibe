@@ -171,7 +171,7 @@
                                             <div class="price-value">€{{ "%.0f"|format(sala.preco) }}</div>
                                             <div class="price-period">por sessão</div>
                                         </div>
-                                        <button class="btn-reservar" onclick="window.location.href='{{ url_for('reservar_sessao_exclusiva') }}'">
+                                        <button class="btn-reservar" onclick="openMatrixModal()">
                                             <i class="fas fa-calendar-check"></i>
                                             Reservar Agora
                                         </button>
@@ -294,54 +294,49 @@
     </footer>
     </div>
 
-    <div id="matrixModal" class="matrix-modal" style="display: none;">
-        <div class="matrix-overlay"></div>
-
-        <div class="matrix-background-image"></div>
-
-        <button class="matrix-close" onclick="closeMatrixModal()">
-            <i class="fas fa-times"></i>
-        </button>
-
-        <div class="matrix-character">
-        </div>
+    <div id="matrixModal" class="clean-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeMatrixModal()"></div>
         
-        <div class="matrix-text">
-            <h2 class="matrix-title">Esta é a sua última oportunidade</h2>
-            <p class="matrix-subtitle">Depois disto, não há volta atrás</p>
-        </div>
-        
-        <div class="matrix-pills">
-            <div class="pill-container">
-                <button class="pill red-pill" onclick="window.location.href='{{ url_for('login') }}'">
-                    <div class="pill-content">
-                        <span class="pill-text">INICIAR SESSÃO</span>
-                        <div class="pill-icon">💊</div>
-                    </div>
-                </button>
-                <div class="pill-description red-desc">
-                    Tome a pílula vermelha e descubra as sessões exclusivas
-                </div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeMatrixModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <h2>Sessões Exclusivas</h2>
+                <p>Escolha como pretende continuar</p>
             </div>
             
-            <div class="pill-container">
-                <button class="pill blue-pill" onclick="window.location.href='{{ url_for('reservar_sessao_exclusiva') }}'">
-                    <div class="pill-content">
-                        <span class="pill-text">CONVIDADO</span>
-                        <div class="pill-icon">💊</div>
-                    </div>
-                </button>
-                <div class="pill-description blue-desc">
-                    Tome a pílula azul e continue como estava
+            <div class="modal-body">
+                <div class="modal-options">
+                    <button class="modal-option login-option" onclick="window.location.href='{{ url_for('login') }}'">
+                        <div class="option-icon">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Iniciar Sessão</h3>
+                            <p>Aceda à sua conta e desfrute de todas as vantagens</p>
+                        </div>
+                        <div class="option-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </button>
+                    
+                    <button class="modal-option guest-option" onclick="window.location.href='{{ url_for('reservar_sessao_exclusiva') }}'">
+                        <div class="option-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Continuar como Convidado</h3>
+                            <p>Explore as sessões exclusivas sem criar conta</p>
+                        </div>
+                        <div class="option-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
-        
-        <div class="matrix-quote">
-            "Lembre-se... tudo o que estou a oferecer é a verdade, nada mais."
-        </div>
-
-        <canvas id="matrixRain" class="matrix-rain"></canvas>
     </div>
 
     <script>
@@ -353,72 +348,21 @@
             window.location.href = '{{ url_for("contactos") }}';
         }
 
-        function closeMatrixModal() {
-            const modal = document.getElementById('matrixModal');
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-            
-            setTimeout(() => {
-                modal.style.display = 'none';
-                stopMatrixRain();
-            }, 300);
+        function openMatrixModal() {
+            const isLoggedIn = {{ 'true' if logged_in else 'false' }};
+            if (!isLoggedIn) {
+                const modal = document.getElementById('matrixModal');
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } else {
+                window.location.href = '{{ url_for('reservar_sessao_exclusiva') }}';
+            }
         }
 
-        let matrixInterval;
-        
-        function startMatrixRain() {
-            const canvas = document.getElementById('matrixRain');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
-            const matrixArray = matrix.split("");
-            
-            const fontSize = 14; 
-            const columns = canvas.width / fontSize;
-            
-            const drops = [];
-            for(let x = 0; x < columns; x++) {
-                drops[x] = 1;
-            }
-            
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.02)'; 
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#00FF41'; 
-                ctx.font = 'bold ' + fontSize + 'px "Courier New", monospace'; 
-                ctx.shadowColor = '#00FF41';
-                ctx.shadowBlur = 8; 
-                
-                for(let i = 0; i < drops.length; i++) {
-                    const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-                    
-                    const alpha = Math.random() * 0.5 + 0.5; 
-                    ctx.globalAlpha = alpha;
-                    
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    ctx.globalAlpha = 1.0;
-                    
-                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.970) { 
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-                
-                ctx.shadowBlur = 0;
-            }
-            
-            matrixInterval = setInterval(draw, 30); 
-        }
-        
-        function stopMatrixRain() {
-            if (matrixInterval) {
-                clearInterval(matrixInterval);
-            }
+        function closeMatrixModal() {
+            const modal = document.getElementById('matrixModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
         }
     </script>
 </body>

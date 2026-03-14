@@ -720,39 +720,40 @@ def home():
         stats = {}
         
         try:
-            pass
-      
+            # Contar filmes em exibição
             cursor.execute("SELECT COUNT(*) as total FROM filmes WHERE estado = 'em_exibicao'")
             result = cursor.fetchone()
             stats['filmes_em_exibicao'] = result['total'] if result else 0
             
-           
+            # Se não houver filmes com estado 'em_exibicao', contar todos
             if stats['filmes_em_exibicao'] == 0:
                 cursor.execute("SELECT COUNT(*) as total FROM filmes")
                 result = cursor.fetchone()
                 stats['filmes_em_exibicao'] = result['total'] if result else 0
             
-           
+            # Contar cinemas
             cursor.execute("SELECT COUNT(*) as total FROM cinemas")
             result = cursor.fetchone()
             stats['total_cinemas'] = result['total'] if result else 0
             
-            
+            # Contar salas
             cursor.execute("SELECT COUNT(*) as total FROM salas")
             result = cursor.fetchone()
             stats['total_salas'] = result['total'] if result else 0
             
-          
+            # Se não houver salas mas houver cinemas, estimar salas
             if stats['total_salas'] == 0 and stats['total_cinemas'] > 0:
                 stats['total_salas'] = stats['total_cinemas'] * 3  
             
+            app.logger.info(f"Stats calculadas com sucesso: {stats}")
+            
         except Exception as e:
             app.logger.error(f"Erro ao buscar estatísticas: {e}")
-         
+            # Fallback com valores padrão
             stats = {
-                'filmes_em_exibicao': 25,
-                'total_cinemas': 5,
-                'total_salas': 15
+                'filmes_em_exibicao': 0,
+                'total_cinemas': 0,
+                'total_salas': 0
             }
         
         app.logger.info(f"Stats calculadas: {stats}")

@@ -171,7 +171,7 @@
                                             <div class="price-value">€{{ "%.0f"|format(sala.preco) }}</div>
                                             <div class="price-period">por sessão</div>
                                         </div>
-                                        <button class="btn-reservar" onclick="openMatrixModal()">
+                                        <button class="btn-reservar" onclick="openAuthModal()">
                                             <i class="fas fa-calendar-check"></i>
                                             Reservar Agora
                                         </button>
@@ -294,11 +294,11 @@
     </footer>
     </div>
 
-    <div id="matrixModal" class="clean-modal" style="display: none;">
-        <div class="modal-overlay" onclick="closeMatrixModal()"></div>
+    <div id="authModal" class="clean-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeAuthModal()"></div>
         
         <div class="modal-content">
-            <button class="modal-close" onclick="closeMatrixModal()">
+            <button class="modal-close" onclick="closeAuthModal()">
                 <i class="fas fa-times"></i>
             </button>
             
@@ -315,20 +315,20 @@
                         </div>
                         <div class="option-content">
                             <h3>Iniciar Sessão</h3>
-                            <p>Aceda à sua conta e desfrute de todas as vantagens</p>
+                            <p>Aceda à sua conta</p>
                         </div>
                         <div class="option-arrow">
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </button>
                     
-                    <button class="modal-option guest-option" onclick="window.location.href='{{ url_for('reservar_sessao_exclusiva') }}'">
+                    <button class="modal-option guest-option" onclick="continuarComoConvidadoExclusiva()">
                         <div class="option-icon">
                             <i class="fas fa-user"></i>
                         </div>
                         <div class="option-content">
                             <h3>Continuar como Convidado</h3>
-                            <p>Explore as sessões exclusivas sem criar conta</p>
+                            <p>Explore as sessões exclusivas</p>
                         </div>
                         <div class="option-arrow">
                             <i class="fas fa-chevron-right"></i>
@@ -348,22 +348,35 @@
             window.location.href = '{{ url_for("contactos") }}';
         }
 
-        function openMatrixModal() {
+        function openAuthModal() {
             const isLoggedIn = {{ 'true' if logged_in else 'false' }};
             if (!isLoggedIn) {
-                const modal = document.getElementById('matrixModal');
+                const modal = document.getElementById('authModal');
                 modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
+                document.documentElement.classList.add('modal-open');
+                document.body.classList.add('modal-open');
             } else {
                 window.location.href = '{{ url_for('reservar_sessao_exclusiva') }}';
             }
         }
 
-        function closeMatrixModal() {
-            const modal = document.getElementById('matrixModal');
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
             modal.style.display = 'none';
-            document.body.style.overflow = '';
+            document.body.style.overflow = 'auto';
+            document.documentElement.classList.remove('modal-open');
+            document.body.classList.remove('modal-open');
         }
+
+        function continuarComoConvidadoExclusiva() {
+            closeAuthModal();
+            window.location.href = '{{ url_for('reservar_sessao_exclusiva') }}';
+        }
+
+        document.querySelectorAll('.btn-reservar').forEach(btn => {
+            btn.addEventListener('click', openAuthModal);
+        });
     </script>
 </body>
 </html>

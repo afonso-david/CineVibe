@@ -1389,6 +1389,10 @@ a {
     z-index: 10000;
 }
 
+.clean-modal * {
+    text-shadow: none !important;
+}
+
 .modal-overlay {
     position: absolute;
     top: 0;
@@ -1815,4 +1819,13 @@ a {
     background: rgba(255, 214, 10, 0.5);
     cursor: not-allowed;
     transform: none;
+}
+
+/* Modal Open State */
+body.modal-open {
+    overflow: hidden !important;
+}
+
+html.modal-open {
+    overflow: hidden !important;
 }

@@ -923,7 +923,7 @@ a {
 .btn-remover-favorito:hover {
     background: rgba(192, 57, 43, 0.9);
     transform: scale(1.1);
-    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    
 }
 .btn-remover-favorito i {
     font-size: 1.2rem;

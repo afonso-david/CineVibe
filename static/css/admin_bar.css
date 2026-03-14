@@ -712,6 +712,26 @@
     transform: translateY(-2px);
 }
 
+.btn-primary {
+    background: linear-gradient(135deg, #FFD60A, #FFC107) !important;
+    color: #0D1B2A !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #FFC107, #FFB300) !important;
+}
+
+.btn-primary[style*="box-shadow: none"],
+.btn-primary.no-shadow {
+    box-shadow: none !important;
+}
+
+.btn-primary[style*="box-shadow: none"]:hover,
+.btn-primary.no-shadow:hover {
+    box-shadow: none !important;
+}
+
 @media (max-width: 1200px) {
     .movies-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

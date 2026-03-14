@@ -1427,7 +1427,6 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(78, 168, 222, 0.3);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -1437,7 +1436,6 @@
 .btn-aplicar-codigo:hover {
     background: linear-gradient(135deg, #2E86AB, #1E5F74);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.4);
 }
 
 .btn-aplicar-codigo:disabled {

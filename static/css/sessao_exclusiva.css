@@ -1155,17 +1155,7 @@ a {
     position: relative;
     overflow: hidden;
 }
-.footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 20% 30%, rgba(255, 214, 10, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(78, 168, 222, 0.05) 0%, transparent 50%);
-    pointer-events: none;
-}
+
 .footer-main {
     padding: 80px 0 40px;
     position: relative;
@@ -1187,15 +1177,7 @@ a {
     font-family: 'Montserrat', sans-serif;
     position: relative;
 }
-.footer-section h4::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 30px;
-    height: 2px;
-    background: linear-gradient(90deg, #FFD60A, transparent);
-}
+
 .footer-logo {
     display: flex;
     align-items: center;
@@ -1238,23 +1220,9 @@ a {
     font-size: 0.95rem;
     position: relative;
 }
-.footer-links a::before {
-    content: '';
-    position: absolute;
-    left: -15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 1px;
-    background: #FFD60A;
-    transition: width 0.3s ease;
-}
+
 .footer-links a:hover {
     color: #FFD60A;
-    padding-left: 20px;
-}
-.footer-links a:hover::before {
-    width: 10px;
 }
 .newsletter-section {
     background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(78, 168, 222, 0.05));

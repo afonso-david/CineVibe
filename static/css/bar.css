@@ -324,7 +324,6 @@ img.logo {
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: none;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
     border: none;
     cursor: pointer;
     position: relative;
@@ -349,7 +348,6 @@ img.logo {
 .hero-btn:hover {
     background: linear-gradient(135deg, #FFD60A, #FFA500);
     transform: none;
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.3);
 }
 
 .hero-btn:active {

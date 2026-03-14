@@ -1525,10 +1525,6 @@ a {
     }
 }
 
-    transform: translateY(-3px);
-    
-}
-
 .footer-social a img {
     width: 20px;
     height: 20px;
@@ -2003,32 +1999,6 @@ a {
         font-size: 0.8rem;
     }
 }
-  .cta-content h2 {
-    font-size: 2.5rem;
-  }
-  
-  .experience-title {
-    font-size: 2.5rem;
-  }
-  
-  .experience-lead {
-    font-size: 1.1rem;
-    margin-bottom: 3rem;
-  }
-  
-  .exp-icon {
-    font-size: 2rem;
-  }
-  
-  .exp-feature h4 {
-    font-size: 1.4rem;
-  }
-  
-  .exp-feature p {
-    font-size: 1rem;
-  }
-}
-
 
 .nav-left {
   display: flex;
@@ -2628,4 +2598,215 @@ a {
     padding: 12px 18px;
     font-size: 0.9rem;
   }
+}
+
+
+/* Clean Modal Styles */
+.clean-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.clean-modal * {
+    text-shadow: none !important;
+}
+
+body.modal-open {
+    overflow: hidden !important;
+}
+
+html.modal-open {
+    overflow: hidden !important;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: relative;
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 480px;
+    animation: slideUp 0.3s ease-out;
+    border: 1px solid rgba(255, 214, 10, 0.15);
+    overflow: hidden;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 214, 10, 0.1);
+    border: none;
+    color: #FFD60A;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none !important;
+}
+
+.modal-close:hover {
+    background: rgba(255, 214, 10, 0.2);
+    transform: rotate(90deg);
+}
+
+.modal-header {
+    padding: 40px 32px 24px;
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.05) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(255, 214, 10, 0.1);
+}
+
+.modal-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #FFD60A;
+    letter-spacing: 0.5px;
+}
+
+.modal-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #8a95a8;
+    font-weight: 500;
+}
+
+.modal-body {
+    padding: 32px;
+}
+
+.modal-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.03) 0%, rgba(255, 214, 10, 0.01) 100%);
+    border: 1px solid rgba(255, 214, 10, 0.12);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.modal-option:hover {
+    background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.04) 100%);
+    border-color: rgba(255, 214, 10, 0.25);
+    transform: translateX(4px);
+}
+
+.option-icon {
+    font-size: 28px;
+    color: #FFD60A;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.option-content {
+    flex: 1;
+}
+
+.option-content h3 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+.option-content p {
+    margin: 0;
+    font-size: 13px;
+    color: #8a95a8;
+    line-height: 1.4;
+}
+
+.option-arrow {
+    color: #FFD60A;
+    font-size: 16px;
+    transition: transform 0.3s ease;
+    opacity: 0.7;
+}
+
+.modal-option:hover .option-arrow {
+    transform: translateX(6px);
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        border-radius: 16px;
+    }
+    
+    .modal-header {
+        padding: 32px 24px 20px;
+    }
+    
+    .modal-header h2 {
+        font-size: 22px;
+    }
+    
+    .modal-body {
+        padding: 24px;
+    }
+    
+    .modal-option {
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .option-icon {
+        font-size: 24px;
+        min-width: 36px;
+    }
+    
+    .option-content h3 {
+        font-size: 15px;
+    }
+    
+    .option-content p {
+        font-size: 12px;
+    }
 }

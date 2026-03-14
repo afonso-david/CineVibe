@@ -6727,6 +6727,7 @@ html.modal-open {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: none !important;
 }
 
 .modal-close:hover {

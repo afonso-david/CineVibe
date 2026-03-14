@@ -987,12 +987,13 @@ a {
 .modal-btn-primary {
   background: linear-gradient(135deg, #FFD60A 0%, #F77F00 100%);
   color: #000;
+  box-shadow: none;
 }
 
 .modal-btn-primary:hover {
   background: linear-gradient(135deg, #F77F00 0%, #FFD60A 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
+  box-shadow: none;
 }
 
 .modal-btn-secondary {

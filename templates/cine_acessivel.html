@@ -72,19 +72,9 @@
                     <p>O cinema é para todos. Descubra as nossas soluções de acessibilidade que tornam a experiência cinematográfica inclusiva e acessível a pessoas com diferentes necessidades.</p>
 
                     <div class="reasons" role="list">
-                        <a href="{{ url_for('acessibilidade') }}" class="reason-link" role="listitem">
-                            <div class="reason">
-                                <div class="reason-number">01</div>
-                                <div class="reason-content">
-                                    <h3>Acessibilidade Física</h3>
-                                    <p>Lugares adaptados, rampas de acesso e elevadores em todos os nossos cinemas para garantir mobilidade total.</p>
-                                </div>
-                            </div>
-                        </a>
-
                         <a href="{{ url_for('audiodescricao') }}" class="reason-link" role="listitem">
                             <div class="reason">
-                                <div class="reason-number">02</div>
+                                <div class="reason-number">01</div>
                                 <div class="reason-content">
                                     <h3>Audiodescrição</h3>
                                     <p>Descrição detalhada das cenas visuais através de fones de ouvido para pessoas com deficiência visual.</p>
@@ -94,7 +84,7 @@
 
                         <a href="{{ url_for('lgp') }}" class="reason-link" role="listitem">
                             <div class="reason">
-                                <div class="reason-number">03</div>
+                                <div class="reason-number">02</div>
                                 <div class="reason-content">
                                     <h3>Língua Gestual Portuguesa</h3>
                                     <p>Interpretação simultânea em LGP em sessões especiais para a comunidade surda.</p>
@@ -104,7 +94,7 @@
 
                         <a href="{{ url_for('legendagem') }}" class="reason-link" role="listitem">
                             <div class="reason">
-                                <div class="reason-number">04</div>
+                                <div class="reason-number">03</div>
                                 <div class="reason-content">
                                     <h3>Legendagem Especial</h3>
                                     <p>Legendas descritivas que incluem efeitos sonoros e música para pessoas com deficiência auditiva.</p>
@@ -153,12 +143,6 @@
                                 <span class="tag legendas" role="listitem" aria-label="Legendas especiais disponíveis">
                                     <span class="sr-only">Legendas especiais disponíveis</span>
                                     📝 Legendas
-                                </span>
-                                {% endif %}
-                                {% if sessao.acessibilidade_fisica %}
-                                <span class="tag fisica" role="listitem" aria-label="Acessibilidade física garantida">
-                                    <span class="sr-only">Acessibilidade física garantida</span>
-                                    ♿ Acessível
                                 </span>
                                 {% endif %}
                             </div>
@@ -301,10 +285,6 @@
                             <div class="detail-item">
                                 <h4>📝 Legendagem Especial</h4>
                                 <p>Legendas que incluem descrição de efeitos sonoros e identificação de personagens.</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>♿ Acessibilidade Física</h4>
-                                <p>Lugares adaptados, acesso por rampa, espaço para cadeira de rodas e acompanhante.</p>
                             </div>
                         </div>
                         <div class="modal-actions">

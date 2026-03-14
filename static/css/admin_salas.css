@@ -228,3 +228,14 @@
 .btn-primary.no-shadow:hover {
     box-shadow: none !important;
 }
+
+/* Botão Editar Global */
+.btn-global {
+    background: linear-gradient(135deg, #4EA8DE, #3B91C0) !important;
+    color: #fff !important;
+    margin-right: 10px;
+}
+
+.btn-global:hover {
+    background: linear-gradient(135deg, #3B91C0, #2E7BA8) !important;
+}

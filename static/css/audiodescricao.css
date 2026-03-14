@@ -650,6 +650,7 @@ a {
 .testimonials-section {
     background: rgba(0, 0, 0, 0.2);
     padding: 6rem 2rem;
+    margin-top: 30px;
     margin-bottom: 6rem;
     border-radius: 20px;
 }

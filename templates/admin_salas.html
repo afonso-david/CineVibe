@@ -3,978 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Salas - CineVibe Admin</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_atores.css') }}">
+    <title>Gestão de Salas | CineVibe - Cinema Acessível Para Todos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/audiodescricao.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        /* Estilos específicos para salas */
-        .sala-icon-small {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-radius: 8px;
-            color: #FFD700;
-            font-size: 1.5rem;
-        }
-        
-        .type-tag {
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-    </style>
-
-    <style>
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(2px);
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal[style*="flex"] {
-            display: flex !important;
-        }
-
-        .modal-content {
-            background: #1a1a1a;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid #333;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid #333;
-            background: linear-gradient(135deg, #2a2a2a, #333);
-        }
-
-        .modal-header h3 {
-            color: #ffd700;
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 4px;
-            transition: color 0.3s ease;
-        }
-
-        .modal-close:hover {
-            color: #fff;
-            background: #333;
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            padding: 20px;
-            border-top: 1px solid #333;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #ffd700;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        .form-input,
-        .form-select {
-            width: 100%;
-            padding: 12px;
-            background: #222;
-            border: 1px solid #444;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 0.9rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: #ffd700;
-            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
-        }
-
-        .form-select option {
-            background: #222;
-            color: #fff;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            color: #000;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-        }
-
-        .btn-secondary {
-            background: #333;
-            color: #fff;
-            border: 1px solid #555;
-        }
-
-        .btn-secondary:hover {
-            background: #444;
-            border-color: #666;
-        }
-
-        /* Notificações */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 10001;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 300px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background: #27ae60;
-        }
-
-        .notification.error {
-            background: #e74c3c;
-        }
-
-        .notification.info {
-            background: #3498db;
-        }
-
-        /* Animações */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { 
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <meta name="description" content="Gestão de Salas no CineVibe. Administre salas de cinema com diferentes tipos e capacidades.">
 </head>
 <body>
-    <div class="admin-layout">
+    <div class="page-wrapper">
         
-        <aside class="sidebar">
-            
-            <nav class="sidebar-nav">
-                <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Dashboard</span>
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <a href="{{ url_for('admin_dashboard') }}" class="logo-link" aria-label="Voltar ao Dashboard">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
                 </a>
-                <a href="{{ url_for('admin_filmes') }}" class="nav-item">
-                    <i class="fas fa-film"></i>
-                    <span>Filmes</span>
-                </a>
-                <a href="{{ url_for('admin_cinemas') }}" class="nav-item">
-                    <i class="fas fa-building"></i>
-                    <span>Cinemas</span>
-                </a>
-                <a href="{{ url_for('admin_usuarios') }}" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span>Usuários</span>
-                </a>
-                <a href="{{ url_for('admin_reservas') }}" class="nav-item">
-                    <i class="fas fa-ticket-alt"></i>
-                    <span>Reservas</span>
-                </a>
-                <a href="{{ url_for('admin_atores') }}" class="nav-item">
-                    <i class="fas fa-user-tie"></i>
-                    <span>Atores</span>
-                </a>
-                <a href="{{ url_for('admin_salas') }}" class="nav-item active">
-                    <i class="fas fa-chair"></i>
-                    <span>Salas</span>
-                </a>
-                <a href="{{ url_for('admin_bar') }}" class="nav-item">
-                    <i class="fas fa-coffee"></i>
-                    <span>Bar</span>
-                </a>
-                <a href="{{ url_for('admin_avatares') }}" class="nav-item">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Avatares</span>
-                </a>
-                <a href="{{ url_for('admin_tipos_sessao') }}" class="nav-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Tipos de Sessão</span>
-                </a>
-                
-                <div class="nav-divider"></div>
-                
-                <a href="{{ url_for('home') }}" class="nav-item">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Voltar ao Site</span>
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="profile-background">
-                        <div class="profile-pattern"></div>
-                        <div class="profile-glow"></div>
-                    </div>
-                    <div class="profile-content">
-                        <div class="user-avatar">
-                            {% if user and (user.avatar_personalizado or user.avatar) %}
-                                <img src="{{ url_for('static', filename=user.avatar_personalizado if user.avatar_personalizado else user.avatar) }}" alt="Avatar" class="avatar-img">
-                            {% else %}
-                                <div class="avatar-placeholder">
-                                    <i class="fas fa-user-shield"></i>
-                                </div>
-                            {% endif %}
-                            <div class="avatar-ring"></div>
-                            <div class="avatar-status"></div>
-                        </div>
-                        <div class="user-info">
-                            <div class="user-name">{{ user.nome if user else 'Admin' }}</div>
-                            <div class="user-role">
-                                <i class="fas fa-crown"></i>
-                                <span>Administrador</span>
-                            </div>
-                            <div class="user-status">
-                                <i class="fas fa-circle"></i>
-                                <span>Online</span>
-                            </div>
-                        </div>
-                        <div class="user-actions">
-                            <a href="{{ url_for('perfil') }}" class="action-btn profile-btn" title="Gerir Perfil">
-                                <i class="fas fa-user-cog"></i>
-                                <div class="btn-glow"></div>
-                            </a>
-                            <a href="{{ url_for('logout') }}" class="action-btn logout-btn" title="Terminar Sessão">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <div class="btn-glow"></div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="profile-decoration">
-                        <div class="decoration-line"></div>
-                        <div class="decoration-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </aside>
-
-        <main class="main-content">
-            
-            <header class="top-bar-pro">
-                <div class="top-bar-left">
-                    <div class="page-title">
-                        <i class="fas fa-chair"></i>
-                        <div>
-                            <h1>Salas</h1>
-                            <p>Total: {{ salas|length }} salas</p>
-                        </div>
-                    </div>
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Salas..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
                 </div>
-                <div class="top-bar-right">
-                    <button class="btn-primary" onclick="abrirModalEditarGlobal()" style="margin-right: 10px; background: linear-gradient(135deg, #4EA8DE, #3B91C0); box-shadow: none;">
-                        <i class="fas fa-globe"></i>
-                        Editar Global
-                    </button>
-                    <button class="btn-primary no-shadow" onclick="abrirModalAdicionarSala()">
-                        <i class="fas fa-plus"></i>
-                        Adicionar Sala
-                    </button>
-                </div>
-            </header>
-
-            <div class="dashboard-content-pro">
-                
-                <div class="control-panel">
-                    <div class="search-section">
-                        <div class="search-box-pro">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Pesquisar salas..." id="searchInput">
-                        </div>
-                        <div class="filter-group">
-                            <select id="cinemaFilter" class="filter-select">
-                                <option value="">Todos os Cinemas</option>
-                                {% for cinema in cinemas %}
-                                <option value="{{ cinema.nome }}">{{ cinema.nome }}</option>
-                                {% endfor %}
-                            </select>
-                            <select id="tipoFilter" class="filter-select">
-                                <option value="">Todos os Tipos</option>
-                                <option value="Normal">Normal</option>
-                                <option value="IMAX">IMAX</option>
-                                <option value="4DX">4DX</option>
-                                <option value="VIP">VIP</option>
-                            </select>
-                            <button class="btn-filter" onclick="limparFiltros()">
-                                <i class="fas fa-filter-circle-xmark"></i>
-                                Limpar
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="view-controls">
-                        <div class="sort-controls">
-                            <select class="sort-select" id="sortSelect">
-                                <option value="id">Ordenar por ID</option>
-                                <option value="nome">Ordenar por Nome</option>
-                                <option value="cinema">Ordenar por Cinema</option>
-                                <option value="capacidade">Ordenar por Capacidade</option>
-                                <option value="tipo">Ordenar por Tipo</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="movies-table-container">
-                    {% if salas %}
-                    <div class="table-wrapper">
-                        <table class="movies-table-pro">
-                            <thead>
-                                <tr>
-                                    <th class="id-header">
-                                        <i class="fas fa-hashtag"></i>
-                                        ID
-                                    </th>
-                                    <th class="poster-header">
-                                        <i class="fas fa-chair"></i>
-                                        Sala
-                                    </th>
-                                    <th class="title-header">
-                                        <i class="fas fa-tag"></i>
-                                        Nome
-                                    </th>
-                                    <th class="genre-header">
-                                        <i class="fas fa-building"></i>
-                                        Cinema
-                                    </th>
-                                    <th class="duration-header">
-                                        <i class="fas fa-users"></i>
-                                        Capacidade
-                                    </th>
-                                    <th class="type-header">
-                                        <i class="fas fa-cog"></i>
-                                        Tipo
-                                    </th>
-                                    <th class="actions-header">
-                                        <i class="fas fa-cogs"></i>
-                                        Ações
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for sala in salas %}
-                                <tr data-sala-id="{{ sala.id }}" data-cinema="{{ sala.cinema_nome }}" data-tipo="{{ sala.tipo_sala }}">
-                                    <td class="id-cell">{{ sala.id }}</td>
-                                    <td class="poster-cell">
-                                        <div class="sala-icon-small">
-                                            <i class="fas fa-chair"></i>
-                                        </div>
-                                    </td>
-                                    <td class="title-cell">
-                                        <div class="movie-title-info">
-                                            <h4>{{ sala.nome_sala }}</h4>
-                                        </div>
-                                    </td>
-                                    <td class="genre-cell">
-                                        <span class="genre-tag">{{ sala.cinema_nome }}</span>
-                                    </td>
-                                    <td class="duration-cell">
-                                        <span class="count-badge">{{ sala.capacidade }}</span>
-                                    </td>
-                                    <td class="type-cell">
-                                        <span class="type-tag">{{ sala.tipo_sala }}</span>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="movie-actions-table">
-                                            <button class="action-btn-table edit" onclick="editarSala({{ sala.id }})" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="action-btn-table delete" onclick="removerSala({{ sala.id }}, '{{ sala.nome_sala }}')" title="Remover">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="user-icon">
+                    {% if user %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=user.avatar if user.avatar else 'imgs/icons/user_icon34-removebg-preview.png') }}" class="user-pic" alt="Perfil">
+                        </a>
                     {% else %}
-                    <div class="empty-state">
-                        <i class="fas fa-chair"></i>
-                        <h3>Nenhuma sala encontrada</h3>
-                        <p>Comece adicionando a primeira sala ao sistema.</p>
-                    </div>
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
                     {% endif %}
                 </div>
             </div>
-        </main>
-    </div>
-
-    <div id="adicionarSalaModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Adicionar Nova Sala</h3>
-                <button onclick="fecharModalAdicionarSala()" class="modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formAdicionarSala" method="POST" action="{{ url_for('admin_adicionar_sala') }}">
-                    <div class="form-group">
-                        <label>Nome da Sala *</label>
-                        <input type="text" name="nome_sala" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cinema *</label>
-                        <select name="id_cinema" class="form-select" required>
-                            <option value="">Selecionar cinema</option>
-                            {% for cinema in cinemas %}
-                                <option value="{{ cinema.id }}">{{ cinema.nome }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Capacidade *</label>
-                        <input type="number" name="capacidade" class="form-input" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de Sala</label>
-                        <select name="tipo_sala" class="form-select">
-                            <option value="Normal">Normal</option>
-                            <option value="IMAX">IMAX</option>
-                            <option value="4DX">4DX</option>
-                            <option value="VIP">VIP</option>
-                            <option value="Premium">Premium</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Filas</label>
-                        <input type="number" name="filas" class="form-input" min="1" value="10">
-                    </div>
-                    <div class="form-group">
-                        <label>Lugares por Fila</label>
-                        <input type="number" name="lugares_por_fila" class="form-input" min="1" value="20">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" onclick="fecharModalAdicionarSala()" class="btn btn-secondary">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" style="box-shadow: none;">Adicionar Sala</button>
-                    </div>
-                </form>
-            </div>
         </div>
-    </div>
+    </header>
 
-    <div id="editarSalaModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Editar Sala</h3>
-                <button onclick="fecharModalEditarSala()" class="modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formEditarSala">
-                    <div class="form-group">
-                        <label>Nome da Sala</label>
-                        <input type="text" id="editNomeSala" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cinema</label>
-                        <select id="editCinema" class="form-select" required>
-                            <option value="">Selecionar cinema</option>
-                            {% for cinema in cinemas %}
-                                <option value="{{ cinema.id }}">{{ cinema.nome }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Capacidade</label>
-                        <input type="number" id="editCapacidade" class="form-input" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de Sala</label>
-                        <select id="editTipoSala" class="form-select">
-                            <option value="Normal">Normal</option>
-                            <option value="IMAX">IMAX</option>
-                            <option value="4DX">4DX</option>
-                            <option value="VIP">VIP</option>
-                            <option value="Premium">Premium</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Filas</label>
-                        <input type="number" id="editFilas" class="form-input" min="1" value="10">
-                    </div>
-                    <div class="form-group">
-                        <label>Lugares por Fila</label>
-                        <input type="number" id="editLugaresPorFila" class="form-input" min="1" value="20">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button onclick="fecharModalEditarSala()" class="btn btn-secondary">Cancelar</button>
-                <button onclick="salvarEdicaoSala()" class="btn btn-primary">Salvar</button>
-            </div>
-        </div>
-    </div>
+    <nav class="nav-center">
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_filmes') }}">Filmes</a>
+        <a href="{{ url_for('admin_cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('admin_usuarios') }}">Usuários</a>
+        <a href="{{ url_for('admin_reservas') }}">Reservas</a>
+        <a href="{{ url_for('admin_atores') }}">Atores</a>
+        <a href="{{ url_for('admin_salas') }}" class="active">Salas</a>
+        <a href="{{ url_for('admin_bar') }}">Bar</a>
+        <a href="{{ url_for('admin_avatares') }}">Avatares</a>
+    </nav>
 
-    <div id="editarGlobalModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Editar Salas Globalmente</h3>
-                <button onclick="fecharModalEditarGlobal()" class="modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div style="background: rgba(78, 168, 222, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid #4EA8DE;">
-                    <p style="color: #4EA8DE; margin: 0; font-size: 0.9rem;">
-                        <i class="fas fa-info-circle"></i>
-                        Esta ação irá atualizar todas as salas com o mesmo nome em todos os cinemas.
-                    </p>
+    <main class="main-content">
+        
+        <section class="hero-section">
+            <div class="hero-text">
+                <div class="hero-badge">Gestão de Salas</div>
+                <h1>Salas de Cinema</h1>
+                <p class="subtitle">Gerencie todas as salas de cinema com facilidade e eficiência</p>
+                <p class="description">Sistema completo de gestão de salas de cinema com suporte para diferentes tipos, capacidades e configurações. Controle total sobre a estrutura das suas salas.</p>
+                <div class="hero-features">
+                    <div class="feature">Múltiplos tipos de salas</div>
+                    <div class="feature">Gestão de capacidade</div>
+                    <div class="feature">Configuração flexível</div>
                 </div>
-                <form id="formEditarGlobal">
-                    <div class="form-group">
-                        <label>Selecionar Sala *</label>
-                        <select id="globalNomeSala" class="form-select" required onchange="atualizarPreviewGlobal()">
-                            <option value="">Escolha uma sala</option>
-                            <option value="Sala 1">Sala 1</option>
-                            <option value="Sala 2">Sala 2</option>
-                            <option value="Sala 3">Sala 3</option>
-                            <option value="Sala 4">Sala 4</option>
-                            <option value="Sala 5">Sala 5</option>
-                            <option value="Sala 6">Sala 6</option>
-                            <option value="Sala 7">Sala 7</option>
-                            <option value="Sala 8">Sala 8</option>
-                            <option value="Sala 9">Sala 9</option>
-                            <option value="Sala 10">Sala 10</option>
-                        </select>
-                    </div>
-                    <div id="previewSalasAfetadas" style="display: none; background: rgba(255, 214, 10, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid #FFD60A;">
-                        <p style="color: #FFD60A; margin: 0 0 10px 0; font-weight: 600;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Salas que serão atualizadas:
-                        </p>
-                        <div id="listaSalasAfetadas" style="color: #E8EEF2; font-size: 0.85rem; max-height: 150px; overflow-y: auto;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Nova Capacidade *</label>
-                        <input type="number" id="globalCapacidade" class="form-input" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Novas Filas *</label>
-                        <input type="number" id="globalFilas" class="form-input" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Novos Lugares por Fila *</label>
-                        <input type="number" id="globalLugaresPorFila" class="form-input" min="1" required>
-                    </div>
-                </form>
+                <div class="hero-cta">
+                    <a href="#salas-list" class="btn-primary">Ver Salas</a>
+                    <a href="#como-funciona" class="btn-secondary">Como Funciona</a>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button onclick="fecharModalEditarGlobal()" class="btn btn-secondary">Cancelar</button>
-                <button onclick="salvarEdicaoGlobal()" class="btn btn-primary" style="box-shadow: none;">
-                    <i class="fas fa-globe"></i>
-                    Atualizar Todas
-                </button>
+            <div class="hero-image">
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="Salas CineVibe" onerror="this.src='{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}'">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="section-header">
+                <h2>O que é a Gestão de Salas?</h2>
+                <p class="description">A gestão de salas é o sistema central para administrar todas as salas de cinema da sua rede. Permite configurar tipos de salas, capacidades, layouts de assentos e muito mais, garantindo uma experiência consistente em todos os cinemas.</p>
+            </div>
+            
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-number">01</div>
+                    <div class="feature-content">
+                        <h3>Tipos de Salas</h3>
+                        <p>Suporte para Normal, IMAX, 4DX, VIP e outros formatos especiais</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">02</div>
+                    <div class="feature-content">
+                        <h3>Gestão de Capacidade</h3>
+                        <p>Controle total sobre o número de assentos e configuração de cada sala</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">03</div>
+                    <div class="feature-content">
+                        <h3>Edição Global</h3>
+                        <p>Atualize múltiplas salas simultaneamente com a mesma configuração</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="examples-section">
+            <div class="section-header">
+                <h2>Tipos de Salas Disponíveis</h2>
+                <p>Conheça os diferentes tipos de salas que pode configurar no sistema</p>
+            </div>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-image">
+                        <i class="fas fa-film" style="font-size: 3rem; color: #FFD60A;"></i>
+                    </div>
+                    <div class="example-content">
+                        <h3>Sala Normal</h3>
+                        <div class="example-text">Salas de cinema padrão com qualidade de som e imagem profissional. Perfeitas para a maioria dos filmes e sessões regulares.</div>
+                        <div class="example-description">Formato padrão</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <i class="fas fa-expand" style="font-size: 3rem; color: #FFD60A;"></i>
+                    </div>
+                    <div class="example-content">
+                        <h3>Sala IMAX</h3>
+                        <div class="example-text">Experiência cinematográfica premium com tela gigante e som envolvente. Ideal para filmes de ação e aventura em grande escala.</div>
+                        <div class="example-description">Formato premium</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <i class="fas fa-cube" style="font-size: 3rem; color: #FFD60A;"></i>
+                    </div>
+                    <div class="example-content">
+                        <h3>Sala 4DX</h3>
+                        <div class="example-text">Tecnologia imersiva com efeitos de movimento, vento e água. Proporciona uma experiência totalmente envolvente e emocionante.</div>
+                        <div class="example-description">Formato imersivo</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <i class="fas fa-crown" style="font-size: 3rem; color: #FFD60A;"></i>
+                    </div>
+                    <div class="example-content">
+                        <h3>Sala VIP</h3>
+                        <div class="example-text">Salas exclusivas com poltronas reclinadas, serviço premium e conforto máximo. Perfeitas para uma experiência de luxo.</div>
+                        <div class="example-description">Formato exclusivo</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <i class="fas fa-glasses" style="font-size: 3rem; color: #FFD60A;"></i>
+                    </div>
+                    <div class="example-content">
+                        <h3>Sala 3D</h3>
+                        <div class="example-text">Tecnologia 3D avançada para filmes com profundidade e efeitos visuais impressionantes. Ideal para blockbusters.</div>
+                        <div class="example-description">Formato 3D</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-image">
+                        <i class="fas fa-users" style="font-size: 3rem; color: #FFD60A;"></i>
+                    </div>
+                    <div class="example-content">
+                        <h3>Sala Privada</h3>
+                        <div class="example-text">Salas privadas para grupos e eventos especiais. Configuração personalizada e serviço dedicado para ocasiões únicas.</div>
+                        <div class="example-description">Formato privado</div>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <section class="testimonials-section">
+            <div class="section-header">
+                <h2>Estatísticas do Sistema</h2>
+                <p>Informações sobre a gestão de salas</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>Total de salas gerenciadas: <strong>{{ salas|length }}</strong></p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>Salas Ativas</h4>
+                            <span>Em todo o sistema</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>Cinemas conectados: <strong>{{ cinemas|length }}</strong></p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>Cinemas</h4>
+                            <span>Na rede CineVibe</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>Capacidade total: <strong>{% set total_capacity = salas|map(attribute='capacidade')|sum %}{{ total_capacity }}</strong> assentos</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>Assentos</h4>
+                            <span>Disponíveis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="section-header">
+                <h2>Perguntas Frequentes</h2>
+                <p>Esclarecemos as suas dúvidas sobre gestão de salas</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>Como adicionar uma nova sala?</h3>
+                    <p>Clique no botão "Adicionar Sala", preencha os dados (nome, tipo, capacidade) e confirme. A sala será criada imediatamente.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Posso editar múltiplas salas ao mesmo tempo?</h3>
+                    <p>Sim! Use a função "Editar Global" para atualizar todas as salas com o mesmo nome em todos os cinemas simultaneamente.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Quais são os tipos de salas disponíveis?</h3>
+                    <p>Oferecemos Normal, IMAX, 4DX, VIP, 3D e Privada. Cada tipo tem características e preços diferentes.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Como gerenciar a capacidade de uma sala?</h3>
+                    <p>Edite a sala e altere o campo de capacidade. O sistema atualizará automaticamente o número de assentos disponíveis.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-legendagem-section">
+            <div class="container">
+                <div class="cta-legendagem-box">
+                    <h2 class="cta-legendagem-title">Pronto para gerenciar suas salas?</h2>
+                    <a href="#salas-list" class="cta-legendagem-btn">Ir para Salas</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('admin_filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('admin_cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('admin_bar') }}">Bar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('perfil') }}">Perfil</a></li>
+                        <li><a href="{{ url_for('logout') }}">Sair</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const cinemaFilter = document.getElementById('cinemaFilter');
-            const tipoFilter = document.getElementById('tipoFilter');
-            const sortSelect = document.getElementById('sortSelect');
-            if (searchInput) {
-                searchInput.addEventListener('input', applyFilters);
-            }
-            if (cinemaFilter) {
-                cinemaFilter.addEventListener('change', applyFilters);
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                return;
             }
             
-            if (tipoFilter) {
-                tipoFilter.addEventListener('change', applyFilters);
-            }
-            if (sortSelect) {
-                sortSelect.addEventListener('change', sortSalas);
+            searchTimeout = setTimeout(() => {
+                window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+            }, 200);
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                if (query) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                }
             }
         });
 
-        function applyFilters() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cinemaFilter = document.getElementById('cinemaFilter').value;
-            const tipoFilter = document.getElementById('tipoFilter').value;
-            
-            const rows = document.querySelectorAll('.movies-table-pro tbody tr');
-            
-            rows.forEach(row => {
-                const nome = row.querySelector('h4').textContent.toLowerCase();
-                const cinema = row.dataset.cinema;
-                const tipo = row.dataset.tipo;
-                
-                const matchesSearch = nome.includes(searchTerm);
-                const matchesCinema = !cinemaFilter || cinema === cinemaFilter;
-                const matchesTipo = !tipoFilter || tipo === tipoFilter;
-                
-                if (matchesSearch && matchesCinema && matchesTipo) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
-        }
+        });
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-        function sortSalas() {
-            const sortBy = document.getElementById('sortSelect').value;
-            const tableBody = document.querySelector('.movies-table-pro tbody');
-            const rows = Array.from(tableBody.querySelectorAll('tr'));
-            
-            rows.sort((a, b) => {
-                switch(sortBy) {
-                    case 'nome':
-                        return a.querySelector('h4').textContent.localeCompare(b.querySelector('h4').textContent);
-                    case 'cinema':
-                        return a.dataset.cinema.localeCompare(b.dataset.cinema);
-                    case 'capacidade':
-                        const capA = parseInt(a.querySelector('.count-badge').textContent);
-                        const capB = parseInt(b.querySelector('.count-badge').textContent);
-                        return capB - capA;
-                    case 'tipo':
-                        return a.dataset.tipo.localeCompare(b.dataset.tipo);
-                    default:
-                        return parseInt(a.dataset.salaId) - parseInt(b.dataset.salaId);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
-            
-            rows.forEach(row => tableBody.appendChild(row));
-        }
+        }, observerOptions);
 
-        function limparFiltros() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('cinemaFilter').value = '';
-            document.getElementById('tipoFilter').value = '';
-            applyFilters();
-        }
-        let salaEditandoId = null;
-        function abrirModalAdicionarSala() {
-            document.getElementById('adicionarSalaModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        function fecharModalAdicionarSala() {
-            document.getElementById('adicionarSalaModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.getElementById('formAdicionarSala').reset();
-        }
-        function editarSala(salaId) {
-            console.log('Editando sala:', salaId);
-            salaEditandoId = salaId;
-            fetch(`/admin/salas/${salaId}/dados`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const sala = data.sala;
-                        document.getElementById('editNomeSala').value = sala.nome_sala || '';
-                        document.getElementById('editCinema').value = sala.id_cinema || '';
-                        document.getElementById('editCapacidade').value = sala.capacidade || '';
-                        document.getElementById('editTipoSala').value = sala.tipo_sala || 'Normal';
-                        document.getElementById('editFilas').value = sala.filas || 10;
-                        document.getElementById('editLugaresPorFila').value = sala.lugares_por_fila || 20;
-                        document.getElementById('editarSalaModal').style.display = 'flex';
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        showNotification('Erro ao carregar dados da sala: ' + data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar dados da sala:', error);
-                    showNotification('Erro ao carregar dados da sala', 'error');
-                });
-        }
-        function fecharModalEditarSala() {
-            document.getElementById('editarSalaModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            salaEditandoId = null;
-        }
-        function salvarEdicaoSala() {
-            if (!salaEditandoId) {
-                showNotification('Erro: ID da sala não encontrado', 'error');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('nome_sala', document.getElementById('editNomeSala').value);
-            formData.append('id_cinema', document.getElementById('editCinema').value);
-            formData.append('capacidade', document.getElementById('editCapacidade').value);
-            formData.append('tipo_sala', document.getElementById('editTipoSala').value);
-            formData.append('filas', document.getElementById('editFilas').value);
-            formData.append('lugares_por_fila', document.getElementById('editLugaresPorFila').value);
-
-            console.log('Salvando sala:', salaEditandoId);
-            
-            fetch(`/admin/salas/${salaEditandoId}/editar`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification('Sala atualizada com sucesso!', 'success');
-                    fecharModalEditarSala();
-                    setTimeout(() => location.reload(), 1000);
-                } else {
-                    showNotification('Erro ao atualizar sala: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao salvar sala:', error);
-                showNotification('Erro ao salvar sala', 'error');
-            });
-        }
-        function removerSala(salaId, nomeSala) {
-            if (confirm(`Tem certeza que deseja remover a sala "${nomeSala}"?`)) {
-                fetch(`/admin/salas/${salaId}/remover`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showNotification('Sala removida com sucesso!', 'success');
-                        setTimeout(() => location.reload(), 1000);
-                    } else {
-                        showNotification('Erro ao remover sala: ' + data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao remover sala:', error);
-                    showNotification('Erro ao remover sala', 'error');
-                });
-            }
-        }
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}"></i>
-                ${message}
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                    }
-                }, 300);
-            }, 3000);
-        }
-        function abrirModalEditarGlobal() {
-            document.getElementById('editarGlobalModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function fecharModalEditarGlobal() {
-            document.getElementById('editarGlobalModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.getElementById('formEditarGlobal').reset();
-            document.getElementById('previewSalasAfetadas').style.display = 'none';
-        }
-
-        function atualizarPreviewGlobal() {
-            const nomeSala = document.getElementById('globalNomeSala').value;
-            const previewDiv = document.getElementById('previewSalasAfetadas');
-            const listaDiv = document.getElementById('listaSalasAfetadas');
-            
-            if (!nomeSala) {
-                previewDiv.style.display = 'none';
-                return;
-            }
-
-            fetch(`/admin/salas/preview-global?nome_sala=${encodeURIComponent(nomeSala)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.salas.length > 0) {
-                        listaDiv.innerHTML = data.salas.map(sala => 
-                            `<div style="padding: 8px 0; border-bottom: 1px solid rgba(255, 214, 10, 0.2);">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
-                                    <div style="flex: 1;">
-                                        <strong>${sala.cinema_nome}</strong> - ${sala.nome_sala}
-                                    </div>
-                                    <div style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end;">
-                                        ${sala.tipos_sessao ? sala.tipos_sessao.split(', ').map(tipo => 
-                                            `<span style="background: rgba(78, 168, 222, 0.3); padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; color: #4EA8DE; white-space: nowrap;">
-                                                ${tipo}
-                                            </span>`
-                                        ).join('') : '<span style="color: #888; font-size: 0.75rem;">Sem sessões</span>'}
-                                    </div>
-                                </div>
-                                <div style="font-size: 0.8rem; color: #B8C5D1; margin-top: 3px;">
-                                    Capacidade: ${sala.capacidade} | Filas: ${sala.filas} | Lugares/Fila: ${sala.lugares_por_fila}
-                                </div>
-                            </div>`
-                        ).join('');
-                        previewDiv.style.display = 'block';
-                    } else {
-                        previewDiv.style.display = 'none';
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar preview:', error);
-                    previewDiv.style.display = 'none';
-                });
-        }
-
-        function salvarEdicaoGlobal() {
-            const nomeSala = document.getElementById('globalNomeSala').value;
-            const capacidade = document.getElementById('globalCapacidade').value;
-            const filas = document.getElementById('globalFilas').value;
-            const lugaresPorFila = document.getElementById('globalLugaresPorFila').value;
-
-            if (!nomeSala || !capacidade || !filas || !lugaresPorFila) {
-                showNotification('Preencha todos os campos obrigatórios', 'error');
-                return;
-            }
-
-            if (!confirm(`Tem certeza que deseja atualizar TODAS as salas "${nomeSala}" em todos os cinemas?`)) {
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('nome_sala', nomeSala);
-            formData.append('capacidade', capacidade);
-            formData.append('filas', filas);
-            formData.append('lugares_por_fila', lugaresPorFila);
-
-            fetch('/admin/salas/editar-global', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification(`${data.count} sala(s) atualizada(s) com sucesso!`, 'success');
-                    fecharModalEditarGlobal();
-                    setTimeout(() => location.reload(), 1500);
-                } else {
-                    showNotification('Erro ao atualizar salas: ' + data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao salvar edição global:', error);
-                showNotification('Erro ao atualizar salas', 'error');
-            });
-        }
-
-        window.onclick = function(event) {
-            const modalEditar = document.getElementById('editarSalaModal');
-            const modalAdicionar = document.getElementById('adicionarSalaModal');
-            const modalGlobal = document.getElementById('editarGlobalModal');
-            
-            if (event.target === modalEditar) {
-                fecharModalEditarSala();
-            }
-            if (event.target === modalAdicionar) {
-                fecharModalAdicionarSala();
-            }
-            if (event.target === modalGlobal) {
-                fecharModalEditarGlobal();
-            }
-        }
-    </script>
-    <script>
-        window.addEventListener('load', function() {
-            document.body.classList.add('loaded');
+        document.querySelectorAll('.step-card, .benefit-card, .testimonial-card, .faq-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
         });
     </script>
 </body>

@@ -7118,22 +7118,24 @@ def filme_detalhe(id_filme):
         
         app.logger.info(f"Buscando cinemas para filme {id_filme}, user_id: {user_id}")
         
+        # Buscar cinemas favoritos do utilizador
+        cinemas_favoritos_ids = []
         if user_id:
-            query = """
-                SELECT c.id, c.nome, c.regiao
-                FROM filmes_cinemas fc
-                JOIN cinemas c ON fc.cinema_id = c.id
-                WHERE fc.filme_id = %s
-            """
-            params = [id_filme]
-        else:
-            query = """
-                SELECT c.id, c.nome, c.regiao
-                FROM filmes_cinemas fc
-                JOIN cinemas c ON fc.cinema_id = c.id
-                WHERE fc.filme_id = %s
-            """
-            params = [id_filme]
+            cursor.execute("""
+                SELECT cinema_id FROM cinemas_favoritos
+                WHERE usuario_id = %s
+            """, (user_id,))
+            cinemas_favoritos = cursor.fetchall()
+            cinemas_favoritos_ids = [c['cinema_id'] for c in cinemas_favoritos]
+            app.logger.info(f"Cinemas favoritos do utilizador {user_id}: {cinemas_favoritos_ids}")
+        
+        query = """
+            SELECT c.id, c.nome, c.regiao
+            FROM filmes_cinemas fc
+            JOIN cinemas c ON fc.cinema_id = c.id
+            WHERE fc.filme_id = %s
+        """
+        params = [id_filme]
             
         if filtro_regiao:
             query += " AND LOWER(TRIM(c.regiao)) = %s"
@@ -7145,6 +7147,20 @@ def filme_detalhe(id_filme):
         
         cursor.execute(query, params)
         filme_cinemas = cursor.fetchall()
+        
+        # Ordenar cinemas: favoritos primeiro, depois os restantes
+        if cinemas_favoritos_ids:
+            filme_cinemas_ordenados = []
+            # Adicionar cinemas favoritos primeiro
+            for cinema in filme_cinemas:
+                if cinema['id'] in cinemas_favoritos_ids:
+                    filme_cinemas_ordenados.append(cinema)
+            # Adicionar cinemas não favoritos
+            for cinema in filme_cinemas:
+                if cinema['id'] not in cinemas_favoritos_ids:
+                    filme_cinemas_ordenados.append(cinema)
+            filme_cinemas = filme_cinemas_ordenados
+            app.logger.info(f"Cinemas ordenados com favoritos primeiro: {[c['id'] for c in filme_cinemas]}")
         
 
         cursor.execute("SELECT DISTINCT regiao FROM cinemas ORDER BY regiao")
@@ -7265,7 +7281,8 @@ def filme_detalhe(id_filme):
         user_avaliacao=user_avaliacao,
         logged_in=logged_in,
         avatar=avatar,
-        request=request
+        request=request,
+        cinemas_favoritos_ids=cinemas_favoritos_ids
     )
 
 @app.route('/cineacessivel')

@@ -553,7 +553,14 @@
                 <div class="cinemas-lista" id="cinemasLista">
                     {% for cinema in filme_cinemas %}
                     <div class="cinema" data-regiao="{{ cinema.regiao|lower }}">
-                        <h3 class="nome-cinema">{{ cinema.nome }}</h3>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                            <h3 class="nome-cinema">{{ cinema.nome }}</h3>
+                            {% if cinema.id in cinemas_favoritos_ids %}
+                            <span style="color: #FFD60A; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-star" style="color: #FFD60A;"></i> Favorito
+                            </span>
+                            {% endif %}
+                        </div>
                         <p style="color: #B8C5D1; margin-bottom: 20px;">{{ cinema.regiao }}</p>
 
                         <div class="botoes-sessao">

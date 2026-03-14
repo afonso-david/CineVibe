@@ -3,88 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Termos e Condições - CineVibe</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/termos_condicoes.css') }}">
+    <title>Termos e Condições | CineVibe - Cinema Acessível Para Todos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/audiodescricao.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
+    <meta name="description" content="Termos e Condições do CineVibe. Conheça as regras de utilização da plataforma.">
+    <style>
+        .terms-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .terms-section {
+            margin-bottom: 3rem;
+        }
+
+        .terms-section h2 {
+            font-size: 1.8rem;
+            color: #FFD60A;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            border-bottom: 2px solid #FFD60A;
+            padding-bottom: 1rem;
+        }
+
+        .terms-section h3 {
+            font-size: 1.3rem;
+            color: #4EA8DE;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .terms-section p {
+            color: #B8C5D1;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .terms-section ul {
+            color: #B8C5D1;
+            line-height: 1.8;
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .terms-section li {
+            margin-bottom: 0.8rem;
+        }
+
+        .highlight {
+            background: rgba(255, 214, 10, 0.1);
+            border-left: 4px solid #FFD60A;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .highlight p {
+            margin: 0;
+            color: #E2E8F0;
+        }
+    </style>
 </head>
 <body>
-    
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <a href="{{ url_for('home') }}">
-                    <img src="{{ url_for('static', filename='imgs/Logo/logo.png') }}" alt="CineVibe">
+    <div class="page-wrapper">
+        
+        <header>
+        <div class="top-nav">
+            <div class="nav-left">
+                <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
                 </a>
             </div>
-            <nav class="nav">
-                <a href="{{ url_for('home') }}">Início</a>
-                <a href="{{ url_for('filmes') }}">Filmes</a>
-                <a href="{{ url_for('cinemas') }}">Cinemas</a>
-                <a href="{{ url_for('contactos') }}">Contactos</a>
-            </nav>
-            <div class="user-actions">
-                {% if logged_in %}
-                    <a href="{{ url_for('perfil') }}" class="profile-link">
-                        <img src="{{ url_for('static', filename=avatar) }}" alt="Avatar" class="avatar">
-                    </a>
-                {% else %}
-                    <a href="{{ url_for('login') }}" class="login-btn">Entrar</a>
-                {% endif %}
+            <div class="nav-right">
+                <div class="search-container">
+                    <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                    <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
+                </div>
+                <div class="user-icon">
+                    {% if logged_in %}
+                        <a href="{{ url_for('perfil') }}">
+                            <img src="{{ url_for('static', filename=avatar) }}" class="user-pic" alt="Perfil">
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}">
+                            <img src="{{ url_for('static', filename='imgs/icons/user_icon34-removebg-preview.png') }}" alt="Login">
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </header>
 
+    <nav class="nav-center">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('filmes') }}">Filmes</a>
+        <a href="{{ url_for('cinemas') }}">Cinemas</a>
+        <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
+        <a href="{{ url_for('bar') }}">Bar</a>
+        <a href="{{ url_for('beneficios') }}">Benefícios</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
+        <a href="{{ url_for('contactos') }}">Contactos</a>
+    </nav>
+
     <main class="main-content">
         
-        <div class="container">
-            <h1>📋 Termos e Condições</h1>
-            
-            <div class="legal-content">
-                <h2>1. Aceitação dos Termos</h2>
-                <p>Ao utilizar o CineVibe, você aceita estes termos...</p>
-                
-                <h2>2. Uso do Serviço</h2>
-                <p>O CineVibe é uma plataforma de reserva de bilhetes de cinema...</p>
-                
-                <h2>3. Reservas e Pagamentos</h2>
-                <p>Todas as reservas estão sujeitas à disponibilidade...</p>
-                
-                <h2>4. Responsabilidades</h2>
-                <p>O utilizador é responsável por...</p>
+        <section class="hero-section">
+            <div class="hero-text">
+                <div class="hero-badge">Regras e Condições</div>
+                <h1>Termos e Condições</h1>
+                <p class="subtitle">Conheça as regras de utilização do CineVibe</p>
+                <p class="description">Ao utilizar a plataforma CineVibe, você concorda com estes termos e condições. Leia atentamente para compreender os seus direitos e responsabilidades.</p>
+                <div class="hero-cta">
+                    <a href="#conteudo" class="btn-primary">Ler Termos</a>
+                    <a href="{{ url_for('contactos') }}" class="btn-secondary">Dúvidas?</a>
+                </div>
             </div>
+            <div class="hero-image">
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="Termos CineVibe" onerror="this.src='{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}'">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="terms-container" id="conteudo">
+            
+            <div class="terms-section">
+                <h2>1. Aceitação dos Termos</h2>
+                <p>Ao aceder e utilizar a plataforma CineVibe, você concorda em cumprir integralmente estes termos e condições. Se não concordar com qualquer parte destes termos, não deve utilizar o serviço.</p>
+                <p>O CineVibe reserva-se o direito de modificar estes termos a qualquer momento. As alterações entram em vigor imediatamente após a publicação. O seu uso continuado da plataforma após as alterações constitui aceitação dos novos termos.</p>
+            </div>
+
+            <div class="terms-section">
+                <h2>2. Conta de Utilizador</h2>
+                <h3>Criação de Conta</h3>
+                <p>Para utilizar certos serviços do CineVibe, deve criar uma conta. Você é responsável por manter a confidencialidade da sua palavra-passe e por todas as atividades que ocorram na sua conta.</p>
+                
+                <h3>Informações Precisas</h3>
+                <p>Você concorda em fornecer informações precisas, atualizadas e completas durante o registo. É sua responsabilidade manter estas informações atualizadas.</p>
+                
+                <h3>Responsabilidade</h3>
+                <p>Você é totalmente responsável por todas as atividades que ocorrem na sua conta, incluindo compras não autorizadas. Notifique-nos imediatamente de qualquer uso não autorizado.</p>
+            </div>
+
+            <div class="terms-section">
+                <h2>3. Reservas e Pagamentos</h2>
+                <h3>Processo de Reserva</h3>
+                <p>As reservas são confirmadas após o pagamento bem-sucedido. O CineVibe não garante a disponibilidade de lugares até à confirmação final.</p>
+                
+                <h3>Preços</h3>
+                <p>Os preços estão sujeitos a alterações sem aviso prévio. O preço cobrado é o que está em vigor no momento da confirmação da reserva.</p>
+                
+                <h3>Métodos de Pagamento</h3>
+                <p>Aceitamos cartões de crédito, débito e outras formas de pagamento digital. Todos os pagamentos são processados de forma segura com encriptação SSL.</p>
+                
+                <div class="highlight">
+                    <p><strong>Importante:</strong> Ao confirmar uma reserva, você concorda em pagar o valor total indicado. Não há reembolsos automáticos.</p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2>4. Cancelamentos e Reembolsos</h2>
+                <h3>Política de Cancelamento</h3>
+                <ul>
+                    <li>Cancelamentos até 24 horas antes da sessão: Reembolso total</li>
+                    <li>Cancelamentos entre 12 e 24 horas: Reembolso de 50%</li>
+                    <li>Cancelamentos menos de 12 horas: Sem reembolso</li>
+                </ul>
+                
+                <h3>Processamento de Reembolsos</h3>
+                <p>Os reembolsos são processados no prazo de 5-7 dias úteis para a conta original. Não somos responsáveis por atrasos causados pelo seu banco.</p>
+            </div>
+
+            <div class="terms-section">
+                <h2>5. Uso Aceitável</h2>
+                <h3>Atividades Proibidas</h3>
+                <p>Você concorda em não utilizar a plataforma para:</p>
+                <ul>
+                    <li>Atividades ilegais ou fraudulentas</li>
+                    <li>Violar direitos de propriedade intelectual</li>
+                    <li>Assédio, ameaças ou abuso de outros utilizadores</li>
+                    <li>Distribuição de malware ou código malicioso</li>
+                    <li>Tentativas de acesso não autorizado aos sistemas</li>
+                    <li>Revenda de bilhetes sem autorização</li>
+                </ul>
+                
+                <div class="highlight">
+                    <p><strong>Consequências:</strong> Violações podem resultar em suspensão ou encerramento da conta, sem reembolso.</p>
+                </div>
+            </div>
+
+            <div class="terms-section">
+                <h2>6. Propriedade Intelectual</h2>
+                <p>Todo o conteúdo da plataforma CineVibe, incluindo textos, imagens, logotipos e código, é protegido por direitos de autor e propriedade intelectual.</p>
+                <p>Você não pode reproduzir, distribuir, modificar ou transmitir qualquer conteúdo sem autorização prévia por escrito do CineVibe.</p>
+            </div>
+
+            <div class="terms-section">
+                <h2>7. Isenção de Responsabilidade</h2>
+                <p>A plataforma CineVibe é fornecida "tal como está" sem garantias de qualquer tipo, expressas ou implícitas.</p>
+                <p>O CineVibe não é responsável por:</p>
+                <ul>
+                    <li>Indisponibilidade temporária do serviço</li>
+                    <li>Erros ou omissões no conteúdo</li>
+                    <li>Danos diretos, indiretos ou consequentes</li>
+                    <li>Perda de dados ou lucros</li>
+                    <li>Ações de terceiros</li>
+                </ul>
+            </div>
+
+            <div class="terms-section">
+                <h2>8. Limitação de Responsabilidade</h2>
+                <p>Em nenhuma circunstância o CineVibe será responsável por danos que excedam o valor total pago por você na plataforma nos últimos 12 meses.</p>
+            </div>
+
+            <div class="terms-section">
+                <h2>9. Lei Aplicável</h2>
+                <p>Estes termos e condições são regidos pela lei portuguesa. Qualquer disputa será resolvida nos tribunais competentes de Portugal.</p>
+            </div>
+
+            <div class="terms-section">
+                <h2>10. Contacto</h2>
+                <p>Para questões sobre estes termos, contacte-nos:</p>
+                <ul>
+                    <li><strong>Email:</strong> termos@cinevibe.pt</li>
+                    <li><strong>Telefone:</strong> +351 123 456 789</li>
+                    <li><strong>Endereço:</strong> CineVibe, Portugal</li>
+                </ul>
+            </div>
+
+            <div class="highlight" style="margin-top: 3rem;">
+                <p><strong>Última atualização:</strong> Março de 2026</p>
+                <p>Estes termos e condições foram atualizados pela última vez em Março de 2026. Recomendamos que revise periodicamente para estar informado sobre qualquer alteração.</p>
+            </div>
+
         </div>
+
+        <section class="cta-legendagem-section">
+            <div class="container">
+                <div class="cta-legendagem-box">
+                    <h2 class="cta-legendagem-title">Tem dúvidas sobre os termos?</h2>
+                    <a href="{{ url_for('contactos') }}" class="cta-legendagem-btn">Contacte-nos</a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
+        <div class="footer-main">
+            <div class="footer-container">
                 <div class="footer-section">
-                    <h3>CineVibe</h3>
-                    <p>A sua experiência cinematográfica completa</p>
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
                 </div>
+
                 <div class="footer-section">
-                    <h4>Links Úteis</h4>
-                    <ul>
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
                         <li><a href="{{ url_for('home') }}">Início</a></li>
                         <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
                         <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
-                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section">
                     <h4>Suporte</h4>
-                    <ul>
-                        <li><a href="#" onclick="alert('Em desenvolvimento')">Política de Privacidade</a></li>
-                        <li><a href="#" onclick="alert('Em desenvolvimento')">Termos e Condições</a></li>
-                        <li><a href="#" onclick="alert('Em desenvolvimento')">Cookies</a></li>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
                     </ul>
                 </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        {% if not logged_in %}
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+                            <li><a href="{{ url_for('logout') }}">Sair</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 CineVibe. Todos os direitos reservados.</p>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+            
+            if (query.length < 2) {
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+            }, 200);
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                if (query) {
+                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

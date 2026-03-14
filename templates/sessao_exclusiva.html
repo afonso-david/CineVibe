@@ -63,21 +63,6 @@
 
         <main>
             
-            <section class="hero-section">
-                <div class="hero-background" style="background-image: url('{{ url_for("static", filename="imgs/filmes/taxi-driver-filmi.jpg") }}');"></div>
-                <div class="hero-content">
-                    <h1 class="hero-title">Sessões Exclusivas</h1>
-                    <p class="hero-subtitle">Experiências Cinematográficas de Luxo</p>
-                    <p class="hero-description">
-                        Desfrute de salas privadas com tecnologia de ponta, serviços personalizados e momentos únicos. 
-                        Cada sessão é criada especialmente para si e os seus convidados.
-                    </p>
-                    <button class="hero-cta" onclick="scrollToSalas()">
-                        <i class="fas fa-crown"></i>
-                        Explorar Salas Exclusivas
-                    </button>
-                </div>
-            </section>
 
             <section class="salas-section" id="salas">
                 <div class="container">
@@ -203,60 +188,7 @@
                 </div>
             </section>
 
-            <section class="features-section">
-                <div class="container">
-                    <h2 class="section-title">Serviços Exclusivos</h2>
-                    <p class="section-subtitle">Tudo pensado para a sua experiência perfeita</p>
-                    
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <div class="feature-card-icon">
-                                <i class="fas fa-concierge-bell"></i>
-                            </div>
-                            <h3>Serviço Personalizado</h3>
-                            <p>Equipa dedicada para cuidar de todos os detalhes da sua experiência, desde a receção até ao final da sessão.</p>
-                        </div>
-                        
-                        <div class="feature-card">
-                            <div class="feature-card-icon">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                            <h3>Gastronomia Premium</h3>
-                            <p>Menu criado pelo nosso chef com ingredientes selecionados e opções para todos os gostos e restrições alimentares.</p>
-                        </div>
-                        
-                        <div class="feature-card">
-                            <div class="feature-card-icon">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                            <h3>Momentos Eternos</h3>
-                            <p>Serviço de fotografia profissional para capturar os melhores momentos da sua experiência exclusiva.</p>
-                        </div>
-                        
-                        <div class="feature-card">
-                            <div class="feature-card-icon">
-                                <i class="fas fa-car"></i>
-                            </div>
-                            <h3>Transporte VIP</h3>
-                            <p>Serviço de transporte de luxo disponível para tornar a sua chegada ainda mais especial e confortável.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            <section class="cta-section">
-                <div class="cta-content">
-                    <h2 class="cta-title">Pronto Para Uma Experiência Única?</h2>
-                    <p class="cta-description">
-                        Entre em contacto connosco para personalizar a sua sessão exclusiva. 
-                        A nossa equipa está pronta para criar momentos inesquecíveis.
-                    </p>
-                    <button class="cta-button" onclick="contactExclusive()">
-                        <i class="fas fa-phone"></i>
-                        Falar com Especialista
-                    </button>
-                </div>
-            </section>
         </main>
         
         <footer class="footer">
@@ -306,8 +238,13 @@
                     <div class="footer-section">
                         <h4>Conta</h4>
                         <ul class="footer-links">
-                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
-                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                            {% if not logged_in %}
+                                <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                                <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                            {% else %}
+                                <li><a href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+                                <li><a href="{{ url_for('logout') }}">Sair</a></li>
+                            {% endif %}
                         </ul>
                     </div>
 

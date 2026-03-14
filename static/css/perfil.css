@@ -1810,7 +1810,7 @@ a {
 .btn-submeter:hover {
     background: linear-gradient(135deg, #FFB703, #FF9500);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.4);
+    
 }
 .btn-submeter:disabled {
     background: #444;

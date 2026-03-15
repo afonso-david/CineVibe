@@ -366,15 +366,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const addForm = document.querySelector('#modalAdicionarCinema form');
     if (addForm) {
         addForm.addEventListener('submit', function(e) {
-            const nome = document.getElementById('nome').value.trim();
-            const localizacao = document.getElementById('localizacao').value.trim();
-            if (!nome || !localizacao) {
+            const cidade = document.getElementById('cidade').value.trim();
+            const regiao = document.getElementById('regiao').value.trim();
+            
+            if (!cidade || !regiao) {
                 e.preventDefault();
-                showNotification('Nome e localização são obrigatórios', 'error');
-                if (!nome) document.getElementById('nome').focus();
-                else if (!localizacao) document.getElementById('localizacao').focus();
+                showNotification('Cidade e região são obrigatórios', 'error');
+                if (!cidade) document.getElementById('cidade').focus();
+                else if (!regiao) document.getElementById('regiao').focus();
                 return false;
             }
+            
+            // Concatenar "CineVibe" + cidade
+            const nomeCompleto = `CineVibe ${cidade}`;
+            document.getElementById('nome').value = nomeCompleto;
+            
+            // Usar a cidade como localização também
+            document.getElementById('localizacao').value = cidade;
+            
             return true;
         });
     }

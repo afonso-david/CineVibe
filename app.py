@@ -6005,7 +6005,7 @@ def admin_cinemas():
                 LEFT JOIN filmes_cinemas fc ON c.id = fc.cinema_id
                 WHERE c.regiao = %s
                 GROUP BY c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem
-                ORDER BY c.nome
+                ORDER BY c.id DESC
             """, (regiao_filtro,))
         else:
             cur.execute("""
@@ -6016,7 +6016,7 @@ def admin_cinemas():
                 LEFT JOIN salas s ON c.id = s.id_cinema
                 LEFT JOIN filmes_cinemas fc ON c.id = fc.cinema_id
                 GROUP BY c.id, c.nome, c.localizacao, c.email, c.regiao, c.imagem
-                ORDER BY c.nome
+                ORDER BY c.id DESC
             """)
         cinemas = cur.fetchall()
         
@@ -6050,22 +6050,26 @@ def admin_cinemas():
 
 @app.route('/admin/cinemas/adicionar', methods=['POST'])
 def admin_adicionar_cinema():
-    pass
-    
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
     try:
-        pass
-        
         nome = request.form.get('nome', '').strip()
+        cidade = request.form.get('cidade', '').strip()
         localizacao = request.form.get('localizacao', '').strip()
         regiao = request.form.get('regiao', '').strip()
         email = request.form.get('email', '').strip()
         
+        # Se localizacao não foi preenchida, usar a cidade
+        if not localizacao:
+            localizacao = cidade
         
-        if not nome or not localizacao:
-            flash("Nome e localização são obrigatórios!", "erro")
+        # Concatenar nome com cidade se necessário
+        if not nome or nome == 'CineVibe':
+            nome = f"CineVibe {cidade}"
+        
+        if not nome or not localizacao or not regiao:
+            flash("Nome, localização e região são obrigatórios!", "erro")
             return redirect(url_for('admin_cinemas'))
         
         imagem = None
@@ -6099,7 +6103,6 @@ def admin_adicionar_cinema():
         
         cur.close()
         conn.close()
-        
         
         flash(f"Cinema '{nome}' adicionado com sucesso!", "sucesso")
         return redirect(url_for('admin_cinemas'))
@@ -6167,21 +6170,56 @@ def admin_remover_cinema(id_cinema):
         return redirect(url_for('login'))
     
     conn = get_db_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(dictionary=True)
     
-    cur.execute("SET FOREIGN_KEY_CHECKS = 0")
-    cur.execute("DELETE FROM reservas WHERE id_cinema = %s", (id_cinema,))
-    cur.execute("DELETE FROM horarios_sessao WHERE id_cinema = %s", (id_cinema,))
-    cur.execute("DELETE FROM filmes_cinemas WHERE cinema_id = %s", (id_cinema,))
-    cur.execute("DELETE FROM salas WHERE id_cinema = %s", (id_cinema,))
-    cur.execute("DELETE FROM cinemas WHERE id = %s", (id_cinema,))
-    cur.execute("SET FOREIGN_KEY_CHECKS = 1")
-    conn.commit()
-    cur.close()
-    conn.close()
+    try:
+        # Verificar se o cinema existe
+        cur.execute("SELECT id, nome FROM cinemas WHERE id = %s", (id_cinema,))
+        cinema = cur.fetchone()
+        
+        if not cinema:
+            flash("Cinema não encontrado!", "erro")
+            return redirect(url_for('admin_cinemas'))
+        
+        cinema_nome = cinema['nome']
+        
+        # Desabilitar verificação de chaves estrangeiras temporariamente
+        cur.execute("SET FOREIGN_KEY_CHECKS = 0")
+        
+        # Remover em cascata
+        cur.execute("DELETE FROM reservas WHERE id_cinema = %s", (id_cinema,))
+        reservas_removidas = cur.rowcount
+        
+        cur.execute("DELETE FROM horarios_sessao WHERE id_cinema = %s", (id_cinema,))
+        horarios_removidos = cur.rowcount
+        
+        cur.execute("DELETE FROM filmes_cinemas WHERE cinema_id = %s", (id_cinema,))
+        filmes_removidos = cur.rowcount
+        
+        cur.execute("DELETE FROM salas WHERE id_cinema = %s", (id_cinema,))
+        salas_removidas = cur.rowcount
+        
+        cur.execute("DELETE FROM cinemas WHERE id = %s", (id_cinema,))
+        
+        # Reabilitar verificação de chaves estrangeiras
+        cur.execute("SET FOREIGN_KEY_CHECKS = 1")
+        
+        conn.commit()
+        
+        app.logger.info(f"Cinema '{cinema_nome}' (ID: {id_cinema}) removido com sucesso. Removidos: {reservas_removidas} reservas, {horarios_removidos} horários, {filmes_removidos} associações de filmes, {salas_removidas} salas")
+        
+        flash(f"Cinema '{cinema_nome}' removido com sucesso!", "sucesso")
+        return redirect(url_for('admin_cinemas'))
+        
+    except Exception as e:
+        conn.rollback()
+        app.logger.error(f"Erro ao remover cinema {id_cinema}: {str(e)}")
+        flash(f"Erro ao remover cinema: {str(e)}", "erro")
+        return redirect(url_for('admin_cinemas'))
     
-    flash("Cinema removido!", "sucesso")
-    return redirect(url_for('admin_cinemas'))
+    finally:
+        cur.close()
+        conn.close()
 
 @app.route('/admin/usuarios')
 def admin_usuarios():

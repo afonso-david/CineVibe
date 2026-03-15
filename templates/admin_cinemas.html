@@ -314,21 +314,24 @@
             <form action="{{ url_for('admin_adicionar_cinema') }}" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label for="nome">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>
                                 <i class="fas fa-building"></i>
                                 Nome do Cinema *
                             </label>
-                            <input type="text" id="nome" name="nome" required placeholder="Ex: CineVibe Lisboa">
+                            <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+                                <div style="flex: 0.3; padding: 0.75rem; background: #2a3f5f; border: 1px solid #4a5f7f; border-radius: 8px; color: #FFD60A; font-weight: 600; display: flex; align-items: center;">
+                                    CineVibe
+                                </div>
+                                <span style="color: #8892B0; font-size: 1.2rem;">+</span>
+                                <div style="flex: 0.7;">
+                                    <input type="text" id="cidade" name="cidade" required placeholder="Ex: Lisboa" style="width: 100%; padding: 0.75rem; border: 1px solid #4a5f7f; border-radius: 8px; background: #1a2a3a; color: #ffffff;">
+                                </div>
+                            </div>
+                            <small style="color: #8892B0; margin-top: 0.5rem; display: block;">O nome será automaticamente "CineVibe" + a cidade que inserir</small>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="localizacao">
-                                <i class="fas fa-map-marker-alt"></i>
-                                Localização *
-                            </label>
-                            <input type="text" id="localizacao" name="localizacao" required placeholder="Ex: Lisboa">
-                        </div>
+                        <!-- Campo hidden para enviar o nome completo -->
+                        <input type="hidden" id="nome" name="nome" value="CineVibe">
                         
                         <div class="form-group">
                             <label for="regiao">
@@ -359,6 +362,8 @@
                             <input type="file" id="imagem" name="imagem" accept="image/*">
                         </div>
                     </div>
+                    <!-- Campo hidden para localização -->
+                    <input type="hidden" id="localizacao" name="localizacao" value="">
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="fecharModal('modalAdicionarCinema')">

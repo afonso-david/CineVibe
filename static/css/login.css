@@ -2069,3 +2069,32 @@ a {
     transform: none;
 }
 
+
+
+/* Scroll apenas em registo */
+.registo-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.registo-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.registo-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.registo-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 214, 10, 0.3);
+  border-radius: 3px;
+}
+
+.registo-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 214, 10, 0.5);
+}
+
+/* Altura fixa apenas para registo */
+.login-section:has(.registo-scroll) .login-wrapper {
+  height: 750px;
+}

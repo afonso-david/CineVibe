@@ -531,32 +531,103 @@
     </main>
 
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
+        <div class="footer-main">
+            <div class="footer-container">
                 <div class="footer-section">
-                    <h3>CineVibe</h3>
-                    <p>A sua experiência cinematográfica completa</p>
+                    <div class="footer-logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
+                        <h3>CineVibe</h3>
+                    </div>
+                    <p class="footer-description">
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
+                    </div>
                 </div>
+
                 <div class="footer-section">
-                    <h4>Links Úteis</h4>
-                    <ul>
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
                         <li><a href="{{ url_for('home') }}">Início</a></li>
                         <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
                         <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
-                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-section">
                     <h4>Suporte</h4>
-                    <ul>
-                        <li><a href="#" onclick="alert('Em desenvolvimento')">Política de Privacidade</a></li>
-                        <li><a href="#" onclick="alert('Em desenvolvimento')">Termos e Condições</a></li>
-                        <li><a href="#" onclick="alert('Em desenvolvimento')">Cookies</a></li>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('acessibilidade') }}">Acessibilidade</a></li>
                     </ul>
                 </div>
+
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        {% if not logged_in %}
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+                            <li><a href="{{ url_for('logout') }}">Sair</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form">
+                            <div class="newsletter-input-group">
+                                <input type="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 CineVibe. Todos os direitos reservados.</p>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
+                        <div class="legal-links">
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <div class="cert-logos">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>

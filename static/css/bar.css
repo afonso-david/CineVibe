@@ -476,15 +476,7 @@ main {
     border-radius: 16px;
 }
 
-.menu-card:hover::before {
-    opacity: 0;
-}
 
-.menu-card:hover {
-    transform: none;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 214, 10, 0.2);
-}
 
 .menu-image {
     position: relative;
@@ -499,10 +491,6 @@ main {
     height: 100%;
     object-fit: cover;
     transition: none;
-}
-
-.menu-card:hover .menu-image img {
-    transform: none;
 }
 
 .menu-overlay {
@@ -520,10 +508,6 @@ main {
     z-index: 3;
 }
 
-.menu-card:hover .menu-overlay {
-    opacity: 0;
-}
-
 .menu-price {
     background: linear-gradient(135deg, #FFD60A, #FFA500);
     color: #0D1B2A;
@@ -538,10 +522,11 @@ main {
     padding: 2rem;
     position: relative;
     z-index: 2;
+    background: #0F1923;
 }
 
 .menu-name {
-    color: #FFD60A;
+    color: #4EA8DE;
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 0.8rem 0;
@@ -568,7 +553,11 @@ main {
 .menu-price-text {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #FFA500;
+    color: #4EA8DE;
+    background: rgba(78, 168, 222, 0.1);
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(78, 168, 222, 0.3);
 }
 
 .no-menus,
@@ -2436,16 +2425,6 @@ main {
     border-radius: 15px;
 }
 
-.menu-card:hover::before {
-    opacity: 0;
-}
-
-.menu-card:hover {
-    transform: none;
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
 .menu-image {
     position: relative;
     height: 200px;
@@ -2509,7 +2488,7 @@ main {
 .menu-price-text {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #FFD60A;
+    color: #4EA8DE;
 }
 
 .menu-btn {
@@ -3175,10 +3154,11 @@ main {
     padding: 2rem;
     position: relative;
     z-index: 2;
+    background: #0F1923;
 }
 
 .topping-name {
-    color: #4EA8DE;
+    color: #FFD60A;
     font-size: 1.4rem;
     font-weight: 700;
     margin: 0 0 0.8rem 0;

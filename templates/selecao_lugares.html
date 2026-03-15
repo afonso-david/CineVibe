@@ -200,7 +200,7 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <div class="viewer-360-container">
-                    <img id="imagem360" src="{{ url_for('static', filename='imgs/sala360.png') }}" alt="Visualização 360º da Sala" class="imagem-360">
+                    <img id="imagem360" src="{{ url_for('static', filename='imgs/sala_360.png') }}" alt="Visualização 360º da Sala" class="imagem-360">
                     <div class="controles-360">
                         <p>Arraste para rotacionar</p>
                     </div>
@@ -400,12 +400,13 @@
             posX360 -= deltaX * 1.5;
             posY360 -= deltaY * 1.5;
             
-            // Limita o movimento para não sair muito dos limites
-            const maxX = imagem360.offsetWidth - container360.offsetWidth;
-            const maxY = imagem360.offsetHeight - container360.offsetHeight;
+            // Calcula os limites baseado no tamanho da imagem e container
+            const maxX = Math.max(0, (imagem360.offsetWidth - container360.offsetWidth) / 2);
+            const maxY = Math.max(0, (imagem360.offsetHeight - container360.offsetHeight) / 2);
             
-            posX360 = Math.max(-maxX, Math.min(0, posX360));
-            posY360 = Math.max(-maxY, Math.min(0, posY360));
+            // Limita o movimento para ambas as direções
+            posX360 = Math.max(-maxX, Math.min(maxX, posX360));
+            posY360 = Math.max(-maxY, Math.min(maxY, posY360));
             
             imagem360.style.transform = `translate(${posX360}px, ${posY360}px)`;
             startX360 = e.clientX;
@@ -432,12 +433,13 @@
             posX360 -= deltaX * 1.5;
             posY360 -= deltaY * 1.5;
             
-            // Limita o movimento para não sair muito dos limites
-            const maxX = imagem360.offsetWidth - container360.offsetWidth;
-            const maxY = imagem360.offsetHeight - container360.offsetHeight;
+            // Calcula os limites baseado no tamanho da imagem e container
+            const maxX = Math.max(0, (imagem360.offsetWidth - container360.offsetWidth) / 2);
+            const maxY = Math.max(0, (imagem360.offsetHeight - container360.offsetHeight) / 2);
             
-            posX360 = Math.max(-maxX, Math.min(0, posX360));
-            posY360 = Math.max(-maxY, Math.min(0, posY360));
+            // Limita o movimento para ambas as direções
+            posX360 = Math.max(-maxX, Math.min(maxX, posX360));
+            posY360 = Math.max(-maxY, Math.min(maxY, posY360));
             
             imagem360.style.transform = `translate(${posX360}px, ${posY360}px)`;
             startX360 = e.touches[0].clientX;

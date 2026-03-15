@@ -470,8 +470,8 @@ a {
 }
 
 .qty-btn {
-    background: linear-gradient(135deg, #FFD60A, #F77F00);
-    color: #1B263B;
+    background: #1B3A52;
+    color: #FFD60A;
     border: none;
     width: 30px;
     height: 30px;
@@ -841,9 +841,9 @@ a {
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4EA8DE, #1976D2);
+    background: #1B3A52;
     border: none;
-    color: white;
+    color: #FFD60A;
     font-size: 1.3rem;
     font-weight: 700;
     cursor: pointer;

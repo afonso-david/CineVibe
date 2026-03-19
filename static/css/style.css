@@ -1856,8 +1856,8 @@ img.logo {
 }
 
 .navigation-cards-section {
-    padding: 120px 0;
-    background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%);
+    padding: 120px 0 180px 0;
+    background: #0D1B2A;
     position: relative;
     overflow: hidden;
 }
@@ -1870,9 +1870,7 @@ img.logo {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 20% 30%, rgba(255, 214, 10, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(78, 168, 222, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(255, 214, 10, 0.03) 0%, transparent 70%);
+        radial-gradient(circle at 80% 70%, rgba(78, 168, 222, 0.08) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -1957,13 +1955,13 @@ img.logo {
 .nav-card-premium {
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
     border-radius: 25px;
-    overflow: visible;
+    overflow: hidden;
     cursor: pointer;
     transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border: 2px solid rgba(255, 214, 10, 0.2);
     position: relative;
     backdrop-filter: blur(20px);
-    min-height: 550px;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
 }
@@ -1976,9 +1974,9 @@ img.logo {
     right: 0;
     bottom: 0;
     background: linear-gradient(135deg, 
-        rgba(255, 214, 10, 0.1) 0%, 
+        rgba(78, 168, 222, 0.1) 0%, 
         rgba(78, 168, 222, 0.1) 50%,
-        rgba(255, 214, 10, 0.1) 100%);
+        rgba(78, 168, 222, 0.1) 100%);
     opacity: 0;
     transition: opacity 0.6s ease;
     z-index: 1;
@@ -2003,15 +2001,15 @@ img.logo {
 }
 
 .filmes-card .nav-card-background {
-    background: linear-gradient(135deg, rgba(255, 214, 10, 0.05) 0%, rgba(13, 27, 42, 0.9) 100%);
+    background: #0D1B2A;
 }
 
 .bar-card .nav-card-background {
-    background: linear-gradient(135deg, rgba(247, 127, 0, 0.05) 0%, rgba(13, 27, 42, 0.9) 100%);
+    background: #0D1B2A;
 }
 
 .accessibility-card .nav-card-background {
-    background: linear-gradient(135deg, rgba(78, 168, 222, 0.05) 0%, rgba(13, 27, 42, 0.9) 100%);
+    background: #0D1B2A;
 }
 
 .gradient-overlay {
@@ -2075,7 +2073,7 @@ img.logo {
 }
 
 .nav-card-premium:hover .floating-icon {
-    transform: scale(1.1) rotate(10deg);
+    transform: scale(1.1);
 }
 
 .nav-card-content-premium {
@@ -2159,7 +2157,6 @@ img.logo {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(78, 168, 222, 0.1));
     padding: 15px 20px;
     border-radius: 15px;
     border: 1px solid rgba(255, 214, 10, 0.2);
@@ -2180,7 +2177,6 @@ img.logo {
 }
 
 .nav-card-premium:hover .nav-card-arrow-premium {
-    background: linear-gradient(135deg, rgba(255, 214, 10, 0.2), rgba(78, 168, 222, 0.2));
     border-color: rgba(255, 214, 10, 0.4);
     transform: translateX(5px);
 }

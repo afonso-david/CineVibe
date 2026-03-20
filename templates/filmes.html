@@ -268,7 +268,7 @@
                     <div class="newsletter-section">
                         <h4>Newsletter</h4>
                         <p>Receba as últimas novidades e promoções exclusivas.</p>
-                        <form class="newsletter-form">
+                        <form class="newsletter-form" method="POST" action="/newsletter/subscribe">
                             <div class="newsletter-input-group">
                                 <input type="email" placeholder="Seu email" required>
                                 <button type="submit">Subscrever</button>
@@ -454,26 +454,6 @@
         });
 
         
-        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            
-            
-            const button = this.querySelector('button');
-            const originalText = button.textContent;
-            
-            button.textContent = 'Subscrevendo...';
-            button.disabled = true;
-            
-            setTimeout(() => {
-                alert(`🎉 Obrigado por se inscrever na nossa newsletter!\n📧 Email: ${email}\n\nReceberá as últimas novidades sobre filmes e promoções exclusivas!`);
-                this.reset();
-                button.textContent = originalText;
-                button.disabled = false;
-            }, 1500);
-        });
-
-        
         function animarCards() {
             const cards = document.querySelectorAll('.filme-card[style*="block"], .filme-card:not([style*="none"])');
             cards.forEach((card, index) => {
@@ -562,6 +542,7 @@
             });
         }
     </script>
+    <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
     <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 </body>
 </html>

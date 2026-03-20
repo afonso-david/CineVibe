@@ -253,7 +253,7 @@
                     <div class="newsletter-section">
                         <h4>Newsletter</h4>
                         <p>Receba as últimas novidades e promoções exclusivas.</p>
-                        <form class="newsletter-form">
+                        <form class="newsletter-form" method="POST" action="/newsletter/subscribe">
                             <div class="newsletter-input-group">
                                 <input type="email" placeholder="Seu email" required>
                                 <button type="submit">Subscrever</button>
@@ -456,6 +456,7 @@
             }
         });
     </script>
+    <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
     <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 </body>
 </html>

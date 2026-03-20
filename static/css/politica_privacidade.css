@@ -1,0 +1,108 @@
+/* Privacy Policy Page Styles */
+
+.cookies-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.cookies-section {
+    margin-bottom: 3rem;
+}
+
+.cookies-section h2 {
+    font-size: 1.8rem;
+    color: #FFD60A;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    border-bottom: 2px solid #FFD60A;
+    padding-bottom: 1rem;
+}
+
+.cookies-section h3 {
+    font-size: 1.3rem;
+    color: #4EA8DE;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.cookies-section p {
+    color: #B8C5D1;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.cookies-section ul {
+    color: #B8C5D1;
+    line-height: 1.8;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+}
+
+.cookies-section li {
+    margin-bottom: 0.8rem;
+}
+
+.highlight {
+    background: rgba(255, 214, 10, 0.1);
+    border-left: 4px solid #FFD60A;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+}
+
+.highlight p {
+    margin: 0;
+    color: #E2E8F0;
+}
+
+/* Privacy specific styles */
+.privacy-important {
+    background: rgba(78, 168, 222, 0.1);
+    border-left: 4px solid #4EA8DE;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+}
+
+.privacy-important p {
+    margin: 0;
+    color: #E2E8F0;
+    font-weight: 500;
+}
+
+.data-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.data-type-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 214, 10, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.data-type-card:hover {
+    border-color: #FFD60A;
+    transform: translateY(-2px);
+}
+
+.data-type-card h4 {
+    color: #FFD60A;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.data-type-card p {
+    color: #B8C5D1;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+}

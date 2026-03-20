@@ -10571,6 +10571,25 @@ def termos_condicoes():
         cursor.close()
         conn.close()
     return render_template('termos_condicoes.html', logged_in=logged_in, avatar=avatar)
+@app.route('/politica_privacidade')
+def politica_privacidade():
+    logged_in = 'user_id' in session
+    avatar = get_user_avatar()
+    if logged_in:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT COALESCE(u.avatar, a.caminho) AS avatar
+            FROM usuarios u
+            LEFT JOIN avatars a ON u.avatar_id = a.id
+            WHERE u.id = %s
+        """, (session['user_id'],))
+        user_data = cursor.fetchone()
+        if user_data and user_data.get('avatar'):
+            avatar = user_data['avatar'].replace('\\', '/').replace('"', '').strip()
+        cursor.close()
+        conn.close()
+    return render_template('politica_privacidade.html', logged_in=logged_in, avatar=avatar)
 
 @app.route('/cookies')
 def cookies_page():

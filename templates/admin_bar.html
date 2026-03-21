@@ -906,57 +906,16 @@
     <script src="{{ url_for('static', filename='js/admin_bar.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            mostrarTab('produtos');
-            
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            tabButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    tabButtons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-            
-            if (tabButtons.length > 0) {
-                tabButtons[0].classList.add('active');
-            }
-
             const sortSelect = document.getElementById('sortSelect');
             if (sortSelect) {
                 sortSelect.addEventListener('change', function() {
                     ordenarProdutos(this.value);
                 });
-                
-                setTimeout(() => {
-                    ordenarProdutos('id');
-                }, 100);
+                setTimeout(() => { ordenarProdutos('id'); }, 100);
             }
         });
         
-        function mostrarTab(tabName) {
-            const allTabs = document.querySelectorAll('.tab-content');
-            allTabs.forEach(tab => tab.style.display = 'none');
-            
-            const selectedTab = document.getElementById('tab-' + tabName);
-            if (selectedTab) {
-                selectedTab.style.display = 'block';
-            }
-            
-            const searchInput = document.getElementById('searchInput');
-            const tipoFilter = document.getElementById('tipoFilter');
-            const sortSelect = document.getElementById('sortSelect');
-            
-            if (searchInput && tipoFilter && sortSelect) {
-                const searchValue = searchInput.value;
-                const tipoValue = tipoFilter.value;
-                const sortValue = sortSelect.value;
-                
-                setTimeout(() => {
-                    if (typeof filtrarProdutos === 'function') {
-                        filtrarProdutos();
-                    }
-                }, 100);
-            }
-        }
+
 
         function ordenarProdutos(criterio) {
             const grid = document.getElementById('produtos-grid');
@@ -970,6 +929,7 @@
                     if (criterio === 'id') {
                         valA = parseInt(a.dataset.produtoId);
                         valB = parseInt(b.dataset.produtoId);
+                        return valB - valA;
                     } else if (criterio === 'nome') {
                         valA = a.querySelector('h3').textContent.toLowerCase();
                         valB = b.querySelector('h3').textContent.toLowerCase();
@@ -995,6 +955,7 @@
                     if (criterio === 'id') {
                         valA = parseInt(a.dataset.produtoId);
                         valB = parseInt(b.dataset.produtoId);
+                        return valB - valA;
                     } else if (criterio === 'nome') {
                         valA = a.querySelector('.title-cell h4').textContent.toLowerCase();
                         valB = b.querySelector('.title-cell h4').textContent.toLowerCase();

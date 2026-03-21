@@ -11708,7 +11708,7 @@ def admin_bar():
         LEFT JOIN menu_produtos mp ON b.id = mp.produto_id
         LEFT JOIN menus m ON mp.menu_id = m.id
         GROUP BY b.id
-        ORDER BY b.id ASC
+        ORDER BY b.id DESC
     """)
     produtos = cursor.fetchall()
     
@@ -11719,7 +11719,7 @@ def admin_bar():
         LEFT JOIN menu_produtos mp ON m.id = mp.menu_id
         LEFT JOIN bar b ON mp.produto_id = b.id
         GROUP BY m.id
-        ORDER BY m.nome
+        ORDER BY m.id DESC
     """)
     menus = cursor.fetchall()
     
@@ -11732,7 +11732,7 @@ def admin_bar():
     cursor.execute("""
         SELECT id, nome, descricao, preco, imagem_url
         FROM toppings
-        ORDER BY nome
+        ORDER BY id DESC
     """)
     toppings = cursor.fetchall()
     

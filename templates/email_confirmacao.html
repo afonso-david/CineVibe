@@ -393,12 +393,12 @@
     <div class="email-container">
         
         <div class="header">
-            <div class="logo">🎬 CineVibe</div>
+            <div class="logo">CineVibe</div>
             <div class="subtitle">Confirmação de Reserva</div>
         </div>
 
         <div class="success-message">
-            ✅ A sua reserva foi confirmada com sucesso!
+            A sua reserva foi confirmada com sucesso!
         </div>
 
         <div class="reserva-info">
@@ -408,42 +408,42 @@
                 <span class="info-value highlight-value">{{ filme }}</span>
             </div>
             <div class="info-row">
-                <span class="info-label"> Tipo de Sessão:</span>
+                <span class="info-label">Tipo de Sessão:</span>
                 <span class="info-value">{{ tipo_sessao }}</span>
             </div>
             <div class="info-row">
-                <span class="info-label"> Cinema:</span>
+                <span class="info-label">Cinema:</span>
                 <span class="info-value">{{ cinema }}</span>
             </div>
             <div class="info-row">
-                <span class="info-label"> Data e Hora:</span>
+                <span class="info-label">Data e Hora:</span>
                 <span class="info-value highlight-value">{{ horario }}</span>
             </div>
         </div>
 
         <div class="reserva-info">
-            <div class="section-title"> Detalhes da Reserva</div>
+            <div class="section-title">Detalhes da Reserva</div>
             <div class="info-row">
-                <span class="info-label"> Nome:</span>
+                <span class="info-label">Nome:</span>
                 <span class="info-value">{{ nome }}</span>
             </div>
             <div class="info-row">
-                <span class="info-label"> Email:</span>
+                <span class="info-label">Email:</span>
                 <span class="info-value">{{ email }}</span>
             </div>
             <div class="info-row">
-                <span class="info-label"> Quantidade de Bilhetes:</span>
+                <span class="info-label">Quantidade de Bilhetes:</span>
                 <span class="info-value">{{ quantidade }}</span>
             </div>
             <div class="info-row">
-                <span class="info-label"> Data de Confirmação:</span>
+                <span class="info-label">Data de Confirmação:</span>
                 <span class="info-value">{{ data_confirmacao }}</span>
             </div>
         </div>
 
         {% if lugares %}
         <div class="lugares-section">
-            <div class="lugares-title"> Lugares Reservados</div>
+            <div class="lugares-title">Lugares Reservados</div>
             <div class="lugares-display">
                 {% if lugares is string %}
                     {{ lugares }}
@@ -456,7 +456,7 @@
 
         {% if bar_items and bar_items|length > 0 %}
         <div class="bar-section">
-            <div class="section-title"> Itens do Bar</div>
+            <div class="section-title">Itens do Bar</div>
             {% for item in bar_items %}
             <div class="bar-item">
                 <span class="bar-item-name">{{ item.quantidade }}x {{ item.nome }}</span>
@@ -467,12 +467,12 @@
         {% endif %}
 
         <div class="total-section">
-            <div class="total-label"> Total da Reserva</div>
+            <div class="total-label">Total da Reserva</div>
             <div class="total-amount">{{ preco_total }}</div>
         </div>
 
         <div class="qr-section">
-            <div class="qr-title">📱 QR Code da Reserva</div>
+            <div class="qr-title">QR Code da Reserva</div>
             <div class="qr-image-container">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-{{ reserva_id }}" alt="QR Code da Reserva" class="qr-image">
             </div>
@@ -482,7 +482,7 @@
         </div>
 
         <div class="instructions">
-            <h4>📋 Instruções Importantes:</h4>
+            <h4>Instruções Importantes:</h4>
             <ul>
                 <li>Apresente o QR Code na bilheteira</li>
                 <li>Traga um documento de identificação válido</li>
@@ -501,7 +501,7 @@
             </div>
             
             <div class="contact-info">
-                📞 +351 800 123 456 | 📧 info@cinevibe.pt | 🌐 www.cinevibe.pt
+                +351 800 123 456 | info@cinevibe.pt | www.cinevibe.pt
             </div>
 
             <div class="disclaimer">

@@ -251,7 +251,7 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
         <body>
             <div class="container">
                 <div class="header">
-                    <h1><span class="emoji">🎬</span>CineVibe</h1>
+                    <h1><span class="emoji"></span>CineVibe</h1>
                 </div>
                 <div class="content">
                     <h2>Olá, {destinatario_nome}!</h2>
@@ -336,7 +336,7 @@ def enviar_email_confirmacao(destinatario_email, destinatario_nome, dados_reserv
 
     
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = f'🎬 Confirmacao de Reserva CineVibe - #{dados_reserva["reserva_id"]}'
+        msg['Subject'] = f'Confirmacao de Reserva CineVibe - #{dados_reserva["reserva_id"]}'
         msg['From'] = f'CineVibe <{EMAIL_USER}>'
         msg['To'] = destinatario_email
 
@@ -2459,13 +2459,13 @@ def resgatar_recompensa():
             msg = MIMEMultipart()
             msg['From'] = EMAIL_USER
             msg['To'] = usuario['email']
-            msg['Subject'] = f"🎁 Código de Desconto CineVibe - {premio['nome']}"
+            msg['Subject'] = f"Código de Desconto CineVibe - {premio['nome']}"
             
             corpo_email = f"""
             <html>
             <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; padding: 20px;">
                 <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.5);">
-                    <h1 style="color: #FFD60A; text-align: center; margin-bottom: 20px;">🎁 Parabéns!</h1>
+                    <h1 style="color: #FFD60A; text-align: center; margin-bottom: 20px;">Parabéns!</h1>
                     
                     <p style="font-size: 18px; text-align: center; margin-bottom: 30px; color: #E0E1DD;">
                         Resgataste com sucesso a tua recompensa:
@@ -7463,247 +7463,6 @@ def contactos():
         return redirect(url_for('contactos'))
     
     return render_template('contactos.html', logged_in=logged_in, avatar=avatar)
-@app.route('/newsletter/subscribe', methods=['POST'])
-def newsletter_subscribe():
-    try:
-        email = request.form.get('email')
-        
-        if not email:
-            return jsonify({'success': False, 'message': 'Email é obrigatório'})
-        
-        # Validar formato do email
-        import re
-        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        if not re.match(email_pattern, email):
-            return jsonify({'success': False, 'message': 'Formato de email inválido'})
-        
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        
-        # Verificar se o email já está subscrito
-        cursor.execute("SELECT id FROM newsletter_subscricoes WHERE email = %s", (email,))
-        existing = cursor.fetchone()
-        
-        if existing:
-            cursor.close()
-            conn.close()
-            return jsonify({'success': False, 'message': 'Este email já está subscrito ao newsletter'})
-        
-        # Inserir nova subscrição
-        cursor.execute("""
-            INSERT INTO newsletter_subscricoes (email, data_subscricao, ativo) 
-            VALUES (%s, NOW(), TRUE)
-        """, (email,))
-        
-        conn.commit()
-        app.logger.info(f"Newsletter: Email {email} inserido na base de dados com sucesso")
-        
-        # Buscar as próximas 2 estreias
-        try:
-            # Primeiro, tentar buscar filmes com data futura
-            cursor.execute("""
-                SELECT titulo, data_lancamento, sinopse, poster_url 
-                FROM filmes 
-                WHERE data_lancamento > CURDATE() 
-                ORDER BY data_lancamento ASC 
-                LIMIT 2
-            """)
-            proximas_estreias = cursor.fetchall()
-            
-            # Se não encontrar filmes futuros, buscar filmes com estado 'brevemente'
-            if not proximas_estreias:
-                cursor.execute("""
-                    SELECT titulo, data_lancamento, sinopse, poster_url 
-                    FROM filmes 
-                    WHERE estado = 'brevemente' 
-                    ORDER BY data_lancamento ASC 
-                    LIMIT 2
-                """)
-                proximas_estreias = cursor.fetchall()
-            
-            # Se ainda não encontrar, buscar os filmes mais recentes
-            if not proximas_estreias:
-                cursor.execute("""
-                    SELECT titulo, data_lancamento, sinopse, poster_url 
-                    FROM filmes 
-                    ORDER BY data_lancamento DESC 
-                    LIMIT 2
-                """)
-                proximas_estreias = cursor.fetchall()
-            
-            app.logger.info(f"Newsletter: Encontradas {len(proximas_estreias)} estreias")
-            for filme in proximas_estreias:
-                app.logger.info(f"Newsletter: Filme - {filme['titulo']}, Data: {filme['data_lancamento']}")
-                
-        except Exception as e:
-            app.logger.error(f"Newsletter: Erro ao buscar estreias: {str(e)}")
-            proximas_estreias = []
-        
-        cursor.close()
-        conn.close()
-        
-        # Enviar email de boas-vindas com as próximas estreias
-        email_enviado = False
-        try:
-            app.logger.info(f"Newsletter: Iniciando envio de email para {email}")
-            
-            msg = MIMEMultipart('alternative')
-            msg['Subject'] = 'Bem-vindo ao Newsletter CineVibe! 🎬'
-            msg['From'] = f'CineVibe <{EMAIL_USER}>'
-            msg['To'] = email
-            
-            # Construir conteúdo das estreias
-            estreias_html = ""
-            if proximas_estreias and len(proximas_estreias) > 0:
-                app.logger.info(f"Newsletter: Processando {len(proximas_estreias)} filmes para o email")
-                for i, filme in enumerate(proximas_estreias):
-                    try:
-                        titulo = filme.get('titulo', 'Título não disponível')
-                        app.logger.info(f"Newsletter: Processando filme {i+1}: {titulo}")
-                        
-                        # Verificar se data_lancamento é None ou string
-                        if filme['data_lancamento']:
-                            if isinstance(filme['data_lancamento'], str):
-                                from datetime import datetime
-                                try:
-                                    data_obj = datetime.strptime(filme['data_lancamento'], '%Y-%m-%d')
-                                    data_formatada = data_obj.strftime('%d de %B de %Y')
-                                except:
-                                    data_formatada = filme['data_lancamento']
-                            else:
-                                data_formatada = filme['data_lancamento'].strftime('%d de %B de %Y')
-                        else:
-                            data_formatada = "Data a confirmar"
-                        
-                        # Verificar se sinopse existe
-                        sinopse = filme.get('sinopse', 'Sinopse em breve...')
-                        if sinopse and len(sinopse) > 200:
-                            sinopse = sinopse[:200] + "..."
-                        elif not sinopse:
-                            sinopse = "Sinopse em breve..."
-                        
-                        estreias_html += f'''
-                        <div style="background-color: white; margin: 20px 0; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                            <h3 style="color: #FFD60A; margin-top: 0;">🎬 {titulo}</h3>
-                            <p style="color: #666; margin: 10px 0;"><strong>Estreia:</strong> {data_formatada}</p>
-                            <p style="color: #333; line-height: 1.6;">{sinopse}</p>
-                        </div>
-                        '''
-                        app.logger.info(f"Newsletter: Filme {titulo} adicionado ao email com sucesso")
-                        
-                    except Exception as e:
-                        app.logger.error(f"Newsletter: Erro ao processar filme {filme.get('titulo', 'Desconhecido')}: {str(e)}")
-                        continue
-                        
-                if not estreias_html:  # Se nenhum filme foi processado com sucesso
-                    estreias_html = '''
-                    <div style="background-color: white; margin: 20px 0; padding: 20px; border-radius: 10px; text-align: center;">
-                        <p style="color: #666;">Novas estreias em breve! Fique atento às nossas novidades.</p>
-                    </div>
-                    '''
-            else:
-                app.logger.info("Newsletter: Nenhuma estreia encontrada, usando mensagem padrão")
-                estreias_html = '''
-                <div style="background-color: white; margin: 20px 0; padding: 20px; border-radius: 10px; text-align: center;">
-                    <p style="color: #666;">🎬 Novas estreias em breve!</p>
-                    <p style="color: #666;">Fique atento às nossas novidades e seja o primeiro a saber sobre os próximos lançamentos.</p>
-                </div>
-                '''
-            
-            html_content = f'''
-            <html>
-                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0;">
-                    <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a1a; color: white;">
-                        <!-- Header -->
-                        <div style="background: linear-gradient(135deg, #FFD60A, #FFA500); padding: 30px; text-align: center;">
-                            <h1 style="margin: 0; font-size: 28px; color: #1a1a1a;">🎬 CineVibe Newsletter</h1>
-                            <p style="margin: 10px 0 0 0; color: #1a1a1a; font-size: 16px;">A sua experiência cinematográfica premium</p>
-                        </div>
-                        
-                        <!-- Welcome Message -->
-                        <div style="padding: 30px; background-color: #1a1a1a;">
-                            <h2 style="color: #FFD60A; margin-top: 0;">Bem-vindo à família CineVibe! 🍿</h2>
-                            <p style="color: #B8C5D1; font-size: 16px; line-height: 1.6;">
-                                Obrigado por se juntar ao nosso newsletter! Agora vai receber em primeira mão todas as novidades sobre:
-                            </p>
-                            
-                            <ul style="color: #B8C5D1; padding-left: 20px;">
-                                <li>🎬 Próximas estreias e pré-estreias</li>
-                                <li>🎟️ Promoções e descontos exclusivos</li>
-                                <li>🌟 Sessões especiais e eventos</li>
-                                <li>🍿 Novidades do bar e produtos</li>
-                            </ul>
-                        </div>
-                        
-                        <!-- Próximas Estreias -->
-                        <div style="padding: 0 30px; background-color: #1a1a1a;">
-                            <h2 style="color: #FFD60A; border-bottom: 2px solid #FFD60A; padding-bottom: 10px;">
-                                🎭 Próximas Estreias
-                            </h2>
-                            <div style="background-color: #2a2a2a; border-radius: 10px; padding: 20px;">
-                                {estreias_html}
-                            </div>
-                        </div>
-                        
-                        <!-- Call to Action -->
-                        <div style="padding: 30px; text-align: center; background-color: #1a1a1a;">
-                            <a href="http://localhost:5000" style="display: inline-block; background: linear-gradient(135deg, #FFD60A, #FFA500); color: #1a1a1a; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 16px;">
-                                Explorar Filmes
-                            </a>
-                        </div>
-                        
-                        <!-- Footer -->
-                        <div style="background-color: #0f0f0f; padding: 20px; text-align: center;">
-                            <p style="margin: 0; color: #666; font-size: 12px;">
-                                CineVibe - A sua experiência cinematográfica premium
-                                <br>
-                                <a href="mailto:info@cinevibe.pt" style="color: #FFD60A;">info@cinevibe.pt</a> | 
-                                <a href="tel:+351123456789" style="color: #FFD60A;">+351 123 456 789</a>
-                            </p>
-                            <p style="margin: 10px 0 0 0; color: #666; font-size: 10px;">
-                                Se não deseja mais receber estes emails, pode cancelar a subscrição a qualquer momento.
-                            </p>
-                        </div>
-                    </div>
-                </body>
-            </html>
-            '''
-            
-            html_part = MIMEText(html_content, 'html')
-            msg.attach(html_part)
-            
-            app.logger.info(f"Newsletter: Conectando ao servidor SMTP {EMAIL_HOST}:{EMAIL_PORT}")
-            server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
-            if EMAIL_USE_TLS:
-                server.starttls()
-                app.logger.info("Newsletter: TLS ativado")
-            
-            server.login(EMAIL_USER, EMAIL_PASSWORD)
-            app.logger.info("Newsletter: Login SMTP realizado com sucesso")
-            
-            text = msg.as_string()
-            server.sendmail(EMAIL_USER, email, text)
-            server.quit()
-            
-            app.logger.info(f"Newsletter: Email enviado com sucesso para {email}")
-            email_enviado = True
-            
-        except Exception as e:
-            app.logger.error(f'Newsletter: Erro ao enviar email: {str(e)}')
-            import traceback
-            app.logger.error(f'Newsletter: Traceback: {traceback.format_exc()}')
-            # Não falhar a subscrição se o email não for enviado
-        
-        if email_enviado:
-            return jsonify({'success': True, 'message': 'Subscrição realizada com sucesso! Verifique o seu email.'})
-        else:
-            return jsonify({'success': True, 'message': 'Subscrição realizada com sucesso! O email de confirmação será enviado em breve.'})
-        
-    except Exception as e:
-        app.logger.error(f'Newsletter: Erro geral na subscrição: {str(e)}')
-        import traceback
-        app.logger.error(f'Newsletter: Traceback geral: {traceback.format_exc()}')
-        return jsonify({'success': False, 'message': 'Erro interno. Tente novamente mais tarde.'})
 
 
 @app.route('/api/process-payment', methods=['POST'])

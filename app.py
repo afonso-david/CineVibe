@@ -10530,7 +10530,7 @@ def cinema_filmes(id_cinema):
             INNER JOIN horarios_sessao hs ON f.id = hs.id_filme
             LEFT JOIN filme_generos fg ON f.id = fg.filme_id
             LEFT JOIN generos g ON fg.genero_id = g.id
-            WHERE hs.id_cinema = %s
+            WHERE hs.id_cinema = %s AND f.estado = 'em_exibicao'
             GROUP BY f.id
             ORDER BY f.titulo
         """, (id_cinema,))

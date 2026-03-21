@@ -79,12 +79,11 @@ a {
 }
 
 .movie-title {
-    color: #4EA8DE;
+    color: #FFD60A;
     font-size: 2.2rem;
     margin-bottom: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    text-shadow: 0 2px 8px rgba(78, 168, 222, 0.3);
     position: relative;
     display: inline-block;
 }

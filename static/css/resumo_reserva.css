@@ -111,6 +111,10 @@
     gap: 0.5rem;
 }
 
+.resumo-header h1 i {
+    color: #FFD60A;
+}
+
 .resumo-header p {
     color: #8B949E;
     font-size: 1rem;
@@ -347,6 +351,10 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+}
+
+.customer-header h2 i {
+    color: #FFD60A;
 }
 
 .user-logged-in {

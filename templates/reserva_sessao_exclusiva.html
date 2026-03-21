@@ -205,6 +205,7 @@
                 </div>
 
                 <form id="formReserva" method="POST" action="{{ url_for('processar_reserva_exclusiva') }}">
+                    <input type="hidden" name="sala_id" value="{{ sala_id }}">
                     {% if not logged_in %}
                     <div class="form-group">
                         <label for="nome_cliente">
@@ -261,7 +262,10 @@
                         <label for="num_pessoas">
                             <i class="fas fa-users"></i> Número de Pessoas
                         </label>
-                        <input type="number" name="num_pessoas" id="num_pessoas" min="1" max="50" value="1" required>
+                        <input type="number" name="num_pessoas" id="num_pessoas" min="1" max="{{ sala_capacidade }}" value="1" required>
+                        <small style="color: rgba(255,255,255,0.5); margin-top: 5px; display: block;">
+                            Máximo de {{ sala_capacidade }} pessoas para esta sala
+                        </small>
                     </div>
 
                     <div class="btn-container">

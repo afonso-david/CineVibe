@@ -324,8 +324,6 @@ def enviar_email_recuperacao_senha(destinatario_email, destinatario_nome, token)
         return False
 
 def enviar_email_confirmacao(destinatario_email, destinatario_nome, dados_reserva):
-    pass
-   
     try:
         app.logger.info(f"Enviando email para: {destinatario_email}")
         
@@ -7771,8 +7769,6 @@ def confirmar_pagamento_sessao():
         
         
         try:
-            pass
-            
             dados_email = {
                 'reserva_id': reserva_id,
                 'filme': 'Sessão Exclusiva',
@@ -7790,9 +7786,7 @@ def confirmar_pagamento_sessao():
                 dados_email
             )
             
-            if resultado_email:
-                pass
-            else:
+            if not resultado_email:
                 app.logger.warning(f"⚠️ Email de sessão exclusiva NÃO foi enviado")
         except Exception as email_error:
             app.logger.error(f"❌ Erro ao enviar email de sessão exclusiva: {email_error}")
@@ -9148,6 +9142,113 @@ def pagamento_tematica():
                          avatar=avatar,
                          reserva=reserva)
 
+def enviar_email_confirmacao_tematica(destinatario_email, destinatario_nome, dados_reserva):
+    try:
+        app.logger.info(f"Enviando email de confirmação temática para: {destinatario_email}")
+
+        if EMAIL_PASSWORD in ['sua_senha_app_aqui', 'DESATIVADO_TEMPORARIAMENTE'] or not EMAIL_PASSWORD:
+            app.logger.warning("Email desativado. Configure senha de app do Gmail.")
+            return False
+
+        tipos_sessao = {
+            'vintage': 'Sessão Vintage',
+            'romance': 'Sessão Romance',
+            'terror': 'Sessão Terror'
+        }
+        nome_sessao = tipos_sessao.get(str(dados_reserva.get('tipo_sala', '')).lower(), 'Sessão Temática')
+
+        try:
+            data_formatada = datetime.strptime(dados_reserva['data_sessao'], '%Y-%m-%d').strftime('%d/%m/%Y')
+        except:
+            data_formatada = dados_reserva.get('data_sessao', '')
+
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="UTF-8"></head>
+        <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; margin: 0; padding: 20px;">
+            <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 15px; overflow: hidden; border: 2px solid #FFD60A;">
+                <div style="background: linear-gradient(135deg, #0D1B2A, #1B263B); padding: 40px 30px; text-align: center; border-bottom: 3px solid #FFD60A;">
+                    <h1 style="color: #FFD60A; margin: 0; font-size: 28px; font-weight: 900;">CineVibe Temático</h1>
+                </div>
+                <div style="padding: 40px 30px;">
+                    <h2 style="color: #FFD60A; margin-bottom: 25px;">Olá, {destinatario_nome}!</h2>
+                    <p style="color: #E0E1DD; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">A sua reserva temática foi confirmada com sucesso!</p>
+                    <div style="background: rgba(255,214,10,0.1); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255,214,10,0.3);">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Reserva:</td>
+                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">#{dados_reserva['reserva_id']}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Sessão:</td>
+                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{nome_sessao}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Filme:</td>
+                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{dados_reserva.get('filme', '')}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Data:</td>
+                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{data_formatada}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Horário:</td>
+                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{dados_reserva.get('hora_sessao', '')}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Pessoas:</td>
+                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{dados_reserva.get('num_pessoas', '')}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#E0E1DD; font-weight:600; padding:20px 0 0 0; border-top:2px solid rgba(255,214,10,0.3); font-size:1.2rem;">Total Pago:</td>
+                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:20px 0 0 0; border-top:2px solid rgba(255,214,10,0.3); font-size:1.2rem;">{dados_reserva.get('total', '')}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p style="color: #FFD60A; font-weight: bold; margin-top: 30px;">Instruções importantes:</p>
+                    <ul style="color: #E0E1DD; line-height: 1.8;">
+                        <li>Chegue 15 minutos antes do horário da sessão</li>
+                        <li>A sala será preparada especialmente para o seu grupo</li>
+                        <li>Serviços de bar e catering estão incluídos</li>
+                    </ul>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <p style="color: #FFD60A; font-weight: bold; margin-bottom: 15px;">QR Code da Reserva</p>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-TEMATICA-{dados_reserva['reserva_id']}" alt="QR Code da Reserva" style="border-radius: 10px; border: 3px solid #FFD60A;">
+                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 10px;">Apresente este QR Code na entrada</p>
+                    </div>
+                    <p style="color: #E0E1DD; font-size: 14px; margin-top: 30px;">Dúvidas? Contacte-nos: info@cinevibe.pt | +351 800 123 456</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.4); padding: 20px; text-align: center; color: #778DA9; font-size: 14px;">
+                    <p style="margin: 5px 0;"><strong style="color: #FFD60A;">© 2024 CineVibe</strong> - Experiências Cinematográficas Temáticas</p>
+                    <p style="margin: 5px 0;">Este email foi enviado automaticamente. Não responda a esta mensagem.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = f'Confirmação de Reserva Temática CineVibe - #{dados_reserva["reserva_id"]}'
+        msg['From'] = f'CineVibe <{EMAIL_USER}>'
+        msg['To'] = destinatario_email
+        msg.attach(MIMEText(html_content, 'html', 'utf-8'))
+
+        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+        if EMAIL_USE_TLS:
+            server.starttls()
+        server.login(EMAIL_USER, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_USER, destinatario_email, msg.as_string())
+        server.quit()
+
+        app.logger.info(f"Email de confirmação temática enviado para: {destinatario_email}")
+        return True
+
+    except Exception as e:
+        app.logger.error(f"Erro ao enviar email de confirmação temática: {str(e)}")
+        return False
+
+
 @app.route('/api/processar-pagamento-tematica', methods=['POST'])
 def api_processar_pagamento_tematica():
     pass
@@ -9262,11 +9363,44 @@ def reservar_sessao_exclusiva():
     """Renderiza a página de reserva de sessão exclusiva"""
     logged_in = 'user_id' in session
     
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    
+    sala_nome = request.args.get('sala', '')
+    sala_id = request.args.get('sala_id')
+    sala_capacidade = 50  # fallback
+
+    # Buscar capacidade da sala a partir da BD
+    if sala_id:
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT capacidade FROM salas_exclusivas WHERE id = %s", (int(sala_id),))
+            sala_row = cursor.fetchone()
+            cursor.close()
+            conn.close()
+            if sala_row:
+                sala_capacidade = sala_row['capacidade']
+            else:
+                app.logger.warning(f"Sala com id={sala_id} não encontrada")
+        except Exception as e:
+            app.logger.error(f"Erro ao buscar capacidade da sala: {e}")
+    elif sala_nome:
+        # fallback por nome se sala_id não vier
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT capacidade FROM salas_exclusivas WHERE LOWER(nome) = LOWER(%s)", (sala_nome,))
+            sala_row = cursor.fetchone()
+            cursor.close()
+            conn.close()
+            if sala_row:
+                sala_capacidade = sala_row['capacidade']
+        except Exception as e:
+            app.logger.error(f"Erro ao buscar capacidade da sala por nome: {e}")
+
+    # Buscar filmes em exibição
+    filmes = []
     try:
-        # Buscar todos os filmes disponíveis
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("""
             SELECT id, titulo, duracao 
             FROM filmes 
@@ -9274,12 +9408,10 @@ def reservar_sessao_exclusiva():
             ORDER BY titulo
         """)
         filmes = cursor.fetchall()
-    except Exception as e:
-        app.logger.error(f"Erro ao buscar filmes: {e}")
-        filmes = []
-    finally:
         cursor.close()
         conn.close()
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar filmes: {e}")
     
     from datetime import datetime, timedelta
     data_minima = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
@@ -9290,7 +9422,10 @@ def reservar_sessao_exclusiva():
                          filmes=filmes,
                          data_minima=data_minima,
                          logged_in=logged_in,
-                         avatar=avatar)
+                         avatar=avatar,
+                         sala_nome=sala_nome,
+                         sala_capacidade=sala_capacidade,
+                         sala_id=sala_id)
 
 @app.route('/processar_reserva_exclusiva', methods=['POST'])
 def processar_reserva_exclusiva():
@@ -9306,9 +9441,28 @@ def processar_reserva_exclusiva():
     if not all([filme_id, data_sessao, hora_sessao, num_pessoas]):
         return "Dados incompletos", 400
     
+    num_pessoas_int = int(num_pessoas)
+    sala_id = request.form.get('sala_id')
+    sala_capacidade = 50  # fallback
+
+    if sala_id:
+        try:
+            conn_cap = get_db_connection()
+            cursor_cap = conn_cap.cursor(dictionary=True)
+            cursor_cap.execute("SELECT capacidade FROM salas_exclusivas WHERE id = %s", (sala_id,))
+            sala_row = cursor_cap.fetchone()
+            if sala_row:
+                sala_capacidade = sala_row['capacidade']
+            cursor_cap.close()
+            conn_cap.close()
+        except Exception as e:
+            app.logger.error(f"Erro ao buscar capacidade da sala: {e}")
+    
+    if num_pessoas_int > sala_capacidade:
+        return f"Número de pessoas excede a capacidade máxima da sala ({sala_capacidade} pessoas)", 400
+    
     # Preço base para sessão exclusiva: €500 + €20 por pessoa adicional
     preco_base = 500.00
-    num_pessoas_int = int(num_pessoas)
     if num_pessoas_int > 1:
         preco_total = preco_base + ((num_pessoas_int - 1) * 20.00)
     else:
@@ -9336,7 +9490,8 @@ def processar_reserva_exclusiva():
         'data_sessao': data_sessao,
         'hora_sessao': hora_sessao,
         'num_pessoas': num_pessoas_int,
-        'preco_total': preco_total
+        'preco_total': preco_total,
+        'sala_nome': request.form.get('sala_nome', '')
     }
     
     if nome_cliente and email_cliente:
@@ -9346,6 +9501,111 @@ def processar_reserva_exclusiva():
     session['reserva_exclusiva_temp'] = reserva_temp
     
     return redirect(url_for('pagamento_exclusivo'))
+
+def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, dados_reserva):
+    try:
+        app.logger.info(f"Enviando email de confirmação exclusiva para: {destinatario_email}")
+
+        if EMAIL_PASSWORD in ['sua_senha_app_aqui', 'DESATIVADO_TEMPORARIAMENTE'] or not EMAIL_PASSWORD:
+            app.logger.warning("Email desativado. Configure senha de app do Gmail.")
+            return False
+
+        tipos_sala = {
+            'intimista': 'Sala Intimista',
+            'vip': 'Sala Vip',
+            'premium': 'Sala Premium',
+            'exclusiva': 'Sala Exclusiva'
+        }
+        nome_sala = tipos_sala.get(str(dados_reserva.get('tipo_sala', '')).lower(), 'Sala Exclusiva')
+
+        try:
+            data_formatada = datetime.strptime(dados_reserva['data_sessao'], '%Y-%m-%d').strftime('%d/%m/%Y')
+        except:
+            data_formatada = dados_reserva.get('data_sessao', '')
+
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="UTF-8"></head>
+        <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; margin: 0; padding: 20px;">
+            <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 15px; overflow: hidden; border: 2px solid #FFD60A;">
+                <div style="background: linear-gradient(135deg, #0D1B2A, #1B263B); padding: 40px 30px; text-align: center; border-bottom: 3px solid #FFD60A;">
+                    <h1 style="color: #FFD60A; margin: 0; font-size: 28px; font-weight: 900;">CineVibe Exclusivo</h1>
+                </div>
+                <div style="padding: 40px 30px;">
+                    <h2 style="color: #FFD60A; margin-bottom: 25px;">Olá, {destinatario_nome}!</h2>
+                    <p style="color: #E0E1DD; font-size: 16px; line-height: 1.6;">A sua reserva exclusiva foi confirmada com sucesso!</p>
+                    <div style="background: rgba(255,214,10,0.1); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255,214,10,0.3);">
+                        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color:#E0E1DD; font-weight:600;">Reserva:</span>
+                            <span style="color:#FFD60A; font-weight:700;">#{dados_reserva['reserva_id']}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color:#E0E1DD; font-weight:600;">Sala:</span>
+                            <span style="color:#FFD60A; font-weight:700;">{nome_sala}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color:#E0E1DD; font-weight:600;">Filme:</span>
+                            <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('filme', '')}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color:#E0E1DD; font-weight:600;">Data:</span>
+                            <span style="color:#FFD60A; font-weight:700;">{data_formatada}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color:#E0E1DD; font-weight:600;">Horário:</span>
+                            <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('hora_sessao', '')}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color:#E0E1DD; font-weight:600;">Pessoas:</span>
+                            <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('num_pessoas', '')}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding-top: 15px; border-top: 2px solid rgba(255,214,10,0.3); font-size: 1.2rem;">
+                            <span style="color:#E0E1DD; font-weight:600;">Total Pago:</span>
+                            <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('total', '')}</span>
+                        </div>
+                    </div>
+                    <p style="color: #FFD60A; font-weight: bold;">Instruções importantes:</p>
+                    <ul style="color: #E0E1DD; line-height: 1.8;">
+                        <li>Chegue 15 minutos antes do horário da sessão</li>
+                        <li>A sala será preparada especialmente para o seu grupo</li>
+                    </ul>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <p style="color: #FFD60A; font-weight: bold; margin-bottom: 15px;">QR Code da Reserva</p>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-EXCLUSIVA-{dados_reserva['reserva_id']}" alt="QR Code da Reserva" style="border-radius: 10px; border: 3px solid #FFD60A;">
+                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 10px;">Apresente este QR Code na entrada</p>
+                    </div>
+                    <p style="color: #E0E1DD; font-size: 14px; margin-top: 30px;">Dúvidas? Contacte-nos: info@cinevibe.pt | +351 800 123 456</p>
+                </div>
+                <div style="background: rgba(0,0,0,0.4); padding: 20px; text-align: center; color: #778DA9; font-size: 14px;">
+                    <p style="margin: 5px 0;"><strong style="color: #FFD60A;">© 2024 CineVibe</strong> - Experiências Cinematográficas Exclusivas</p>
+                    <p style="margin: 5px 0;">Este email foi enviado automaticamente. Não responda a esta mensagem.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = f'Confirmação de Reserva Exclusiva CineVibe - #{dados_reserva["reserva_id"]}'
+        msg['From'] = f'CineVibe <{EMAIL_USER}>'
+        msg['To'] = destinatario_email
+        msg.attach(MIMEText(html_content, 'html', 'utf-8'))
+
+        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+        if EMAIL_USE_TLS:
+            server.starttls()
+        server.login(EMAIL_USER, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_USER, destinatario_email, msg.as_string())
+        server.quit()
+
+        app.logger.info(f"Email de confirmação exclusiva enviado para: {destinatario_email}")
+        return True
+
+    except Exception as e:
+        app.logger.error(f"Erro ao enviar email de confirmação exclusiva: {str(e)}")
+        return False
+
 
 @app.route('/pagamento_exclusivo')
 def pagamento_exclusivo():
@@ -9430,6 +9690,21 @@ def api_processar_pagamento_exclusivo():
         conn.close()
         
         app.logger.info(f"Reserva sessão exclusiva criada com sucesso - ID: {reserva_id}")
+
+        # Enviar email de confirmação
+        try:
+            dados_email = {
+                'reserva_id': reserva_id,
+                'tipo_sala': reserva_temp.get('sala_nome', 'exclusiva'),
+                'filme': filme['titulo'],
+                'data_sessao': data.get('data_sessao', ''),
+                'hora_sessao': data.get('hora_sessao', ''),
+                'num_pessoas': data.get('num_pessoas', 1),
+                'total': f"€{float(data['preco_total']):.2f}"
+            }
+            enviar_email_confirmacao_exclusiva(email_cliente, nome_cliente, dados_email)
+        except Exception as email_error:
+            app.logger.error(f"Erro ao enviar email exclusivo: {email_error}")
         
         # Limpar dados temporários da sessão
         if 'reserva_exclusiva_temp' in session:

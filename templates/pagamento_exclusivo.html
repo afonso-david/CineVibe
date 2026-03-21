@@ -713,7 +713,10 @@
                 hora_sessao: dadosReserva.hora_sessao,
                 num_pessoas: dadosReserva.num_pessoas,
                 preco_total: dadosReserva.preco_total,
-                metodo_pagamento: metodoSelecionado
+                metodo_pagamento: metodoSelecionado,
+                sala_nome: dadosReserva.sala_nome || 'Exclusiva',
+                nome_cliente: dadosReserva.nome_cliente || '',
+                email_cliente: dadosReserva.email_cliente || ''
             };
             if (metodoSelecionado === 'mastercard' || metodoSelecionado === 'visa') {
                 dadosPagamento.dados_cartao = {

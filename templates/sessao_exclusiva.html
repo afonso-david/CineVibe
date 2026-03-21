@@ -171,7 +171,7 @@
                                             <div class="price-value">€{{ "%.0f"|format(sala.preco) }}</div>
                                             <div class="price-period">por sessão</div>
                                         </div>
-                                        <button class="btn-reservar" onclick="openAuthModal()">
+                                        <button class="btn-reservar" onclick="openAuthModal('{{ sala.nome }}', {{ sala.id }})">
                                             <i class="fas fa-calendar-check"></i>
                                             Reservar Agora
                                         </button>
@@ -350,16 +350,18 @@
             window.location.href = '{{ url_for("contactos") }}';
         }
 
-        function openAuthModal() {
+        function openAuthModal(salaNome, salaId) {
             const isLoggedIn = {{ 'true' if logged_in else 'false' }};
+            const url = '{{ url_for("reservar_sessao_exclusiva") }}?sala=' + encodeURIComponent(salaNome) + '&sala_id=' + salaId;
             if (!isLoggedIn) {
                 const modal = document.getElementById('authModal');
                 modal.style.display = 'flex';
+                modal.dataset.redirectUrl = url;
                 document.body.style.overflow = 'hidden';
                 document.documentElement.classList.add('modal-open');
                 document.body.classList.add('modal-open');
             } else {
-                window.location.href = '{{ url_for('reservar_sessao_exclusiva') }}';
+                window.location.href = url;
             }
         }
 
@@ -372,13 +374,13 @@
         }
 
         function continuarComoConvidadoExclusiva() {
+            const modal = document.getElementById('authModal');
+            const url = modal.dataset.redirectUrl || '{{ url_for("reservar_sessao_exclusiva") }}';
             closeAuthModal();
-            window.location.href = '{{ url_for('reservar_sessao_exclusiva') }}';
+            window.location.href = url;
         }
 
-        document.querySelectorAll('.btn-reservar').forEach(btn => {
-            btn.addEventListener('click', openAuthModal);
-        });
+
     </script>
 </body>
 </html>

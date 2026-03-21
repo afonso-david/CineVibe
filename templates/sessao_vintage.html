@@ -438,15 +438,44 @@
             
             if (prevBtn && nextBtn && moviesContainer) {
                 const scrollAmount = 360; 
-                
+                let autoScrollInterval;
+
                 prevBtn.addEventListener('click', function() {
+                    handleUserInteraction();
                     moviesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
                 });
                 
                 nextBtn.addEventListener('click', function() {
+                    handleUserInteraction();
                     moviesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                 });
-                
+
+                function startAutoScroll() {
+                    stopAutoScroll();
+                    autoScrollInterval = setInterval(() => {
+                        const maxScroll = moviesContainer.scrollWidth - moviesContainer.clientWidth;
+                        if (moviesContainer.scrollLeft >= maxScroll) {
+                            moviesContainer.scrollTo({ left: 0, behavior: 'smooth' });
+                        } else {
+                            moviesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                        }
+                    }, 3000);
+                }
+
+                function stopAutoScroll() {
+                    if (autoScrollInterval) {
+                        clearInterval(autoScrollInterval);
+                        autoScrollInterval = null;
+                    }
+                }
+
+                function handleUserInteraction() {
+                    stopAutoScroll();
+                    setTimeout(startAutoScroll, 5000);
+                }
+
+                moviesContainer.addEventListener('mouseenter', stopAutoScroll);
+                moviesContainer.addEventListener('mouseleave', startAutoScroll);
                 
                 function updateButtonStates() {
                     const maxScroll = moviesContainer.scrollWidth - moviesContainer.clientWidth;
@@ -455,7 +484,8 @@
                 }
 
                 moviesContainer.addEventListener('scroll', updateButtonStates);
-                updateButtonStates(); 
+                updateButtonStates();
+                startAutoScroll();
             }
         });
 

@@ -8939,13 +8939,12 @@ def sessao_vintage():
             FROM filmes f
             INNER JOIN filme_generos fg ON f.id = fg.filme_id
             INNER JOIN generos g ON fg.genero_id = g.id
-            WHERE (g.nome LIKE '%Vintage%' OR g.nome LIKE '%Clássico%' OR g.nome LIKE '%Classic%')
+            WHERE fg.genero_id = 12
             AND f.estado = 'em_exibicao'
             AND f.poster_url IS NOT NULL 
             AND f.poster_url != ''
             GROUP BY f.id, f.titulo, f.poster_url, f.poster_hover, f.trailer_url, f.duracao, f.data_lancamento
-            ORDER BY f.data_lancamento ASC
-            LIMIT 20
+            ORDER BY CASE WHEN f.id IN (4, 17, 3, 7, 38, 68, 69, 1, 33, 5, 31, 8, 34, 30, 40, 32, 29, 6) THEN 0 ELSE 1 END, FIELD(f.id, 4, 17, 3, 7, 38, 68, 69, 1, 33, 5, 31, 8, 34, 30, 40, 32, 29, 6), f.data_lancamento ASC
         """)
         filmes_vintage = cursor.fetchall()
         

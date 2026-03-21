@@ -1252,7 +1252,7 @@ a {
     border-radius: 20px;
     font-weight: 900;
     font-size: 0.9rem;
-    box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
+    box-shadow: none;
 }
 
 .vintage-rank {

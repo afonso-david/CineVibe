@@ -192,8 +192,9 @@
                                 <div class="movie-rank vintage-rank">
                                     <span class="rank-number">#{{ loop.index }}</span>
                                 </div>
-                                <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}{% if filme.trailer_url %}?trailer=auto{% endif %}" 
-                                   aria-label="Ver detalhes de {{ filme.titulo }}">
+                                <a href="{{ url_for('reserva_sessao_tematica', tipo='vintage', filme_id=filme.id) }}" 
+                                   aria-label="Reservar sessão com {{ filme.titulo }}"
+                                   onclick="return verificarLoginFilme(event, 'vintage', {{ filme.id }})">
                                     <div class="poster-container">
                                         <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
                                              alt="Poster de {{ filme.titulo }}" 
@@ -804,6 +805,20 @@
             window.location.href = '/reserva_sessao_tematica?tipo=' + tipo;
         }
 
+        let filmeIdAtual = null;
+
+        function verificarLoginFilme(event, tipo, filmeId) {
+            event.preventDefault();
+            tipoSessaoAtual = tipo;
+            filmeIdAtual = filmeId;
+            if (!loggedIn) {
+                openAuthModal();
+                return false;
+            }
+            window.location.href = '/reserva_sessao_tematica?tipo=' + tipo + '&filme_id=' + filmeId;
+            return false;
+        }
+
         function openAuthModal() {
             const modal = document.getElementById('authModal');
             modal.style.display = 'flex';
@@ -821,7 +836,9 @@
         function continuarComoConvidado(tipo) {
             closeAuthModal();
             setTimeout(() => {
-                window.location.href = '/reserva_sessao_tematica?tipo=' + tipo;
+                let url = '/reserva_sessao_tematica?tipo=' + tipo;
+                if (filmeIdAtual) url += '&filme_id=' + filmeIdAtual;
+                window.location.href = url;
             }, 300);
         }
 

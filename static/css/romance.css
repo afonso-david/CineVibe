@@ -820,7 +820,7 @@ a {
     border-radius: 20px;
     font-weight: 900;
     font-size: 0.9rem;
-    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+    box-shadow: none;
 }
 
 .romance-rank {

@@ -9060,12 +9060,15 @@ def reserva_sessao_tematica():
     
     avatar = get_user_avatar() if logged_in else 'imgs/icons/user_icon34-removebg-preview.png'
     
+    filme_id_selecionado = request.args.get('filme_id', type=int)
+
     return render_template('reserva_sessao_tematica.html',
                          tipo_sessao=tipo_sessao,
                          filmes=filmes,
                          data_minima=data_minima,
                          logged_in=logged_in,
-                         avatar=avatar)
+                         avatar=avatar,
+                         filme_id_selecionado=filme_id_selecionado)
 
 @app.route('/processar_reserva_tematica', methods=['POST'])
 def processar_reserva_tematica():

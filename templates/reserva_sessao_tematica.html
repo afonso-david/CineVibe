@@ -236,7 +236,7 @@
                         <select name="filme_id" id="filme_id" style="overflow-y: auto; max-height: none;">
                             <option value="">Sem preferência de filme</option>
                             {% for filme in filmes %}
-                                <option value="{{ filme.id }}">{{ filme.titulo }} ({{ filme.duracao }} min)</option>
+                                <option value="{{ filme.id }}" {% if filme_id_selecionado and filme.id|int == filme_id_selecionado|int %}selected{% endif %}>{{ filme.titulo }} ({{ filme.duracao }} min)</option>
                             {% endfor %}
                         </select>
                     </div>

@@ -141,6 +141,161 @@
             margin-right: 8px;
         }
 
+        /* ── Calendário Custom ── */
+        .calendar-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            border-radius: 14px;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .cal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: rgba(255, 214, 10, 0.08);
+            border-bottom: 1px solid rgba(255, 214, 10, 0.2);
+        }
+
+        .cal-header h3 {
+            color: #FFD60A;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .cal-nav {
+            background: none;
+            border: 1px solid rgba(255, 214, 10, 0.4);
+            color: #FFD60A;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .cal-nav:hover {
+            background: rgba(255, 214, 10, 0.15);
+        }
+
+        .cal-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .cal-grid {
+            padding: 12px 16px 16px;
+        }
+
+        .cal-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 6px;
+        }
+
+        .cal-weekdays span {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cal-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.85);
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            background: none;
+        }
+
+        .cal-day:hover:not(.disabled):not(.empty) {
+            background: rgba(255, 214, 10, 0.15);
+            border-color: rgba(255, 214, 10, 0.4);
+            color: #FFD60A;
+        }
+
+        .cal-day.today {
+            border-color: rgba(255, 214, 10, 0.5);
+            color: #FFD60A;
+            font-weight: 700;
+        }
+
+        .cal-day.selected {
+            background: linear-gradient(135deg, #FFD60A, #FFA500);
+            color: #1a1a1a;
+            font-weight: 700;
+            border-color: transparent;
+        }
+
+        .cal-day.disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        .cal-day.empty {
+            cursor: default;
+        }
+
+        .cal-selected-display {
+            padding: 13px 16px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 214, 10, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cal-selected-display:hover {
+            border-color: #FFD60A;
+            background: rgba(255, 214, 10, 0.08);
+        }
+
+        .cal-selected-display span {
+            color: #FFD60A;
+            font-weight: 600;
+        }
+
+        .calendar-wrapper {
+            display: none;
+            margin-top: 8px;
+        }
+
+        .calendar-wrapper.open {
+            display: block;
+        }
+
         @media (max-width: 768px) {
             .reserva-container {
                 margin: 20px;
@@ -236,10 +391,28 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="data_sessao">
+                            <label>
                                 <i class="fas fa-calendar"></i> Data
                             </label>
-                            <input type="date" name="data_sessao" id="data_sessao" min="{{ data_minima }}" required>
+                            <input type="hidden" name="data_sessao" id="data_sessao" required>
+                            <div class="cal-selected-display" id="calDisplay" onclick="toggleCalendar()">
+                                <i class="fas fa-calendar" style="color:rgba(255,214,10,0.6)"></i>
+                                <span id="calDisplayText">Selecione uma data...</span>
+                                <i class="fas fa-chevron-down" style="margin-left:auto;color:rgba(255,214,10,0.5);font-size:0.8rem" id="calChevron"></i>
+                            </div>
+                            <div class="calendar-wrapper" id="calendarWrapper">
+                                <div class="cal-header">
+                                    <button type="button" class="cal-nav" id="calPrev"><i class="fas fa-chevron-left"></i></button>
+                                    <h3 id="calMonthYear"></h3>
+                                    <button type="button" class="cal-nav" id="calNext"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <div class="cal-grid">
+                                    <div class="cal-weekdays">
+                                        <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+                                    </div>
+                                    <div class="cal-days" id="calDays"></div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -343,6 +516,100 @@
 
     <script>
         const loggedIn = {{ 'true' if logged_in else 'false' }};
+        const dataMinima = '{{ data_minima }}';
+
+        // ── Calendário Custom ──
+        const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        const minDate = new Date(dataMinima + 'T00:00:00');
+        let calYear = minDate.getFullYear();
+        let calMonth = minDate.getMonth();
+        let selectedDate = null;
+
+        function toggleCalendar() {
+            const wrapper = document.getElementById('calendarWrapper');
+            const chevron = document.getElementById('calChevron');
+            const isOpen = wrapper.classList.toggle('open');
+            chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+        }
+
+        function renderCalendar() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            document.getElementById('calMonthYear').textContent = MESES[calMonth] + ' ' + calYear;
+
+            const firstDay = new Date(calYear, calMonth, 1).getDay();
+            const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+            const minMonth = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+            const curMonth = new Date(calYear, calMonth, 1);
+            document.getElementById('calPrev').disabled = curMonth <= minMonth;
+
+            const grid = document.getElementById('calDays');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'cal-day empty';
+                grid.appendChild(empty);
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const cellDate = new Date(calYear, calMonth, d);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = d;
+                btn.className = 'cal-day';
+
+                if (cellDate < minDate) {
+                    btn.classList.add('disabled');
+                } else {
+                    if (cellDate.toDateString() === today.toDateString()) btn.classList.add('today');
+                    if (selectedDate && cellDate.toDateString() === selectedDate.toDateString()) btn.classList.add('selected');
+                    btn.addEventListener('click', () => selectDate(cellDate));
+                }
+                grid.appendChild(btn);
+            }
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            document.getElementById('data_sessao').value = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('calDisplayText').textContent =
+                `${dd} de ${MESES[date.getMonth()]} de ${yyyy}`;
+            renderCalendar();
+            // Fechar calendário após seleção
+            const wrapper = document.getElementById('calendarWrapper');
+            wrapper.classList.remove('open');
+            document.getElementById('calChevron').style.transform = '';
+        }
+
+        document.getElementById('calPrev').addEventListener('click', () => {
+            calMonth--;
+            if (calMonth < 0) { calMonth = 11; calYear--; }
+            renderCalendar();
+        });
+
+        document.getElementById('calNext').addEventListener('click', () => {
+            calMonth++;
+            if (calMonth > 11) { calMonth = 0; calYear++; }
+            renderCalendar();
+        });
+
+        // Fechar ao clicar fora
+        document.addEventListener('click', function(e) {
+            const wrapper = document.getElementById('calendarWrapper');
+            const display = document.getElementById('calDisplay');
+            if (!wrapper.contains(e.target) && !display.contains(e.target)) {
+                wrapper.classList.remove('open');
+                document.getElementById('calChevron').style.transform = '';
+            }
+        });
+
+        renderCalendar();
 
         function fecharModal() {
             document.getElementById('loginModal').style.display = 'none';

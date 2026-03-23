@@ -1,4 +1,4 @@
-
+﻿
 @import url('audiodescricao.css');
 
 @import url('style.css');
@@ -303,7 +303,6 @@
 .newsletter-input-group button:hover {
     background: linear-gradient(135deg, #FFB703, #FF9500);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 183, 3, 0.4);
 }
 
 .footer-contact {

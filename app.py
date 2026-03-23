@@ -15085,6 +15085,159 @@ def debug_bar():
     except Exception as e:
         return f"<h1>Erro Debug</h1><p>{str(e)}</p>"
 
+def enviar_email_newsletter(destinatario_email, proximos_filmes):
+    try:
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = 'Novidades CineVibe - Proximas Estreias'
+        msg['From'] = f'CineVibe <{EMAIL_USER}>'
+        msg['To'] = destinatario_email
+
+        filmes_html = ''
+        for filme in proximos_filmes:
+            data_str = ''
+            if filme.get('data_lancamento'):
+                try:
+                    d = filme['data_lancamento']
+                    if hasattr(d, 'strftime'):
+                        data_str = f'<p style="margin:6px 0 0 0;font-size:13px;color:#aaa;">Estreia: {d.strftime("%d/%m/%Y")}</p>'
+                except:
+                    pass
+            filmes_html += f'''
+            <td style="width:50%;padding:14px;vertical-align:top;text-align:center;border:1px solid #333;border-radius:6px;">
+                <p style="margin:0;font-size:17px;font-weight:bold;color:#FFD700;">{filme["titulo"]}</p>
+                <p style="margin:6px 0 0 0;font-size:13px;color:#ccc;">{filme.get("genero_nome","")}</p>
+                {data_str}
+            </td>
+            <td style="width:10px;"></td>'''
+
+        html = f'''<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Novidades CineVibe</title>
+</head>
+<body style="margin:0;padding:0;background-color:#0a0a0a;font-family:Arial,Helvetica,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0a0a;">
+  <tr>
+    <td align="center" style="padding:30px 10px;">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#111;border-radius:10px;overflow:hidden;">
+
+        <!-- Header -->
+        <tr>
+          <td style="background-color:#1a1a1a;padding:30px;text-align:center;border-bottom:2px solid #FFD700;">
+            <p style="margin:0;font-size:28px;font-weight:bold;color:#FFD700;letter-spacing:2px;">CINEVIBE</p>
+            <p style="margin:8px 0 0 0;font-size:13px;color:#aaa;letter-spacing:1px;">A SUA EXPERIENCIA CINEMATOGRAFICA</p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:30px;">
+            <p style="margin:0 0 8px 0;font-size:22px;font-weight:bold;color:#fff;">Obrigado por subscrever!</p>
+            <p style="margin:0 0 24px 0;font-size:15px;color:#bbb;line-height:1.6;">Fique a par das proximas estreias em exclusivo para os nossos subscritores.</p>
+
+            <p style="margin:0 0 16px 0;font-size:18px;font-weight:bold;color:#FFD700;border-bottom:1px solid #333;padding-bottom:10px;">Proximas Estreias</p>
+
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                {filmes_html}
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background-color:#1a1a1a;padding:20px;text-align:center;border-top:1px solid #333;">
+            <p style="margin:0;font-size:12px;color:#666;">Recebeu este email porque subscreveu a newsletter do CineVibe.</p>
+            <p style="margin:6px 0 0 0;font-size:12px;color:#666;">CineVibe - info@cinevibe.pt</p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>'''
+
+        msg.attach(MIMEText(html, 'html', 'utf-8'))
+        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+        if EMAIL_USE_TLS:
+            server.starttls()
+        server.login(EMAIL_USER, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_USER, destinatario_email, msg.as_string())
+        server.quit()
+        return True
+    except Exception as e:
+        app.logger.error(f"Erro ao enviar newsletter: {str(e)}")
+        return False
+
+
+@app.route('/newsletter/subscribe', methods=['POST'])
+def newsletter_subscribe():
+    email = request.form.get('email', '').strip()
+    if not email or '@' not in email:
+        return jsonify({'success': False, 'message': 'Email invalido.'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        # Verificar se já existe
+        cursor.execute("SELECT id, ativo FROM newsletter_subscricoes WHERE email = %s", (email,))
+        existente = cursor.fetchone()
+
+        if existente:
+            if existente['ativo']:
+                return jsonify({'success': False, 'message': 'Este email ja esta subscrito.'})
+            else:
+                cursor.execute("UPDATE newsletter_subscricoes SET ativo = 1, data_subscricao = NOW() WHERE email = %s", (email,))
+                conn.commit()
+        else:
+            cursor.execute("INSERT INTO newsletter_subscricoes (email) VALUES (%s)", (email,))
+            conn.commit()
+
+        # Buscar as 2 proximas estreias (data_lancamento >= hoje, ordenado ASC)
+        cursor.execute("""
+            SELECT f.titulo, f.data_lancamento, g.nome as genero_nome
+            FROM filmes f
+            LEFT JOIN filme_generos fg ON f.id = fg.filme_id
+            LEFT JOIN generos g ON fg.genero_id = g.id
+            WHERE f.data_lancamento >= CURDATE()
+            GROUP BY f.id
+            ORDER BY f.data_lancamento ASC
+            LIMIT 2
+        """)
+        proximos_filmes = cursor.fetchall()
+
+        # Fallback: se não houver filmes futuros, pegar os mais recentes
+        if not proximos_filmes:
+            cursor.execute("""
+                SELECT f.titulo, f.data_lancamento, g.nome as genero_nome
+                FROM filmes f
+                LEFT JOIN filme_generos fg ON f.id = fg.filme_id
+                LEFT JOIN generos g ON fg.genero_id = g.id
+                WHERE f.estado IN ('brevemente', 'em_exibicao')
+                GROUP BY f.id
+                ORDER BY f.data_lancamento DESC
+                LIMIT 2
+            """)
+            proximos_filmes = cursor.fetchall()
+
+        enviar_email_newsletter(email, proximos_filmes)
+
+        return jsonify({'success': True, 'message': 'Subscricao realizada com sucesso! Verifique o seu email.'})
+    except Exception as e:
+        conn.rollback()
+        app.logger.error(f"Erro newsletter: {str(e)}")
+        return jsonify({'success': False, 'message': 'Erro ao processar subscricao.'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
 if __name__ == '__main__':
     pass
  

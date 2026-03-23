@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --primary-gold: #FFD60A;
     --secondary-gold: #FFA500;
     --dark-bg: #0D1B2A;
@@ -1268,7 +1268,6 @@ a {
 }
 .newsletter-input-group button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 214, 10, 0.3);
 }
 .footer-contact {
     display: flex;

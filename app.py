@@ -15238,6 +15238,21 @@ def newsletter_subscribe():
         conn.close()
 
 
+@app.route('/api/cinema/<int:cinema_id>')
+def api_cinema(cinema_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT * FROM cinemas WHERE id = %s", (cinema_id,))
+        cinema = cursor.fetchone()
+        if cinema:
+            return jsonify({'success': True, 'cinema': cinema})
+        return jsonify({'success': False, 'message': 'Cinema não encontrado'}), 404
+    finally:
+        cursor.close()
+        conn.close()
+
+
 if __name__ == '__main__':
     pass
  

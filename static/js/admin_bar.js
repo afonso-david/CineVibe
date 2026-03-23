@@ -143,7 +143,10 @@ function abrirModalAdicionarProduto() {
 }
 function fecharModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
-    document.body.style.overflow = 'auto';
+    const aindaAberto = document.querySelector('.modal-overlay[style*="flex"]');
+    if (!aindaAberto) {
+        document.body.style.overflow = 'auto';
+    }
 }
 async function editarProduto(produtoId) {
     try {
@@ -406,6 +409,7 @@ function removerMenu(menuId) {
 function abrirSeletorProdutos() {
     const listId = window.menuContext === 'novo' ? 'produtos-novo-menu-list' : 'produtos-menu-list';
     document.getElementById('modalSeletorProdutos').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
     const produtosAdicionados = document.querySelectorAll(`#${listId} .produto-item`);
     const idsAdicionados = Array.from(produtosAdicionados).map(item => {
         const nome = item.querySelector('.produto-nome').textContent;

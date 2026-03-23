@@ -48,7 +48,6 @@ a {
 
 .nav-center a:hover,
 .nav-center a.active {
-  color: var(--romance-pink) !important;
 }
 
 .nav-center a::after {

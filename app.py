@@ -10357,16 +10357,16 @@ def bar():
         return render_template('bar.html', 
                              menus=menus,
                              toppings=toppings,
-                             logged_in=session.get('user_authenticated', False),
-                             avatar=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png'))
+                             logged_in='user_id' in session,
+                             avatar=get_user_avatar())
                              
     except Exception as e:
         app.logger.error(f"Erro na rota /bar: {e}")
         return render_template('bar.html', 
                              menus=[],
                              toppings=[],
-                             logged_in=session.get('user_authenticated', False),
-                             avatar=session.get('user_avatar', 'imgs/icons/user_icon34-removebg-preview.png'))
+                             logged_in='user_id' in session,
+                             avatar=get_user_avatar())
 @app.route('/resumo_reserva', methods=['GET', 'POST'])
 def resumo_reserva():
     pass
@@ -12558,14 +12558,6 @@ def admin_editar_avatar(avatar_id):
             file.save(filepath)
             
             caminho = f"imgs/avatars/{filename}"
-            
-            if avatar_atual and avatar_atual['caminho'] != "imgs/icons/user_icon34-removebg-preview.png":
-                old_path = os.path.join('static', avatar_atual['caminho'])
-                if os.path.exists(old_path):
-                    try:
-                        os.remove(old_path)
-                    except:
-                        pass
     
     cursor.execute("UPDATE avatars SET nome = %s, caminho = %s, categoria_id = %s WHERE id = %s", (nome, caminho, categoria_id, avatar_id))
     conn.commit()

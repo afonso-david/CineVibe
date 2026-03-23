@@ -48,10 +48,11 @@ a {
 
 .nav-center a:hover,
 .nav-center a.active {
+  color: #fff !important;
 }
 
 .nav-center a::after {
-  background: linear-gradient(90deg, var(--romance-pink), var(--romance-deep)) !important;
+  background: linear-gradient(90deg, #FFD60A, #4EA8DE) !important;
 }
 
 .user-icon img:hover {

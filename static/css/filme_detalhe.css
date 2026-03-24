@@ -5369,7 +5369,6 @@ a {
 
 .btn-avaliar-agora:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4);
 }
 
 .formulario-avaliacao {
@@ -6860,4 +6859,127 @@ html.modal-open {
     .option-content p {
         font-size: 12px;
     }
+}
+
+/* Formulário de Primeira Avaliação */
+.stars-container-inline {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.stars-container-inline .star-inline {
+    font-size: 2rem;
+    color: #444;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.stars-container-inline .star-inline:hover {
+    color: #FFD60A;
+    transform: scale(1.1);
+}
+
+.stars-container-inline .star-inline.selected {
+    color: #FFD60A;
+    text-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
+}
+
+.rating-feedback-inline {
+    display: block;
+    color: #B8C5D1;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.form-group-inline {
+    margin-bottom: 20px;
+}
+
+.label-inline {
+    display: block;
+    color: #FFD60A;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.form-group-inline textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #B8C5D1;
+    font-size: 0.95rem;
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.form-group-inline textarea:focus {
+    outline: none;
+    border-color: rgba(255, 214, 10, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.char-counter-inline {
+    text-align: right;
+    color: #6B7280;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.form-actions-inline {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-cancelar-inline,
+.btn-salvar-inline {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.btn-cancelar-inline {
+    background: rgba(184, 197, 209, 0.2);
+    color: #B8C5D1;
+}
+
+.btn-cancelar-inline:hover {
+    background: rgba(184, 197, 209, 0.3);
+}
+
+.btn-salvar-inline {
+    background: #FFD60A;
+    color: #0D1B2A;
+}
+
+.btn-salvar-inline:hover {
+    background: #FFA500;
+    transform: translateY(-2px);
+}
+
+/* Fix para formulário não sair do container */
+#formularioPrimeiraAvaliacao {
+    overflow: hidden;
+}
+
+#formularioPrimeiraAvaliacao .modo-edicao {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#formularioPrimeiraAvaliacao form {
+    width: 100%;
+    box-sizing: border-box;
 }

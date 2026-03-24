@@ -442,9 +442,6 @@
                                             placeholder="Partilhe os seus pensamentos sobre o filme..."
                                             maxlength="500"
                                             rows="3">{{ user_avaliacao.comentario if user_avaliacao.comentario else '' }}</textarea>
-                                        <div class="char-counter-inline">
-                                            <span id="charCountInline">{{ user_avaliacao.comentario|length if user_avaliacao.comentario else 0 }}</span>/500 caracteres
-                                        </div>
                                     </div>
                                     
                                     <div class="form-actions-inline">
@@ -465,7 +462,7 @@
                         </div>
                         {% else %}
                         
-                        <div class="prompt-avaliar">
+                        <div class="prompt-avaliar" id="promptAvaliar">
                             <div class="prompt-content">
                                 <img src="{{ url_for('static', filename=avatar) }}" 
                                      alt="Seu avatar" 
@@ -478,6 +475,56 @@
                                     <i class="fas fa-star"></i>
                                     Avaliar Filme
                                 </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Formulário de primeira avaliação (escondido inicialmente) -->
+                        <div class="minha-avaliacao-card" id="formularioPrimeiraAvaliacao" style="display: none;">
+                            <div class="modo-edicao">
+                                <div class="card-header-minha">
+                                    <div class="usuario-info-minha">
+                                        <img src="{{ url_for('static', filename=avatar) }}" 
+                                             alt="Seu avatar" 
+                                             class="meu-avatar">
+                                        <div class="minha-info">
+                                            <span class="meu-nome">A Sua Avaliação</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <form id="formPrimeiraAvaliacao">
+                                    <div class="form-group-inline">
+                                        <label class="label-inline">Classificação</label>
+                                        <div class="stars-container-inline">
+                                            <span class="star-inline" data-rating="1" onclick="selecionarEstrelaPrimeiraVez(1)">★</span>
+                                            <span class="star-inline" data-rating="2" onclick="selecionarEstrelaPrimeiraVez(2)">★</span>
+                                            <span class="star-inline" data-rating="3" onclick="selecionarEstrelaPrimeiraVez(3)">★</span>
+                                            <span class="star-inline" data-rating="4" onclick="selecionarEstrelaPrimeiraVez(4)">★</span>
+                                            <span class="star-inline" data-rating="5" onclick="selecionarEstrelaPrimeiraVez(5)">★</span>
+                                        </div>
+                                        <span class="rating-feedback-inline" id="ratingTextPrimeiraVez">Selecione uma classificação</span>
+                                        <input type="hidden" id="ratingValuePrimeiraVez" name="rating" value="0">
+                                    </div>
+                                    
+                                    <div class="form-group-inline">
+                                        <label class="label-inline">Comentário (opcional)</label>
+                                        <textarea 
+                                            id="comentarioPrimeiraVez" 
+                                            name="comentario" 
+                                            placeholder="Partilhe os seus pensamentos sobre o filme..."
+                                            maxlength="500"
+                                            rows="3"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-actions-inline">
+                                        <button type="button" class="btn-cancelar-inline" onclick="cancelarPrimeiraAvaliacao()">
+                                            Cancelar
+                                        </button>
+                                        <button type="button" class="btn-salvar-inline" onclick="salvarPrimeiraAvaliacao()">
+                                            Publicar Avaliação
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         {% endif %}
@@ -1196,10 +1243,7 @@
                     document.getElementById('ratingTextInline').textContent = rating + ' de 5 estrelas';
                 }
                 const textarea = document.getElementById('comentarioInline');
-                if (textarea) {
-                    textarea.addEventListener('input', updateCharCountInline);
-                    updateCharCountInline();
-                }
+                // Character counter removed
             }, 100);
         }
 
@@ -1242,27 +1286,25 @@
         }
 
         function removerAvaliacao() {
-            if (confirm('Tem a certeza que deseja remover a sua avaliação?')) {
-                fetch('/remover_avaliacao', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        filme_id: {{ filme.id }}
-                    })
+            fetch('/remover_avaliacao', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id_filme: {{ filme.id }}
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('Erro: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Erro ao remover avaliação');
-                });
-            }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erro ao remover avaliação');
+            });
         }
 
         let currentRatingInlineGlobal = {{ user_avaliacao.rating if user_avaliacao else 0 }};
@@ -1306,17 +1348,86 @@
             });
         }
 
-        function updateCharCountInline() {
-            const textarea = document.getElementById('comentarioInline');
-            const charCount = document.getElementById('charCountInline');
-            if (textarea && charCount) {
-                charCount.textContent = textarea.value.length;
-            }
-        }
-
         function abrirFormularioAvaliacao() {
-            console.log('Abrir formulário de avaliação');
+            document.getElementById('promptAvaliar').style.display = 'none';
+            document.getElementById('formularioPrimeiraAvaliacao').style.display = 'block';
         }
+        
+        function cancelarPrimeiraAvaliacao() {
+            document.getElementById('formularioPrimeiraAvaliacao').style.display = 'none';
+            document.getElementById('promptAvaliar').style.display = 'block';
+            // Reset form
+            document.getElementById('ratingValuePrimeiraVez').value = '0';
+            document.getElementById('comentarioPrimeiraVez').value = '';
+            document.getElementById('ratingTextPrimeiraVez').textContent = 'Selecione uma classificação';
+            // Reset stars
+            document.querySelectorAll('#formularioPrimeiraAvaliacao .star-inline').forEach(star => {
+                star.classList.remove('selected');
+            });
+        }
+        
+        let currentRatingPrimeiraVez = 0;
+        
+        function selecionarEstrelaPrimeiraVez(rating) {
+            currentRatingPrimeiraVez = rating;
+            document.getElementById('ratingValuePrimeiraVez').value = rating;
+            
+            const feedbackTexts = {
+                1: '1 de 5 estrelas - Fraco',
+                2: '2 de 5 estrelas - Medíocre',
+                3: '3 de 5 estrelas - Bom',
+                4: '4 de 5 estrelas - Muito Bom',
+                5: '5 de 5 estrelas - Excelente'
+            };
+            
+            document.getElementById('ratingTextPrimeiraVez').textContent = feedbackTexts[rating];
+            
+            // Update visual stars
+            document.querySelectorAll('#formularioPrimeiraAvaliacao .star-inline').forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+        
+        function salvarPrimeiraAvaliacao() {
+            const rating = document.getElementById('ratingValuePrimeiraVez').value;
+            const comentario = document.getElementById('comentarioPrimeiraVez').value.trim();
+            
+            if (!rating || rating === '0') {
+                alert('Por favor, selecione uma classificação');
+                return;
+            }
+            
+            fetch('/avaliar_filme', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    filme_id: {{ filme.id }},
+                    rating: parseInt(rating),
+                    comentario: comentario
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erro ao salvar avaliação');
+            });
+        }
+        
+        // Character counter removed for primeira avaliacao
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners can be added here if needed
+        });
 
         function openAuthModal() {
             const isLoggedIn = {{ 'true' if logged_in else 'false' }};

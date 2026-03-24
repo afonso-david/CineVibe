@@ -820,44 +820,12 @@
                         
                         this.fecharModal();
                         
-                        
-                        if (data.filme_titulo) {
-                            
-                            const notification = document.createElement('div');
-                            notification.style.cssText = `
-                                position: fixed;
-                                top: 20px;
-                                right: 20px;
-                                background: #4CAF50;
-                                color: white;
-                                padding: 15px 20px;
-                                border-radius: 5px;
-                                z-index: 10000;
-                                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                                font-family: Arial, sans-serif;
-                            `;
-                            notification.innerHTML = `
-                                <strong>✅ Avaliação salva!</strong><br>
-                                Redirecionando para ${data.filme_titulo}...
-                            `;
-                            document.body.appendChild(notification);
-                            
-                            
-                            setTimeout(() => {
-                                if (notification.parentNode) {
-                                    notification.parentNode.removeChild(notification);
-                                }
-                            }, 2000);
+                        // Redirecionar imediatamente
+                        if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                            window.location.reload();
                         }
-                        
-                        
-                        setTimeout(() => {
-                            if (data.redirect_url) {
-                                window.location.href = data.redirect_url;
-                            } else {
-                                window.location.reload();
-                            }
-                        }, 1500);
                         
                     } else {
                         console.error('Erro do servidor:', data.message);

@@ -400,6 +400,46 @@
                                 </div>
                             </div>
                         </div>
+
+                        {% if dados_pagamento.subscricao and dados_pagamento.subscricao.bilhetes_disponiveis > 0 %}
+                        <div class="bilhetes-gratis-section">
+                            <div class="bilhetes-gratis-header">
+                                <h3><i class="fas fa-gift"></i> Bilhetes Grátis</h3>
+                                <p>Tens {{ dados_pagamento.subscricao.bilhetes_disponiveis }} bilhete(s) grátis disponível(is) este mês</p>
+                            </div>
+                            
+                            <div class="bilhetes-gratis-actions">
+                                {% set num_lugares = dados_pagamento.lugares_selecionados|length %}
+                                {% set bilhetes_a_usar = [num_lugares, dados_pagamento.subscricao.bilhetes_disponiveis]|min %}
+                                
+                                <button type="button" id="usarBilhetesGratis" class="btn-usar-bilhetes" onclick="usarBilhetesGratis({{ bilhetes_a_usar }})">
+                                    <i class="fas fa-ticket-alt"></i>
+                                    Usar {{ bilhetes_a_usar }} Bilhete{% if bilhetes_a_usar > 1 %}s{% endif %} Grátis
+                                </button>
+                                
+                                <div id="bilhetesGratisAplicados" class="bilhetes-aplicados" style="display: none;">
+                                    <div class="bilhetes-info">
+                                        <div class="bilhetes-header">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span class="bilhetes-titulo">Bilhetes Grátis Aplicados!</span>
+                                            <button type="button" id="removerBilhetesGratis" class="btn-remover-bilhetes" onclick="removerBilhetesGratis()">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div class="bilhetes-detalhes">
+                                            <p><strong id="bilhetesUsadosTexto"></strong></p>
+                                            <div class="bilhetes-valores">
+                                                <div class="valor-desconto-bilhetes">
+                                                    <span>Desconto:</span>
+                                                    <span id="valorDescontoBilhetes">-€0.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                         
                         <div class="pagamento-opcoes">
                             <div class="opcao-pagamento">
@@ -696,7 +736,8 @@
             }
             const dadosPagamento = {
                 payment_method: metodoPagamento.value,
-                codigo: codigoDescontoAtivo
+                codigo: codigoDescontoAtivo,
+                bilhetes_gratis_usados: bilhetesGratisAtivos
             };
             const botao = event.target;
             const textoOriginal = botao.innerHTML;
@@ -872,6 +913,50 @@
                 botaoRemover.addEventListener('click', removerDesconto);
             }
         });
+
+        // Sistema de Bilhetes Grátis
+        let bilhetesGratisAtivos = 0;
+        let descontoBilhetesGratis = 0;
+        const precoBilhete = {{ dados_pagamento.preco_bilhete }};
+
+        function usarBilhetesGratis(quantidade) {
+            bilhetesGratisAtivos = quantidade;
+            descontoBilhetesGratis = quantidade * precoBilhete;
+            
+            // Atualizar UI
+            document.getElementById('usarBilhetesGratis').style.display = 'none';
+            document.getElementById('bilhetesGratisAplicados').style.display = 'block';
+            document.getElementById('bilhetesUsadosTexto').textContent = 
+                `${quantidade} bilhete${quantidade > 1 ? 's' : ''} grátis aplicado${quantidade > 1 ? 's' : ''}`;
+            document.getElementById('valorDescontoBilhetes').textContent = 
+                `-€${descontoBilhetesGratis.toFixed(2)}`;
+            
+            // Atualizar total
+            atualizarTotalComBilhetesGratis();
+        }
+
+        function removerBilhetesGratis() {
+            bilhetesGratisAtivos = 0;
+            descontoBilhetesGratis = 0;
+            
+            // Atualizar UI
+            document.getElementById('usarBilhetesGratis').style.display = 'block';
+            document.getElementById('bilhetesGratisAplicados').style.display = 'none';
+            
+            // Atualizar total
+            atualizarTotalComBilhetesGratis();
+        }
+
+        function atualizarTotalComBilhetesGratis() {
+            const totalAtual = {{ dados_pagamento.total_geral }};
+            const novoTotal = Math.max(0, totalAtual - descontoBilhetesGratis);
+            
+            // Atualizar o total exibido no botão de pagamento
+            const botaoPagamento = document.querySelector('.btn-finalizar-pagamento .amount');
+            if (botaoPagamento) {
+                botaoPagamento.textContent = `€${novoTotal.toFixed(2)}`;
+            }
+        }
     </script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
 </body>

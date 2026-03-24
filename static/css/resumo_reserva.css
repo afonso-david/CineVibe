@@ -307,6 +307,21 @@
     font-size: 1rem;
 }
 
+.subtotal-item.desconto-item {
+    color: #4CAF50;
+    font-weight: 500;
+}
+
+.subtotal-item.desconto-item i {
+    margin-right: 0.3rem;
+    color: #FFD60A;
+}
+
+.subtotal-item .desconto-valor {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
 .total-divider {
     height: 1px;
     background: rgba(255, 214, 10, 0.3);
@@ -473,7 +488,6 @@
 .form-group input:focus {
     outline: none;
     border-color: #FFD60A;
-    box-shadow: 0 0 10px rgba(255, 214, 10, 0.3);
     background: rgba(255, 255, 255, 0.15);
 }
 

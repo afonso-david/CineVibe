@@ -176,10 +176,28 @@
                                     <span>Bilhetes</span>
                                     <span>€{{ "%.2f"|format(quantidade * preco_bilhete) }}</span>
                                 </div>
+                                {% if subscricao and subscricao.plano_tipo in ['member', 'premium'] and desconto_bilhetes > 0 %}
+                                <div class="subtotal-item desconto-item">
+                                    <span>
+                                        <i class="fas fa-tag"></i>
+                                        Desconto {{ subscricao.plano_tipo|capitalize }} ({% if subscricao.plano_tipo == 'member' %}15%{% else %}25%{% endif %})
+                                    </span>
+                                    <span class="desconto-valor">-€{{ "%.2f"|format(desconto_bilhetes) }}</span>
+                                </div>
+                                {% endif %}
                                 {% if total_bar > 0 %}
                                 <div class="subtotal-item">
                                     <span>Produtos do Bar</span>
                                     <span>€{{ "%.2f"|format(total_bar) }}</span>
+                                </div>
+                                {% endif %}
+                                {% if subscricao and subscricao.plano_tipo in ['member', 'premium'] and desconto_bar > 0 %}
+                                <div class="subtotal-item desconto-item">
+                                    <span>
+                                        <i class="fas fa-tag"></i>
+                                        Desconto Bar {{ subscricao.plano_tipo|capitalize }} ({% if subscricao.plano_tipo == 'member' %}10%{% else %}20%{% endif %})
+                                    </span>
+                                    <span class="desconto-valor">-€{{ "%.2f"|format(desconto_bar) }}</span>
                                 </div>
                                 {% endif %}
                                 {% if total_toppings > 0 %}

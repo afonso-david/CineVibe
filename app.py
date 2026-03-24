@@ -10621,7 +10621,34 @@ def resumo_reserva():
         
         app.logger.info(f"📊 Total toppings: €{total_toppings}, Total toppings: {len(toppings_selecionados)}")
         
-        total_geral = total_bilhetes + total_bar + total_toppings
+        # Calcular descontos baseados no plano do usuário
+        subscricao = None
+        desconto_bilhetes = 0.0
+        desconto_bar = 0.0
+        
+        if 'user_id' in session:
+            subscricao = get_user_subscription(session['user_id'])
+            
+            if subscricao and subscricao.get('plano_tipo') in ['member', 'premium']:
+                plano = subscricao['plano_tipo']
+                
+                # Desconto em bilhetes
+                if plano == 'member':
+                    desconto_bilhetes = total_bilhetes * 0.15  # 15%
+                elif plano == 'premium':
+                    desconto_bilhetes = total_bilhetes * 0.25  # 25%
+                
+                # Desconto no bar (se houver produtos)
+                if total_bar > 0:
+                    if plano == 'member':
+                        desconto_bar = total_bar * 0.10  # 10%
+                    elif plano == 'premium':
+                        desconto_bar = total_bar * 0.20  # 20%
+        
+        # Aplicar descontos ao total
+        total_bilhetes_com_desconto = total_bilhetes - desconto_bilhetes
+        total_bar_com_desconto = total_bar - desconto_bar
+        total_geral = total_bilhetes_com_desconto + total_bar_com_desconto + total_toppings
         
         cursor.close()
         conn.close()
@@ -10662,6 +10689,9 @@ def resumo_reserva():
                              total_bar=total_bar,
                              total_toppings=total_toppings,
                              total_geral=total_geral,
+                             subscricao=subscricao,
+                             desconto_bilhetes=desconto_bilhetes,
+                             desconto_bar=desconto_bar,
                              quantidade=len(lugares_selecionados),
                              user_authenticated='user_id' in session,
                              user_avatar=get_user_avatar(),
@@ -14457,8 +14487,66 @@ def checkout():
         preco_bilhete = float(tipo_sessao.get('preco_bilhete', 8.50)) if tipo_sessao else 8.50
         quantidade = len(lugares_selecionados)
         total_bilhetes = quantidade * preco_bilhete
+        
+        # Obter produtos do bar da sessão
+        produtos_bar_sessao = session.get('produtos_bar', [])
         total_bar = 0.0
-        total_geral = total_bilhetes + total_bar
+        
+        # Calcular total do bar se houver produtos
+        if produtos_bar_sessao:
+            conn_bar = get_db_connection()
+            cursor_bar = conn_bar.cursor(dictionary=True)
+            
+            for produto in produtos_bar_sessao:
+                produto_id = produto.get('id')
+                quantidade_prod = int(produto.get('quantidade', 1))
+                tipo_produto = produto.get('tipo', 'bar')
+                
+                if tipo_produto == 'menu':
+                    cursor_bar.execute("SELECT preco_total as preco FROM menus WHERE id = %s", (produto_id,))
+                else:
+                    cursor_bar.execute("SELECT preco FROM bar WHERE id = %s", (produto_id,))
+                
+                produto_info = cursor_bar.fetchone()
+                if produto_info:
+                    total_bar += float(produto_info['preco']) * quantidade_prod
+            
+            cursor_bar.close()
+            conn_bar.close()
+        
+        # Obter informações da subscrição se o user estiver logado
+        subscricao = None
+        reserva_data = None
+        desconto_bilhetes = 0.0
+        desconto_bar = 0.0
+        
+        if user_authenticated:
+            subscricao = get_user_subscription(session['user_id'])
+            reserva_data = {
+                'lugares_selecionados': lugares_selecionados
+            }
+            
+            # Calcular descontos baseados no plano
+            if subscricao and subscricao.get('plano_tipo') in ['member', 'premium']:
+                plano = subscricao['plano_tipo']
+                
+                # Desconto em bilhetes
+                if plano == 'member':
+                    desconto_bilhetes = total_bilhetes * 0.15  # 15%
+                elif plano == 'premium':
+                    desconto_bilhetes = total_bilhetes * 0.25  # 25%
+                
+                # Desconto no bar (se houver produtos)
+                if total_bar > 0:
+                    if plano == 'member':
+                        desconto_bar = total_bar * 0.10  # 10%
+                    elif plano == 'premium':
+                        desconto_bar = total_bar * 0.20  # 20%
+        
+        # Aplicar descontos ao total
+        total_bilhetes_com_desconto = total_bilhetes - desconto_bilhetes
+        total_bar_com_desconto = total_bar - desconto_bar
+        total_geral = total_bilhetes_com_desconto + total_bar_com_desconto
         
         session['checkout_data'] = {
             'filme_id': filme_id,
@@ -14470,7 +14558,6 @@ def checkout():
             'total_geral': total_geral
         }
         session['total'] = total_geral
-        
         
         return render_template('checkout.html',
                              filme=filme,
@@ -14485,8 +14572,12 @@ def checkout():
                              total_bilhetes=total_bilhetes,
                              total_bar=total_bar,
                              total_geral=total_geral,
+                             desconto_bilhetes=desconto_bilhetes,
+                             desconto_bar=desconto_bar,
                              user_authenticated=user_authenticated,
-                             user_avatar=user_avatar)
+                             user_avatar=user_avatar,
+                             subscricao=subscricao,
+                             reserva_data=reserva_data)
                              
     except Exception as e:
         app.logger.error(f"❌ CHECKOUT - Erro: {e}")
@@ -14545,6 +14636,7 @@ def processar_checkout():
         
         total_geral = data.get('total_geral', 17.0)
         payment_method = data.get('payment_method', 'cartao')
+        bilhetes_gratis_usados = data.get('bilhetes_gratis_usados', 0)
         
         
         app.logger.info(f"📥 Lugares processados: '{lugares}' (tipo: {type(lugares).__name__})")
@@ -14574,6 +14666,44 @@ def processar_checkout():
         
     
         user_id = session.get('user_id')
+        
+        # Se usou bilhetes grátis, atualizar contador na BD
+        if bilhetes_gratis_usados > 0 and user_id:
+            conn_bilhetes = get_db_connection()
+            cursor_bilhetes = conn_bilhetes.cursor(dictionary=True)
+            try:
+                # Verificar se tem bilhetes disponíveis
+                cursor_bilhetes.execute("""
+                    SELECT bilhetes_gratis_mes, bilhetes_gratis_usados
+                    FROM subscricoes
+                    WHERE user_id = %s AND status = 'ativo'
+                    ORDER BY id DESC LIMIT 1
+                """, (user_id,))
+                subscricao = cursor_bilhetes.fetchone()
+                
+                if subscricao:
+                    bilhetes_disponiveis = subscricao['bilhetes_gratis_mes'] - subscricao['bilhetes_gratis_usados']
+                    
+                    if bilhetes_disponiveis >= bilhetes_gratis_usados:
+                        # Atualizar contador
+                        cursor_bilhetes.execute("""
+                            UPDATE subscricoes
+                            SET bilhetes_gratis_usados = bilhetes_gratis_usados + %s
+                            WHERE user_id = %s AND status = 'ativo'
+                        """, (bilhetes_gratis_usados, user_id))
+                        conn_bilhetes.commit()
+                        app.logger.info(f"✅ {bilhetes_gratis_usados} bilhete(s) grátis usado(s) pelo user {user_id}")
+                    else:
+                        app.logger.warning(f"⚠️ User {user_id} tentou usar mais bilhetes grátis do que tem disponível")
+            except Exception as e:
+                app.logger.error(f"❌ Erro ao processar bilhetes grátis: {str(e)}")
+            finally:
+                cursor_bilhetes.close()
+                conn_bilhetes.close()
+        
+        # Se total é 0 e método é 'gratis', marcar como pago com bilhetes grátis
+        if float(total_geral) == 0 and payment_method == 'gratis':
+            payment_method = 'bilhetes_gratis'
         
         if user_id:
             pass
@@ -15248,6 +15378,7 @@ def finalizar_pagamento_com_desconto():
         data = request.get_json()
         codigo = data.get('codigo', '').strip().upper()
         payment_method = data.get('payment_method')
+        bilhetes_gratis_usados = data.get('bilhetes_gratis_usados', 0)
         
         if not payment_method:
             return jsonify({'success': False, 'message': 'Método de pagamento não selecionado'})
@@ -15255,6 +15386,7 @@ def finalizar_pagamento_com_desconto():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
  
+        # Processar código de desconto se existir
         if codigo:
             cursor.execute("""
                 UPDATE codigos_desconto 
@@ -15267,6 +15399,36 @@ def finalizar_pagamento_com_desconto():
                 conn.close()
                 return jsonify({'success': False, 'message': 'Código de desconto inválido ou já usado'})
         
+        # Processar bilhetes grátis se foram usados
+        if bilhetes_gratis_usados > 0:
+            # Verificar se o user tem bilhetes disponíveis
+            cursor.execute("""
+                SELECT bilhetes_gratis_mes, bilhetes_gratis_usados
+                FROM subscricoes
+                WHERE user_id = %s AND status = 'ativo'
+                ORDER BY id DESC LIMIT 1
+            """, (session['user_id'],))
+            subscricao = cursor.fetchone()
+            
+            if not subscricao:
+                cursor.close()
+                conn.close()
+                return jsonify({'success': False, 'message': 'Subscrição não encontrada'})
+            
+            bilhetes_disponiveis = subscricao['bilhetes_gratis_mes'] - subscricao['bilhetes_gratis_usados']
+            
+            if bilhetes_disponiveis < bilhetes_gratis_usados:
+                cursor.close()
+                conn.close()
+                return jsonify({'success': False, 'message': 'Não tens bilhetes grátis suficientes'})
+            
+            # Atualizar contador de bilhetes usados
+            cursor.execute("""
+                UPDATE subscricoes
+                SET bilhetes_gratis_usados = bilhetes_gratis_usados + %s
+                WHERE user_id = %s AND status = 'ativo'
+            """, (bilhetes_gratis_usados, session['user_id']))
+        
         conn.commit()
         cursor.close()
         conn.close()
@@ -15274,7 +15436,8 @@ def finalizar_pagamento_com_desconto():
         return jsonify({
             'success': True,
             'message': 'Pagamento processado com sucesso!',
-            'codigo_usado': codigo if codigo else None
+            'codigo_usado': codigo if codigo else None,
+            'bilhetes_gratis_usados': bilhetes_gratis_usados
         })
         
     except Exception as e:

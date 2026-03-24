@@ -265,9 +265,7 @@
                     });
                 }
             {% else %}
-                if (confirm('Para subscrever um plano, precisa de fazer login. Deseja fazer login agora?')) {
-                    window.location.href = '{{ url_for("login") }}?redirect=beneficios&plan=' + planType;
-                }
+                window.location.href = '{{ url_for("login") }}?next={{ url_for("beneficios") }}';
             {% endif %}
         }
         function animateOnScroll() {

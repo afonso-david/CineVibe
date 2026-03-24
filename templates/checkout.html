@@ -137,7 +137,7 @@
                     <form id="checkoutForm">
                         {% if not user_authenticated %}
                         <div class="user-info-guest">
-                            <p><i class="fas fa-info-circle"></i> Seus dados foram salvos no resumo anterior</p>
+                            <p><i class="fas fa-info-circle"></i> Os seus dados foram salvos no resumo anterior</p>
                         </div>
                         {% else %}
                         <div class="user-info">
@@ -149,6 +149,7 @@
                         <div class="payment-section">
                             <h3><i class="fas fa-credit-card"></i> Métodos de Pagamento</h3>
 
+                            {% if user_authenticated %}
                             <div class="codigo-desconto-integrated">
                                 <div class="codigo-desconto-header">
                                     <div class="codigo-title">
@@ -193,6 +194,45 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
+
+                            {% if subscricao and subscricao.bilhetes_disponiveis > 0 %}
+                            <div class="bilhetes-gratis-integrated">
+                                <div class="bilhetes-gratis-header">
+                                    <div class="bilhetes-title">
+                                        <i class="fas fa-gift"></i>
+                                        <span>Bilhetes Grátis Disponíveis: {{ subscricao.bilhetes_disponiveis }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="bilhetes-gratis-actions">
+                                    {% set num_lugares = reserva_data.lugares_selecionados|length if reserva_data and reserva_data.lugares_selecionados else 1 %}
+                                    {% set bilhetes_a_usar = [num_lugares, subscricao.bilhetes_disponiveis]|min %}
+                                    
+                                    <button type="button" id="usarBilhetesGratis" class="btn-usar-bilhetes-checkout" onclick="usarBilhetesGratisCheckout({{ bilhetes_a_usar }}, {{ preco_bilhete|default(8.50) }})">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        Usar {{ bilhetes_a_usar }} Bilhete{% if bilhetes_a_usar > 1 %}s{% endif %} Grátis
+                                    </button>
+                                    
+                                    <div id="bilhetesGratisAplicadosCheckout" class="bilhetes-aplicados-checkout" style="display: none;">
+                                        <div class="bilhetes-info-checkout">
+                                            <div class="bilhetes-header-checkout">
+                                                <div class="bilhetes-left">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    <div class="bilhetes-text">
+                                                        <span class="bilhetes-titulo-checkout" id="bilhetesUsadosTextoCheckout"></span>
+                                                        <span class="bilhetes-desconto" id="valorDescontoBilhetesCheckout"></span>
+                                                    </div>
+                                                </div>
+                                                <button type="button" id="removerBilhetesGratisCheckout" class="btn-remover-bilhetes-checkout" onclick="removerBilhetesGratisCheckout()">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
 
                             <div id="payment-methods-container" class="payment-methods-grid">
                                 <div class="payment-method-item" data-method="mbway">
@@ -304,10 +344,10 @@
                                 <i class="fas fa-arrow-left"></i>
                                 Voltar
                             </button>
-                            <button type="button" class="btn-primary" onclick="prosseguirPagamento()">
-                                <i class="fas fa-credit-card"></i>
-                                Prosseguir para Pagamento
-                                <span class="amount">€{{ "%.2f"|format(total_geral) }}</span>
+                            <button type="button" id="btnProsseguir" class="btn-primary" onclick="prosseguirPagamento()">
+                                <i class="fas fa-credit-card" id="btnIcon"></i>
+                                <span id="btnTexto">Prosseguir para Pagamento</span>
+                                <span class="amount" id="btnAmount">€{{ "%.2f"|format(total_geral) }}</span>
                             </button>
                         </div>
                     </form>
@@ -422,14 +462,23 @@
         }
 
         function prosseguirPagamento() {
-            if (!selectedPaymentMethod) {
-                alert('Por favor, selecione um método de pagamento.');
-                return;
+            const totalAtual = {{ total_geral }};
+            const novoTotal = Math.max(0, totalAtual - descontoBilhetesGratisCheckout);
+            
+            if (novoTotal === 0) {
+                // Total é 0, finalizar reserva diretamente
+                finalizarReservaGratis();
+            } else {
+                // Total > 0, prosseguir para seleção de método de pagamento
+                if (!selectedPaymentMethod) {
+                    alert('Por favor, selecione um método de pagamento.');
+                    return;
+                }
+                if (!validatePaymentMethod()) {
+                    return;
+                }
+                iniciarProcessoPagamento();
             }
-            if (!validatePaymentMethod()) {
-                return;
-            }
-            iniciarProcessoPagamento();
         }
 
         function iniciarProcessoPagamento() {
@@ -443,7 +492,8 @@
                 lugares: {{ (",".join(lugares_selecionados) if lugares_selecionados else "A1,A2") | tojson }},
                 total_geral: {{ total_geral if total_geral else 17.0 }},
                 payment_method: selectedPaymentMethod,
-                payment_data: getPaymentData()
+                payment_data: getPaymentData(),
+                bilhetes_gratis_usados: bilhetesGratisAtivosCheckout
             };
             
             {% if not user_authenticated %}
@@ -459,7 +509,7 @@
             if (!customerName || !customerEmail || customerName.trim() === '' || customerEmail.trim() === '') {
                 console.error('❌ Dados do cliente não encontrados na sessão!');
                 document.getElementById('loadingModal').style.display = 'none';
-                alert('❌ Erro: Dados do cliente não encontrados. Por favor, volte ao Resumo da Compra e preencha seus dados.');
+                alert('❌ Erro: Dados do cliente não encontrados. Por favor, volte ao Resumo da Compra e preencha os seus dados.');
                 window.location.href = '{{ url_for("resumo_reserva") }}';
                 return;
             }
@@ -809,6 +859,139 @@
                 botaoRemover.addEventListener('click', removerDesconto);
             }
         });
+
+        // Sistema de Bilhetes Grátis para Checkout
+        let bilhetesGratisAtivosCheckout = 0;
+        let descontoBilhetesGratisCheckout = 0;
+
+        function usarBilhetesGratisCheckout(quantidade, precoBilhete) {
+            bilhetesGratisAtivosCheckout = quantidade;
+            descontoBilhetesGratisCheckout = quantidade * precoBilhete;
+            
+            // Atualizar UI
+            document.getElementById('usarBilhetesGratis').style.display = 'none';
+            document.getElementById('bilhetesGratisAplicadosCheckout').style.display = 'block';
+            document.getElementById('bilhetesUsadosTextoCheckout').textContent = 
+                `${quantidade} bilhete${quantidade > 1 ? 's' : ''} grátis aplicado${quantidade > 1 ? 's' : ''}`;
+            document.getElementById('valorDescontoBilhetesCheckout').textContent = 
+                `-€${descontoBilhetesGratisCheckout.toFixed(2)}`;
+            
+            // Atualizar total
+            atualizarTotalComBilhetesGratisCheckout();
+        }
+
+        function removerBilhetesGratisCheckout() {
+            bilhetesGratisAtivosCheckout = 0;
+            descontoBilhetesGratisCheckout = 0;
+            
+            // Atualizar UI
+            document.getElementById('usarBilhetesGratis').style.display = 'block';
+            document.getElementById('bilhetesGratisAplicadosCheckout').style.display = 'none';
+            
+            // Atualizar total
+            atualizarTotalComBilhetesGratisCheckout();
+        }
+
+        function atualizarTotalComBilhetesGratisCheckout() {
+            const totalAtual = {{ total_geral }};
+            const novoTotal = Math.max(0, totalAtual - descontoBilhetesGratisCheckout);
+            
+            // Atualizar o total exibido no botão de pagamento
+            const botaoPagamento = document.querySelector('.btn-primary .amount');
+            if (botaoPagamento) {
+                botaoPagamento.textContent = `€${novoTotal.toFixed(2)}`;
+            }
+            
+            // Atualizar texto do botão se total for 0
+            const btnTexto = document.getElementById('btnTexto');
+            const btnIcon = document.getElementById('btnIcon');
+            const btnAmount = document.getElementById('btnAmount');
+            
+            if (novoTotal === 0) {
+                btnTexto.textContent = 'Finalizar Reserva';
+                btnIcon.className = 'fas fa-check-circle';
+                btnAmount.style.display = 'none';
+            } else {
+                btnTexto.textContent = 'Prosseguir para Pagamento';
+                btnIcon.className = 'fas fa-credit-card';
+                btnAmount.style.display = 'inline';
+            }
+        }
+
+        function finalizarReservaGratis() {
+            // Mostrar loading
+            const loadingOverlay = document.getElementById('loadingModal');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'flex';
+                document.getElementById('loadingTitle').textContent = 'Processando Reserva...';
+                document.getElementById('loadingMessage').textContent = 'Aguarde um momento';
+            }
+            
+            // Preparar dados completos da reserva
+            const dados = {
+                filme_id: {{ filme.id if filme else 1 }},
+                cinema_id: {{ cinema.id if cinema else 1 }},
+                id_tipo_sessao: {{ tipo_sessao.id if tipo_sessao else 1 }},
+                id_horario_sessao: {{ horario.id if horario else 1 }},
+                data_sessao: '{{ data_sessao if data_sessao else "2025-01-20" }}',
+                lugares: {{ (",".join(lugares_selecionados) if lugares_selecionados else "A1,A2") | tojson }},
+                total_geral: 0,
+                payment_method: 'gratis',
+                bilhetes_gratis_usados: bilhetesGratisAtivosCheckout
+            };
+            
+            {% if not user_authenticated %}
+            const customerName = '{{ session.get("nome_cliente", "") }}';
+            const customerEmail = '{{ session.get("email_cliente", "") }}';
+            const customerPhone = '{{ session.get("telefone_cliente", "") }}';
+            
+            if (!customerName || !customerEmail || customerName.trim() === '' || customerEmail.trim() === '') {
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+                alert('❌ Erro: Dados do cliente não encontrados. Por favor, volte ao Resumo da Compra e preencha os seus dados.');
+                return;
+            }
+            dados.customer_name = customerName.trim();
+            dados.customer_email = customerEmail.trim();
+            dados.customer_phone = customerPhone ? customerPhone.trim() : '';
+            {% endif %}
+            
+            console.log('📧 Dados da reserva grátis:', dados);
+            
+            // Enviar dados para o backend
+            fetch('/processar_checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (loadingOverlay) {
+                        document.getElementById('loadingTitle').textContent = 'Reserva Confirmada!';
+                        document.getElementById('loadingMessage').textContent = 'Redirecionando...';
+                    }
+                    setTimeout(() => {
+                        window.location.href = data.redirect || '/confirmacao';
+                    }, 1500);
+                } else {
+                    alert('Erro ao processar reserva: ' + (data.error || data.message || 'Erro desconhecido'));
+                    if (loadingOverlay) {
+                        loadingOverlay.style.display = 'none';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao processar reserva. Tente novamente.');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+            });
+        }
     </script>
     </div> 
 </body>

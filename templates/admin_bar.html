@@ -131,17 +131,21 @@
                 <div class="top-bar-right">
                     <div class="quick-stats">
                         <div class="stat-item">
-                            <i class="fas fa-utensils"></i>
-                            <span>{{ produtos|length }} Produtos</span>
+                            <i class="fas fa-cookie-bite"></i>
+                            <span>{{ snacks|length }} Snacks</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-glass-whiskey"></i>
+                            <span>{{ bebidas|length }} Bebidas</span>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-list"></i>
                             <span>{{ menus|length }} Menus</span>
                         </div>
                     </div>
-                    <button class="btn-primary" id="btnAdicionar" onclick="abrirModalAdicionarProduto()">
-                        <i class="fas fa-plus"></i>
-                        <span id="btnAdicionarTexto">Novo Produto</span>
+                    <button class="btn-primary" id="btnAdicionar" onclick="abrirModalAdicionar()">
+                        <i class="fas fa-plus" id="btnAdicionarIcone"></i>
+                        <span id="btnAdicionarTexto">Novo Snack</span>
                     </button>
                 </div>
             </header>
@@ -159,8 +163,6 @@
                                 <option value="">Todos os Tipos</option>
                                 <option value="Bebida">Bebidas</option>
                                 <option value="Snack">Snacks</option>
-                                <option value="Doce">Doces</option>
-                                <option value="Combo">Combos</option>
                             </select>
                             <div class="price-filters">
                                 <button class="price-btn active" data-price="all">Todos</button>
@@ -189,29 +191,31 @@
                                 <option value="id">Ordenar por ID</option>
                                 <option value="nome">Ordenar por Nome</option>
                                 <option value="preco">Ordenar por Preço</option>
-                                <option value="tipo">Ordenar por Tipo</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div class="tabs-container">
-                    <button class="tab-btn active" onclick="mostrarTab('produtos')">
-                        <i class="fas fa-utensils"></i> Produtos
+                    <button class="tab-btn active" onclick="mostrarTab('snacks')">
+                        <i class="fas fa-cookie-bite"></i> Snacks
+                    </button>
+                    <button class="tab-btn" onclick="mostrarTab('bebidas')">
+                        <i class="fas fa-glass-whiskey"></i> Bebidas
                     </button>
                     <button class="tab-btn" onclick="mostrarTab('menus')">
                         <i class="fas fa-list"></i> Menus
                     </button>
                     <button class="tab-btn" onclick="mostrarTab('toppings')">
-                        <i class="fas fa-cookie-bite"></i> Toppings
+                        <i class="fas fa-plus-circle"></i> Toppings
                     </button>
                 </div>
 
-                <div id="tab-produtos" class="tab-content" style="display: block;">
+                <div id="tab-snacks" class="tab-content" style="display: block;">
                 
                 <div class="movies-grid" id="produtos-grid" style="display: none;">
-                    {% for produto in produtos %}
-                    <div class="movie-card-pro" data-produto-id="{{ produto.id }}" data-tipo="{{ produto.tipo or '' }}" data-preco="{{ produto.preco }}">
+                    {% for produto in snacks %}
+                    <div class="movie-card-pro" data-produto-id="{{ produto.id }}" data-tipo="{{ produto.categoria or '' }}" data-preco="{{ produto.preco }}">
                         <div class="movie-poster">
                             {% if produto.imagem %}
                             <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}" onerror="this.src='/static/imgs/produtos/default.svg'">
@@ -232,7 +236,7 @@
                         <div class="movie-info">
                             <h3>{{ produto.nome }}</h3>
                             <div class="movie-meta">
-                                <span class="genre">{{ produto.tipo or 'N/A' }}</span>
+                                <span class="genre">{{ produto.categoria or 'N/A' }}</span>
                                 <span class="price">€{{ "%.2f"|format(produto.preco) }}</span>
                             </div>
                             <div class="movie-stats">
@@ -258,7 +262,7 @@
                                     </th>
                                     <th class="director-header">
                                         <i class="fas fa-tag"></i>
-                                        Tipo
+                                        Categoria
                                     </th>
                                     <th class="release-header">
                                         <i class="fas fa-euro-sign"></i>
@@ -275,8 +279,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for produto in produtos %}
-                                <tr data-produto-id="{{ produto.id }}" data-tipo="{{ produto.tipo or '' }}" data-preco="{{ produto.preco }}">
+                                {% for produto in snacks %}
+                                <tr data-produto-id="{{ produto.id }}" data-tipo="{{ produto.categoria or '' }}" data-preco="{{ produto.preco }}">
                                     <td class="poster-cell">
                                         <div class="movie-poster-small">
                                             {% if produto.imagem %}
@@ -291,7 +295,112 @@
                                             <h4>{{ produto.nome }}</h4>
                                         </div>
                                     </td>
-                                    <td class="director-cell">{{ produto.tipo or 'N/A' }}</td>
+                                    <td class="director-cell">{{ produto.categoria or 'N/A' }}</td>
+                                    <td class="release-cell">€{{ "%.2f"|format(produto.preco) }}</td>
+                                    <td class="duration-cell">{{ produto.menus or 'Nenhum' }}</td>
+                                    <td class="actions-cell">
+                                        <div class="movie-actions-table">
+                                            <button class="action-btn-table edit" onclick="editarProduto({{ produto.id }})" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn-table delete" onclick="removerProduto({{ produto.id }})" title="Remover">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+                <div id="tab-bebidas" class="tab-content" style="display: none;">
+                
+                <div class="movies-grid" id="bebidas-grid" style="display: none;">
+                    {% for produto in bebidas %}
+                    <div class="movie-card-pro" data-produto-id="{{ produto.id }}" data-tipo="{{ produto.categoria or '' }}" data-preco="{{ produto.preco }}">
+                        <div class="movie-poster">
+                            {% if produto.imagem %}
+                            <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}" onerror="this.src='/static/imgs/produtos/default.svg'">
+                            {% else %}
+                            <img src="/static/imgs/produtos/default.svg" alt="Produto sem imagem">
+                            {% endif %}
+                            <div class="movie-overlay">
+                                <div class="movie-actions">
+                                    <button class="action-btn edit" onclick="editarProduto({{ produto.id }})" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="removerProduto({{ produto.id }})" title="Remover">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="movie-info">
+                            <h3>{{ produto.nome }}</h3>
+                            <div class="movie-meta">
+                                <span class="genre">{{ produto.categoria or 'N/A' }}</span>
+                                <span class="price">€{{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                            <div class="movie-stats">
+                                <span class="menus-count">{{ produto.menus or 'Sem menus' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="movies-table-container" id="bebidas-table">
+                    <div class="table-wrapper">
+                        <table class="movies-table-pro">
+                            <thead>
+                                <tr>
+                                    <th class="poster-header">
+                                        <i class="fas fa-image"></i>
+                                        Poster
+                                    </th>
+                                    <th class="title-header">
+                                        <i class="fas fa-glass-whiskey"></i>
+                                        Bebida
+                                    </th>
+                                    <th class="director-header">
+                                        <i class="fas fa-tag"></i>
+                                        Categoria
+                                    </th>
+                                    <th class="release-header">
+                                        <i class="fas fa-euro-sign"></i>
+                                        Preço
+                                    </th>
+                                    <th class="duration-header">
+                                        <i class="fas fa-list"></i>
+                                        Menus
+                                    </th>
+                                    <th class="genre-header">
+                                        <i class="fas fa-cogs"></i>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in bebidas %}
+                                <tr data-produto-id="{{ produto.id }}" data-tipo="{{ produto.categoria or '' }}" data-preco="{{ produto.preco }}">
+                                    <td class="poster-cell">
+                                        <div class="movie-poster-small">
+                                            {% if produto.imagem %}
+                                            <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}" onerror="this.src='/static/imgs/produtos/default.svg'">
+                                            {% else %}
+                                            <img src="/static/imgs/produtos/default.svg" alt="Produto sem imagem">
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="title-cell">
+                                        <div class="movie-title-info">
+                                            <h4>{{ produto.nome }}</h4>
+                                        </div>
+                                    </td>
+                                    <td class="director-cell">{{ produto.categoria or 'N/A' }}</td>
                                     <td class="release-cell">€{{ "%.2f"|format(produto.preco) }}</td>
                                     <td class="duration-cell">{{ produto.menus or 'Nenhum' }}</td>
                                     <td class="actions-cell">
@@ -538,21 +647,12 @@
                 <form action="{{ url_for('admin_adicionar_produto') }}" method="POST" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="nome_produto">Nome do Produto *</label>
+                            <label for="nome_produto">Nome do Produto</label>
                             <input type="text" id="nome_produto" name="nome" required>
                         </div>
+                        <input type="hidden" id="tipo_produto" name="tipo" value="snacks">
                         <div class="form-group">
-                            <label for="tipo_produto">Tipo</label>
-                            <select id="tipo_produto" name="tipo">
-                                <option value="">Selecionar tipo</option>
-                                <option value="Bebida">Bebida</option>
-                                <option value="Snack">Snack</option>
-                                <option value="Doce">Doce</option>
-                                <option value="Combo">Combo</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="preco_produto">Preço (€) *</label>
+                            <label for="preco_produto">Preço (€)</label>
                             <input type="number" id="preco_produto" name="preco" step="0.01" min="0" required>
                         </div>
                         <div class="form-group full-width">
@@ -593,21 +693,12 @@
                 <form id="formEditarProduto" method="POST" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="edit_nome_produto">Nome do Produto *</label>
+                            <label for="edit_nome_produto">Nome do Produto</label>
                             <input type="text" id="edit_nome_produto" name="nome" required>
                         </div>
+                        <input type="hidden" id="edit_tipo_produto" name="tipo" value="">
                         <div class="form-group">
-                            <label for="edit_tipo_produto">Tipo</label>
-                            <select id="edit_tipo_produto" name="tipo">
-                                <option value="">Selecionar tipo</option>
-                                <option value="Bebida">Bebida</option>
-                                <option value="Snack">Snack</option>
-                                <option value="Doce">Doce</option>
-                                <option value="Combo">Combo</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_preco_produto">Preço (€) *</label>
+                            <label for="edit_preco_produto">Preço (€)</label>
                             <input type="number" id="edit_preco_produto" name="preco" step="0.01" min="0" required>
                         </div>
                         <div class="form-group full-width">
@@ -649,7 +740,7 @@
                 <form id="formAdicionarMenu" method="POST" action="{{ url_for('admin_adicionar_menu') }}" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label for="nome_menu">Nome do Menu *</label>
+                            <label for="nome_menu">Nome do Menu</label>
                             <input type="text" id="nome_menu" name="nome" required>
                         </div>
                         <div class="form-group full-width">
@@ -657,7 +748,7 @@
                             <textarea id="descricao_menu" name="descricao" rows="3"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="preco_menu">Preço Total (€) *</label>
+                            <label for="preco_menu">Preço Total (€)</label>
                             <input type="number" id="preco_menu" name="preco_total" step="0.01" min="0" required>
                         </div>
                         <div class="form-group full-width">
@@ -709,7 +800,7 @@
                 <form id="formEditarMenu" method="POST" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label for="edit_nome_menu">Nome do Menu *</label>
+                            <label for="edit_nome_menu">Nome do Menu</label>
                             <input type="text" id="edit_nome_menu" name="nome" required>
                         </div>
                         <div class="form-group full-width">
@@ -717,7 +808,7 @@
                             <textarea id="edit_descricao_menu" name="descricao" rows="3"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="edit_preco_menu">Preço Total (€) *</label>
+                            <label for="edit_preco_menu">Preço Total (€)</label>
                             <input type="number" id="edit_preco_menu" name="preco_total" step="0.01" min="0" required>
                         </div>
                         <div class="form-group full-width">
@@ -772,19 +863,40 @@
                 </div>
                 
                 <div class="produtos-disponiveis" id="produtosDisponiveis">
-                    {% for produto in produtos %}
+                    {% for produto in snacks %}
                     <div class="produto-seletor-item" data-produto-id="{{ produto.id }}" data-produto-nome="{{ produto.nome }}" data-produto-preco="{{ produto.preco }}">
                         <div class="produto-seletor-info">
                             {% if produto.imagem %}
                             <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}" class="produto-seletor-img">
                             {% else %}
                             <div class="produto-seletor-img-placeholder">
-                                <i class="fas fa-utensils"></i>
+                                <i class="fas fa-cookie-bite"></i>
                             </div>
                             {% endif %}
                             <div class="produto-seletor-details">
                                 <h4>{{ produto.nome }}</h4>
-                                <span class="produto-seletor-tipo">{{ produto.tipo }}</span>
+                                <span class="produto-seletor-tipo">{{ produto.categoria }}</span>
+                                <span class="produto-seletor-preco">€{{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-produto-menu" onclick="adicionarProdutoAoMenu({{ produto.id }}, '{{ produto.nome }}', {{ produto.preco }})">
+                            <i class="fas fa-plus"></i> Adicionar
+                        </button>
+                    </div>
+                    {% endfor %}
+                    {% for produto in bebidas %}
+                    <div class="produto-seletor-item" data-produto-id="{{ produto.id }}" data-produto-nome="{{ produto.nome }}" data-produto-preco="{{ produto.preco }}">
+                        <div class="produto-seletor-info">
+                            {% if produto.imagem %}
+                            <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}" class="produto-seletor-img">
+                            {% else %}
+                            <div class="produto-seletor-img-placeholder">
+                                <i class="fas fa-glass-whiskey"></i>
+                            </div>
+                            {% endif %}
+                            <div class="produto-seletor-details">
+                                <h4>{{ produto.nome }}</h4>
+                                <span class="produto-seletor-tipo">{{ produto.categoria }}</span>
                                 <span class="produto-seletor-preco">€{{ "%.2f"|format(produto.preco) }}</span>
                             </div>
                         </div>
@@ -816,7 +928,7 @@
                 <form id="formAdicionarTopping" method="POST" action="{{ url_for('admin_adicionar_topping') }}" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label for="nome_topping">Nome do Topping *</label>
+                            <label for="nome_topping">Nome do Topping</label>
                             <input type="text" id="nome_topping" name="nome" required>
                         </div>
                         <div class="form-group full-width">
@@ -824,7 +936,7 @@
                             <textarea id="descricao_topping" name="descricao" rows="3"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="preco_topping">Preço (€) *</label>
+                            <label for="preco_topping">Preço (€)</label>
                             <input type="number" id="preco_topping" name="preco" step="0.01" min="0" required>
                         </div>
                         <div class="form-group full-width">
@@ -865,7 +977,7 @@
                 <form id="formEditarTopping" method="POST" enctype="multipart/form-data">
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label for="edit_nome_topping">Nome do Topping *</label>
+                            <label for="edit_nome_topping">Nome do Topping</label>
                             <input type="text" id="edit_nome_topping" name="nome" required>
                         </div>
                         <div class="form-group full-width">
@@ -873,7 +985,7 @@
                             <textarea id="edit_descricao_topping" name="descricao" rows="3"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="edit_preco_topping">Preço (€) *</label>
+                            <label for="edit_preco_topping">Preço (€)</label>
                             <input type="number" id="edit_preco_topping" name="preco" step="0.01" min="0" required>
                         </div>
                         <div class="form-group full-width">

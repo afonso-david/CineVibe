@@ -29,15 +29,28 @@ function mostrarTab(tabName) {
     }
     const btnAdicionar = document.getElementById('btnAdicionar');
     const btnTexto = document.getElementById('btnAdicionarTexto');
-    if (tabName === 'produtos') {
+    const btnIcone = document.getElementById('btnAdicionarIcone');
+    
+    if (tabName === 'snacks') {
+        btnAdicionar.onclick = abrirModalAdicionarProduto;
+        btnTexto.textContent = 'Novo Snack';
+        btnIcone.className = 'fas fa-cookie-bite';
+    } else if (tabName === 'bebidas') {
+        btnAdicionar.onclick = abrirModalAdicionarProduto;
+        btnTexto.textContent = 'Nova Bebida';
+        btnIcone.className = 'fas fa-glass-whiskey';
+    } else if (tabName === 'produtos') {
         btnAdicionar.onclick = abrirModalAdicionarProduto;
         btnTexto.textContent = 'Novo Produto';
+        btnIcone.className = 'fas fa-utensils';
     } else if (tabName === 'menus') {
         btnAdicionar.onclick = abrirModalAdicionarMenu;
         btnTexto.textContent = 'Novo Menu';
+        btnIcone.className = 'fas fa-list';
     } else if (tabName === 'toppings') {
         btnAdicionar.onclick = abrirModalAdicionarTopping;
         btnTexto.textContent = 'Novo Topping';
+        btnIcone.className = 'fas fa-plus-circle';
     }
     localStorage.setItem('adminBarActiveTab', tabName);
 }
@@ -103,6 +116,7 @@ function updateViewDisplay() {
 function sortProducts() {
     const containers = [
         { grid: document.querySelector('#produtos-grid'), table: document.querySelector('#produtos-table tbody'), attr: 'data-produto-id' },
+        { grid: document.querySelector('#bebidas-grid'), table: document.querySelector('#bebidas-table tbody'), attr: 'data-produto-id' },
         { grid: document.querySelector('#menus-grid'), table: document.querySelector('#menus-table tbody'), attr: 'data-menu-id' },
         { grid: document.querySelector('#toppings-grid'), table: document.querySelector('#toppings-table tbody'), attr: 'data-topping-id' }
     ];
@@ -123,10 +137,6 @@ function sortProducts() {
                         aValue = parseFloat(a.dataset.preco) || 0;
                         bValue = parseFloat(b.dataset.preco) || 0;
                         return aValue - bValue;
-                    case 'tipo':
-                        aValue = a.dataset.tipo || '';
-                        bValue = b.dataset.tipo || '';
-                        return aValue.localeCompare(bValue);
                     default: 
                         aValue = parseInt(a.getAttribute(container.attr)) || 0;
                         bValue = parseInt(b.getAttribute(container.attr)) || 0;
@@ -137,7 +147,32 @@ function sortProducts() {
         });
     });
 }
+
+function abrirModalAdicionar() {
+    const activeTab = localStorage.getItem('adminBarActiveTab') || 'snacks';
+    
+    if (activeTab === 'snacks' || activeTab === 'bebidas' || activeTab === 'produtos') {
+        abrirModalAdicionarProduto();
+    } else if (activeTab === 'menus') {
+        abrirModalAdicionarMenu();
+    } else if (activeTab === 'toppings') {
+        abrirModalAdicionarTopping();
+    }
+}
+
 function abrirModalAdicionarProduto() {
+    const activeTab = localStorage.getItem('adminBarActiveTab') || 'snacks';
+    const tipoProdutoInput = document.getElementById('tipo_produto');
+    
+    // Define a categoria baseada no tab ativo
+    if (activeTab === 'snacks') {
+        tipoProdutoInput.value = 'snacks';
+    } else if (activeTab === 'bebidas') {
+        tipoProdutoInput.value = 'bebidas';
+    } else {
+        tipoProdutoInput.value = 'snacks'; // default
+    }
+    
     document.getElementById('modalAdicionarProduto').style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
@@ -157,7 +192,7 @@ async function editarProduto(produtoId) {
             return;
         }
         document.getElementById('edit_nome_produto').value = produto.nome || produto.produto || '';
-        document.getElementById('edit_tipo_produto').value = produto.tipo || '';
+        document.getElementById('edit_tipo_produto').value = produto.categoria || produto.tipo || '';
         document.getElementById('edit_preco_produto').value = produto.preco || '';
         const imagemAtualInput = document.getElementById('imagem_atual_produto');
         const previewEdit = document.getElementById('preview_edit_imagem_produto');

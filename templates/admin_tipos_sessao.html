@@ -421,8 +421,6 @@
 
     .btn-primary:hover {
         background: linear-gradient(135deg, #FFC107, #FFB300);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
     }
 
     /* Table Styles */
@@ -462,25 +460,23 @@
         });
     }
     function removerTipo(id, nome) {
-        if (confirm(`Tem certeza que deseja remover o tipo "${nome}"? Esta ação não pode ser desfeita.`)) {
-            fetch(`/admin/tipos-sessao/${id}/remover`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-            });
-        }
+        fetch(`/admin/tipos-sessao/${id}/remover`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
     }
     function abrirModalAdicionarTipo() {
         document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> Adicionar Novo Tipo de Sessão';

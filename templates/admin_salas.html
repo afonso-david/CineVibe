@@ -31,6 +31,14 @@
             font-weight: 500;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
+        
+        .btn-primary.no-shadow {
+            box-shadow: none !important;
+        }
+        
+        .btn-primary.no-shadow:hover {
+            box-shadow: none !important;
+        }
     </style>
 
     <style>
@@ -354,7 +362,7 @@
                 <div class="top-bar-right">
                     <button class="btn-primary" onclick="abrirModalEditarGlobal()" style="margin-right: 10px; background: linear-gradient(135deg, #4EA8DE, #3B91C0); box-shadow: none;">
                         <i class="fas fa-globe"></i>
-                        Editar Global
+                        Edição Global
                     </button>
                     <button class="btn-primary no-shadow" onclick="abrirModalAdicionarSala()">
                         <i class="fas fa-plus"></i>
@@ -415,10 +423,6 @@
                                         <i class="fas fa-hashtag"></i>
                                         ID
                                     </th>
-                                    <th class="poster-header">
-                                        <i class="fas fa-chair"></i>
-                                        Sala
-                                    </th>
                                     <th class="title-header">
                                         <i class="fas fa-tag"></i>
                                         Nome
@@ -445,11 +449,6 @@
                                 {% for sala in salas %}
                                 <tr data-sala-id="{{ sala.id }}" data-cinema="{{ sala.cinema_nome }}" data-tipo="{{ sala.tipo_sala }}">
                                     <td class="id-cell">{{ sala.id }}</td>
-                                    <td class="poster-cell">
-                                        <div class="sala-icon-small">
-                                            <i class="fas fa-chair"></i>
-                                        </div>
-                                    </td>
                                     <td class="title-cell">
                                         <div class="movie-title-info">
                                             <h4>{{ sala.nome_sala }}</h4>

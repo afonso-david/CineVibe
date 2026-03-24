@@ -2765,6 +2765,7 @@ def admin_dashboard():
             s.nome_sala,
             c.nome as cinema_nome,
             f.titulo as filme_titulo,
+            f.id as filme_id,
             DATE_FORMAT(datas.data_sessao, '%d/%m/%Y') as data_sessao,
             TIME_FORMAT(h.hora, '%H:%i') as horario,
             s.capacidade,
@@ -2782,15 +2783,31 @@ def admin_dashboard():
             SELECT CURDATE() as data_sessao
             UNION SELECT DATE_ADD(CURDATE(), INTERVAL 1 DAY)
             UNION SELECT DATE_ADD(CURDATE(), INTERVAL 2 DAY)
+            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 4 DAY)
+            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 5 DAY)
+            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 6 DAY)
         ) datas
         LEFT JOIN reservas r ON r.id_horario_sessao = hs.id AND r.data_sessao = datas.data_sessao
         WHERE f.estado = 'em_exibicao' AND datas.data_sessao >= CURDATE()
-        GROUP BY hs.id, s.nome_sala, c.nome, f.titulo, datas.data_sessao, h.hora, s.capacidade
-        HAVING taxa_ocupacao < 30
-        ORDER BY datas.data_sessao ASC, h.hora ASC
-        LIMIT 10
+        GROUP BY hs.id, s.nome_sala, c.nome, f.titulo, f.id, datas.data_sessao, h.hora, s.capacidade
+        HAVING taxa_ocupacao <= 50
+        ORDER BY taxa_ocupacao ASC, datas.data_sessao ASC, h.hora ASC
     """)
-    sessoes_baixa_ocupacao = cur.fetchall()
+    sessoes_baixa_ocupacao_raw = cur.fetchall()
+    
+    # Garantir que cada filme aparece apenas uma vez
+    sessoes_baixa_ocupacao = []
+    filmes_adicionados = set()
+    
+    for sessao in sessoes_baixa_ocupacao_raw:
+        filme_id = sessao['filme_id']
+        if filme_id not in filmes_adicionados:
+            sessoes_baixa_ocupacao.append(sessao)
+            filmes_adicionados.add(filme_id)
+        
+        if len(sessoes_baixa_ocupacao) >= 10:
+            break
     
     cur.execute("""
         SELECT 
@@ -8133,9 +8150,9 @@ def reserva():
                 })
 
         cursor.execute("""
-            SELECT id, produto AS nome, preco, imagem_url AS imagem, tipo
+            SELECT id, produto AS nome, preco, imagem_url AS imagem, categoria AS tipo
             FROM bar
-            ORDER BY tipo, produto
+            ORDER BY categoria, produto
         """)
         produtos_bar = cursor.fetchall() or []
         for p in produtos_bar:
@@ -8156,11 +8173,11 @@ def reserva():
                     m['imagem_url'] = url_for('static', filename=raw.lstrip('/'))
             
             cursor.execute("""
-                SELECT b.id, b.produto AS nome, b.preco, b.imagem_url AS imagem, b.tipo
+                SELECT b.id, b.produto AS nome, b.preco, b.imagem_url AS imagem, b.categoria
                 FROM menu_produtos mp
                 JOIN bar b ON mp.produto_id = b.id
                 WHERE mp.menu_id = %s
-                ORDER BY b.tipo, b.produto
+                ORDER BY b.categoria, b.produto
             """, (m['id'],))
             produtos_menu = cursor.fetchall() or []
             
@@ -10710,14 +10727,14 @@ def bar_menu_ajax(menu_id):
     cursor = cnx.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT p.id, p.produto, p.preco, p.imagem_url, p.tipo,
+            SELECT p.id, p.produto, p.preco, p.imagem_url, p.categoria,
                    IFNULL(GROUP_CONCAT(cp.caracteristica SEPARATOR ','), '') AS caracteristicas
             FROM menu_produtos mp
             JOIN bar p ON mp.produto_id = p.id
             LEFT JOIN caracteristica_produto_bar cp ON cp.produto_id = p.id
             WHERE mp.menu_id = %s
             GROUP BY p.id
-            ORDER BY p.tipo, p.produto
+            ORDER BY p.categoria, p.produto
         """, (menu_id,))
         produtos = cursor.fetchall() or []
 
@@ -11948,15 +11965,28 @@ def admin_bar():
     cursor = conn.cursor(dictionary=True)
     
     cursor.execute("""
-        SELECT b.id, b.produto as nome, b.preco, b.imagem_url as imagem, b.tipo,
+        SELECT b.id, b.produto as nome, b.preco, b.imagem_url as imagem, b.categoria,
                GROUP_CONCAT(DISTINCT m.nome SEPARATOR ', ') as menus
         FROM bar b
         LEFT JOIN menu_produtos mp ON b.id = mp.produto_id
         LEFT JOIN menus m ON mp.menu_id = m.id
+        WHERE LOWER(b.categoria) IN ('snacks', 'snack')
         GROUP BY b.id
         ORDER BY b.id DESC
     """)
-    produtos = cursor.fetchall()
+    snacks = cursor.fetchall()
+    
+    cursor.execute("""
+        SELECT b.id, b.produto as nome, b.preco, b.imagem_url as imagem, b.categoria,
+               GROUP_CONCAT(DISTINCT m.nome SEPARATOR ', ') as menus
+        FROM bar b
+        LEFT JOIN menu_produtos mp ON b.id = mp.produto_id
+        LEFT JOIN menus m ON mp.menu_id = m.id
+        WHERE LOWER(b.categoria) IN ('bebidas', 'bebida')
+        GROUP BY b.id
+        ORDER BY b.id DESC
+    """)
+    bebidas = cursor.fetchall()
     
     cursor.execute("""
         SELECT m.id, m.nome, m.descricao, m.preco_total, m.imagem_url,
@@ -11985,7 +12015,7 @@ def admin_bar():
     cursor.close()
     conn.close()
     
-    return render_template('admin_bar.html', user=get_current_user(), produtos=produtos, menus=menus, toppings=toppings)
+    return render_template('admin_bar.html', user=get_current_user(), snacks=snacks, bebidas=bebidas, menus=menus, toppings=toppings)
 
 @app.route('/admin/bar/produtos/adicionar', methods=['POST'])
 def admin_adicionar_produto():
@@ -12015,7 +12045,7 @@ def admin_adicionar_produto():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO bar (produto, preco, imagem_url, tipo)
+        INSERT INTO bar (produto, preco, imagem_url, categoria)
         VALUES (%s, %s, %s, %s)
     """, (nome, preco, imagem_path, tipo))
     conn.commit()
@@ -12078,7 +12108,7 @@ def admin_editar_produto(produto_id):
     cursor = conn.cursor()
     cursor.execute("""
         UPDATE bar
-        SET produto = %s, preco = %s, imagem_url = %s, tipo = %s
+        SET produto = %s, preco = %s, imagem_url = %s, categoria = %s
         WHERE id = %s
     """, (nome, preco, imagem_path, tipo, produto_id))
     conn.commit()
@@ -12311,21 +12341,21 @@ def admin_menu_detalhe(menu_id):
     menu = cursor.fetchone()
     
     cursor.execute("""
-        SELECT p.id, p.nome, p.preco, p.imagem, p.tipo
-        FROM produtos p
+        SELECT p.id, p.produto as nome, p.preco, p.imagem_url as imagem, p.categoria as tipo
+        FROM bar p
         INNER JOIN menu_produtos mp ON p.id = mp.produto_id
         WHERE mp.menu_id = %s
-        ORDER BY p.tipo, p.nome
+        ORDER BY p.categoria, p.produto
     """, (menu_id,))
     produtos_menu = cursor.fetchall()
     
     cursor.execute("""
-        SELECT id, nome, preco, tipo
-        FROM produtos
+        SELECT id, produto as nome, preco, categoria as tipo
+        FROM bar
         WHERE id NOT IN (
             SELECT produto_id FROM menu_produtos WHERE menu_id = %s
         )
-        ORDER BY tipo, nome
+        ORDER BY categoria, produto
     """, (menu_id,))
     produtos_disponiveis = cursor.fetchall()
     

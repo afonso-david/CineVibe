@@ -14,20 +14,20 @@
 
 <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
     
-    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+    <div class="stat-card" style="background: linear-gradient(135deg, #4834d4 0%, #341f97 100%); padding: 1.5rem; border-radius: 12px; color: white;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Hoje</p>
                 <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_hoje) }}</h2>
                 <p style="margin: 0; font-size: 0.85rem; opacity: 0.8;">{{ reservas_hoje }} reservas</p>
             </div>
-            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px; margin-left: 1.5rem;">
                 <i class="fas fa-euro-sign" style="font-size: 1.5rem;"></i>
             </div>
         </div>
     </div>
 
-    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+    <div class="stat-card" style="background: linear-gradient(135deg, #eb3b5a 0%, #c0392b 100%); padding: 1.5rem; border-radius: 12px; color: white;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Semanal</p>
@@ -42,33 +42,33 @@
                     {% endif %}
                 </p>
             </div>
-            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px; margin-left: 1.5rem;">
                 <i class="fas fa-calendar-week" style="font-size: 1.5rem;"></i>
             </div>
         </div>
     </div>
 
-    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+    <div class="stat-card" style="background: linear-gradient(135deg, #3867d6 0%, #2c3e50 100%); padding: 1.5rem; border-radius: 12px; color: white;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Mensal</p>
                 <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_mes) }}</h2>
                 <p style="margin: 0; font-size: 0.85rem; opacity: 0.8;">Este mês</p>
             </div>
-            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px; margin-left: 1.5rem;">
                 <i class="fas fa-calendar-alt" style="font-size: 1.5rem;"></i>
             </div>
         </div>
     </div>
 
-    <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 1.5rem; border-radius: 12px; color: white;">
+    <div class="stat-card" style="background: linear-gradient(135deg, #16a085 0%, #0e6655 100%); padding: 1.5rem; border-radius: 12px; color: white;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Receita Total</p>
                 <h2 style="margin: 0.5rem 0; font-size: 2rem;">€{{ "%.2f"|format(receita_total) }}</h2>
                 <p style="margin: 0; font-size: 0.85rem; opacity: 0.8;">{{ total_reservas }} reservas</p>
             </div>
-            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px;">
+            <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px; margin-left: 1.5rem;">
                 <i class="fas fa-chart-line" style="font-size: 1.5rem;"></i>
             </div>
         </div>
@@ -392,7 +392,7 @@
         <h2><i class="fas fa-file-export"></i> Exportar Relatórios</h2>
     </div>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; padding: 1rem;">
-        <a href="{{ url_for('exportar_relatorio', tipo='reservas') }}" class="export-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+        <a href="{{ url_for('exportar_relatorio', tipo='reservas') }}" class="export-btn" style="background: linear-gradient(135deg, #4834d4 0%, #341f97 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
             <i class="fas fa-ticket-alt" style="font-size: 2rem;"></i>
             <div>
                 <h4 style="margin: 0; font-size: 1rem;">Relatório de Reservas</h4>
@@ -400,7 +400,7 @@
             </div>
         </a>
         
-        <a href="{{ url_for('exportar_relatorio', tipo='vendas') }}" class="export-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+        <a href="{{ url_for('exportar_relatorio', tipo='vendas') }}" class="export-btn" style="background: linear-gradient(135deg, #eb3b5a 0%, #c0392b 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
             <i class="fas fa-chart-line" style="font-size: 2rem;"></i>
             <div>
                 <h4 style="margin: 0; font-size: 1rem;">Relatório de Vendas</h4>
@@ -408,7 +408,7 @@
             </div>
         </a>
         
-        <a href="{{ url_for('exportar_relatorio', tipo='usuarios') }}" class="export-btn" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+        <a href="{{ url_for('exportar_relatorio', tipo='usuarios') }}" class="export-btn" style="background: linear-gradient(135deg, #3867d6 0%, #2c3e50 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
             <i class="fas fa-users" style="font-size: 2rem;"></i>
             <div>
                 <h4 style="margin: 0; font-size: 1rem;">Relatório de Usuários</h4>
@@ -416,7 +416,7 @@
             </div>
         </a>
         
-        <a href="{{ url_for('exportar_relatorio', tipo='filmes') }}" class="export-btn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
+        <a href="{{ url_for('exportar_relatorio', tipo='filmes') }}" class="export-btn" style="background: linear-gradient(135deg, #16a085 0%, #0e6655 100%); padding: 1.5rem; border-radius: 12px; color: white; text-decoration: none; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s;">
             <i class="fas fa-film" style="font-size: 2rem;"></i>
             <div>
                 <h4 style="margin: 0; font-size: 1rem;">Relatório de Filmes</h4>

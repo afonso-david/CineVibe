@@ -377,7 +377,6 @@ body {
     color: #ffffff;
     background: rgba(255, 214, 10, 0.1);
     border-color: rgba(255, 214, 10, 0.3);
-    transform: translateY(-2px) scale(1.05);
 }
 .action-btn i {
     position: relative;
@@ -2544,8 +2543,8 @@ body {
     color: #4EA8DE;
 }
 .btn-primary {
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
+    background: linear-gradient(135deg, #FFD60A, #FFC107);
+    color: #0D1B2A;
     border: none;
     padding: 12px 24px;
     border-radius: 8px;
@@ -2560,8 +2559,8 @@ body {
     white-space: nowrap;
 }
 .btn-primary:hover {
-    transform: translateY(-2px);
-    color: white;
+    background: linear-gradient(135deg, #FFC107, #FFB300);
+    color: #0D1B2A;
 }
 .btn-primary i {
     font-size: 0.9rem;

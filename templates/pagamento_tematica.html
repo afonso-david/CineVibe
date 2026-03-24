@@ -741,7 +741,6 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
 
                 if (data.success) {
-                    alert('Pagamento processado com sucesso! Reserva confirmada.');
                     window.location.href = '/home?reserva_concluida=1';
                 } else {
                     alert(data.message || 'Erro ao processar pagamento. Tente novamente.');

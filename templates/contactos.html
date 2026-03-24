@@ -14,18 +14,6 @@
                 <p>Entre em contacto connosco. Estamos aqui para ajudar com qualquer questão sobre a sua experiência cinematográfica.</p>
             </div>
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for category, message in messages %}
-                            <div class="flash-message flash-{{ category }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-
             <div class="contactos-container">
                 
                 <div class="contacto-form-section">

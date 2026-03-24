@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes-section.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
-
+    
     <script src="{{ url_for('static', filename='js/logo-preload.js') }}"></script>
 
     <meta name="description" content="CineVibe - A melhor experiência cinematográfica com filmes em estreia, salas premium e serviços exclusivos.">
@@ -25,7 +25,7 @@
 </head>
 <body>
     <div class="page-wrapper">
-
+        
         <header>
         <div class="top-nav">
             <div class="nav-left">
@@ -68,26 +68,26 @@
         <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
-
+    
     <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
         <main>
-
+            
             <section class="hero-banner" id="banner">
-
-                <video id="videoPlayer"
-                       width="100%"
-                       height="100%"
-                       autoplay
-                       muted
+                
+                <video id="videoPlayer" 
+                       width="100%" 
+                       height="100%" 
+                       autoplay 
+                       muted 
                        preload="auto"
                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
                     <source src="{{ url_for('static', filename='Vídeos/Trailers/superman-trailer.mp4') }}" type="video/mp4">
-
+                   
                 </video>
 
-                <img id="posterImage"
-                     src="{{ url_for('static', filename='imgs/filmes/superman-poster.jpg') }}"
+                <img id="posterImage" 
+                     src="{{ url_for('static', filename='imgs/filmes/superman-poster.jpg') }}" 
                      alt="Imagem do Filme"
                      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
 
@@ -134,7 +134,7 @@
                         </div>
                         <p class="section-description-elegant">Mergulhe numa experiência cinematográfica única com os nossos serviços premium</p>
                     </div>
-
+                    
                     <div class="navigation-cards-grid-premium">
                         <div class="nav-card-premium filmes-card" onclick="window.location.href='{{ url_for('filmes') }}';">
                             <div class="nav-card-background">
@@ -170,7 +170,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="nav-card-premium bar-card" onclick="window.location.href='{{ url_for('bar') }}';">
                             <div class="nav-card-background">
                                 <div class="gradient-overlay"></div>
@@ -205,7 +205,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="nav-card-premium accessibility-card" onclick="window.location.href='{{ url_for('cine_acessivel') }}';">
                             <div class="nav-card-background">
                                 <div class="gradient-overlay"></div>
@@ -252,7 +252,7 @@
                     <div class="discover-text">
                         <h2>Descobre o Melhor do Cinema</h2>
                         <p>Explora a nossa vasta coleção de filmes em alta definição. Desde os últimos sucessos de bilheteira aos clássicos atemporais, oferecemos uma experiência cinematográfica única e inesquecível.</p>
-
+                        
                         <div class="cinema-stats">
                             <div class="stat-item">
                                 <div class="cinema-stat-number">{{ stats.filmes_em_exibicao if stats else '0' }}</div>
@@ -267,14 +267,14 @@
                                 <div class="stat-label">SALAS<br>DE CINEMA</div>
                             </div>
                         </div>
-
+                        
                         <a href="{{ url_for('filmes') }}" class="discover-btn">
                             EXPLORAR CATÁLOGO
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                     <div class="discover-image">
-
+                        
                             <img src="{{ url_for('static', filename='imgs/filmes/superman-poster.jpg') }}" alt="">
                         </div>
                     </div>
@@ -286,16 +286,16 @@
                     <h2><i class="fa-solid fa-trophy"></i> Top 10 Filmes Mais Vistos</h2>
                     <p>Os filmes que estão a conquistar o público no CineVibe</p>
                 </div>
-
+                
                 <div class="movies-carousel">
                         <button class="carousel-btn prev" id="prevBtn">
                             <i class="fas fa-chevron-left"></i>
                         </button>
-
+                        
                         <div class="movies-container" id="moviesContainer">
                             {% if filmes %}
                                 {% for filme in filmes %}
-                                <article class="filme-card"
+                                <article class="filme-card" 
                                          data-rank="{{ loop.index }}"
                                          data-genero="{{ filme.genero_nome|lower }}"
                                          data-titulo="{{ filme.titulo|lower }}"
@@ -304,17 +304,17 @@
                                     <div class="movie-rank">
                                         <span class="rank-number">#{{ loop.index }}</span>
                                     </div>
-                                    <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}{% if filme.trailer_url %}?trailer=auto{% endif %}"
+                                    <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}{% if filme.trailer_url %}?trailer=auto{% endif %}" 
                                        aria-label="Ver detalhes de {{ filme.titulo }}">
                                         <div class="poster-container">
-                                            <img src="{{ filme.poster_url if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}"
-                                                 alt="Poster de {{ filme.titulo }}"
+                                            <img src="{{ filme.poster_url if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
+                                                 alt="Poster de {{ filme.titulo }}" 
                                                  class="poster-main"
                                                  loading="lazy"
                                                  onerror="this.src='{{ url_for('static', filename='imgs/filmes/placeholder.jpg') }}';">
                                             {% if filme.poster_hover %}
-                                            <img src="{{ filme.poster_hover }}"
-                                                 alt="Poster alternativo de {{ filme.titulo }}"
+                                            <img src="{{ filme.poster_hover }}" 
+                                                 alt="Poster alternativo de {{ filme.titulo }}" 
                                                  class="poster-hover"
                                                  loading="lazy">
                                             {% endif %}
@@ -333,7 +333,7 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-
+                        
                         <button class="carousel-btn next" id="nextBtn">
                             <i class="fas fa-chevron-right"></i>
                         </button>
@@ -380,32 +380,32 @@
                         <h2>Experiências Únicas</h2>
                         <p>Descubra as nossas experiências exclusivas</p>
                     </div>
-
+                    
                     <div class="experiences-grid">
                         <div class="experience-card premium">
                             <div class="experience-icon">
-                                <img src="{{ url_for('static', filename='imgs/Does-Netflix-Support-Dolby-Atmos-removebg-preview.png') }}"
-                                     alt="Dolby Atmos"
+                                <img src="{{ url_for('static', filename='imgs/Does-Netflix-Support-Dolby-Atmos-removebg-preview.png') }}" 
+                                     alt="Dolby Atmos" 
                                      class="experience-image"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-crown" style="display: none;"></i>
                             </div>
                         </div>
-
+                        
                         <div class="experience-card romantic">
                             <div class="experience-icon">
-                                <img src="{{ url_for('static', filename='imgs/imax-2-logo-black-and-white-removebg-preview.png') }}"
-                                     alt="IMAX"
+                                <img src="{{ url_for('static', filename='imgs/imax-2-logo-black-and-white-removebg-preview.png') }}" 
+                                     alt="IMAX" 
                                      class="experience-image"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-heart" style="display: none;"></i>
                             </div>
                         </div>
-
+                        
                         <div class="experience-card accessible">
                             <div class="experience-icon">
-                                <img src="{{ url_for('static', filename='imgs/4dx8706.logowik.com-removebg-preview (1).png') }}"
-                                     alt="4DX"
+                                <img src="{{ url_for('static', filename='imgs/4dx8706.logowik.com-removebg-preview (1).png') }}" 
+                                     alt="4DX" 
                                      class="experience-image"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-universal-access" style="display: none;"></i>
@@ -414,8 +414,8 @@
 
                         <div class="experience-card premium">
                             <div class="experience-icon">
-                                <img src="{{ url_for('static', filename='imgs/icons/images__2_-removebg-preview.png') }}"
-                                     alt="Experiência Premium"
+                                <img src="{{ url_for('static', filename='imgs/icons/images__2_-removebg-preview.png') }}" 
+                                     alt="Experiência Premium" 
                                      class="experience-image"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-star" style="display: none;"></i>
@@ -424,8 +424,8 @@
 
                         <div class="experience-card vip">
                             <div class="experience-icon">
-                                <img src="{{ url_for('static', filename='imgs/icons/vip-removebg-preview.png') }}"
-                                     alt="VIP"
+                                <img src="{{ url_for('static', filename='imgs/icons/vip-removebg-preview.png') }}" 
+                                     alt="VIP" 
                                      class="experience-image"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-crown" style="display: none;"></i>
@@ -436,7 +436,7 @@
                 </div>
             </section>
 
-        </main>
+        </main>        
         <footer class="footer">
             <div class="footer-main">
                 <div class="footer-container">
@@ -589,7 +589,7 @@
         function playCurrentVideo() {
             const filme = filmes[currentIndex];
             console.log(' Iniciando trailer:', filme.titulo);
-
+            
             const heroBanner = document.querySelector('.hero-banner');
             clearTimeout(videoTimeout);
             clearTimeout(imageTimeout);
@@ -609,11 +609,11 @@
                 console.error('Erro ao reproduzir vídeo:', error);
                 showCurrentImage();
             });
-
+            
             mostrandoTrailer = true;
             if (!filme.titulo.includes('Rambo')) {
                 let duracao = filme.titulo.includes('Superman') || filme.titulo.includes('Black Phone') ? 17000 : 30000;
-
+                
                 videoTimeout = setTimeout(() => {
                     if (mostrandoTrailer) {
                         videoPlayer.pause();
@@ -626,14 +626,14 @@
         function showCurrentImage() {
             const filme = filmes[currentIndex];
             console.log('🖼️ Mostrando imagem:', filme.titulo);
-
+            
             const heroBanner = document.querySelector('.hero-banner');
             clearTimeout(videoTimeout);
             clearTimeout(imageTimeout);
             imagem.src = filme.imagem;
             heroBanner.classList.remove('showing-video');
             heroBanner.classList.add('showing-image');
-
+            
             mostrandoTrailer = false;
             imageTimeout = setTimeout(() => {
                 nextMovie();
@@ -721,18 +721,18 @@
             }
         });
 
-
+        
         const moviesContainer = document.getElementById('moviesContainer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
         if (moviesContainer && prevBtn && nextBtn) {
-            const cardWidth = 330;
+            const cardWidth = 330; 
             let currentScroll = 0;
             let autoScrollInterval;
             let isUserInteracting = false;
-
-
+            
+            
             function getMaxScroll() {
                 return Math.max(0, moviesContainer.scrollWidth - moviesContainer.clientWidth);
             }
@@ -756,7 +756,7 @@
             // Auto-scroll function
             function autoScroll() {
                 const maxScroll = getMaxScroll();
-
+                
                 if (currentScroll >= maxScroll) {
                     // Volta ao início quando chega ao fim
                     scrollToPosition(0);
@@ -784,7 +784,7 @@
             function handleUserInteraction() {
                 isUserInteracting = true;
                 stopAutoScroll();
-
+                
                 // Retoma o auto-scroll após 5 segundos sem interação
                 setTimeout(() => {
                     isUserInteracting = false;
@@ -801,7 +801,7 @@
                 handleUserInteraction();
                 scrollToPosition(currentScroll + cardWidth * 2);
             });
-
+            
             moviesContainer.addEventListener('scroll', function() {
                 currentScroll = this.scrollLeft;
                 updateCarouselButtons();
@@ -818,10 +818,10 @@
                     startAutoScroll();
                 }
             });
-
+            
             updateCarouselButtons();
             window.addEventListener('resize', updateCarouselButtons);
-
+            
             // Inicia o auto-scroll após 2 segundos
             setTimeout(startAutoScroll, 2000);
         }
@@ -832,7 +832,7 @@
         }
         function animateStats() {
             const statNumbers = document.querySelectorAll('.stat-number');
-
+            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -840,14 +840,14 @@
                         const duration = 2000;
                         const increment = target / (duration / 16);
                         let current = 0;
-
+                        
                         const timer = setInterval(() => {
                             current += increment;
                             if (current >= target) {
                                 current = target;
                                 clearInterval(timer);
                             }
-
+                            
                             if (target >= 1000000) {
                                 entry.target.textContent = (current / 1000000).toFixed(1) + 'M';
                             } else if (target >= 1000) {
@@ -856,12 +856,12 @@
                                 entry.target.textContent = Math.floor(current);
                             }
                         }, 16);
-
+                        
                         observer.unobserve(entry.target);
                     }
                 });
             }, { threshold: 0.5 });
-
+            
             statNumbers.forEach(stat => observer.observe(stat));
         }
         const searchInput = document.getElementById('searchInput');
@@ -871,12 +871,12 @@
         searchInput.addEventListener('input', function() {
             clearTimeout(searchTimeout);
             const query = this.value.trim();
-
+            
             if (query.length < 2) {
                 searchResults.style.display = 'none';
                 return;
             }
-
+            
             searchTimeout = setTimeout(() => {
                 window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
             }, 200);
@@ -897,7 +897,7 @@
                 .then(response => response.json())
                 .then(data => {
                     const results = [];
-
+                    
                     if (data.filmes && data.filmes.length > 0) {
                         data.filmes.forEach(filme => {
                             results.push({
@@ -907,7 +907,7 @@
                             });
                         });
                     }
-
+                    
                     if (data.cinemas && data.cinemas.length > 0) {
                         data.cinemas.forEach(cinema => {
                             results.push({
@@ -917,7 +917,7 @@
                             });
                         });
                     }
-
+                    
                     if (data.menus && data.menus.length > 0) {
                         data.menus.forEach(menu => {
                             results.push({
@@ -927,7 +927,7 @@
                             });
                         });
                     }
-
+                    
                     if (data.produtos && data.produtos.length > 0) {
                         data.produtos.forEach(produto => {
                             results.push({
@@ -937,7 +937,7 @@
                             });
                         });
                     }
-
+                    
                     if (results.length > 0) {
                         searchResults.innerHTML = results.map(item => `
                             <div class="search-result-item" onclick="window.location.href='${item.url}'">
@@ -957,7 +957,7 @@
                     searchResults.style.display = 'block';
                 });
         }
-
+        
         document.addEventListener('click', function(e) {
             if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                 searchResults.style.display = 'none';
@@ -969,17 +969,17 @@
                 e.stopPropagation();
                 this.classList.toggle('active');
             });
-
+            
             document.addEventListener('click', function() {
                 profileDropdown.classList.remove('active');
             });
         }
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎬 CineVibe iniciada');
-
+            
             const heroBanner = document.querySelector('.hero-banner');
             heroBanner.classList.add('showing-video');
-
+            
             updateHeroContent();
             animateStats();
             setTimeout(() => {

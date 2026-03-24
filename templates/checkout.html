@@ -224,7 +224,7 @@
                                                         <span class="bilhetes-desconto" id="valorDescontoBilhetesCheckout"></span>
                                                     </div>
                                                 </div>
-                                                <button type="button" id="removerBilhetesGratisCheckout" class="btn-remover-bilhetes-checkout" onclick="removerBilhetesGratisCheckout()">
+                                                <button type="button" id="removerBilhetesGratisCheckout" class="btn-remover-bilhetes-checkout">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </div>
@@ -858,6 +858,17 @@
             if (botaoRemover) {
                 botaoRemover.addEventListener('click', removerDesconto);
             }
+            
+            // Event listener para remover bilhetes grátis
+            const btnRemoverBilhetes = document.getElementById('removerBilhetesGratisCheckout');
+            if (btnRemoverBilhetes) {
+                btnRemoverBilhetes.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Botão de remover bilhetes clicado!');
+                    removerBilhetesGratisCheckout();
+                });
+            }
         });
 
         // Sistema de Bilhetes Grátis para Checkout
@@ -881,12 +892,27 @@
         }
 
         function removerBilhetesGratisCheckout() {
+            console.log('Removendo bilhetes grátis...');
             bilhetesGratisAtivosCheckout = 0;
             descontoBilhetesGratisCheckout = 0;
             
             // Atualizar UI
-            document.getElementById('usarBilhetesGratis').style.display = 'block';
-            document.getElementById('bilhetesGratisAplicadosCheckout').style.display = 'none';
+            const btnUsar = document.getElementById('usarBilhetesGratis');
+            const divAplicados = document.getElementById('bilhetesGratisAplicadosCheckout');
+            
+            if (btnUsar) {
+                btnUsar.style.display = 'block';
+                console.log('Botão usar mostrado');
+            } else {
+                console.error('Elemento usarBilhetesGratis não encontrado');
+            }
+            
+            if (divAplicados) {
+                divAplicados.style.display = 'none';
+                console.log('Div aplicados escondida');
+            } else {
+                console.error('Elemento bilhetesGratisAplicadosCheckout não encontrado');
+            }
             
             // Atualizar total
             atualizarTotalComBilhetesGratisCheckout();

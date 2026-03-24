@@ -172,8 +172,7 @@ a {
   border: 2px solid rgba(255, 214, 10, 0.15);
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 15px 45px rgba(0,0,0,0.4);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .plan-card::before {
@@ -186,6 +185,7 @@ a {
   background: linear-gradient(90deg, transparent, #FFD60A, transparent);
   opacity: 0;
   transition: opacity 0.3s;
+  border-radius: 24px 24px 0 0;
 }
 
 .plan-card::after {
@@ -201,31 +201,29 @@ a {
 }
 
 .plan-card:hover::before {
-  opacity: 1;
+  opacity: 0;
 }
 
 .plan-card:hover::after {
-  opacity: 1;
+  opacity: 0;
 }
 
 .plan-card:hover {
-  transform: translateY(-20px) scale(1.03);
-  box-shadow: 0 25px 70px rgba(255, 214, 10, 0.25), 0 0 0 1px rgba(255, 214, 10, 0.4);
-  border-color: rgba(255, 214, 10, 0.5);
+  transform: none;
+  border-color: rgba(255, 214, 10, 0.15);
 }
 
 .plan-card.recommended {
   background: linear-gradient(135deg, rgba(255, 214, 10, 0.2) 0%, rgba(27, 38, 59, 0.95) 50%);
   border: 3px solid #FFD60A;
   transform: scale(1.08);
-  box-shadow: 0 20px 60px rgba(255, 214, 10, 0.4);
 }
 
 .plan-card.recommended::before {
-  opacity: 1;
+  opacity: 0;
   height: 6px;
   background: linear-gradient(90deg, #FFD60A, #FFA500, #FFD60A);
-  animation: shimmer 3s infinite;
+  border-radius: 24px 24px 0 0;
 }
 
 @keyframes shimmer {
@@ -235,15 +233,17 @@ a {
 
 .plan-card .ribbon {
   position: absolute;
-  top: -12px;
-  right: -12px;
+  top: 15px;
+  right: -5px;
   background: #F2C94C;
   color: #0D1B2A;
-  padding: 8px 15px;
+  padding: 8px 20px;
   font-size: 0.85rem;
   font-weight: 700;
   border-radius: 10px;
   transform: rotate(5deg);
+  z-index: 10;
+  white-space: nowrap;
 }
 
 .plan-header h2 {
@@ -311,31 +311,45 @@ a {
   color: #FFD60A;
   position: relative;
   overflow: hidden;
+  transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.btn-normal.btn-current {
+  background: rgba(255, 214, 10, 0.2);
+  border: 2px solid #FFD60A;
+  color: #FFD60A;
+  cursor: default;
+  opacity: 0.8;
+}
+
+.btn-normal.btn-current:hover {
+  transform: none;
+  background: rgba(255, 214, 10, 0.2);
+  color: #FFD60A;
 }
 
 .btn-normal::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: #FFD60A;
-  transform: translate(-50%, -50%);
-  transition: width 0.5s, height 0.5s;
-  z-index: -1;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .btn-normal:hover::before {
-  width: 300px;
-  height: 300px;
+  left: 100%;
 }
 
 .btn-normal:hover {
+  background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+  transform: scale(1.05);
   color: #0D1B2A;
   border-color: #FFD60A;
-  transform: scale(1.05);
 }
 
 .btn-member {
@@ -343,7 +357,7 @@ a {
   color: #0D1B2A;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .btn-member::before {
@@ -355,6 +369,8 @@ a {
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   transition: left 0.5s;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .btn-member:hover::before {
@@ -364,7 +380,6 @@ a {
 .btn-member:hover {
   background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
   transform: scale(1.05);
-  box-shadow: 0 6px 25px rgba(255, 214, 10, 0.6);
 }
 
 .btn-premium {
@@ -372,16 +387,16 @@ a {
   color: #0D1B2A;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(255, 214, 10, 0.5);
   animation: pulse 2s infinite;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 @keyframes pulse {
   0%, 100% {
-    box-shadow: 0 6px 20px rgba(255, 214, 10, 0.5);
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 8px 30px rgba(255, 214, 10, 0.7);
+    transform: scale(1.02);
   }
 }
 
@@ -394,16 +409,18 @@ a {
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   transition: left 0.5s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.btn-premium:hover {
+  background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+  transform: scale(1.05);
+  animation: none;
 }
 
 .btn-premium:hover::before {
   left: 100%;
-}
-
-.btn-premium:hover {
-  background: linear-gradient(135deg, #FFB703 0%, #FF9500 50%, #FF8C00 100%);
-  transform: scale(1.08);
-  box-shadow: 0 10px 40px rgba(255, 214, 10, 0.8);
 }
 
 @media (max-width: 968px) {
@@ -1290,5 +1307,118 @@ a {
   .btn {
     padding: 12px 20px;
     font-size: 0.9rem;
+  }
+}
+
+
+/* Modal de Comparação de Planos */
+.comparison-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.comparison-modal .modal-content {
+  background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);
+  border-radius: 20px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 2px solid #FFD60A;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.comparison-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 2px solid rgba(255, 214, 10, 0.3);
+}
+
+.comparison-modal .modal-header h3 {
+  margin: 0;
+  color: #FFD60A;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.comparison-modal .modal-close {
+  background: transparent;
+  border: none;
+  color: #FFD60A;
+  font-size: 2rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.comparison-modal .modal-close:hover {
+  background: rgba(255, 214, 10, 0.2);
+  transform: rotate(90deg);
+}
+
+.comparison-modal .modal-body {
+  padding: 30px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table thead th {
+  background: rgba(255, 214, 10, 0.2);
+  color: #FFD60A;
+  padding: 15px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #FFD60A;
+}
+
+.comparison-table tbody td {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.comparison-table tbody td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: #FFD60A;
+}
+
+.comparison-table tbody tr:hover {
+  background: rgba(255, 214, 10, 0.1);
+}
+
+@media (max-width: 768px) {
+  .comparison-modal .modal-content {
+    max-width: 95%;
+  }
+  
+  .comparison-table {
+    font-size: 0.9rem;
+  }
+  
+  .comparison-table thead th,
+  .comparison-table tbody td {
+    padding: 10px 5px;
   }
 }

@@ -472,6 +472,7 @@
     border: 1px solid rgba(255, 214, 10, 0.3);
     position: relative;
     overflow: hidden;
+    z-index: 2;
 }
 
 .payment-methods-section::before {
@@ -512,6 +513,7 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    z-index: 10;
 }
 
 .payment-method-item::before {
@@ -1043,6 +1045,8 @@
 
 #payment-methods-container {
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
 }
 
 #payment-methods-container.hiding {
@@ -1736,6 +1740,10 @@
     border-radius: 12px;
     padding: 1.25rem;
     margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
 }
 
 .bilhetes-gratis-header {
@@ -1758,7 +1766,7 @@
 .btn-usar-bilhetes-checkout {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+    background: #FFD60A;
     color: #0D1B2A;
     border: none;
     border-radius: 10px;
@@ -1773,8 +1781,8 @@
 }
 
 .btn-usar-bilhetes-checkout:hover {
+    background: #FFA500;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 214, 10, 0.4);
 }
 
 .btn-usar-bilhetes-checkout i {
@@ -1787,6 +1795,9 @@
     border-radius: 10px;
     padding: 1rem;
     margin-top: 1rem;
+    position: relative;
+    z-index: 50;
+    pointer-events: auto;
 }
 
 .bilhetes-info-checkout {
@@ -1829,18 +1840,23 @@
 }
 
 .btn-remover-bilhetes-checkout {
-    background: rgba(231, 76, 60, 0.2);
-    border: 1px solid #e74c3c;
-    color: #e74c3c;
+    background: rgba(255, 59, 48, 0.3);
+    border: 1px solid #ff3b30;
+    color: #ff3b30;
     padding: 6px 12px;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
 }
 
 .btn-remover-bilhetes-checkout:hover {
-    background: rgba(231, 76, 60, 0.3);
+    background: rgba(255, 59, 48, 0.5);
+    transform: scale(1.05);
+}
 }
 
 @media (max-width: 768px) {

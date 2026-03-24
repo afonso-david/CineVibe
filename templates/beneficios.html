@@ -79,12 +79,16 @@
                         <li><span class="icon-x">✗</span> Lugares VIP</li>
                         <li><span class="icon-x">✗</span> Suporte prioritário</li>
                     </ul>
-                    <a href="{{ url_for('registo') }}" class="btn btn-normal">Registar Grátis</a>
+                    {% if logged_in and (not plano_atual or plano_atual.plano_tipo == 'normal') %}
+                        <button class="btn btn-normal btn-current" disabled>Atual</button>
+                    {% else %}
+                        <a href="{{ url_for('registo') }}" class="btn btn-normal">Registar Grátis</a>
+                    {% endif %}
                 </div>
             </div>
 
             <div class="plan-card recommended">
-                <div class="ribbon">Recomendado</div>
+                <div class="ribbon">Popular</div>
                 <div class="plan-header">
                     <h2>CineMember</h2>
                     <div class="price">€9.99<span>/mês</span></div>
@@ -126,44 +130,34 @@
     <footer class="footer">
         <div class="footer-main">
             <div class="footer-container">
-                
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo">
+                        <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="CineVibe Logo" style="max-height: 50px;">
                         <h3>CineVibe</h3>
                     </div>
                     <p class="footer-description">
-                        Desfrute de benefícios exclusivos e experiências cinematográficas premium. Junte-se à nossa comunidade e aproveite descontos, eventos especiais e muito mais.
+                        A sua experiência cinematográfica premium. Desfrute dos melhores filmes com a melhor qualidade e conforto.
                     </p>
                     <div class="footer-social">
-                        <a href="#" aria-label="Facebook"><img src="{{ url_for('static', filename='imgs/icons/facebook.png') }}" alt="Facebook"></a>
-                        <a href="#" aria-label="Instagram"><img src="{{ url_for('static', filename='imgs/icons/instagram.png') }}" alt="Instagram"></a>
-                        <a href="#" aria-label="Twitter"><img src="{{ url_for('static', filename='imgs/icons/twitter.png') }}" alt="Twitter"></a>
-                        <a href="#" aria-label="YouTube"><img src="{{ url_for('static', filename='imgs/icons/youtube.png') }}" alt="YouTube"></a>
+                        <a href="#" aria-label="TikTok">
+                            <img src="{{ url_for('static', filename='imgs/icons/tiktok_icon_FFD60A-removebg-preview.png') }}" alt="Tik Tok">
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <img src="{{ url_for('static', filename='imgs/icons/instagram_icon_FFD60A-removebg-preview.png') }}" alt="Instagram">
+                        </a>
+                        <a href="#" aria-label="X">
+                            <img src="{{ url_for('static', filename='imgs/icons/x_icon_FFD60A-removebg-preview.png') }}" alt="X">
+                        </a>
                     </div>
                 </div>
 
                 <div class="footer-section">
-                    <h4>Planos</h4>
+                    <h4>Navegação</h4>
                     <ul class="footer-links">
-                        <li><a href="#normal">Plano Normal</a></li>
-                        <li><a href="#member">CineMember</a></li>
-                        <li><a href="#premium">CinePremium</a></li>
-                        <li><a href="#">Comparar Planos</a></li>
-                        <li><a href="#">Alterar Plano</a></li>
-                        <li><a href="#">Cancelar Subscrição</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Benefícios</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Descontos Estudante</a></li>
-                        <li><a href="#">Descontos Sénior</a></li>
-                        <li><a href="#">Pacotes Família</a></li>
-                        <li><a href="{{ url_for('recompensas') }}">Programa Fidelidade</a></li>
-                        <li><a href="#">Eventos Exclusivos</a></li>
-                        <li><a href="#">Pré-estreias</a></li>
+                        <li><a href="{{ url_for('home') }}">Início</a></li>
+                        <li><a href="{{ url_for('filmes') }}">Filmes</a></li>
+                        <li><a href="{{ url_for('cinemas') }}">Cinemas</a></li>
+                        <li><a href="{{ url_for('bar') }}">Bar</a></li>
                     </ul>
                 </div>
 
@@ -171,31 +165,44 @@
                     <h4>Suporte</h4>
                     <ul class="footer-links">
                         <li><a href="{{ url_for('contactos') }}">Contactos</a></li>
-                        <li><a href="#">Centro de Ajuda</a></li>
-                        <li><a href="#">FAQ Benefícios</a></li>
-                        <li><a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a></li>
-                        <li><a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a></li>
-                        <li><a href="#">Gestão de Conta</a></li>
+                        <li><a href="{{ url_for('termos_condicoes') }}">Termos</a></li>
+                        <li><a href="{{ url_for('politica_privacidade') }}">Privacidade</a></li>
+                        <li><a href="{{ url_for('cine_acessivel') }}">Acessibilidade</a></li>
                     </ul>
                 </div>
 
-                <div class="footer-section newsletter-section">
-                    <h4>Ofertas Exclusivas</h4>
-                    <p>Receba ofertas especiais, descontos exclusivos e novidades sobre os nossos planos de benefícios.</p>
-                    <form class="newsletter-form" method="POST" action="/newsletter/subscribe">
-                        <div class="newsletter-input-group">
-                            <input type="email" name="email" placeholder="O seu email..." required>
-                            <button type="submit">Subscrever</button>
-                        </div>
-                    </form>
-                    <div class="footer-contact">
-                        <div class="contact-item">
-                            <span class="contact-icon">📞</span>
-                            <span>Linha Benefícios: +351 800 123 456</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">✉️</span>
-                            <span>beneficios@cinevibe.pt</span>
+                <div class="footer-section">
+                    <h4>Conta</h4>
+                    <ul class="footer-links">
+                        {% if not logged_in %}
+                            <li><a href="{{ url_for('login') }}">Entrar</a></li>
+                            <li><a href="{{ url_for('registo') }}">Registar</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('perfil') }}">Meu Perfil</a></li>
+                            <li><a href="{{ url_for('logout') }}">Sair</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <div class="newsletter-section">
+                        <h4>Newsletter</h4>
+                        <p>Receba as últimas novidades e promoções exclusivas.</p>
+                        <form class="newsletter-form" method="POST" action="/newsletter/subscribe">
+                            <div class="newsletter-input-group">
+                                <input type="email" name="email" placeholder="Seu email" required>
+                                <button type="submit">Subscrever</button>
+                            </div>
+                        </form>
+                        <div class="footer-contact">
+                            <div class="contact-item">
+                                <span class="contact-icon">📧</span>
+                                <span>info@cinevibe.pt</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">📞</span>
+                                <span>+351 123 456 789</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -206,19 +213,17 @@
             <div class="footer-bottom-container">
                 <div class="footer-bottom-content">
                     <div class="footer-legal">
-                        <p>&copy; 2024 CineVibe. Todos os direitos reservados. Benefícios e descontos sujeitos a termos e condições.</p>
+                        <p>&copy; 2026 CineVibe. Todos os direitos reservados.</p>
                         <div class="legal-links">
-                            <a href="{{ url_for('termos_condicoes') }}">Termos</a>
-                            <a href="{{ url_for('cookies_page') }}">Cookies</a>
-                            <a href="#">Termos de Subscrição</a>
+                            <a href="{{ url_for('termos_condicoes') }}">Termos e Condições</a>
+                            <a href="{{ url_for('politica_privacidade') }}">Política de Privacidade</a>
+                            <a href="{{ url_for('cookies_page') }}">Política de Cookies</a>
                         </div>
                     </div>
                     <div class="footer-certifications">
-                        <span class="cert-text">Pagamentos Seguros</span>
                         <div class="cert-logos">
-                            <img src="{{ url_for('static', filename='imgs/certifications/ssl.png') }}" alt="SSL Seguro">
-                            <img src="{{ url_for('static', filename='imgs/certifications/visa.png') }}" alt="Visa">
-                            <img src="{{ url_for('static', filename='imgs/certifications/mastercard.png') }}" alt="Mastercard">
+                            <span class="cert-text">SSL Seguro</span>
+                            <span class="cert-text">GDPR Compliant</span>
                         </div>
                     </div>
                 </div>
@@ -229,41 +234,13 @@
     <script>
         function subscribePlan(planType) {
             {% if logged_in %}
-                const planNames = {
-                    'member': 'CineMember',
-                    'premium': 'CinePremium'
-                };
-                
                 const planPrices = {
                     'member': '9.99',
                     'premium': '19.99'
                 };
                 
-                if (confirm(`Deseja subscrever o plano ${planNames[planType]} por €${planPrices[planType]}/mês?`)) {
-                    fetch('/subscribe_plan', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            plan: planType,
-                            price: planPrices[planType]
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Subscrição realizada com sucesso! Bem-vindo ao ' + planNames[planType]);
-                            location.reload();
-                        } else {
-                            alert('Erro ao processar subscrição. Tente novamente.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro:', error);
-                        alert('Erro ao processar subscrição. Tente novamente.');
-                    });
-                }
+                // Redirecionar para página de pagamento
+                window.location.href = `/pagamento_plano?plan=${planType}&price=${planPrices[planType]}`;
             {% else %}
                 window.location.href = '{{ url_for("login") }}?next={{ url_for("beneficios") }}';
             {% endif %}
@@ -276,6 +253,7 @@
                         setTimeout(() => {
                             entry.target.style.opacity = '1';
                             entry.target.style.transform = 'translateY(0)';
+                            entry.target.style.boxShadow = 'none';
                         }, index * 200);
                     }
                 });
@@ -285,6 +263,7 @@
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(30px)';
                 card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                card.style.boxShadow = 'none';
                 observer.observe(card);
             });
         }
@@ -293,17 +272,16 @@
             
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
-                    this.style.boxShadow = '0 25px 70px rgba(255, 214, 10, 0.3), 0 0 0 1px rgba(255, 214, 10, 0.5)';
+                    // Efeito de hover sem box-shadow
                 });
                 
                 card.addEventListener('mouseleave', function() {
-                    if (!this.classList.contains('recommended')) {
-                        this.style.boxShadow = '0 15px 45px rgba(0,0,0,0.4)';
-                    }
+                    // Remover efeito de hover
                 });
             });
         }
         function comparePlans() {
+            console.log('Função comparePlans chamada');
             const modal = document.createElement('div');
             modal.className = 'comparison-modal';
             modal.innerHTML = `
@@ -378,7 +356,13 @@
             `;
             
             document.body.appendChild(modal);
-            modal.style.display = 'flex';
+            console.log('Modal adicionado ao body');
+            
+            // Forçar display flex
+            setTimeout(() => {
+                modal.style.display = 'flex';
+                console.log('Modal display definido para flex');
+            }, 10);
         }
 
         function closeComparisonModal() {
@@ -390,36 +374,49 @@
         document.addEventListener('DOMContentLoaded', function() {
             animateOnScroll();
             addCardEffects();
+            
+            // Criar botão de comparação
             const pricingSection = document.querySelector('.pricing-section');
-            const compareButton = document.createElement('button');
-            compareButton.textContent = 'Comparar Todos os Planos';
-            compareButton.className = 'btn-compare';
-            compareButton.onclick = comparePlans;
-            compareButton.style.cssText = `
-                margin-top: 40px;
-                padding: 15px 30px;
-                background: transparent;
-                border: 2px solid #FFD60A;
-                color: #FFD60A;
-                border-radius: 8px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            `;
-            
-            compareButton.addEventListener('mouseenter', function() {
-                this.style.background = '#FFD60A';
-                this.style.color = '#0D1B2A';
-            });
-            
-            compareButton.addEventListener('mouseleave', function() {
-                this.style.background = 'transparent';
-                this.style.color = '#FFD60A';
-            });
-            
-            pricingSection.appendChild(compareButton);
+            if (pricingSection) {
+                const compareButton = document.createElement('button');
+                compareButton.textContent = 'Comparar Todos os Planos';
+                compareButton.className = 'btn-compare';
+                compareButton.onclick = function() {
+                    console.log('Botão clicado!');
+                    comparePlans();
+                };
+                compareButton.style.cssText = `
+                    margin-top: 40px;
+                    padding: 15px 30px;
+                    background: transparent;
+                    border: 2px solid #FFD60A;
+                    color: #FFD60A;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                `;
+                
+                compareButton.addEventListener('mouseenter', function() {
+                    this.style.background = '#FFD60A';
+                    this.style.color = '#0D1B2A';
+                });
+                
+                compareButton.addEventListener('mouseleave', function() {
+                    this.style.background = 'transparent';
+                    this.style.color = '#FFD60A';
+                });
+                
+                pricingSection.appendChild(compareButton);
+                console.log('Botão de comparação adicionado com sucesso');
+            } else {
+                console.error('Seção de preços não encontrada!');
+            }
         });
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {

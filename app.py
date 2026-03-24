@@ -10888,6 +10888,19 @@ def beneficios():
                          plano_atual=plano_atual)
 
 
+@app.route('/pagamento_plano')
+def pagamento_plano():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    logged_in = True
+    avatar = get_user_avatar()
+    
+    return render_template('pagamento_plano.html',
+                         logged_in=logged_in,
+                         avatar=avatar)
+
+
 @app.route('/subscribe_plan', methods=['POST'])
 def subscribe_plan():
     if 'user_id' not in session:

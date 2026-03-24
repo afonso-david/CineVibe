@@ -2779,7 +2779,7 @@ a {
 }
 
 .plano-badge {
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+    background: #FFD60A;
     color: #0D1B2A;
     padding: 8px 20px;
     border-radius: 20px;
@@ -2862,6 +2862,7 @@ a {
 
 .btn-change:hover {
     background: rgba(78, 168, 222, 0.3);
+    transform: translateY(-2px);
 }
 
 .btn-cancel {
@@ -2872,6 +2873,7 @@ a {
 
 .btn-cancel:hover {
     background: rgba(231, 76, 60, 0.3);
+    transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

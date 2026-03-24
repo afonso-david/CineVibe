@@ -87,10 +87,28 @@
                                 <span>Bilhetes ({{ dados_pagamento.lugares_selecionados|length }}x)</span>
                                 <span>€{{ "%.2f"|format(dados_pagamento.total_bilhetes) }}</span>
                             </div>
+                            {% if dados_pagamento.desconto_bilhetes > 0 %}
+                            <div class="total-item desconto">
+                                <span><i class="fas fa-tag"></i> Desconto Plano ({{ dados_pagamento.desconto_percentual_bilhetes }}%)</span>
+                                <span class="desconto-valor">-€{{ "%.2f"|format(dados_pagamento.desconto_bilhetes) }}</span>
+                            </div>
+                            {% endif %}
                             {% if dados_pagamento.total_bar > 0 %}
                             <div class="total-item">
                                 <span>Produtos do Bar</span>
                                 <span>€{{ "%.2f"|format(dados_pagamento.total_bar) }}</span>
+                            </div>
+                            {% endif %}
+                            {% if dados_pagamento.desconto_bar > 0 %}
+                            <div class="total-item desconto">
+                                <span><i class="fas fa-tag"></i> Desconto Bar ({{ dados_pagamento.desconto_percentual_bar }}%)</span>
+                                <span class="desconto-valor">-€{{ "%.2f"|format(dados_pagamento.desconto_bar) }}</span>
+                            </div>
+                            {% endif %}
+                            {% if dados_pagamento.subscricao and dados_pagamento.subscricao.bilhetes_disponiveis > 0 %}
+                            <div class="total-item bilhetes-gratis">
+                                <span><i class="fas fa-gift"></i> Bilhetes Grátis Disponíveis</span>
+                                <span class="bilhetes-count">{{ dados_pagamento.subscricao.bilhetes_disponiveis }}</span>
                             </div>
                             {% endif %}
                             <div class="total-final">

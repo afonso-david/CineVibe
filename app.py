@@ -2172,6 +2172,8 @@ def perfil():
             'pontos_gastos': 0
         }
 
+        # Obter informações da subscrição
+        subscricao = get_user_subscription(user_id)
 
         return render_template("perfil.html", 
                              user=user, 
@@ -2184,6 +2186,7 @@ def perfil():
                              nivel_cor=nivel_cor,
                              total_filmes_vistos=total_filmes_vistos,
                              total_avaliacoes=total_avaliacoes,
+                             subscricao=subscricao,
                              logged_in=True,
                              avatar=avatar,
                              is_admin=False)
@@ -10827,7 +10830,204 @@ def cinema_filmes(id_cinema):
                          cinema=cinema,
                          filmes=filmes)
 @app.route('/beneficios')
-def beneficios(): return render_template('beneficios.html')
+def beneficios():
+    logged_in = 'user_id' in session
+    avatar = get_user_avatar()
+    
+    plano_atual = None
+    if logged_in:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        try:
+            cursor.execute("""
+                SELECT plano_tipo, preco_mensal, status, 
+                       bilhetes_gratis_mes, bilhetes_gratis_usados,
+                       data_inicio, data_proximo_pagamento
+                FROM subscricoes 
+                WHERE user_id = %s AND status = 'ativo'
+                ORDER BY id DESC LIMIT 1
+            """, (session['user_id'],))
+            plano_atual = cursor.fetchone()
+        finally:
+            cursor.close()
+            conn.close()
+    
+    return render_template('beneficios.html', 
+                         logged_in=logged_in, 
+                         avatar=avatar,
+                         plano_atual=plano_atual)
+
+
+@app.route('/subscribe_plan', methods=['POST'])
+def subscribe_plan():
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Precisa de fazer login'}), 401
+    
+    data = request.get_json()
+    plan_type = data.get('plan')
+    price = data.get('price')
+    
+    if plan_type not in ['member', 'premium']:
+        return jsonify({'success': False, 'message': 'Plano inválido'}), 400
+    
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        # Verificar se já tem subscrição ativa
+        cursor.execute("""
+            SELECT id, plano_tipo FROM subscricoes 
+            WHERE user_id = %s AND status = 'ativo'
+        """, (session['user_id'],))
+        subscricao_existente = cursor.fetchone()
+        
+        # Definir bilhetes grátis por mês
+        bilhetes_gratis = 1 if plan_type == 'member' else 2
+        
+        # Calcular data do próximo pagamento (30 dias)
+        from datetime import datetime, timedelta
+        proximo_pagamento = datetime.now() + timedelta(days=30)
+        
+        if subscricao_existente:
+            # Atualizar subscrição existente
+            cursor.execute("""
+                UPDATE subscricoes 
+                SET plano_tipo = %s, 
+                    preco_mensal = %s,
+                    bilhetes_gratis_mes = %s,
+                    bilhetes_gratis_usados = 0,
+                    ultimo_reset_bilhetes = CURDATE(),
+                    data_proximo_pagamento = %s,
+                    atualizado_em = NOW()
+                WHERE user_id = %s AND status = 'ativo'
+            """, (plan_type, price, bilhetes_gratis, proximo_pagamento, session['user_id']))
+            subscricao_id = subscricao_existente['id']
+        else:
+            # Criar nova subscrição
+            cursor.execute("""
+                INSERT INTO subscricoes 
+                (user_id, plano_tipo, preco_mensal, status, bilhetes_gratis_mes, 
+                 bilhetes_gratis_usados, ultimo_reset_bilhetes, data_proximo_pagamento)
+                VALUES (%s, %s, %s, 'ativo', %s, 0, CURDATE(), %s)
+            """, (session['user_id'], plan_type, price, bilhetes_gratis, proximo_pagamento))
+            subscricao_id = cursor.lastrowid
+        
+        # Registar pagamento no histórico
+        cursor.execute("""
+            INSERT INTO historico_pagamentos 
+            (subscricao_id, user_id, valor, plano_tipo, status_pagamento, metodo_pagamento)
+            VALUES (%s, %s, %s, %s, 'concluido', 'simulado')
+        """, (subscricao_id, session['user_id'], price, plan_type))
+        
+        conn.commit()
+        
+        return jsonify({
+            'success': True, 
+            'message': 'Subscrição realizada com sucesso!',
+            'plano': plan_type
+        })
+        
+    except Exception as e:
+        conn.rollback()
+        app.logger.error(f"Erro ao processar subscrição: {str(e)}")
+        return jsonify({'success': False, 'message': 'Erro ao processar subscrição'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/cancelar_subscricao', methods=['POST'])
+def cancelar_subscricao():
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Não autorizado'}), 401
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("""
+            UPDATE subscricoes 
+            SET status = 'cancelado', 
+                data_fim = NOW(),
+                atualizado_em = NOW()
+            WHERE user_id = %s AND status = 'ativo'
+        """, (session['user_id'],))
+        
+        # Criar subscrição normal (gratuita)
+        cursor.execute("""
+            INSERT INTO subscricoes 
+            (user_id, plano_tipo, preco_mensal, status, bilhetes_gratis_mes)
+            VALUES (%s, 'normal', 0.00, 'ativo', 0)
+        """, (session['user_id'],))
+        
+        conn.commit()
+        return jsonify({'success': True, 'message': 'Subscrição cancelada com sucesso'})
+        
+    except Exception as e:
+        conn.rollback()
+        app.logger.error(f"Erro ao cancelar subscrição: {str(e)}")
+        return jsonify({'success': False, 'message': 'Erro ao cancelar subscrição'}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def get_user_subscription(user_id):
+    """Função auxiliar para obter subscrição do utilizador"""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        # Verificar se precisa resetar bilhetes grátis (novo mês)
+        cursor.execute("""
+            UPDATE subscricoes 
+            SET bilhetes_gratis_usados = 0,
+                ultimo_reset_bilhetes = CURDATE()
+            WHERE user_id = %s 
+            AND status = 'ativo'
+            AND (ultimo_reset_bilhetes IS NULL 
+                 OR ultimo_reset_bilhetes < DATE_FORMAT(NOW(), '%%Y-%%m-01'))
+        """, (user_id,))
+        conn.commit()
+        
+        cursor.execute("""
+            SELECT plano_tipo, preco_mensal, status,
+                   bilhetes_gratis_mes, bilhetes_gratis_usados,
+                   (bilhetes_gratis_mes - bilhetes_gratis_usados) as bilhetes_disponiveis
+            FROM subscricoes 
+            WHERE user_id = %s AND status = 'ativo'
+            ORDER BY id DESC LIMIT 1
+        """, (user_id,))
+        return cursor.fetchone()
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def aplicar_desconto_plano(valor_original, user_id, tipo='bilhete'):
+    """Aplica desconto baseado no plano do utilizador"""
+    subscricao = get_user_subscription(user_id)
+    
+    if not subscricao:
+        return valor_original, 0
+    
+    plano = subscricao['plano_tipo']
+    desconto_percentual = 0
+    
+    if tipo == 'bilhete':
+        if plano == 'member':
+            desconto_percentual = 15
+        elif plano == 'premium':
+            desconto_percentual = 25
+    elif tipo == 'bar':
+        if plano == 'member':
+            desconto_percentual = 10
+        elif plano == 'premium':
+            desconto_percentual = 20
+    
+    desconto = (valor_original * desconto_percentual) / 100
+    valor_final = valor_original - desconto
+    
+    return valor_final, desconto_percentual
 
 @app.route('/termos-condicoes')
 def termos_condicoes():
@@ -14119,10 +14319,31 @@ def pagamento():
         preco_bilhete = 8.50
         total_bilhetes = len(lugares_selecionados) * preco_bilhete
         
+        # Aplicar desconto do plano nos bilhetes
+        desconto_bilhetes = 0
+        desconto_percentual_bilhetes = 0
+        if logged_in and user_id:
+            total_bilhetes_com_desconto, desconto_percentual_bilhetes = aplicar_desconto_plano(total_bilhetes, user_id, 'bilhete')
+            desconto_bilhetes = total_bilhetes - total_bilhetes_com_desconto
+            total_bilhetes = total_bilhetes_com_desconto
+        
         produtos_bar = reserva_data.get('produtos_bar', [])
         total_bar = sum(produto.get('preco', 0) * produto.get('quantidade', 1) for produto in produtos_bar)
         
+        # Aplicar desconto do plano no bar
+        desconto_bar = 0
+        desconto_percentual_bar = 0
+        if logged_in and user_id and total_bar > 0:
+            total_bar_com_desconto, desconto_percentual_bar = aplicar_desconto_plano(total_bar, user_id, 'bar')
+            desconto_bar = total_bar - total_bar_com_desconto
+            total_bar = total_bar_com_desconto
+        
         total_geral = total_bilhetes + total_bar
+        
+        # Obter informações da subscrição para mostrar bilhetes grátis
+        subscricao = None
+        if logged_in and user_id:
+            subscricao = get_user_subscription(user_id)
 
         dados_pagamento = {
             'filme': filme,
@@ -14136,7 +14357,12 @@ def pagamento():
             'total_bilhetes': total_bilhetes,
             'total_bar': total_bar,
             'total_geral': total_geral,
-            'preco_bilhete': preco_bilhete
+            'preco_bilhete': preco_bilhete,
+            'desconto_bilhetes': desconto_bilhetes,
+            'desconto_percentual_bilhetes': desconto_percentual_bilhetes,
+            'desconto_bar': desconto_bar,
+            'desconto_percentual_bar': desconto_percentual_bar,
+            'subscricao': subscricao
         }
         
         

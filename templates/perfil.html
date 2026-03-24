@@ -151,6 +151,68 @@
                 </div>
             </div>
 
+            {% if subscricao %}
+            <div class="plano-section">
+                <h2 class="section-title">O Meu Plano</h2>
+                <div class="plano-card plano-{{ subscricao.plano_tipo }}">
+                    <div class="plano-header">
+                        <div class="plano-info">
+                            <h3>
+                                {% if subscricao.plano_tipo == 'normal' %}
+                                    Plano Normal
+                                {% elif subscricao.plano_tipo == 'member' %}
+                                    CineMember
+                                {% elif subscricao.plano_tipo == 'premium' %}
+                                    CinePremium
+                                {% endif %}
+                            </h3>
+                            <p class="plano-preco">
+                                {% if subscricao.preco_mensal > 0 %}
+                                    €{{ "%.2f"|format(subscricao.preco_mensal) }}/mês
+                                {% else %}
+                                    Grátis
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% if subscricao.plano_tipo != 'normal' %}
+                        <div class="plano-badge">Ativo</div>
+                        {% endif %}
+                    </div>
+                    <div class="plano-beneficios">
+                        {% if subscricao.plano_tipo == 'member' %}
+                            <div class="beneficio-item"><i class="fas fa-check"></i> 15% desconto em bilhetes</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> 10% desconto no bar</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> 1 bilhete grátis/mês</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> Acesso a pré-estreias</div>
+                        {% elif subscricao.plano_tipo == 'premium' %}
+                            <div class="beneficio-item"><i class="fas fa-check"></i> 25% desconto em bilhetes</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> 20% desconto no bar</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> 2 bilhetes grátis/mês</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> Lugares VIP incluídos</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> Suporte prioritário 24/7</div>
+                        {% else %}
+                            <div class="beneficio-item"><i class="fas fa-check"></i> Acesso a todos os filmes</div>
+                            <div class="beneficio-item"><i class="fas fa-check"></i> Reservas online</div>
+                        {% endif %}
+                    </div>
+                    {% if subscricao.bilhetes_disponiveis > 0 %}
+                    <div class="bilhetes-gratis-info">
+                        <i class="fas fa-gift"></i>
+                        <span>Tens {{ subscricao.bilhetes_disponiveis }} bilhete(s) grátis disponível(is) este mês!</span>
+                    </div>
+                    {% endif %}
+                    <div class="plano-acoes">
+                        {% if subscricao.plano_tipo == 'normal' %}
+                            <a href="{{ url_for('beneficios') }}" class="btn-upgrade">Fazer Upgrade</a>
+                        {% else %}
+                            <a href="{{ url_for('beneficios') }}" class="btn-change">Alterar Plano</a>
+                            <button onclick="cancelarPlano()" class="btn-cancel">Cancelar Plano</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="filmes-section">
                 <h2 class="section-title">Filmes Vistos</h2>
                 <div class="filmes-grid">
@@ -1073,6 +1135,30 @@
                 fecharModalAlterarSenha();
             }
         });
+
+        function cancelarPlano() {
+            if (confirm('Tens a certeza que queres cancelar o teu plano? Perderás todos os benefícios.')) {
+                fetch('/cancelar_subscricao', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Plano cancelado com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro ao cancelar plano: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao cancelar plano. Tenta novamente.');
+                });
+            }
+        }
     </script>
     <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 {% endblock %}

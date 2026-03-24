@@ -885,3 +885,41 @@ body {
         font-size: 1rem;
     }
 }
+
+/* Estilos para descontos e bilhetes grátis */
+.total-item.desconto {
+    color: #4EA8DE;
+    font-weight: 500;
+}
+
+.total-item.desconto .desconto-valor {
+    color: #4EA8DE;
+    font-weight: 600;
+}
+
+.total-item.desconto i {
+    margin-right: 5px;
+    color: #FFD60A;
+}
+
+.total-item.bilhetes-gratis {
+    background: linear-gradient(90deg, rgba(255, 214, 10, 0.1), rgba(78, 168, 222, 0.1));
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px solid rgba(255, 214, 10, 0.3);
+}
+
+.total-item.bilhetes-gratis i {
+    color: #FFD60A;
+    margin-right: 8px;
+}
+
+.total-item.bilhetes-gratis .bilhetes-count {
+    background: #FFD60A;
+    color: #0D1B2A;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}

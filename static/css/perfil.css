@@ -2733,3 +2733,155 @@ a {
         grid-template-columns: 1fr;
     }
 }
+
+/* Seção de Plano */
+.plano-section {
+    margin-top: 2rem;
+}
+
+.plano-card {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.95), rgba(13, 27, 42, 0.95));
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid rgba(255, 214, 10, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.plano-card.plano-member {
+    border-color: rgba(78, 168, 222, 0.5);
+}
+
+.plano-card.plano-premium {
+    border-color: rgba(255, 214, 10, 0.7);
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.95), rgba(42, 54, 79, 0.95));
+}
+
+.plano-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.plano-info h3 {
+    color: #FFD60A;
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
+
+.plano-preco {
+    color: #B8C5D1;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.plano-badge {
+    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+    color: #0D1B2A;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.plano-beneficios {
+    margin: 1.5rem 0;
+}
+
+.beneficio-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    color: #B8C5D1;
+    font-size: 1rem;
+}
+
+.beneficio-item i {
+    color: #4EA8DE;
+    font-size: 1.1rem;
+}
+
+.bilhetes-gratis-info {
+    background: linear-gradient(90deg, rgba(255, 214, 10, 0.15), rgba(78, 168, 222, 0.15));
+    border: 1px solid rgba(255, 214, 10, 0.4);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #FFD60A;
+    font-weight: 600;
+}
+
+.bilhetes-gratis-info i {
+    font-size: 1.5rem;
+}
+
+.plano-acoes {
+    display: flex;
+    gap: 15px;
+    margin-top: 1.5rem;
+}
+
+.btn-upgrade,
+.btn-change,
+.btn-cancel {
+    flex: 1;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-upgrade {
+    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+    color: #0D1B2A;
+}
+
+.btn-upgrade:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 214, 10, 0.4);
+}
+
+.btn-change {
+    background: rgba(78, 168, 222, 0.2);
+    color: #4EA8DE;
+    border: 1px solid #4EA8DE;
+}
+
+.btn-change:hover {
+    background: rgba(78, 168, 222, 0.3);
+}
+
+.btn-cancel {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.btn-cancel:hover {
+    background: rgba(231, 76, 60, 0.3);
+}
+
+@media (max-width: 768px) {
+    .plano-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .plano-acoes {
+        flex-direction: column;
+    }
+}

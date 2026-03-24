@@ -255,10 +255,6 @@
                                     <img src="{{ url_for('static', filename='imgs/pagamento/apple-removebg-preview.png') }}" alt="Apple Pay">
                                     <span>Apple Pay</span>
                                 </div>
-                                <div class="payment-method-item" data-method="giftcard">
-                                    <i class="fas fa-gift"></i>
-                                    <span>Gift Cards</span>
-                                </div>
                             </div>
 
                             <div id="payment-forms-container" style="display: none;">
@@ -321,21 +317,6 @@
                                     </div>
                                 </div>
 
-                                <div id="giftcard-form" class="payment-form" style="display: none;">
-                                    <h4><i class="fas fa-gift"></i> Gift Card</h4>
-                                    <div class="form-group">
-                                        <label for="gift-code">Código do Gift Card</label>
-                                        <input type="text" id="gift-code" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="gift-pin">PIN (se aplicável)</label>
-                                        <input type="password" id="gift-pin" placeholder="****" maxlength="4">
-                                    </div>
-                                    <div class="gift-info">
-                                        <i class="fas fa-info-circle"></i>
-                                        <span>Introduza o código de 16 dígitos do seu Gift Card</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         
@@ -436,9 +417,6 @@
                     break;
                 case 'applepay':
                     formId = 'applepay-form';
-                    break;
-                case 'giftcard':
-                    formId = 'giftcard-form';
                     break;
             }
             
@@ -634,14 +612,6 @@
                     }
                     break;
                     
-                case 'giftcard':
-                    const giftCode = document.getElementById('gift-code').value.trim();
-                    if (!giftCode || giftCode.length < 16) {
-                        alert('Por favor, introduza um código de Gift Card válido.');
-                        document.getElementById('gift-code').focus();
-                        return false;
-                    }
-                    break;
             }
             return true;
         }
@@ -659,11 +629,6 @@
                         expiry: document.getElementById('card-expiry').value,
                         cvv: document.getElementById('card-cvv').value,
                         name: document.getElementById('card-name').value
-                    };
-                case 'giftcard':
-                    return {
-                        code: document.getElementById('gift-code').value,
-                        pin: document.getElementById('gift-pin').value
                     };
                 default:
                     return {};
@@ -821,14 +786,6 @@
                         value = value.substring(0, 2) + '/' + value.substring(2, 4);
                     }
                     e.target.value = value;
-                });
-            }
-            const giftCodeInput = document.getElementById('gift-code');
-            if (giftCodeInput) {
-                giftCodeInput.addEventListener('input', function(e) {
-                    let value = e.target.value.replace(/[^A-Z0-9]/g, '');
-                    let formattedValue = value.match(/.{1,4}/g)?.join('-') || value;
-                    e.target.value = formattedValue;
                 });
             }
             const toggleCodigo = document.getElementById('toggleCodigo');

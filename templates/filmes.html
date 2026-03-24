@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="{{ url_for('static', filename='js/logo-preload.js') }}"></script>
     <meta name="description" content="Descubra os melhores filmes em exibição e os que estão para chegar no CineVibe. Experiência cinematográfica premium com qualidade superior.">
     <meta name="keywords" content="filmes, cinema, CineVibe, em exibição, brevemente, ação, comédia, drama, terror, romance">
@@ -144,7 +145,7 @@
                             <div class="filme-info">
                                 <h3 class="titulo">{{ filme.titulo }}</h3>
                                 <p class="genero">{{ filme.genero_nome or 'Género não especificado' }}</p>
-                                <p class="duracao">⏱️ {{ filme.duracao }}min</p>
+                                <p class="duracao"><i class="fas fa-clock"></i> {{ filme.duracao }}min</p>
                             </div>
                         </div>
                     </a>
@@ -189,7 +190,7 @@
                             <div class="filme-info">
                                 <h3 class="titulo">{{ filme.titulo }}</h3>
                                 <p class="genero">{{ filme.genero_nome or 'Género não especificado' }}</p>
-                                <p class="duracao">⏱️ {{ filme.duracao }}min</p>
+                                <p class="duracao"><i class="fas fa-clock"></i> {{ filme.duracao }}min</p>
                             </div>
                         </div>
                     </a>

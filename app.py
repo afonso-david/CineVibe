@@ -4333,6 +4333,7 @@ def admin_editar_sala(sala_id):
         tipo_sala = request.form.get('tipo_sala', 'Normal')
         filas = request.form.get('filas', 10)
         lugares_por_fila = request.form.get('lugares_por_fila', 20)
+        lugares_acessiveis_str = request.form.get('lugares_acessiveis', '')
         
         if not nome_sala or not capacidade or not id_cinema:
             return jsonify({'success': False, 'message': 'Nome, capacidade e cinema são obrigatórios'})
@@ -4346,11 +4347,16 @@ def admin_editar_sala(sala_id):
         if sala_existente:
             return jsonify({'success': False, 'message': f'Já existe outra sala com o nome "{nome_sala}" neste cinema'})
         
+        lugares_acessiveis_json = None
+        if lugares_acessiveis_str and lugares_acessiveis_str.strip():
+            lugares_list = [lugar.strip() for lugar in lugares_acessiveis_str.split(',') if lugar.strip()]
+            lugares_acessiveis_json = json.dumps(lugares_list)
+        
         cursor.execute("""
             UPDATE salas 
-            SET nome_sala = %s, capacidade = %s, id_cinema = %s, tipo_sala = %s, filas = %s, lugares_por_fila = %s
+            SET nome_sala = %s, capacidade = %s, id_cinema = %s, tipo_sala = %s, filas = %s, lugares_por_fila = %s, lugares_acessiveis = %s
             WHERE id = %s
-        """, (nome_sala, int(capacidade), int(id_cinema), tipo_sala, int(filas), int(lugares_por_fila), sala_id))
+        """, (nome_sala, int(capacidade), int(id_cinema), tipo_sala, int(filas), int(lugares_por_fila), lugares_acessiveis_json, sala_id))
         
         conn.commit()
         
@@ -4394,6 +4400,15 @@ def admin_get_dados_sala(sala_id):
             sala['filas'] = int(sala['filas'])
         if sala.get('lugares_por_fila'):
             sala['lugares_por_fila'] = int(sala['lugares_por_fila'])
+        
+        if sala.get('lugares_acessiveis'):
+            try:
+                lugares_json = json.loads(sala['lugares_acessiveis'])
+                sala['lugares_acessiveis'] = ', '.join(lugares_json) if isinstance(lugares_json, list) else ''
+            except:
+                sala['lugares_acessiveis'] = ''
+        else:
+            sala['lugares_acessiveis'] = ''
         
         return jsonify({
             'success': True,
@@ -12631,7 +12646,7 @@ def admin_salas():
     
     cursor.execute("""
         SELECT s.id, s.nome_sala, s.capacidade, s.tipo_sala, 
-               s.id_cinema,
+               s.id_cinema, s.lugares_acessiveis,
                c.nome as cinema_nome, c.localizacao as cinema_localizacao
         FROM salas s
         INNER JOIN cinemas c ON s.id_cinema = c.id
@@ -12643,6 +12658,21 @@ def admin_salas():
     
     columns = [description[0] for description in cursor.description]
     salas = [dict(zip(columns, row)) for row in rows]
+    
+    # Processar lugares acessíveis (converter JSON string para lista)
+    import json
+    for sala in salas:
+        if sala.get('lugares_acessiveis'):
+            try:
+                if isinstance(sala['lugares_acessiveis'], str):
+                    sala['lugares_acessiveis'] = json.loads(sala['lugares_acessiveis'])
+                sala['num_acessiveis'] = len(sala['lugares_acessiveis']) if sala['lugares_acessiveis'] else 0
+            except:
+                sala['lugares_acessiveis'] = []
+                sala['num_acessiveis'] = 0
+        else:
+            sala['lugares_acessiveis'] = []
+            sala['num_acessiveis'] = 0
     
     cursor.execute("SELECT id, nome, localizacao FROM cinemas ORDER BY nome")
     cinema_rows = cursor.fetchall()

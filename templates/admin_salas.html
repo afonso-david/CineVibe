@@ -440,6 +440,10 @@
                                         Tipo
                                     </th>
                                     <th class="actions-header">
+                                        <i class="fas fa-wheelchair"></i>
+                                        Acessíveis
+                                    </th>
+                                    <th class="actions-header">
                                         <i class="fas fa-cogs"></i>
                                         Ações
                                     </th>
@@ -462,6 +466,16 @@
                                     </td>
                                     <td class="type-cell">
                                         <span class="type-tag">{{ sala.tipo_sala }}</span>
+                                    </td>
+                                    <td class="duration-cell">
+                                        <span class="count-badge" style="background: linear-gradient(135deg, #4EA8DE, #3B91C0);" title="Lugares: {{ sala.lugares_acessiveis | join(', ') if sala.lugares_acessiveis else 'Nenhum' }}">
+                                            <i class="fas fa-wheelchair"></i> {{ sala.num_acessiveis }}
+                                        </span>
+                                        {% if sala.lugares_acessiveis %}
+                                        <div style="font-size: 0.75rem; color: #B8C5D1; margin-top: 5px;">
+                                            {{ sala.lugares_acessiveis | join(', ') }}
+                                        </div>
+                                        {% endif %}
                                     </td>
                                     <td class="actions-cell">
                                         <div class="movie-actions-table">
@@ -588,6 +602,13 @@
                     <div class="form-group">
                         <label>Lugares por Fila</label>
                         <input type="number" id="editLugaresPorFila" class="form-input" min="1" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>Lugares Acessíveis</label>
+                        <input type="text" id="editLugaresAcessiveis" class="form-input" placeholder="Ex: G1, G2, G24, G25">
+                        <small style="color: #8B949E; font-size: 0.85rem; display: block; margin-top: 5px;">
+                            <i class="fas fa-info-circle"></i> Separe os lugares por vírgula (ex: G1, G2, G24)
+                        </small>
                     </div>
                 </form>
             </div>
@@ -761,6 +782,7 @@
                         document.getElementById('editTipoSala').value = sala.tipo_sala || 'Normal';
                         document.getElementById('editFilas').value = sala.filas || 10;
                         document.getElementById('editLugaresPorFila').value = sala.lugares_por_fila || 20;
+                        document.getElementById('editLugaresAcessiveis').value = sala.lugares_acessiveis || '';
                         document.getElementById('editarSalaModal').style.display = 'flex';
                         document.body.style.overflow = 'hidden';
                     } else {
@@ -790,6 +812,7 @@
             formData.append('tipo_sala', document.getElementById('editTipoSala').value);
             formData.append('filas', document.getElementById('editFilas').value);
             formData.append('lugares_por_fila', document.getElementById('editLugaresPorFila').value);
+            formData.append('lugares_acessiveis', document.getElementById('editLugaresAcessiveis').value);
 
             console.log('Salvando sala:', salaEditandoId);
             

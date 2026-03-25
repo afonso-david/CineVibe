@@ -108,12 +108,15 @@
                                         <div class="divider-line-vertical"></div>
                                     {% endif %}
                                     
-                                    <div class="seat {{ 'occupied' if lugar.ocupado else ('accessible' if lugar.acessivel else 'available') }}" 
+                                    <div class="seat {{ 'occupied' if lugar.ocupado else ('vip' if lugar.vip else ('accessible' if lugar.acessivel else 'available')) }}" 
                                          data-seat="{{ lugar.nome }}"
                                          data-row="{{ fileira.letra }}"
                                          data-position="{{ loop.index }}"
                                          data-occupied="{{ 'true' if lugar.ocupado else 'false' }}"
                                          {% if not lugar.ocupado %}onclick="toggleSeat(this)"{% endif %}>
+                                        {% if lugar.vip and not lugar.ocupado %}
+                                        <i class="fa-solid fa-crown"></i>
+                                        {% endif %}
                                     </div>
                                     {% endfor %}
                                 </div>
@@ -140,6 +143,10 @@
                         <div class="legend-item">
                             <div class="legend-seat legend-selected"></div>
                             <span>Selecionado</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-seat legend-vip"><i class="fa-solid fa-crown"></i></div>
+                            <span>VIP</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-seat legend-accessible"></div>

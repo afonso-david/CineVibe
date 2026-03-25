@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash, make_response
 import mysql.connector
 import logging
+import json
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import smtplib
@@ -8417,34 +8418,39 @@ def selecao_lugares():
         if capacidade_sala is None or id_sala is None:
             app.logger.warning(f"Capacidade ou id_sala None para horário {id_horario_sessao}")
             if id_sala:
-                cursor.execute("SELECT capacidade, filas, lugares_por_fila, lugares_acessiveis FROM salas WHERE id = %s", (id_sala,))
+                cursor.execute("SELECT capacidade, filas, lugares_por_fila, lugares_acessiveis, lugares_vip FROM salas WHERE id = %s", (id_sala,))
                 sala_info = cursor.fetchone()
                 if sala_info:
                     capacidade_sala = sala_info.get('capacidade', 100)
                     filas = sala_info.get('filas', 10)
                     lugares_por_fila = sala_info.get('lugares_por_fila', 10)
                     lugares_acessiveis = sala_info.get('lugares_acessiveis', None)
+                    lugares_vip = sala_info.get('lugares_vip', None)
                 else:
                     capacidade_sala = 100
                     filas = 10
                     lugares_por_fila = 10
                     lugares_acessiveis = None
+                    lugares_vip = None
             else:
                 capacidade_sala = 100
                 filas = 10
                 lugares_por_fila = 10
                 lugares_acessiveis = None
+                lugares_vip = None
         else:
-            cursor.execute("SELECT filas, lugares_por_fila, lugares_acessiveis FROM salas WHERE id = %s", (id_sala,))
+            cursor.execute("SELECT filas, lugares_por_fila, lugares_acessiveis, lugares_vip FROM salas WHERE id = %s", (id_sala,))
             sala_layout = cursor.fetchone()
             if sala_layout:
                 filas = sala_layout.get('filas', 10)
                 lugares_por_fila = sala_layout.get('lugares_por_fila', 10)
                 lugares_acessiveis = sala_layout.get('lugares_acessiveis', None)
+                lugares_vip = sala_layout.get('lugares_vip', None)
             else:
                 filas = 10
                 lugares_por_fila = 10
                 lugares_acessiveis = None
+                lugares_vip = None
         
         if lugares_acessiveis and isinstance(lugares_acessiveis, str):
             import json
@@ -8453,15 +8459,22 @@ def selecao_lugares():
             except:
                 lugares_acessiveis = None
         
+        if lugares_vip and isinstance(lugares_vip, str):
+            try:
+                lugares_vip = json.loads(lugares_vip)
+            except:
+                lugares_vip = None
+        
         sala = {
             'nome_sala': horario.get('nome_sala', 'Sala 1'),
             'capacidade': capacidade_sala,
             'filas': filas,
             'lugares_por_fila': lugares_por_fila,
-            'lugares_acessiveis': lugares_acessiveis
+            'lugares_acessiveis': lugares_acessiveis,
+            'lugares_vip': lugares_vip
         }
         
-        app.logger.info(f"Sala final - Nome: {sala['nome_sala']}, Capacidade: {sala['capacidade']}, Filas: {sala['filas']}, Lugares/Fila: {sala['lugares_por_fila']}, Acessíveis: {lugares_acessiveis}")
+        app.logger.info(f"Sala final - Nome: {sala['nome_sala']}, Capacidade: {sala['capacidade']}, Filas: {sala['filas']}, Lugares/Fila: {sala['lugares_por_fila']}, Acessíveis: {lugares_acessiveis}, VIP: {lugares_vip}")
         
         cursor.execute("""
             SELECT lugares
@@ -8484,7 +8497,8 @@ def selecao_lugares():
             sala['filas'], 
             sala['lugares_por_fila'], 
             list(lugares_ocupados_set),
-            sala.get('lugares_acessiveis')
+            sala.get('lugares_acessiveis'),
+            sala.get('lugares_vip')
         )
         
         lugares_ocupados_no_layout = []
@@ -8530,7 +8544,7 @@ def selecao_lugares():
         user_avatar=get_user_avatar()
     )
 
-def gerar_layout_sala(filas, lugares_por_fila, lugares_ocupados, lugares_acessiveis=None):
+def gerar_layout_sala(filas, lugares_por_fila, lugares_ocupados, lugares_acessiveis=None, lugares_vip=None):
     """Gera o layout da sala baseado nas filas e lugares por fila reais da BD"""
     if filas is None or filas <= 0:
         app.logger.error(f"Número de filas inválido: {filas}")
@@ -8559,6 +8573,7 @@ def gerar_layout_sala(filas, lugares_por_fila, lugares_ocupados, lugares_acessiv
         ]
     
     lugares_acessiveis_set = set(lugares_acessiveis)
+    lugares_vip_set = set(lugares_vip) if lugares_vip else set()
     
     for i in range(filas):
         letra_fileira = chr(65 + i)
@@ -8577,7 +8592,8 @@ def gerar_layout_sala(filas, lugares_por_fila, lugares_ocupados, lugares_acessiv
             lugar = {
                 'nome': nome_lugar,
                 'ocupado': esta_ocupado,
-                'acessivel': nome_lugar in lugares_acessiveis_set
+                'acessivel': nome_lugar in lugares_acessiveis_set,
+                'vip': nome_lugar in lugares_vip_set
             }
             fileira['lugares'].append(lugar)
         
@@ -12646,7 +12662,7 @@ def admin_salas():
     
     cursor.execute("""
         SELECT s.id, s.nome_sala, s.capacidade, s.tipo_sala, 
-               s.id_cinema, s.lugares_acessiveis,
+               s.id_cinema, s.lugares_acessiveis, s.lugares_vip,
                c.nome as cinema_nome, c.localizacao as cinema_localizacao
         FROM salas s
         INNER JOIN cinemas c ON s.id_cinema = c.id
@@ -12659,7 +12675,6 @@ def admin_salas():
     columns = [description[0] for description in cursor.description]
     salas = [dict(zip(columns, row)) for row in rows]
     
-    # Processar lugares acessíveis (converter JSON string para lista)
     import json
     for sala in salas:
         if sala.get('lugares_acessiveis'):
@@ -12673,6 +12688,18 @@ def admin_salas():
         else:
             sala['lugares_acessiveis'] = []
             sala['num_acessiveis'] = 0
+        
+        if sala.get('lugares_vip'):
+            try:
+                if isinstance(sala['lugares_vip'], str):
+                    sala['lugares_vip'] = json.loads(sala['lugares_vip'])
+                sala['num_vip'] = len(sala['lugares_vip']) if sala['lugares_vip'] else 0
+            except:
+                sala['lugares_vip'] = []
+                sala['num_vip'] = 0
+        else:
+            sala['lugares_vip'] = []
+            sala['num_vip'] = 0
     
     cursor.execute("SELECT id, nome, localizacao FROM cinemas ORDER BY nome")
     cinema_rows = cursor.fetchall()
@@ -12812,12 +12839,18 @@ def admin_editar_global():
             if not all([capacidade, filas, lugares_por_fila]):
                 return jsonify({'success': False, 'message': 'Campos obrigatórios faltando'}), 400
             
-            cursor.execute("""
-                UPDATE salas
-                SET capacidade = %s, filas = %s, lugares_por_fila = %s
-                WHERE nome_sala = %s
-            """, (capacidade, filas, lugares_por_fila, nome_sala))
-        else:
+            if nome_sala == 'TODAS':
+                cursor.execute("""
+                    UPDATE salas
+                    SET capacidade = %s, filas = %s, lugares_por_fila = %s
+                """, (capacidade, filas, lugares_por_fila))
+            else:
+                cursor.execute("""
+                    UPDATE salas
+                    SET capacidade = %s, filas = %s, lugares_por_fila = %s
+                    WHERE nome_sala = %s
+                """, (capacidade, filas, lugares_por_fila, nome_sala))
+        elif tipo_edicao == 'acessiveis':
             lugares_acessiveis_str = request.form.get('lugares_acessiveis', '')
             lugares_acessiveis_json = None
             
@@ -12825,11 +12858,36 @@ def admin_editar_global():
                 lugares_list = [lugar.strip() for lugar in lugares_acessiveis_str.split(',') if lugar.strip()]
                 lugares_acessiveis_json = json.dumps(lugares_list)
             
-            cursor.execute("""
-                UPDATE salas
-                SET lugares_acessiveis = %s
-                WHERE nome_sala = %s
-            """, (lugares_acessiveis_json, nome_sala))
+            if nome_sala == 'TODAS':
+                cursor.execute("""
+                    UPDATE salas
+                    SET lugares_acessiveis = %s
+                """, (lugares_acessiveis_json,))
+            else:
+                cursor.execute("""
+                    UPDATE salas
+                    SET lugares_acessiveis = %s
+                    WHERE nome_sala = %s
+                """, (lugares_acessiveis_json, nome_sala))
+        elif tipo_edicao == 'vip':
+            lugares_vip_str = request.form.get('lugares_vip', '')
+            lugares_vip_json = None
+            
+            if lugares_vip_str and lugares_vip_str.strip():
+                lugares_list = [lugar.strip() for lugar in lugares_vip_str.split(',') if lugar.strip()]
+                lugares_vip_json = json.dumps(lugares_list)
+            
+            if nome_sala == 'TODAS':
+                cursor.execute("""
+                    UPDATE salas
+                    SET lugares_vip = %s
+                """, (lugares_vip_json,))
+            else:
+                cursor.execute("""
+                    UPDATE salas
+                    SET lugares_vip = %s
+                    WHERE nome_sala = %s
+                """, (lugares_vip_json, nome_sala))
         
         count = cursor.rowcount
         conn.commit()

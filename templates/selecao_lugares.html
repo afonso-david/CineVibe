@@ -116,6 +116,8 @@
                                          {% if not lugar.ocupado %}onclick="toggleSeat(this)"{% endif %}>
                                         {% if lugar.vip and not lugar.ocupado %}
                                         <i class="fa-solid fa-crown"></i>
+                                        {% elif lugar.acessivel and not lugar.ocupado %}
+                                        <i class="fa-solid fa-wheelchair"></i>
                                         {% endif %}
                                     </div>
                                     {% endfor %}
@@ -149,7 +151,7 @@
                             <span>VIP</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-seat legend-accessible"></div>
+                            <div class="legend-seat legend-accessible"><i class="fa-solid fa-wheelchair"></i></div>
                             <span>Acessível</span>
                         </div>
                         <div class="legend-item">
@@ -302,6 +304,10 @@
             selectedSeats = selectedSeats.filter(seat => seat !== seatName);
         } else {
             if (selectedSeats.length < maxSeats) {
+                if (seatElement.classList.contains('accessible')) {
+                    showAccessibleConfirmation(seatElement, seatName);
+                    return;
+                }
                 seatElement.classList.add('selected');
                 selectedSeats.push(seatName);
             } else {
@@ -310,6 +316,55 @@
         }
         
         updateSummary();
+    }
+    
+    function showAccessibleConfirmation(seatElement, seatName) {
+        const modal = document.createElement('div');
+        modal.className = 'accessible-modal';
+        modal.innerHTML = `
+            <div class="accessible-modal-content">
+                <div class="accessible-modal-icon">
+                    <i class="fa-solid fa-wheelchair"></i>
+                </div>
+                <h3>Lugar Acessível</h3>
+                <p>Este lugar é reservado para pessoas com mobilidade reduzida.</p>
+                <p style="font-size: 0.9rem; color: #B8C5D1; margin-top: 10px;">Tem certeza que deseja selecionar este lugar?</p>
+                <div class="accessible-modal-buttons">
+                    <button class="accessible-btn-cancel" onclick="closeAccessibleModal()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button class="accessible-btn-confirm" onclick="confirmAccessibleSeat('${seatName}')">
+                        <i class="fas fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.classList.add('modal-open');
+        
+        modal.pendingSeat = seatElement;
+        modal.pendingSeatName = seatName;
+        
+        setTimeout(() => modal.classList.add('show'), 10);
+    }
+    
+    function closeAccessibleModal() {
+        const modal = document.querySelector('.accessible-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
+            setTimeout(() => modal.remove(), 300);
+        }
+    }
+    
+    function confirmAccessibleSeat(seatName) {
+        const modal = document.querySelector('.accessible-modal');
+        if (modal && modal.pendingSeat) {
+            modal.pendingSeat.classList.add('selected');
+            selectedSeats.push(seatName);
+            updateSummary();
+        }
+        closeAccessibleModal();
     }
 
     function updateSummary() {

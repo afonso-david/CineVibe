@@ -631,6 +631,10 @@
     font-size: 0.45rem;
     font-weight: 600;
     flex-shrink: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .seat.available {
@@ -696,41 +700,46 @@
 .seat.accessible {
     background-color: #03050F;
     border: 3px solid #0C112B;
-    box-shadow: 0 0 6px #00FF00, 0 0 12px #00FF00, inset 0 2px 4px rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 6px #50E6FF, 0 0 12px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.1);
     position: relative;
 }
 
-.seat.accessible::before {
-    content: "";
+.seat.accessible i {
+    color: #00FF00;
+    font-size: 14px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 15px;
-    height: 15px;
-    background-image: url('/static/imgs/cadeira_rodas_icon-removebg-preview.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    filter: brightness(1.5) contrast(1.2);
 }
 
 .seat.accessible:hover {
     background-color: #03050F;
     border: 3px solid #0C112B;
-    box-shadow: 0 0 8px #00FF00, 0 0 16px #00FF00, inset 0 2px 4px rgba(0, 255, 0, 0.2);
+    box-shadow: 0 0 8px #50E6FF, 0 0 16px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.2);
     transform: scale(1.1);
 }
 
+.seat.accessible.selected {
+    background: #FFD60A;
+    border: 3px solid #0C112B;
+    box-shadow: 0 0 8px #50E6FF, 0 0 16px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.seat.accessible.selected i {
+    color: #000000;
+}
+
 .seat.vip {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    border: 2px solid #FFD700;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+    background-color: #03050F;
+    border: 3px solid #0C112B;
+    box-shadow: 0 0 6px #50E6FF, 0 0 12px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.1);
     position: relative;
 }
 
 .seat.vip i {
-    color: #1B263B;
+    color: #FFD700;
     font-size: 14px;
     position: absolute;
     top: 50%;
@@ -739,19 +748,21 @@
 }
 
 .seat.vip:hover {
-    background: linear-gradient(135deg, #FFA500, #FFD700);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.5);
+    background-color: #03050F;
+    border: 3px solid #0C112B;
+    box-shadow: 0 0 8px #50E6FF, 0 0 16px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.2);
     transform: scale(1.1);
 }
 
 .seat.vip.selected {
-    background: linear-gradient(135deg, #4EA8DE, #3B91C0);
-    border: 2px solid #4EA8DE;
-    box-shadow: 0 0 10px rgba(78, 168, 222, 0.5);
+    background: #FFD60A;
+    border: 3px solid #0C112B;
+    box-shadow: 0 0 8px #50E6FF, 0 0 16px #50E6FF, inset 0 2px 4px rgba(80, 230, 255, 0.2);
+    transform: scale(1.1);
 }
 
 .seat.vip.selected i {
-    color: #FFD700;
+    color: #000000;
 }
 
 .seat-legend {
@@ -826,29 +837,22 @@
 .legend-accessible {
     background-color: #03050F;
     border: 3px solid #0C112B;
-    box-shadow: 0 0 4px #00FF00, 0 0 8px #00FF00;
+    box-shadow: 0 0 4px #50E6FF, 0 0 8px #50E6FF;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.legend-accessible::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 14px;
-    height: 14px;
-    background-image: url('/static/imgs/cadeira_rodas_icon-removebg-preview.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    filter: brightness(1.5) contrast(1.2);
+.legend-accessible i {
+    color: #00FF00;
+    font-size: 10px;
 }
 
 .legend-vip {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    border: 2px solid #FFD700;
-    box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+    background-color: #03050F;
+    border: 3px solid #0C112B;
+    box-shadow: 0 0 4px #50E6FF, 0 0 8px #50E6FF;
     position: relative;
     display: flex;
     align-items: center;
@@ -856,7 +860,7 @@
 }
 
 .legend-vip i {
-    color: #1B263B;
+    color: #FFD700;
     font-size: 10px;
 }
 
@@ -1366,7 +1370,6 @@
     border-color: rgba(78, 168, 222, 0.5);
     color: #4EA8DE;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(78, 168, 222, 0.2);
 }
 
 .back-btn i {
@@ -2011,4 +2014,164 @@ div.wide-center-aisle {
     width: 50px !important;
     height: 2px !important;
   }
+}
+
+
+.accessible-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    overflow-y: auto;
+}
+
+body.modal-open {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.accessible-modal.show {
+    opacity: 1;
+}
+
+.accessible-modal-content {
+    background: linear-gradient(135deg, #1B263B, #0D1B2A);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 450px;
+    width: 90%;
+    border: 2px solid rgba(0, 255, 0, 0.3);
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.accessible-modal-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 255, 0, 0.05));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+.accessible-modal-icon i {
+    font-size: 2.5rem;
+    color: #00FF00;
+}
+
+.accessible-modal-content h3 {
+    color: #00FF00;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.accessible-modal-content p {
+    color: #E8EEF2;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.accessible-modal-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+}
+
+.accessible-btn-cancel,
+.accessible-btn-confirm {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.accessible-btn-cancel {
+    background: linear-gradient(135deg, #2A3B52, #1B263B);
+    color: #B8C5D1;
+    border: 1px solid rgba(78, 168, 222, 0.3);
+}
+
+.accessible-btn-cancel:hover {
+    background: linear-gradient(135deg, #1B263B, #0D1B2A);
+    border-color: rgba(78, 168, 222, 0.5);
+    color: #4EA8DE;
+    transform: translateY(-2px);
+}
+
+.accessible-btn-confirm {
+    background: linear-gradient(135deg, #00FF00, #00CC00);
+    color: #000000;
+    border: 1px solid #00FF00;
+}
+
+.accessible-btn-confirm:hover {
+    background: linear-gradient(135deg, #00CC00, #00AA00);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .accessible-modal-content {
+        padding: 1.5rem;
+        max-width: 90%;
+    }
+    
+    .accessible-modal-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .accessible-modal-icon i {
+        font-size: 2rem;
+    }
+    
+    .accessible-modal-content h3 {
+        font-size: 1.2rem;
+    }
+    
+    .accessible-modal-buttons {
+        flex-direction: column;
+    }
+    
+    .accessible-btn-cancel,
+    .accessible-btn-confirm {
+        width: 100%;
+        justify-content: center;
+    }
 }

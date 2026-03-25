@@ -184,20 +184,12 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
     {% block extra_js %}{% endblock %}
 
     <script>
         window.addEventListener('load', function() {
             document.body.classList.add('loaded');
-        });
-
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = this.value.trim();
-                if (query) {
-                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
-                }
-            }
         });
     </script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>

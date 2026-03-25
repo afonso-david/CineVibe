@@ -12795,22 +12795,41 @@ def admin_editar_global():
         return jsonify({'success': False, 'message': 'Não autorizado'}), 401
     
     nome_sala = request.form.get('nome_sala', '')
-    capacidade = request.form.get('capacidade', '')
-    filas = request.form.get('filas', '')
-    lugares_por_fila = request.form.get('lugares_por_fila', '')
+    tipo_edicao = request.form.get('tipo_edicao', 'capacidade')
     
-    if not all([nome_sala, capacidade, filas, lugares_por_fila]):
-        return jsonify({'success': False, 'message': 'Campos obrigatórios faltando'}), 400
+    if not nome_sala:
+        return jsonify({'success': False, 'message': 'Nome da sala é obrigatório'}), 400
     
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        cursor.execute("""
-            UPDATE salas
-            SET capacidade = %s, filas = %s, lugares_por_fila = %s
-            WHERE nome_sala = %s
-        """, (capacidade, filas, lugares_por_fila, nome_sala))
+        if tipo_edicao == 'capacidade':
+            capacidade = request.form.get('capacidade', '')
+            filas = request.form.get('filas', '')
+            lugares_por_fila = request.form.get('lugares_por_fila', '')
+            
+            if not all([capacidade, filas, lugares_por_fila]):
+                return jsonify({'success': False, 'message': 'Campos obrigatórios faltando'}), 400
+            
+            cursor.execute("""
+                UPDATE salas
+                SET capacidade = %s, filas = %s, lugares_por_fila = %s
+                WHERE nome_sala = %s
+            """, (capacidade, filas, lugares_por_fila, nome_sala))
+        else:
+            lugares_acessiveis_str = request.form.get('lugares_acessiveis', '')
+            lugares_acessiveis_json = None
+            
+            if lugares_acessiveis_str and lugares_acessiveis_str.strip():
+                lugares_list = [lugar.strip() for lugar in lugares_acessiveis_str.split(',') if lugar.strip()]
+                lugares_acessiveis_json = json.dumps(lugares_list)
+            
+            cursor.execute("""
+                UPDATE salas
+                SET lugares_acessiveis = %s
+                WHERE nome_sala = %s
+            """, (lugares_acessiveis_json, nome_sala))
         
         count = cursor.rowcount
         conn.commit()

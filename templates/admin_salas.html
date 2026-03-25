@@ -649,6 +649,8 @@
                             <option value="Sala 8">Sala 8</option>
                             <option value="Sala 9">Sala 9</option>
                             <option value="Sala 10">Sala 10</option>
+                            <option value="Sala IMAX">Sala IMAX</option>
+                            <option value="Sala 4DX">Sala 4DX</option>
                         </select>
                     </div>
                     <div id="previewSalasAfetadas" style="display: none; background: rgba(255, 214, 10, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid #FFD60A;">
@@ -658,17 +660,46 @@
                         </p>
                         <div id="listaSalasAfetadas" style="color: #E8EEF2; font-size: 0.85rem; max-height: 150px; overflow-y: auto;"></div>
                     </div>
+                    
                     <div class="form-group">
-                        <label>Nova Capacidade *</label>
-                        <input type="number" id="globalCapacidade" class="form-input" min="1" required>
+                        <label style="font-weight: 600; color: #4EA8DE; margin-bottom: 10px; display: block;">
+                            <i class="fas fa-cog"></i> Escolha o que deseja atualizar:
+                        </label>
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <label style="display: flex; align-items: center; cursor: pointer; user-select: none; flex: 1; padding: 12px; background: rgba(78, 168, 222, 0.1); border-radius: 8px; border: 2px solid transparent; transition: all 0.3s;" id="opcaoCapacidadeLabel">
+                                <input type="radio" name="tipoEdicaoGlobal" value="capacidade" id="opcaoCapacidade" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer;" checked onchange="toggleOpcaoEdicaoGlobal()">
+                                <span><i class="fas fa-chair"></i> Capacidade e Layout</span>
+                            </label>
+                            <label style="display: flex; align-items: center; cursor: pointer; user-select: none; flex: 1; padding: 12px; background: rgba(78, 168, 222, 0.1); border-radius: 8px; border: 2px solid transparent; transition: all 0.3s;" id="opcaoAcessiveisLabel">
+                                <input type="radio" name="tipoEdicaoGlobal" value="acessiveis" id="opcaoAcessiveis" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer;" onchange="toggleOpcaoEdicaoGlobal()">
+                                <span><i class="fas fa-wheelchair"></i> Lugares Acessíveis</span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Novas Filas *</label>
-                        <input type="number" id="globalFilas" class="form-input" min="1" required>
+                    
+                    <div id="camposCapacidade">
+                        <div class="form-group">
+                            <label>Nova Capacidade *</label>
+                            <input type="number" id="globalCapacidade" class="form-input" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Novas Filas *</label>
+                            <input type="number" id="globalFilas" class="form-input" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Novos Lugares por Fila *</label>
+                            <input type="number" id="globalLugaresPorFila" class="form-input" min="1">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Novos Lugares por Fila *</label>
-                        <input type="number" id="globalLugaresPorFila" class="form-input" min="1" required>
+                    
+                    <div id="camposAcessiveis" style="display: none;">
+                        <div class="form-group">
+                            <label>Lugares Acessíveis</label>
+                            <input type="text" id="globalLugaresAcessiveis" class="form-input" placeholder="Ex: G1, G2, G24, G25">
+                            <small style="color: #8B949E; font-size: 0.85rem; display: block; margin-top: 5px;">
+                                <i class="fas fa-info-circle"></i> Separe os lugares por vírgula (ex: G1, G2, G24). Deixe vazio para remover todos.
+                            </small>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -939,24 +970,42 @@
 
         function salvarEdicaoGlobal() {
             const nomeSala = document.getElementById('globalNomeSala').value;
-            const capacidade = document.getElementById('globalCapacidade').value;
-            const filas = document.getElementById('globalFilas').value;
-            const lugaresPorFila = document.getElementById('globalLugaresPorFila').value;
+            const tipoEdicao = document.querySelector('input[name="tipoEdicaoGlobal"]:checked').value;
 
-            if (!nomeSala || !capacidade || !filas || !lugaresPorFila) {
-                showNotification('Preencha todos os campos obrigatórios', 'error');
-                return;
-            }
-
-            if (!confirm(`Tem certeza que deseja atualizar TODAS as salas "${nomeSala}" em todos os cinemas?`)) {
+            if (!nomeSala) {
+                showNotification('Selecione uma sala', 'error');
                 return;
             }
 
             const formData = new FormData();
             formData.append('nome_sala', nomeSala);
-            formData.append('capacidade', capacidade);
-            formData.append('filas', filas);
-            formData.append('lugares_por_fila', lugaresPorFila);
+            formData.append('tipo_edicao', tipoEdicao);
+
+            if (tipoEdicao === 'capacidade') {
+                const capacidade = document.getElementById('globalCapacidade').value;
+                const filas = document.getElementById('globalFilas').value;
+                const lugaresPorFila = document.getElementById('globalLugaresPorFila').value;
+
+                if (!capacidade || !filas || !lugaresPorFila) {
+                    showNotification('Preencha todos os campos obrigatórios', 'error');
+                    return;
+                }
+
+                formData.append('capacidade', capacidade);
+                formData.append('filas', filas);
+                formData.append('lugares_por_fila', lugaresPorFila);
+
+                if (!confirm(`Tem certeza que deseja atualizar a capacidade e layout de TODAS as salas "${nomeSala}"?`)) {
+                    return;
+                }
+            } else {
+                const lugaresAcessiveis = document.getElementById('globalLugaresAcessiveis').value;
+                formData.append('lugares_acessiveis', lugaresAcessiveis);
+
+                if (!confirm(`Tem certeza que deseja atualizar os lugares acessíveis de TODAS as salas "${nomeSala}"?`)) {
+                    return;
+                }
+            }
 
             fetch('/admin/salas/editar-global', {
                 method: 'POST',
@@ -976,6 +1025,30 @@
                 console.error('Erro ao salvar edição global:', error);
                 showNotification('Erro ao atualizar salas', 'error');
             });
+        }
+        
+        function toggleOpcaoEdicaoGlobal() {
+            const tipoEdicao = document.querySelector('input[name="tipoEdicaoGlobal"]:checked').value;
+            const camposCapacidade = document.getElementById('camposCapacidade');
+            const camposAcessiveis = document.getElementById('camposAcessiveis');
+            const labelCapacidade = document.getElementById('opcaoCapacidadeLabel');
+            const labelAcessiveis = document.getElementById('opcaoAcessiveisLabel');
+            
+            if (tipoEdicao === 'capacidade') {
+                camposCapacidade.style.display = 'block';
+                camposAcessiveis.style.display = 'none';
+                labelCapacidade.style.borderColor = '#4EA8DE';
+                labelCapacidade.style.background = 'rgba(78, 168, 222, 0.2)';
+                labelAcessiveis.style.borderColor = 'transparent';
+                labelAcessiveis.style.background = 'rgba(78, 168, 222, 0.1)';
+            } else {
+                camposCapacidade.style.display = 'none';
+                camposAcessiveis.style.display = 'block';
+                labelAcessiveis.style.borderColor = '#4EA8DE';
+                labelAcessiveis.style.background = 'rgba(78, 168, 222, 0.2)';
+                labelCapacidade.style.borderColor = 'transparent';
+                labelCapacidade.style.background = 'rgba(78, 168, 222, 0.1)';
+            }
         }
 
         window.onclick = function(event) {

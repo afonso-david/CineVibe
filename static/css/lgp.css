@@ -492,9 +492,21 @@ nav.nav-center + .main-content .hero-banner {
     left: 0;
     right: 0;
     
-    margin-top: 0;
+    margin-top: -100px;
     
-    top: -1px;
+    top: 0;
+}
+
+/* Fix para telas grandes - remove o espaço entre navbar e vídeo */
+@media (min-width: 1920px) {
+    .hero-banner {
+        margin-top: 0;
+        top: -1px;
+    }
+    
+    .main-content {
+        margin-top: -1px !important;
+    }
 }
 
 .hero-banner video {

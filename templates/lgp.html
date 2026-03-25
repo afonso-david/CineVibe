@@ -48,6 +48,7 @@
             background-color: #1E2A3A;
             padding: 12px 25px;
             align-items: center;
+            margin-bottom: 0;
         }
         
         /* Hero banner básico */
@@ -62,7 +63,7 @@
             left: 0;
             right: 0;
             margin-top: 0;
-            top: -1px;
+            top: 0;
         }
         
         .hero-banner video {
@@ -73,6 +74,19 @@
             height: 100%;
             object-fit: cover;
             z-index: 1;
+        }
+        
+        /* Em telas grandes, corta o topo do vídeo */
+        @media (min-width: 1920px) {
+            .hero-banner video {
+                clip-path: inset(12% 0 0 0);
+            }
+        }
+        
+        @media (min-width: 2560px) {
+            .hero-banner video {
+                clip-path: inset(15% 0 0 0);
+            }
         }
         
         /* Loading spinner */
@@ -97,6 +111,20 @@
         
         body.loaded .loading-spinner {
             display: none;
+        }
+        
+        .page-wrapper {
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            margin-bottom: 0;
+        }
+        
+        .main-content {
+            margin-top: 0;
+            padding-top: 0;
         }
     </style>
 
@@ -152,9 +180,7 @@
         <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
-
     <main class="main-content">
-        
         <section class="hero-banner" id="banner">
             
             <video id="heroVideo" 
@@ -195,7 +221,7 @@
             </div>
         </section>
 
-        <section class="about-section">
+        <section class="about-section" id="como-funciona">
             <div class="section-header">
                 <h2>O que é a Interpretação em LGP?</h2>
                 <p class="description">A interpretação em Língua Gestual Portuguesa é um serviço que traduz todos os elementos sonoros do filme - diálogos, efeitos sonoros, música e narração - para a língua natural da comunidade surda portuguesa. Através de intérpretes certificados, garantimos que cada emoção, cada palavra e cada som chegue ao público surdo de forma completa e expressiva.</p>

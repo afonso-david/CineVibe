@@ -9610,8 +9610,32 @@ def processar_reserva_exclusiva():
     if num_pessoas_int > sala_capacidade:
         return f"Número de pessoas excede a capacidade máxima da sala ({sala_capacidade} pessoas)", 400
     
-    # Preço base para sessão exclusiva: €500 + €20 por pessoa adicional
-    preco_base = 500.00
+    # Buscar o nome e preço da sala
+    sala_nome = request.form.get('sala_nome', '').lower()
+    
+    # Se não vier sala_nome, buscar pelo sala_id
+    if not sala_nome and sala_id:
+        try:
+            conn_sala = get_db_connection()
+            cursor_sala = conn_sala.cursor(dictionary=True)
+            cursor_sala.execute("SELECT nome FROM salas_exclusivas WHERE id = %s", (sala_id,))
+            sala_row = cursor_sala.fetchone()
+            if sala_row:
+                sala_nome = sala_row['nome'].lower()
+            cursor_sala.close()
+            conn_sala.close()
+        except Exception as e:
+            app.logger.error(f"Erro ao buscar nome da sala: {e}")
+    
+    # Definir preços por tipo de sala
+    precos_salas = {
+        'intimista': 150.00,
+        'vip': 350.00,
+        'premium': 200.00
+    }
+    preco_base = precos_salas.get(sala_nome, 150.00)
+    
+    # Calcular preço total: preço base + €20 por pessoa adicional
     if num_pessoas_int > 1:
         preco_total = preco_base + ((num_pessoas_int - 1) * 20.00)
     else:

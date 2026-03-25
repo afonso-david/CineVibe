@@ -361,6 +361,7 @@
 
                 <form id="formReserva" method="POST" action="{{ url_for('processar_reserva_exclusiva') }}">
                     <input type="hidden" name="sala_id" value="{{ sala_id }}">
+                    <input type="hidden" name="sala_nome" value="{{ sala_nome }}">
                     {% if not logged_in %}
                     <div class="form-group">
                         <label for="nome_cliente">
@@ -446,7 +447,7 @@
                             <i class="fas fa-arrow-left"></i>
                             Voltar
                         </a>
-                        <button type="submit" class="btn-primary">
+                        <button type="submit" class="btn-primary" id="btnSubmit" disabled>
                             <i class="fas fa-arrow-right"></i>
                             Continuar para Pagamento
                         </button>
@@ -610,6 +611,43 @@
         });
 
         renderCalendar();
+
+        // Validação do formulário
+        function validarFormulario() {
+            const filmeId = document.getElementById('filme_id').value;
+            const dataSessao = document.getElementById('data_sessao').value;
+            const horaSessao = document.getElementById('hora_sessao').value;
+            const btnSubmit = document.getElementById('btnSubmit');
+
+            let valido = true;
+
+            if (!loggedIn) {
+                const nomeCliente = document.getElementById('nome_cliente').value.trim();
+                const emailCliente = document.getElementById('email_cliente').value.trim();
+                if (!nomeCliente || !emailCliente) valido = false;
+            }
+
+            if (!filmeId || !dataSessao || !horaSessao) {
+                valido = false;
+            }
+
+            btnSubmit.disabled = !valido;
+            btnSubmit.style.opacity = valido ? '1' : '0.5';
+            btnSubmit.style.cursor = valido ? 'pointer' : 'not-allowed';
+        }
+
+        // Adicionar listeners aos campos
+        document.getElementById('filme_id').addEventListener('change', validarFormulario);
+        document.getElementById('data_sessao').addEventListener('change', validarFormulario);
+        document.getElementById('hora_sessao').addEventListener('change', validarFormulario);
+
+        if (!loggedIn) {
+            document.getElementById('nome_cliente').addEventListener('input', validarFormulario);
+            document.getElementById('email_cliente').addEventListener('input', validarFormulario);
+        }
+
+        // Validar ao carregar
+        validarFormulario();
 
         function fecharModal() {
             document.getElementById('loginModal').style.display = 'none';

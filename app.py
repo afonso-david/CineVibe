@@ -6968,6 +6968,7 @@ def filmes():
     pass
     
     genero_filtro = request.args.get('genero', '').strip().lower()
+    user_id = session.get('user_id')
     
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -6975,6 +6976,41 @@ def filmes():
         cursor.execute("SELECT id, nome FROM generos ORDER BY nome ASC")
         generos = cursor.fetchall() or []
         
+        # Analisar preferências do utilizador se estiver logado
+        generos_preferidos = []
+        filmes_vistos_ids = []
+        
+        if user_id:
+            # Buscar géneros dos filmes que o utilizador já viu (através de reservas concluídas)
+            cursor.execute("""
+                SELECT g.id, g.nome, COUNT(*) as contagem
+                FROM reservas r
+                JOIN filmes f ON r.id_filme = f.id
+                JOIN filme_generos fg ON f.id = fg.filme_id
+                JOIN generos g ON fg.genero_id = g.id
+                JOIN horarios_sessao hs ON r.id_horario_sessao = hs.id
+                JOIN horarios h ON hs.id_horario = h.id
+                WHERE r.id_usuario = %s
+                AND DATE_ADD(CONCAT(r.data_sessao, ' ', h.hora), INTERVAL f.duracao MINUTE) < NOW()
+                GROUP BY g.id, g.nome
+                ORDER BY contagem DESC
+                LIMIT 3
+            """, (user_id,))
+            generos_preferidos = cursor.fetchall() or []
+            
+            # Buscar IDs dos filmes já vistos
+            cursor.execute("""
+                SELECT DISTINCT f.id
+                FROM reservas r
+                JOIN filmes f ON r.id_filme = f.id
+                JOIN horarios_sessao hs ON r.id_horario_sessao = hs.id
+                JOIN horarios h ON hs.id_horario = h.id
+                WHERE r.id_usuario = %s
+                AND DATE_ADD(CONCAT(r.data_sessao, ' ', h.hora), INTERVAL f.duracao MINUTE) < NOW()
+            """, (user_id,))
+            filmes_vistos_ids = [row['id'] for row in cursor.fetchall()]
+        
+        # Query base para buscar filmes
         query = """
             SELECT
                 f.id,
@@ -6984,6 +7020,19 @@ def filmes():
                 f.poster_hover,
                 f.estado,
                 COALESCE(GROUP_CONCAT(g.nome SEPARATOR ', '), '') AS genero_nome
+        """
+        
+        # Se o utilizador tem preferências, adicionar score de relevância
+        if generos_preferidos:
+            generos_ids = [str(g['id']) for g in generos_preferidos]
+            query += f""",
+                (SELECT COUNT(*) 
+                 FROM filme_generos fg2 
+                 WHERE fg2.filme_id = f.id 
+                 AND fg2.genero_id IN ({','.join(generos_ids)})) as relevancia_score
+            """
+        
+        query += """
             FROM filmes f
             LEFT JOIN filme_generos fg ON f.id = fg.filme_id
             LEFT JOIN generos g ON fg.genero_id = g.id
@@ -6998,10 +7047,24 @@ def filmes():
                 WHERE LOWER(g2.nome) = %s
             )
             """
-            query += " GROUP BY f.id ORDER BY f.id ASC"
+            query += " GROUP BY f.id"
+            
+            # Ordenação personalizada
+            if generos_preferidos:
+                query += " ORDER BY relevancia_score DESC, f.id ASC"
+            else:
+                query += " ORDER BY f.id ASC"
+                
             cursor.execute(query, (genero_filtro,))
         else:
-            query += " GROUP BY f.id ORDER BY f.id ASC"
+            query += " GROUP BY f.id"
+            
+            # Ordenação personalizada
+            if generos_preferidos:
+                query += " ORDER BY relevancia_score DESC, f.id ASC"
+            else:
+                query += " ORDER BY f.id ASC"
+                
             cursor.execute(query)
             
         filmes = cursor.fetchall() or []
@@ -7013,6 +7076,9 @@ def filmes():
             elif estado in ('brevemente', 'breve', 'coming_soon', 'comingsoon'):
                 estado = 'brevemente'
             f['estado'] = estado
+            
+            # Marcar se o filme já foi visto
+            f['ja_visto'] = f['id'] in filmes_vistos_ids
 
             if f.get('poster_url'):
                 f['poster_url'] = _normalize_img_path(f['poster_url'])
@@ -7027,8 +7093,14 @@ def filmes():
             if f.get('genero_nome') is None:
                 f['genero_nome'] = ''
 
+        # Separar por estado e ordenar: filmes não vistos primeiro, depois vistos
         filmes_em_exibicao = [f for f in filmes if f['estado'] == 'em_exibicao']
         filmes_brevemente = [f for f in filmes if f['estado'] == 'brevemente']
+        
+        # Reordenar para colocar filmes já vistos no final
+        if user_id and filmes_vistos_ids:
+            filmes_em_exibicao = sorted(filmes_em_exibicao, key=lambda x: (x['ja_visto'], -x.get('relevancia_score', 0)))
+            filmes_brevemente = sorted(filmes_brevemente, key=lambda x: (x['ja_visto'], -x.get('relevancia_score', 0)))
 
     finally:
         try: cursor.close()
@@ -7040,7 +7112,8 @@ def filmes():
                            filmes_em_exibicao=filmes_em_exibicao,
                            filmes_brevemente=filmes_brevemente,
                            generos=generos,
-                           genero_filtro=genero_filtro)
+                           genero_filtro=genero_filtro,
+                           generos_preferidos=generos_preferidos if user_id else [])
 
 @app.route('/filme/<int:id_filme>')
 def filme_detalhe(id_filme):

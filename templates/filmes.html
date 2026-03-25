@@ -130,6 +130,11 @@
                     <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}" 
                        aria-label="Ver detalhes de {{ filme.titulo }}">
                         <div class="poster-container">
+                            {% if filme.ja_visto %}
+                            <div style="position: absolute; top: 10px; right: 10px; background: rgba(78, 168, 222, 0.9); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; z-index: 10; font-weight: 600;">
+                                <i class="fas fa-check-circle"></i> Visto
+                            </div>
+                            {% endif %}
                             <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
                                  alt="Poster de {{ filme.titulo }}" 
                                  class="poster-main"
@@ -175,6 +180,11 @@
                     <a href="{{ url_for('filme_detalhe', id_filme=filme.id) }}" 
                        aria-label="Ver detalhes de {{ filme.titulo }}">
                         <div class="poster-container">
+                            {% if filme.ja_visto %}
+                            <div style="position: absolute; top: 10px; right: 10px; background: rgba(78, 168, 222, 0.9); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; z-index: 10; font-weight: 600;">
+                                <i class="fas fa-check-circle"></i> Visto
+                            </div>
+                            {% endif %}
                             <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
                                  alt="Poster de {{ filme.titulo }}" 
                                  class="poster-main"

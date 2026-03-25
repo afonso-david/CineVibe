@@ -8513,6 +8513,28 @@ def selecao_lugares():
         
         user_authenticated = 'user_id' in session
         
+        # Verificar se o usuário tem plano com lugares VIP incluídos
+        user_has_vip_plan = False
+        if user_authenticated:
+            user_id = session.get('user_id')
+            conn_plan = get_db_connection()
+            cursor_plan = conn_plan.cursor(dictionary=True)
+            try:
+                cursor_plan.execute("""
+                    SELECT plano_tipo
+                    FROM subscricoes
+                    WHERE user_id = %s 
+                    AND status = 'ativo'
+                    ORDER BY id DESC LIMIT 1
+                """, (user_id,))
+                subscricao = cursor_plan.fetchone()
+                # Planos Premium e Cinéfilo incluem lugares VIP
+                if subscricao and subscricao.get('plano_tipo') in ['premium', 'cinefilo']:
+                    user_has_vip_plan = True
+            finally:
+                cursor_plan.close()
+                conn_plan.close()
+        
         salvar_dados_reserva_sessao(
             filme_id=int(filme_id),
             cinema_id=int(cinema_id), 
@@ -8535,6 +8557,7 @@ def selecao_lugares():
         lugares=lugares,
         quantidade=quantidade,
         preco_bilhete=preco_bilhete,
+        user_has_vip_plan=user_has_vip_plan,
         data_sessao=data_sessao,
         id_horario_sessao=id_horario_sessao,
         cinema_id=cinema_id,

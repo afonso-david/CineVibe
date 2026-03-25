@@ -125,16 +125,6 @@
                             {% endif %}
                         {% endfor %}
 
-                        <div class="cinema-entrances">
-                            <div class="entrance entrance-left">
-                                <img src="{{ url_for('static', filename='imgs/icons/entrada.png') }}" alt="Entrada Esquerda">
-                                <span>ENTRADA</span>
-                            </div>
-                            <div class="entrance entrance-right">
-                                <img src="{{ url_for('static', filename='imgs/icons/entrada.png') }}" alt="Entrada Direita">
-                                <span>ENTRADA</span>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="seat-legend">
@@ -148,7 +138,7 @@
                         </div>
                         <div class="legend-item">
                             <div class="legend-seat legend-vip"><i class="fa-solid fa-crown"></i></div>
-                            <span>VIP</span>
+                            <span>VIP {% if user_has_vip_plan %}(Incluído no Plano){% else %}(+€3.00){% endif %}</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-seat legend-accessible"><i class="fa-solid fa-wheelchair"></i></div>
@@ -222,7 +212,20 @@
     let selectedSeats = [];
     const maxSeats = parseInt('{{ quantidade }}');
     const pricePerSeat = parseFloat('{{ preco_bilhete }}');
+    const vipPriceExtra = 3.00; // Acréscimo para lugares VIP
+    const userHasVipPlan = {{ 'true' if user_has_vip_plan else 'false' }};
     let autoSelectionDone = false;
+
+    function getSeatPrice(seatElement) {
+        if (seatElement.classList.contains('vip')) {
+            // Se o usuário tem plano VIP, não cobra extra
+            if (userHasVipPlan) {
+                return pricePerSeat;
+            }
+            return pricePerSeat + vipPriceExtra;
+        }
+        return pricePerSeat;
+    }
 
     function findBestSeats(quantity) {
         const allSeats = document.querySelectorAll('.seat.available');
@@ -369,7 +372,16 @@
 
     function updateSummary() {
         const selectedCount = selectedSeats.length;
-        const totalPrice = selectedCount * pricePerSeat;
+        let totalPrice = 0;
+        
+        // Calcular preço total baseado nos tipos de lugares selecionados
+        selectedSeats.forEach(seatName => {
+            const seatElement = document.querySelector(`.seat[data-seat="${seatName}"]`);
+            if (seatElement) {
+                totalPrice += getSeatPrice(seatElement);
+            }
+        });
+        
         document.getElementById('selectedCount').textContent = selectedCount;
         document.getElementById('totalPrice').textContent = `€${totalPrice.toFixed(2)}`;
         

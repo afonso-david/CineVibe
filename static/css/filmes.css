@@ -52,9 +52,6 @@ a {
   background-color: #1E2A3A;
   padding: 12px 25px !important;
   align-items: center;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;

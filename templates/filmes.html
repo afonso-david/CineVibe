@@ -6,6 +6,7 @@
     <title>Filmes - CineVibe | A Sua Experiência Cinematográfica</title>
     <link rel="preload" href="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" as="image">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-menu.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/logo.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -47,7 +48,7 @@
         </div>
     </header>
 
-    <nav class="nav-center" id="navMenu">
+    <nav class="nav-center mobile-menu" id="navMenu">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}" class="active">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>

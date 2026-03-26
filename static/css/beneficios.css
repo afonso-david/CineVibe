@@ -967,9 +967,16 @@ a {
   }
   
   .nav-center {
-    width: 260px;
-    padding: 70px 0 20px 0;
-  }
+  display: flex;
+  gap: 20px;
+  background-color: #1E2A3A;
+  padding: 12px 25px;
+  align-items: center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: auto;
+}
   
   .nav-center a {
     padding: 16px 25px;

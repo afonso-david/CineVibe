@@ -19,11 +19,72 @@ a {
   justify-content: space-between;
   padding: 20px 25px;
   background: linear-gradient(to right, #0D1B2A, #1B263B);
-  
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   height: 55px;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu span {
+  width: 100%;
+  height: 3px;
+  background: #FFD60A;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+  transform: translateY(10.5px) rotate(45deg);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.hamburger-menu.active span:nth-child(3) {
+  transform: translateY(-10.5px) rotate(-45deg);
+}
+
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .logo {
@@ -48,6 +109,7 @@ a {
   -webkit-backface-visibility: hidden;
   pointer-events: auto;
 }
+
 .nav-center a {
   color: #fff;
   font-family: "Nunito Sans", sans-serif;
@@ -83,12 +145,9 @@ a {
   width: 80%;
 }
 
-.nav-center a:hover {
-  color: #4EA8DE;
-}
-
+.nav-center a:hover,
 .nav-center a.active {
-  color: #fff;
+  color: #4EA8DE;
 }
 
 .nav-right {
@@ -144,6 +203,7 @@ a {
   background-color: #18AFC6;
   transform: scale(1.1);
 }
+
 
 .container {
   max-width: 1200px;
@@ -2414,61 +2474,75 @@ a {
 }
 
 @media (max-width: 480px) {
-  .hamburger-menu {
-    width: 26px;
-    height: 20px;
-  }
-  
-  .hamburger-menu span {
-    height: 2.5px;
-  }
-  
-  .hamburger-menu.active span:nth-child(1) {
-    transform: translateY(8.75px) rotate(45deg);
-  }
-  
-  .hamburger-menu.active span:nth-child(3) {
-    transform: translateY(-8.75px) rotate(-45deg);
-  }
-  
-  .nav-center {
-    width: 260px;
-    padding: 70px 0 20px 0;
-  }
-  
-  .nav-center a {
-    padding: 16px 25px;
-    font-size: 15px;
-  }
-  
-  .nav-center a:hover,
-  .nav-center a.active {
-    padding-left: 35px;
-  }
-  
-  .top-nav {
-    padding: 10px 15px;
-  }
-  
-  .logo {
-    width: 100px;
-  }
-  
-  .search-container input {
-    width: 150px;
-    font-size: 12px;
-    padding: 6px 30px 6px 10px;
-  }
-  
-  .search_icon {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .user-icon img {
-    width: 30px;
-    height: 30px;
-  }
+    .hamburger-menu {
+        width: 26px;
+        height: 20px;
+    }
+    
+    .hamburger-menu span {
+        height: 2.5px;
+    }
+    
+    .hamburger-menu.active span:nth-child(1) {
+        transform: translateY(8.75px) rotate(45deg);
+    }
+    
+    .hamburger-menu.active span:nth-child(3) {
+        transform: translateY(-8.75px) rotate(-45deg);
+    }
+    
+    .nav-center {
+        width: 260px;
+        padding: 70px 0 20px 0;
+    }
+    
+    .nav-center a {
+        padding: 16px 25px;
+        font-size: 15px;
+    }
+    
+    .nav-center a:hover,
+    .nav-center a.active {
+        padding-left: 35px;
+    }
+    
+    .top-nav {
+        padding: 10px 15px;
+    }
+    
+    .logo {
+        width: 100px;
+    }
+    
+    .nav-center {
+        padding: 8px 10px;
+        gap: 5px;
+    }
+    
+    .nav-center a {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+    
+    .search-container input {
+        width: 150px;
+        font-size: 12px;
+        padding: 4px 12px 4px 30px;
+    }
+    
+    .search_icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .user-icon img {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .hero-banner {
+        height: 50vh;
+        min-hei
   
   .hero-section {
     height: 100vh;

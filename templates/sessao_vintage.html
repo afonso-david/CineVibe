@@ -44,19 +44,19 @@
                 </div>
             </div>
         </div>
-    </header>
+     </header>
 
-    <nav class="nav-center" id="navMenu">
-        <a href="{{ url_for('home') }}">Home</a>
+    <nav class="nav-center mobile-menu" id="navMenu">
+        <a href="{{ url_for('home') }}"class="active">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
         <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
         <a href="{{ url_for('bar') }}">Bar</a>
         <a href="{{ url_for('beneficios') }}">Benefícios</a>
-        <a href="{{ url_for('sessao') }}"class="active">Sessão Só Para Ti</a>
+        <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
-    
+
     <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
         <section class="hero-section" style="background-image: url('{{ url_for('static', filename='imgs/A1PRNm5wKtwlhPmPvmRk2MEXwwG.jpg') }}');">

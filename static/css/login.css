@@ -303,6 +303,8 @@ a {
   color: #FFD60A;
   margin-bottom: 10px;
   font-weight: 700;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .form-header p {

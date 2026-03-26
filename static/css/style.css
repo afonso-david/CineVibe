@@ -8,6 +8,20 @@ body {
   overflow-y: auto;
 }
 
+*:focus {
+  outline: none;
+}
+
+* {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input, textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 a {
   text-decoration: none;
   color: inherit;

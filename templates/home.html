@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes-section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-menu.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
 
     <script src="{{ url_for('static', filename='js/logo-preload.js') }}"></script>
@@ -58,8 +59,8 @@
         </div>
     </header>
 
-    <nav class="nav-center" id="navMenu">
-        <a href="{{ url_for('home') }}" class="active">Home</a>
+    <nav class="nav-center mobile-menu" id="navMenu">
+        <a href="{{ url_for('home') }}"class="active">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
         <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>

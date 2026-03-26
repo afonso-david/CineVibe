@@ -1,326 +1,615 @@
-/* ================================================================
-   MOBILE MENU & HAMBURGER - STYLESHEET COMPLETO
-   ================================================================ */
-
-/* ─────────────────────────────────────────────────────────────── */
-/* 1. HAMBURGER MENU ICON */
-/* ─────────────────────────────────────────────────────────────── */
-
-.hamburger-menu {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 28px;
-  height: 22px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  z-index: 1100;
-}
-
-.hamburger-menu span {
-  display: block;
-  width: 100%;
-  height: 3px;
-  background-color: #ffffff;
-  border-radius: 2px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: center;
-}
-
-.hamburger-menu.active span:nth-child(1) {
-  transform: translateY(9.5px) rotate(45deg);
-}
-
-.hamburger-menu.active span:nth-child(2) {
-  opacity: 0;
-  transition-duration: 0.1s;
-}
-
-.hamburger-menu.active span:nth-child(3) {
-  transform: translateY(-9.5px) rotate(-45deg);
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* 2. MOBILE MENU OVERLAY (BACKDROP) */
-/* ─────────────────────────────────────────────────────────────── */
-
-.mobile-menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1050;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  pointer-events: none;
-}
-
-.mobile-menu-overlay.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* 3. MOBILE MENU NAV */
-/* ─────────────────────────────────────────────────────────────── */
-
-.nav-center.mobile-menu {
-  /* Position */
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1099;
-  
-  /* Size */
-  width: 280px;
-  height: 100vh;
-  
-  /* Layout */
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 0;
-  
-  /* Spacing */
-  padding: 0;
-  margin: 0;
-  
-  /* Styling */
-  background: linear-gradient(180deg, #1B263B 0%, #0D1B2A 100%);
-  overflow-y: auto;
-  overflow-x: hidden;
-  
-  /* Animation */
-  transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-center.mobile-menu.mobile-active {
-  transform: translateX(0);
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* 4. MOBILE MENU LINKS */
-/* ─────────────────────────────────────────────────────────────── */
-
-.nav-center.mobile-menu a {
-  /* Layout */
-  display: block;
-  width: 100%;
-  
-  /* Spacing */
-  padding: 16px 24px;
-  margin: 0;
-  
-  /* Text */
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 500;
-  font-family: "Nunito Sans", sans-serif;
-  text-decoration: none;
-  
-  /* Borders */
-  border-bottom: 1px solid rgba(255, 214, 10, 0.1);
-  border-radius: 0;
-  
-  /* Animation */
-  transition: all 0.3s ease;
-  position: relative;
-  
-  /* Pointer */
-  cursor: pointer;
-}
-
-.nav-center.mobile-menu a::after {
-  display: none !important;
-}
-
-.nav-center.mobile-menu a:hover {
-  background-color: rgba(255, 214, 10, 0.08);
-  padding-left: 32px;
-  color: #FFD60A;
-}
-
-.nav-center.mobile-menu a.active {
-  background-color: rgba(255, 214, 10, 0.12);
-  padding-left: 32px;
-  color: #FFD60A;
-  border-bottom-color: rgba(255, 214, 10, 0.3);
-}
-
-.nav-center.mobile-menu a:last-child {
-  border-bottom: none;
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* 5. SCROLLBAR STYLING (MOBILE) */
-/* ─────────────────────────────────────────────────────────────── */
-
-.nav-center.mobile-menu::-webkit-scrollbar {
-  width: 6px;
-}
-
-.nav-center.mobile-menu::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.nav-center.mobile-menu::-webkit-scrollbar-thumb {
-  background: rgba(255, 214, 10, 0.3);
-  border-radius: 3px;
-}
-
-.nav-center.mobile-menu::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 214, 10, 0.5);
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* 6. DESKTOP STYLES (show horizontal nav, hide mobile) */
-/* ─────────────────────────────────────────────────────────────── */
-
-@media (min-width: 769px) {
-  /* Hide hamburger and overlay */
-  .hamburger-menu {
-    display: none !important;
-  }
-  
-  .mobile-menu-overlay {
-    display: none !important;
-  }
-  
-  /* Desktop nav styles */
-  .nav-center.mobile-menu {
-    /* Position - inline */
-    position: static !important;
-    transform: none !important;
-    
-    /* Size - auto */
-    width: auto !important;
-    height: auto !important;
-    
-    /* Layout - horizontal */
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 20px !important;
-    
-    /* Spacing */
-    padding: 12px 25px !important;
-    margin: 0 !important;
-    
-    /* Styling */
-    background-color: #1E2A3A !important;
-    overflow: visible !important;
-    z-index: auto !important;
-  }
-  
-  /* Desktop links */
-  .nav-center.mobile-menu a {
-    /* Layout */
-    width: auto !important;
-    display: inline-block !important;
-    
-    /* Spacing */
-    padding: 5px 15px !important;
-    margin: 0 !important;
-    
-    /* Text */
-    font-size: 16px !important;
-    
-    /* Borders */
-    border: none !important;
-    border-radius: 4px !important;
-    position: relative !important;
-  }
-  
-  /* Show underline effect on desktop */
-  .nav-center.mobile-menu a::after {
-    display: block !important;
-    content: '';
-    position: absolute !important;
-    bottom: -1px !important;
-    left: 50% !important;
-    width: 0 !important;
-    height: 2px !important;
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE) !important;
-    transition: all 0.4s ease !important;
-    transform: translateX(-50%) !important;
-  }
-  
-  .nav-center.mobile-menu a:hover::after,
-  .nav-center.mobile-menu a.active::after {
-    width: 80% !important;
-  }
-  
-  .nav-center.mobile-menu a:hover {
-    background-color: transparent !important;
-    padding-left: 15px !important;
-    color: #4EA8DE !important;
-  }
-  
-  .nav-center.mobile-menu a.active {
-    background-color: transparent !important;
-    padding-left: 15px !important;
-    color: #4EA8DE !important;
-  }
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* 7. TABLET STYLES (768px) */
-/* ─────────────────────────────────────────────────────────────── */
-
 @media (max-width: 768px) {
-  .hamburger-menu {
-    display: flex !important;
-  }
-  
-  .mobile-menu-overlay {
-    display: block !important;
-  }
-}
+    body {
+        font-size: 14px;
+    }
 
-/* ─────────────────────────────────────────────────────────────── */
-/* 8. SMALL MOBILE STYLES (480px) */
-/* ─────────────────────────────────────────────────────────────── */
+    .container {
+        padding: 0 15px;
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 2rem !important;
+    }
+
+    h2 {
+        font-size: 1.8rem !important;
+    }
+
+    h3 {
+        font-size: 1.5rem !important;
+    }
+
+    h4 {
+        font-size: 1.3rem !important;
+    }
+
+    p {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+
+    button,
+    .btn,
+    input[type="submit"] {
+        padding: 12px 20px !important;
+        font-size: 14px !important;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    textarea,
+    select {
+        padding: 10px 15px !important;
+        font-size: 14px !important;
+    }
+
+    table {
+        font-size: 13px !important;
+    }
+
+    .section-header h2 {
+        font-size: 2rem !important;
+    }
+
+    .section-header p {
+        font-size: 1rem !important;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .grid,
+    .cards-grid,
+    .items-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .flex-row {
+        flex-direction: column !important;
+    }
+
+    .modal,
+    .popup {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin: 10px !important;
+    }
+
+    .card,
+    .box,
+    .panel {
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+    }
+}
 
 @media (max-width: 480px) {
-  .hamburger-menu {
-    width: 24px;
-    height: 20px;
-  }
-  
-  .hamburger-menu span {
-    height: 2.5px;
-  }
-  
-  .nav-center.mobile-menu {
-    width: 260px !important;
-  }
-  
-  .nav-center.mobile-menu a {
-    padding: 14px 20px !important;
-    font-size: 14px !important;
-  }
-  
-  .nav-center.mobile-menu a:hover {
-    padding-left: 28px !important;
-  }
+    body {
+        font-size: 13px;
+    }
+
+    h1 {
+        font-size: 1.6rem !important;
+    }
+
+    h2 {
+        font-size: 1.5rem !important;
+    }
+
+    h3 {
+        font-size: 1.3rem !important;
+    }
+
+    h4 {
+        font-size: 1.1rem !important;
+    }
+
+    p {
+        font-size: 0.9rem !important;
+    }
+
+    button,
+    .btn,
+    input[type="submit"] {
+        padding: 10px 18px !important;
+        font-size: 13px !important;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    textarea,
+    select {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+    }
+
+    .section-header h2 {
+        font-size: 1.6rem !important;
+    }
+
+    .section-header p {
+        font-size: 0.9rem !important;
+    }
+
+    .card,
+    .box,
+    .panel {
+        padding: 12px !important;
+    }
 }
 
-/* ─────────────────────────────────────────────────────────────── */
-/* 9. ANIMATIONS OPTIMIZATIONS */
-/* ─────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .filme-card,
+    .movie-card {
+        flex: 0 0 250px !important;
+        min-width: 250px !important;
+    }
 
-@media (prefers-reduced-motion: reduce) {
-  .hamburger-menu span,
-  .nav-center.mobile-menu,
-  .mobile-menu-overlay {
-    transition: none !important;
-  }
+    .filme-poster,
+    .movie-poster {
+        height: 300px !important;
+    }
+
+    .filme-info,
+    .movie-info {
+        padding: 15px !important;
+    }
+
+    .filme-info h3,
+    .movie-info h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .carousel-btn,
+    .slider-btn {
+        display: none !important;
+    }
+
+    .filmes-container,
+    .movies-container {
+        gap: 15px !important;
+        padding: 15px 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .filme-card,
+    .movie-card {
+        flex: 0 0 220px !important;
+        min-width: 220px !important;
+    }
+
+    .filme-poster,
+    .movie-poster {
+        height: 260px !important;
+    }
+
+    .filme-info,
+    .movie-info {
+        padding: 12px !important;
+    }
+
+    .filme-info h3,
+    .movie-info h3 {
+        font-size: 1rem !important;
+    }
+
+    .filmes-container,
+    .movies-container {
+        gap: 12px !important;
+        padding: 10px 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-container,
+    .login-container,
+    .register-container {
+        width: 95% !important;
+        max-width: 95% !important;
+        padding: 20px !important;
+        margin: 20px auto !important;
+    }
+
+    .form-group {
+        margin-bottom: 15px !important;
+    }
+
+    .form-row {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .form-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .form-actions button {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkout-container,
+    .payment-container,
+    .reserva-container {
+        padding: 15px !important;
+    }
+
+    .checkout-grid,
+    .payment-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .summary-box,
+    .total-box {
+        position: static !important;
+        margin-top: 20px !important;
+    }
+
+    .lugares-grid,
+    .seats-grid {
+        gap: 8px !important;
+    }
+
+    .lugar,
+    .seat {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 11px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkout-container,
+    .payment-container,
+    .reserva-container {
+        padding: 10px !important;
+    }
+
+    .lugares-grid,
+    .seats-grid {
+        gap: 6px !important;
+    }
+
+    .lugar,
+    .seat {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 10px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .perfil-container,
+    .profile-container {
+        padding: 15px !important;
+    }
+
+    .perfil-header,
+    .profile-header {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 15px !important;
+    }
+
+    .perfil-avatar,
+    .profile-avatar {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    .perfil-tabs,
+    .profile-tabs {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    .perfil-tab,
+    .profile-tab {
+        padding: 10px 15px !important;
+        font-size: 13px !important;
+    }
+
+    .reservas-list,
+    .bookings-list {
+        gap: 15px !important;
+    }
+
+    .reserva-card,
+    .booking-card {
+        padding: 15px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .bar-container {
+        padding: 15px !important;
+    }
+
+    .produtos-grid,
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px !important;
+    }
+
+    .produto-card,
+    .product-card {
+        padding: 12px !important;
+    }
+
+    .produto-image,
+    .product-image {
+        height: 150px !important;
+    }
+
+    .carrinho,
+    .cart {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-height: 50vh !important;
+        border-radius: 20px 20px 0 0 !important;
+        z-index: 1000 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .produtos-grid,
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .produto-card,
+    .product-card {
+        padding: 10px !important;
+    }
+
+    .produto-image,
+    .product-image {
+        height: 120px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .sessao-container,
+    .session-container {
+        padding: 15px !important;
+    }
+
+    .sessao-header,
+    .session-header {
+        padding: 20px 15px !important;
+    }
+
+    .sessao-title,
+    .session-title {
+        font-size: 2rem !important;
+    }
+
+    .sessao-description,
+    .session-description {
+        font-size: 1rem !important;
+    }
+
+    .sessao-features,
+    .session-features {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    .horarios-grid,
+    .schedule-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    .horario-btn,
+    .schedule-btn {
+        padding: 12px !important;
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sessao-title,
+    .session-title {
+        font-size: 1.6rem !important;
+    }
+
+    .horarios-grid,
+    .schedule-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .cinemas-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .cinema-card {
+        padding: 15px !important;
+    }
+
+    .cinema-image {
+        height: 200px !important;
+    }
+
+    .salas-list {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .contactos-container,
+    .contact-container {
+        padding: 15px !important;
+    }
+
+    .contactos-grid,
+    .contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .mapa,
+    .map {
+        height: 300px !important;
+    }
+
+    .contacto-info,
+    .contact-info {
+        padding: 15px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .beneficios-container,
+    .benefits-container {
+        padding: 15px !important;
+    }
+
+    .beneficios-grid,
+    .benefits-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .beneficio-card,
+    .benefit-card {
+        padding: 20px !important;
+    }
+
+    .pontos-display,
+    .points-display {
+        font-size: 2.5rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .acessibilidade-container,
+    .accessibility-container {
+        padding: 15px !important;
+    }
+
+    .acessibilidade-grid,
+    .accessibility-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .recurso-card,
+    .feature-card {
+        padding: 20px !important;
+    }
+
+    .recurso-icon,
+    .feature-icon {
+        width: 60px !important;
+        height: 60px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .filme-detalhe-container {
+        padding: 15px !important;
+    }
+
+    .filme-hero {
+        height: 50vh !important;
+        min-height: 300px !important;
+    }
+
+    .filme-hero-content {
+        padding: 20px 15px !important;
+    }
+
+    .filme-detalhes-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .filme-poster-container {
+        max-width: 100% !important;
+    }
+
+    .trailer-container {
+        height: 250px !important;
+    }
+
+    .elenco-grid,
+    .cast-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+    }
+
+    .ator-card,
+    .actor-card {
+        padding: 10px !important;
+    }
+
+    .ator-foto,
+    .actor-photo {
+        width: 80px !important;
+        height: 80px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .filme-hero {
+        height: 40vh !important;
+        min-height: 250px !important;
+    }
+
+    .elenco-grid,
+    .cast-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+
+    .trailer-container {
+        height: 200px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: block !important;
+    }
+
+    .text-center-mobile {
+        text-align: center !important;
+    }
+
+    .full-width-mobile {
+        width: 100% !important;
+    }
+
+    .no-padding-mobile {
+        padding: 0 !important;
+    }
+
+    .no-margin-mobile {
+        margin: 0 !important;
+    }
 }

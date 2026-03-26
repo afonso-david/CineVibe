@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-menu.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-global.css') }}">
     {% block extra_css %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
@@ -59,7 +60,7 @@
             </div>
         </header>
 
-        <nav class="nav-center" id="navMenu">
+        <nav class="nav-center mobile-menu" id="navMenu">
             <a href="{{ url_for('home') }}" {% if request.endpoint == 'home' %}class="active"{% endif %}>Home</a>
             <a href="{{ url_for('filmes') }}" {% if request.endpoint == 'filmes' %}class="active"{% endif %}>Filmes</a>
             <a href="{{ url_for('cinemas') }}" {% if request.endpoint == 'cinemas' %}class="active"{% endif %}>Cinemas</a>

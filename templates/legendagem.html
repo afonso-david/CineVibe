@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/legendagem.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v=3.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
 
     <meta name="description" content="Legendagem profissional no CineVibe. Cinema inclusivo com legendas de qualidade para uma experiência cinematográfica completa.">
@@ -26,6 +27,11 @@
         <header>
         <div class="top-nav">
             <div class="nav-left">
+                <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
                     <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
                 </a>
@@ -60,6 +66,8 @@
         <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
         <a href="{{ url_for('contactos') }}">Contactos</a>
     </nav>
+
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
         <main id="main-content">
             
@@ -459,6 +467,7 @@
             });
         }
     </script>
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
 </body>
 </html>

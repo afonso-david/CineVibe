@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v=3.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
 
     <style>
@@ -235,6 +236,11 @@
         <header>
             <div class="top-nav">
                 <div class="nav-left">
+                    <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                     <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
                         <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">       
                     </a>
@@ -265,6 +271,8 @@
             <a href="{{ url_for('sessao') }}">Sessão Só Para Ti</a>
             <a href="{{ url_for('contactos') }}">Contactos</a>
         </nav>
+
+        <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
         <main>
             <div class="reserva-container">
@@ -554,5 +562,6 @@
             }
         }
     </script>
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 </body>
 </html>

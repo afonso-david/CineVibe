@@ -1496,11 +1496,6 @@ a {
         grid-template-columns: 1fr;
     }
 
-    .nav-center a {
-        margin: 0 1rem;
-        font-size: 0.9rem;
-    }
-
     .main-content {
         padding: 2rem 1rem;
     }

@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sessao_exclusiva.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v=2.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
 
     <meta name="description" content="Sessões exclusivas e personalizadas no CineVibe - Experiências cinematográficas únicas">
@@ -26,6 +27,11 @@
         <header>
         <div class="top-nav">
             <div class="nav-left">
+                <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <a href="{{ url_for('home') }}" class="logo-link" aria-label="Voltar à página inicial">
                     <img src="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" alt="logo CineVibe" class="logo">
                 </a>
@@ -49,6 +55,8 @@
             </div>
         </div>
     </header>
+
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
     <nav class="nav-center">
         <a href="{{ url_for('home') }}">Home</a>
@@ -381,6 +389,7 @@
 
 
     </script>
+    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search.js') }}"></script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
 </body>

@@ -2184,69 +2184,7 @@ a {
   gap: 15px;
 }
 
-.hamburger-menu {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 24px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  z-index: 1001;
-  transition: all 0.3s ease;
-}
-
-.hamburger-menu span {
-  width: 100%;
-  height: 3px;
-  background: #FFD60A;
-  border-radius: 3px;
-  transition: all 0.3s ease;
-  transform-origin: center;
-}
-
-.hamburger-menu.active span:nth-child(1) {
-  transform: translateY(10.5px) rotate(45deg);
-}
-
-.hamburger-menu.active span:nth-child(2) {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-.hamburger-menu.active span:nth-child(3) {
-  transform: translateY(-10.5px) rotate(-45deg);
-}
-
-.mobile-menu-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 998;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.mobile-menu-overlay.active {
-  opacity: 1;
-  pointer-events: all;
-}
-
 @media (max-width: 768px) {
-  .hamburger-menu {
-    display: flex;
-  }
-  
-  .mobile-menu-overlay {
-    display: block;
-  }
   
   .movies-carousel {
     padding: 0 20px;
@@ -2315,51 +2253,6 @@ a {
     width: 30px;
     height: 30px;
     margin-top: 10px;
-  }
-  
-  .nav-center {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 280px;
-    height: 100vh;
-    background: linear-gradient(180deg, #1B263B 0%, #0D1B2A 100%);
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 80px 0 20px 0;
-    gap: 0;
-    z-index: 999;
-    transition: left 0.3s ease;
-    overflow-y: auto;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
-  }
-  
-  .nav-center.mobile-active {
-    left: 0;
-  }
-  
-  .nav-center a {
-    width: 100%;
-    padding: 18px 30px;
-    font-size: 16px;
-    border-radius: 0;
-    border-bottom: 1px solid rgba(255, 214, 10, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .nav-center a:first-child {
-    margin-left: 0;
-  }
-  
-  .nav-center a::after {
-    display: none;
-  }
-  
-  .nav-center a:hover,
-  .nav-center a.active {
-    background: rgba(255, 214, 10, 0.1);
-    padding-left: 40px;
-    color: #FFD60A;
   }
   
   .hero-section {
@@ -2530,21 +2423,6 @@ a {
   .filme-info .duracao {
     font-size: 0.7rem;
     margin-bottom: 8px;
-  }
-  
-  .nav-center {
-    width: 260px;
-    padding: 70px 0 20px 0;
-  }
-  
-  .nav-center a {
-    padding: 16px 25px;
-    font-size: 15px;
-  }
-  
-  .nav-center a:hover,
-  .nav-center a.active {
-    padding-left: 35px;
   }
   
   .top-nav {

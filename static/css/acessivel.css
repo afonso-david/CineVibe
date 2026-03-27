@@ -206,6 +206,19 @@ a {
   background-color: #18AFC6;
   transform: scale(1.1);
 }
+
+.user-icon a:focus,
+.user-icon a:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.user-icon a:focus img,
+.user-icon a:active img {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .banner {
     position: relative;
     width: 100%;

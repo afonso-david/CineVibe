@@ -13,6 +13,20 @@ a {
   color: inherit;
 }
 
+.nav-center a {
+  color: #fff !important;
+  font-family: "Nunito Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  padding: 5px 15px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  position: relative !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
 :root {
     --primary-gold: #FFD700;
     --primary-gold-dark: #B8860B;

@@ -97,17 +97,6 @@ a {
   transform: scale(1.1);
 }
 
-.user-icon img.active-profile {
-  border: 3px solid #18AFC6;
-  background-color: #18AFC6;
-}
-
-.user-icon img.active-profile:hover {
-  background-color: #18AFC6;
-  border-color: #18AFC6;
-  transform: scale(1.1);
-}
-
 .page-wrapper {
   min-height: 100vh;
 }

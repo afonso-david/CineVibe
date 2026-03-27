@@ -72,13 +72,11 @@ a {
   transform: scale(1.1);
 }
 .user-icon img.active-profile {
-  border: 3px solid #18AFC6;
-  background-color: #18AFC6;
+  box-shadow: 0 0 15px rgba(24, 175, 198, 0.6);
 }
 .user-icon img.active-profile:hover {
-  background-color: #18AFC6;
-  border-color: #18AFC6;
   transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(24, 175, 198, 0.8);
 }
 .perfil-main {
     min-height: 100vh;

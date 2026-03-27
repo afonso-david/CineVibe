@@ -143,6 +143,18 @@ a {
   transform: scale(1.1);
 }
 
+.user-icon img.active-profile,
+.user-icon .user-pic.active-profile {
+  box-shadow: 0 0 15px rgba(24, 175, 198, 0.6) !important;
+  padding: 6px !important;
+}
+
+.user-icon img.active-profile:hover,
+.user-icon .user-pic.active-profile:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(24, 175, 198, 0.8) !important;
+}
+
 .main-content {
     max-width: 1400px;
     margin: 0 auto;

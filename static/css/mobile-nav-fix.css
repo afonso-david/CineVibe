@@ -1,6 +1,103 @@
-/* Mobile Menu - ÚNICA FONTE DA VERDADE */
-/* Copiado exatamente da página cineacessivel que funciona corretamente */
-/* TODAS as regras com !important para sobrescrever qualquer CSS específico de página */
+/* ============================================
+   MOBILE NAVIGATION - SOLUÇÃO DEFINITIVA
+   Aplicável a TODAS as páginas
+   TODAS as regras com !important para sobrescrever CSS específicos
+   ============================================ */
+
+/* Desativar seleção de texto em elementos não editáveis */
+* {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Permitir seleção apenas em inputs, textareas e elementos editáveis */
+input,
+textarea,
+[contenteditable="true"],
+.selectable {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Garantir que botões e links são clicáveis */
+button,
+a,
+.hamburger-menu,
+.hamburger-menu *,
+.btn,
+[role="button"],
+.mobile-menu-overlay {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Garantir que o hamburger menu é totalmente interativo */
+.hamburger-menu {
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
+}
+
+/* Regras base do nav-center (desktop) - PADRONIZADO PARA TODAS AS PÁGINAS */
+.nav-center {
+  display: flex !important;
+  gap: 20px !important;
+  background-color: #1E2A3A !important;
+  padding: 12px 25px !important;
+  align-items: center !important;
+  will-change: transform !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  pointer-events: auto !important;
+}
+
+.nav-center a {
+  color: #fff !important;
+  font-family: "Nunito Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  padding: 5px 15px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  position: relative !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.nav-center a:first-child {
+  margin-left: 20px !important;
+}
+
+.nav-center a::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -1px !important;
+  left: 50% !important;
+  width: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, #FFD60A, #4EA8DE) !important;
+  transition: all 0.4s ease !important;
+  transform: translateX(-50%) !important;
+}
+
+.nav-center a:hover::after,
+.nav-center a.active::after {
+  width: 80% !important;
+}
+
+.nav-center a:hover,
+.nav-center a.active {
+  color: #4EA8DE !important;
+}
+
+.nav-center a:focus {
+  outline: none !important;
+  border: none !important;
+}
 
 /* Regras base do hamburger menu */
 .hamburger-menu {
@@ -13,7 +110,6 @@
   border: none !important;
   cursor: pointer !important;
   padding: 0 !important;
-  margin: 0 !important;
   z-index: 1001 !important;
   transition: all 0.3s ease !important;
 }
@@ -180,5 +276,29 @@
   .nav-center a:hover,
   .nav-center a.active {
     padding-left: 35px !important;
+  }
+  
+  .top-nav {
+    padding: 10px 15px !important;
+  }
+  
+  .logo {
+    width: 100px !important;
+  }
+  
+  .search-container input {
+    width: 120px !important;
+    font-size: 12px !important;
+    padding: 4px 12px 4px 30px !important;
+  }
+  
+  .search_icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .user-icon img {
+    width: 25px !important;
+    height: 25px !important;
   }
 }

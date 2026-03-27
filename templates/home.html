@@ -11,10 +11,85 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ range(1, 999999) | random }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filmes-section.css') }}?v={{ range(1, 999999) | random }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v={{ range(1, 999999) | random }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
+
+    <style>
+        /* CORREÇÃO HAMBURGER MENU - INLINE PARA MÁXIMA PRIORIDADE */
+        .hamburger-menu {
+            display: none !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            width: 30px !important;
+            height: 24px !important;
+            background: transparent !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            z-index: 1001 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .hamburger-menu span {
+            display: block !important;
+            width: 100% !important;
+            height: 3px !important;
+            background: #FFD60A !important;
+            border-radius: 3px !important;
+            transition: all 0.3s ease !important;
+            transform-origin: center !important;
+        }
+
+        .hamburger-menu.active span:nth-child(1) {
+            transform: translateY(10.5px) rotate(45deg) !important;
+        }
+
+        .hamburger-menu.active span:nth-child(2) {
+            opacity: 0 !important;
+            transform: translateX(-20px) !important;
+        }
+
+        .hamburger-menu.active span:nth-child(3) {
+            transform: translateY(-10.5px) rotate(-45deg) !important;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hamburger-menu {
+                width: 26px !important;
+                height: 20px !important;
+            }
+            
+            .hamburger-menu span {
+                height: 2.5px !important;
+            }
+            
+            .hamburger-menu.active span:nth-child(1) {
+                transform: translateY(8.75px) rotate(45deg) !important;
+            }
+            
+            .hamburger-menu.active span:nth-child(3) {
+                transform: translateY(-8.75px) rotate(-45deg) !important;
+            }
+        }
+    </style>
+
+    <script>
+        // FORÇA LIMPEZA DO CACHE
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (let name of names) caches.delete(name);
+            });
+        }
+    </script>
 
     <script src="{{ url_for('static', filename='js/logo-preload.js') }}"></script>
 

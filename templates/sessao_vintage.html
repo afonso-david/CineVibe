@@ -6,6 +6,40 @@
     <title>Sessão Vintage | CineVibe</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/vintage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v={{ range(1, 999999) | random }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <style>
+        /* FORÇA MOBILE NAV - INLINE PARA MÁXIMA PRIORIDADE */
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: flex !important;
+                width: 30px !important;
+                height: 24px !important;
+            }
+            .hamburger-menu span {
+                height: 3px !important;
+            }
+            .nav-center {
+                width: 280px !important;
+                padding: 80px 0 20px 0 !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .hamburger-menu {
+                width: 26px !important;
+                height: 20px !important;
+            }
+            .hamburger-menu span {
+                height: 2.5px !important;
+            }
+            .nav-center {
+                width: 260px !important;
+                padding: 70px 0 20px 0 !important;
+            }
+        }
+    </style>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">

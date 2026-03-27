@@ -3359,37 +3359,7 @@ main {
   transform: scale(1.1);
 }
 
-.nav-center {
-  display: flex;
-  gap: 20px;
-  background-color: #1E2A3A;
-  padding: 12px 25px;
-  align-items: center;
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  pointer-events: auto;
-}
-
-.nav-center a {
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 10px 15px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.nav-center a:hover {
-  color: #FFD60A;
-  background: rgba(255, 214, 10, 0.1);
-}
-
-.nav-center a.active {
-  color: #FFD60A;
-  background: rgba(255, 214, 10, 0.15);
-}
+/* Regras .nav-center desktop removidas - geridas por mobile-nav-fix.css */
 
 /* HAMBURGER MENU - BAR PAGE */
 @media (max-width: 768px) {
@@ -3523,4 +3493,124 @@ main {
         height: 30px !important;
         margin-top: 10px !important;
     }
+}
+
+
+/* MELHORIAS MOBILE ESPECÍFICAS PARA BAR PAGE */
+@media (max-width: 768px) {
+  .hero-bar {
+    background-size: cover !important;
+    background-position: center !important;
+    min-height: 60vh !important;
+  }
+  
+  .hero-content-right {
+    position: relative !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    max-width: 100% !important;
+    padding: 40px 20px !important;
+    text-align: center !important;
+  }
+  
+  .hero-text {
+    max-width: 100% !important;
+  }
+  
+  .hero-btn {
+    width: 100% !important;
+    max-width: 300px !important;
+    justify-content: center !important;
+  }
+  
+  .menus-section,
+  .toppings-section {
+    padding: 3rem 0 !important;
+  }
+  
+  .menu-card,
+  .topping-card {
+    margin: 0 auto !important;
+    max-width: 400px !important;
+  }
+  
+  /* CORREÇÃO BARRA DE PESQUISA E ÍCONE LUPA - BAR PAGE */
+  .search-container {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .search-container input {
+    width: 200px !important;
+    font-size: 14px !important;
+    padding: 5px 15px 5px 35px !important;
+    margin-top: 10px !important;
+    background-color: #223B53 !important;
+    border: none !important;
+    border-radius: 30px !important;
+    color: white !important;
+    outline: none !important;
+  }
+  
+  .search-container .search_icon {
+    position: absolute !important;
+    left: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 25px !important;
+    height: 25px !important;
+    margin-top: 5px !important;
+    cursor: pointer !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-bar {
+    min-height: 50vh !important;
+  }
+  
+  .hero-content-right {
+    padding: 30px 15px !important;
+  }
+  
+  .hero-title {
+    font-size: 2rem !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem !important;
+  }
+  
+  .hero-description {
+    font-size: 0.9rem !important;
+  }
+  
+  .hero-btn {
+    padding: 14px 30px !important;
+    font-size: 1rem !important;
+  }
+  
+  .section-title {
+    font-size: 1.8rem !important;
+  }
+  
+  .menus-grid,
+  .toppings-grid {
+    padding: 0 10px !important;
+  }
+  
+  /* CORREÇÃO BARRA DE PESQUISA E ÍCONE LUPA - BAR PAGE MOBILE PEQUENO */
+  .search-container input {
+    width: 120px !important;
+    font-size: 12px !important;
+    padding: 4px 12px 4px 30px !important;
+  }
+  
+  .search-container .search_icon {
+    width: 20px !important;
+    height: 20px !important;
+    left: 8px !important;
+  }
 }

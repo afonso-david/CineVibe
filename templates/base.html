@@ -12,9 +12,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-menu.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-global.css') }}">
     {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v={{ range(1, 999999) | random }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
     
     <script src="{{ url_for('static', filename='js/logo-preload.js') }}"></script>

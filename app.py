@@ -2761,39 +2761,33 @@ def admin_dashboard():
     """)
     ocupacao_salas = cur.fetchall()
     
+    # Query simplificada - apenas sessões com reservas existentes
     cur.execute("""
         SELECT 
             s.nome_sala,
             c.nome as cinema_nome,
             f.titulo as filme_titulo,
             f.id as filme_id,
-            DATE_FORMAT(datas.data_sessao, '%d/%m/%Y') as data_sessao,
+            DATE_FORMAT(r.data_sessao, '%d/%m/%Y') as data_sessao,
             TIME_FORMAT(h.hora, '%H:%i') as horario,
             s.capacidade,
-            COALESCE(SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1), 0) as total_lugares_reservados,
+            SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1) as total_lugares_reservados,
             ROUND(
-                (COALESCE(SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1), 0) / s.capacidade * 100),
+                (SUM(LENGTH(r.lugares) - LENGTH(REPLACE(r.lugares, ',', '')) + 1) / s.capacidade * 100),
                 1
             ) as taxa_ocupacao
-        FROM horarios_sessao hs
+        FROM reservas r
+        JOIN horarios_sessao hs ON r.id_horario_sessao = hs.id
         JOIN salas s ON hs.id_sala = s.id
         JOIN cinemas c ON s.id_cinema = c.id
         JOIN horarios h ON hs.id_horario = h.id
-        JOIN filmes f ON hs.id_filme = f.id
-        CROSS JOIN (
-            SELECT CURDATE() as data_sessao
-            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 1 DAY)
-            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 2 DAY)
-            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 4 DAY)
-            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 5 DAY)
-            UNION SELECT DATE_ADD(CURDATE(), INTERVAL 6 DAY)
-        ) datas
-        LEFT JOIN reservas r ON r.id_horario_sessao = hs.id AND r.data_sessao = datas.data_sessao
-        WHERE f.estado = 'em_exibicao' AND datas.data_sessao >= CURDATE()
-        GROUP BY hs.id, s.nome_sala, c.nome, f.titulo, f.id, datas.data_sessao, h.hora, s.capacidade
+        JOIN filmes f ON r.id_filme = f.id
+        WHERE r.data_sessao >= CURDATE() AND r.data_sessao <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+        AND f.estado = 'em_exibicao'
+        GROUP BY r.id_horario_sessao, r.data_sessao, s.id, s.nome_sala, c.nome, f.titulo, f.id, h.hora, s.capacidade
         HAVING taxa_ocupacao <= 50
-        ORDER BY taxa_ocupacao ASC, datas.data_sessao ASC, h.hora ASC
+        ORDER BY taxa_ocupacao ASC, r.data_sessao ASC
+        LIMIT 20
     """)
     sessoes_baixa_ocupacao_raw = cur.fetchall()
     

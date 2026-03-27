@@ -50,7 +50,8 @@ a {
   border: 2px solid rgba(255, 214, 10, 0.15);
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: visible;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+  overflow: hidden;
 }
 
 .plan-card::before {
@@ -79,16 +80,17 @@ a {
 }
 
 .plan-card:hover::before {
-  opacity: 0;
+  opacity: 1;
 }
 
 .plan-card:hover::after {
-  opacity: 0;
+  opacity: 1;
 }
 
 .plan-card:hover {
-  transform: none;
-  border-color: rgba(255, 214, 10, 0.15);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 60px rgba(255, 214, 10, 0.3);
+  border-color: rgba(255, 214, 10, 0.5);
 }
 
 .plan-card.recommended {
@@ -854,140 +856,7 @@ a {
     flex-direction: column;
     gap: 10px;
   }
-}
 
-  .pricing-section {
-    padding: 100px 20px 60px;
-  }
-  
-  .section-title {
-    font-size: 2rem;
-  }
-  
-  .section-subtitle {
-    font-size: 1rem;
-  }
-  
-  .pricing-table {
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
-  
-  .plan-card {
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .footer-container {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    padding: 0 20px;
-    text-align: center;
-  }
-  
-  .footer-section {
-    align-items: center;
-  }
-  
-  .footer-section h4 {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .footer-section h4::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .footer-logo {
-    justify-content: center;
-  }
-  
-  .footer-social {
-    justify-content: center;
-  }
-  
-  .footer-links {
-    text-align: center;
-  }
-  
-  .footer-links a::before {
-    display: none;
-  }
-  
-  .footer-links a:hover {
-    padding-left: 0;
-    transform: translateX(0);
-  }
-  
-  .newsletter-section {
-    text-align: center;
-    grid-column: span 1;
-    padding: 25px;
-    margin-top: 10px;
-  }
-  
-  .footer-bottom-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-  }
-  
-  .legal-links {
-    justify-content: center;
-    gap: 15px;
-  }
-  
-  .footer-certifications {
-    justify-content: center;
-  }
-  
-  .footer-bottom-container {
-    padding: 0 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hamburger-menu {
-    width: 26px;
-    height: 20px;
-  }
-  
-  .hamburger-menu span {
-    height: 2.5px;
-  }
-  
-  .hamburger-menu.active span:nth-child(1) {
-    transform: translateY(8.75px) rotate(45deg);
-  }
-  
-  .hamburger-menu.active span:nth-child(3) {
-    transform: translateY(-8.75px) rotate(-45deg);
-  }
-  
-  .nav-center {
-  display: flex;
-  gap: 20px;
-  background-color: #1E2A3A;
-  padding: 12px 25px;
-  align-items: center;
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  pointer-events: auto;
-}
-  
-  .nav-center a {
-    padding: 16px 25px;
-    font-size: 15px;
-  }
-  
-  .nav-center a:hover,
-  .nav-center a.active {
-    padding-left: 35px;
-  }
-  
   .pricing-section {
     padding: 80px 15px 40px;
   }
@@ -1015,6 +884,45 @@ a {
   .btn {
     padding: 12px 20px;
     font-size: 0.9rem;
+  }
+
+  .hamburger-menu {
+    width: 26px;
+    height: 20px;
+  }
+  
+  .hamburger-menu span {
+    height: 2.5px;
+  }
+  
+  .hamburger-menu.active span:nth-child(1) {
+    transform: translateY(8.75px) rotate(45deg);
+  }
+  
+  .hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-8.75px) rotate(-45deg);
+  }
+  
+  .nav-center {
+    display: flex;
+    gap: 20px;
+    background-color: #1E2A3A;
+    padding: 12px 25px;
+    align-items: center;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    pointer-events: auto;
+  }
+  
+  .nav-center a {
+    padding: 16px 25px;
+    font-size: 15px;
+  }
+  
+  .nav-center a:hover,
+  .nav-center a.active {
+    padding-left: 35px;
   }
 }
 

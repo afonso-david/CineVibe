@@ -156,23 +156,6 @@
             transform: translateY(-3px);
         }
 
-        .payment-method.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #4EA8DE;
-            color: #fff;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
         .payment-method i {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
@@ -679,11 +662,27 @@
         }
 
         function selecionarMetodoPagamento(metodo) {
+            const metodoElement = document.querySelector(`[data-method="${metodo}"]`);
+            
+            // Se o método já está selecionado, desseleciona
+            if (metodoSelecionado === metodo) {
+                metodoSelecionado = null;
+                metodoElement.classList.remove('selected');
+                document.getElementById('dadosCartao').style.display = 'none';
+                document.getElementById('dadosMbway').style.display = 'none';
+                document.getElementById('dadosPaypal').style.display = 'none';
+                document.getElementById('dadosApplepay').style.display = 'none';
+                document.getElementById('dadosGiftcard').style.display = 'none';
+                document.querySelector('.btn-finalizar').disabled = true;
+                return;
+            }
+            
+            // Seleciona o novo método
             metodoSelecionado = metodo;
             document.querySelectorAll('.payment-method').forEach(method => {
                 method.classList.remove('selected');
             });
-            document.querySelector(`[data-method="${metodo}"]`).classList.add('selected');
+            metodoElement.classList.add('selected');
             document.getElementById('dadosCartao').style.display = 'none';
             document.getElementById('dadosMbway').style.display = 'none';
             document.getElementById('dadosPaypal').style.display = 'none';
@@ -708,6 +707,7 @@
                     break;
             }
             document.querySelector('.btn-finalizar').disabled = false;
+
         }
 
         function validarFormulario() {

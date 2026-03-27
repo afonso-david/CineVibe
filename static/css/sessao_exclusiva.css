@@ -26,6 +26,25 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+/* Nav-center - CSS padronizado */
+.nav-center {
+  display: flex !important;
+  gap: 20px !important;
+  background-color: #1E2A3A !important;
+  padding: 12px 25px !important;
+  align-items: center !important;
+  will-change: transform !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  pointer-events: auto !important;
+}
+
+.nav-center a {
+  font-family: "Nunito Sans", sans-serif !important;
+  font-weight: 400 !important;
+}
+
 a {
   text-decoration: none;
   color: inherit;

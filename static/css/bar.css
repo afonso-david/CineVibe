@@ -3223,7 +3223,6 @@ main {
   justify-content: space-between;
   padding: 20px 25px;
   background: linear-gradient(to right, #0D1B2A, #1B263B);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   height: 55px;
   will-change: transform;
   backface-visibility: hidden;
@@ -3314,48 +3313,50 @@ main {
 
 .search-container {
   position: relative;
-  display: flex;
-  align-items: center;
+  margin-top: 0;
 }
 
 .search-container input {
-  width: 300px;
-  padding: 8px 15px 8px 40px;
-  border-radius: 25px;
-  border: 2px solid rgba(255, 214, 10, 0.3);
-  background: rgba(255, 255, 255, 0.05);
+  background-color: #223B53;
+  border: none;
+  padding: 6px 20px 6px 40px;
+  border-radius: 30px;
   color: white;
-  font-size: 15px;
-  transition: all 0.3s ease;
+  outline: none;
+  width: 400px;
+  font-size: 18px;
+  transition: 0.3s ease;
+  margin-right: auto;
   margin-top: 20px;
 }
 
 .search-container input:focus {
-  outline: none;
-  border-color: #FFD60A;
-  background: rgba(255, 255, 255, 0.1);
+  background-color: #22314A;
 }
 
 .search_icon {
   position: absolute;
-  left: 12px;
-  width: 20px;
-  height: 20px;
-  opacity: 0.7;
-  pointer-events: none;
-  margin-top: 20px;
+  left: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .user-icon img {
-  width: 40px;
-  height: 40px;
+  background-color: #1B263B;
   border-radius: 50%;
+  padding: 6px;
+  width: 35px;
+  height: 35px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: 0.3s ease;
   margin-top: 20px;
 }
 
 .user-icon img:hover {
+  background-color: #18AFC6;
   transform: scale(1.1);
 }
 

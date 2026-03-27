@@ -606,12 +606,27 @@
         }
 
         function selecionarMetodoPagamento(metodo) {
+            const metodoElement = document.querySelector(`[data-method="${metodo}"]`);
+            
+            // Se o método já está selecionado, desseleciona
+            if (metodoSelecionado === metodo) {
+                metodoSelecionado = null;
+                metodoElement.classList.remove('selected');
+                document.getElementById('dadosCartao').style.display = 'none';
+                document.getElementById('dadosMbway').style.display = 'none';
+                document.getElementById('dadosPaypal').style.display = 'none';
+                document.getElementById('dadosApplepay').style.display = 'none';
+                document.getElementById('dadosGiftcard').style.display = 'none';
+                return;
+            }
+            
+            // Seleciona o novo método
             metodoSelecionado = metodo;
 
             document.querySelectorAll('.payment-method').forEach(method => {
                 method.classList.remove('selected');
             });
-            document.querySelector(`[data-method="${metodo}"]`).classList.add('selected');
+            metodoElement.classList.add('selected');
 
             document.getElementById('dadosCartao').style.display = 'none';
             document.getElementById('dadosMbway').style.display = 'none';

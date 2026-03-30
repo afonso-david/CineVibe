@@ -8287,7 +8287,7 @@ def reserva():
     if user_authenticated:
         conn_user = get_db_connection()
         cursor_user = conn_user.cursor(dictionary=True)
-        cursor_user.execute("SELECT nome, email, avatar FROM usuarios WHERE id = %s", (session['user_id'],))
+        cursor_user.execute("SELECT nome, email, avatar, avatar_personalizado FROM usuarios WHERE id = %s", (session['user_id'],))
         user = cursor_user.fetchone()
         cursor_user.close()
         conn_user.close()
@@ -8295,7 +8295,10 @@ def reserva():
         if user:
             user_name = user['nome']
             user_email = user['email']
-            if user.get('avatar'):
+            # Priorizar avatar_personalizado, depois avatar, depois default
+            if user.get('avatar_personalizado'):
+                user_avatar = user['avatar_personalizado']
+            elif user.get('avatar'):
                 user_avatar = user['avatar']
     
     return render_template(

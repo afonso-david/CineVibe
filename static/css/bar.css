@@ -3223,6 +3223,7 @@ main {
   justify-content: space-between;
   padding: 20px 25px;
   background: linear-gradient(to right, #0D1B2A, #1B263B);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   height: 55px;
   will-change: transform;
   backface-visibility: hidden;
@@ -3233,8 +3234,6 @@ main {
   display: flex;
   align-items: center;
   gap: 15px;
-  position: relative;
-  z-index: 1000;
 }
 
 .hamburger-menu {
@@ -3308,12 +3307,11 @@ main {
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
 .search-container {
   position: relative;
-  margin-top: 0;
 }
 
 .search-container input {

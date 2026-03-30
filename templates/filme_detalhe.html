@@ -591,9 +591,11 @@
                         Todas as Regiões
                     </button>
                     {% for regiao in regioes %}
+                    {% if regiao and regiao.strip() %}
                     <button class="filtro-regiao-btn" data-regiao="{{ regiao|lower }}" onclick="filtrarPorRegiao('{{ regiao|lower }}')">
                         {{ regiao }}
                     </button>
+                    {% endif %}
                     {% endfor %}
                 </div>
 
@@ -1078,15 +1080,16 @@
             window.location.href = '{{ url_for("login") }}';
         }    
         function filtrarPorRegiao(regiao) {
-            const botaoClicado = window.event ? window.event.target : (event ? event.target : null);
-            document.querySelectorAll('.filtro-regiao-btn').forEach(btn => {
+            const botoes = document.querySelectorAll('.filtro-regiao-btn');
+            botoes.forEach(btn => {
                 btn.classList.remove('active');
+                if (btn.dataset.regiao === regiao) {
+                    btn.classList.add('active');
+                }
             });
-            if (botaoClicado) {
-                botaoClicado.classList.add('active');
-            }
             
-            document.querySelectorAll('.cinema').forEach(cinema => {
+            const cinemas = document.querySelectorAll('.cinema');
+            cinemas.forEach(cinema => {
                 if (regiao === 'todas' || cinema.dataset.regiao === regiao) {
                     cinema.style.display = 'block';
                 } else {

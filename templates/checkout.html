@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}?v=2.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/Logo/favicon.ico') }}">
 </head>
 <body>
@@ -45,7 +45,7 @@
     </header>
 
     <nav class="nav-center">
-        <a href="{{ url_for('home') }}"class="active">Home</a>
+        <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
         <a href="{{ url_for('cine_acessivel') }}">CineAcessível</a>
@@ -443,20 +443,26 @@
             const totalAtual = {{ total_geral }};
             const novoTotal = Math.max(0, totalAtual - descontoBilhetesGratisCheckout);
             
+            console.log('💰 Total atual:', totalAtual);
+            console.log('🎁 Desconto bilhetes grátis:', descontoBilhetesGratisCheckout);
+            console.log('💵 Novo total:', novoTotal);
+            
             if (novoTotal === 0) {
                 // Total é 0, finalizar reserva diretamente
+                console.log('✅ Total é 0, finalizando reserva grátis...');
                 finalizarReservaGratis();
-            } else {
-                // Total > 0, prosseguir para seleção de método de pagamento
-                if (!selectedPaymentMethod) {
-                    alert('Por favor, selecione um método de pagamento.');
-                    return;
-                }
-                if (!validatePaymentMethod()) {
-                    return;
-                }
-                iniciarProcessoPagamento();
+                return;
             }
+            
+            // Total > 0, prosseguir para seleção de método de pagamento
+            if (!selectedPaymentMethod) {
+                alert('Por favor, selecione um método de pagamento.');
+                return;
+            }
+            if (!validatePaymentMethod()) {
+                return;
+            }
+            iniciarProcessoPagamento();
         }
 
         function iniciarProcessoPagamento() {
@@ -833,8 +839,11 @@
         let descontoBilhetesGratisCheckout = 0;
 
         function usarBilhetesGratisCheckout(quantidade, precoBilhete) {
+            console.log('🎫 Usando bilhetes grátis:', quantidade, 'x', precoBilhete);
             bilhetesGratisAtivosCheckout = quantidade;
             descontoBilhetesGratisCheckout = quantidade * precoBilhete;
+            
+            console.log('💰 Desconto total:', descontoBilhetesGratisCheckout);
             
             // Atualizar UI
             document.getElementById('usarBilhetesGratis').style.display = 'none';

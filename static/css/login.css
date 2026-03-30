@@ -762,6 +762,7 @@ a {
   position: relative;
   overflow: hidden;
   border: 2px solid rgba(255, 214, 10, 0.3);
+  box-shadow: none;
 }
 
 .footer-social a::before {
@@ -785,6 +786,7 @@ a {
   transform: translateY(-4px) scale(1.15);
   border-color: #FFD60A;
   background: rgba(255, 214, 10, 0.25);
+  box-shadow: none;
 }
 
 .footer-social img {
@@ -794,6 +796,7 @@ a {
   position: relative;
   z-index: 1;
   transition: all 0.3s ease;
+  box-shadow: none;
 }
 
 .footer-social a:hover img {

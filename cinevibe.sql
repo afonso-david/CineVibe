@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 23, 2026 at 10:39 AM
+-- Generation Time: Mar 27, 2026 at 11:16 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `atores` (
   `foto_url` varchar(255) DEFAULT NULL,
   `data_nascimento` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `atores`
@@ -143,8 +143,8 @@ INSERT INTO `atores` (`id`, `nome`, `nacionalidade`, `foto_url`, `data_nasciment
 (122, 'David Carradine', 'Americana', 'imgs/atores/93653718cecf48af95ddfec323e2a676.png', NULL),
 (123, 'Lucy Liu', 'Americana', 'imgs/atores/1fc0c3e7d3ed42d6901bae41b84da89b.png', NULL),
 (124, ' Michael Keaton ', 'Americana', 'imgs/atores/26688cb6ce6544cda0c25e8b595855db.png', NULL),
-(125, 'Winona Ryder', 'Americana', 'imgs/atores/f549b76e1e3c40e7ad411b720a6a29cb.png', NULL),
-(126, 'Catherine o\'hara', 'Americana', 'imgs/atores/b9029fcd8b8f462081e7fd19179e2e1a.png', NULL);
+(126, 'Catherine o\'hara', 'Americana', 'imgs/atores/b9029fcd8b8f462081e7fd19179e2e1a.png', NULL),
+(127, 'Winona Ryder', 'Americana', 'imgs/atores/8fcf03b18d4d4559b76612ba4ce781b7.png', NULL);
 
 -- --------------------------------------------------------
 
@@ -175,7 +175,6 @@ INSERT INTO `avaliacoes_filmes` (`id`, `usuario_id`, `filme_id`, `rating`, `come
 (3, 14, 13, 4.0, 'Bueda Fixe!!!', '2025-11-19 20:39:26'),
 (5, 1, 16, 4.0, 'Filme', '2025-11-19 20:57:12'),
 (6, 1, 3, 3.0, 'Ação do início ao fim, adorei!', '2026-01-13 13:16:50'),
-(7, 1, 20, 5.0, 'O Batman que nós merecemos', '2026-01-14 14:01:33'),
 (8, 1, 13, 5.0, 'Muito assutador', '2026-01-07 22:26:13'),
 (9, 1, 1, 4.0, 'Ação da boa', '2026-01-07 22:32:37'),
 (17, 1, 32, 4.0, 'Avaliação editada - ainda muito bom!', '2026-01-13 13:26:51'),
@@ -194,7 +193,10 @@ INSERT INTO `avaliacoes_filmes` (`id`, `usuario_id`, `filme_id`, `rating`, `come
 (49, 1, 7, 3.0, 'Clássico', '2026-02-15 19:22:25'),
 (50, 14, 10, 4.0, 'Assustador', '2026-02-15 19:35:08'),
 (51, 1, 9, 5.0, 'Muito bom', '2026-02-15 22:38:55'),
-(54, 1, 30, 3.0, 'Não gostei muito', '2026-02-21 20:19:57');
+(54, 1, 30, 3.0, 'Não gostei muito', '2026-02-21 20:19:57'),
+(59, 14, 18, 2.0, 'Não gostei muito', '2026-03-24 17:28:41'),
+(64, 14, 9, 4.0, 'Animação muito boa', '2026-03-24 17:48:35'),
+(65, 1, 33, 5.0, 'Sem comentários', '2026-03-27 14:47:02');
 
 -- --------------------------------------------------------
 
@@ -278,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `avatar_categories` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `avatar_categories`
@@ -303,40 +305,41 @@ CREATE TABLE IF NOT EXISTS `bar` (
   `produto` varchar(255) NOT NULL,
   `preco` decimal(10,2) NOT NULL,
   `imagem_url` varchar(255) DEFAULT NULL,
-  `tipo` varchar(50) NOT NULL,
   `categoria` varchar(50) DEFAULT 'snacks',
   `descricao` text,
   `icone` varchar(50) DEFAULT 'fas fa-cookie-bite',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `bar`
 --
 
-INSERT INTO `bar` (`id`, `produto`, `preco`, `imagem_url`, `tipo`, `categoria`, `descricao`, `icone`) VALUES
-(1, 'Pipocas Salgadas', 5.50, 'imgs/Snacks/pipocas.png', '', 'snacks', 'Pipocas clássicas', 'fas fa-seedling'),
-(2, 'Doritos', 3.50, 'imgs/Snacks/Doritos.png', 'snack', 'snacks', 'Tortilla chips', 'fas fa-pepper-hot'),
-(3, 'Gomas (Fini)', 3.50, 'imgs/Snacks/gomas2.png', 'snack', 'snacks', 'Gomas sortidas', 'fas fa-candy-cane'),
-(4, 'Kit Kat', 3.00, 'imgs/Snacks/Kit_Kat__Nestle-removebg-preview.png', 'snack', 'snacks', 'Chocolate crocante', 'fas fa-cookie'),
-(5, 'Gomas (Fini Berries)', 3.50, 'imgs/Snacks/gomas3.png', 'snack', 'snacks', 'Gomas de frutos vermelhos', 'fas fa-candy-cane'),
-(6, 'BEN & JERRY\'S Cherry Garcia', 6.00, 'imgs/Snacks/35659_US_IC_Cherry-Garcia_473ml_FOP-1000x1000-c53bc2a7-f52d-4563-8da3-3d939891c6b3_1-removebg-preview.png', 'snack', 'snacks', 'Gelado premium', 'fas fa-ice-cream'),
-(7, 'Snickers', 3.00, 'imgs/Snacks/dutyfree-removebg-preview.png', 'snack', 'snacks', 'Barra de chocolate', 'fas fa-cookie'),
-(8, 'M&M', 6.00, 'imgs/Snacks/descarregar__3_-removebg-preview.png', 'snack', 'snacks', 'Chocolates coloridos', 'fas fa-cookie'),
-(9, 'Cheetos', 3.50, 'imgs/Snacks/cheetos.png', 'snack', 'snacks', 'Snack de queijo', 'fas fa-pepper-hot'),
-(10, 'Skittles', 3.00, 'imgs/Snacks/skittles.png', 'snack', 'snacks', 'Gomas de fruta', 'fas fa-candy-cane'),
-(11, 'Pretzel', 1.50, 'imgs/Snacks/R.png', 'snack', 'snacks', 'Snack salgado', 'fas fa-cookie-bite'),
-(12, 'BEN & JERRY\'S Half Baked', 6.00, 'imgs/Snacks/000403040-1-removebg-preview.png', 'snack', 'snacks', 'Gelado premium', 'fas fa-ice-cream'),
-(13, 'Coca Cola', 2.50, 'imgs/Snacks/Coca.png', 'bebida', 'bebidas', 'Refrigerante clássico', 'fas fa-glass-whiskey'),
-(14, 'Fanta', 2.50, 'imgs/Snacks/Fanta.png', 'bebida', 'bebidas', 'Refrigerante de laranja', 'fas fa-glass-whiskey'),
-(15, 'Nachos', 5.50, 'imgs/Snacks/Nachos.png', 'snack', 'snacks', 'Com queijo derretido', 'fas fa-pepper-hot'),
-(16, 'Sprite', 2.50, 'imgs/produtos/08aaccd75f2b4c73971997673cf8e4fb.png', '', 'bebidas', 'Refrigerante de limão', 'fas fa-glass-whiskey'),
-(17, 'Pipocas doces', 5.50, 'imgs/Snacks/pipocas.png', 'Snack', 'snacks', 'Pipocas açucaradas', 'fas fa-seedling'),
-(18, 'Compal de pera', 2.50, 'imgs/Snacks/3306-1000x1000-removebg-preview.png', 'bebida', 'bebidas', 'Sumo natural', 'fas fa-glass-citrus'),
-(19, 'Compal de melancia e morango', 2.50, 'imgs/Snacks/OIP-removebg-preview (17).png', 'bebida', 'bebidas', 'Sumo natural', 'fas fa-glass-citrus'),
-(20, 'Compal de maracujá', 2.50, 'imgs/Snacks/Compal-Vital-Damasco-Maracujá-1536x864-removebg-preview.png', 'bebida', 'bebidas', 'Sumo natural', 'fas fa-glass-citrus'),
-(21, 'Bongo tuti fruti', 2.50, 'imgs/Snacks/015_bongo8frutos-tinified.png', 'bebida', 'bebidas', 'Sumo tropical', 'fas fa-glass-citrus'),
-(24, 'Bongo Manga', 2.50, 'imgs/Snacks/OIP__1_-removebg-preview (6).png', 'Bebida', 'bebidas', 'Sumo tropical', 'fas fa-glass-citrus');
+INSERT INTO `bar` (`id`, `produto`, `preco`, `imagem_url`, `categoria`, `descricao`, `icone`) VALUES
+(1, 'Pipocas Salgadas', 5.50, 'imgs/Snacks/pipocas.png', 'snacks', 'Pipocas clássicas', 'fas fa-seedling'),
+(2, 'Doritos', 3.50, 'imgs/Snacks/Doritos.png', 'snacks', 'Tortilla chips', 'fas fa-pepper-hot'),
+(3, 'Gomas (Fini)', 3.50, 'imgs/Snacks/gomas2.png', 'snacks', 'Gomas sortidas', 'fas fa-candy-cane'),
+(4, 'Kit Kat', 3.00, 'imgs/Snacks/Kit_Kat__Nestle-removebg-preview.png', 'snacks', 'Chocolate crocante', 'fas fa-cookie'),
+(5, 'Gomas (Fini Berries)', 3.50, 'imgs/Snacks/gomas3.png', 'snacks', 'Gomas de frutos vermelhos', 'fas fa-candy-cane'),
+(6, 'BEN & JERRY\'S Cherry Garcia', 6.00, 'imgs/Snacks/35659_US_IC_Cherry-Garcia_473ml_FOP-1000x1000-c53bc2a7-f52d-4563-8da3-3d939891c6b3_1-removebg-preview.png', 'snacks', 'Gelado premium', 'fas fa-ice-cream'),
+(7, 'Snickers', 3.00, 'imgs/Snacks/dutyfree-removebg-preview.png', 'snacks', 'Barra de chocolate', 'fas fa-cookie'),
+(8, 'M&M', 6.00, 'imgs/Snacks/descarregar__3_-removebg-preview.png', 'snacks', 'Chocolates coloridos', 'fas fa-cookie'),
+(9, 'Cheetos', 3.50, 'imgs/Snacks/cheetos.png', 'snacks', 'Snack de queijo', 'fas fa-pepper-hot'),
+(10, 'Skittles', 3.00, 'imgs/Snacks/skittles.png', 'snacks', 'Gomas de fruta', 'fas fa-candy-cane'),
+(11, 'Pretzel', 1.50, 'imgs/Snacks/R.png', 'snacks', 'Snack salgado', 'fas fa-cookie-bite'),
+(12, 'BEN & JERRY\'S Half Baked', 6.00, 'imgs/Snacks/000403040-1-removebg-preview.png', 'snacks', 'Gelado premium', 'fas fa-ice-cream'),
+(13, 'Coca Cola', 2.50, 'imgs/Snacks/Coca.png', 'bebidas', 'Refrigerante clássico', 'fas fa-glass-whiskey'),
+(14, 'Fanta', 2.50, 'imgs/Snacks/Fanta.png', 'bebidas', 'Refrigerante de laranja', 'fas fa-glass-whiskey'),
+(15, 'Nachos', 5.50, 'imgs/Snacks/Nachos.png', 'snacks', 'Com queijo derretido', 'fas fa-pepper-hot'),
+(16, 'Sprite', 2.50, 'imgs/produtos/f91fd971e133432ab2855ee20f7134b2.png', 'bebidas', 'Refrigerante de limão', 'fas fa-glass-whiskey'),
+(17, 'Pipocas doces', 5.50, 'imgs/Snacks/pipocas.png', 'snacks', 'Pipocas açucaradas', 'fas fa-seedling'),
+(18, 'Compal de pera', 2.50, 'imgs/Snacks/3306-1000x1000-removebg-preview.png', 'bebidas', 'Sumo natural', 'fas fa-glass-citrus'),
+(19, 'Compal de melancia e morango', 2.50, 'imgs/Snacks/OIP-removebg-preview (17).png', 'bebidas', 'Sumo natural', 'fas fa-glass-citrus'),
+(20, 'Compal de maracujá', 2.50, 'imgs/Snacks/Compal-Vital-Damasco-Maracujá-1536x864-removebg-preview.png', 'bebidas', 'Sumo natural', 'fas fa-glass-citrus'),
+(21, 'Bongo tuti fruti', 2.50, 'imgs/Snacks/015_bongo8frutos-tinified.png', 'bebidas', 'Sumo tropical', 'fas fa-glass-citrus'),
+(24, 'Bongo Manga', 2.50, 'imgs/Snacks/OIP__1_-removebg-preview (6).png', 'bebidas', 'Sumo tropical', 'fas fa-glass-citrus'),
+(32, 'Pipocas Vintage', 5.00, 'imgs/produtos/c8ee11d14ea3496ea96ac0e0b62c7862.png', 'snacks', NULL, 'fas fa-cookie-bite'),
+(34, 'Coca cola Vintage', 2.00, 'imgs/produtos/d0f229413dec43a38d0daf1fd1dfa009.png', 'Bebida', NULL, 'fas fa-cookie-bite');
 
 -- --------------------------------------------------------
 
@@ -389,29 +392,30 @@ CREATE TABLE IF NOT EXISTS `cinemas` (
   `email` varchar(100) DEFAULT NULL,
   `regiao` varchar(50) DEFAULT NULL,
   `imagem` varchar(255) DEFAULT NULL,
+  `rua` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `cinemas`
 --
 
-INSERT INTO `cinemas` (`id`, `nome`, `localizacao`, `email`, `regiao`, `imagem`) VALUES
-(1, 'CineVibe Lisboa', 'Lisboa', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Lisboa.png'),
-(2, 'CineVibe Porto', 'Porto', NULL, 'Grande Porto', 'imgs/cinemas/CineVibe_Porto.png'),
-(3, 'CineVibe Montijo', 'Montijo', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Montijo.png'),
-(4, 'CineVibe Setúbal', 'Setúbal', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Setubal.png'),
-(5, 'CineVibe Faro', 'Faro', NULL, 'Sul', 'imgs/cinemas/CineVibe_Faro.png'),
-(6, 'CineVibe Braga', 'Braga', '', 'Norte', 'imgs/cinemas/cinema_1c635b33.png'),
-(7, 'CineVibe Coimbra', 'Coimbra', NULL, 'Centro', 'imgs/cinemas/CineVibe_Coimbra_v2.png'),
-(8, 'CineVibe Aveiro', 'Aveiro', '', 'Centro', 'imgs/cinemas/cinema_552777a2.png'),
-(9, 'CineVibe Viseu', 'Viseu', NULL, 'Grande Porto', 'imgs/cinemas/CineVibe_Viseu.png'),
-(10, 'CineVibe Évora', 'Évora', NULL, 'Sul', 'imgs/cinemas/CineVibe_Evora.png'),
-(11, 'CineVibe Leiria', 'Leiria', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Leiria.png'),
-(12, 'CineVibe Santarém', 'Santarém', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Santarem_v2.png'),
-(13, 'CineVibe Portimão', 'Portimão', NULL, 'Sul', 'imgs/cinemas/CineVibe_Portimao.png'),
-(14, 'CineVibe Funchal', 'Funchal', NULL, 'Madeira', 'imgs/cinemas/CineVibe_Funchal.png'),
-(15, 'CineVibe São Miguel', 'Rua da Cultura, Ponta Delgada', 'contacto@cineacores.pt', 'Açores', 'imgs\\cinemas\\cinevibe_sao_miguel.png\"');
+INSERT INTO `cinemas` (`id`, `nome`, `localizacao`, `email`, `regiao`, `imagem`, `rua`) VALUES
+(1, 'CineVibe Lisboa', 'Lisboa', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Lisboa.png', 'Avenida da Liberdade'),
+(2, 'CineVibe Porto', 'Porto', NULL, 'Grande Porto', 'imgs/cinemas/CineVibe_Porto.png', 'Rua de Santa Catarina'),
+(3, 'CineVibe Montijo', 'Montijo', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Montijo.png', 'Avenida 25 de Abril'),
+(4, 'CineVibe Setúbal', 'Setúbal', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Setubal.png', 'Avenida Luísa Todi'),
+(5, 'CineVibe Faro', 'Faro', NULL, 'Sul', 'imgs/cinemas/CineVibe_Faro.png', 'Avenida da República'),
+(6, 'CineVibe Braga', 'Braga', '', 'Norte', 'imgs/cinemas/cinema_1c635b33.png', 'Rua do Souto'),
+(7, 'CineVibe Coimbra', 'Coimbra', NULL, 'Centro', 'imgs/cinemas/CineVibe_Coimbra_v2.png', 'Rua da Sofia'),
+(8, 'CineVibe Aveiro', 'Aveiro', '', 'Centro', 'imgs/cinemas/cinema_552777a2.png', 'Rua de Coimbra'),
+(9, 'CineVibe Viseu', 'Viseu', NULL, 'Grande Porto', 'imgs/cinemas/CineVibe_Viseu.png', 'Rua Direita'),
+(10, 'CineVibe Évora', 'Évora', NULL, 'Sul', 'imgs/cinemas/CineVibe_Evora.png', 'Rua 5 de Outubro'),
+(11, 'CineVibe Leiria', 'Leiria', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Leiria.png', 'Rua Barão de Viamonte'),
+(12, 'CineVibe Santarém', 'Santarém', NULL, 'Grande Lisboa', 'imgs/cinemas/CineVibe_Santarem_v2.png', 'Rua do Seminário'),
+(13, 'CineVibe Portimão', 'Portimão', NULL, 'Sul', 'imgs/cinemas/CineVibe_Portimao.png', 'Avenida Tomás Cabreira'),
+(14, 'CineVibe Funchal', 'Funchal', NULL, 'Madeira', 'imgs/cinemas/CineVibe_Funchal.png', 'Avenida Arriaga'),
+(15, 'CineVibe São Miguel', 'Rua da Cultura, Ponta Delgada', 'contacto@cineacores.pt', '', 'imgs\\cinemas\\cinevibe_sao_miguel.png\"', NULL);
 
 -- --------------------------------------------------------
 
@@ -465,7 +469,7 @@ CREATE TABLE IF NOT EXISTS `codigos_desconto` (
   UNIQUE KEY `codigo` (`codigo`),
   KEY `idx_codigo` (`codigo`),
   KEY `idx_usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `codigos_desconto`
@@ -505,7 +509,10 @@ INSERT INTO `codigos_desconto` (`id`, `codigo`, `usuario_id`, `premio_id`, `prem
 (31, 'XNWPQ4LB', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 0, '2026-02-21 20:34:26', NULL, '2026-03-23 20:34:26'),
 (32, 'PXIRTV34', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 1, '2026-03-14 17:42:16', '2026-03-14 19:29:20', '2026-04-13 16:42:16'),
 (33, 'U73B35TL', 1, 2, 'Pipocas doces/Salgadas', 0.00, 'valor_fixo', 4.00, 0, '2026-03-14 17:42:36', NULL, '2026-04-13 16:42:37'),
-(34, '38ITKPID', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-03-14 17:44:25', NULL, '2026-04-13 16:44:26');
+(34, '38ITKPID', 1, 1, 'Coca Cola pequena', 0.00, 'valor_fixo', 2.50, 0, '2026-03-14 17:44:25', NULL, '2026-04-13 16:44:26'),
+(35, 'SR0I43E9', 1, 3, 'Bilhete CineVibe', 0.00, 'produto_gratis', 0.00, 1, '2026-03-25 18:28:02', '2026-03-25 18:29:37', '2026-04-24 17:28:02'),
+(36, 'B4R46TOK', 1, 3, 'Bilhete CineVibe', 0.00, 'produto_gratis', 0.00, 1, '2026-03-25 18:32:45', '2026-03-25 18:33:39', '2026-04-24 17:32:46'),
+(37, 'UI51EOFA', 1, 8, 'Pretzel', 0.00, 'valor_fixo', 3.50, 1, '2026-03-27 22:49:05', '2026-03-27 22:54:08', '2026-04-26 21:49:06');
 
 -- --------------------------------------------------------
 
@@ -534,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `filmes` (
   `idade_recomendada` int DEFAULT NULL,
   `poster_hover` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filmes`
@@ -542,47 +549,46 @@ CREATE TABLE IF NOT EXISTS `filmes` (
 
 INSERT INTO `filmes` (`id`, `titulo`, `sinopse`, `diretor`, `idioma_original`, `pais_origem`, `data_lancamento`, `duracao`, `poster_url`, `imagem_grande`, `trailer_url`, `estado`, `rotten_tomatoes_score`, `rotten_tomatoes_url`, `imdb_rating`, `imdb_url`, `idade_recomendada`, `poster_hover`) VALUES
 (1, 'Rambo III', 'Rambo vai ao Afeganistão para resgatar o Coronel Trautman.', 'Peter MacDonald', 'Inglês', 'Estados Unidos', '1988-05-25', 102, 'imgs/filmes/65a1bc5c8311e.jpg', 'imgs/filmes/rambo-iii.jpg', 'https://www.youtube.com/watch?v=9eJvyU7C2UQ', 'em_exibicao', 44, 'https://www.rottentomatoes.com/m/test_movie', 5.8, 'https://www.imdb.com/title/tt1234567/', 16, 'imgs/f7af5df66f18568592a37aad7268acaf.jpg'),
-(2, 'Superman (2025)', 'Num mundo onde o super‑herói mais icónico voltou a aterrar, Clark Kent/Superman enfrenta as consequências das suas intervenções em crises internacionais. Quando a confiança pública vacila, o bilionário brilhante e manipulador Lex Luthor aproveita para desafiar o Homem de Aço. Agora, com o apoio da intrépida jornalista Lois Lane e dos que ainda acreditam no ideal de verdade, justiça e humanidade, Superman terá de provar que a esperança ainda tem lugar neste novo universo', 'James Gunn', 'Inglês', 'Estados Unidos', '2025-07-11', 150, 'imgs/filmes/Superman.jpg', 'imgs/filmes/Superman-2025-Official-Teaser-Trailer.jpg', 'https://www.youtube.com/embed/uhUht6vAsMY?si=Yq3CfJ1KdX_x6LIR&start=83&end=101&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/superman_2025', 7.4, 'https://www.imdb.com/title/tt5950044/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_superman', 12, 'imgs\\3a3d65c1cd6cbd1b722e1159d8057d3e - Cópia.jpg\"'),
-(3, 'E.T. the Extra-Terrestrial', 'Um menino faz amizade com um extraterrestre perdido na Terra.', 'Steven Spielberg', 'Inglês', 'Estados Unidos', '1982-06-11', 115, 'imgs/filmes/ET.jpg', 'imgs/filmes/image.jpg', 'https://www.youtube.com/watch?v=FkT-LM8JxCs', 'em_exibicao', 99, 'https://www.rottentomatoes.com/m/et_the_extraterrestrial', 7.9, 'https://www.imdb.com/title/tt0083866/', 10, 'imgs\\de9936fc768350dc3f9ec4efb1d027ed - Cópia.jpg\"'),
-(4, 'Back to the Future', 'Um adolescente viaja no tempo e conhece os seus pais quando jovens.', 'Robert Zemeckis', 'Inglês', 'Estados Unidos', '1985-07-03', 116, 'imgs/filmes/Back to the future.jpg', 'imgs/filmes/back-to-the-future-official-40th-anniversary-re-release-trai_1qa1.1200.webp', 'https://www.youtube.com/watch?v=qvsgGtivCgs', 'em_exibicao', 93, 'https://www.rottentomatoes.com/m/back_to_the_future', 8.5, 'https://www.imdb.com/title/tt0088763/', 10, 'imgs/1926836d80bf22cd02e5099a4584bca6.jpg'),
+(2, 'Superman', 'Num mundo onde o super‑herói mais icónico voltou a aterrar, Clark Kent/Superman enfrenta as consequências das suas intervenções em crises internacionais. Quando a confiança pública vacila, o bilionário brilhante e manipulador Lex Luthor aproveita para desafiar o Homem de Aço. Agora, com o apoio da intrépida jornalista Lois Lane e dos que ainda acreditam no ideal de verdade, justiça e humanidade, Superman terá de provar que a esperança ainda tem lugar neste novo universo', 'James Gunn', 'Inglês', 'Estados Unidos', '2025-07-11', 150, 'imgs/filmes/Superman.jpg', 'imgs/filmes/Superman-2025-Official-Teaser-Trailer.jpg', 'https://www.youtube.com/embed/uhUht6vAsMY?si=Yq3CfJ1KdX_x6LIR&start=83&end=101&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/superman_2025', 7.4, 'https://www.imdb.com/title/tt5950044/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_superman', 12, 'imgs\\3a3d65c1cd6cbd1b722e1159d8057d3e - Cópia.jpg\"'),
+(3, 'E.T. O Extra-Terrestre', 'Um menino faz amizade com um extraterrestre perdido na Terra.', 'Steven Spielberg', 'Inglês', 'Estados Unidos', '1982-06-11', 115, 'imgs/filmes/ET.jpg', 'imgs/filmes/image.jpg', 'https://www.youtube.com/watch?v=FkT-LM8JxCs', 'em_exibicao', 99, 'https://www.rottentomatoes.com/m/et_the_extraterrestrial', 7.9, 'https://www.imdb.com/title/tt0083866/', 10, 'imgs\\de9936fc768350dc3f9ec4efb1d027ed - Cópia.jpg\"'),
+(4, 'Regresso ao Futuro', 'Um adolescente viaja no tempo e conhece os seus pais quando jovens.', 'Robert Zemeckis', 'Inglês', 'Estados Unidos', '1985-07-03', 116, 'imgs/filmes/Back to the future.jpg', 'imgs/filmes/back-to-the-future-official-40th-anniversary-re-release-trai_1qa1.1200.webp', 'https://www.youtube.com/watch?v=qvsgGtivCgs', 'em_exibicao', 93, 'https://www.rottentomatoes.com/m/back_to_the_future', 8.5, 'https://www.imdb.com/title/tt0088763/', 10, 'imgs/1926836d80bf22cd02e5099a4584bca6.jpg'),
 (5, 'Jurassic Park', 'Um parque temático com dinossauros clonados sofre um desastre.', 'Steven Spielberg', 'Inglês', 'Estados Unidos', '1993-06-11', 127, 'imgs/filmes/Jurassic park.jpg', 'imgs/filmes/jurassic-park-rexy-1024x576-e1542845722946.jpg', 'https://www.youtube.com/embed/QWBKEmWWL38?si=jkl012&start=25&end=44&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 92, 'https://www.rottentomatoes.com/m/jurassic_park', 8.2, 'https://www.imdb.com/title/tt0107290/', 13, 'imgs\\ffc21b65aa3b4d849363115a55310ed7 - Cópia.jpg\"'),
 (6, 'Scream', 'Um assassino mascarado aterroriza adolescentes de uma pequena cidade.', 'Wes Craven', 'Inglês', 'Estados Unidos', '1996-12-20', 111, 'imgs/filmes/Scream.jpg', 'imgs/filmes/OIP.webp', 'https://www.youtube.com/watch?v=U0LETmDvuXc', 'em_exibicao', 78, 'https://www.rottentomatoes.com/m/1074316-scream', 7.4, 'https://www.imdb.com/title/tt0117571/', 16, 'imgs\\aed55bcc4dbaf6042673164630022dc9 - Cópia.jpg\"'),
 (7, 'The Karate Kid', 'Um adolescente aprende karaté com um mestre para enfrentar os seus rivais.', 'John G. Avildsen', 'Inglês', 'Estados Unidos', '1984-06-22', 126, 'imgs/filmes/Karate kid.webp', 'imgs/filmes/R.jpeg', 'https://www.youtube.com/watch?v=r_8Rw16uscg', 'em_exibicao', 89, 'https://www.rottentomatoes.com/m/karate_kid', 7.3, 'https://www.imdb.com/title/tt0087538/', 10, 'imgs/bd63774c72706745b5bdc6a47c0cd252.jpg'),
-(8, 'The Shawshank Redemption', 'Dois prisioneiros criam um laço profundo durante anos de prisão.', 'Frank Darabont', 'Inglês', 'Estados Unidos', '1994-09-23', 142, 'imgs/filmes/Shawshank redmption.jpg', 'imgs/filmes/Shawshank-Featured.jpg', 'https://www.youtube.com/watch?v=PLl99DlL6b4', 'em_exibicao', 91, 'https://www.rottentomatoes.com/m/shawshank_redemption', 9.3, 'https://www.imdb.com/title/tt0111161/', 16, 'imgs/0736e316f455a0422a4da65be1c9e9a3.jpg'),
-(9, 'Homem-Aranha: No Aranhaverso', 'Miles Morales descobre que existem múltiplos Homens-Aranha no multiverso.', 'Bob Persichetti, Peter Ramsey, Rodney Rothman', 'Inglês', 'Estados Unidos', '2018-12-14', 117, 'imgs/filmes/spider-man-into-the-spider-verse.jpg', 'imgs/filmes/R (1).jpeg', 'https://www.youtube.com/watch?v=g4Hbz2jLxvQ&t=15s', 'em_exibicao', 97, 'https://www.rottentomatoes.com/m/spider_man_into_the_spider_verse', 8.4, 'https://www.imdb.com/title/tt4633694/', 10, 'imgs\\582f3977ea299969fcb3544fe59675ab - Cópia.jpg\"'),
-(10, 'Seven', 'Dois detectives perseguem um serial killer que baseia seus crimes nos sete pecados capitais.', 'David Fincher', 'Inglês', 'Estados Unidos', '1995-09-22', 127, 'imgs/filmes/Seven.jpg', 'imgs/filmes/635801.jpg', 'https://www.youtube.com/watch?v=KPOuJGkpblk', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/seven', 8.6, 'https://www.imdb.com/title/tt0114369/', 16, 'imgs\\983710f239516f59ff5b216fa60a714b - Cópia.jpg\"'),
-(11, 'The Hangover', 'Três amigos tentam descobrir o que aconteceu na despedida de solteiro em Las Vegas.', 'Todd Phillips', 'Inglês', 'Estados Unidos', '2009-06-05', 100, 'imgs/filmes/hangouver.jpg', 'imgs/filmes/know-these-20-facts-hangover.webp', 'https://www.youtube.com/watch?v=tlize92ffnY', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/hangover', 7.7, 'https://www.imdb.com/title/tt1119646/', 16, 'imgs\\a42674bc_8b09dcdda85982aed429747b0c90eb29.jpg\"'),
+(8, 'Os Condenados de Shawshank', 'Dois prisioneiros criam um laço profundo durante anos de prisão.', 'Frank Darabont', 'Inglês', 'Estados Unidos', '1994-09-23', 142, 'imgs/filmes/Shawshank redmption.jpg', 'imgs/filmes/Shawshank-Featured.jpg', 'https://www.youtube.com/watch?v=PLl99DlL6b4', 'em_exibicao', 91, 'https://www.rottentomatoes.com/m/shawshank_redemption', 9.3, 'https://www.imdb.com/title/tt0111161/', 16, 'imgs/0736e316f455a0422a4da65be1c9e9a3.jpg'),
+(9, 'Homem-Aranha: No Universo Aranha', 'Miles Morales descobre que existem múltiplos Homens-Aranha no multiverso.', 'Bob Persichetti, Peter Ramsey, Rodney Rothman', 'Inglês', 'Estados Unidos', '2018-12-14', 117, 'imgs/filmes/spider-man-into-the-spider-verse.jpg', 'imgs/filmes/R (1).jpeg', 'https://www.youtube.com/watch?v=g4Hbz2jLxvQ&t=15s', 'em_exibicao', 97, 'https://www.rottentomatoes.com/m/spider_man_into_the_spider_verse', 8.4, 'https://www.imdb.com/title/tt4633694/', 10, 'imgs\\582f3977ea299969fcb3544fe59675ab - Cópia.jpg\"'),
+(10, 'Sete Pecados Mortais', 'Dois detectives perseguem um serial killer que baseia seus crimes nos sete pecados capitais.', 'David Fincher', 'Inglês', 'Estados Unidos', '1995-09-22', 127, 'imgs/filmes/Seven.jpg', 'imgs/filmes/635801.jpg', 'https://www.youtube.com/watch?v=KPOuJGkpblk', 'em_exibicao', 83, 'https://www.rottentomatoes.com/m/seven', 8.6, 'https://www.imdb.com/title/tt0114369/', 16, 'imgs\\983710f239516f59ff5b216fa60a714b - Cópia.jpg\"'),
+(11, 'A Ressaca', 'Três amigos tentam descobrir o que aconteceu na despedida de solteiro em Las Vegas.', 'Todd Phillips', 'Inglês', 'Estados Unidos', '2009-06-05', 100, 'imgs/filmes/hangouver.jpg', 'imgs/filmes/know-these-20-facts-hangover.webp', 'https://www.youtube.com/watch?v=tlize92ffnY', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/hangover', 7.7, 'https://www.imdb.com/title/tt1119646/', 16, 'imgs\\a42674bc_8b09dcdda85982aed429747b0c90eb29.jpg\"'),
 (12, 'Como Treinares o Teu Dragão 3', 'Hiccup e Toothless descobrem um mundo de dragões selvagens.', 'Dean DeBlois', 'Inglês', 'Estados Unidos', '2019-02-22', 104, 'imgs/filmes/How to train your dragon.jpg', 'imgs/filmes/mv5bmzi3mtc2ndy4mv5bml5banbnxkftztgwndu3nti2njm-v1-sx1777-cr001777736-al.avif', 'https://www.youtube.com/watch?v=SkcucKDrbOI', 'em_exibicao', 90, 'https://www.rottentomatoes.com/m/how_to_train_your_dragon_the_hidden_world', 7.5, 'https://www.imdb.com/title/tt2386490/', 10, 'imgs\\119a16babbb09895cfcc3f58ce3a6f97 - Cópia.jpg\"'),
-(13, 'The Black Phone 2', 'Após os eventos do primeiro filme, Finn e Gwen enfrentam novos horrores quando o misterioso telefone preto volta a tocar, revelando segredos sombrios de seu passado.', 'Scott Derrickson', 'Inglês', 'Estados Unidos', '2025-10-17', 114, 'imgs/filmes/The Black Phone 2.jpg', 'imgs/filmes/black_phone_2.jpg', 'https://www.youtube.com/watch?v=DdR-gzFZoDk', 'em_exibicao', 72, 'https://www.rottentomatoes.com/m/black_phone_2', 6.4, 'https://www.imdb.com/title/tt29644189/', 16, 'imgs\\67b3159994a9c0a182be805994933b78 - Cópia.jpg\"'),
-(14, 'The Conjuring: Last Rites', 'Investigadores paranormais Ed e Lorraine Warren enfrentam seu caso mais aterrador, com entidades que desafiam sua experiência, no capítulo final da saga iniciada em 2013.', 'Michael Chaves', 'Inglês', 'Estados Unidos', '2025-09-05', 135, 'imgs/filmes/24TTrTCttPJnBNVC0NFGj9P0dMb.webp', 'imgs/filmes/l-intro-1760718440.jpg', 'https://www.youtube.com/watch?v=bMgfsdYoEEo', 'em_exibicao', 59, 'https://www.rottentomatoes.com/m/the_conjuring_last_rites', 6.2, 'https://www.imdb.com/title/tt22898462/', 16, 'imgs\\96d13790ba1eea310128da223a1efe26 - Cópia.jpg\"'),
-(15, 'Demon Slayer – Infinity Castle', 'Tanjiro e os Caçadores enfrentam Muzan no arco final.', 'Haruo Sotozaki', 'Japonês', 'Japão', '2025-07-18', 155, 'imgs/filmes/film-demon-slayer-la-forteresse-infinie-visuel-2.webp', 'imgs/filmes/demon-slayer-infinity-castle.webp', 'https://www.youtube.com/watch?v=x7uLutVRBfI', 'em_exibicao', 98, 'https://www.rottentomatoes.com/m/demon_slayer_kimetsu_no_yaiba_infinity_castle', 8.5, 'https://www.imdb.com/title/tt32820897/', 12, 'imgs\\1025eb3d_1e5db40d62965c506d471c8c806b0da2.jpg\"'),
-(16, 'The Smashing Machine', 'A história do lutador de MMA Mark Kerr, enfrentando desafios dentro e fora do ringue.', 'Benny Safdie', 'Inglês', 'Estados Unidos', '2025-10-03', 123, 'imgs/filmes/the-smashing-machine-official-poster.avif', 'imgs/filmes/the-smashing-machine-a24.webp', 'https://www.youtube.com/watch?v=aRpnP3LZ99g', 'em_exibicao', 70, 'https://www.rottentomatoes.com/m/the_smashing_machine_2025', 6.6, 'https://www.imdb.com/title/tt11214558/', 16, 'imgs/The_Smashing_Machine_Thumb_d86d918480.jpg'),
+(13, 'Telefone Negro 2', 'Após os eventos do primeiro filme, Finn e Gwen enfrentam novos horrores quando o misterioso telefone preto volta a tocar, revelando segredos sombrios de seu passado.', 'Scott Derrickson', 'Inglês', 'Estados Unidos', '2025-10-17', 114, 'imgs/filmes/The Black Phone 2.jpg', 'imgs/filmes/black_phone_2.jpg', 'https://www.youtube.com/watch?v=DdR-gzFZoDk', 'em_exibicao', 72, 'https://www.rottentomatoes.com/m/black_phone_2', 6.4, 'https://www.imdb.com/title/tt29644189/', 16, 'imgs\\67b3159994a9c0a182be805994933b78 - Cópia.jpg\"'),
+(14, 'A Evocação 4', 'Investigadores paranormais Ed e Lorraine Warren enfrentam seu caso mais aterrador, com entidades que desafiam sua experiência, no capítulo final da saga iniciada em 2013.', 'Michael Chaves', 'Inglês', 'Estados Unidos', '2025-09-05', 135, 'imgs/filmes/24TTrTCttPJnBNVC0NFGj9P0dMb.webp', 'imgs/filmes/l-intro-1760718440.jpg', 'https://www.youtube.com/watch?v=bMgfsdYoEEo', 'em_exibicao', 59, 'https://www.rottentomatoes.com/m/the_conjuring_last_rites', 6.2, 'https://www.imdb.com/title/tt22898462/', 16, 'imgs\\96d13790ba1eea310128da223a1efe26 - Cópia.jpg\"'),
+(15, 'Demon Slayer – Castelo Infinito', 'Tanjiro e os Caçadores enfrentam Muzan no arco final.', 'Haruo Sotozaki', 'Japonês', 'Japão', '2025-07-18', 155, 'imgs/filmes/film-demon-slayer-la-forteresse-infinie-visuel-2.webp', 'imgs/filmes/demon-slayer-infinity-castle.webp', 'https://www.youtube.com/watch?v=x7uLutVRBfI', 'em_exibicao', 98, 'https://www.rottentomatoes.com/m/demon_slayer_kimetsu_no_yaiba_infinity_castle', 8.5, 'https://www.imdb.com/title/tt32820897/', 12, 'imgs\\1025eb3d_1e5db40d62965c506d471c8c806b0da2.jpg\"'),
+(16, 'Coração de Lutador', 'A história do lutador de MMA Mark Kerr, enfrentando desafios dentro e fora do ringue.', 'Benny Safdie', 'Inglês', 'Estados Unidos', '2025-10-03', 123, 'imgs/filmes/the-smashing-machine-official-poster.avif', 'imgs/filmes/the-smashing-machine-a24.webp', 'https://www.youtube.com/watch?v=aRpnP3LZ99g', 'em_exibicao', 70, 'https://www.rottentomatoes.com/m/the_smashing_machine_2025', 6.6, 'https://www.imdb.com/title/tt11214558/', 16, 'imgs/The_Smashing_Machine_Thumb_d86d918480.jpg'),
 (17, 'Rocky IV', 'Após a morte do seu amigo Apollo Creed numa luta contra o boxeador russo Ivan Drago, Rocky Balboa decide enfrentá-lo numa luta épica em Moscovo, colocando a honra e o orgulho em jogo durante a Guerra Fria.', 'Sylvester Stallone', 'Inglês', 'Estados Unidos', '1985-11-27', 91, 'imgs/filmes/jmvpwgW5M2kduR9zB0q8qGFC4zM.webp', 'imgs/filmes/MKWEioPFtFOtcSUrLe6dhzDizldbkqRNykVde66L6HQ.webp', 'https://www.youtube.com/watch?v=4qjV0bB2V0Q', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/rocky_iv', 6.9, 'https://www.imdb.com/title/tt0089927/', 10, 'imgs\\474696ab5c5ddcc3005f8d974fc1a073 - Cópia.jpg\"'),
-(18, 'Sinners', 'Ambientado em 1932 no Delta do Mississippi, os irmãos gêmeos Smoke e Stack retornam à sua cidade natal para recomeçar, mas descobrem que um mal ainda maior os espera.', 'Ryan Coogler', 'Inglês', 'Estados Unidos', '2025-04-18', 138, 'imgs/filmes/sinners-official-poster.jpg', 'imgs/filmes/sinners-hed.jpg', 'https://www.youtube.com/watch?v=bKGxHflevuk', 'em_exibicao', 97, 'https://www.rottentomatoes.com/m/sinners_2025', 8.2, 'https://www.imdb.com/title/tt31193180/', 16, 'imgs/b01a2671a2aee6e6acc1efb91bdc11c2.jpg'),
-(19, 'Gladiator II', 'O filme segue Lucius Verus, sobrinho de Cómodo, que após as invasões romanas é forçado a tornar-se gladiador e enfrenta uma nova era de lutas e conspirações em Roma.', 'Ridley Scott', 'Inglês', 'Estados Unidos', '2024-11-22', 148, 'imgs/filmes/fedce497491780e5a5d856d0602eebc0_original.jpg', 'imgs/filmes/1094465-gladiator-2-paul-mescal-est-lucius.jpg', 'https://www.youtube.com/watch?v=4rgYUipGJNo', 'em_exibicao', 70, 'https://www.rottentomatoes.com/m/gladiator_ii', 6.5, 'https://www.imdb.com/title/tt9218128/', 16, 'imgs/410de0484f85d5213a869b017cc1b137.jpg'),
-(20, 'The Batman', 'Quando o crime se espalha por Gotham City e um assassino sádico deixa um rastro de enigmas, Batman mergulha nas profundezas da corrupção e descobre segredos sombrios que podem mudar tudo.', 'Matt Reeves', 'Inglês', 'Estados Unidos', '2022-03-04', 176, 'imgs/filmes/Batman.jpg', 'imgs/filmes/196-The-Batman-Dest-scaled.jpg', 'https://www.youtube.com/embed/mqqft2x_Aa4?si=abc123&start=45&end=65&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/the_batman', 7.8, 'https://www.imdb.com/title/tt1877830/', 14, 'imgs\\98cfc504d0b12fc81303a01c2b7405dd - Cópia.jpg\"'),
-(22, 'Odisseia', 'Uma epopeia visual e emocional onde um astronauta atravessa dimensões do tempo e da memória para salvar aquilo que mais ama. À medida que a missão se desenrola, segredos do seu passado e do universo põem em causa o próprio conceito de realidade.', 'Christopher Nolan', 'Inglês', 'Estados Unidos', '2026-12-04', 165, 'imgs/filmes/image001.avif', 'imgs/filmes/matt-damon-in-the-odyssey.avif', 'https://www.youtube.com/watch?v=EXEMPLO_ODISSEIA', 'brevemente', NULL, NULL, NULL, NULL, 13, NULL),
+(18, 'Pecadores', 'Ambientado em 1932 no Delta do Mississippi, os irmãos gêmeos Smoke e Stack retornam à sua cidade natal para recomeçar, mas descobrem que um mal ainda maior os espera.', 'Ryan Coogler', 'Inglês', 'Estados Unidos', '2025-04-18', 138, 'imgs/filmes/sinners-official-poster.jpg', 'imgs/filmes/sinners-hed.jpg', 'https://www.youtube.com/watch?v=bKGxHflevuk', 'em_exibicao', 97, 'https://www.rottentomatoes.com/m/sinners_2025', 8.2, 'https://www.imdb.com/title/tt31193180/', 16, 'imgs/b01a2671a2aee6e6acc1efb91bdc11c2.jpg'),
+(19, 'Gladiador II', 'O filme segue Lucius Verus, sobrinho de Cómodo, que após as invasões romanas é forçado a tornar-se gladiador e enfrenta uma nova era de lutas e conspirações em Roma.', 'Ridley Scott', 'Inglês', 'Estados Unidos', '2024-11-22', 148, 'imgs/filmes/fedce497491780e5a5d856d0602eebc0_original.jpg', 'imgs/filmes/1094465-gladiator-2-paul-mescal-est-lucius.jpg', 'https://www.youtube.com/watch?v=4rgYUipGJNo', 'em_exibicao', 70, 'https://www.rottentomatoes.com/m/gladiator_ii', 6.5, 'https://www.imdb.com/title/tt9218128/', 16, 'imgs/410de0484f85d5213a869b017cc1b137.jpg'),
+(20, 'Batman', 'Quando o crime se espalha por Gotham City e um assassino sádico deixa um rastro de enigmas, Batman mergulha nas profundezas da corrupção e descobre segredos sombrios que podem mudar tudo.', 'Matt Reeves', 'Inglês', 'Estados Unidos', '2022-03-04', 176, 'imgs/filmes/Batman.jpg', 'imgs/filmes/196-The-Batman-Dest-scaled.jpg', 'https://www.youtube.com/embed/mqqft2x_Aa4?si=abc123&start=45&end=65&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/the_batman', 7.8, 'https://www.imdb.com/title/tt1877830/', 14, 'imgs\\98cfc504d0b12fc81303a01c2b7405dd - Cópia.jpg\"'),
+(22, 'A Odisseia', 'Uma epopeia visual e emocional onde um astronauta atravessa dimensões do tempo e da memória para salvar aquilo que mais ama. À medida que a missão se desenrola, segredos do seu passado e do universo põem em causa o próprio conceito de realidade.', 'Christopher Nolan', 'Inglês', 'Estados Unidos', '2026-12-04', 165, 'imgs/filmes/image001.avif', 'imgs/filmes/matt-damon-in-the-odyssey.avif', 'https://www.youtube.com/watch?v=EXEMPLO_ODISSEIA', 'brevemente', NULL, NULL, NULL, NULL, 13, 'imgs\\filmes\\od.jpg\"'),
 (23, 'Five Nights at Freddy\'s 2', 'Sequência sombria onde um novo segurança nocturno descobre que os animatrónicos reencenderam as suas memórias — e a sua sede por sangue. À medida que as noites passam a entidade que habita a fábrica fica mais inteligente e vingativa.', 'Emma Tammi', 'Inglês', 'Estados Unidos', '2025-12-04', 105, 'imgs/filmes/five-nights-at-freddy-s-2-the-movie-fan-casting-poster-408632-large.jpg', 'imgs/filmes/may-has-broken-a-major-five-nights-at-freddy-s-tradition.avif', 'https://www.youtube.com/watch?v=dSDpoobO6yM&t=2s', 'em_exibicao', NULL, NULL, NULL, NULL, 16, 'imgs/4e3e7e45b809a8f37d85ba9072f70b0c.jpg'),
 (24, '28 Years Later: The Bone Temple', 'Anos após uma vaga de terror que varreu o país, um pequeno grupo de sobreviventes segue pistas até ao mítico \"Bone Temple\". À medida que a noite cai, segredos do passado ressurgem e a linha entre sã consciência e loucura desvanece.', 'Ava Richardson', 'Inglês', 'Reino Unido', '2026-01-16', 110, 'imgs/filmes/28-years-later_-the-bone-temple-poster.avif', 'imgs/filmes/M1tfi8TCyk2tubfoP57iwA.jpg', 'https://www.youtube.com/watch?v=EOwTdTZA8D8', 'em_exibicao', NULL, NULL, NULL, NULL, 16, 'imgs\\d428b9ca592a2b47ca8623d17ce8767d.jpg\"'),
-(25, 'Mortal Kombat 2', 'Após os eventos do primeiro torneio, os guerreiros da Terra enfrentam uma nova ameaça quando Shao Kahn decide invadir o seu mundo. Novos campeões entram em combate, e as alianças serão postas à prova enquanto o destino dos reinos é decidido.', 'Simon McQuoid', 'Inglês', 'Estados Unidos', '2026-05-08', 118, 'imgs/filmes/mortal-kombat-2-poster.avif', 'imgs/filmes/spieleverfilmungen-featured-mortal-kombat-2-cast-warner-bros-960x540.jpg', 'https://www.youtube.com/watch?v=YOOPPPM2mB8', 'brevemente', NULL, NULL, NULL, NULL, 16, NULL),
-(26, 'Spider-Man: Brand New Day', 'Após os eventos do Multiverso, Peter Parker tenta reconstruir a sua vida enquanto enfrenta as consequências de um mundo que o esqueceu. Quando um novo vilão surge com o poder de manipular memórias, Peter é forçado a lutar não só pelo futuro de Nova Iorque, mas também pela sua própria identidade.', 'Jon Watts', NULL, NULL, '2026-07-10', 142, 'imgs/filmes/SPIDER-MAN-BRAND-NEW-DAY.jpg', 'imgs\\filmes\\spider-man.webp\"', 'https://www.youtube.com/watch?v=8TZMtslA3UY', 'brevemente', NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 'Supergirl: Woman of Tomorrow', 'Kara Zor-El, prima de Superman, embarca numa jornada de vingança e autodescoberta através da galáxia. Após testemunhar uma tragédia pessoal, Supergirl é forçada a enfrentar o lado mais sombrio do universo — e de si própria — enquanto decide que tipo de heroína deseja ser.', 'Craig Gillespie', 'Inglês', 'Estados Unidos', '2026-06-26', 135, 'imgs/filmes/5Yx1evq4mvo3eOKvcYq8BtnnIp1.webp', 'imgs/filmes/6m3jGKVlYGTZ4IwAYU2tI6HdjN4-1200-1200-675-675-crop-000000.jpg', 'https://www.youtube.com/watch?v=EXEMPLO_SUPERGIRL', 'brevemente', NULL, NULL, NULL, NULL, 12, 'https://www.youtube.com/watch?v=YqdAEdkHrwo'),
-(28, 'Cantando na Chuva', 'Um astro do cinema mudo enfrenta dificuldades na transição para os filmes falados. Musical icónico que celebra a era dourada de Hollywood.', 'Stanley Donen, Gene Kelly', 'Inglês', 'EUA', '1952-04-11', 103, 'imgs/filmes/singing in the rain.jpg', NULL, 'https://www.youtube.com/watch?v=lSE8sl2-PZg', 'em_exibicao', 100, 'https://www.rottentomatoes.com/m/singin_in_the_rain', 8.3, 'https://www.imdb.com/title/tt0045152/', 0, 'imgs/ec89d1f3e0b55b7529730229c71c5111.jpg'),
-(29, 'Sunset Boulevard', 'Joe Gillis, um roteirista em dificuldades, encontra refúgio na mansão de Norma Desmond, uma antiga estrela do cinema mudo que vive isolada e sonha com o seu retorno triunfal. À medida que Joe se envolve na vida dela, descobre um mundo de ilusões, solidão e decadência, onde a fronteira entre fama e loucura se desvanece.', 'Billy Wilder', 'Inglês', 'EUA', '1850-08-10', 112, 'imgs/filmes/Sunset-Boulevard-film-images-246a2c53-2878-414c-9eb8-065564e64a4.jpg', 'imgs/filmes/sunsetboulevard1950.4254.webp', 'https://www.youtube.com/watch?v=_dY0SVxnHjQ', 'em_exibicao', 98, 'https://www.rottentomatoes.com/m/sunset_boulevard', 8.4, 'https://www.imdb.com/title/tt0043014/', 10, 'imgs/d494a7f2c7fd77bfeb2da8431cc3ed56.jpg'),
-(30, 'Psycho', 'Uma secretária rouba dinheiro e foge, parando num motel isolado gerido por Norman Bates. O que se segue é um dos thrillers mais icónicos da história do cinema.', 'Alfred Hitchcock', 'Inglês', 'EUA', '1960-09-08', 109, 'imgs/filmes/Psycho-1960-film-images-fe8c0937-1b83-4cd5-994e-9a31ee9657e.jpg', 'imgs/filmes/psycho.avif', 'https://www.youtube.com/watch?v=Wz719b9QUqY', 'em_exibicao', 96, 'https://www.rottentomatoes.com/m/psycho', 8.5, 'https://www.imdb.com/title/tt0054215/', 0, 'imgs/e5426ab9b5a4be2f1f134274c50b7704.jpg'),
+(25, 'Mortal Kombat 2', 'Após os eventos do primeiro torneio, os guerreiros da Terra enfrentam uma nova ameaça quando Shao Kahn decide invadir o seu mundo. Novos campeões entram em combate, e as alianças serão postas à prova enquanto o destino dos reinos é decidido.', 'Simon McQuoid', 'Inglês', 'Estados Unidos', '2026-05-08', 118, 'imgs/filmes/mortal-kombat-2-poster.avif', 'imgs/filmes/spieleverfilmungen-featured-mortal-kombat-2-cast-warner-bros-960x540.jpg', 'https://www.youtube.com/watch?v=YOOPPPM2mB8', 'brevemente', NULL, NULL, NULL, NULL, 16, 'imgs\\filmes\\mo.jpg\"'),
+(26, 'Homem-Aranha: Um Novo Dia', 'Após os eventos do Multiverso, Peter Parker tenta reconstruir a sua vida enquanto enfrenta as consequências de um mundo que o esqueceu. Quando um novo vilão surge com o poder de manipular memórias, Peter é forçado a lutar não só pelo futuro de Nova Iorque, mas também pela sua própria identidade.', 'Jon Watts', 'Inglês', 'Estados Unidos', '2026-07-31', 142, 'imgs/filmes/SPIDER-MAN-BRAND-NEW-DAY.jpg', 'imgs\\filmes\\spider-man_bnd_thumbnail_16x9_generic_texted_dom_official_trailer_v2_txtlss.jpg\"', 'https://www.youtube.com/watch?v=8TZMtslA3UY', 'brevemente', NULL, NULL, NULL, NULL, NULL, 'imgs\\filmes\\5d539b40d18e48295106a98b27532a5e.jpg\"'),
+(27, 'Supergirl: Woman of Tomorrow', 'Kara Zor-El, prima de Superman, embarca numa jornada de vingança e autodescoberta através da galáxia. Após testemunhar uma tragédia pessoal, Supergirl é forçada a enfrentar o lado mais sombrio do universo — e de si própria — enquanto decide que tipo de heroína deseja ser.', 'Craig Gillespie', 'Inglês', 'Estados Unidos', '2026-06-25', 135, 'imgs/filmes/5Yx1evq4mvo3eOKvcYq8BtnnIp1.webp', 'imgs/filmes/6m3jGKVlYGTZ4IwAYU2tI6HdjN4-1200-1200-675-675-crop-000000.jpg', 'https://www.youtube.com/watch?v=EXEMPLO_SUPERGIRL', 'brevemente', NULL, NULL, NULL, NULL, 12, 'imgs\\filmes\\supergirl.jpg\"'),
+(28, 'Cantando na Chuva', 'Um astro do cinema mudo enfrenta dificuldades na transição para os filmes falados. Musical icónico que celebra a era dourada de Hollywood.', 'Stanley Donen, Gene Kelly', 'Inglês', 'Estados Unidos', '1952-04-11', 103, 'imgs/filmes/singing in the rain.jpg', NULL, 'https://www.youtube.com/watch?v=lSE8sl2-PZg', 'em_exibicao', 100, 'https://www.rottentomatoes.com/m/singin_in_the_rain', 8.3, 'https://www.imdb.com/title/tt0045152/', 0, 'imgs/ec89d1f3e0b55b7529730229c71c5111.jpg'),
+(29, 'Sunset Boulevard', 'Joe Gillis, um roteirista em dificuldades, encontra refúgio na mansão de Norma Desmond, uma antiga estrela do cinema mudo que vive isolada e sonha com o seu retorno triunfal. À medida que Joe se envolve na vida dela, descobre um mundo de ilusões, solidão e decadência, onde a fronteira entre fama e loucura se desvanece.', 'Billy Wilder', 'Inglês', 'Estados Unidos', '1850-08-10', 112, 'imgs/filmes/Sunset-Boulevard-film-images-246a2c53-2878-414c-9eb8-065564e64a4.jpg', 'imgs/filmes/sunsetboulevard1950.4254.webp', 'https://www.youtube.com/watch?v=_dY0SVxnHjQ', 'em_exibicao', 98, 'https://www.rottentomatoes.com/m/sunset_boulevard', 8.4, 'https://www.imdb.com/title/tt0043014/', 10, 'imgs/d494a7f2c7fd77bfeb2da8431cc3ed56.jpg'),
+(30, 'Psycho', 'Uma secretária rouba dinheiro e foge, parando num motel isolado gerido por Norman Bates. O que se segue é um dos thrillers mais icónicos da história do cinema.', 'Alfred Hitchcock', 'Inglês', 'Estados Unidos', '1960-09-08', 109, 'imgs/filmes/Psycho-1960-film-images-fe8c0937-1b83-4cd5-994e-9a31ee9657e.jpg', 'imgs/filmes/psycho.avif', 'https://www.youtube.com/watch?v=Wz719b9QUqY', 'em_exibicao', 96, 'https://www.rottentomatoes.com/m/psycho', 8.5, 'https://www.imdb.com/title/tt0054215/', 0, 'imgs/e5426ab9b5a4be2f1f134274c50b7704.jpg'),
 (31, 'Lawrence da Arábia', 'A história épica de T.E. Lawrence, um oficial britânico que uniu tribos árabes durante a Primeira Guerra Mundial. Vencedor de 7 Óscares.', 'David Lean', 'Inglês', 'Reino Unido', '1962-12-16', 216, 'imgs/filmes/0937b63d234e2b38313f7530908b376c_XL.jpg', 'imgs/filmes/vised-lawrence-of-arabia-wide-screen-camels.jpg', 'https://www.youtube.com/watch?v=vOlRhGEhG7k', 'em_exibicao', 94, 'https://www.rottentomatoes.com/m/lawrence_of_arabia', 8.3, 'https://www.imdb.com/title/tt0056172/', 0, 'imgs/69e25fe0c71ea0db2c89c39baf6ec6c6.jpg'),
-(32, '2001: Odisseia no Espaço', 'Uma viagem épica através do espaço e do tempo, explorando a evolução humana e o encontro com inteligência artificial. Obra-prima visionária de Kubrick.', 'Stanley Kubrick', 'Inglês', 'Reino Unido / EUA', '1968-04-02', 149, 'imgs/filmes/R.jpg', 'imgs/filmes/R (1).jpg', 'https://www.youtube.com/watch?v=7E9CD3Hucws', 'em_exibicao', 92, 'https://www.rottentomatoes.com/m/2001_a_space_odyssey', 8.3, 'https://www.imdb.com/title/tt0062622/', 0, 'imgs/691047e85c11d004b4ddacabc2869c69.jpg'),
-(33, 'Star Wars: Episódio IV - Uma Nova Esperança', 'Luke Skywalker junta-se à Aliança Rebelde para destruir a Estrela da Morte e salvar a Princesa Leia das garras do Império Galáctico.', 'George Lucas', 'Inglês', 'EUA', '1977-05-25', 121, 'imgs/filmes/star wars.jpg', 'imgs/filmes/a.jpg', 'https://www.youtube.com/watch?v=vZ734NWnAHA', 'em_exibicao', 93, 'https://www.rottentomatoes.com/m/star_wars', 8.6, 'https://www.imdb.com/title/tt0076759/', 0, 'imgs/70076f7dd43959aa4f9a5326bc2c9bb6.jpg'),
-(34, 'Taxi Driver', 'Um veterano de guerra solitário trabalha como taxista em Nova Iorque e planeja salvar uma jovem prostituta da vida nas ruas. Drama psicológico intenso.', 'Martin Scorsese', NULL, NULL, '1976-02-08', 114, 'imgs\\filme_34_6f914397.jpg\"', 'imgs/filmes/taxi-driver-filmi.jpg', 'https://www.youtube.com/watch?v=T5IligQP7Fo', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/taxi_driver', NULL, 'https://www.imdb.com/title/tt0075314/', 0, 'imgs\\526106c0ccce111d7600a01348980485.jpg\"'),
-(35, 'O Exorcista', 'Uma menina de 12 anos é possuída por uma entidade demoníaca. Dois padres tentam salvá-la através de um exorcismo. Um dos filmes de terror mais assustadores de sempre.', 'William Friedkin', 'Inglês', 'EUA', '1973-12-26', 122, 'imgs/filmes/exorcista.webp', 'imgs/filmes/o-exorcista-1973-filme-cena.jpg', 'https://www.youtube.com/watch?v=4x6a6igB1AQ', 'em_exibicao', 84, 'https://www.rottentomatoes.com/m/exorcist', 8.1, 'https://www.imdb.com/title/tt0070047/', 16, 'imgs/83d3b65f715d93f31a1eb5d358602ace.jpg'),
-(38, 'Os Caçadores da Arca Perdida', 'O arqueólogo Indiana Jones é contratado pelo governo americano para encontrar a Arca da Aliança antes dos nazis. Aventura épica cheia de ação.', 'Steven Spielberg', NULL, NULL, '1986-05-08', 115, 'imgs\\filmes\\indiana jones.webp\"', 'imgs/filmes/3026122-indy.jpg', 'https://www.youtube.com/watch?v=XkkzKHCx154', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/raiders_of_the_lost_ark', NULL, 'https://www.imdb.com/title/tt0082971/', 10, 'imgs/eb54a5dac4861b4908a9f9a2ab8f2d32.jpg'),
-(39, 'La La Land', 'Uma atriz aspirante e um pianista de jazz lutam para alcançar os seus sonhos em Los Angeles, enquanto vivem um romance marcado por escolhas difíceis.', 'Damien Chazelle', NULL, NULL, '2016-12-09', 128, 'imgs/filmes/la.jpg', 'imgs/filmes/la2.jpg', 'https://www.youtube.com/watch?v=0pdqf4P9MB8', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/la_la_land', NULL, 'https://www.imdb.com/title/tt3783958/', 0, 'imgs/0d82d8434adc4352e1e7b6c1f61dc5f7.jpg'),
+(32, '2001: Odisseia no Espaço', 'Uma viagem épica através do espaço e do tempo, explorando a evolução humana e o encontro com inteligência artificial. Obra-prima visionária de Kubrick.', 'Stanley Kubrick', 'Inglês', 'Reino Unido / Estados Unidos', '1968-04-02', 149, 'imgs/filmes/R.jpg', 'imgs/filmes/R (1).jpg', 'https://www.youtube.com/watch?v=7E9CD3Hucws', 'em_exibicao', 92, 'https://www.rottentomatoes.com/m/2001_a_space_odyssey', 8.3, 'https://www.imdb.com/title/tt0062622/', 0, 'imgs/691047e85c11d004b4ddacabc2869c69.jpg'),
+(33, 'Star Wars: Episódio IV - Uma Nova Esperança', 'Luke Skywalker junta-se à Aliança Rebelde para destruir a Estrela da Morte e salvar a Princesa Leia das garras do Império Galáctico.', 'George Lucas', 'Inglês', 'Estados Unidos', '1977-05-25', 121, 'imgs/filmes/star wars.jpg', 'imgs/filmes/a.jpg', 'https://www.youtube.com/watch?v=vZ734NWnAHA', 'em_exibicao', 93, 'https://www.rottentomatoes.com/m/star_wars', 8.6, 'https://www.imdb.com/title/tt0076759/', 0, 'imgs/70076f7dd43959aa4f9a5326bc2c9bb6.jpg'),
+(34, 'Taxi Driver', 'Um veterano de guerra solitário trabalha como taxista em Nova Iorque e planeja salvar uma jovem prostituta da vida nas ruas. Drama psicológico intenso.', 'Martin Scorsese', NULL, 'Estados Unidos', '1976-02-08', 114, 'imgs\\filme_34_6f914397.jpg\"', 'imgs/filmes/taxi-driver-filmi.jpg', 'https://www.youtube.com/watch?v=T5IligQP7Fo', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/taxi_driver', NULL, 'https://www.imdb.com/title/tt0075314/', 0, 'imgs\\526106c0ccce111d7600a01348980485.jpg\"'),
+(35, 'O Exorcista', 'Uma menina de 12 anos é possuída por uma entidade demoníaca. Dois padres tentam salvá-la através de um exorcismo. Um dos filmes de terror mais assustadores de sempre.', 'William Friedkin', 'Inglês', 'Estados Unidos', '1973-12-26', 122, 'imgs/filmes/exorcista.webp', 'imgs/filmes/o-exorcista-1973-filme-cena.jpg', 'https://www.youtube.com/watch?v=4x6a6igB1AQ', 'em_exibicao', 84, 'https://www.rottentomatoes.com/m/exorcist', 8.1, 'https://www.imdb.com/title/tt0070047/', 16, 'imgs/83d3b65f715d93f31a1eb5d358602ace.jpg'),
+(38, 'Os Caçadores da Arca Perdida', 'O arqueólogo Indiana Jones é contratado pelo governo americano para encontrar a Arca da Aliança antes dos nazis. Aventura épica cheia de ação.', 'Steven Spielberg', NULL, 'Estados Unidos', '1986-05-08', 115, 'imgs\\filmes\\indiana jones.webp\"', 'imgs/filmes/3026122-indy.jpg', 'https://www.youtube.com/watch?v=XkkzKHCx154', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/raiders_of_the_lost_ark', NULL, 'https://www.imdb.com/title/tt0082971/', 10, 'imgs/eb54a5dac4861b4908a9f9a2ab8f2d32.jpg'),
+(39, 'La La Land', 'Uma atriz aspirante e um pianista de jazz lutam para alcançar os seus sonhos em Los Angeles, enquanto vivem um romance marcado por escolhas difíceis.', 'Damien Chazelle', NULL, 'Estados Unidos', '2016-12-09', 128, 'imgs/filmes/la.jpg', 'imgs/filmes/la2.jpg', 'https://www.youtube.com/watch?v=0pdqf4P9MB8', 'em_exibicao', NULL, 'https://www.rottentomatoes.com/m/la_la_land', NULL, 'https://www.imdb.com/title/tt3783958/', 0, 'imgs/0d82d8434adc4352e1e7b6c1f61dc5f7.jpg'),
 (40, 'Casablanca', 'Durante a Segunda Guerra Mundial, o dono de um bar em Casablanca reencontra um grande amor do passado, levando a escolhas difíceis num clima de resistência e sacrifício.', 'Michael Curtiz', 'Inglês', 'Estados Unidos', '1950-11-25', 102, 'imgs/filmes/casablanca.jpg', 'imgs/filmes/casablanca-photo1.jpg', 'https://www.youtube.com/watch?v=MF7JH_54d8c', 'em_exibicao', 99, 'https://www.rottentomatoes.com/m/casablanca', 8.5, 'https://www.imdb.com/title/tt0034583/', 12, 'imgs/fef6c149f363ad038ad59e2dff2b7957.jpg'),
-(42, 'Materialists', 'Lucy (Dakota Johnson) é uma casamenteira de luxo em Nova Iorque que se envolve num triângulo amoroso entre o seu ex-namorado John (Chris Evans), que é ator e vive em dificuldades, e Harry (Pedro Pascal), um milionário atraente.', 'Celine Song', 'Inglês', 'Estados Unidos', '2025-06-13', 117, 'imgs/filmes/OIP (6).webp', 'imgs/filmes/9mMslH0Bn3agSQTrR6vQBvzUYHt.webp', 'https://www.youtube.com/watch?v=4A_kmjtsJ7c', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/materialists', 6.3, 'https://www.imdb.com/title/tt30253473/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_mater', 12, 'imgs/6bf9914c0531c3a6ed1ab8d1401cbc01.jpg'),
-(67, 'Avenger\'s Doomsday', 'dfsf', 'A definir', NULL, NULL, '2024-01-01', 120, 'imgs/filmes/d2f8c220_doomsday.jpg', NULL, '', 'brevemente', NULL, '', NULL, '', 0, NULL),
-(68, 'Kill Bill: Volume 1', 'Uma assassina profissional conhecida como A Noiva acorda de um coma de quatro anos e decide vingar-se dos membros do esquadrão que a traíram no dia do seu casamento.', 'Quentin Tarantino', 'English', 'Estados Unidos\r\n', '2003-10-10', 111, 'imgs/filmes/kill_bill.jpg', 'imgs/filmes/0f3e00c00b874f846be3c6d2a009473c.jpg', 'https://www.youtube.com/watch?v=7kSuas6mRpk', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/kill_bill_vol_1', 8.2, 'https://www.imdb.com/title/tt0266697/', 18, 'imgs/filmes/906dfa40dc7e2292ed8690a333d50b1c.jpg'),
-(69, 'Ghostbusters', 'Três cientistas de Nova Iorque perdem os seus empregos numa universidade e decidem abrir um negócio incomum: capturar fantasmas que estão a invadir a cidade.', 'Ivan Reitman', 'English', 'United States', '1984-06-08', 105, 'imgs/filmes/filme_69_f0b67c4f.jpg', 'https://image.tmdb.org/t/p/original/tT8YdJkKXw3u9F7YjFhF38sZ4N2.jpg', 'https://www.youtube.com/watch?v=6hDkhw5Wkas', 'em_exibicao', 95, 'https://www.rottentomatoes.com/m/ghostbusters', 7.8, 'https://www.imdb.com/title/tt0087332/', 12, 'ghostbusters_hover.jpg'),
-(70, 'Beetlejuice', 'Um casal recentemente falecido tenta assombrar a sua antiga casa para afastar os novos moradores. Para isso acabam por invocar Beetlejuice, um bio-exorcista excêntrico e problemático do mundo dos mortos.', 'Tim Burton', 'English', 'United States', '1988-03-30', 92, 'imgs/filmes/filme_70_3a66db88.JPG', 'https://image.tmdb.org/t/p/original/4uKJ0u3r2a5yqk0EY50jYOEoTP0.jpg', 'https://www.youtube.com/watch?v=ickbVzajrk0', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/beetlejuice', 7.5, 'https://www.imdb.com/title/tt0094721/', 12, 'beetlejuice_hover.jpg');
+(42, 'O Match Perfeito', 'Lucy (Dakota Johnson) é uma casamenteira de luxo em Nova Iorque que se envolve num triângulo amoroso entre o seu ex-namorado John (Chris Evans), que é ator e vive em dificuldades, e Harry (Pedro Pascal), um milionário atraente.', 'Celine Song', 'Inglês', 'Estados Unidos', '2025-06-13', 117, 'imgs/filmes/OIP (6).webp', 'imgs/filmes/9mMslH0Bn3agSQTrR6vQBvzUYHt.webp', 'https://www.youtube.com/watch?v=4A_kmjtsJ7c', 'em_exibicao', 79, 'https://www.rottentomatoes.com/m/materialists', 6.3, 'https://www.imdb.com/title/tt30253473/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_mater', 12, 'imgs/6bf9914c0531c3a6ed1ab8d1401cbc01.jpg'),
+(68, 'Kill Bill: Volume 1', 'Uma assassina profissional conhecida como A Noiva acorda de um coma de quatro anos e decide vingar-se dos membros do esquadrão que a traíram no dia do seu casamento.', 'Quentin Tarantino', 'English', 'Estados Unidos\r\n', '2003-10-10', 111, 'imgs/filmes/kill_bill.jpg', 'imgs\\filmes\\0f3e00c00b874f846be3c6d2a009473c.jpg', 'https://www.youtube.com/watch?v=7kSuas6mRpk', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/kill_bill_vol_1', 8.2, 'https://www.imdb.com/title/tt0266697/', 18, 'imgs\\filmes\\906dfa40dc7e2292ed8690a333d50b1c.jpg'),
+(69, 'Ghostbusters', 'Três cientistas de Nova Iorque perdem os seus empregos numa universidade e decidem abrir um negócio incomum: capturar fantasmas que estão a invadir a cidade.', 'Ivan Reitman', 'English', 'Estados Unidos', '1984-06-08', 105, 'imgs/filmes/filme_69_f0b67c4f.jpg', 'https://image.tmdb.org/t/p/original/tT8YdJkKXw3u9F7YjFhF38sZ4N2.jpg', 'https://www.youtube.com/watch?v=6hDkhw5Wkas', 'em_exibicao', 95, 'https://www.rottentomatoes.com/m/ghostbusters', 7.8, 'https://www.imdb.com/title/tt0087332/', 12, 'imgs\\filmes\\gh.jpg\"'),
+(70, 'Beetlejuice', 'Um casal recentemente falecido tenta assombrar a sua antiga casa para afastar os novos moradores. Para isso acabam por invocar Beetlejuice, um bio-exorcista excêntrico e problemático do mundo dos mortos.', 'Tim Burton', 'English', 'Estados Unidos', '1988-03-30', 92, 'imgs/filmes/filme_70_3a66db88.JPG', 'https://image.tmdb.org/t/p/original/4uKJ0u3r2a5yqk0EY50jYOEoTP0.jpg', 'https://www.youtube.com/watch?v=ickbVzajrk0', 'em_exibicao', 85, 'https://www.rottentomatoes.com/m/beetlejuice', 7.5, 'https://www.imdb.com/title/tt0094721/', 12, 'imgs\\filmes\\bet.jpg\"');
 
 -- --------------------------------------------------------
 
@@ -598,7 +604,7 @@ CREATE TABLE IF NOT EXISTS `filmes_cinemas` (
   PRIMARY KEY (`id`),
   KEY `fk_filmes_cinemas_filme` (`filme_id`),
   KEY `fk_filmes_cinemas_cinema` (`cinema_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=589 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=635 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filmes_cinemas`
@@ -862,20 +868,6 @@ INSERT INTO `filmes_cinemas` (`id`, `filme_id`, `cinema_id`) VALUES
 (496, 27, 13),
 (497, 27, 14),
 (498, 27, 15),
-(529, 67, 1),
-(530, 67, 2),
-(531, 67, 3),
-(532, 67, 4),
-(533, 67, 5),
-(534, 67, 6),
-(535, 67, 7),
-(537, 67, 9),
-(538, 67, 10),
-(539, 67, 11),
-(540, 67, 12),
-(541, 67, 13),
-(542, 67, 14),
-(543, 67, 15),
 (544, 70, 1),
 (545, 70, 2),
 (546, 70, 3),
@@ -935,7 +927,7 @@ CREATE TABLE IF NOT EXISTS `filme_atores` (
   PRIMARY KEY (`id`),
   KEY `fk_filme_atores_filme` (`filme_id`),
   KEY `fk_filme_atores_ator` (`ator_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=223 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filme_atores`
@@ -1048,8 +1040,8 @@ INSERT INTO `filme_atores` (`id`, `filme_id`, `ator_id`, `papel`) VALUES
 (218, 68, 123, 'Uma Thurman'),
 (219, 68, 122, 'Bill'),
 (220, 70, 124, 'Beetlejuice'),
-(221, 70, 125, 'Lydia Deetz'),
-(222, 70, 126, 'Delia Deetz');
+(222, 70, 126, 'Delia Deetz'),
+(224, 70, 127, 'Lydia Deetz');
 
 -- --------------------------------------------------------
 
@@ -1065,7 +1057,7 @@ CREATE TABLE IF NOT EXISTS `filme_generos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `filme_id` (`filme_id`,`genero_id`),
   KEY `fk_filme_generos_genero` (`genero_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=186 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `filme_generos`
@@ -1186,7 +1178,6 @@ INSERT INTO `filme_generos` (`id`, `filme_id`, `genero_id`) VALUES
 (113, 40, 4),
 (86, 40, 12),
 (85, 40, 13),
-(159, 67, 1),
 (160, 68, 1),
 (161, 68, 12),
 (162, 68, 16),
@@ -1237,6 +1228,38 @@ INSERT INTO `generos` (`id`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `historico_pagamentos`
+--
+
+DROP TABLE IF EXISTS `historico_pagamentos`;
+CREATE TABLE IF NOT EXISTS `historico_pagamentos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `subscricao_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `plano_tipo` enum('member','premium') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `metodo_pagamento` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_pagamento` enum('pendente','concluido','falhado','reembolsado') COLLATE utf8mb4_unicode_ci DEFAULT 'pendente',
+  `data_pagamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `referencia_pagamento` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notas` text COLLATE utf8mb4_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `subscricao_id` (`subscricao_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `historico_pagamentos`
+--
+
+INSERT INTO `historico_pagamentos` (`id`, `subscricao_id`, `user_id`, `valor`, `plano_tipo`, `metodo_pagamento`, `status_pagamento`, `data_pagamento`, `referencia_pagamento`, `notas`) VALUES
+(1, 1, 1, 19.99, 'premium', 'simulado', 'concluido', '2026-03-24 15:28:53', NULL, NULL),
+(2, 2, 14, 9.99, 'member', 'simulado', 'concluido', '2026-03-24 17:04:08', NULL, NULL),
+(3, 8, 11, 9.99, 'member', 'simulado', 'concluido', '2026-03-27 23:01:47', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `horarios`
 --
 
@@ -1245,7 +1268,7 @@ CREATE TABLE IF NOT EXISTS `horarios` (
   `id` int NOT NULL AUTO_INCREMENT,
   `hora` time NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `horarios`
@@ -1283,7 +1306,8 @@ INSERT INTO `horarios` (`id`, `hora`) VALUES
 (29, '23:12:00'),
 (30, '16:12:00'),
 (31, '12:12:00'),
-(32, '14:17:00');
+(32, '14:17:00'),
+(33, '12:31:00');
 
 -- --------------------------------------------------------
 
@@ -1304,7 +1328,7 @@ CREATE TABLE IF NOT EXISTS `horarios_sessao` (
   KEY `fk_horario_cinema` (`id_cinema`),
   KEY `fk_horario_tipo_sessao` (`id_tipo_sessao`),
   KEY `fk_horario_horario` (`id_horario`)
-) ENGINE=InnoDB AUTO_INCREMENT=105845 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=107050 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `horarios_sessao`
@@ -7864,300 +7888,6 @@ INSERT INTO `horarios_sessao` (`id`, `id_filme`, `id_cinema`, `id_tipo_sessao`, 
 (104051, 27, 15, 8, 17, 233),
 (104052, 27, 15, 8, 12, 233),
 (104053, 27, 15, 8, 32, 233),
-(104685, 67, 1, 1, 24, 7),
-(104686, 67, 1, 1, 29, 7),
-(104687, 67, 1, 1, 26, 7),
-(104688, 67, 1, 2, 9, 121),
-(104689, 67, 1, 2, 31, 121),
-(104690, 67, 1, 2, 26, 121),
-(104691, 67, 1, 4, 15, 8),
-(104692, 67, 1, 4, 7, 8),
-(104693, 67, 1, 4, 26, 8),
-(104694, 67, 1, 5, 26, 121),
-(104695, 67, 1, 5, 28, 121),
-(104696, 67, 1, 5, 30, 121),
-(104697, 67, 1, 6, 6, 121),
-(104698, 67, 1, 6, 23, 121),
-(104699, 67, 1, 6, 5, 121),
-(104700, 67, 1, 7, 24, 121),
-(104701, 67, 1, 7, 1, 121),
-(104702, 67, 1, 7, 12, 121),
-(104703, 67, 1, 8, 32, 121),
-(104704, 67, 1, 8, 14, 121),
-(104705, 67, 1, 8, 13, 121),
-(104706, 67, 2, 1, 8, 15),
-(104707, 67, 2, 1, 14, 15),
-(104708, 67, 2, 1, 19, 15),
-(104709, 67, 2, 2, 14, 129),
-(104710, 67, 2, 2, 32, 129),
-(104711, 67, 2, 2, 1, 129),
-(104712, 67, 2, 4, 22, 16),
-(104713, 67, 2, 4, 25, 16),
-(104714, 67, 2, 4, 31, 16),
-(104715, 67, 2, 5, 26, 129),
-(104716, 67, 2, 5, 12, 129),
-(104717, 67, 2, 5, 24, 129),
-(104718, 67, 2, 6, 1, 129),
-(104719, 67, 2, 6, 25, 129),
-(104720, 67, 2, 6, 3, 129),
-(104721, 67, 2, 7, 6, 129),
-(104722, 67, 2, 7, 30, 129),
-(104723, 67, 2, 7, 16, 129),
-(104724, 67, 2, 8, 24, 129),
-(104725, 67, 2, 8, 7, 129),
-(104726, 67, 2, 8, 26, 129),
-(104727, 67, 3, 1, 32, 23),
-(104728, 67, 3, 1, 24, 23),
-(104729, 67, 3, 1, 26, 23),
-(104730, 67, 3, 2, 11, 137),
-(104731, 67, 3, 2, 4, 137),
-(104732, 67, 3, 2, 22, 137),
-(104733, 67, 3, 4, 10, 24),
-(104734, 67, 3, 4, 12, 24),
-(104735, 67, 3, 4, 24, 24),
-(104736, 67, 3, 5, 24, 137),
-(104737, 67, 3, 5, 26, 137),
-(104738, 67, 3, 5, 27, 137),
-(104739, 67, 3, 6, 15, 137),
-(104740, 67, 3, 6, 13, 137),
-(104741, 67, 3, 6, 29, 137),
-(104742, 67, 3, 7, 6, 137),
-(104743, 67, 3, 7, 21, 137),
-(104744, 67, 3, 7, 10, 137),
-(104745, 67, 3, 8, 10, 137),
-(104746, 67, 3, 8, 11, 137),
-(104747, 67, 3, 8, 31, 137),
-(104748, 67, 4, 1, 26, 31),
-(104749, 67, 4, 1, 25, 31),
-(104750, 67, 4, 1, 20, 31),
-(104751, 67, 4, 2, 14, 145),
-(104752, 67, 4, 2, 2, 145),
-(104753, 67, 4, 2, 8, 145),
-(104754, 67, 4, 4, 14, 32),
-(104755, 67, 4, 4, 3, 32),
-(104756, 67, 4, 4, 22, 32),
-(104757, 67, 4, 5, 30, 145),
-(104758, 67, 4, 5, 28, 145),
-(104759, 67, 4, 5, 11, 145),
-(104760, 67, 4, 6, 12, 145),
-(104761, 67, 4, 6, 13, 145),
-(104762, 67, 4, 6, 24, 145),
-(104763, 67, 4, 7, 13, 145),
-(104764, 67, 4, 7, 20, 145),
-(104765, 67, 4, 7, 4, 145),
-(104766, 67, 4, 8, 8, 145),
-(104767, 67, 4, 8, 23, 145),
-(104768, 67, 4, 8, 29, 145),
-(104769, 67, 5, 1, 13, 39),
-(104770, 67, 5, 1, 26, 39),
-(104771, 67, 5, 1, 29, 39),
-(104772, 67, 5, 2, 29, 153),
-(104773, 67, 5, 2, 31, 153),
-(104774, 67, 5, 2, 18, 153),
-(104775, 67, 5, 4, 1, 40),
-(104776, 67, 5, 4, 7, 40),
-(104777, 67, 5, 4, 14, 40),
-(104778, 67, 5, 5, 31, 153),
-(104779, 67, 5, 5, 32, 153),
-(104780, 67, 5, 5, 29, 153),
-(104781, 67, 5, 6, 7, 153),
-(104782, 67, 5, 6, 28, 153),
-(104783, 67, 5, 6, 14, 153),
-(104784, 67, 5, 7, 22, 153),
-(104785, 67, 5, 7, 19, 153),
-(104786, 67, 5, 7, 20, 153),
-(104787, 67, 5, 8, 32, 153),
-(104788, 67, 5, 8, 30, 153),
-(104789, 67, 5, 8, 5, 153),
-(104790, 67, 6, 1, 17, 47),
-(104791, 67, 6, 1, 1, 47),
-(104792, 67, 6, 1, 11, 47),
-(104793, 67, 6, 2, 32, 161),
-(104794, 67, 6, 2, 23, 161),
-(104795, 67, 6, 2, 6, 161),
-(104796, 67, 6, 4, 24, 48),
-(104797, 67, 6, 4, 5, 48),
-(104798, 67, 6, 4, 28, 48),
-(104799, 67, 6, 5, 3, 161),
-(104800, 67, 6, 5, 18, 161),
-(104801, 67, 6, 5, 20, 161),
-(104802, 67, 6, 6, 32, 161),
-(104803, 67, 6, 6, 31, 161),
-(104804, 67, 6, 6, 4, 161),
-(104805, 67, 6, 7, 15, 161),
-(104806, 67, 6, 7, 20, 161),
-(104807, 67, 6, 7, 1, 161),
-(104808, 67, 6, 8, 3, 161),
-(104809, 67, 6, 8, 14, 161),
-(104810, 67, 6, 8, 17, 161),
-(104811, 67, 7, 1, 25, 55),
-(104812, 67, 7, 1, 32, 55),
-(104813, 67, 7, 1, 14, 55),
-(104814, 67, 7, 2, 3, 169),
-(104815, 67, 7, 2, 18, 169),
-(104816, 67, 7, 2, 28, 169),
-(104817, 67, 7, 4, 1, 56),
-(104818, 67, 7, 4, 9, 56),
-(104819, 67, 7, 4, 29, 56),
-(104820, 67, 7, 5, 20, 169),
-(104821, 67, 7, 5, 32, 169),
-(104822, 67, 7, 5, 12, 169),
-(104823, 67, 7, 6, 12, 169),
-(104824, 67, 7, 6, 6, 169),
-(104825, 67, 7, 6, 28, 169),
-(104826, 67, 7, 7, 27, 169),
-(104827, 67, 7, 7, 21, 169),
-(104828, 67, 7, 7, 7, 169),
-(104829, 67, 7, 8, 8, 169),
-(104830, 67, 7, 8, 19, 169),
-(104831, 67, 7, 8, 25, 169),
-(104853, 67, 9, 1, 3, 71),
-(104854, 67, 9, 1, 26, 71),
-(104855, 67, 9, 1, 32, 71),
-(104856, 67, 9, 2, 12, 185),
-(104857, 67, 9, 2, 24, 185),
-(104858, 67, 9, 2, 10, 185),
-(104859, 67, 9, 4, 29, 72),
-(104860, 67, 9, 4, 16, 72),
-(104861, 67, 9, 4, 19, 72),
-(104862, 67, 9, 5, 27, 185),
-(104863, 67, 9, 5, 32, 185),
-(104864, 67, 9, 5, 11, 185),
-(104865, 67, 9, 6, 8, 185),
-(104866, 67, 9, 6, 19, 185),
-(104867, 67, 9, 6, 3, 185),
-(104868, 67, 9, 7, 19, 185),
-(104869, 67, 9, 7, 16, 185),
-(104870, 67, 9, 7, 25, 185),
-(104871, 67, 9, 8, 31, 185),
-(104872, 67, 9, 8, 7, 185),
-(104873, 67, 9, 8, 29, 185),
-(104874, 67, 10, 1, 17, 79),
-(104875, 67, 10, 1, 25, 79),
-(104876, 67, 10, 1, 14, 79),
-(104877, 67, 10, 2, 4, 193),
-(104878, 67, 10, 2, 26, 193),
-(104879, 67, 10, 2, 8, 193),
-(104880, 67, 10, 4, 23, 80),
-(104881, 67, 10, 4, 9, 80),
-(104882, 67, 10, 4, 10, 80),
-(104883, 67, 10, 5, 21, 193),
-(104884, 67, 10, 5, 25, 193),
-(104885, 67, 10, 5, 22, 193),
-(104886, 67, 10, 6, 31, 193),
-(104887, 67, 10, 6, 26, 193),
-(104888, 67, 10, 6, 29, 193),
-(104889, 67, 10, 7, 8, 193),
-(104890, 67, 10, 7, 27, 193),
-(104891, 67, 10, 7, 10, 193),
-(104892, 67, 10, 8, 27, 193),
-(104893, 67, 10, 8, 8, 193),
-(104894, 67, 10, 8, 25, 193),
-(104895, 67, 11, 1, 32, 87),
-(104896, 67, 11, 1, 15, 87),
-(104897, 67, 11, 1, 14, 87),
-(104898, 67, 11, 2, 4, 201),
-(104899, 67, 11, 2, 28, 201),
-(104900, 67, 11, 2, 17, 201),
-(104901, 67, 11, 4, 20, 88),
-(104902, 67, 11, 4, 17, 88),
-(104903, 67, 11, 4, 9, 88),
-(104904, 67, 11, 5, 29, 201),
-(104905, 67, 11, 5, 24, 201),
-(104906, 67, 11, 5, 11, 201),
-(104907, 67, 11, 6, 29, 201),
-(104908, 67, 11, 6, 28, 201),
-(104909, 67, 11, 6, 11, 201),
-(104910, 67, 11, 7, 15, 201),
-(104911, 67, 11, 7, 5, 201),
-(104912, 67, 11, 7, 9, 201),
-(104913, 67, 11, 8, 5, 201),
-(104914, 67, 11, 8, 16, 201),
-(104915, 67, 11, 8, 31, 201),
-(104916, 67, 12, 1, 29, 95),
-(104917, 67, 12, 1, 18, 95),
-(104918, 67, 12, 1, 30, 95),
-(104919, 67, 12, 2, 21, 209),
-(104920, 67, 12, 2, 19, 209),
-(104921, 67, 12, 2, 29, 209),
-(104922, 67, 12, 4, 29, 96),
-(104923, 67, 12, 4, 23, 96),
-(104924, 67, 12, 4, 20, 96),
-(104925, 67, 12, 5, 2, 209),
-(104926, 67, 12, 5, 24, 209),
-(104927, 67, 12, 5, 31, 209),
-(104928, 67, 12, 6, 12, 209),
-(104929, 67, 12, 6, 17, 209),
-(104930, 67, 12, 6, 30, 209),
-(104931, 67, 12, 7, 17, 209),
-(104932, 67, 12, 7, 1, 209),
-(104933, 67, 12, 7, 18, 209),
-(104934, 67, 12, 8, 13, 209),
-(104935, 67, 12, 8, 5, 209),
-(104936, 67, 12, 8, 17, 209),
-(104937, 67, 13, 1, 20, 103),
-(104938, 67, 13, 1, 32, 103),
-(104939, 67, 13, 1, 24, 103),
-(104940, 67, 13, 2, 30, 217),
-(104941, 67, 13, 2, 14, 217),
-(104942, 67, 13, 2, 29, 217),
-(104943, 67, 13, 4, 18, 104),
-(104944, 67, 13, 4, 12, 104),
-(104945, 67, 13, 4, 32, 104),
-(104946, 67, 13, 5, 15, 217),
-(104947, 67, 13, 5, 20, 217),
-(104948, 67, 13, 5, 5, 217),
-(104949, 67, 13, 6, 15, 217),
-(104950, 67, 13, 6, 24, 217),
-(104951, 67, 13, 6, 26, 217),
-(104952, 67, 13, 7, 4, 217),
-(104953, 67, 13, 7, 31, 217),
-(104954, 67, 13, 7, 19, 217),
-(104955, 67, 13, 8, 17, 217),
-(104956, 67, 13, 8, 3, 217),
-(104957, 67, 13, 8, 32, 217),
-(104958, 67, 14, 1, 7, 111),
-(104959, 67, 14, 1, 19, 111),
-(104960, 67, 14, 1, 30, 111),
-(104961, 67, 14, 2, 3, 225),
-(104962, 67, 14, 2, 15, 225),
-(104963, 67, 14, 2, 6, 225),
-(104964, 67, 14, 4, 28, 112),
-(104965, 67, 14, 4, 31, 112),
-(104966, 67, 14, 4, 10, 112),
-(104967, 67, 14, 5, 8, 225),
-(104968, 67, 14, 5, 23, 225),
-(104969, 67, 14, 5, 21, 225),
-(104970, 67, 14, 6, 10, 225),
-(104971, 67, 14, 6, 25, 225),
-(104972, 67, 14, 6, 26, 225),
-(104973, 67, 14, 7, 30, 225),
-(104974, 67, 14, 7, 21, 225),
-(104975, 67, 14, 7, 15, 225),
-(104976, 67, 14, 8, 28, 225),
-(104977, 67, 14, 8, 21, 225),
-(104978, 67, 14, 8, 6, 225),
-(104979, 67, 15, 1, 17, 119),
-(104980, 67, 15, 1, 31, 119),
-(104981, 67, 15, 1, 15, 119),
-(104982, 67, 15, 2, 21, 233),
-(104983, 67, 15, 2, 19, 233),
-(104984, 67, 15, 2, 26, 233),
-(104985, 67, 15, 4, 7, 120),
-(104986, 67, 15, 4, 6, 120),
-(104987, 67, 15, 4, 31, 120),
-(104988, 67, 15, 5, 23, 233),
-(104989, 67, 15, 5, 5, 233),
-(104990, 67, 15, 5, 9, 233),
-(104991, 67, 15, 6, 1, 233),
-(104992, 67, 15, 6, 9, 233),
-(104993, 67, 15, 6, 28, 233),
-(104994, 67, 15, 7, 19, 233),
-(104995, 67, 15, 7, 11, 233),
-(104996, 67, 15, 7, 14, 233),
-(104997, 67, 15, 8, 31, 233),
-(104998, 67, 15, 8, 5, 233),
-(104999, 67, 15, 8, 26, 233),
 (105000, 70, 1, 1, 14, 7),
 (105001, 70, 1, 1, 20, 7),
 (105002, 70, 1, 1, 17, 7),
@@ -8959,7 +8689,276 @@ INSERT INTO `horarios_sessao` (`id`, `id_filme`, `id_cinema`, `id_tipo_sessao`, 
 (105841, 68, 15, 7, 10, 233),
 (105842, 68, 15, 8, 28, 233),
 (105843, 68, 15, 8, 10, 233),
-(105844, 68, 15, 8, 22, 233);
+(105844, 68, 15, 8, 22, 233),
+(105845, 70, 1, 2, 27, 121),
+(105846, 70, 1, 2, 5, 121),
+(105847, 70, 1, 2, 28, 121),
+(105848, 70, 1, 6, 30, 121),
+(105849, 70, 1, 6, 7, 121),
+(105850, 70, 1, 6, 2, 121),
+(105851, 70, 1, 7, 23, 121),
+(105852, 70, 1, 7, 2, 121),
+(105853, 70, 1, 7, 30, 121),
+(105854, 70, 1, 8, 1, 121),
+(105855, 70, 1, 8, 26, 121),
+(105856, 70, 1, 8, 6, 121),
+(105857, 70, 2, 2, 8, 129),
+(105858, 70, 2, 2, 10, 129),
+(105859, 70, 2, 2, 20, 129),
+(105860, 70, 2, 4, 10, 16),
+(105861, 70, 2, 4, 1, 16),
+(105862, 70, 2, 4, 29, 16),
+(105863, 70, 2, 6, 15, 129),
+(105864, 70, 2, 6, 16, 129),
+(105865, 70, 2, 6, 17, 129),
+(105866, 70, 2, 7, 27, 129),
+(105867, 70, 2, 7, 5, 129),
+(105868, 70, 2, 7, 2, 129),
+(105869, 70, 2, 8, 4, 129),
+(105870, 70, 2, 8, 2, 129),
+(105871, 70, 2, 8, 3, 129),
+(105872, 70, 3, 2, 13, 137),
+(105873, 70, 3, 2, 16, 137),
+(105874, 70, 3, 2, 15, 137),
+(105875, 70, 3, 4, 32, 24),
+(105876, 70, 3, 4, 18, 24),
+(105877, 70, 3, 4, 14, 24),
+(105878, 70, 3, 6, 24, 137),
+(105879, 70, 3, 6, 5, 137),
+(105880, 70, 3, 6, 2, 137),
+(105881, 70, 3, 7, 5, 137),
+(105882, 70, 3, 7, 28, 137),
+(105883, 70, 3, 7, 13, 137),
+(105884, 70, 3, 8, 8, 137),
+(105885, 70, 3, 8, 17, 137),
+(105886, 70, 3, 8, 32, 137),
+(105887, 70, 4, 2, 9, 145),
+(105888, 70, 4, 2, 7, 145),
+(105889, 70, 4, 2, 11, 145),
+(105890, 70, 4, 4, 31, 32),
+(105891, 70, 4, 4, 25, 32),
+(105892, 70, 4, 4, 10, 32),
+(105893, 70, 4, 6, 8, 145),
+(105894, 70, 4, 6, 4, 145),
+(105895, 70, 4, 6, 7, 145),
+(105896, 70, 4, 7, 6, 145),
+(105897, 70, 4, 7, 26, 145),
+(105898, 70, 4, 7, 29, 145),
+(105899, 70, 4, 8, 24, 145),
+(105900, 70, 4, 8, 15, 145),
+(105901, 70, 4, 8, 21, 145),
+(105902, 70, 5, 2, 30, 153),
+(105903, 70, 5, 2, 8, 153),
+(105904, 70, 5, 2, 17, 153),
+(105905, 70, 5, 4, 25, 40),
+(105906, 70, 5, 4, 6, 40),
+(105907, 70, 5, 4, 2, 40),
+(105908, 70, 5, 6, 20, 153),
+(105909, 70, 5, 6, 18, 153),
+(105910, 70, 5, 6, 17, 153),
+(105911, 70, 5, 7, 24, 153),
+(105912, 70, 5, 7, 15, 153),
+(105913, 70, 5, 7, 13, 153),
+(105914, 70, 5, 8, 25, 153),
+(105915, 70, 5, 8, 10, 153),
+(105916, 70, 5, 8, 4, 153),
+(105917, 70, 6, 1, 6, 47),
+(105918, 70, 6, 1, 13, 47),
+(105919, 70, 6, 1, 27, 47),
+(105920, 70, 6, 2, 26, 161),
+(105921, 70, 6, 2, 28, 161),
+(105922, 70, 6, 2, 31, 161),
+(105923, 70, 6, 4, 8, 48),
+(105924, 70, 6, 4, 29, 48),
+(105925, 70, 6, 4, 23, 48),
+(105926, 70, 6, 5, 8, 161),
+(105927, 70, 6, 5, 11, 161),
+(105928, 70, 6, 6, 28, 161),
+(105929, 70, 6, 6, 22, 161),
+(105930, 70, 6, 6, 17, 161),
+(105931, 70, 6, 7, 19, 161),
+(105932, 70, 6, 7, 16, 161),
+(105933, 70, 6, 7, 23, 161),
+(105934, 70, 6, 8, 18, 161),
+(105935, 70, 6, 8, 24, 161),
+(105936, 70, 6, 8, 1, 161),
+(105937, 70, 7, 2, 2, 169),
+(105938, 70, 7, 2, 9, 169),
+(105939, 70, 7, 2, 14, 169),
+(105940, 70, 7, 4, 30, 56),
+(105941, 70, 7, 4, 16, 56),
+(105942, 70, 7, 4, 7, 56),
+(105943, 70, 7, 6, 22, 169),
+(105944, 70, 7, 6, 20, 169),
+(105945, 70, 7, 6, 16, 169),
+(105946, 70, 7, 7, 10, 169),
+(105947, 70, 7, 7, 30, 169),
+(105948, 70, 7, 7, 26, 169),
+(105949, 70, 7, 8, 13, 169),
+(105950, 70, 7, 8, 16, 169),
+(105951, 70, 7, 8, 24, 169),
+(105952, 70, 8, 2, 12, 177),
+(105953, 70, 8, 2, 28, 177),
+(105954, 70, 8, 2, 20, 177),
+(105955, 70, 8, 4, 25, 64),
+(105956, 70, 8, 4, 24, 64),
+(105957, 70, 8, 4, 16, 64),
+(105958, 70, 8, 6, 10, 177),
+(105959, 70, 8, 6, 6, 177),
+(105960, 70, 8, 6, 19, 177),
+(105961, 70, 8, 7, 15, 177),
+(105962, 70, 8, 7, 5, 177),
+(105963, 70, 8, 7, 31, 177),
+(105964, 70, 8, 8, 31, 177),
+(105965, 70, 8, 8, 8, 177),
+(105966, 70, 8, 8, 25, 177),
+(105967, 70, 9, 1, 25, 71),
+(105968, 70, 9, 1, 7, 71),
+(105969, 70, 9, 1, 29, 71),
+(105970, 70, 9, 2, 13, 185),
+(105971, 70, 9, 2, 6, 185),
+(105972, 70, 9, 2, 26, 185),
+(105973, 70, 9, 4, 1, 72),
+(105974, 70, 9, 4, 10, 72),
+(105975, 70, 9, 4, 30, 72),
+(105976, 70, 9, 5, 2, 185),
+(105977, 70, 9, 5, 28, 185),
+(105978, 70, 9, 5, 24, 185),
+(105979, 70, 9, 6, 31, 185),
+(105980, 70, 9, 6, 2, 185),
+(105981, 70, 9, 6, 30, 185),
+(105982, 70, 9, 7, 22, 185),
+(105983, 70, 9, 7, 2, 185),
+(105984, 70, 9, 7, 20, 185),
+(105985, 70, 9, 8, 13, 185),
+(105986, 70, 9, 8, 19, 185),
+(105987, 70, 9, 8, 4, 185),
+(105988, 70, 10, 1, 2, 79),
+(105989, 70, 10, 1, 26, 79),
+(105990, 70, 10, 1, 19, 79),
+(105991, 70, 10, 2, 32, 193),
+(105992, 70, 10, 2, 7, 193),
+(105993, 70, 10, 2, 23, 193),
+(105994, 70, 10, 4, 2, 80),
+(105995, 70, 10, 4, 27, 80),
+(105996, 70, 10, 4, 32, 80),
+(105997, 70, 10, 5, 27, 193),
+(105998, 70, 10, 5, 23, 193),
+(105999, 70, 10, 5, 12, 193),
+(106000, 70, 10, 6, 22, 193),
+(106001, 70, 10, 6, 10, 193),
+(106002, 70, 10, 6, 16, 193),
+(106003, 70, 10, 7, 5, 193),
+(106004, 70, 10, 7, 7, 193),
+(106005, 70, 10, 7, 20, 193),
+(106006, 70, 10, 8, 24, 193),
+(106007, 70, 10, 8, 17, 193),
+(106008, 70, 10, 8, 11, 193),
+(106009, 70, 11, 1, 20, 87),
+(106010, 70, 11, 1, 21, 87),
+(106011, 70, 11, 1, 23, 87),
+(106012, 70, 11, 2, 9, 201),
+(106013, 70, 11, 2, 5, 201),
+(106014, 70, 11, 2, 16, 201),
+(106015, 70, 11, 4, 13, 88),
+(106016, 70, 11, 4, 21, 88),
+(106017, 70, 11, 4, 25, 88),
+(106018, 70, 11, 5, 32, 201),
+(106019, 70, 11, 5, 12, 201),
+(106020, 70, 11, 5, 18, 201),
+(106021, 70, 11, 6, 23, 201),
+(106022, 70, 11, 6, 25, 201),
+(106023, 70, 11, 6, 3, 201),
+(106024, 70, 11, 7, 14, 201),
+(106025, 70, 11, 7, 11, 201),
+(106026, 70, 11, 7, 1, 201),
+(106027, 70, 11, 8, 18, 201),
+(106028, 70, 11, 8, 20, 201),
+(106029, 70, 11, 8, 8, 201),
+(106030, 70, 12, 1, 26, 95),
+(106031, 70, 12, 1, 6, 95),
+(106032, 70, 12, 1, 20, 95),
+(106033, 70, 12, 2, 10, 209),
+(106034, 70, 12, 2, 18, 209),
+(106035, 70, 12, 2, 7, 209),
+(106036, 70, 12, 4, 30, 96),
+(106037, 70, 12, 4, 10, 96),
+(106038, 70, 12, 4, 8, 96),
+(106039, 70, 12, 5, 6, 209),
+(106040, 70, 12, 5, 12, 209),
+(106041, 70, 12, 5, 14, 209),
+(106042, 70, 12, 6, 23, 209),
+(106043, 70, 12, 6, 20, 209),
+(106044, 70, 12, 6, 32, 209),
+(106045, 70, 12, 7, 22, 209),
+(106046, 70, 12, 7, 24, 209),
+(106047, 70, 12, 7, 14, 209),
+(106048, 70, 12, 8, 1, 209),
+(106049, 70, 12, 8, 28, 209),
+(106050, 70, 12, 8, 4, 209),
+(106051, 70, 13, 1, 19, 103),
+(106052, 70, 13, 1, 27, 103),
+(106053, 70, 13, 1, 3, 103),
+(106054, 70, 13, 2, 6, 217),
+(106055, 70, 13, 2, 2, 217),
+(106056, 70, 13, 2, 7, 217),
+(106057, 70, 13, 4, 26, 104),
+(106058, 70, 13, 4, 27, 104),
+(106059, 70, 13, 4, 22, 104),
+(106060, 70, 13, 5, 24, 217),
+(106061, 70, 13, 5, 21, 217),
+(106062, 70, 13, 5, 9, 217),
+(106063, 70, 13, 6, 23, 217),
+(106064, 70, 13, 6, 14, 217),
+(106065, 70, 13, 6, 27, 217),
+(106066, 70, 13, 7, 28, 217),
+(106067, 70, 13, 7, 21, 217),
+(106068, 70, 13, 7, 9, 217),
+(106069, 70, 13, 8, 29, 217),
+(106070, 70, 13, 8, 22, 217),
+(106071, 70, 13, 8, 9, 217),
+(106072, 70, 14, 1, 3, 111),
+(106073, 70, 14, 1, 14, 111),
+(106074, 70, 14, 1, 11, 111),
+(106075, 70, 14, 2, 26, 225),
+(106076, 70, 14, 2, 8, 225),
+(106077, 70, 14, 2, 27, 225),
+(106078, 70, 14, 4, 18, 112),
+(106079, 70, 14, 4, 15, 112),
+(106080, 70, 14, 4, 32, 112),
+(106081, 70, 14, 5, 25, 225),
+(106082, 70, 14, 5, 11, 225),
+(106083, 70, 14, 5, 4, 225),
+(106084, 70, 14, 6, 12, 225),
+(106085, 70, 14, 6, 15, 225),
+(106086, 70, 14, 6, 14, 225),
+(106087, 70, 14, 7, 31, 225),
+(106088, 70, 14, 7, 10, 225),
+(106089, 70, 14, 7, 12, 225),
+(106090, 70, 14, 8, 20, 225),
+(106091, 70, 14, 8, 25, 225),
+(106092, 70, 14, 8, 16, 225),
+(106093, 70, 15, 1, 14, 119),
+(106094, 70, 15, 1, 18, 119),
+(106095, 70, 15, 1, 13, 119),
+(106096, 70, 15, 2, 24, 233),
+(106097, 70, 15, 2, 6, 233),
+(106098, 70, 15, 2, 9, 233),
+(106099, 70, 15, 4, 22, 120),
+(106100, 70, 15, 4, 15, 120),
+(106101, 70, 15, 4, 16, 120),
+(106102, 70, 15, 5, 15, 233),
+(106103, 70, 15, 5, 6, 233),
+(106104, 70, 15, 5, 18, 233),
+(106105, 70, 15, 6, 26, 233),
+(106106, 70, 15, 6, 30, 233),
+(106107, 70, 15, 6, 20, 233),
+(106108, 70, 15, 7, 27, 233),
+(106109, 70, 15, 7, 26, 233),
+(106110, 70, 15, 7, 15, 233),
+(106111, 70, 15, 8, 23, 233),
+(106112, 70, 15, 8, 29, 233),
+(106113, 70, 15, 8, 9, 233);
 
 -- --------------------------------------------------------
 
@@ -12050,8 +12049,7 @@ INSERT INTO `menus` (`id`, `nome`, `descricao`, `preco_total`, `imagem_url`) VAL
 (2, 'Menu Nachos', 'Nachos mais Coca Cola', 5.50, 'imgs/menus/menu_b2cc8b63.png'),
 (3, 'Menu Kids', 'Pipocas mais sumo', 5.00, 'imgs/menus/menu_a5c7990c.png'),
 (4, 'Menu chocolate', 'Chocolate e bebida ', 6.50, 'imgs/Snacks/menu5.png'),
-(5, 'Menu Combo Duplo', 'dois menus combo', 14.00, 'imgs/menus/menu_a0d5bee1.png'),
-(8, 'Menu Vintage', 'Recorde os velhos tempos com o Menu Vinytage', 7.00, 'imgs/menus/menu_4f4eacd4.png');
+(5, 'Menu Combo Duplo', 'dois menus combo', 14.00, 'imgs/menus/menu_a0d5bee1.png');
 
 -- --------------------------------------------------------
 
@@ -12067,7 +12065,7 @@ CREATE TABLE IF NOT EXISTS `menu_produtos` (
   PRIMARY KEY (`id`),
   KEY `fk_menu_produtos_menu` (`menu_id`),
   KEY `fk_menu_produtos_produto` (`produto_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `menu_produtos`
@@ -12083,12 +12081,6 @@ INSERT INTO `menu_produtos` (`id`, `menu_id`, `produto_id`) VALUES
 (60, 2, 15),
 (61, 2, 13),
 (62, 2, 16),
-(63, 3, 18),
-(64, 3, 19),
-(65, 3, 20),
-(66, 3, 21),
-(67, 3, 1),
-(68, 3, 17),
 (89, 1, 1),
 (90, 1, 14),
 (91, 1, 16),
@@ -12102,7 +12094,13 @@ INSERT INTO `menu_produtos` (`id`, `menu_id`, `produto_id`) VALUES
 (123, 4, 13),
 (124, 4, 16),
 (125, 4, 14),
-(126, 8, 11);
+(132, 3, 18),
+(133, 3, 19),
+(134, 3, 20),
+(135, 3, 21),
+(136, 3, 1),
+(137, 3, 17),
+(138, 3, 24);
 
 -- --------------------------------------------------------
 
@@ -12118,14 +12116,14 @@ CREATE TABLE IF NOT EXISTS `newsletter_subscricoes` (
   `ativo` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `newsletter_subscricoes`
 --
 
 INSERT INTO `newsletter_subscricoes` (`id`, `email`, `data_subscricao`, `ativo`) VALUES
-(57, 'afonso2008david@gmail.com', '2026-03-21 11:13:43', 1);
+(63, 'afonso2008david@gmail.com', '2026-03-24 14:58:42', 1);
 
 -- --------------------------------------------------------
 
@@ -12145,7 +12143,7 @@ CREATE TABLE IF NOT EXISTS `pontos_gastos` (
   PRIMARY KEY (`id`),
   KEY `idx_usuario_gastos` (`usuario_id`),
   KEY `idx_codigo_gastos` (`codigo_desconto`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `pontos_gastos`
@@ -12175,7 +12173,10 @@ INSERT INTO `pontos_gastos` (`id`, `usuario_id`, `premio_id`, `premio_nome`, `po
 (21, 1, 8, 'Pretzel', 100, 'XNWPQ4LB', '2026-02-21 20:34:26'),
 (22, 1, 1, 'Coca Cola pequena', 200, 'PXIRTV34', '2026-03-14 17:42:16'),
 (23, 1, 2, 'Pipocas doces/Salgadas', 300, 'U73B35TL', '2026-03-14 17:42:36'),
-(24, 1, 1, 'Coca Cola pequena', 200, '38ITKPID', '2026-03-14 17:44:25');
+(24, 1, 1, 'Coca Cola pequena', 200, '38ITKPID', '2026-03-14 17:44:25'),
+(25, 1, 3, 'Bilhete CineVibe', 1000, 'SR0I43E9', '2026-03-25 18:28:02'),
+(26, 1, 3, 'Bilhete CineVibe', 1000, 'B4R46TOK', '2026-03-25 18:32:45'),
+(27, 1, 8, 'Pretzel', 100, 'UI51EOFA', '2026-03-27 22:49:05');
 
 -- --------------------------------------------------------
 
@@ -12209,36 +12210,6 @@ INSERT INTO `premios` (`id`, `nome`, `img_url`, `pontos`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `recompensas`
---
-
-DROP TABLE IF EXISTS `recompensas`;
-CREATE TABLE IF NOT EXISTS `recompensas` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(100) NOT NULL,
-  `descricao` text,
-  `custo_pontos` int NOT NULL,
-  `imagem` varchar(255) DEFAULT NULL,
-  `ativo` tinyint(1) DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `recompensas`
---
-
-INSERT INTO `recompensas` (`id`, `titulo`, `descricao`, `custo_pontos`, `imagem`, `ativo`, `created_at`) VALUES
-(1, 'Pipocas Médias', 'Uma porção de pipocas médias grátis', 100, 'imgs/Snacks/pipocas.png', 1, '2025-11-19 17:48:53'),
-(2, 'Bebida Grande', 'Uma bebida grande à tua escolha', 200, 'imgs/Snacks/Coca.png', 1, '2025-11-19 17:48:53'),
-(3, 'Bilhete Grátis', 'Um bilhete para qualquer sessão 2D', 300, 'imgs/icons/encomenda.png', 1, '2025-11-19 17:48:53'),
-(4, 'Combo Duplo', '2 bilhetes + 2 pipocas + 2 bebidas', 500, 'imgs/Snacks/pipocas.png', 1, '2025-11-19 17:48:53'),
-(5, 'Upgrade VIP', 'Upgrade para sala VIP em qualquer sessão', 800, 'imgs/icons/wheel-removebg-preview.png', 1, '2025-11-19 17:48:53'),
-(6, 'Sessão Privada', 'Uma sessão privada para até 10 pessoas', 1000, 'imgs/icons/sessao.png', 1, '2025-11-19 17:48:53');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `reservas`
 --
 
@@ -12266,7 +12237,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   KEY `tipo_sessao_id` (`id_tipo_sessao`),
   KEY `idx_data_sessao` (`data_sessao`),
   KEY `fk_reserva_horario_sessao` (`id_horario_sessao`)
-) ENGINE=InnoDB AUTO_INCREMENT=853 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=868 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas`
@@ -12657,7 +12628,22 @@ INSERT INTO `reservas` (`id`, `id_horario_sessao`, `data_sessao`, `id_filme`, `i
 (849, 227, '2026-03-21', 2, 7, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-21 11:24:18', 'confirmada', 23.70, 'applepay', 'O15,O16,O17'),
 (850, 227, '2026-03-21', 2, 7, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-21 11:37:30', 'confirmada', 7.90, 'applepay', 'M3'),
 (851, 227, '2026-03-21', 2, 7, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-21 11:40:39', 'confirmada', 7.90, 'applepay', 'O3'),
-(852, 227, '2026-03-21', 2, 7, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-21 11:43:29', 'confirmada', 7.90, 'applepay', 'C12');
+(852, 227, '2026-03-21', 2, 7, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-21 11:43:29', 'confirmada', 7.90, 'applepay', 'C12'),
+(853, 163, '2026-03-25', 2, 1, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-24 15:55:29', 'confirmada', 0.00, 'bilhetes_gratis', 'F8'),
+(854, 163, '2026-03-25', 2, 1, 5, NULL, 'Afonso David', 'afonso2008david@gmail.com', '963315105', '2026-03-24 16:16:29', 'confirmada', 15.90, 'applepay', 'L21'),
+(855, 329, '2026-03-24', 3, 7, 8, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-03-24 16:29:56', 'confirmada', 7.90, 'applepay', 'E10'),
+(856, 5686, '2026-03-25', 16, 7, 5, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', '', '2026-03-24 17:23:31', 'confirmada', 0.00, 'bilhetes_gratis', 'D23'),
+(857, 2757, '2026-03-25', 11, 1, 4, 13, 'Admin', 'cinevibeadmn@gmail.com', '', '2026-03-24 19:43:13', 'confirmada', 89.40, 'applepay', 'F4,F5,F6,F7,F8,F9'),
+(858, 250, '2026-03-24', 2, 8, 8, 13, 'Admin', 'cinevibeadmn@gmail.com', '', '2026-03-24 19:44:09', 'confirmada', 39.50, 'applepay', 'A3,A4,A5,A6,A7'),
+(859, 250, '2026-03-24', 2, 8, 8, 13, 'Admin', 'cinevibeadmn@gmail.com', '', '2026-03-24 19:45:12', 'confirmada', 7.90, 'applepay', 'J2'),
+(860, 155, '2026-03-25', 2, 1, 1, 13, 'Admin', 'cinevibeadmn@gmail.com', '', '2026-03-24 19:50:27', 'confirmada', 12.90, 'applepay', 'M11'),
+(861, 105298, '2026-03-25', 69, 1, 2, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-25 15:24:26', 'confirmada', 432.53, 'applepay', 'A1,A13,A14,A2,A3,A4,A5,A6,A7,A8,B10,B11,B12,B13,B14,B15,B17,B18,B24,B25,B8,B9,C1,C10,C13,C2,C3,C4,C5,C7,C8,C9,K23,K24,K25,L1,L10,L11,L12,L13,L14,L15,L16,L17,L2,L21,L23,L24,L3,L4,L5,L6,L7,L8,L9,M10,M11,M12,M14,M21,M22,M23,M24,M25,M5,M6,M7,M8,M9,N1,N2,N3,N4'),
+(862, 105300, '2026-03-26', 69, 1, 4, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-25 17:14:33', 'confirmada', 11.18, 'applepay', 'A5'),
+(863, 35012, '2026-03-26', 33, 1, 5, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-25 18:33:42', 'confirmada', 0.00, 'bilhetes_gratis', 'E7'),
+(864, 105574, '2026-03-27', 68, 1, 2, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-26 02:47:06', 'confirmada', 12.33, 'applepay', 'A8'),
+(865, 105574, '2026-03-27', 68, 1, 2, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-26 04:03:09', 'confirmada', 5.93, 'applepay', 'K8'),
+(866, 105584, '2026-03-27', 68, 1, 8, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-27 11:59:52', 'confirmada', 5.93, 'applepay', 'C7'),
+(867, 3855, '2026-03-28', 13, 1, 2, 1, 'Afonso', 'afonso2008david@gmail.com', '', '2026-03-27 22:54:58', 'confirmada', 12.33, 'applepay', 'J15');
 
 -- --------------------------------------------------------
 
@@ -12683,7 +12669,7 @@ CREATE TABLE IF NOT EXISTS `reservas_bar` (
   KEY `menu_id` (`menu_id`),
   KEY `topping_id` (`topping_id`),
   KEY `bebida_id` (`bebida_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas_bar`
@@ -12730,7 +12716,10 @@ INSERT INTO `reservas_bar` (`id`, `id_reserva`, `produto_id`, `menu_id`, `bebida
 (39, 840, 1, 1, 13, NULL, 'Menu Combo (Pipocas Salgadas + Coca Cola)', 1, 8.00, 8.00),
 (40, 844, 1, 5, 13, NULL, 'Menu Combo Duplo (Pipocas Salgadas + Coca Cola)', 1, 14.00, 14.00),
 (41, 846, 1, 1, 14, 3, 'Menu Combo (Pipocas Salgadas + Fanta) + Toppings', 1, 9.20, 9.20),
-(42, 847, 1, 1, 14, 3, 'Menu Combo (Pipocas Salgadas + Fanta) + Toppings', 1, 9.20, 9.20);
+(42, 847, 1, 1, 14, 3, 'Menu Combo (Pipocas Salgadas + Fanta) + Toppings', 1, 9.20, 9.20),
+(43, 854, 17, 1, 13, 7, 'Menu Combo (Pipocas doces + Coca Cola) + Toppings', 1, 9.80, 9.80),
+(44, 864, 1, 1, 14, 3, 'Menu Combo (Pipocas Salgadas + Fanta) + Toppings', 1, 9.20, 9.20),
+(45, 867, 1, 1, 13, 2, 'Menu Combo (Pipocas Salgadas + Coca Cola) + Toppings', 1, 9.80, 9.80);
 
 -- --------------------------------------------------------
 
@@ -12756,7 +12745,7 @@ CREATE TABLE IF NOT EXISTS `reservas_exclusivas` (
   PRIMARY KEY (`id`),
   KEY `filme_id` (`filme_id`),
   KEY `usuario_id` (`usuario_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas_exclusivas`
@@ -12804,7 +12793,12 @@ INSERT INTO `reservas_exclusivas` (`id`, `tipo_sala`, `filme_id`, `data_sessao`,
 (40, 'exclusiva', 3, '2026-03-27', '14:00:00', 1, 500.00, 1, 'Afonso', 'afonso2008david@gmail.com', NULL, '2026-03-21 14:03:21', 'confirmada'),
 (41, 'exclusiva', 69, '2026-03-26', '14:00:00', 1, 500.00, 1, 'Afonso', 'afonso2008david@gmail.com', NULL, '2026-03-21 14:07:10', 'confirmada'),
 (42, 'exclusiva', 19, '2026-03-23', '10:00:00', 1, 500.00, NULL, 'Afonso da Silva David', 'afonso2008david@gmail.com', NULL, '2026-03-21 14:09:00', 'confirmada'),
-(43, 'exclusiva', 3, '2026-03-25', '10:00:00', 1, 500.00, 1, 'Afonso', 'afonso2008david@gmail.com', NULL, '2026-03-21 14:16:20', 'confirmada');
+(43, 'exclusiva', 3, '2026-03-25', '10:00:00', 1, 500.00, 1, 'Afonso', 'afonso2008david@gmail.com', NULL, '2026-03-21 14:16:20', 'confirmada'),
+(44, 'exclusiva', 69, '2026-03-25', '16:30:00', 2, 520.00, 14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', NULL, '2026-03-24 18:23:11', 'confirmada'),
+(45, 'exclusiva', 11, '2026-03-27', '14:00:00', 1, 200.00, NULL, 'Afonso David', 'afonso2008david@gmail.com', NULL, '2026-03-26 04:15:42', 'confirmada'),
+(46, 'exclusiva', 11, '2026-03-28', '14:00:00', 1, 200.00, 1, 'Afonso', 'afonso2008david@gmail.com', NULL, '2026-03-27 12:13:07', 'confirmada'),
+(47, 'exclusiva', 69, '2026-03-28', '14:00:00', 1, 200.00, 1, 'Afonso', 'afonso2008david@gmail.com', NULL, '2026-03-27 22:42:59', 'confirmada'),
+(48, 'exclusiva', 20, '2026-03-31', '21:30:00', 11, 400.00, 1, 'Afonso', 'afonso2008david@gmail.com', NULL, '2026-03-27 22:58:55', 'confirmada');
 
 -- --------------------------------------------------------
 
@@ -12830,7 +12824,7 @@ CREATE TABLE IF NOT EXISTS `reservas_tematicas` (
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   KEY `filme_id` (`filme_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservas_tematicas`
@@ -12848,7 +12842,8 @@ INSERT INTO `reservas_tematicas` (`id`, `usuario_id`, `nome_cliente`, `email_cli
 (9, 1, 'Afonso', 'afonso2008david@gmail.com', 'vintage', 28, '2026-03-26', '19:00:00', 1, 35.00, 'applepay', 'confirmada', '2026-03-21 14:17:12'),
 (10, 1, 'Afonso', 'afonso2008david@gmail.com', 'vintage', 28, '2026-03-22', '16:30:00', 1, 35.00, 'applepay', 'confirmada', '2026-03-21 14:26:36'),
 (11, 1, 'Afonso', 'afonso2008david@gmail.com', 'vintage', 30, '2026-03-27', '19:00:00', 1, 35.00, 'applepay', 'confirmada', '2026-03-21 14:33:53'),
-(12, 1, 'Afonso', 'afonso2008david@gmail.com', 'vintage', 1, '2026-03-26', '21:30:00', 1, 35.00, 'applepay', 'confirmada', '2026-03-21 14:36:09');
+(12, 1, 'Afonso', 'afonso2008david@gmail.com', 'vintage', 1, '2026-03-26', '21:30:00', 1, 35.00, 'applepay', 'confirmada', '2026-03-21 14:36:09'),
+(13, 1, 'Afonso', 'afonso2008david@gmail.com', 'terror', 70, '2026-03-28', '16:30:00', 1, 45.00, 'applepay', 'confirmada', '2026-03-27 12:21:56');
 
 -- --------------------------------------------------------
 
@@ -12894,6 +12889,7 @@ CREATE TABLE IF NOT EXISTS `salas` (
   `filas` int DEFAULT NULL,
   `lugares_por_fila` int DEFAULT NULL,
   `lugares_acessiveis` json DEFAULT NULL,
+  `lugares_vip` json DEFAULT NULL COMMENT 'Array JSON com códigos dos lugares VIP (ex: ["A1", "A2", "B1"])',
   PRIMARY KEY (`id`),
   KEY `fk_sala_cinema` (`id_cinema`)
 ) ENGINE=InnoDB AUTO_INCREMENT=243 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -12902,157 +12898,157 @@ CREATE TABLE IF NOT EXISTS `salas` (
 -- Dumping data for table `salas`
 --
 
-INSERT INTO `salas` (`id`, `id_cinema`, `nome_sala`, `capacidade`, `tipo_sala`, `filas`, `lugares_por_fila`, `lugares_acessiveis`) VALUES
-(7, 1, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(8, 1, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(15, 2, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(16, 2, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(23, 3, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(24, 3, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(31, 4, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(32, 4, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(39, 5, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(40, 5, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(47, 6, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(48, 6, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(55, 7, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(56, 7, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(63, 8, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(64, 8, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(71, 9, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(72, 9, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(79, 10, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(80, 10, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(87, 11, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(88, 11, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(95, 12, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(96, 12, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(103, 13, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(104, 13, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(111, 14, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(112, 14, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(119, 15, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(120, 15, 'Sala 4DX', 100, '4DX', 10, 10, '[\"E1\", \"E2\", \"E9\", \"E10\"]'),
-(121, 1, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(122, 1, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(123, 1, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(124, 1, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(125, 1, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(126, 1, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(127, 1, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(128, 1, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(129, 2, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(130, 2, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(131, 2, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(132, 2, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(133, 2, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(134, 2, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(135, 2, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(136, 2, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(137, 3, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(138, 3, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(139, 3, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(140, 3, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(141, 3, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(142, 3, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(143, 3, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(144, 3, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(145, 4, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(146, 4, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(147, 4, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(148, 4, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(149, 4, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(150, 4, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(151, 4, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(152, 4, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(153, 5, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(154, 5, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(155, 5, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(156, 5, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(157, 5, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(158, 5, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(159, 5, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(160, 5, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(161, 6, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(162, 6, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(163, 6, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(164, 6, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(165, 6, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(166, 6, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(167, 6, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(168, 6, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(169, 7, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(170, 7, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(171, 7, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(172, 7, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(173, 7, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(174, 7, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(175, 7, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(176, 7, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(177, 8, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(178, 8, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(179, 8, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(180, 8, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(181, 8, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(182, 8, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(183, 8, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(184, 8, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(185, 9, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(186, 9, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(187, 9, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(188, 9, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(189, 9, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(190, 9, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(191, 9, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(192, 9, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(193, 10, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(194, 10, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(195, 10, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(196, 10, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(197, 10, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(198, 10, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(199, 10, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(200, 10, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(201, 11, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(202, 11, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(203, 11, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(204, 11, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(205, 11, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(206, 11, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(207, 11, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(208, 11, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(209, 12, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(210, 12, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(211, 12, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(212, 12, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(213, 12, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(214, 12, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(215, 12, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(216, 12, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(217, 13, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(218, 13, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(219, 13, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(220, 13, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(221, 13, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(222, 13, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(223, 13, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(224, 13, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(225, 14, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(226, 14, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(227, 14, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(228, 14, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(229, 14, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(230, 14, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(231, 14, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(232, 14, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(233, 15, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(234, 15, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(235, 15, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(236, 15, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(237, 15, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(238, 15, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(239, 15, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]'),
-(240, 15, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\"]');
+INSERT INTO `salas` (`id`, `id_cinema`, `nome_sala`, `capacidade`, `tipo_sala`, `filas`, `lugares_por_fila`, `lugares_acessiveis`, `lugares_vip`) VALUES
+(7, 1, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(8, 1, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(15, 2, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(16, 2, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(23, 3, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(24, 3, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(31, 4, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(32, 4, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(39, 5, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(40, 5, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(47, 6, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(48, 6, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(55, 7, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(56, 7, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(63, 8, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(64, 8, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(71, 9, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(72, 9, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(79, 10, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(80, 10, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(87, 11, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(88, 11, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(95, 12, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(96, 12, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(103, 13, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(104, 13, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(111, 14, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(112, 14, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(119, 15, 'Sala IMAX', 350, 'IMAX', 14, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(120, 15, 'Sala 4DX', 100, '4DX', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', NULL),
+(121, 1, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(122, 1, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(123, 1, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(124, 1, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(125, 1, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(126, 1, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(127, 1, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(128, 1, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(129, 2, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(130, 2, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(131, 2, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(132, 2, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(133, 2, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(134, 2, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(135, 2, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(136, 2, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(137, 3, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(138, 3, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(139, 3, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(140, 3, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(141, 3, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(142, 3, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(143, 3, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(144, 3, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(145, 4, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(146, 4, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(147, 4, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(148, 4, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(149, 4, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(150, 4, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(151, 4, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(152, 4, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(153, 5, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(154, 5, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(155, 5, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(156, 5, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(157, 5, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(158, 5, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(159, 5, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(160, 5, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(161, 6, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(162, 6, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(163, 6, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(164, 6, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(165, 6, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(166, 6, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(167, 6, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(168, 6, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(169, 7, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(170, 7, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(171, 7, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(172, 7, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(173, 7, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(174, 7, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(175, 7, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(176, 7, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(177, 8, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(178, 8, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(179, 8, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(180, 8, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(181, 8, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(182, 8, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(183, 8, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(184, 8, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(185, 9, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(186, 9, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(187, 9, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(188, 9, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(189, 9, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(190, 9, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(191, 9, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(192, 9, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(193, 10, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(194, 10, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(195, 10, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(196, 10, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(197, 10, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(198, 10, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(199, 10, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(200, 10, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(201, 11, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(202, 11, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(203, 11, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(204, 11, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(205, 11, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(206, 11, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(207, 11, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(208, 11, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(209, 12, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(210, 12, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(211, 12, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(212, 12, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(213, 12, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(214, 12, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(215, 12, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(216, 12, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(217, 13, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(218, 13, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(219, 13, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(220, 13, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(221, 13, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(222, 13, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(223, 13, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(224, 13, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(225, 14, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(226, 14, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(227, 14, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(228, 14, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(229, 14, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(230, 14, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(231, 14, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(232, 14, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(233, 15, 'Sala 1', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(234, 15, 'Sala 2', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(235, 15, 'Sala 3', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(236, 15, 'Sala 4', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(237, 15, 'Sala 5', 100, 'Normal', 10, 10, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(238, 15, 'Sala 6', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(239, 15, 'Sala 7', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]'),
+(240, 15, 'Sala 8', 375, 'Normal', 15, 25, '[\"G1\", \"G2\", \"G24\", \"G25\", \"H1\", \"H2\", \"H24\", \"H25\"]', '[\"J16\", \"J17\", \"J18\", \"J19\", \"J6\", \"J7\", \"J8\", \"J9\"]');
 
 -- --------------------------------------------------------
 
@@ -13107,6 +13103,53 @@ INSERT INTO `sessoes_tematicas` (`id`, `nome_id`, `descricao`, `capacidade`, `ge
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `subscricoes`
+--
+
+DROP TABLE IF EXISTS `subscricoes`;
+CREATE TABLE IF NOT EXISTS `subscricoes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `plano_tipo` enum('normal','member','premium') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'normal',
+  `preco_mensal` decimal(10,2) DEFAULT '0.00',
+  `status` enum('ativo','cancelado','expirado','pendente') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ativo',
+  `data_inicio` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `data_fim` timestamp NULL DEFAULT NULL,
+  `data_proximo_pagamento` timestamp NULL DEFAULT NULL,
+  `bilhetes_gratis_mes` int DEFAULT '0',
+  `bilhetes_gratis_usados` int DEFAULT '0',
+  `ultimo_reset_bilhetes` date DEFAULT NULL,
+  `metodo_pagamento` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notas` text COLLATE utf8mb4_unicode_ci,
+  `criado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `atualizado_em` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `plano_tipo` (`plano_tipo`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `subscricoes`
+--
+
+INSERT INTO `subscricoes` (`id`, `user_id`, `plano_tipo`, `preco_mensal`, `status`, `data_inicio`, `data_fim`, `data_proximo_pagamento`, `bilhetes_gratis_mes`, `bilhetes_gratis_usados`, `ultimo_reset_bilhetes`, `metodo_pagamento`, `notas`, `criado_em`, `atualizado_em`) VALUES
+(1, 1, 'premium', 19.99, 'cancelado', '2026-03-24 15:21:42', '2026-03-27 23:04:07', '2026-04-23 14:28:53', 2, 2, '2026-03-24', NULL, NULL, '2026-03-24 15:21:42', '2026-03-27 23:04:07'),
+(2, 14, 'member', 9.99, 'ativo', '2026-03-24 15:21:42', NULL, '2026-04-23 16:04:08', 1, 1, '2026-03-24', NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 17:23:30'),
+(3, 47, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, NULL, NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 15:21:42'),
+(4, 15, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, NULL, NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 15:21:42'),
+(6, 13, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, '2026-03-24', NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 19:43:01'),
+(7, 22, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, NULL, NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 15:21:42'),
+(8, 11, 'member', 9.99, 'ativo', '2026-03-24 15:21:42', NULL, '2026-04-26 22:01:47', 1, 0, '2026-03-27', NULL, NULL, '2026-03-24 15:21:42', '2026-03-27 23:01:47'),
+(9, 45, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, NULL, NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 15:21:42'),
+(10, 24, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, NULL, NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 15:21:42'),
+(11, 30, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, NULL, NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 15:21:42'),
+(12, 21, 'normal', 0.00, 'ativo', '2026-03-24 15:21:42', NULL, NULL, 0, 0, NULL, NULL, NULL, '2026-03-24 15:21:42', '2026-03-24 15:21:42'),
+(13, 1, 'normal', 0.00, 'ativo', '2026-03-27 23:04:07', NULL, NULL, 0, 0, '2026-03-27', NULL, NULL, '2026-03-27 23:04:07', '2026-03-27 23:04:10');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tipos_sessao`
 --
 
@@ -13118,7 +13161,7 @@ CREATE TABLE IF NOT EXISTS `tipos_sessao` (
   `preco_bilhete` decimal(5,2) NOT NULL DEFAULT '0.00' COMMENT 'Preço final do bilhete deste tipo de sessão',
   `preco` decimal(10,2) DEFAULT '8.50',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tipos_sessao`
@@ -13253,16 +13296,15 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo_usuario`, `criado_em`, `ultimo_login`, `avatar`, `avatar_id`, `social_provider`, `social_id`, `is_admin`, `biografia`, `filme_favorito_id`, `avatar_personalizado`) VALUES
-(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$uXjKVYN3nzvoRCf1$8f5b4b243980148d144cef8bf17fe5abb9a52279e79575a0b26c759633ff80da6275797a4e442cdf8a4f804c0b09ebb03291d3a90fcad000c565d0160501981d', 'normal', '2025-11-03 20:23:37', '2026-03-23 09:16:24', NULL, 4, NULL, NULL, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
-(11, 'Duarte', 'duartemariation@gmail.com', 'scrypt:32768:8:1$h5SKV2XnqVI4TCjn$3fbcc143a0ffdeff34037e6aaa861b2900517e152fa955de0336cefe00efb812b9d4989e720e9707c056974358a403d42ce410e4895ffccbacff862cf79381b4', 'normal', '2025-11-04 00:08:34', '2026-02-15 20:33:19', NULL, 13, NULL, NULL, 0, NULL, NULL, 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png'),
-(13, 'Admin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-03-23 09:20:13', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, NULL, NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
-(14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', 'scrypt:32768:8:1$b4qBlQCA6n19uNbC$c7a2c12ef1d6cb85bb483fb6aefba5a914a0380cb986b34161e76e1cca549dee28e65a4bb70a0133bfa29a7d345b8ce6c70c92be2ea3fb7b55374fb52a2a0872', 'normal', '2025-11-17 21:28:06', '2026-02-16 00:29:24', NULL, 29, NULL, NULL, 0, NULL, NULL, NULL),
+(1, 'Afonso', 'afonso2008david@gmail.com', 'scrypt:32768:8:1$uXjKVYN3nzvoRCf1$8f5b4b243980148d144cef8bf17fe5abb9a52279e79575a0b26c759633ff80da6275797a4e442cdf8a4f804c0b09ebb03291d3a90fcad000c565d0160501981d', 'normal', '2025-11-03 20:23:37', '2026-03-27 23:03:59', NULL, 4, NULL, NULL, 0, NULL, NULL, 'imgs/profile/super-herois/OIP-removebg-preview (13).png'),
+(11, 'Duarte', 'duartemariation@gmail.com', 'scrypt:32768:8:1$h5SKV2XnqVI4TCjn$3fbcc143a0ffdeff34037e6aaa861b2900517e152fa955de0336cefe00efb812b9d4989e720e9707c056974358a403d42ce410e4895ffccbacff862cf79381b4', 'normal', '2025-11-04 00:08:34', '2026-03-27 23:01:22', NULL, 13, NULL, NULL, 0, NULL, NULL, 'imgs/profile/animação/Captura_de_ecrã_2025-11-25_095206-removebg-preview.png'),
+(13, 'Admin', 'cinevibeadmn@gmail.com', 'scrypt:32768:8:1$5a8qZPm7uxSN4Sr6$f387028978773ff3a6124cc807f00e4662e9a370ab2b5550c57ff7ff2d8576843f810833a072beff9bd5250700a0e3aa6f6abfd808b082192f48367322aa8416', 'normal', '2025-11-17 08:47:56', '2026-03-27 21:44:08', 'imgs/avatars/custom/user_13_20251117095337.png', NULL, NULL, NULL, 1, NULL, NULL, 'imgs/avatars/custom/user_13_20251117095337.png'),
+(14, 'Nastya Kiryeyev', 'anastasia.kiri.ana@gmail.com', 'scrypt:32768:8:1$b4qBlQCA6n19uNbC$c7a2c12ef1d6cb85bb483fb6aefba5a914a0380cb986b34161e76e1cca549dee28e65a4bb70a0133bfa29a7d345b8ce6c70c92be2ea3fb7b55374fb52a2a0872', 'normal', '2025-11-17 21:28:06', '2026-03-27 23:01:02', NULL, 29, NULL, NULL, 0, NULL, NULL, NULL),
 (15, 'André Almeida', 'andrea@gmail.com', 'scrypt:32768:8:1$vxnypx0d0A7g9NkJ$3d5776f833f4b231d7fb77320d5e249ecbce83f48fd00a08d9562ecfbac2de6ebaa51c7f31795256d612d6c8f53328b2158f721dd17cbaf3d13d29bc9f5202e9', 'normal', '2025-11-19 08:50:33', '2025-11-20 08:52:11', 'imgs/icons/user_icon34-removebg-preview.png', 5, NULL, NULL, 0, NULL, NULL, NULL),
 (21, 'Marta Silva', 'martasilva@gmail.com', 'scrypt:32768:8:1$UGh7InYCqj6X6I6G$bab6d731f06982739b6097ed2e43a5c4b97babbf6cd68ca3bebfc998d5e1d276b636c25767830d09d7e6c61b0ba62fc2b3070a9574d1d04422459f9c85710559', 'normal', '2025-11-20 09:25:15', '2025-11-22 11:39:11', 'imgs/icons/user_icon34-removebg-preview.png', 21, NULL, NULL, 0, NULL, NULL, NULL),
 (22, 'António Domingos', 'domingos27@gmail.com', 'scrypt:32768:8:1$9D8ErdPBgaI1n6aZ$6a44888d26aa6c577ab05d0211de9920558669ef6b4157264eb0436ca6d7b09a5fbd3613ed58ba41de4c72153fadacb9fe9ac74d47fb1cacb1d4fc02a9bf2f43', 'normal', '2025-11-20 09:27:20', '2025-11-20 09:27:20', 'imgs/icons/user_icon34-removebg-preview.png', 16, NULL, NULL, 0, NULL, NULL, NULL),
 (24, 'Marco David', 'marcogdavid@gmail.com', 'scrypt:32768:8:1$It3tUW7G4yjLqS6I$b1f0443f2868693a877d9deb36637e7e963435535edca2517ee975903172d94db031bffd27dbae2d1e8bd9bf9897b8de24c568c8f3eb859b2a480f8471962802', 'normal', '2025-11-22 11:34:47', '2026-02-10 22:28:20', NULL, 25, NULL, NULL, 0, NULL, NULL, 'imgs/avatars/default.png'),
 (30, 'Maria Silva', 'maria.silva@email.com', 'senha123', 'normal', '0000-00-00 00:00:00', NULL, 'imgs/avatars/default.png', 1, NULL, NULL, 0, NULL, NULL, NULL),
-(44, 'Rodrigo António', 'antonio@gmail.com', 'scrypt:32768:8:1$0jPXIX1X19RaWbWh$fc793bd1ee0141b910c4a9a0daabb32cc6b9403765d598490b508ecafc8e04c3c3483205f0df0f3e127f3cc1c2cd9161a45074a66a0a04d0b647f34e65cdd504', 'normal', '2026-01-29 20:48:37', '2026-01-29 20:48:37', 'imgs/avatars/default.png', 37, NULL, NULL, 0, NULL, NULL, NULL),
 (45, 'José', 'jose@gmail.com', 'scrypt:32768:8:1$fBfbcrD3vVOdjF9y$f3245dba73ed003578a44d6a4290e6dc41121d6851b512a0d170a050fa01a9581304f71a04c76c39b11d32a11afd45018c139be06fad0a78b88f9d12905f4ae7', 'normal', '2026-01-29 20:58:00', '2026-02-10 22:23:30', 'imgs/profile/80s/OIP-removebg-preview (16).png', 4, NULL, NULL, 0, NULL, NULL, NULL),
 (47, 'André', 'andre23@gmail.com', 'scrypt:32768:8:1$gP6KPCSUPzbXL0So$a8d0fa7fc7d5e4049afff998c3570417f9a05334322f8b8a0a417f5a85e5856a55a732aa769d451e3b0ef69d10a0772686ae849867ff0070cb38e642a36fe0af', 'normal', '2026-02-10 22:11:15', '2026-02-10 22:30:34', 'imgs/avatars/default.png', 6, NULL, NULL, 0, NULL, NULL, NULL);
 
@@ -13324,6 +13366,13 @@ ALTER TABLE `filme_generos`
   ADD CONSTRAINT `fk_filme_generos_genero` FOREIGN KEY (`genero_id`) REFERENCES `generos` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `historico_pagamentos`
+--
+ALTER TABLE `historico_pagamentos`
+  ADD CONSTRAINT `historico_pagamentos_ibfk_1` FOREIGN KEY (`subscricao_id`) REFERENCES `subscricoes` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `historico_pagamentos_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `horarios_sessao`
 --
 ALTER TABLE `horarios_sessao`
@@ -13368,6 +13417,12 @@ ALTER TABLE `salas`
 --
 ALTER TABLE `sessoes_tematicas`
   ADD CONSTRAINT `sessoes_tematicas_ibfk_1` FOREIGN KEY (`nome_id`) REFERENCES `tipos_sessao` (`id`);
+
+--
+-- Constraints for table `subscricoes`
+--
+ALTER TABLE `subscricoes`
+  ADD CONSTRAINT `subscricoes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

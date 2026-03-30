@@ -2558,13 +2558,13 @@ a {
 }
 
 .btn-upgrade {
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
+    background: #FFD60A;
     color: #0D1B2A;
 }
 
 .btn-upgrade:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 214, 10, 0.4);
+    background: #FFC700;
 }
 
 .btn-change {

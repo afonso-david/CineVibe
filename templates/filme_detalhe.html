@@ -1482,7 +1482,7 @@
             
             <div class="modal-body">
                 <div class="modal-options">
-                    <button class="modal-option login-option" onclick="window.location.href='{{ url_for('login') }}'">
+                    <button class="modal-option login-option" onclick="window.location.href='{{ url_for('login') }}?next={{ request.path }}'">
                         <div class="option-icon">
                             <i class="fas fa-sign-in-alt"></i>
                         </div>

@@ -858,6 +858,11 @@ def login():
 def auth_google():
     pass
     
+    # Capturar o parâmetro next e guardar na sessão
+    next_url = request.args.get('next')
+    if next_url:
+        session['oauth_next_url'] = next_url
+    
     # Verificar se vem da página de registo
     from_register = request.args.get('register') == 'true'
     session['google_register_mode'] = from_register
@@ -904,6 +909,10 @@ def auth_google_callback():
                 session['google_email'] = user_data['email']
                 session['google_name'] = user_data['name']
                 session.pop('google_register_mode', None)
+                # Passar o next_url para o registo
+                next_url = session.get('oauth_next_url')
+                if next_url:
+                    return redirect(url_for('registo', from_google='true', next=next_url))
                 return redirect(url_for('registo', from_google='true'))
             
             return process_social_login(user_data, 'google')
@@ -946,6 +955,10 @@ def auth_google_callback():
             session['google_name'] = user_data.get('name')
             session.pop('google_register_mode', None)
             flash("Email obtido do Google! Complete o registo abaixo.", "sucesso")
+            # Passar o next_url para o registo
+            next_url = session.get('oauth_next_url')
+            if next_url:
+                return redirect(url_for('registo', from_google='true', next=next_url))
             return redirect(url_for('registo', from_google='true'))
         
         return process_social_login(user_data, 'google')
@@ -1124,7 +1137,14 @@ def process_social_login(user_data, provider):
        
         session.pop('oauth_state', None)
         
+        # Recuperar o next_url da sessão
+        next_url = session.pop('oauth_next_url', None)
+        
         flash(f"Bem-vindo, {nome}!", "sucesso")
+        
+        # Redirecionar para a página especificada ou para home
+        if next_url and next_url.startswith('/'):
+            return redirect(next_url)
         return redirect(url_for('home'))
         
     except Exception as e:
@@ -1202,6 +1222,9 @@ def api_redefinir_senha():
 
 @app.route('/registo', methods=["GET", "POST"])
 def registo():
+    # Capturar o parâmetro next
+    next_url = request.args.get('next') or request.form.get('next')
+    
     # Se for GET e não tiver parâmetro from_google, limpar sessão do Google
     if request.method == "GET" and not request.args.get('from_google'):
         session.pop('google_email', None)
@@ -1351,6 +1374,9 @@ def registo():
             session.pop('google_email', None)
             session.pop('google_name', None)
             
+            # Redirecionar para a página especificada ou para home
+            if next_url and next_url.startswith('/'):
+                return redirect(next_url)
             return redirect(url_for("home"))
             
         except Exception as e:
@@ -1364,7 +1390,7 @@ def registo():
 
     cursor.close()
     conn.close()
-    return render_template("registo.html", avatars=avatars)
+    return render_template("registo.html", avatars=avatars, next_url=next_url)
 
 
 @app.route('/update-avatar', methods=['POST'])

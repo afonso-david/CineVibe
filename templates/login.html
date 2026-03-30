@@ -151,7 +151,7 @@
                         </div>
 
                         <div class="form-footer">
-                            <p>Não tem conta? <a href="{{ url_for('registo') }}">Registar-se</a></p>
+                            <p>Não tem conta? <a href="{{ url_for('registo') }}{% if next_url %}?next={{ next_url }}{% endif %}">Registar-se</a></p>
                         </div>
                     </div>
                 </div>
@@ -377,7 +377,9 @@
                 btnGoogle.addEventListener('click', function(e) {
                     e.preventDefault();
                     console.log('Login com Google clicado');
-                    window.location.href = '/auth/google';
+                    const nextUrl = '{{ next_url }}';
+                    const url = nextUrl ? `/auth/google?next=${encodeURIComponent(nextUrl)}` : '/auth/google';
+                    window.location.href = url;
                 });
             }
             

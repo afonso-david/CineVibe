@@ -11562,13 +11562,6 @@ def pesquisa():
             'keywords': ['lgp', 'lingua gestual', 'língua gestual', 'gestual', 'surdo', 'acessibilidade', 'interprete']
         },
         {
-            'titulo': 'Acessibilidade',
-            'descricao': 'Informações sobre acessibilidade física nas salas de cinema',
-            'url': 'acessibilidade',
-            'icone': 'fas fa-wheelchair',
-            'keywords': ['acessibilidade', 'cadeira rodas', 'mobilidade', 'rampa', 'elevador', 'deficiencia motora', 'deficiência motora', 'fisica']
-        },
-        {
             'titulo': 'CineAcessível',
             'descricao': 'Todas as opções de acessibilidade do CineVibe',
             'url': 'cine_acessivel',

@@ -2480,83 +2480,91 @@ def resgatar_recompensa():
         
         conn.commit()
         
-        
-        try:
-            pass
-    
-            msg = MIMEMultipart()
-            msg['From'] = EMAIL_USER
-            msg['To'] = usuario['email']
-            msg['Subject'] = f"Código de Desconto CineVibe - {premio['nome']}"
-            
-            corpo_email = f"""
-            <html>
-            <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; padding: 20px;">
-                <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.5);">
-                    <h1 style="color: #FFD60A; text-align: center; margin-bottom: 20px;">Parabéns!</h1>
-                    
-                    <p style="font-size: 18px; text-align: center; margin-bottom: 30px; color: #E0E1DD;">
-                        Resgataste com sucesso a tua recompensa:
-                    </p>
-                    
-                    <div style="background: #FFD60A; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 30px;">
-                        <h2 style="color: #0D1B2A; margin: 0;">{premio['nome']}</h2>
-                    </div>
-                    
-                    <p style="text-align: center; font-size: 16px; margin: 30px 0; color: #E0E1DD;">
-                        O teu código de desconto é:
-                    </p>
-                    
-                    <div style="background: #0D1B2A; color: #FFD60A; font-size: 32px; font-weight: bold; text-align: center; padding: 20px; border-radius: 8px; letter-spacing: 3px; margin-bottom: 30px;">
-                        {codigo}
-                    </div>
-                    
-                    <div style="background: #415A77; border-left: 4px solid #FFD60A; padding: 20px; margin-bottom: 30px; border-radius: 5px;">
-                        <h3 style="color: #FFD60A; margin-top: 0;">Como usar:</h3>
-                        <ol style="color: #E0E1DD; line-height: 1.8;">
-                            <li>Faz a tua reserva normalmente</li>
-                            <li>Na página de pagamento, introduz o código no campo "Código de Desconto"</li>
-                            <li>Clica em "Aplicar" para ver o desconto</li>
-                            <li>Finaliza a compra e desfruta!</li>
-                        </ol>
-                    </div>
-                    
-                    <p style="text-align: center; color: #778DA9; font-size: 14px; margin: 20px 0;">
-                        ⏰ Este código expira em 30 dias<br>
-                        📧 Guarda este email para não perderes o código
-                    </p>
-                    
-                    <div style="text-align: center; margin-top: 30px;">
-                        <a href="http://localhost:5000/filmes" style="background: #FFD60A; color: #0D1B2A; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
-                            Ver Filmes Disponíveis
-                        </a>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """
-            
-            msg.attach(MIMEText(corpo_email, 'html'))
-            
-
-            if EMAIL_PASSWORD in ['sua_senha_app', 'DESATIVADO_TEMPORARIAMENTE'] or not EMAIL_PASSWORD:
-                app.logger.warning("Email desativado temporariamente. Configure senha de app do Gmail para ativar.")
-            else:
-                pass
-          
-                server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
-                if EMAIL_USE_TLS:
-                    server.starttls()
-                server.login(EMAIL_USER, EMAIL_PASSWORD)
-                server.send_message(msg)
-                server.quit()
-            
-        except Exception as email_error:
-            app.logger.error(f"Erro ao enviar email de código de desconto: {email_error}")
-           
-        
+        # Responder imediatamente ao usuário
         cursor.close()
         conn.close()
+        
+        # Enviar email em background (não bloqueia a resposta)
+        try:
+            import threading
+            
+            def enviar_email_background():
+                try:
+                    msg = MIMEMultipart()
+                    msg['From'] = EMAIL_USER
+                    msg['To'] = usuario['email']
+                    msg['Subject'] = f"Código de Desconto CineVibe - {premio['nome']}"
+                    
+                    corpo_email = f"""
+                    <html>
+                    <body style="font-family: Arial, sans-serif; background-color: #0D1B2A; padding: 20px;">
+                        <div style="max-width: 600px; margin: 0 auto; background: #1B263B; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+                            <h1 style="color: #FFD60A; text-align: center; margin-bottom: 20px;">Parabéns!</h1>
+                            
+                            <p style="font-size: 18px; text-align: center; margin-bottom: 30px; color: #E0E1DD;">
+                                Resgataste com sucesso a tua recompensa:
+                            </p>
+                            
+                            <div style="background: #FFD60A; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 30px;">
+                                <h2 style="color: #0D1B2A; margin: 0;">{premio['nome']}</h2>
+                            </div>
+                            
+                            <p style="text-align: center; font-size: 16px; margin: 30px 0; color: #E0E1DD;">
+                                O teu código de desconto é:
+                            </p>
+                            
+                            <div style="background: #0D1B2A; color: #FFD60A; font-size: 32px; font-weight: bold; text-align: center; padding: 20px; border-radius: 8px; letter-spacing: 3px; margin-bottom: 30px;">
+                                {codigo}
+                            </div>
+                            
+                            <div style="background: #415A77; border-left: 4px solid #FFD60A; padding: 20px; margin-bottom: 30px; border-radius: 5px;">
+                                <h3 style="color: #FFD60A; margin-top: 0;">Como usar:</h3>
+                                <ol style="color: #E0E1DD; line-height: 1.8;">
+                                    <li>Faz a tua reserva normalmente</li>
+                                    <li>Na página de pagamento, introduz o código no campo "Código de Desconto"</li>
+                                    <li>Clica em "Aplicar" para ver o desconto</li>
+                                    <li>Finaliza a compra e desfruta!</li>
+                                </ol>
+                            </div>
+                            
+                            <p style="text-align: center; color: #778DA9; font-size: 14px; margin: 20px 0;">
+                                ⏰ Este código expira em 30 dias<br>
+                                📧 Guarda este email para não perderes o código
+                            </p>
+                            
+                            <div style="text-align: center; margin-top: 30px;">
+                                <a href="http://localhost:5000/filmes" style="background: #FFD60A; color: #0D1B2A; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+                                    Ver Filmes Disponíveis
+                                </a>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    """
+                    
+                    msg.attach(MIMEText(corpo_email, 'html'))
+                    
+                    if EMAIL_PASSWORD not in ['sua_senha_app', 'DESATIVADO_TEMPORARIAMENTE'] and EMAIL_PASSWORD:
+                        server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
+                        if EMAIL_USE_TLS:
+                            server.starttls()
+                        server.login(EMAIL_USER, EMAIL_PASSWORD)
+                        server.send_message(msg)
+                        server.quit()
+                        app.logger.info(f"Email de código enviado para {usuario['email']}")
+                    else:
+                        app.logger.warning("Email desativado - código não enviado")
+                        
+                except Exception as email_error:
+                    app.logger.error(f"Erro ao enviar email de código: {email_error}")
+            
+            # Iniciar thread para enviar email em background
+            email_thread = threading.Thread(target=enviar_email_background)
+            email_thread.daemon = True
+            email_thread.start()
+            
+        except Exception as thread_error:
+            app.logger.error(f"Erro ao criar thread de email: {thread_error}")
         
         return jsonify({
             'success': True, 

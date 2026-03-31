@@ -91,7 +91,7 @@
                         </div>
                         <div class="next-level">
                             {% if (pontos or 0) >= 5000 %}
-                            <span class="next-label">🎉 <strong>Nível Máximo Atingido!</strong></span>
+                            <span class="next-label"><i class="fas fa-trophy"></i> <strong>Nível Máximo Atingido!</strong></span>
                             {% else %}
                             <span class="next-label">Próximo nível em <strong>{{ 1000 - ((pontos or 0) % 1000) }}</strong> pontos</span>
                             {% endif %}

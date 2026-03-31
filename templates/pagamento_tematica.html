@@ -793,18 +793,23 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('loadingOverlay').style.display = 'none';
+                // Adicionar delay mínimo de 2 segundos para melhor UX
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').style.display = 'none';
 
-                if (data.success) {
-                    window.location.href = '/home?reserva_concluida=1';
-                } else {
-                    alert(data.message || 'Erro ao processar pagamento. Tente novamente.');
-                }
+                    if (data.success) {
+                        window.location.href = '/home?reserva_concluida=1';
+                    } else {
+                        alert(data.message || 'Erro ao processar pagamento. Tente novamente.');
+                    }
+                }, 2000);
             })
             .catch(error => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                console.error('Erro:', error);
-                alert('Erro ao processar pagamento. Tente novamente.');
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    console.error('Erro:', error);
+                    alert('Erro ao processar pagamento. Tente novamente.');
+                }, 2000);
             });
         }
     </script>

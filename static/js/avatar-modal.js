@@ -58,16 +58,16 @@ function carregarAvatares() {
             </div>
             <div class="avatars-grid">
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/super-herois/Superman (Superman 2025).jpg', this)">
-                    <img src="static/imgs/profile/super-herois/Superman (Superman 2025).jpg" alt="Superman" />
+                    <img src="static/imgs/profile/super-herois/Superman (Superman 2025).jpg" alt="Superman" loading="eager" />
                 </div>
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/super-herois/SUPERMAN.jpg', this)">
-                    <img src="static/imgs/profile/super-herois/SUPERMAN.jpg" alt="Superman 2" />
+                    <img src="static/imgs/profile/super-herois/SUPERMAN.jpg" alt="Superman 2" loading="eager" />
                 </div>
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/super-herois/Gal_Gadot-removebg-preview.png', this)">
-                    <img src="static/imgs/profile/super-herois/Gal_Gadot-removebg-preview.png" alt="Wonder Woman" />
+                    <img src="static/imgs/profile/super-herois/Gal_Gadot-removebg-preview.png" alt="Wonder Woman" loading="eager" />
                 </div>
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/super-herois/657-6577079_spiderman-mask-png-transparent-spider-man-homecoming-suit-removebg-preview.png', this)">
-                    <img src="static/imgs/profile/super-herois/657-6577079_spiderman-mask-png-transparent-spider-man-homecoming-suit-removebg-preview.png" alt="Spider-Man" />
+                    <img src="static/imgs/profile/super-herois/657-6577079_spiderman-mask-png-transparent-spider-man-homecoming-suit-removebg-preview.png" alt="Spider-Man" loading="eager" />
                 </div>
             </div>
         </div>
@@ -78,16 +78,16 @@ function carregarAvatares() {
             </div>
             <div class="avatars-grid">
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/terror/chucky-tv-series-removebg-preview.png', this)">
-                    <img src="static/imgs/profile/terror/chucky-tv-series-removebg-preview.png" alt="Chucky" />
+                    <img src="static/imgs/profile/terror/chucky-tv-series-removebg-preview.png" alt="Chucky" loading="eager" />
                 </div>
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/terror/freddy-krueger-icon-5-removebg-preview.png', this)">
-                    <img src="static/imgs/profile/terror/freddy-krueger-icon-5-removebg-preview.png" alt="Freddy Krueger" />
+                    <img src="static/imgs/profile/terror/freddy-krueger-icon-5-removebg-preview.png" alt="Freddy Krueger" loading="eager" />
                 </div>
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/terror/The-Nun-1-removebg-preview.png', this)">
-                    <img src="static/imgs/profile/terror/The-Nun-1-removebg-preview.png" alt="The Nun" />
+                    <img src="static/imgs/profile/terror/The-Nun-1-removebg-preview.png" alt="The Nun" loading="eager" />
                 </div>
                 <div class="avatar-option" onclick="selecionarAvatar('imgs/profile/terror/SMILEFF_11MAIN-1-removebg-preview.png', this)">
-                    <img src="static/imgs/profile/terror/SMILEFF_11MAIN-1-removebg-preview.png" alt="Smile" />
+                    <img src="static/imgs/profile/terror/SMILEFF_11MAIN-1-removebg-preview.png" alt="Smile" loading="eager" />
                 </div>
             </div>
         </div>

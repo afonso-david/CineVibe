@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessão Vintage | CineVibe</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/vintage.css') }}?v={{ range(1, 999999) | random }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v=3.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vintage.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -47,7 +46,7 @@
         </div>
     </header>
 
-    <nav class="nav-center mobile-menu" id="navMenu">
+    <nav class="nav-center" id="navMenu">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('filmes') }}">Filmes</a>
         <a href="{{ url_for('cinemas') }}">Cinemas</a>
@@ -563,175 +562,186 @@
     <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
 
     <style>
-        .clean-modal {
+        .matrix-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: rgba(0, 0, 0, 0.98);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            backdrop-filter: blur(3px);
         }
-
-        .clean-modal * {
-            text-shadow: none !important;
+        .matrix-modal.show {
+            opacity: 1;
         }
-
-        body.modal-open {
-            overflow: hidden !important;
-        }
-
-        html.modal-open {
-            overflow: hidden !important;
-        }
-
-        .modal-overlay {
+        .matrix-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+            background: radial-gradient(ellipse at center, rgba(0, 30, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 70%);
+            z-index: 1;
         }
-
-        .modal-content {
-            position: relative;
-            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 480px;
-            animation: slideUp 0.3s ease-out;
-            border: 1px solid rgba(255, 214, 10, 0.15);
-            overflow: hidden;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-close {
+        .matrix-background-image {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 214, 10, 0.1);
-            border: none;
-            color: #FFD60A;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 10001;
-            width: 40px;
-            height: 40px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 750px;
+            min-height: 650px;
+            background: url('{{ url_for("static", filename="imgs/273b7b060e96f9828f8c73db76c00b31.jpg") }}') center/cover no-repeat;
+            border-radius: 25px;
+            z-index: 3;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 0, 0.3));
+        }
+        .matrix-close {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.8));
+            border: 3px solid #00ff00;
+            color: #00ff00;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.4s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: none !important;
+            z-index: 102;
         }
-
-        .modal-close:hover {
-            background: rgba(255, 214, 10, 0.2);
-            transform: rotate(90deg);
+        .matrix-close:hover {
+            background: #00ff00;
+            color: #000;
+            transform: rotate(90deg) scale(1.2);
         }
-
-        .modal-header {
-            padding: 40px 32px 24px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.05) 0%, transparent 100%);
-            border-bottom: 1px solid rgba(255, 214, 10, 0.1);
+        .matrix-text {
+            text-align: center;
+            margin-bottom: 40px;
+            z-index: 101;
+            position: relative;
         }
-
-        .modal-header h2 {
-            margin: 0 0 8px 0;
-            font-size: 26px;
-            font-weight: 700;
-            color: #FFD60A;
-            letter-spacing: 0.5px;
+        .matrix-title {
+            font-family: 'Courier New', monospace;
+            font-size: 2.8rem;
+            color: #00ff00;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 1);
+            z-index: 101;
+            font-weight: 900;
         }
-
-        .modal-header p {
-            margin: 0;
-            font-size: 14px;
-            color: #8a95a8;
-            font-weight: 500;
+        .matrix-subtitle {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: #00dd00;
+            z-index: 101;
         }
-
-        .modal-body {
-            padding: 32px;
+        .matrix-pills {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 101;
         }
-
-        .modal-options {
+        .pill-container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-        }
-
-        .modal-option {
-            display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.03) 0%, rgba(255, 214, 10, 0.01) 100%);
-            border: 1px solid rgba(255, 214, 10, 0.12);
-            border-radius: 14px;
+            gap: 15px;
+        }
+        .pill {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.8));
+            border: 4px solid;
+            border-radius: 60px;
+            padding: 20px 35px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-        }
-
-        .modal-option:hover {
-            background: linear-gradient(135deg, rgba(255, 214, 10, 0.08) 0%, rgba(255, 214, 10, 0.04) 100%);
-            border-color: rgba(255, 214, 10, 0.25);
-            transform: translateX(4px);
-        }
-
-        .option-icon {
-            font-size: 28px;
-            color: #FFD60A;
-            min-width: 40px;
+            font-family: 'Courier New', monospace;
+            font-weight: 900;
+            font-size: 16px;
+            transition: all 0.5s ease;
+            min-width: 220px;
+            height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .option-content {
-            flex: 1;
+        .red-pill {
+            border-color: #ff0000;
+            color: #ff0000;
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.5);
         }
-
-        .option-content h3 {
-            margin: 0 0 6px 0;
+        .red-pill:hover {
+            background: rgba(255, 0, 0, 0.2);
+            transform: translateY(-10px) scale(1.08);
+        }
+        .blue-pill {
+            border-color: #0066ff;
+            color: #0066ff;
+            box-shadow: 0 10px 40px rgba(0, 102, 255, 0.5);
+        }
+        .blue-pill:hover {
+            background: rgba(0, 102, 255, 0.2);
+            transform: translateY(-10px) scale(1.08);
+        }
+        .pill-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .pill-icon {
+            font-size: 24px;
+        }
+        .pill-description {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            text-align: center;
+            max-width: 220px;
+            opacity: 0.9;
+        }
+        .red-desc {
+            color: #ffdddd;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+        .blue-desc {
+            color: #ddddff;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+        .matrix-quote {
+            font-family: 'Courier New', monospace;
+            font-style: italic;
+            color: #00ff00;
             font-size: 16px;
-            font-weight: 600;
-            color: #ffffff;
-            letter-spacing: 0.3px;
+            opacity: 0.8;
+            text-align: center;
+            position: relative;
+            z-index: 101;
+            margin-top: 40px;
         }
-
-        .option-content p {
-            margin: 0;
-            font-size: 13px;
-            color: #8a95a8;
-            line-height: 1.4;
-        }
-
-        .option-arrow {
-            color: #FFD60A;
-            font-size: 16px;
-            transition: transform 0.3s ease;
-            opacity: 0.7;
-        }
-
-        .modal-option:hover .option-arrow {
-            transform: translateX(6px);
-            opacity: 1;
+        .matrix-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.9;
         }
     </style>
 
@@ -750,7 +760,7 @@
             
             <div class="modal-body">
                 <div class="modal-options">
-                    <button class="modal-option login-option" onclick="window.location.href='{{ url_for('login') }}?next={{ request.path }}'">>
+                    <button class="modal-option login-option" onclick="window.location.href='{{ url_for('login') }}'">
                         <div class="option-icon">
                             <i class="fas fa-sign-in-alt"></i>
                         </div>
@@ -859,7 +869,6 @@
             });
         }
     </script>
-    <script src="{{ url_for('static', filename='js/hamburger-menu.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search.js') }}"></script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
 </body>

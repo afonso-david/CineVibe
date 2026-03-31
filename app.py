@@ -7530,26 +7530,26 @@ def contactos():
             
             html_content = f'''
             <html>
-                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #000000; background-color: #ffffff; margin: 0; padding: 0;">
                     <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-                        <h2 style="color: #FFD60A; border-bottom: 2px solid #FFD60A; padding-bottom: 10px;">
+                        <h2 style="color: #FFD60A; background-color: #1a1a1a; padding: 15px; border-bottom: 3px solid #FFD60A; margin: 0 0 20px 0;">
                             Nova Mensagem de Contacto - CineVibe
                         </h2>
                         
-                        <div style="background-color: white; padding: 20px; border-radius: 5px; margin-top: 20px;">
-                            <p><strong>Nome:</strong> {nome}</p>
-                            <p><strong>Email:</strong> {email}</p>
-                            <p><strong>Assunto:</strong> {assunto}</p>
-                            {'<p><strong>Tipo:</strong> Utilizador Registado</p>' if logged_in else '<p><strong>Tipo:</strong> Visitante</p>'}
+                        <div style="background-color: #ffffff; padding: 20px; border-radius: 5px; margin-top: 20px; border: 1px solid #ddd;">
+                            <p style="color: #000000; margin: 10px 0;"><strong style="color: #000000;">Nome:</strong> {nome}</p>
+                            <p style="color: #000000; margin: 10px 0;"><strong style="color: #000000;">Email:</strong> <a href="mailto:{email}" style="color: #0066cc;">{email}</a></p>
+                            <p style="color: #000000; margin: 10px 0;"><strong style="color: #000000;">Assunto:</strong> {assunto}</p>
+                            {'<p style="color: #000000; margin: 10px 0;"><strong style="color: #000000;">Tipo:</strong> Utilizador Registado</p>' if logged_in else '<p style="color: #000000; margin: 10px 0;"><strong style="color: #000000;">Tipo:</strong> Visitante</p>'}
                             
-                            <div style="margin-top: 20px; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #FFD60A;">
-                                <p><strong>Mensagem:</strong></p>
-                                <p>{mensagem}</p>
+                            <div style="margin-top: 20px; padding: 15px; background-color: #fffbea; border-left: 4px solid #FFD60A; border: 1px solid #FFD60A;">
+                                <p style="color: #000000; margin: 0 0 10px 0;"><strong style="color: #000000;">Mensagem:</strong></p>
+                                <p style="color: #000000; margin: 0; white-space: pre-wrap;">{mensagem}</p>
                             </div>
                         </div>
                         
-                        <div style="margin-top: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px;">
-                            <p style="margin: 0; font-size: 12px; color: #666;">
+                        <div style="margin-top: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border: 1px solid #b3d9e8;">
+                            <p style="margin: 0; font-size: 12px; color: #333333;">
                                 Esta mensagem foi enviada através do formulário de contacto do CineVibe.
                                 <br>Pode responder diretamente a este email para contactar o remetente.
                             </p>

@@ -6,7 +6,7 @@
     <title>Benefícios | CineVibe</title>
     <link rel="preload" href="{{ url_for('static', filename='imgs/Logo/logo8 sem fundo.png') }}" as="image">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/beneficios.css') }}?v=5">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/beneficios.css') }}?v=6">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fix.css') }}?v={{ range(1, 999999) | random }}">
     
     <style>
@@ -117,7 +117,7 @@
                     {% elif logged_in and plano_atual and plano_atual.plano_tipo in ['member', 'premium'] %}
                         <button class="btn btn-normal" disabled style="opacity: 0.5; cursor: not-allowed;">Plano Inferior</button>
                     {% else %}
-                        <a href="{{ url_for('registo') }}" class="btn btn-normal">Registar Grátis</a>
+                        <button class="btn btn-normal btn-current" disabled>Plano Atual</button>
                     {% endif %}
                 </div>
             </div>
@@ -164,7 +164,7 @@
                     {% if logged_in and plano_atual and plano_atual.plano_tipo == 'premium' %}
                         <button class="btn btn-premium btn-current" disabled>Atual</button>
                     {% else %}
-                        <a href="#" class="btn btn-premium" onclick="subscribePlan('premium')">Experiência Premium</a>
+                        <a href="#" class="btn btn-premium" onclick="subscribePlan('premium')">Subscrever Agora</a>
                     {% endif %}
                 </div>
             </div>
@@ -318,14 +318,14 @@
                 });
                 
                 card.addEventListener('mouseleave', function() {
-                    // Remover efeito de hover
+                    
                 });
             });
         }
         function comparePlans() {
             console.log('Função comparePlans chamada');
             
-            // Bloquear scroll do body e html
+            
             document.body.style.overflow = 'hidden';
             document.documentElement.style.overflow = 'hidden';
             document.body.style.position = 'fixed';

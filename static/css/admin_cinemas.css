@@ -735,6 +735,75 @@
     border-color: #FFD700;
 }
 
+.rating-cell {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.rating-badge {
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+    background: rgba(255, 214, 10, 0.2);
+    color: #FFD60A;
+    white-space: nowrap;
+}
+
+.rating-badge.na {
+    background: rgba(136, 136, 136, 0.2);
+    color: #888;
+}
+
+.rating-header {
+    text-align: center;
+    min-width: 80px;
+}
+
+.duration-cell {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.duration-badge {
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+    background: rgba(255, 214, 10, 0.1);
+    color: #FFD60A;
+    white-space: nowrap;
+}
+
+.id-cell {
+    text-align: center;
+    font-weight: 600;
+    color: #FFD60A;
+}
+
+.title-cell {
+    min-width: 200px;
+}
+
+.genre-cell {
+    max-width: 200px;
+}
+
+.actors-cell {
+    max-width: 250px;
+}
+
+.actors-text {
+    color: #ccc;
+    font-size: 0.9rem;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .empty-state {
     text-align: center;
     padding: 80px 20px;

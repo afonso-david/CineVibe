@@ -2846,8 +2846,7 @@ def admin_dashboard():
             COALESCE(COUNT(DISTINCT r.id), 0) as total_reservas
         FROM filmes f
         JOIN horarios_sessao hs ON hs.id_filme = f.id
-        LEFT JOIN reservas r ON r.id_filme = f.id 
-            AND r.data_sessao BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()
+        LEFT JOIN reservas r ON r.id_filme = f.id
         WHERE f.estado = 'em_exibicao'
         GROUP BY f.id, f.titulo, f.poster_url
         HAVING total_reservas = 0 AND total_sessoes > 0

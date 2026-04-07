@@ -552,6 +552,13 @@
                 imageObserver.observe(img);
             });
         }
+
+        // Otimizar carregamento das primeiras imagens
+        document.querySelectorAll('.poster-main, .poster-hover').forEach((img, index) => {
+            if (index < 12) { // Primeiros 6 filmes (2 imagens cada)
+                img.loading = 'eager';
+            }
+        });
     </script>
     <script src="{{ url_for('static', filename='js/search.js') }}"></script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>

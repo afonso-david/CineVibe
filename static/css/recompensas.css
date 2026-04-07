@@ -314,18 +314,6 @@ a {
   position: relative;
 }
 
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
-  background: linear-gradient(90deg, #4EA8DE, #FFD60A);
-  border-radius: 2px;
-}
-
 .section-icon {
   width: 65px;
   height: 65px;

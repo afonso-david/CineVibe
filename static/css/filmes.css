@@ -953,6 +953,10 @@ a {
   object-fit: cover;
   transition: opacity 0.4s ease;
   z-index: 1;
+  display: block;
+  background: rgba(27, 38, 59, 0.3);
+  color: transparent;
+  font-size: 0;
 }
 .poster-hover {
   position: absolute;
@@ -964,6 +968,9 @@ a {
   opacity: 0;
   transition: opacity 0.4s ease;
   z-index: 2;
+  display: block;
+  color: transparent;
+  font-size: 0;
 }
 .filme-card:hover .poster-main {
   opacity: 0;

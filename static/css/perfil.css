@@ -113,16 +113,6 @@ a {
     z-index: -1;
     animation: borderGlow 3s ease-in-out infinite alternate;
 }
-.perfil-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: none;
-    pointer-events: none;
-}
 @keyframes borderGlow {
     0% { opacity: 0.6; }
     100% { opacity: 1; }
@@ -503,17 +493,6 @@ a {
     text-align: center;
     letter-spacing: 2px;
     position: relative;
-}
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
-    border-radius: 2px;
 }
 .filmes-section {
     margin-bottom: 40px;
@@ -932,8 +911,7 @@ a {
         border-radius: 20px;
     }
     
-    .perfil-card::before,
-    .perfil-card::after {
+    .perfil-card::before {
         display: none;
     }
     
@@ -1057,8 +1035,7 @@ a {
         max-height: none;
     }
     
-    .pontos-card::before,
-    .pontos-card::after {
+    .pontos-card::before {
         display: none;
     }
     

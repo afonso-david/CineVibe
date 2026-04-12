@@ -1075,8 +1075,12 @@ def process_social_login(user_data, provider):
             user_id = user['id']
             app.logger.info(f"Utilizador existente encontrado - ID: {user_id}")
             
-            
-            cursor.execute("UPDATE usuarios SET ultimo_login = %s WHERE id = %s", (datetime.now(), user_id))
+            # Atualiza ultimo_login E campos social
+            cursor.execute("""
+                UPDATE usuarios 
+                SET ultimo_login = %s, social_provider = %s, social_id = %s 
+                WHERE id = %s
+            """, (datetime.now(), provider, social_id, user_id))
             conn.commit()
         else:
             pass

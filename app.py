@@ -2048,7 +2048,7 @@ def perfil():
 
       
         cursor.execute("""
-            SELECT u.id, u.nome, u.email, u.tipo_usuario, u.avatar, u.avatar_id,
+            SELECT u.id, u.nome, u.email, u.avatar, u.avatar_id,
                    a.caminho as avatar_path
             FROM usuarios u 
             LEFT JOIN avatars a ON u.avatar_id = a.id 
@@ -7888,8 +7888,8 @@ def confirmar_pagamento_sessao():
                 user_id = existing_user['id']
             else:
                 cursor.execute("""
-                    INSERT INTO usuarios (nome, email, senha, tipo_usuario, criado_em)
-                    VALUES (%s, %s, 'GUEST_USER', 'convidado', NOW())
+                    INSERT INTO usuarios (nome, email, senha, criado_em)
+                    VALUES (%s, %s, 'GUEST_USER', NOW())
                 """, (nome_cliente, email_cliente))
                 
                 user_id = cursor.lastrowid
@@ -11833,34 +11833,7 @@ def toggle_favorito_cinema(cinema_id):
         app.logger.error(traceback.format_exc())
         return jsonify({'success': False, 'message': f'Erro: {str(e)}'})
 
-@app.route('/atualizar_perfil', methods=['POST'])
-def atualizar_perfil():
-    if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'Login necessário'})
-    
-    data = request.get_json()
-    biografia = data.get('biografia', '')
-    filme_favorito_id = data.get('filme_favorito_id')
-    
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    try:
-        cursor.execute("""
-            UPDATE usuarios 
-            SET biografia = %s, filme_favorito_id = %s
-            WHERE id = %s
-        """, (biografia, filme_favorito_id, session['user_id']))
-        
-        conn.commit()
-        return jsonify({'success': True, 'message': 'Perfil atualizado com sucesso!'})
-        
-    except Exception as e:
-        conn.rollback()
-        return jsonify({'success': False, 'message': f'Erro: {str(e)}'})
-    finally:
-        cursor.close()
-        conn.close()
+
 
 @app.route('/admin/atores')
 def admin_atores():

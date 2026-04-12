@@ -605,11 +605,7 @@ def get_user_avatar():
             conn = get_db_connection()
             cursor = conn.cursor(dictionary=True)
             cursor.execute("""
-                SELECT 
-                    CASE 
-                        WHEN u.avatar IS NOT NULL AND u.avatar != '' THEN u.avatar
-                        ELSE a.caminho
-                    END as avatar_path
+                SELECT a.caminho as avatar_path
                 FROM usuarios u 
                 LEFT JOIN avatars a ON u.avatar_id = a.id 
                 WHERE u.id = %s
@@ -810,11 +806,7 @@ def login():
         
       
         cur.execute("""
-            SELECT 
-                CASE 
-                    WHEN u.avatar IS NOT NULL AND u.avatar != '' THEN u.avatar
-                    ELSE a.caminho
-                END as avatar_path
+            SELECT a.caminho as avatar_path
             FROM usuarios u 
             LEFT JOIN avatars a ON u.avatar_id = a.id 
             WHERE u.id = %s
@@ -1107,7 +1099,7 @@ def process_social_login(user_data, provider):
         
         
         cursor.execute("""
-            SELECT COALESCE(u.avatar, a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') as avatar
+            SELECT COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') as avatar
             FROM usuarios u 
             LEFT JOIN avatars a ON u.avatar_id = a.id 
             WHERE u.id = %s
@@ -1278,46 +1270,16 @@ def registo():
             custom_avatar_path = None
             
             
-            if avatar_upload and avatar_upload.filename:
-                import os
-                from werkzeug.utils import secure_filename
-                
-             
-                upload_folder = os.path.join('static', 'imgs', 'avatars', 'custom')
-                os.makedirs(upload_folder, exist_ok=True)
-                
-              
-                filename = secure_filename(avatar_upload.filename)
-                unique_filename = f"{agora.strftime('%Y%m%d%H%M%S')}_{filename}"
-                filepath = os.path.join(upload_folder, unique_filename)
-                
-              
-                avatar_upload.save(filepath)
-                
-               
-                custom_avatar_path = f"imgs/avatars/custom/{unique_filename}"
-                
-                
-                cursor.execute("""
-                    INSERT INTO usuarios (nome, email, senha, criado_em, ultimo_login, avatar)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """, (nome, email, senha_hash, agora, agora, custom_avatar_path))
-            elif avatar_id and avatar_id.isdigit():
-                pass
-            
+            if avatar_id and avatar_id.isdigit():
                 cursor.execute("""
                     INSERT INTO usuarios (nome, email, senha, criado_em, ultimo_login, avatar_id)
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """, (nome, email, senha_hash, agora, agora, int(avatar_id)))
             else:
-                pass
-             
                 cursor.execute("SELECT id FROM avatars WHERE id > 0 ORDER BY id")
                 avatars_disponiveis = cursor.fetchall()
                 
                 if avatars_disponiveis:
-                    pass
-          
                     avatar_aleatorio = random.choice(avatars_disponiveis)
                     avatar_id_aleatorio = avatar_aleatorio['id']
                     
@@ -1445,64 +1407,6 @@ def update_avatar():
     except Exception as e:
         return jsonify({'success': False, 'message': f'Erro interno: {str(e)}'})
 
-@app.route('/upload-avatar', methods=['POST'])
-def upload_avatar():
-    if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'Não está logado'})
-    
-    if 'avatar' not in request.files:
-        return jsonify({'success': False, 'message': 'Nenhum arquivo enviado'})
-    
-    file = request.files['avatar']
-    
-    if file.filename == '':
-        return jsonify({'success': False, 'message': 'Nenhum arquivo selecionado'})
-    
-
-    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
-    file_ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else ''
-    
-    if file_ext not in allowed_extensions:
-        return jsonify({'success': False, 'message': 'Formato de arquivo não permitido'})
-    
-    try:
-        import os
-        from werkzeug.utils import secure_filename
-        
-       
-        filename = f"user_{session['user_id']}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_ext}"
-        filename = secure_filename(filename)
-        
-        upload_folder = os.path.join('static', 'imgs', 'avatars', 'custom')
-        os.makedirs(upload_folder, exist_ok=True)
-        
-        filepath = os.path.join(upload_folder, filename)
-        file.save(filepath)
-        
-       
-        db_path = f"imgs/avatars/custom/{filename}"
-        
-     
-        conn = get_db_connection()
-        cur = conn.cursor()
-        
-        cur.execute(
-            "UPDATE usuarios SET avatar = %s, avatar_id = NULL WHERE id = %s",
-            (db_path, session['user_id'])
-        )
-        conn.commit()
-        
-        cur.close()
-        conn.close()
-        
-        return jsonify({
-            'success': True,
-            'message': 'Avatar enviado com sucesso',
-            'new_avatar': db_path
-        })
-        
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'Erro ao fazer upload: {str(e)}'})
 
 @app.route("/avatars/<categoria>")
 def avatars_categoria(categoria):
@@ -1538,6 +1442,51 @@ def avatars_categoria(categoria):
         return jsonify(avatars)
     except Exception as e:
         app.logger.error(f"Erro ao buscar avatares: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route("/api/avatars/all")
+def avatars_all():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(dictionary=True)
+
+        # Buscar todas as categorias
+        cur.execute("SELECT id, nome FROM avatar_categories ORDER BY nome")
+        categorias = cur.fetchall()
+        
+        resultado = []
+        
+        for categoria in categorias:
+            # Buscar avatares de cada categoria
+            cur.execute("""
+                SELECT a.id, a.nome, a.caminho
+                FROM avatars a
+                WHERE a.categoria_id = %s
+                ORDER BY a.nome
+            """, (categoria['id'],))
+            
+            avatars = cur.fetchall()
+            
+            # Limpar caminhos
+            for av in avatars:
+                p = av["caminho"].replace("\\", "/").replace('"', "").strip()
+                if p.startswith("static/"):
+                    p = p[7:]
+                if p.startswith("/static/"):
+                    p = p[8:]
+                av["caminho"] = p
+            
+            resultado.append({
+                'categoria': categoria['nome'],
+                'avatars': avatars
+            })
+        
+        cur.close()
+        conn.close()
+
+        return jsonify(resultado)
+    except Exception as e:
+        app.logger.error(f"Erro ao buscar todos os avatares: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
@@ -2048,7 +1997,7 @@ def perfil():
 
       
         cursor.execute("""
-            SELECT u.id, u.nome, u.email, u.avatar, u.avatar_id,
+            SELECT u.id, u.nome, u.email, u.avatar_id,
                    a.caminho as avatar_path
             FROM usuarios u 
             LEFT JOIN avatars a ON u.avatar_id = a.id 
@@ -2074,8 +2023,6 @@ def perfil():
         
         if user.get('avatar_path'):
             avatar = str(user['avatar_path'])
-        elif user.get('avatar'):
-            avatar = str(user['avatar'])
         else:
             avatar = 'imgs/icons/user_icon34-removebg-preview.png'
         
@@ -2240,7 +2187,7 @@ def recompensas():
     
    
     cursor.execute("""
-        SELECT u.id, u.nome, u.email, u.avatar, u.avatar_id,
+        SELECT u.id, u.nome, u.email, u.avatar_id,
                a.caminho as avatar_path
         FROM usuarios u 
         LEFT JOIN avatars a ON u.avatar_id = a.id 
@@ -2348,11 +2295,7 @@ def premios():
         user_id = session['user_id']
       
         cursor.execute("""
-            SELECT 
-                CASE 
-                    WHEN u.avatar IS NOT NULL AND u.avatar != '' THEN u.avatar
-                    ELSE a.caminho
-                END AS avatar
+            SELECT a.caminho AS avatar
             FROM usuarios u
             LEFT JOIN avatars a ON u.avatar_id = a.id
             WHERE u.id = %s
@@ -3370,7 +3313,7 @@ def admin_filme_detalhe(id_filme):
             av.comentario,
             av.data_avaliacao,
             u.nome as usuario_nome,
-            COALESCE(u.avatar, a.caminho) as usuario_avatar
+            COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') as usuario_avatar
         FROM avaliacoes_filmes av
         JOIN usuarios u ON av.usuario_id = u.id
         LEFT JOIN avatars a ON u.avatar_id = a.id
@@ -5000,7 +4943,7 @@ def admin_filme_avaliacoes(id_filme):
             av.data_avaliacao,
             u.nome as usuario_nome,
             u.email,
-            COALESCE(u.avatar, a.caminho) as usuario_avatar
+            COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') as usuario_avatar
         FROM avaliacoes_filmes av
         JOIN usuarios u ON av.usuario_id = u.id
         LEFT JOIN avatars a ON u.avatar_id = a.id
@@ -6310,7 +6253,7 @@ def admin_usuarios():
     try:
         query = """
             SELECT u.id, u.nome, u.email, u.criado_em, u.ultimo_login, u.is_admin, 
-                   u.avatar, u.avatar_personalizado, u.avatar_id
+                   u.avatar_id
             FROM usuarios u
             WHERE 1=1
         """
@@ -6346,12 +6289,7 @@ def admin_usuarios():
             
             avatar_url = 'imgs/icons/user_icon34-removebg-preview.png'
             
-            if usuario.get('avatar_personalizado') and usuario['avatar_personalizado']:
-                temp_url = str(usuario['avatar_personalizado']).replace('\\', '/').replace('"', '').strip()
-                if temp_url and temp_url != 'None' and temp_url != '' and 'default.png' not in temp_url:
-                    avatar_url = temp_url
-            
-            if (avatar_url == 'imgs/icons/user_icon34-removebg-preview.png' or 'default.png' in avatar_url) and usuario.get('avatar_id') and usuario['avatar_id']:
+            if usuario.get('avatar_id') and usuario['avatar_id']:
                 try:
                     cur.execute("SELECT caminho FROM avatars WHERE id = %s", (usuario['avatar_id'],))
                     avatar_result = cur.fetchone()
@@ -6902,7 +6840,7 @@ def inject_user():
     try:
         cur.execute(
             """
-            SELECT u.nome, u.email, u.avatar, u.avatar_id, u.is_admin, 
+            SELECT u.nome, u.email, u.avatar_id, u.is_admin, 
                    a.caminho AS avatar_path
             FROM usuarios u
             LEFT JOIN avatars a ON u.avatar_id = a.id
@@ -6979,7 +6917,7 @@ def debug_login_afonso():
             session['user_email'] = user['email']
             
             cursor.execute("""
-                SELECT COALESCE(u.avatar, a.caminho) as avatar_path
+                SELECT COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') as avatar_path
                 FROM usuarios u 
                 LEFT JOIN avatars a ON u.avatar_id = a.id 
                 WHERE u.id = %s
@@ -7350,7 +7288,7 @@ def filme_detalhe(id_filme):
                 av.comentario,
                 av.data_avaliacao,
                 u.nome as usuario_nome,
-                COALESCE(u.avatar, a.caminho) as usuario_avatar
+                COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') as usuario_avatar
             FROM avaliacoes_filmes av
             JOIN usuarios u ON av.usuario_id = u.id
             LEFT JOIN avatars a ON u.avatar_id = a.id
@@ -8324,7 +8262,7 @@ def reserva():
     if user_authenticated:
         conn_user = get_db_connection()
         cursor_user = conn_user.cursor(dictionary=True)
-        cursor_user.execute("SELECT nome, email, avatar, avatar_personalizado FROM usuarios WHERE id = %s", (session['user_id'],))
+        cursor_user.execute("SELECT nome, email, a.caminho as avatar FROM usuarios u LEFT JOIN avatars a ON u.avatar_id = a.id WHERE u.id = %s", (session['user_id'],))
         user = cursor_user.fetchone()
         cursor_user.close()
         conn_user.close()
@@ -8332,11 +8270,7 @@ def reserva():
         if user:
             user_name = user['nome']
             user_email = user['email']
-            # Priorizar avatar_personalizado, depois avatar, depois default
-            if user.get('avatar_personalizado'):
-                user_avatar = user['avatar_personalizado']
-            elif user.get('avatar'):
-                user_avatar = user['avatar']
+            user_avatar = user.get('avatar') or 'imgs/icons/user_icon34-removebg-preview.png'
     
     return render_template(
         'reserva.html',
@@ -11282,7 +11216,7 @@ def termos_condicoes():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
-            SELECT COALESCE(u.avatar, a.caminho) AS avatar
+            SELECT COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') AS avatar
             FROM usuarios u
             LEFT JOIN avatars a ON u.avatar_id = a.id
             WHERE u.id = %s
@@ -11301,7 +11235,7 @@ def politica_privacidade():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
-            SELECT COALESCE(u.avatar, a.caminho) AS avatar
+            SELECT COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') AS avatar
             FROM usuarios u
             LEFT JOIN avatars a ON u.avatar_id = a.id
             WHERE u.id = %s
@@ -11321,7 +11255,7 @@ def cookies_page():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
-            SELECT COALESCE(u.avatar, a.caminho) AS avatar
+            SELECT COALESCE(a.caminho, 'imgs/icons/user_icon34-removebg-preview.png') AS avatar
             FROM usuarios u
             LEFT JOIN avatars a ON u.avatar_id = a.id
             WHERE u.id = %s
@@ -13541,34 +13475,44 @@ def api_avatar_categorias():
 
 @app.route('/api/atualizar-avatar', methods=['POST'])
 def api_atualizar_avatar():
-    pass
-  
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Login necessário'})
     
     try:
         data = request.get_json()
-        avatar_caminho = data.get('avatar')
+        avatar_id = data.get('avatar_id')
         
-        if not avatar_caminho:
-            return jsonify({'success': False, 'message': 'Caminho do avatar não fornecido'})
-        
-        avatar_caminho = avatar_caminho.replace('/static/', '').replace('\\', '/').strip()
+        if not avatar_id:
+            return jsonify({'success': False, 'message': 'Avatar ID não fornecido'})
         
         conn = get_db_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         
+        # Verificar se o avatar existe
+        cursor.execute("SELECT id, caminho FROM avatars WHERE id = %s", (avatar_id,))
+        avatar = cursor.fetchone()
+        
+        if not avatar:
+            return jsonify({'success': False, 'message': 'Avatar não encontrado'})
+        
+        # Atualizar o avatar_id do utilizador
         cursor.execute("""
             UPDATE usuarios 
-            SET avatar = %s 
+            SET avatar_id = %s 
             WHERE id = %s
-        """, (avatar_caminho, session['user_id']))
+        """, (avatar_id, session['user_id']))
         
         conn.commit()
         
-        session['user_avatar'] = avatar_caminho
+        # Atualizar sessão
+        avatar_path = avatar['caminho'].replace('\\', '/').replace('"', '').strip()
+        session['user_avatar'] = avatar_path
         
-        return jsonify({'success': True, 'message': 'Avatar atualizado com sucesso'})
+        return jsonify({
+            'success': True, 
+            'message': 'Avatar atualizado com sucesso',
+            'avatar_path': avatar_path
+        })
         
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
@@ -13827,63 +13771,6 @@ def atualizar_avatar():
         cursor.close()
         conn.close()
 
-@app.route('/upload_avatar_custom', methods=['POST'])
-def upload_avatar_custom():
-    if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'Login necessário'})
-    
-    data = request.get_json()
-    image_data = data.get('image_data')
-    
-    if not image_data:
-        return jsonify({'success': False, 'message': 'Imagem não fornecida'})
-    
-    try:
-        import base64
-        import os
-        from datetime import datetime
-        
-        if ',' in image_data:
-            image_data = image_data.split(',')[1]
-        
-        image_bytes = base64.b64decode(image_data)
-        
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f'user_{session["user_id"]}_{timestamp}.jpg'
-        
-        avatars_dir = os.path.join('static', 'imgs', 'avatars')
-        os.makedirs(avatars_dir, exist_ok=True)
-        filepath = os.path.join(avatars_dir, filename)
-        
-        with open(filepath, 'wb') as f:
-            f.write(image_bytes)
-        
-        db_path = f'imgs/avatars/{filename}'
-        
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute("""
-                UPDATE usuarios 
-                SET avatar = %s, avatar_id = NULL
-                WHERE id = %s
-            """, (db_path, session['user_id']))
-            
-            conn.commit()
-            return jsonify({'success': True, 'message': 'Avatar atualizado com sucesso!'})
-            
-        except Exception as e:
-            conn.rollback()
-            if os.path.exists(filepath):
-                os.remove(filepath)
-            return jsonify({'success': False, 'message': f'Erro na BD: {str(e)}'})
-        finally:
-            cursor.close()
-            conn.close()
-            
-    except Exception as e:
-        return jsonify({'success': False, 'message': f'Erro ao processar imagem: {str(e)}'})
 
 @app.route('/atualizar_nome', methods=['POST'])
 def atualizar_nome():
@@ -15920,3 +15807,4 @@ if __name__ == '__main__':
     
     app.logger.info("Iniciando app; endpoints registados:\n%s", app.url_map)
     app.run(debug=True)
+

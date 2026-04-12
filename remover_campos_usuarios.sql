@@ -12,5 +12,12 @@ ALTER TABLE usuarios DROP COLUMN biografia;
 -- Remover campo filme_favorito_id (nunca é lido, apenas UPDATE sem SELECT)
 ALTER TABLE usuarios DROP COLUMN filme_favorito_id;
 
+-- Remover campo avatar (upload personalizado não existe no frontend)
+ALTER TABLE usuarios DROP COLUMN avatar;
+
+-- Remover campo avatar_personalizado (campo duplicado e inútil)
+ALTER TABLE usuarios DROP COLUMN avatar_personalizado;
+
 -- Verificar estrutura final da tabela
+-- Campos restantes: id, nome, email, senha, criado_em, ultimo_login, avatar_id, social_provider, social_id, is_admin
 DESCRIBE usuarios;

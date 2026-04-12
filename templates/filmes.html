@@ -139,12 +139,12 @@
                             <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
                                  alt="Poster de {{ filme.titulo }}" 
                                  class="poster-main"
-                                 loading="lazy">
+                                 loading="eager">
                             {% if filme.poster_hover %}
                             <img src="{{ url_for('static', filename=filme.poster_hover) }}" 
                                  alt="Poster alternativo de {{ filme.titulo }}" 
                                  class="poster-hover"
-                                 loading="lazy">
+                                 loading="eager">
                             {% endif %}
                         </div>
                         <div class="filme-overlay">
@@ -189,12 +189,12 @@
                             <img src="{{ url_for('static', filename=filme.poster_url) if filme.poster_url else url_for('static', filename='imgs/filmes/placeholder.jpg') }}" 
                                  alt="Poster de {{ filme.titulo }}" 
                                  class="poster-main"
-                                 loading="lazy">
+                                 loading="eager">
                             {% if filme.poster_hover %}
                             <img src="{{ url_for('static', filename=filme.poster_hover) }}" 
                                  alt="Poster alternativo de {{ filme.titulo }}" 
                                  class="poster-hover"
-                                 loading="lazy">
+                                 loading="eager">
                             {% endif %}
                         </div>
                         <div class="filme-overlay">

@@ -8262,7 +8262,7 @@ def reserva():
     if user_authenticated:
         conn_user = get_db_connection()
         cursor_user = conn_user.cursor(dictionary=True)
-        cursor_user.execute("SELECT nome, email, a.caminho as avatar FROM usuarios u LEFT JOIN avatars a ON u.avatar_id = a.id WHERE u.id = %s", (session['user_id'],))
+        cursor_user.execute("SELECT u.nome, u.email, a.caminho as avatar FROM usuarios u LEFT JOIN avatars a ON u.avatar_id = a.id WHERE u.id = %s", (session['user_id'],))
         user = cursor_user.fetchone()
         cursor_user.close()
         conn_user.close()

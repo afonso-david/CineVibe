@@ -358,29 +358,7 @@
     <script>
         const searchInput = document.getElementById('searchInput');
         let searchTimeout;
-
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            const query = this.value.trim();
-            
-            if (query.length < 2) {
-                return;
-            }
-            
-            searchTimeout = setTimeout(() => {
-                window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
-            }, 200);
-        });
-
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                clearTimeout(searchTimeout);
-                const query = this.value.trim();
-                if (query) {
-                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
-                }
-            }
-        });
+        // search handled by search.js
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -396,5 +374,6 @@
         });
     </script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 </body>
 </html>

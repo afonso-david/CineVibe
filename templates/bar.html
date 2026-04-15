@@ -32,7 +32,7 @@
                 </div>
                 <div class="nav-right">
                     <div class="search-container">
-                        <input type="text" placeholder="Procurar Filmes..." id="searchInput">
+                        <input type="text" placeholder="Procurar Menus..." id="searchInput">
                         <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
                     </div>
                     <div class="user-icon">
@@ -345,20 +345,12 @@
             });
             
             searchTimeout = setTimeout(() => {
-                if (!isLocalSearch) {
-                    window.location.href = `/pesquisa?q=${encodeURIComponent(searchTerm)}`;
-                }
+                // global search handled by search.js
             }, 2000);
         });
 
         searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                clearTimeout(searchTimeout);
-                const query = this.value.trim();
-                if (query) {
-                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
-                }
-            }
+            // search handled by search.js
         });
 
         document.querySelector('.hero-btn').addEventListener('click', function(e) {

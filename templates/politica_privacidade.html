@@ -231,15 +231,9 @@
 
     <script>
         const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = this.value.trim();
-                if (query) {
-                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
-                }
-            }
-        });
+        // search handled by search.js
     </script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 </body>
 </html>

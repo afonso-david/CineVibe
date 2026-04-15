@@ -361,12 +361,7 @@
             document.getElementById('mapFrame').src = '';
         }
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const searchTerm = this.value;
-                if (searchTerm.trim()) {
-                    window.location.href = `/pesquisa?q=${encodeURIComponent(searchTerm)}`;
-                }
-            }
+            // search handled by search.js
         });
     </script>
 {% endblock %}

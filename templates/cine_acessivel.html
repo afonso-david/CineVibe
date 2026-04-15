@@ -65,7 +65,7 @@
                 </div>
                 <div class="nav-right">
                     <div class="search-container">
-                        <input type="text" placeholder="Procurar Menus..." id="searchInput">
+                        <input type="text" placeholder="Procurar Filmes..." id="searchInput">
                         <img src="{{ url_for('static', filename='imgs/icons/OIP-removebg-preview (4).png') }}" alt="search_icon" class="search_icon">
                     </div>
                     <div class="user-icon">
@@ -671,30 +671,10 @@
         let searchTimeout;
 
         if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
-                const query = this.value.trim();
-                
-                if (query.length < 2) {
-                    return;
-                }
-                
-                searchTimeout = setTimeout(() => {
-                    window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
-                }, 200);
-            });
-
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    clearTimeout(searchTimeout);
-                    const query = this.value.trim();
-                    if (query) {
-                        window.location.href = `/pesquisa?q=${encodeURIComponent(query)}`;
-                    }
-                }
-            });
+            // search handled by search.js
         }
     </script>
     <script src="{{ url_for('static', filename='js/newsletter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 </body>
 </html>

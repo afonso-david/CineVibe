@@ -11243,7 +11243,7 @@ def cookies_page():
 def api_pesquisa():
     query = request.args.get('q', '').strip()
     
-    if not query or len(query) < 2:
+    if not query or len(query) < 1:
         return jsonify({'filmes': [], 'cinemas': [], 'menus': [], 'produtos': []})
     
     conn = get_db_connection()
@@ -11304,11 +11304,30 @@ def api_pesquisa():
     cursor.close()
     conn.close()
     
+    # Buscar opções de acessibilidade — match por nome, descrição ou keywords
+    acessiveis_todos = [
+        {'nome': 'CineAcessível', 'url': '/cineacessivel', 'descricao': 'Todas as opções de acessibilidade', 'keywords': 'cineacessivel acessivel acessibilidade inclusao deficiencia'},
+        {'nome': 'Audiodescrição', 'url': '/cine_acessivel/audiodescricao', 'descricao': 'Filmes com audiodescrição', 'keywords': 'audiodescricao audiodescricão audio descricao cegos invisuais'},
+        {'nome': 'LGP - Língua Gestual Portuguesa', 'url': '/cine_acessivel/lgp', 'descricao': 'Sessões em língua gestual', 'keywords': 'lgp gestual lingua surdos surdo linguagem'},
+
+        {'nome': 'Legendagem', 'url': '/cine_acessivel/legendagem', 'descricao': 'Sessões com legendagem', 'keywords': 'legendagem legendas legenda subtitulos surdos'},
+    ]
+    query_lower = query.lower()
+    import unicodedata
+    def normalize(s):
+        return ''.join(c for c in unicodedata.normalize('NFD', s.lower()) if unicodedata.category(c) != 'Mn')
+    q_norm = normalize(query_lower)
+    acessibilidade = [
+        a for a in acessiveis_todos
+        if q_norm in normalize(a['nome']) or q_norm in normalize(a['descricao']) or q_norm in normalize(a['keywords'])
+    ]
+    
     return jsonify({
         'filmes': filmes,
         'cinemas': cinemas,
         'menus': menus,
-        'produtos': produtos
+        'produtos': produtos,
+        'acessibilidade': acessibilidade
     })
 
 @app.route('/api/check_toppings')

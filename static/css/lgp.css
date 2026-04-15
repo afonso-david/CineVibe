@@ -765,18 +765,6 @@ nav.nav-center + .main-content .hero-banner {
     position: relative;
 }
 
-.about-section .section-header h2::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(90deg, #FFD60A, #4EA8DE);
-    border-radius: 2px;
-}
-
 .about-section .description {
     font-size: 1.3rem;
     color: #E2E8F0;

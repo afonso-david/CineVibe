@@ -363,7 +363,7 @@
                         <div class="info-divider"></div>
                         <div class="avaliacoes-header">
                             <h3 class="avaliacoes-titulo">
-                                <span class="titulo-icon">⭐</span>
+                                <span class="titulo-icon"><i class="fas fa-star"></i></span>
                                 Avaliações dos Utilizadores
                                 <span class="titulo-badge">{{ avaliacoes|length if avaliacoes else 0 }}</span>
                             </h3>
@@ -385,9 +385,9 @@
                                             <div class="minha-rating">
                                                 {% for i in range(1, 6) %}
                                                     {% if i <= user_avaliacao.rating %}
-                                                        <span class="star-filled">★</span>
+                                                        <span class="star-filled"><i class="fas fa-star"></i></span>
                                                     {% else %}
-                                                        <span class="star-empty">☆</span>
+                                                        <span class="star-empty"><i class="far fa-star"></i></span>
                                                     {% endif %}
                                                 {% endfor %}
                                                 <span class="rating-number">{{ user_avaliacao.rating }}/5</span>
@@ -425,11 +425,11 @@
                                     <div class="rating-section-inline">
                                         <label>A sua classificação:</label>
                                         <div class="stars-inline" id="starsInline">
-                                            <span class="star-inline" data-rating="1" onclick="selecionarEstrelaInline(1)">★</span>
-                                            <span class="star-inline" data-rating="2" onclick="selecionarEstrelaInline(2)">★</span>
-                                            <span class="star-inline" data-rating="3" onclick="selecionarEstrelaInline(3)">★</span>
-                                            <span class="star-inline" data-rating="4" onclick="selecionarEstrelaInline(4)">★</span>
-                                            <span class="star-inline" data-rating="5" onclick="selecionarEstrelaInline(5)">★</span>
+                                            <span class="star-inline" data-rating="1" onclick="selecionarEstrelaInline(1)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="2" onclick="selecionarEstrelaInline(2)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="3" onclick="selecionarEstrelaInline(3)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="4" onclick="selecionarEstrelaInline(4)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="5" onclick="selecionarEstrelaInline(5)"><i class="fas fa-star"></i></span>
                                         </div>
                                         <span class="rating-feedback-inline" id="ratingTextInline">{{ user_avaliacao.rating }} de 5 estrelas</span>
                                         <input type="hidden" id="ratingValueInline" name="rating" value="{{ user_avaliacao.rating }}">
@@ -496,11 +496,11 @@
                                     <div class="form-group-inline">
                                         <label class="label-inline">Classificação</label>
                                         <div class="stars-container-inline">
-                                            <span class="star-inline" data-rating="1" onclick="selecionarEstrelaPrimeiraVez(1)">★</span>
-                                            <span class="star-inline" data-rating="2" onclick="selecionarEstrelaPrimeiraVez(2)">★</span>
-                                            <span class="star-inline" data-rating="3" onclick="selecionarEstrelaPrimeiraVez(3)">★</span>
-                                            <span class="star-inline" data-rating="4" onclick="selecionarEstrelaPrimeiraVez(4)">★</span>
-                                            <span class="star-inline" data-rating="5" onclick="selecionarEstrelaPrimeiraVez(5)">★</span>
+                                            <span class="star-inline" data-rating="1" onclick="selecionarEstrelaPrimeiraVez(1)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="2" onclick="selecionarEstrelaPrimeiraVez(2)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="3" onclick="selecionarEstrelaPrimeiraVez(3)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="4" onclick="selecionarEstrelaPrimeiraVez(4)"><i class="fas fa-star"></i></span>
+                                            <span class="star-inline" data-rating="5" onclick="selecionarEstrelaPrimeiraVez(5)"><i class="fas fa-star"></i></span>
                                         </div>
                                         <span class="rating-feedback-inline" id="ratingTextPrimeiraVez">Selecione uma classificação</span>
                                         <input type="hidden" id="ratingValuePrimeiraVez" name="rating" value="0">
@@ -545,9 +545,9 @@
                                             <div class="minha-rating">
                                                 {% for i in range(1, 6) %}
                                                     {% if i <= avaliacao.rating %}
-                                                        <span class="star-filled">★</span>
+                                                        <span class="star-filled"><i class="fas fa-star"></i></span>
                                                     {% else %}
-                                                        <span class="star-empty">☆</span>
+                                                        <span class="star-empty"><i class="far fa-star"></i></span>
                                                     {% endif %}
                                                 {% endfor %}
                                                 <span class="rating-number">{{ avaliacao.rating }}/5</span>

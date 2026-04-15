@@ -73,17 +73,6 @@ a {
     background-color: #2D1B2E;
 }
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        linear-gradient(135deg, #2D1B2E 0%, #4A1942 50%, #2D1B2E 100%);
-    z-index: -1;
-}
 
 .hero-overlay {
     position: absolute;
@@ -311,16 +300,6 @@ a {
   overflow: hidden;
 }
 
-.features-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(255, 105, 180, 0.6), transparent);
-}
-
 .features-section::after {
   content: '';
   position: absolute;
@@ -338,18 +317,6 @@ a {
   margin-bottom: 1rem;
   color: #ffffff;
   position: relative;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--romance-pink), transparent);
-  border-radius: 2px;
 }
 
 .features-grid {
@@ -638,11 +605,6 @@ a {
     font-size: 3.5rem;
 }
 
-.couple-seat-text .section-title::after {
-    left: 0;
-    transform: translateX(0);
-}
-
 .couple-seat-description {
     font-size: 1.2rem;
     line-height: 1.8;
@@ -692,11 +654,6 @@ a {
         font-size: 2.8rem;
     }
     
-    .couple-seat-text .section-title::after {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    
     .couple-seat-description {
         text-align: center;
     }
@@ -719,18 +676,6 @@ a {
     color: #ffffff;
     
     position: relative;
-}
-
-.movies-section .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--romance-pink), var(--romance-deep));
-    border-radius: 2px;
 }
 
 .section-header {
@@ -764,7 +709,6 @@ a {
     display: flex;
     gap: 30px;
     overflow-x: auto;
-    scroll-behavior: smooth;
     padding: 20px 0;
     scrollbar-width: none;
     -ms-overflow-style: none;

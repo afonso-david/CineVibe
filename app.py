@@ -2608,6 +2608,10 @@ def admin_dashboard():
                COALESCE(SUM(r.total), 0) as receita
         FROM filmes f
         LEFT JOIN reservas r ON f.id = r.id_filme
+        LEFT JOIN horarios_sessao hs ON r.id_horario_sessao = hs.id
+        LEFT JOIN horarios h ON hs.id_horario = h.id
+        WHERE r.id IS NULL 
+           OR DATE_ADD(CONCAT(r.data_sessao, ' ', h.hora), INTERVAL f.duracao MINUTE) < NOW()
         GROUP BY f.id, f.titulo, f.poster_url
         ORDER BY total_reservas DESC
         LIMIT 10
@@ -7012,19 +7016,6 @@ def filmes():
                 f.poster_hover,
                 f.estado,
                 COALESCE(GROUP_CONCAT(g.nome SEPARATOR ', '), '') AS genero_nome
-        """
-        
-        # Se o utilizador tem preferências, adicionar score de relevância
-        if generos_preferidos:
-            generos_ids = [str(g['id']) for g in generos_preferidos]
-            query += f""",
-                (SELECT COUNT(*) 
-                 FROM filme_generos fg2 
-                 WHERE fg2.filme_id = f.id 
-                 AND fg2.genero_id IN ({','.join(generos_ids)})) as relevancia_score
-            """
-        
-        query += """
             FROM filmes f
             LEFT JOIN filme_generos fg ON f.id = fg.filme_id
             LEFT JOIN generos g ON fg.genero_id = g.id
@@ -7039,24 +7030,10 @@ def filmes():
                 WHERE LOWER(g2.nome) = %s
             )
             """
-            query += " GROUP BY f.id"
-            
-            # Ordenação personalizada
-            if generos_preferidos:
-                query += " ORDER BY relevancia_score DESC, f.id ASC"
-            else:
-                query += " ORDER BY f.id ASC"
-                
+            query += " GROUP BY f.id ORDER BY f.id ASC"
             cursor.execute(query, (genero_filtro,))
         else:
-            query += " GROUP BY f.id"
-            
-            # Ordenação personalizada
-            if generos_preferidos:
-                query += " ORDER BY relevancia_score DESC, f.id ASC"
-            else:
-                query += " ORDER BY f.id ASC"
-                
+            query += " GROUP BY f.id ORDER BY f.id ASC"
             cursor.execute(query)
             
         filmes = cursor.fetchall() or []
@@ -7085,14 +7062,14 @@ def filmes():
             if f.get('genero_nome') is None:
                 f['genero_nome'] = ''
 
-        # Separar por estado e ordenar: filmes não vistos primeiro, depois vistos
+        # Separar por estado
         filmes_em_exibicao = [f for f in filmes if f['estado'] == 'em_exibicao']
         filmes_brevemente = [f for f in filmes if f['estado'] == 'brevemente']
         
-        # Reordenar para colocar filmes já vistos no final
+        # Reordenar para colocar filmes já vistos no final, mantendo ordem por ID
         if user_id and filmes_vistos_ids:
-            filmes_em_exibicao = sorted(filmes_em_exibicao, key=lambda x: (x['ja_visto'], -x.get('relevancia_score', 0)))
-            filmes_brevemente = sorted(filmes_brevemente, key=lambda x: (x['ja_visto'], -x.get('relevancia_score', 0)))
+            filmes_em_exibicao = sorted(filmes_em_exibicao, key=lambda x: (x['ja_visto'], x['id']))
+            filmes_brevemente = sorted(filmes_brevemente, key=lambda x: (x['ja_visto'], x['id']))
 
     finally:
         try: cursor.close()
@@ -9251,8 +9228,6 @@ def processar_reserva_tematica():
 
 @app.route('/pagamento_tematica')
 def pagamento_tematica():
-    pass
-
     if 'reserva_tematica_temp' not in session:
         return redirect(url_for('sessao_tematica'))
     
@@ -9375,13 +9350,11 @@ def enviar_email_confirmacao_tematica(destinatario_email, destinatario_nome, dad
 
 @app.route('/api/processar-pagamento-tematica', methods=['POST'])
 def api_processar_pagamento_tematica():
-    pass
-
     try:
         data = request.get_json()
         app.logger.info(f"Dados recebidos para pagamento sessão temática: {data}")
         
-        required_fields = ['tipo_sessao', 'preco_total', 'metodo_pagamento']
+        required_fields = ['tipo_sessao', 'preco_total', 'payment_method']
         
         for field in required_fields:
             if not data.get(field):
@@ -9433,7 +9406,7 @@ def api_processar_pagamento_tematica():
             data.get('hora_sessao'),
             data.get('num_pessoas', 1),
             data['preco_total'],
-            data['metodo_pagamento']
+            data.get('payment_method', 'outro')
         ))
         
         reserva_id = cursor.lastrowid

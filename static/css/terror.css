@@ -69,18 +69,6 @@ a {
     background-color: #0D1B2A;
 }
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        linear-gradient(135deg, #0D1B2A 0%, #1B263B 50%, #0D1B2A 100%);
-    z-index: -1;
-}
-
 .hero-background {
     position: absolute;
     top: 0;
@@ -259,16 +247,6 @@ a {
   overflow: hidden;
 }
 
-.features-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.6), transparent);
-}
-
 .features-section::after {
   content: '';
   position: absolute;
@@ -286,18 +264,6 @@ a {
   margin-bottom: 1rem;
   color: #ffffff;
   position: relative;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #dc2626, transparent);
-  border-radius: 2px;
 }
 
 .features-grid {
@@ -555,25 +521,6 @@ a {
     position: relative;
     
     line-height: 1.2;
-}
-
-.movies-section .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 140px;
-    height: 3px;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(220, 38, 38, 0.8), 
-        #dc2626, 
-        rgba(220, 38, 38, 0.8), 
-        transparent
-    );
-    border-radius: 2px;
-    
 }
 
 .movies-section .section-subtitle {
@@ -987,7 +934,6 @@ a {
     display: flex;
     gap: 30px;
     overflow-x: auto;
-    scroll-behavior: smooth;
     padding: 20px 0;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -1380,25 +1326,6 @@ a {
     position: relative;
     
     line-height: 1.2;
-}
-
-.reactions-section .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 140px;
-    height: 3px;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(220, 38, 38, 0.8), 
-        #dc2626, 
-        rgba(220, 38, 38, 0.8), 
-        transparent
-    );
-    border-radius: 2px;
-    
 }
 
 .reactions-section .section-subtitle {

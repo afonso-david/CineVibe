@@ -483,6 +483,7 @@ body {
 .data-table tbody tr {
     transition: all 0.3s ease;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    height: auto;
 }
 .data-table tbody tr:hover {
     background: rgba(255, 214, 10, 0.05);
@@ -493,6 +494,11 @@ body {
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.95rem;
     font-weight: 500;
+    white-space: normal;
+    word-wrap: break-word;
+    vertical-align: top;
+    max-width: none;
+    overflow: visible;
 }
 .badge {
     padding: 6px 12px;

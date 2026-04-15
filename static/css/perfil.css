@@ -677,9 +677,10 @@ a {
 }
 .cinemas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 350px));
     gap: 30px;
     min-height: 200px;
+    justify-content: start;
 }
 .cinema-card {
     background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);

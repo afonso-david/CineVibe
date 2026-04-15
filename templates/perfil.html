@@ -134,19 +134,19 @@
                 <h2 class="section-title">As Minhas Estatísticas</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number">{{ stats.filmes_vistos or 12 }}</div>
+                        <div class="stat-number">{{ stats.filmes_vistos if stats.filmes_vistos is not none else 0 }}</div>
                         <div class="stat-label">Filmes Vistos</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">{{ stats.reservas_feitas or 8 }}</div>
+                        <div class="stat-number">{{ stats.reservas_feitas if stats.reservas_feitas is not none else 0 }}</div>
                         <div class="stat-label">Reservas Feitas</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">{{ stats.avaliacoes_feitas or 5 }}</div>
+                        <div class="stat-number">{{ stats.avaliacoes_feitas if stats.avaliacoes_feitas is not none else 0 }}</div>
                         <div class="stat-label">Avaliações</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">{{ stats.pontos_gastos or 0 }}</div>
+                        <div class="stat-number">{{ stats.pontos_gastos if stats.pontos_gastos is not none else 0 }}</div>
                         <div class="stat-label">Pontos Gastos</div>
                     </div>
                 </div>

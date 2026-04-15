@@ -406,7 +406,12 @@ def get_current_user():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM usuarios WHERE id = %s", (session['user_id'],))
+        cursor.execute("""
+            SELECT u.*, a.caminho as avatar 
+            FROM usuarios u 
+            LEFT JOIN avatars a ON u.avatar_id = a.id 
+            WHERE u.id = %s
+        """, (session['user_id'],))
         user = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -1457,11 +1462,12 @@ def avatars_all():
         resultado = []
         
         for categoria in categorias:
-            # Buscar avatares de cada categoria
+            # Buscar avatares de cada categoria, excluindo o avatar do admin
             cur.execute("""
                 SELECT a.id, a.nome, a.caminho
                 FROM avatars a
                 WHERE a.categoria_id = %s
+                AND a.nome != 'Admin CineVibe'
                 ORDER BY a.nome
             """, (categoria['id'],))
             
@@ -2787,17 +2793,18 @@ def admin_dashboard():
     
     cur.execute("""
         SELECT 
+            f.id,
             f.titulo,
             f.poster_url,
             COUNT(DISTINCT hs.id) as total_sessoes,
-            COALESCE(COUNT(DISTINCT r.id), 0) as total_reservas
+            COUNT(DISTINCT r.id) as total_reservas
         FROM filmes f
-        JOIN horarios_sessao hs ON hs.id_filme = f.id
+        INNER JOIN horarios_sessao hs ON hs.id_filme = f.id
         LEFT JOIN reservas r ON r.id_filme = f.id
         WHERE f.estado = 'em_exibicao'
         GROUP BY f.id, f.titulo, f.poster_url
-        HAVING total_reservas = 0 AND total_sessoes > 0
-        ORDER BY total_sessoes DESC
+        HAVING COUNT(DISTINCT r.id) = 0 AND COUNT(DISTINCT hs.id) > 0
+        ORDER BY COUNT(DISTINCT hs.id) DESC
         LIMIT 10
     """)
     filmes_sem_reservas = cur.fetchall()

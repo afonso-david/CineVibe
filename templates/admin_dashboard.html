@@ -136,7 +136,7 @@
                 {% endif %}
             </div>
 
-            <div style="background: #1B263B; border-radius: 8px; padding: 1rem; border-left: 4px solid #f5576c;">
+            <div style="background: #1B263B; border-radius: 8px; padding: 1rem; border-left: 4px solid #f5576c; max-height: 500px; overflow-y: auto;">
                 <h3 style="color: #f5576c; font-size: 1rem; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fas fa-film"></i> Filmes Sem Reservas
                 </h3>
@@ -250,11 +250,11 @@
             <div style="padding: 1rem; background: #1B263B; border-radius: 8px; margin-bottom: 0.75rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                     <h4 style="margin: 0; color: #FFD60A; font-size: 0.95rem;">{{ cinema.nome }}</h4>
-                    <span style="color: #43e97b; font-weight: 600;">€{{ "%.2f"|format(cinema.receita) }}</span>
+                    <span style="color: {% if cinema.receita < 500 %}#f5576c{% else %}#43e97b{% endif %}; font-weight: 600;">€{{ "%.2f"|format(cinema.receita) }}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="color: #8892B0; font-size: 0.85rem;">{{ cinema.localizacao }}</span>
-                    <span style="color: #8892B0; font-size: 0.85rem;">{{ cinema.total_reservas }} reservas</span>
+                    <span style="color: {% if cinema.total_reservas < 50 %}#f5576c{% else %}#8892B0{% endif %}; font-size: 0.85rem;">{{ cinema.total_reservas }} reservas</span>
                 </div>
             </div>
             {% endfor %}
@@ -479,100 +479,68 @@ new Chart(reservasCtx, {
 });
 
 // Gráfico de Tipos de Sessão
-const tiposSessaoCtx = document.getElementById('tiposSessaoChart').getContext('2d');
-new Chart(tiposSessaoCtx, {
-    type: 'doughnut',
-    data: {
-        labels: [{% for tipo in tipos_sessao_stats %}'{{ tipo.nome }}'{% if not loop.last %}, {% endif %}{% endfor %}],
-        datasets: [{
-            data: [{% for tipo in tipos_sessao_stats %}{{ tipo.total_reservas }}{% if not loop.last %}, {% endif %}{% endfor %}],
-            backgroundColor: [
-                '#667eea',  // Roxo
-                '#f093fb',  // Rosa
-                '#4facfe',  // Azul claro
-                '#43e97b',  // Verde
-                '#FFD60A',  // Amarelo
-                '#f5576c',  // Vermelho
-                '#fa709a',  // Rosa escuro
-                '#30cfd0',  // Turquesa
-                '#a8edea',  // Verde água
-                '#feca57'   // Laranja
-            ],
-            borderWidth: 3,
-            borderColor: '#0D1B2A',
-            hoverBorderWidth: 5,
-            hoverBorderColor: '#FFD60A',
-            hoverOffset: 15
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '65%',
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { 
-                    color: '#8892B0',
-                    padding: 20,
-                    font: {
-                        size: 13,
-                        family: 'Inter',
-                        weight: '500'
-                    },
-                    usePointStyle: true,
-                    pointStyle: 'circle'
-                }
+const tiposSessaoCtx = document.getElementById('tiposSessaoChart');
+if (tiposSessaoCtx) {
+    new Chart(tiposSessaoCtx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: [{% for tipo in tipos_sessao_stats %}'{{ tipo.nome }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                data: [{% for tipo in tipos_sessao_stats %}{{ tipo.total_reservas }}{% if not loop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: [
+                    '#667eea', '#f093fb', '#4facfe', '#43e97b', '#FFD60A', 
+                    '#f5576c', '#fa709a', '#30cfd0', '#a8edea', '#feca57'
+                ],
+                borderWidth: 3,
+                borderColor: '#0D1B2A',
+                hoverBorderWidth: 8,
+                hoverBorderColor: '#FFD60A',
+                hoverOffset: 25
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            interaction: {
+                mode: 'point',
+                intersect: true
             },
-            tooltip: {
-                enabled: true,
-                backgroundColor: 'rgba(13, 27, 42, 0.98)',
-                titleColor: '#FFD60A',
-                titleFont: {
-                    size: 16,
-                    weight: 'bold',
-                    family: 'Inter'
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { 
+                        color: '#8892B0',
+                        padding: 20,
+                        font: { size: 13, family: 'Inter', weight: '500' },
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
                 },
-                bodyColor: '#fff',
-                bodyFont: {
-                    size: 14,
-                    family: 'Inter'
-                },
-                borderColor: '#FFD60A',
-                borderWidth: 2,
-                padding: 16,
-                displayColors: true,
-                boxWidth: 15,
-                boxHeight: 15,
-                boxPadding: 8,
-                cornerRadius: 8,
-                callbacks: {
-                    title: function(context) {
-                        return '🎬 ' + context[0].label;
-                    },
-                    label: function(context) {
-                        let value = context.parsed || 0;
-                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                        let percentage = ((value / total) * 100).toFixed(1);
-                        return [
-                            'Reservas: ' + value,
-                            'Percentagem: ' + percentage + '%'
-                        ];
+                tooltip: {
+                    enabled: true,
+                    mode: 'point',
+                    backgroundColor: 'rgba(13, 27, 42, 0.98)',
+                    titleColor: '#FFD60A',
+                    titleFont: { size: 16, weight: 'bold', family: 'Inter' },
+                    bodyColor: '#fff',
+                    bodyFont: { size: 14, family: 'Inter' },
+                    borderColor: '#FFD60A',
+                    borderWidth: 2,
+                    padding: 16,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.parsed || 0;
+                            let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            let percentage = ((value / total) * 100).toFixed(1);
+                            return ' ' + context.label + ': ' + value + ' reservas (' + percentage + '%)';
+                        }
                     }
                 }
             }
-        },
-        animation: {
-            animateRotate: true,
-            animateScale: true,
-            duration: 1000,
-            easing: 'easeInOutQuart'
-        },
-        interaction: {
-            mode: 'nearest',
-            intersect: true
         }
-    }
-});
+    });
+}
 </script>
 {% endblock %}

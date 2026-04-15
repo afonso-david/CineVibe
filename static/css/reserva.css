@@ -231,17 +231,6 @@ main {
     display: inline-block;
 }
 
-.movie-title::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, #4EA8DE, #FFD60A);
-    border-radius: 2px;
-}
-
 .movie-info-item {
     display: flex;
     align-items: center;

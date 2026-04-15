@@ -550,6 +550,13 @@ nav.nav-center + .main-content .hero-banner {
     margin: 0 auto;
 }
 
+@media (min-width: 1200px) {
+    .hero-banner .hero-content {
+        margin: 0;
+        margin-left: 2rem;
+    }
+}
+
 .hero-banner .hero-text,
 .hero-banner .hero-image {
     position: relative;

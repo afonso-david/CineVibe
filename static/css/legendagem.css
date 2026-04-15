@@ -9,6 +9,32 @@
     margin-bottom: 0;
 }
 
+.subtitle-overlay {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 90%;
+}
+
+.subtitle-overlay p {
+    background: rgba(0, 0, 0, 0.9);
+    color: #FFFFFF;
+    padding: 12px 24px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    border-radius: 4px;
+    display: block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
 .banner img {
     position: absolute;
     top: 0;

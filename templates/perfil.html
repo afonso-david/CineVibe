@@ -712,8 +712,19 @@
                 document.getElementById('modalCinemaLocalizacao').textContent = cinema.localizacao;
                 document.getElementById('modalCinemaRegiao').textContent = cinema.regiao || 'N/A';
                 
-                const endereco = cinema.morada || cinema.rua || cinema.localizacao;
-                const location = encodeURIComponent(endereco + ', Portugal');
+                // Construir endereço completo: Rua + Cidade + Portugal
+                let endereco = '';
+                if (cinema.rua && cinema.localizacao) {
+                    endereco = `${cinema.rua}, ${cinema.localizacao}, Portugal`;
+                } else if (cinema.localizacao) {
+                    endereco = `${cinema.localizacao}, Portugal`;
+                } else if (cinema.rua) {
+                    endereco = `${cinema.rua}, Portugal`;
+                } else {
+                    endereco = cinema.nome + ', Portugal';
+                }
+                
+                const location = encodeURIComponent(endereco);
                 const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${location}&zoom=15`;
                 document.getElementById('mapFrameCinema').src = mapUrl;
                 

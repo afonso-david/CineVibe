@@ -688,6 +688,7 @@ a {
     border: 2px solid rgba(255, 214, 10, 0.2);
     position: relative;
     min-height: 400px;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
 }
@@ -704,13 +705,14 @@ a {
 }
 .cinema-image {
     position: relative;
-    height: 200px;
+    height: 250px;
     overflow: hidden;
 }
 .cinema-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: transform 0.4s ease;
 }
 .cinema-placeholder {

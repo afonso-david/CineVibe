@@ -297,10 +297,10 @@
                                         <i class="fas fa-film"></i>
                                         Ver Filmes
                                     </a>
-                                    <a href="{{ url_for('cinemas') }}#cinema-{{ cinema.id }}" class="btn-ver-detalhes">
+                                    <button class="btn-ver-detalhes" onclick="verDetalhesCinema({{ cinema.id }})">
                                         <i class="fas fa-info-circle"></i>
                                         Detalhes
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -432,6 +432,49 @@
             <div class="modal-footer-senha">
                 <button class="btn-cancelar-senha" onclick="fecharModalAlterarSenha()">Cancelar</button>
                 <button class="btn-confirmar-senha" onclick="alterarSenha()">Alterar Senha</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes do Cinema -->
+    <div id="modalDetalhesCinema" class="modal-detalhes-cinema" style="display:none;">
+        <div class="modal-detalhes-cinema-content">
+            <button class="modal-close-cinema" onclick="fecharModalDetalhesCinema()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header-cinema">
+                <h2 id="modalCinemaNome"></h2>
+            </div>
+            
+            <div class="modal-body-cinema">
+                <div class="modal-info-cinema">
+                    <div class="info-item-cinema">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Localização</strong>
+                            <p id="modalCinemaLocalizacao"></p>
+                        </div>
+                    </div>
+                    <div class="info-item-cinema">
+                        <i class="fas fa-globe"></i>
+                        <div>
+                            <strong>Região</strong>
+                            <p id="modalCinemaRegiao"></p>
+                        </div>
+                    </div>
+                    <div class="info-item-cinema">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Horário</strong>
+                            <p>Aberto das 10h às 24h</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-map-cinema">
+                    <iframe id="mapFrameCinema" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
             </div>
         </div>
     </div>
@@ -647,6 +690,59 @@
                         alert('Erro de conexão ao remover cinema.');
                     });
                 });
+            });
+
+            // Funções do Modal de Detalhes do Cinema
+            window.verDetalhesCinema = function(cinemaId) {
+                fetch(`/api/cinema/${cinemaId}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            abrirModalDetalhesCinema(data.cinema);
+                        } else {
+                            console.error('Erro ao carregar detalhes');
+                        }
+                    })
+                    .catch(err => console.error('Erro de conexão', err));
+            };
+
+            function abrirModalDetalhesCinema(cinema) {
+                const modal = document.getElementById('modalDetalhesCinema');
+                document.getElementById('modalCinemaNome').textContent = cinema.nome;
+                document.getElementById('modalCinemaLocalizacao').textContent = cinema.localizacao;
+                document.getElementById('modalCinemaRegiao').textContent = cinema.regiao || 'N/A';
+                
+                const endereco = cinema.morada || cinema.rua || cinema.localizacao;
+                const location = encodeURIComponent(endereco + ', Portugal');
+                const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${location}&zoom=15`;
+                document.getElementById('mapFrameCinema').src = mapUrl;
+                
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            window.fecharModalDetalhesCinema = function() {
+                const modal = document.getElementById('modalDetalhesCinema');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                document.getElementById('mapFrameCinema').src = '';
+            };
+
+            // Fechar modal ao clicar fora
+            document.getElementById('modalDetalhesCinema')?.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    fecharModalDetalhesCinema();
+                }
+            });
+
+            // Fechar modal com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('modalDetalhesCinema');
+                    if (modal && modal.style.display === 'flex') {
+                        fecharModalDetalhesCinema();
+                    }
+                }
             });
 
             

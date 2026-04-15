@@ -387,30 +387,52 @@
             if (heroVideo) {
                 heroVideo.muted = true;
                 heroVideo.loop = false;
-                heroVideo.currentTime = 15;
+                
+                const playVideo = () => {
+                    heroVideo.currentTime = 15;
+                    if (heroVideo.paused) {
+                        const playPromise = heroVideo.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                console.log('Vídeo de fundo LGP iniciado com sucesso (15s-40s)');
+                            }).catch(error => {
+                                console.log('Erro ao reproduzir vídeo de fundo:', error);
+                            });
+                        }
+                    }
+                };
+                
                 heroVideo.addEventListener('timeupdate', function() {
                     if (heroVideo.currentTime >= 40) {
                         heroVideo.currentTime = 15;
                     }
                 });
-                heroVideo.addEventListener('loadeddata', function() {
-                    heroVideo.currentTime = 15;
-                });
-                const playPromise = heroVideo.play();
                 
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        console.log('Vídeo de fundo LGP iniciado com sucesso (15s-40s)');
-                        heroVideo.currentTime = 15;
-                    }).catch(error => {
-                        console.log('Erro ao reproduzir vídeo de fundo:', error);
-                        heroVideo.style.display = 'none';
-                    });
-                }
+                heroVideo.addEventListener('loadeddata', function() {
+                    playVideo();
+                });
+                
                 heroVideo.addEventListener('error', function() {
                     console.log('Erro ao carregar vídeo');
                     heroVideo.style.display = 'none';
                 });
+                
+                // Tenta tocar imediatamente do início
+                playVideo();
+                
+                // Toca quando a página fica visível
+                document.addEventListener('visibilitychange', function() {
+                    if (!document.hidden) {
+                        playVideo();
+                    }
+                });
+                
+                // Verifica a cada 500ms se o vídeo está pausado e força a reprodução
+                setInterval(function() {
+                    if (heroVideo.paused && !document.hidden) {
+                        playVideo();
+                    }
+                }, 500);
             }
         });
     </script>

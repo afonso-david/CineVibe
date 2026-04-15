@@ -45,6 +45,13 @@
     color: #FFFFFF;
 }
 
+@media (min-width: 1200px) {
+    .banner-content {
+        margin: 0;
+        margin-left: 2rem;
+    }
+}
+
 .hero-badge {
     display: inline-block;
     background: rgba(255, 214, 10, 0.2);

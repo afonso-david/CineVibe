@@ -453,7 +453,7 @@
             .then(result => {
                 if (result.success) {
                     setTimeout(() => {
-                        window.location.href = result.redirect || '/perfil';
+                        window.location.href = result.redirect || '/';
                     }, 1200);
                 } else {
                     document.getElementById('loadingModal').style.display = 'none';

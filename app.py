@@ -9276,31 +9276,27 @@ def enviar_email_confirmacao_tematica(destinatario_email, destinatario_nome, dad
                     <div style="background: rgba(255,214,10,0.1); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255,214,10,0.3);">
                         <table style="width: 100%; border-collapse: collapse;">
                             <tr>
-                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Reserva:</td>
-                                <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">#{dados_reserva['reserva_id']}</td>
-                            </tr>
-                            <tr>
-                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Sessão:</td>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 15px 12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Sessão:</td>
                                 <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{nome_sessao}</td>
                             </tr>
                             <tr>
-                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Filme:</td>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 15px 12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Filme:</td>
                                 <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{dados_reserva.get('filme', '')}</td>
                             </tr>
                             <tr>
-                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Data:</td>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 15px 12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Data:</td>
                                 <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{data_formatada}</td>
                             </tr>
                             <tr>
-                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Horário:</td>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 15px 12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Horário:</td>
                                 <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{dados_reserva.get('hora_sessao', '')}</td>
                             </tr>
                             <tr>
-                                <td style="color:#E0E1DD; font-weight:600; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Pessoas:</td>
+                                <td style="color:#E0E1DD; font-weight:600; padding:12px 15px 12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">Pessoas:</td>
                                 <td style="color:#FFD60A; font-weight:700; text-align:right; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);">{dados_reserva.get('num_pessoas', '')}</td>
                             </tr>
                             <tr>
-                                <td style="color:#E0E1DD; font-weight:600; padding:20px 0 0 0; border-top:2px solid rgba(255,214,10,0.3); font-size:1.2rem;">Total Pago:</td>
+                                <td style="color:#E0E1DD; font-weight:600; padding:20px 15px 0 0; border-top:2px solid rgba(255,214,10,0.3); font-size:1.2rem;">Total Pago:</td>
                                 <td style="color:#FFD60A; font-weight:700; text-align:right; padding:20px 0 0 0; border-top:2px solid rgba(255,214,10,0.3); font-size:1.2rem;">{dados_reserva.get('total', '')}</td>
                             </tr>
                         </table>
@@ -9313,7 +9309,7 @@ def enviar_email_confirmacao_tematica(destinatario_email, destinatario_nome, dad
                     </ul>
                     <div style="text-align: center; margin: 30px 0;">
                         <p style="color: #FFD60A; font-weight: bold; margin-bottom: 15px;">QR Code da Reserva</p>
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-TEMATICA-{dados_reserva['reserva_id']}" alt="QR Code da Reserva" style="border-radius: 10px; border: 3px solid #FFD60A;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-{nome_sessao.upper().replace(' ','-')}-{dados_reserva.get('data_sessao','')}-{dados_reserva.get('hora_sessao','')}" alt="QR Code da Reserva" style="border-radius: 10px; border: 3px solid #FFD60A;">
                         <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 10px;">Apresente este QR Code na entrada</p>
                     </div>
                     <p style="color: #E0E1DD; font-size: 14px; margin-top: 30px;">Dúvidas? Contacte-nos: info@cinevibe.pt | +351 800 123 456</p>
@@ -9328,7 +9324,7 @@ def enviar_email_confirmacao_tematica(destinatario_email, destinatario_nome, dad
         """
 
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = f'Confirmação de Reserva Temática CineVibe - #{dados_reserva["reserva_id"]}'
+        msg['Subject'] = 'Confirmação de Reserva Temática CineVibe'
         msg['From'] = f'CineVibe <{EMAIL_USER}>'
         msg['To'] = destinatario_email
         msg.attach(MIMEText(html_content, 'html', 'utf-8'))
@@ -9658,31 +9654,27 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
                     <p style="color: #E0E1DD; font-size: 16px; line-height: 1.6;">A sua reserva exclusiva foi confirmada com sucesso!</p>
                     <div style="background: rgba(255,214,10,0.1); padding: 25px; border-radius: 15px; margin: 25px 0; border: 1px solid rgba(255,214,10,0.3);">
                         <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <span style="color:#E0E1DD; font-weight:600;">Reserva:</span>
-                            <span style="color:#FFD60A; font-weight:700;">#{dados_reserva['reserva_id']}</span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <span style="color:#E0E1DD; font-weight:600;">Sala:</span>
+                            <span style="color:#E0E1DD; font-weight:600; padding-right:15px;">Sala:</span>
                             <span style="color:#FFD60A; font-weight:700;">{nome_sala}</span>
                         </div>
                         <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <span style="color:#E0E1DD; font-weight:600;">Filme:</span>
+                            <span style="color:#E0E1DD; font-weight:600; padding-right:15px;">Filme:</span>
                             <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('filme', '')}</span>
                         </div>
                         <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <span style="color:#E0E1DD; font-weight:600;">Data:</span>
+                            <span style="color:#E0E1DD; font-weight:600; padding-right:15px;">Data:</span>
                             <span style="color:#FFD60A; font-weight:700;">{data_formatada}</span>
                         </div>
                         <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <span style="color:#E0E1DD; font-weight:600;">Horário:</span>
+                            <span style="color:#E0E1DD; font-weight:600; padding-right:15px;">Horário:</span>
                             <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('hora_sessao', '')}</span>
                         </div>
                         <div style="display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <span style="color:#E0E1DD; font-weight:600;">Pessoas:</span>
+                            <span style="color:#E0E1DD; font-weight:600; padding-right:15px;">Pessoas:</span>
                             <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('num_pessoas', '')}</span>
                         </div>
                         <div style="display:flex; justify-content:space-between; padding-top: 15px; border-top: 2px solid rgba(255,214,10,0.3); font-size: 1.2rem;">
-                            <span style="color:#E0E1DD; font-weight:600;">Total Pago:</span>
+                            <span style="color:#E0E1DD; font-weight:600; padding-right:15px;">Total Pago:</span>
                             <span style="color:#FFD60A; font-weight:700;">{dados_reserva.get('total', '')}</span>
                         </div>
                     </div>
@@ -9693,7 +9685,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
                     </ul>
                     <div style="text-align: center; margin: 30px 0;">
                         <p style="color: #FFD60A; font-weight: bold; margin-bottom: 15px;">QR Code da Reserva</p>
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-EXCLUSIVA-{dados_reserva['reserva_id']}" alt="QR Code da Reserva" style="border-radius: 10px; border: 3px solid #FFD60A;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=CINEVIBE-{nome_sala.upper().replace(' ','-')}-{dados_reserva.get('data_sessao','')}-{dados_reserva.get('hora_sessao','')}" alt="QR Code da Reserva" style="border-radius: 10px; border: 3px solid #FFD60A;">
                         <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 10px;">Apresente este QR Code na entrada</p>
                     </div>
                     <p style="color: #E0E1DD; font-size: 14px; margin-top: 30px;">Dúvidas? Contacte-nos: info@cinevibe.pt | +351 800 123 456</p>
@@ -9708,7 +9700,7 @@ def enviar_email_confirmacao_exclusiva(destinatario_email, destinatario_nome, da
         """
 
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = f'Confirmação de Reserva Exclusiva CineVibe - #{dados_reserva["reserva_id"]}'
+        msg['Subject'] = 'Confirmação de Reserva Exclusiva CineVibe'
         msg['From'] = f'CineVibe <{EMAIL_USER}>'
         msg['To'] = destinatario_email
         msg.attach(MIMEText(html_content, 'html', 'utf-8'))

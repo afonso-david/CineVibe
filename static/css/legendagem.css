@@ -651,13 +651,14 @@
 }
 
 .about-section .section-header h2 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(2.5rem, 4vw, 4rem);
     font-weight: 800;
     color: #FFD60A;
     margin-bottom: 30px;
     font-family: 'Montserrat', sans-serif;
     line-height: 1.1;
     position: relative;
+    white-space: nowrap;
 }
 
 .about-section .description {

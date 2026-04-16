@@ -216,6 +216,7 @@ html {
   color: #0D1B2A !important;
   font-weight: 900 !important;
   line-height: 1;
+  display: none !important;
 }
 
 .user-avatar img {

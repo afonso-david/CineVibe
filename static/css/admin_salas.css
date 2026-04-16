@@ -149,11 +149,13 @@
 .btn-primary {
     background: linear-gradient(135deg, #FFD60A, #FFC107) !important;
     color: #0D1B2A !important;
+    box-shadow: none !important;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
     background: linear-gradient(135deg, #FFC107, #FFB300) !important;
+    box-shadow: none !important;
 }
 
 .btn-secondary {

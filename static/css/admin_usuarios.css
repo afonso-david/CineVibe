@@ -616,7 +616,9 @@
     width: 90%;
     max-width: 600px;
     max-height: 90vh;
-    overflow: visible;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     border: 1px solid rgba(255, 215, 0, 0.3);
     
     position: relative;
@@ -626,7 +628,9 @@
     max-width: 1400px;
     width: 95%;
     max-height: 95vh;
-    overflow: visible;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-header {
@@ -676,9 +680,9 @@
 
 .modal-body {
     padding: 30px;
-    overflow: visible;
-    max-height: calc(95vh - 140px);
     overflow-y: auto;
+    flex: 1;
+    min-height: 0;
 }
 
 .form-grid {
@@ -727,8 +731,10 @@
     display: flex;
     gap: 16px;
     justify-content: flex-end;
-    padding-top: 20px;
+    padding: 20px 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    background: #1a1a2e;
 }
 
 .btn-cancel,

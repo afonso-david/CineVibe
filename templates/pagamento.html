@@ -409,12 +409,9 @@
                             </div>
                             
                             <div class="bilhetes-gratis-actions">
-                                {% set num_lugares = dados_pagamento.lugares_selecionados|length %}
-                                {% set bilhetes_a_usar = [num_lugares, dados_pagamento.subscricao.bilhetes_disponiveis]|min %}
-                                
-                                <button type="button" id="usarBilhetesGratis" class="btn-usar-bilhetes" onclick="usarBilhetesGratis({{ bilhetes_a_usar }})">
+                                <button type="button" id="usarBilhetesGratis" class="btn-usar-bilhetes" onclick="usarBilhetesGratis(1)">
                                     <i class="fas fa-ticket-alt"></i>
-                                    Usar {{ bilhetes_a_usar }} Bilhete{% if bilhetes_a_usar > 1 %}s{% endif %} Grátis
+                                    Usar 1 Bilhete Grátis
                                 </button>
                                 
                                 <div id="bilhetesGratisAplicados" class="bilhetes-aplicados" style="display: none;">

@@ -99,7 +99,7 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Login**
-<img src="./screenshots/login.png" alt="Login page"/>
+<img src="static\imgs\Logo\Screenshot 2026-06-29 at 09-26-07 Login CineVibe.png" alt="Login page"/>
 
 </td>
 </tr>

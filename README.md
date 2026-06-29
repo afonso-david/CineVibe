@@ -71,7 +71,7 @@ The goal was to build something close to a production-ready product: a relationa
 <div align="center">
 
 **Homepage**
-<img src="static\imgs\Logo\Screenshot 2026-06-29 at 10-51-43 CineVibe - A Sua Experiência Cinematográfica.png" alt="CineVibe homepage" width="100%"/>
+<img src="static\imgs\Logo\Captura de ecrã 2026-06-29 105433.png" alt="CineVibe homepage" width="100%"/>
 <br/><br/>
 
 <table>

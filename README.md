@@ -123,7 +123,7 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Admin · Room Management**
-<img src="./screenshots/admin-rooms.png" alt="Admin dashboard room management"/>
+<img src="static\imgs\Logo\Screenshot 2026-06-29 at 09-36-07 Gestão de Salas - CineVibe Admin.png" alt="Admin dashboard room management"/>
 
 </td>
 </tr>

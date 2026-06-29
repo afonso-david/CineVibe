@@ -290,7 +290,3 @@ app.run(debug=True, port=5001)
 Developed as a **Final Capstone Project (PAP)** — 2026.
 
 <br/>
-
-<div align="center">
-  <sub>Built with ☕ and a lot of SQL joins.</sub>
-</div>

@@ -117,7 +117,7 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Admin · Movie Management**
-<img src="./screenshots/admin-movies.png" alt="Admin dashboard movie management"/>
+<img src="static\imgs\Logo\Screenshot 2026-06-29 at 09-34-51 Gestão de Filmes - CineVibe Admin.png" alt="Admin dashboard movie management"/>
 
 </td>
 <td width="50%">

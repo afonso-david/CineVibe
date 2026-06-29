@@ -93,7 +93,7 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Ratings & Reviews**
-<img src="./screenshots/movie-ratings.png" alt="Ratings, IMDb score and user reviews"/>
+<img src="static\imgs\Logo\Screenshot 2026-06-28 at 23-39-55 Superman - CineVibe Detalhes do Filme.png" alt="Ratings, IMDb score and user reviews"/>
 
 </td>
 <td width="50%">

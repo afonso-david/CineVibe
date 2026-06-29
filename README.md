@@ -79,7 +79,7 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Movie Catalog**
-<img src="./screenshots/movies.png" alt="Movie catalog with genre filters"/>
+<img src="static\imgs\Logo\Screenshot 2026-06-28 at 23-52-03 Filmes - CineVibe A Sua Experiência Cinematográfica.png"/>
 
 </td>
 <td width="50%">

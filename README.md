@@ -108,7 +108,7 @@ The goal was to build something close to a production-ready product: a relationa
 <br/>
 
 **Interactive Seat Selection**
-<img src="./screenshots/seat-selection.png" alt="Interactive seat map" width="100%"/>
+<img src="static\imgs\Logo\Screenshot 2026-06-28 at 23-42-06 Seleção de Lugares CineVibe.png" alt="Interactive seat map" width="100%"/>
 
 <br/><br/>
 

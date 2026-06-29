@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="PAP\static\imgs\Logo\logo8 sem fundo.png" alt="CineVibe logo" width="280"/>
+ <img src="static/imgs/Logo/logo8%20sem%20fundo.png" alt="CineVibe logo" width="280"/>
 
   ### A full-stack movie ticket booking platform built as a final-year capstone project
 

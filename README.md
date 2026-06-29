@@ -85,7 +85,7 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Movie Details**
-<img src="./screenshots/movie-info.png" alt="Movie detail page with cast"/>
+<img src="static\imgs\Logo\Screenshot 2026-06-28 at 23-39-33 Superman - CineVibe Detalhes do Filme.png"/>
 
 </td>
 </tr>

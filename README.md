@@ -1,5 +1,5 @@
 <div align="center">
- <img src="static/imgs/Logo/logo8%20sem%20fundo.png" alt="CineVibe logo" width="280"/>
+  <img src="static/imgs/Logo/logo8%20sem%20fundo.png" alt="CineVibe logo" width="280"/>
 
   ### A full-stack movie ticket booking platform built as a final-year capstone project
 
@@ -11,7 +11,7 @@
 
   <br/>
 
-  **[Features](#-features) · [Screenshots](#-screenshots) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure)**
+  **[Features](#-features) · [Screenshots](#-screenshots) · [Tech Stack](#-tech-stack) · [Database Schema](#-database-schema) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure)**
 
 </div>
 
@@ -71,7 +71,8 @@ The goal was to build something close to a production-ready product: a relationa
 <div align="center">
 
 **Homepage**
-<img src="static\imgs\Logo\Captura de ecrã 2026-06-29 105433.png" alt="CineVibe homepage" width="100%"/>
+<img src="static/imgs/Logo/Captura%20de%20ecr%C3%A3%202026-06-29%20105433.png" alt="CineVibe homepage" width="100%"/>
+
 <br/><br/>
 
 <table>
@@ -79,13 +80,13 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Movie Catalog**
-<img src="static\imgs\Logo\Screenshot 2026-06-28 at 23-52-03 Filmes - CineVibe A Sua Experiência Cinematográfica.png"/>
+<img src="static/imgs/Logo/Screenshot%202026-06-28%20at%2023-52-03%20Filmes%20-%20CineVibe%20A%20Sua%20Experi%C3%AAncia%20Cinematogr%C3%A1fica.png" alt="Movie catalog with genre filters"/>
 
 </td>
 <td width="50%">
 
 **Movie Details**
-<img src="static\imgs\Logo\Screenshot 2026-06-28 at 23-39-33 Superman - CineVibe Detalhes do Filme.png"/>
+<img src="static/imgs/Logo/Screenshot%202026-06-28%20at%2023-39-33%20Superman%20-%20CineVibe%20Detalhes%20do%20Filme.png" alt="Movie detail page with cast"/>
 
 </td>
 </tr>
@@ -93,12 +94,13 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Ratings & Reviews**
-<img src="static/imgs/Logo/Screenshot 2026-06-28 at 23-39-55 Superman - CineVibe Detalhes do Filme.png" alt="Ratings, IMDb score and user reviews" height="450" style="object-fit: cover; width: 100%;"/>
+<img src="static/imgs/Logo/Screenshot%202026-06-28%20at%2023-39-55%20Superman%20-%20CineVibe%20Detalhes%20do%20Filme.png" alt="Ratings, IMDb score and user reviews" height="450"/>
+
 </td>
 <td width="50%">
 
 **Login**
-<img src="static/imgs/Logo/Screenshot 2026-06-29 at 09-26-07 Login CineVibe.png" alt="Login page" height="450" style="object-fit: cover; width: 100%;"/>
+<img src="static/imgs/Logo/Screenshot%202026-06-29%20at%2009-26-07%20Login%20CineVibe.png" alt="Login page" height="450"/>
 
 </td>
 </tr>
@@ -107,7 +109,7 @@ The goal was to build something close to a production-ready product: a relationa
 <br/>
 
 **Interactive Seat Selection**
-<img src="static\imgs\Logo\Screenshot 2026-06-28 at 23-42-06 Seleção de Lugares CineVibe.png" alt="Interactive seat map" width="100%"/>
+<img src="static/imgs/Logo/Screenshot%202026-06-28%20at%2023-42-06%20Sele%C3%A7%C3%A3o%20de%20Lugares%20CineVibe.png" alt="Interactive seat map" width="100%"/>
 
 <br/><br/>
 
@@ -116,13 +118,13 @@ The goal was to build something close to a production-ready product: a relationa
 <td width="50%">
 
 **Admin · Movie Management**
-<img src="static/imgs/Logo/Screenshot 2026-06-29 at 09-34-51 Gestão de Filmes - CineVibe Admin.png" alt="Admin dashboard movie management"/>
+<img src="static/imgs/Logo/Screenshot%202026-06-29%20at%2009-34-51%20Gest%C3%A3o%20de%20Filmes%20-%20CineVibe%20Admin.png" alt="Admin dashboard movie management"/>
 
 </td>
 <td width="50%">
 
 **Admin · Room Management**
-<img src="static\imgs\Logo\Screenshot 2026-06-29 at 09-36-07 Gestão de Salas - CineVibe Admin.png" alt="Admin dashboard room management"/>
+<img src="static/imgs/Logo/Screenshot%202026-06-29%20at%2009-36-07%20Gest%C3%A3o%20de%20Salas%20-%20CineVibe%20Admin.png" alt="Admin dashboard room management"/>
 
 </td>
 </tr>
@@ -142,6 +144,16 @@ The goal was to build something close to a production-ready product: a relationa
 | **Charts** | Chart.js |
 | **Icons** | Font Awesome |
 | **Fonts** | Google Fonts (Inter, Montserrat, Roboto) |
+
+<br/>
+
+## 🗄️ Database Schema
+
+CineVibe's data model spans 40+ relational tables, covering everything from movies, cinemas, rooms and showtimes to bookings, concession orders, loyalty points, themed sessions and accessibility seating.
+
+<div align="center">
+  <img src="static/imgs/Logo/Screenshot%202026-06-29%20at%2010-59-20%20base_de%20dados_conect.pdf.png" alt="CineVibe database ER diagram" width="100%"/>
+</div>
 
 <br/>
 

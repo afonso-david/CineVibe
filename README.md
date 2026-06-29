@@ -1,157 +1,286 @@
-# CineVibe - Sistema de Reserva de Bilhetes de Cinema
+<div align="center">
+  <img src="./screenshots/logo.png" alt="CineVibe logo" width="280"/>
 
-Projeto Académico - PAP 2026
+  ### A full-stack movie ticket booking platform built as a final-year capstone project
 
-## Requisitos do Sistema
+  [![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+  [![Flask](https://img.shields.io/badge/Flask-Backend-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+  [![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+  [![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+  [![License](https://img.shields.io/badge/License-Academic-yellow?style=for-the-badge)](#license)
 
-Antes de começar, certifique-se de ter instalado:
+  <br/>
 
-- Python 3.8 ou superior
-- MySQL 8.0 ou superior
-- Navegador web moderno (Chrome, Firefox, Edge)
+  **[Features](#-features) · [Screenshots](#-screenshots) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure)**
 
-## Instalação Passo a Passo
+</div>
 
-### 1. Preparar o Ambiente Python
+<br/>
 
-Abra o terminal/prompt de comando na pasta do projeto e execute:
+## 🎬 About
+
+**CineVibe** is a complete cinema ticket booking system developed as my final-year **PAP (Prova de Aptidão Profissional)** capstone project for 2026. It simulates a real-world movie theater chain platform — from browsing now-showing films and picking seats in a live seat map, to a full admin dashboard for managing movies, cinemas, screening rooms, and bookings.
+
+The goal was to build something close to a production-ready product: a relational database with dozens of interconnected entities, a Flask backend handling authentication and business logic, and a polished, responsive frontend — all without a frontend framework, just HTML, CSS and vanilla JavaScript.
+
+<br/>
+
+## ✨ Features
+
+<table>
+<tr>
+<td valign="top" width="33%">
+
+### 🌐 Public Area
+- Browse now-showing & upcoming movies
+- Advanced search & genre filters
+- Detailed movie pages (cast, ratings, trailer)
+- Cinema & showtime listings
+- Themed screenings (Vintage, Romance, Horror)
+- Accessibility features (audio description, sign language, subtitles)
+
+</td>
+<td valign="top" width="33%">
+
+### 🎟️ User Area
+- Interactive seat selection map
+- Concession stand ordering (combos, snacks, drinks)
+- Loyalty points & rewards system
+- Booking history
+- Profile & avatar customization
+
+</td>
+<td valign="top" width="34%">
+
+### 🛠️ Admin Dashboard
+- Real-time statistics dashboard
+- Full CRUD for movies, actors & directors
+- Cinema, room & showtime management
+- Concession stand product management
+- User & booking management
+- Exportable reports
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## 📸 Screenshots
+
+<div align="center">
+
+**Homepage**
+<img src="./screenshots/home.png" alt="CineVibe homepage" width="100%"/>
+
+<br/><br/>
+
+<table>
+<tr>
+<td width="50%">
+
+**Movie Catalog**
+<img src="./screenshots/movies.png" alt="Movie catalog with genre filters"/>
+
+</td>
+<td width="50%">
+
+**Movie Details**
+<img src="./screenshots/movie-info.png" alt="Movie detail page with cast"/>
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Ratings & Reviews**
+<img src="./screenshots/movie-ratings.png" alt="Ratings, IMDb score and user reviews"/>
+
+</td>
+<td width="50%">
+
+**Login**
+<img src="./screenshots/login.png" alt="Login page"/>
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+**Interactive Seat Selection**
+<img src="./screenshots/seat-selection.png" alt="Interactive seat map" width="100%"/>
+
+<br/><br/>
+
+<table>
+<tr>
+<td width="50%">
+
+**Admin · Movie Management**
+<img src="./screenshots/admin-movies.png" alt="Admin dashboard movie management"/>
+
+</td>
+<td width="50%">
+
+**Admin · Room Management**
+<img src="./screenshots/admin-rooms.png" alt="Admin dashboard room management"/>
+
+</td>
+</tr>
+</table>
+
+</div>
+
+<br/>
+
+## 🧰 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Python 3, Flask |
+| **Database** | MySQL 8 |
+| **Frontend** | HTML5, CSS3, JavaScript (ES6) |
+| **Charts** | Chart.js |
+| **Icons** | Font Awesome |
+| **Fonts** | Google Fonts (Inter, Montserrat, Roboto) |
+
+<br/>
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.8 or higher
+- MySQL 8.0 or higher
+- A modern web browser (Chrome, Firefox, Edge)
+
+### 1. Set up the Python environment
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configurar a Base de Dados
+### 2. Set up the database
 
-#### 2.1. Criar a Base de Dados
-
-Abra o MySQL Workbench, DBeaver ou outro cliente MySQL e execute:
+**Create the database**
 
 ```sql
 CREATE DATABASE cinevibe CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-#### 2.2. Importar os Dados
+**Import the data**
 
-No mesmo cliente MySQL, importe o ficheiro `cinevibe.sql`:
+Using your preferred MySQL client (MySQL Workbench, DBeaver, etc.), import `cinevibe.sql`:
 
-- MySQL Workbench: File > Run SQL Script > Selecionar `cinevibe.sql`
-- DBeaver: Botão direito na base de dados > Execute SQL Script > Selecionar `cinevibe.sql`
-- Linha de comandos:
-```bash
-mysql -u root -p cinevibe < cinevibe.sql
-```
+- **MySQL Workbench** → `File > Run SQL Script` → select `cinevibe.sql`
+- **DBeaver** → right-click the database → `Execute SQL Script` → select `cinevibe.sql`
+- **Command line:**
+  ```bash
+  mysql -u root -p cinevibe < cinevibe.sql
+  ```
 
-### 3. Configurar Credenciais da Base de Dados
+### 3. Configure database credentials
 
-Abra o ficheiro `app.py` e localize a função `get_db_connection()` (aproximadamente linha 381).
-
-Altere as credenciais conforme a sua configuração MySQL:
+Open `app.py` and locate the `get_db_connection()` function (around line 381), then update it with your MySQL credentials:
 
 ```python
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="A_SUA_SENHA_MYSQL",  # Altere aqui
+        password="YOUR_MYSQL_PASSWORD",  # change this
         database="cinevibe"
     )
 ```
 
-### 4. Executar a Aplicação
-
-No terminal, execute:
+### 4. Run the application
 
 ```bash
 python app.py
 ```
 
-A aplicação estará disponível em: `http://127.0.0.1:5000`
+The app will be available at **http://127.0.0.1:5000**
 
-## Credenciais de Acesso
+### 5. Create an admin account
 
-Ao executar a aplicação pela primeira vez:
+1. Go to `http://127.0.0.1:5000/registo` and create a user account
+2. Promote it to admin via MySQL:
+   ```sql
+   UPDATE usuarios SET is_admin = TRUE WHERE email = 'your_email@example.com';
+   ```
+3. Log in and access the admin dashboard at `/admin`
 
-1. Aceda a `http://127.0.0.1:5000/registo`
-2. Crie uma conta de utilizador
-3. Para tornar a conta em administrador, execute no MySQL:
+<br/>
 
-```sql
-UPDATE usuarios SET is_admin = TRUE WHERE email = 'seu_email@exemplo.com';
-```
-
-Depois faça login e aceda ao dashboard admin em `/admin`
-
-## Funcionalidades Principais
-
-### Área Pública
-- Navegação de filmes em cartaz
-- Pesquisa e filtros avançados
-- Visualização de detalhes dos filmes
-- Informações sobre cinemas
-- Sessões temáticas (Vintage, Romance, Terror)
-- Funcionalidades de acessibilidade (Audiodescrição, LGP, Legendagem)
-
-### Área de Utilizador
-- Reserva de bilhetes com seleção de lugares
-- Escolha de produtos do bar (menus, snacks, bebidas, toppings)
-- Sistema de recompensas e pontos
-- Histórico de reservas
-- Gestão de perfil e avatar
-
-### Área de Administração
-- Dashboard com estatísticas em tempo real
-- Gestão completa de filmes, atores e realizadores
-- Gestão de cinemas, salas e horários
-- Gestão de produtos do bar
-- Gestão de utilizadores e reservas
-- Exportação de relatórios
-
-## Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 cinevibe/
-├── app.py                    # Aplicação Flask principal (configurar credenciais MySQL aqui)
-├── requirements.txt          # Dependências Python
-├── cinevibe.sql             # Base de dados completa
+├── app.py                    # Main Flask application (configure MySQL credentials here)
+├── requirements.txt          # Python dependencies
+├── cinevibe.sql               # Full database dump
 ├── static/
-│   ├── css/                 # Ficheiros CSS
-│   ├── js/                  # Ficheiros JavaScript
-│   ├── imgs/                # Imagens e recursos
-│   └── Vídeos/              # Vídeos promocionais
-└── templates/               # Templates HTML
+│   ├── css/                  # Stylesheets
+│   ├── js/                   # JavaScript files
+│   ├── imgs/                  # Images & assets
+│   └── videos/                # Promotional videos
+└── templates/                 # HTML templates
 ```
 
-## Resolução de Problemas
+<br/>
 
-### Erro de Conexão à Base de Dados
-- Verifique se o MySQL está a correr
-- Confirme as credenciais no ficheiro `app.py` (função `get_db_connection`)
-- Certifique-se que a base de dados `cinevibe` foi criada
+## 🩹 Troubleshooting
 
-### Erro ao Importar cinevibe.sql
-- Verifique se tem permissões suficientes
-- Certifique-se que está a usar MySQL 8.0+
-- Tente importar em partes menores se o ficheiro for muito grande
+<details>
+<summary><strong>Database connection error</strong></summary>
+<br/>
 
-### Porta 5000 já em uso
-- Altere a porta no final do ficheiro `app.py`:
+- Make sure MySQL is running
+- Double-check the credentials in `app.py` (`get_db_connection`)
+- Confirm the `cinevibe` database was created
+
+</details>
+
+<details>
+<summary><strong>Error importing cinevibe.sql</strong></summary>
+<br/>
+
+- Verify you have sufficient permissions
+- Make sure you're running MySQL 8.0+
+- Try importing in smaller chunks if the file is too large
+
+</details>
+
+<details>
+<summary><strong>Port 5000 already in use</strong></summary>
+<br/>
+
+Change the port at the bottom of `app.py`:
+
 ```python
 app.run(debug=True, port=5001)
 ```
 
-### Módulos Python em falta
-- Execute novamente: `pip install -r requirements.txt`
-- Verifique se está a usar Python 3.8+
+</details>
 
-## Tecnologias Utilizadas
+<details>
+<summary><strong>Missing Python modules</strong></summary>
+<br/>
 
-- Backend: Python 3, Flask
-- Base de Dados: MySQL 8
-- Frontend: HTML5, CSS3, JavaScript
-- Gráficos: Chart.js
-- Ícones: Font Awesome
-- Fontes: Google Fonts (Inter, Montserrat, Roboto)
+- Run `pip install -r requirements.txt` again
+- Make sure you're using Python 3.8+
 
+</details>
 
+<br/>
 
-Desenvolvido como Prova de Aptidão Profissional - 2026
+## 📄 License
+
+Developed as a **Final Capstone Project (PAP)** — 2026.
+
+<br/>
+
+<div align="center">
+  <sub>Built with ☕ and a lot of SQL joins.</sub>
+</div>
